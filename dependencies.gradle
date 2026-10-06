@@ -34,5 +34,7 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.69-GTNH:dev")
+    // Decimation itself (closed source). libs/Decimation-base.jar = Decimation.jar.patched
+    // minus our own net/decimation/{worldgen,fixes} classes; RFG remaps it SRG -> MCP.
+    devOnlyNonPublishable(rfg.deobf(project.files("libs/Decimation-base.jar")))
 }
