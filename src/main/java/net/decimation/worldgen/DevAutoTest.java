@@ -94,6 +94,7 @@ public class DevAutoTest
                 return;
             }
             checkBottlecaps();
+            checkVehicle();
         }
         catch (Throwable t)
         {
@@ -147,6 +148,33 @@ public class DevAutoTest
         }
         FMLLog.info("[%s] AUTOTEST bottlecaps: balance %d -> %d (dropped %d), caps left as items: %d",
                     DecimationWorldGen.MODID, capsBefore, after, CAPS, inInventory);
+    }
+
+    /**
+     * Vehicle fix: a survival punch must leave an empty vehicle alone, a
+     * sneaking survival punch must still pick it up.
+     */
+    private void checkVehicle()
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (p == null)
+        {
+            return;
+        }
+        p.setGameType(WorldSettings.GameType.SURVIVAL);
+        deci.ad.e vehicle = new deci.ad.i(p.worldObj, p.posX + 3, p.posY, p.posZ); // hummer
+        p.worldObj.spawnEntityInWorld(vehicle);
+        p.setSneaking(false);
+        p.attackTargetEntityWithCurrentItem(vehicle);
+        boolean survivedPunch = !vehicle.isDead;
+        p.setSneaking(true);
+        p.attackTargetEntityWithCurrentItem(vehicle);
+        boolean pickedUpSneaking = vehicle.isDead;
+        p.setSneaking(false);
+        vehicle.setDead();
+        p.setGameType(WorldSettings.GameType.CREATIVE);
+        FMLLog.info("[%s] AUTOTEST vehicle: survives survival punch=%s, sneak punch picks up=%s",
+                    DecimationWorldGen.MODID, survivedPunch, pickedUpSneaking);
     }
 
     private void run(WorldServer world)
