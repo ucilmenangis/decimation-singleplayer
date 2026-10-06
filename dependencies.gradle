@@ -56,3 +56,11 @@ def installVoiceChat = tasks.register("installVoiceChat", Copy) {
 tasks.matching { it.name == "runClient" }.configureEach {
     dependsOn(installVoiceChat)
 }
+
+// `gradlew runClient -Pautotest` runs the unattended singleplayer smoke test
+// (net.decimation.worldgen.DevAutoTest) and quits the game when done.
+tasks.matching { it.name == "runClient" }.configureEach {
+    if (project.hasProperty("autotest")) {
+        jvmArgs("-Ddeciworldgen.autotest=true")
+    }
+}

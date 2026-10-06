@@ -109,6 +109,16 @@ public class DecimationWorldGen
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new net.decimation.fixes.ZoneSpawnHandler());
         FMLLog.info("[%s] zone store and zone spawn fix registered", MODID);
+
+        // PROPERTY is a compile-time constant, so a dedicated server never
+        // loads DevAutoTest (it references client-only classes)
+        if (Boolean.getBoolean(DevAutoTest.PROPERTY)
+            && cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
+        {
+            DevAutoTest test = new DevAutoTest();
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(test);
+            FMLLog.info("[%s] AUTOTEST enabled", MODID);
+        }
     }
 
     /**
