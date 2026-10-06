@@ -1,0 +1,14 @@
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "Structure generation and singleplayer fixes for Decimation.",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"authorList": [],
+		"requiredMods": ["deci"],
+		"dependencies": ["deci"],
+		"useDependencyInformation": true
+	}]
+}
