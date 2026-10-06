@@ -82,13 +82,71 @@ public class DevAutoTest
         }
         try
         {
-            run(MinecraftServer.getServer().worldServerForDimension(0));
+            if (capCheckIn < 0)
+            {
+                run(MinecraftServer.getServer().worldServerForDimension(0));
+                dropBottlecaps();
+                capCheckIn = 60; // give the player a few seconds to pick them up
+                return;
+            }
+            if (--capCheckIn > 0)
+            {
+                return;
+            }
+            checkBottlecaps();
         }
         catch (Throwable t)
         {
             FMLLog.info("[%s] AUTOTEST error: %s", DecimationWorldGen.MODID, t);
         }
         finished = true;
+    }
+
+    private int capCheckIn = -1;
+    private long capsBefore;
+    private static final int CAPS = 5;
+
+    private static net.minecraft.entity.player.EntityPlayerMP player()
+    {
+        List<?> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+        return players.isEmpty() ? null : (net.minecraft.entity.player.EntityPlayerMP) players.get(0);
+    }
+
+    /** Bottlecap fix: drop caps on the player, they must become balance. */
+    private void dropBottlecaps()
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (p == null)
+        {
+            FMLLog.info("[%s] AUTOTEST bottlecaps: no player", DecimationWorldGen.MODID);
+            return;
+        }
+        capsBefore = deci.Q.b.e(p).cb();
+        net.minecraft.entity.item.EntityItem item = new net.minecraft.entity.item.EntityItem(
+            p.worldObj, p.posX, p.posY, p.posZ,
+            new net.minecraft.item.ItemStack(deci.aD.k.aln, CAPS));
+        item.delayBeforeCanPickup = 0;
+        p.worldObj.spawnEntityInWorld(item);
+    }
+
+    private void checkBottlecaps()
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (p == null)
+        {
+            return;
+        }
+        long after = deci.Q.b.e(p).cb();
+        int inInventory = 0;
+        for (net.minecraft.item.ItemStack st : p.inventory.mainInventory)
+        {
+            if (st != null && st.getItem() == deci.aD.k.aln)
+            {
+                inInventory += st.stackSize;
+            }
+        }
+        FMLLog.info("[%s] AUTOTEST bottlecaps: balance %d -> %d (dropped %d), caps left as items: %d",
+                    DecimationWorldGen.MODID, capsBefore, after, CAPS, inInventory);
     }
 
     private void run(WorldServer world)
