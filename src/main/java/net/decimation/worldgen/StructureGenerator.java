@@ -55,6 +55,10 @@ public class StructureGenerator implements IWorldGenerator
     private static final int MAX_FOUNDATION = 8;
     /** Width of the graded terrain ring around the footprint. */
     private static final int RING = 3;
+    /** City street width in blocks, along each cell's west and north edge. */
+    private static final int STREET_WIDTH = 5;
+    /** How far above a street plants and tree parts are cleared. */
+    private static final int STREET_CLEARANCE = 8;
     /** Zone extends this many blocks past the footprint on every side. */
     private static final int ZONE_MARGIN = 8;
     /** Schematic block id that means "leave the world untouched here". */
@@ -89,17 +93,21 @@ public class StructureGenerator implements IWorldGenerator
     private final java.util.Map<Integer, Sub> substitutions;
     /** every Decimation road-surface block, for FACE_ROAD detection */
     private final Set<Block> roadBlocks;
+    /** Surface for generated city streets; null disables street painting. */
+    private final Block streetBlock;
     private boolean disabled;
     private int errors;
     private boolean loggedBadId;
 
     public StructureGenerator(List<Schematic> schematics,
                               java.util.Map<Integer, Sub> substitutions,
-                              Set<Block> roadBlocks)
+                              Set<Block> roadBlocks,
+                              Block streetBlock)
     {
         this.schematics = schematics;
         this.substitutions = substitutions;
         this.roadBlocks = roadBlocks;
+        this.streetBlock = streetBlock;
     }
 
     @Override
@@ -174,6 +182,10 @@ public class StructureGenerator implements IWorldGenerator
         }
 
         int sector = sector(world, chunkX, chunkZ);
+        if (sector == CITY && streetBlock != null)
+        {
+            paintStreets(world, chunkX, chunkZ);
+        }
         List<Schematic> pool = pool(sector);
         if (pool.isEmpty())
         {
@@ -189,8 +201,11 @@ public class StructureGenerator implements IWorldGenerator
         {
             return;
         }
-        int anchorX = cellX * CELL + r.nextInt(CELL);
-        int anchorZ = cellZ * CELL + r.nextInt(CELL);
+        // anchors stay in the first CELL-1 chunks: origin +8 plus a 24 wide
+        // footprint then ends before the next cell, whose first chunk
+        // carries the city street
+        int anchorX = cellX * CELL + r.nextInt(CELL - 1);
+        int anchorZ = cellZ * CELL + r.nextInt(CELL - 1);
         Schematic schematic = pool.get(r.nextInt(pool.size()));
         int turns = r.nextInt(4); // 0/90/180/270 clockwise
         if (anchorX != chunkX || anchorZ != chunkZ)
@@ -351,6 +366,74 @@ public class StructureGenerator implements IWorldGenerator
             return net.decimation.mod.server.zones.a.POLICE;
         }
         return null;
+    }
+
+    /**
+     * City streets: every cell's first chunk row/column carries a
+     * STREET_WIDTH wide road along its west / north edge, so CITY sectors get
+     * a street grid with one block per cell. Each chunk paints only its own
+     * columns, which are always loaded while it populates, so this never
+     * triggers neighbouring chunk generation. The surface follows the terrain
+     * (stepping one block at a time), skips water, and clears plants and
+     * tree parts standing on it.
+     */
+    private void paintStreets(World world, int chunkX, int chunkZ)
+    {
+        boolean northSouth = Math.floorMod(chunkX, CELL) == 0;
+        boolean eastWest = Math.floorMod(chunkZ, CELL) == 0;
+        if (!northSouth && !eastWest)
+        {
+            return;
+        }
+        int baseX = chunkX << 4, baseZ = chunkZ << 4;
+        for (int x = 0; x < 16; x++)
+        {
+            for (int z = 0; z < 16; z++)
+            {
+                if (!((northSouth && x < STREET_WIDTH) || (eastWest && z < STREET_WIDTH)))
+                {
+                    continue;
+                }
+                int wx = baseX + x, wz = baseZ + z;
+                int y = ground(world, wx, wz) - 1;
+                // ground() stops on tree trunks; walk down to the real soil
+                while (y > 4 && clearable(world.getBlock(wx, y, wz)))
+                {
+                    y--;
+                }
+                if (y <= 4 || y > 250 || isWater(world, wx, y + 1, wz))
+                {
+                    continue;
+                }
+                Block top = world.getBlock(wx, y, wz);
+                if (top.getMaterial().isLiquid())
+                {
+                    continue;
+                }
+                world.setBlock(wx, y, wz, streetBlock, 0, 2);
+                for (int above = y + 1; above <= y + STREET_CLEARANCE; above++)
+                {
+                    if (clearable(world.getBlock(wx, above, wz)))
+                    {
+                        world.setBlock(wx, above, wz, Blocks.air, 0, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    /** Plants, snow and tree parts: things a street may remove or look through. */
+    private static boolean clearable(Block b)
+    {
+        net.minecraft.block.material.Material m = b.getMaterial();
+        return m == net.minecraft.block.material.Material.air
+            || m == net.minecraft.block.material.Material.plants
+            || m == net.minecraft.block.material.Material.vine
+            || m == net.minecraft.block.material.Material.leaves
+            || m == net.minecraft.block.material.Material.wood
+            || m == net.minecraft.block.material.Material.snow
+            || m == net.minecraft.block.material.Material.gourd
+            || m == net.minecraft.block.material.Material.cactus;
     }
 
     /**

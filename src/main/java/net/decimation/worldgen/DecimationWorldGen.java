@@ -92,7 +92,8 @@ public class DecimationWorldGen
     public void init(FMLInitializationEvent event)
     {
         GameRegistry.registerWorldGenerator(
-            new StructureGenerator(schematics, buildSubstitutions(), roadBlocks()),
+            new StructureGenerator(schematics, buildSubstitutions(), roadBlocks(),
+                                   Block.getBlockFromName("deci:BlockRoad")),
             100);
         FMLLog.info("[%s] structure generator registered", MODID);
 
