@@ -38,3 +38,21 @@ dependencies {
     // minus our own net/decimation/{worldgen,fixes} classes; RFG remaps it SRG -> MCP.
     devOnlyNonPublishable(rfg.deobf(project.files("libs/Decimation-base.jar")))
 }
+
+// Decimation's main menu swaps "Play" for "Update" unless mods/DecimationVoiceChat.jar
+// exists (net.decimation.mod.common.utils.h.gI()). Install a deobfuscated copy of the
+// real voice chat jar into the dev run folder so the dev menu behaves like Prism.
+configurations {
+    voiceChatDeobf
+}
+dependencies {
+    voiceChatDeobf(rfg.deobf(project.files("libs/DecimationVoiceChat.jar")))
+}
+def installVoiceChat = tasks.register("installVoiceChat", Copy) {
+    from(configurations.voiceChatDeobf)
+    into(layout.projectDirectory.dir("run/client/mods"))
+    rename { "DecimationVoiceChat.jar" }
+}
+tasks.matching { it.name == "runClient" }.configureEach {
+    dependsOn(installVoiceChat)
+}
