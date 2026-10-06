@@ -55,6 +55,8 @@ public class StructureGenerator implements IWorldGenerator
     private static final int MAX_FOUNDATION = 8;
     /** Width of the graded terrain ring around the footprint. */
     private static final int RING = 3;
+    /** Zone extends this many blocks past the footprint on every side. */
+    private static final int ZONE_MARGIN = 8;
     /** Schematic block id that means "leave the world untouched here". */
     private static final int SKIP_ID = 7; // bedrock, never used in ruins
 
@@ -211,16 +213,20 @@ public class StructureGenerator implements IWorldGenerator
         int maxZ = originZ + footL - 1;
 
         // sample ground at the corners and centre of the footprint
-        int[] samples = {
-            ground(world, originX, originZ),
-            ground(world, maxX, originZ),
-            ground(world, originX, maxZ),
-            ground(world, maxX, maxZ),
-            ground(world, (originX + maxX) / 2, (originZ + maxZ) / 2),
+        int[][] points = {
+            {originX, originZ}, {maxX, originZ}, {originX, maxZ}, {maxX, maxZ},
+            {(originX + maxX) / 2, (originZ + maxZ) / 2},
         };
         int lo = Integer.MAX_VALUE, hi = Integer.MIN_VALUE;
-        for (int y : samples)
+        for (int[] p : points)
         {
+            int y = ground(world, p[0], p[1]);
+            // ground() skips water (it does not block movement), so the
+            // first block above the seabed is where water shows up
+            if (isWater(world, p[0], y, p[1]))
+            {
+                return; // ocean/lake/river site
+            }
             lo = Math.min(lo, y);
             hi = Math.max(hi, y);
         }
@@ -231,13 +237,6 @@ public class StructureGenerator implements IWorldGenerator
         // floor REPLACES the top ground layer - flush with the terrain
         // instead of perched one block above it
         int groundY = lo - 1;
-
-        if (isWater(world, originX, groundY, originZ)
-            || isWater(world, maxX, groundY, maxZ)
-            || isWater(world, (originX + maxX) / 2, groundY, (originZ + maxZ) / 2))
-        {
-            return; // ocean/lake/river site
-        }
 
         // pass 1: foundation + blocks, bottom-up. SKIP cells never touch the
         // world. Flag 2 (send to client, no neighbour updates) so attached
@@ -324,9 +323,34 @@ public class StructureGenerator implements IWorldGenerator
                         + " - was it created with a different mod list?",
                         DecimationWorldGen.MODID, s.name, skippedIds);
         }
-        FMLLog.info("[%s] placed '%s' at %d,%d,%d (rot %d, sector %s)",
+        net.decimation.mod.server.zones.a zone = zoneFor(s);
+        if (zone != null)
+        {
+            ZoneStore.add(zone,
+                          originX - ZONE_MARGIN, groundY - 4, originZ - ZONE_MARGIN,
+                          maxX + ZONE_MARGIN, groundY + s.height + 16, maxZ + ZONE_MARGIN);
+        }
+        FMLLog.info("[%s] placed '%s' at %d,%d,%d (rot %d, sector %s, zone %s)",
                     DecimationWorldGen.MODID, s.name, originX, groundY, originZ,
-                    turns * 90, sectorName);
+                    turns * 90, sectorName, zone == null ? "none" : zone.name());
+    }
+
+    /**
+     * Zone tag by schematic prefix: military sites get Decimation's MILITARY
+     * zone, city blocks its POLICE zone (both bias infected spawns toward
+     * their uniformed variants). Civilian and untagged ruins stay unzoned.
+     */
+    private static net.decimation.mod.server.zones.a zoneFor(Schematic s)
+    {
+        if (s.name.startsWith("mil_"))
+        {
+            return net.decimation.mod.server.zones.a.MILITARY;
+        }
+        if (s.name.startsWith("city_"))
+        {
+            return net.decimation.mod.server.zones.a.POLICE;
+        }
+        return null;
     }
 
     /**
@@ -407,12 +431,11 @@ public class StructureGenerator implements IWorldGenerator
                 {
                     continue;
                 }
-                Block surface = world.getBlock(x, naturalTop, z);
-                if (surface == Blocks.water
-                    || surface == Blocks.flowing_water)
+                if (isWater(world, x, naturalTop + 1, z))
                 {
-                    continue; // never cut into or fill over water
+                    continue; // underwater column: never cut into or fill over water
                 }
+                Block surface = world.getBlock(x, naturalTop, z);
                 // interpolate: floor level at the wall, natural at ring edge
                 int targetTop = groundY
                     + Math.round((naturalTop - groundY) * dist / (float) (RING + 1));
@@ -446,7 +469,11 @@ public class StructureGenerator implements IWorldGenerator
         }
     }
 
-    /** First air Y above the topmost solid/liquid block. */
+    /**
+     * Y just above the topmost movement-blocking block. Despite its name,
+     * getTopSolidOrLiquidBlock skips water, so over a lake this is the
+     * block above the lake bed, which is water.
+     */
     private static int ground(World world, int x, int z)
     {
         return world.getTopSolidOrLiquidBlock(x, z); // getTopSolidOrLiquidBlock

@@ -101,6 +101,14 @@ public class DecimationWorldGen
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new net.decimation.fixes.BottlecapHandler());
         FMLLog.info("[%s] bottlecap pickup fix registered", MODID);
+
+        // generated structures carry Decimation zones (military / police)
+        ZoneStore store = new ZoneStore();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(store);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(store);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new net.decimation.fixes.ZoneSpawnHandler());
+        FMLLog.info("[%s] zone store and zone spawn fix registered", MODID);
     }
 
     /**
