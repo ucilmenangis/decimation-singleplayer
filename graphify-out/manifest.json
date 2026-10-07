@@ -50,14 +50,14 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791372696.2989397,
-    "ast_hash": "6128c859183d4ee79726951aff9159ce",
-    "semantic_hash": "6128c859183d4ee79726951aff9159ce"
+    "mtime": 1791373613.6746676,
+    "ast_hash": "dd679298c6e56040a07ff9bb6bb94209",
+    "semantic_hash": "dd679298c6e56040a07ff9bb6bb94209"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791373044.5185084,
-    "ast_hash": "4635d3dbaab8084d40d9b11c722b3925",
-    "semantic_hash": "4635d3dbaab8084d40d9b11c722b3925"
+    "mtime": 1791374133.689084,
+    "ast_hash": "35f11df0244fff21489879286b76da29",
+    "semantic_hash": "35f11df0244fff21489879286b76da29"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -70,9 +70,9 @@
     "semantic_hash": "d4b685f732c9680f7e1309982fa104e7"
   },
   "dev/src/main/java/net/decimation/worldgen/StructureGenerator.java": {
-    "mtime": 1791372606.5305393,
-    "ast_hash": "3e9a3a227d8bd785a8831a34bdc61d2e",
-    "semantic_hash": "3e9a3a227d8bd785a8831a34bdc61d2e"
+    "mtime": 1791374119.7200706,
+    "ast_hash": "131249b7a8d1065215deb3e69442efec",
+    "semantic_hash": "131249b7a8d1065215deb3e69442efec"
   },
   "dev/src/main/java/net/decimation/worldgen/ZoneStore.java": {
     "mtime": 1791318417.960504,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791373332.8893058,
-    "ast_hash": "d3b203519e2e64ffe97d9299e6bdb833",
-    "semantic_hash": "d3b203519e2e64ffe97d9299e6bdb833"
+    "mtime": 1791374347.9716086,
+    "ast_hash": "51a4efba0ad9378c05646fffbe2f2d3e",
+    "semantic_hash": "51a4efba0ad9378c05646fffbe2f2d3e"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791373166.1439154,
-    "ast_hash": "673a3f2f6548dfcbb5f374bccd90cad4",
-    "semantic_hash": "673a3f2f6548dfcbb5f374bccd90cad4"
+    "mtime": 1791374356.098591,
+    "ast_hash": "6b638e2eacb7f9cb9d8a23749feba77d",
+    "semantic_hash": "6b638e2eacb7f9cb9d8a23749feba77d"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -225,9 +225,9 @@
     "semantic_hash": "f706a72408e55786b95646cd5975c0b6"
   },
   "docs/building_design.md": {
-    "mtime": 1791370583.7322848,
-    "ast_hash": "fd3337bbba7a27280b0dbebeb3739033",
-    "semantic_hash": "fd3337bbba7a27280b0dbebeb3739033"
+    "mtime": 1791374347.9711492,
+    "ast_hash": "e61d270c50e9534682fbee9a1650464c",
+    "semantic_hash": "e61d270c50e9534682fbee9a1650464c"
   },
   "tools/patches/PatchPropCulling.java": {
     "mtime": 1791357832.6546814,

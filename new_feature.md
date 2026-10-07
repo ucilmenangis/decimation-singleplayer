@@ -227,7 +227,10 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   `grade(world, x, z, baseY)`) and `Slices` grades every lot column of a
   window before writing the plan there. Buildings now keep a 2 block side
   yard and a 3 block back yard where the lot allows, and a setback of 6..9
-  (75% of lots with room) for a front yard. Next: step 2, street life.
+  (75% of lots with room) for a front yard.
+  Step 2 (street life) DONE in v0.15.0: levelled streets, centre lines,
+  lamps, benches, bins, trash bags, checked in autotest screenshots.
+  Next: step 3, full multiblocks.
 
 ---
 

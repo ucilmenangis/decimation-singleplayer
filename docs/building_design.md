@@ -91,3 +91,34 @@ margin ring (written as SKIP except where overgrowth goes).
   (`PropRenderer`). Car wreck model (deci:BlockWreckage*): long axis along x at 0 degrees,
 confirmed in game 2026-10-07 (the first guess, along z, put every car across
 the road). North-south streets use metadata 5/3, east-west streets 4/2.
+
+## Street life (0.15.0)
+
+- Streets are levelled: every street and sidewalk column takes the height
+  of its street's centre column (offset 2) at the same position along it;
+  intersections and corners use the intersection centre. Before, the
+  painter followed the ground column by column and one street could step 3
+  blocks from side to side (seen in an autotest screenshot). Cut / fill up
+  to 6 blocks, else the column keeps its own height.
+- Dashed centre line, 3 on 3 off, `deci:BlockRoad_CenterLine`, never in an
+  intersection or the 2 blocks next to it. That block (DeciTexturedBlock)
+  picks its top texture by metadata % 4: 0 and 1 have the stripe down the
+  texture, 2 and 3 across. North-south streets use meta 4, east-west 2;
+  confirmed in autotest screenshots (dashes run along the street).
+- Street lights (`deci:BlockStreetLight`) on the sidewalk column next to the
+  road, every 20 blocks, the two sides staggered by 10, 25% missing. Benches
+  (`deci:BlockStreetBench`, 35% of slots) and bins (`deci:BlockStreetBin`,
+  40%) on the inner sidewalk column, trash bags (`BlockTrashBag1/2`, 4%)
+  scattered. Corners stay empty.
+- Facing of any BlockProp, from deobf `PropRenderer`: translate, rotate 180
+  about x, rotate metadata % 4 * 90 about y, then the prop's extra rotation.
+  A model's +x then points: meta 4 west, 5 north, 2 east, 3 south for props
+  with extra rotation 180 (street light arm, bench front: backrest is at
+  model -x); for extra rotation 0 (cars) +x points east at 4, south at 5.
+  So "toward the road": road to the west 4, east 2, north 5, south 3.
+  Street light arm confirmed in game (autotest side-on screenshot, meta 2
+  arm east). Model extents can be read from the `.bmodel` text (rotation
+  points + shape offsets), see docs/gun_model_spec.md for the format.
+- Not used: stop line textures (`road_stopline0..3`) are partial stripes at
+  one block edge; traffic lights, power poles, phone booths (later).
+

@@ -382,6 +382,13 @@ of the last session:
   vanilla's terrain generator, flat cities on the exact city sectors
   (`Sectors` is now shared), dead land near cities, overgrown far away,
   rivers, no ocean. Autotest now runs on this world type.
+  v0.15.0: street life (docs/building_design.md "Street life"): levelled
+  street cross-sections, dashed centre lines, street lights, benches, bins,
+  trash bags, facing derived from PropRenderer's transform. Autotest ends
+  with 3 screenshots of a city street in `dev/run/client/screenshots/
+  autotest_<n>.png` (along the street, a street light side-on, across the
+  street); READ THEM to check anything visual (facing, levelling) instead
+  of asking the user. `-Ddeciworldgen.autotest.views=false` skips them.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

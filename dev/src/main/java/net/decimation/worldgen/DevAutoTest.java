@@ -72,14 +72,138 @@ public class DevAutoTest
         }
         if (finished)
         {
+            if (takeViews(mc))
+            {
+                return;
+            }
             FMLLog.info("[%s] AUTOTEST done, shutting down", DecimationWorldGen.MODID);
             mc.shutdown();
         }
     }
 
+    // ---- screenshots of a city street, so street furniture facing can be
+    // checked without a person: <run dir>/screenshots/autotest_<view>.png
+
+    /** View: offset from a north-south street centre (x, height above ground, z), yaw, pitch. */
+    private static final float LAMP = 999;
+    private static final float[][] VIEWS = {
+        {4, 3, 0, 180, 12},   // from the east sidewalk, looking north along the street
+        {LAMP, 0, 0, 0, 0},   // side-on view of the nearest street light (arm direction)
+        {-3, 3, 0, 270, 10},  // on the west sidewalk, looking east across the street (levelling)
+    };
+    private volatile int viewRequested = -1;
+    private volatile int viewReady = -1;
+    private int view;
+    private int viewWait;
+
+    /** Client side: one view after another; false once all are saved. */
+    private boolean takeViews(Minecraft mc)
+    {
+        if (view >= VIEWS.length || "false".equals(System.getProperty(PROPERTY + ".views")))
+        {
+            return false;
+        }
+        mc.gameSettings.hideGUI = true;
+        if (viewRequested < view)
+        {
+            viewRequested = view;
+            viewWait = 0;
+            return true;
+        }
+        if (viewReady < view || ++viewWait < 260)
+        {
+            return true; // teleport pending, then let the chunks render
+        }
+        net.minecraft.util.IChatComponent msg = net.minecraft.util.ScreenShotHelper.saveScreenshot(
+            mc.mcDataDir, "autotest_" + view + ".png", mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+        FMLLog.info("[%s] AUTOTEST view %d at %s: %s", DecimationWorldGen.MODID, view, viewSpot,
+                    msg == null ? "?" : msg.getUnformattedText());
+        view++;
+        return true;
+    }
+
+    private volatile String viewSpot = "";
+
+    /** Server side: move the player to the requested view over a city street. */
+    private void serveView()
+    {
+        int v = viewRequested;
+        if (v < 0 || v <= viewReady)
+        {
+            return;
+        }
+        viewSpot = "";
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        long seed = world.getSeed();
+        int sx = 0, sz = 0;
+        search:
+        for (int r = 0; r < 6; r++)
+        {
+            for (int rx = -r; rx <= r; rx++)
+            {
+                for (int rz = -r; rz <= r; rz++)
+                {
+                    if (Sectors.regionSector(seed, rx, rz) == StructureGenerator.CITY)
+                    {
+                        sx = rx * Sectors.REGION_BLOCKS + 64 + 2; // centre of a north-south street
+                        sz = rz * Sectors.REGION_BLOCKS + 64 + 34;
+                        break search;
+                    }
+                }
+            }
+        }
+        float[] f = VIEWS[v];
+        int x = sx + (int) f[0], z = sz + (int) f[2];
+        world.getChunkProvider().loadChunk(x >> 4, z >> 4);
+        int ground = world.getTopSolidOrLiquidBlock(x, z);
+        float yaw = f[3], pitch = f[4];
+        double px = x + 0.5, py = ground + f[1], pz = z + 0.5;
+        if (f[0] == LAMP)
+        {
+            // side-on view of the nearest street light: 7 blocks off it,
+            // across its arm, so the arm points left or right on screen
+            net.minecraft.block.Block lamp = net.minecraft.block.Block.getBlockFromName("deci:BlockStreetLight");
+            search2:
+            for (int dz = 0; dz < 64; dz++)
+            {
+                for (int dx = -40; dx < 40; dx++)
+                {
+                    for (int y = 60; y < 90; y++)
+                    {
+                        if (world.getBlock(sx + dx, y, sz + dz) == lamp)
+                        {
+                            int meta = world.getBlockMetadata(sx + dx, y, sz + dz);
+                            // arm: 2 east, 3 south, 4 west, 5 north; look from 7 blocks to its right
+                            int ax = meta == 2 ? 1 : meta == 4 ? -1 : 0, az = meta == 3 ? 1 : meta == 5 ? -1 : 0;
+                            px = sx + dx + 0.5 - az * 7;
+                            pz = sz + dz + 0.5 + ax * 7;
+                            py = y + 4;
+                            yaw = (float) Math.toDegrees(Math.atan2(-(sx + dx + 0.5 - px), sz + dz + 0.5 - pz));
+                            pitch = 0;
+                            viewSpot = "lamp meta " + meta + " at " + (sx + dx) + "," + y + "," + (sz + dz) + ", arm "
+                                + (ax > 0 ? "east" : ax < 0 ? "west" : az > 0 ? "south" : "north") + ", camera";
+                            break search2;
+                        }
+                    }
+                }
+            }
+        }
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        p.playerNetServerHandler.setPlayerLocation(px, py, pz, yaw, pitch);
+        viewSpot += " " + (int) px + "," + (int) py + "," + (int) pz;
+        viewReady = v;
+    }
+
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event)
     {
+        if (event.phase == TickEvent.Phase.END && finished)
+        {
+            serveView();
+            return;
+        }
         if (event.phase != TickEvent.Phase.END || !requested || finished)
         {
             return;
