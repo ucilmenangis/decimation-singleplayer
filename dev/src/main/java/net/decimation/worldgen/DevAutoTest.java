@@ -99,7 +99,7 @@ public class DevAutoTest
     /** Client side: one view after another; false once all are saved. */
     private boolean takeViews(Minecraft mc)
     {
-        int views = SETS ? net.decimation.worldgen.sets.FurnitureSets.all().size()
+        int views = FLATS ? FLATS_VIEWS : SETS ? net.decimation.worldgen.sets.FurnitureSets.all().size()
             : GALLERY ? (galleryNames().size() + GALLERY_PER_VIEW - 1) / GALLERY_PER_VIEW
             : AUDIT ? AUDIT_VIEWS : VIEWS.length;
         if (view >= views || "false".equals(System.getProperty(PROPERTY + ".views")))
@@ -120,7 +120,7 @@ public class DevAutoTest
             savedGamma = mc.gameSettings.gammaSetting;
         }
         mc.gameSettings.hideGUI = true;
-        if (AUDIT || GALLERY || SETS)
+        if (AUDIT || GALLERY || SETS || FLATS)
         {
             mc.gameSettings.gammaSetting = 1.0F;
         }
@@ -156,7 +156,7 @@ public class DevAutoTest
             return true;
         }
         net.minecraft.util.IChatComponent msg = net.minecraft.util.ScreenShotHelper.saveScreenshot(
-            mc.mcDataDir, (SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
+            mc.mcDataDir, (FLATS ? "flat_" : SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
             mc.displayWidth, mc.displayHeight,
             mc.getFramebuffer());
         FMLLog.info("[%s] AUTOTEST view %d at %s: %s", DecimationWorldGen.MODID, view, viewSpot,
@@ -304,6 +304,93 @@ public class DevAutoTest
         viewReady = v;
     }
 
+    // ---- flats audit (-Ddeciworldgen.autotest.flats=true): 3 apartment
+    // blocks x (storey 1 living room, storey 1 bedroom, storey 2 living room,
+    // ground storey lobby / flat); the camera stands at a room edge looking
+    // along the longest open line (Building.lookCell)
+    private static final boolean FLATS = "true".equals(System.getProperty(PROPERTY + ".flats"));
+    private static final int FLATS_VIEWS = 12;
+    private List<Building> flats;
+
+    private void serveFlatView(int v)
+    {
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        if (flats == null)
+        {
+            flats = new ArrayList<Building>();
+            long seed = world.getSeed();
+            for (int r = 0; r < 6 && flats.size() < 3; r++)
+            {
+                for (int rx = -r; rx <= r && flats.size() < 3; rx++)
+                {
+                    for (int rz = -r; rz <= r && flats.size() < 3; rz++)
+                    {
+                        if (Math.max(Math.abs(rx), Math.abs(rz)) != r
+                            || Sectors.regionSector(seed, rx, rz) != StructureGenerator.CITY)
+                        {
+                            continue;
+                        }
+                        for (int cx = rx * 4; cx < rx * 4 + 4 && flats.size() < 3; cx++)
+                        {
+                            for (int cz = rz * 4; cz < rz * 4 + 4 && flats.size() < 3; cz++)
+                            {
+                                for (Building b : DecimationWorldGen.city.plan(world, cx, cz))
+                                {
+                                    if (b.kind == Building.APARTMENT && b.floors >= 3 && flats.size() < 3)
+                                    {
+                                        flats.add(b);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        viewSkip = false;
+        int i = v / 4, mode = v % 4;
+        Building b = i < flats.size() ? flats.get(i) : null;
+        if (b == null)
+        {
+            viewSkip = true;
+            viewSpot = "no flat " + i;
+            viewReady = v;
+            return;
+        }
+        for (int cx = (b.minX >> 4) - 2; cx <= ((b.minX + b.width) >> 4) + 2; cx++)
+        {
+            for (int cz = (b.minZ >> 4) - 2; cz <= ((b.minZ + b.length) >> 4) + 2; cz++)
+            {
+                world.getChunkProvider().loadChunk(cx, cz);
+            }
+        }
+        Integer baseY = StructureData.get(world).baseY(b.id);
+        int storey = mode == 3 ? 0 : mode == 2 ? 2 : 1;
+        byte room = mode == 1 ? Building.R_BEDROOM : mode == 3 ? Building.R_LOBBY : Building.R_LIVING;
+        int[] c = b.lookCell(storey, room);
+        if (c == null && mode == 3)
+        {
+            c = b.lookCell(0, Building.R_LIVING);
+        }
+        if (baseY == null || baseY == StructureData.CANCELLED || c == null)
+        {
+            viewSkip = true;
+            viewSpot = b.id + " mode " + mode + " unavailable";
+            viewReady = v;
+            return;
+        }
+        world.setWorldTime(6000);
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        viewYaw = c[2];
+        viewPitch = 12;
+        p.playerNetServerHandler.setPlayerLocation(c[0] + 0.5, baseY + storey * Building.FLOOR + 1, c[1] + 0.5, c[2], 12);
+        viewSpot = b.describe() + " " + b.id + " storey " + storey + " " + (mode == 1 ? "bedroom" : mode == 3 ? "ground" : "living")
+            + " at " + c[0] + "," + (baseY + storey * Building.FLOOR + 1) + "," + c[1];
+        viewReady = v;
+    }
+
     // ---- furniture set preview (-Ddeciworldgen.autotest.sets=true): every
     // furniture set staged alone in a bay (plaster back wall, plank floor),
     // photographed front-on: set_<n>.png, set name logged per view
@@ -396,6 +483,8 @@ public class DevAutoTest
         if ("seat".equals(type)) return dx < 0 ? 0 : dx > 0 ? 1 : dz < 0 ? 2 : 3;
         if ("bed".equals(type)) return (dx < 0 ? 1 : dx > 0 ? 3 : dz < 0 ? 2 : 0) | ("head".equals(e.part) ? 8 : 0);
         if ("meta".equals(type)) return e.meta;
+        if ("trapdoor".equals(type)) return (dz > 0 ? 0 : dz < 0 ? 1 : dx > 0 ? 2 : 3) | 4;
+        if ("hook".equals(type)) return dz < 0 ? 0 : dx > 0 ? 1 : dz > 0 ? 2 : 3;
         return dx < 0 ? 4 : dx > 0 ? 2 : dz < 0 ? 5 : 3;
     }
 
@@ -558,6 +647,11 @@ public class DevAutoTest
                     ((net.minecraft.entity.Entity) o).setDead();
                 }
             }
+        }
+        if (FLATS)
+        {
+            serveFlatView(v);
+            return;
         }
         if (SETS)
         {

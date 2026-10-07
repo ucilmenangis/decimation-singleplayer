@@ -274,8 +274,10 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   parts later through a block translation tool with a license notice.
   Steps 1a (v0.19.0) and 1b + 2 for apartments (v0.20.0) DONE; live loop
   added on user request (no restart per change): /deciworldgen reload /
-  rebuild, -Photswap + tools/hotswap.py. Next: step 3 reference library +
-  critic pass on apartments, then offices / shops on sets.
+  rebuild, -Photswap + tools/hotswap.py. Step 3 first pass DONE v0.21.0:
+  reference + checklist, critic pass 1 (overall 3/10 on v0.20), fixes for
+  the verified findings. Open items listed in
+  docs/references/critic_apartment_v0.20.md; then offices / shops on sets.
 
 ---
 

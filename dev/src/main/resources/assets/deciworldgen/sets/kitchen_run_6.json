@@ -1,20 +1,56 @@
 {
   "name": "kitchen_run_6",
-  "rooms": ["kitchen"],
+  "rooms": [
+    "kitchen"
+  ],
   "weight": 8,
-  "comment": "Long kitchen with a washing machine at the end.",
+  "comment": "Long kitchen with a washing machine at the end.; fridge = 2 high iron block, tap (tripwire hook) over the sink, wall cabinets with trapdoor doors.",
   "layers": [
-    ["FCSCOW",
-     "......"],
-    ["      "],
-    ["uuuuu "]
+    [
+      "FCSCOW",
+      "......"
+    ],
+    [
+      "F h   "
+    ],
+    [
+      " uuuu ",
+      " tttt "
+    ]
   ],
   "palette": {
-    "F": {"block": "deci:BlockElectricBoxBin", "type": "prop", "face": "out"},
-    "C": {"block": "minecraft:double_stone_slab"},
-    "S": {"block": "minecraft:cauldron"},
-    "O": {"block": "minecraft:furnace", "type": "vanilla", "face": "out"},
-    "W": {"block": "deci:BlockWashingMachine", "type": "prop", "face": "out"},
-    "u": {"block": "minecraft:planks", "meta": 5}
+    "F": {
+      "block": "minecraft:iron_block"
+    },
+    "C": {
+      "block": "minecraft:double_stone_slab"
+    },
+    "S": {
+      "block": "minecraft:cauldron"
+    },
+    "O": {
+      "block": "minecraft:furnace",
+      "type": "vanilla",
+      "face": "out"
+    },
+    "W": {
+      "block": "deci:BlockWashingMachine",
+      "type": "prop",
+      "face": "out"
+    },
+    "u": {
+      "block": "minecraft:planks",
+      "meta": 5
+    },
+    "h": {
+      "block": "minecraft:tripwire_hook",
+      "type": "hook",
+      "face": "in"
+    },
+    "t": {
+      "block": "minecraft:trapdoor",
+      "type": "trapdoor",
+      "face": "in"
+    }
   }
 }

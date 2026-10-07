@@ -182,7 +182,10 @@ public class Building implements Graded
         }
 
         // ---- floor plans
-        boolean core = width >= 12 && length >= 10 && kind != SHOP;
+        // apartments need the width for flats: the 7 long stair core left a
+        // 12 wide block no room for a single flat (empty storeys, review
+        // 0.21); narrow blocks climb by the corner ladder shaft instead
+        boolean core = width >= (kind == APARTMENT ? 16 : 12) && length >= 10 && kind != SHOP;
         coreFx = core ? width - 8 : -1;
         // shallow apartment blocks get a corridor along one side (flats ~6
         // deep) instead of a middle corridor leaving 2 to 3 deep flats
@@ -222,7 +225,8 @@ public class Building implements Graded
                 planApartment(groundPlan, groundFurn, groundFurnMeta, true);
                 planApartment(upperPlan, upperFurn, upperFurnMeta, false);
         }
-        byte fallback = kind == OFFICE ? R_OFFICE : kind == SHOP ? R_SHOP : R_LIVING;
+        // apartment cells outside any flat (around the stairs, ends of rows) are hall
+        byte fallback = kind == OFFICE ? R_OFFICE : kind == SHOP ? R_SHOP : R_CORRIDOR;
         for (byte[][] rooms : new byte[][][] {groundRoom, upperRoom})
         {
             for (int fx = 0; fx < width; fx++)
@@ -376,6 +380,61 @@ public class Building implements Graded
         return viewCell(storey, kind == APARTMENT ? R_LIVING : kind == OFFICE ? R_OFFICE : R_SHOP);
     }
 
+    /**
+     * Dev audit: a camera spot in a room of type want: the open cell at a
+     * room edge with the longest straight view across the room, {world x,
+     * world z, yaw}; null if the storey has no such room.
+     */
+    int[] lookCell(int storey, byte want)
+    {
+        byte[][] plan = storey == 0 ? groundPlan : upperPlan;
+        byte[][] rooms = storey == 0 ? groundRoom : upperRoom;
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int best = 0, bx = -1, bz = -1, bd = 0;
+        for (int fx = 1; fx < width - 1; fx++)
+        {
+            for (int z = 1; z < length - 1; z++)
+            {
+                if (rooms[fx][z] != want || plan[fx][z] != OPEN)
+                {
+                    continue;
+                }
+                for (int d = 0; d < 4; d++)
+                {
+                    int run = 0, x = fx, zz = z;
+                    while (true)
+                    {
+                        x += dirs[d][0];
+                        zz += dirs[d][1];
+                        if (x <= 0 || zz <= 0 || x >= width - 1 || zz >= length - 1 || rooms[x][zz] != want
+                            || plan[x][zz] == WALL || plan[x][zz] == LINING)
+                        {
+                            break;
+                        }
+                        run++;
+                    }
+                    // stand at the room's edge: the cell behind must not be the same room
+                    int back = rooms[Math.max(0, Math.min(width - 1, fx - dirs[d][0]))][Math.max(0, Math.min(length - 1, z - dirs[d][1]))];
+                    if (back != want && run > best)
+                    {
+                        best = run;
+                        bx = fx;
+                        bz = z;
+                        bd = d;
+                    }
+                }
+            }
+        }
+        if (bx < 0)
+        {
+            return null;
+        }
+        int dx = front == FRONT_WEST ? dirs[bd][0] : -dirs[bd][0], dz = dirs[bd][1];
+        int yaw = dx > 0 ? 270 : dx < 0 ? 90 : dz > 0 ? 0 : 180;
+        int x = front == FRONT_WEST ? minX + bx : minX + width - 1 - bx;
+        return new int[] {x, minZ + bz, yaw};
+    }
+
     int[] viewCell(int storey, byte want)
     {
         byte[][] plan = storey == 0 ? groundPlan : upperPlan;
@@ -489,7 +548,10 @@ public class Building implements Graded
         switch (plan[fx][z])
         {
             case WALL:
-                if (within == 3 || unit(fx, ly, z) > decay * 0.3)
+                // decay takes out whole wall columns (a breach), never single
+                // blocks: those left plaster lumps floating at mid height and
+                // made flats see-through (critic review 0.20)
+                if (within == 3 || unit(fx, storey * 7 + 11, z) > decay * 0.18)
                 {
                     Block panel = within == 1 ? wallBottom : wallTop;
                     if (panel != null)
@@ -563,7 +625,7 @@ public class Building implements Graded
         switch (room)
         {
             case R_CORRIDOR: b = corridorFloor; break;
-            case R_BEDROOM: b = bedroomCarpet; break;
+            case R_BEDROOM: b = null; meta[0] = 1; return Blocks.planks; // warm spruce (grey carpet read as concrete)
             case R_LOBBY: b = lobbyFloor; break;
             case R_OFFICE: b = deci("BlockFloorCarpet_" + (1 + (int) (unit(storey, 22, 22) * 4))); break;
             case R_MEETING: b = meetingCarpet; break;
@@ -926,7 +988,8 @@ public class Building implements Graded
     {
         double d = unit(fx, ly, z);
         byte[][] plan = ly / FLOOR == 0 ? groundPlan : upperPlan;
-        if (d < decay * 0.10 && !byDoor(plan, fx, z))
+        // debris gathers along walls and in corners, not in the middle of a room
+        if (d < decay * 0.07 && nearWall(plan, fx, z) && !byDoor(plan, fx, z))
         {
             return lowDebris(fx, ly, z, meta);
         }
@@ -1688,6 +1751,16 @@ public class Building implements Graded
         if ("seat".equals(type)) return seatStairs(dfx, dz);
         if ("bed".equals(type)) return bedDir(dfx, dz) | ("head".equals(e.part) ? 8 : 0);
         if ("meta".equals(type)) return e.meta;
+        if ("trapdoor".equals(type) || "hook".equals(type))
+        {
+            // face = where the supporting block is; trapdoor: open panel
+            // flat against it (cabinet door), hook: a tap on the wall
+            int wx = front == FRONT_WEST ? dfx : -dfx;
+            int side = "trapdoor".equals(type)
+                ? (dz > 0 ? 0 : dz < 0 ? 1 : wx > 0 ? 2 : 3)
+                : (dz < 0 ? 0 : wx > 0 ? 1 : dz > 0 ? 2 : 3);
+            return "trapdoor".equals(type) ? side | 4 : side;
+        }
         return propFacing(dfx, dz);
     }
 

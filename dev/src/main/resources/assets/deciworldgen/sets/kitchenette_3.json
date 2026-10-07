@@ -1,18 +1,48 @@
 {
   "name": "kitchenette_3",
-  "rooms": ["kitchen"],
+  "rooms": [
+    "kitchen"
+  ],
   "weight": 8,
-  "comment": "Compact kitchen for small flats: fridge, sink, oven; one free row in front.",
+  "comment": "Compact kitchen for small flats: fridge, sink, oven; fridge = 2 high iron block, tap (tripwire hook) over the sink, wall cabinets with trapdoor doors.",
   "layers": [
-    ["FSO",
-     "..."],
-    ["   "],
-    [" uu"]
+    [
+      "FSO",
+      "..."
+    ],
+    [
+      "Fh "
+    ],
+    [
+      " uu",
+      " tt"
+    ]
   ],
   "palette": {
-    "F": {"block": "deci:BlockElectricBoxBin", "type": "prop", "face": "out"},
-    "S": {"block": "minecraft:cauldron"},
-    "O": {"block": "minecraft:furnace", "type": "vanilla", "face": "out"},
-    "u": {"block": "minecraft:planks", "meta": 1}
+    "F": {
+      "block": "minecraft:iron_block"
+    },
+    "S": {
+      "block": "minecraft:cauldron"
+    },
+    "O": {
+      "block": "minecraft:furnace",
+      "type": "vanilla",
+      "face": "out"
+    },
+    "u": {
+      "block": "minecraft:planks",
+      "meta": 1
+    },
+    "h": {
+      "block": "minecraft:tripwire_hook",
+      "type": "hook",
+      "face": "in"
+    },
+    "t": {
+      "block": "minecraft:trapdoor",
+      "type": "trapdoor",
+      "face": "in"
+    }
   }
 }

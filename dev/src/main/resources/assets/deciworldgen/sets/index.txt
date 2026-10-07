@@ -16,6 +16,7 @@ living_couch_wall.json
 living_tv_armchair.json
 living_tv_small.json
 living_tv_sofa.json
+lobby_bench.json
 lobby_bikes.json
 lobby_bin_plant.json
 wardrobe.json

@@ -93,6 +93,9 @@ Knowledge index:
 - `docs/interior_spec.md`: design spec for interiors and exteriors
   (surfaces, doors, room programs, story / decay layer, exterior, how to
   verify, building categories); round 2 step 4c, approved 2026-10-07.
+- `docs/references/apartment.md`: real-world clearances, 1.7.10 furniture
+  techniques, the apartment review checklist; critic reports in
+  `docs/references/critic_*.md`.
 - `docs/furniture_sets.md`: data driven furniture sets (JSON format,
   placement rules, preview mode, live editing: /deciworldgen reload /
   rebuild, tools/hotswap.py).
@@ -444,6 +447,12 @@ of the last session:
   apartment outer walls (LINING cells, window recesses), corner entry
   doors, one-sided corridor for apartment blocks under 18 deep, closets,
   /deciworldgen reload | rebuild, -Photswap + tools/hotswap.py.
+  v0.21.0: critic pass 1 on apartments (docs/references/
+  critic_apartment_v0.20.md, verify every critic claim: it was wrong on
+  chair facing and lintels), reference + checklist
+  (docs/references/apartment.md), kitchen sets with iron fridge, trapdoor
+  cabinet doors and tap, wall breaches by column, narrow apartment blocks
+  use the ladder, `-Pflats` audit (Building.lookCell camera).
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

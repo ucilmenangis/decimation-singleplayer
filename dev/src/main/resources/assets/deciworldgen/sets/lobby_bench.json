@@ -1,0 +1,25 @@
+{
+  "name": "lobby_bench",
+  "rooms": [
+    "lobby"
+  ],
+  "weight": 8,
+  "comment": "Two street benches facing into the lobby, a plant at the end.",
+  "layers": [
+    [
+      "b b P"
+    ]
+  ],
+  "palette": {
+    "b": {
+      "block": "deci:BlockStreetBench",
+      "type": "prop",
+      "face": "out"
+    },
+    "P": {
+      "block": "deci:BlockCocaPlant",
+      "type": "prop",
+      "face": "out"
+    }
+  }
+}

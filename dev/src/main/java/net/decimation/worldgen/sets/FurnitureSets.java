@@ -108,6 +108,23 @@ public final class FurnitureSets
                 FMLLog.warning("[deciworldgen] set %s not loaded: %s", e.getKey(), ex);
             }
         }
+        java.util.Collections.sort(sets, new java.util.Comparator<FurnitureSet>()
+        {
+            public int compare(FurnitureSet a, FurnitureSet b)
+            {
+                return a.name.compareTo(b.name); // stable numbering for previews and seeds
+            }
+        });
+        for (List<FurnitureSet> l : rooms.values())
+        {
+            java.util.Collections.sort(l, new java.util.Comparator<FurnitureSet>()
+            {
+                public int compare(FurnitureSet a, FurnitureSet b)
+                {
+                    return a.name.compareTo(b.name);
+                }
+            });
+        }
         byRoom = rooms;
         all = sets;
         String report = sets.size() + " furniture sets loaded, " + errors + " with errors";

@@ -52,7 +52,10 @@ spirit of Lost Cities' data driven parts.
   `type` for how the facing becomes metadata:
   `prop` (Decimation BlockProp: TVs, chairs, fridges...), `vanilla`
   (chest, furnace), `seat` (stairs as a sofa / toilet: the sitter faces
-  `face`), `bed` (+ `"part": "head"` or `"foot"`, `face` = foot to head).
+  `face`), `bed` (+ `"part": "head"` or `"foot"`, `face` = foot to head),
+  `trapdoor` (open trapdoor flat against the block on side `face`: cabinet
+  doors), `hook` (tripwire hook on the wall on side `face`: a tap).
+- Sets are sorted by name (stable preview numbering).
 - `rooms` = the slot the set fills: living, kitchen, dining, bed, storage,
   desk, bath, lobby, closet. `weight` = how often it is picked.
 - Prop looks and sizes: docs/prop_catalogue.md.
@@ -66,9 +69,9 @@ weighted order, every wall of the room and every offset; a set fits when
 every cell is free, off the kept walkway (entry door to bedroom door), its
 back row stands against a wall, lining or glass partition and not in front
 of a door; full height pieces (layer 2 content) never cover a window.
-Measured on seed 1 (distinct rooms): kitchen 100%, bath 100%, lobby
-100%, closet 100%, bed 84%, living 80%, dining 68%; storage and desk are
-optional extras (~40%). `servertest.py ... debugsets` logs every
+Measured on seed 1 (distinct rooms, v0.21): kitchen 100%, bath 100%,
+lobby 100%, closet 100%, bed 92%, living 87%, dining 65%; storage and
+desk are optional extras (~38%). `servertest.py ... debugsets` logs every
 placement (`sets: ok` / `sets: no ... room WxL`).
 
 ## Checking a set

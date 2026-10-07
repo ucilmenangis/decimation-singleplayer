@@ -20,9 +20,9 @@
     "semantic_hash": "f6d0ec3d1c5bb5c1802a7544eafa4896"
   },
   "dev/dependencies.gradle": {
-    "mtime": 1791385378.0514934,
-    "ast_hash": "88f003c0cd7a3a912b141d30b40561b6",
-    "semantic_hash": "88f003c0cd7a3a912b141d30b40561b6"
+    "mtime": 1791387258.7462919,
+    "ast_hash": "3023b21decb9ac868cae8e8f962927a6",
+    "semantic_hash": "3023b21decb9ac868cae8e8f962927a6"
   },
   "dev/repositories.gradle": {
     "mtime": 1791314872.0,
@@ -50,14 +50,14 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791385593.9216795,
-    "ast_hash": "e4c3d30ccdfabbd06ee81a4aebd16a36",
-    "semantic_hash": "e4c3d30ccdfabbd06ee81a4aebd16a36"
+    "mtime": 1791388867.7242565,
+    "ast_hash": "a067d58411c6c929294d99a76d0bf5b7",
+    "semantic_hash": "a067d58411c6c929294d99a76d0bf5b7"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791385556.753598,
-    "ast_hash": "ee956b1188685a54ca40ddd4fa13504a",
-    "semantic_hash": "ee956b1188685a54ca40ddd4fa13504a"
+    "mtime": 1791388140.4991004,
+    "ast_hash": "37d3a63d1edd3dc0f695e898dbf1bbea",
+    "semantic_hash": "37d3a63d1edd3dc0f695e898dbf1bbea"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791385593.9431014,
-    "ast_hash": "a29859ce408ca7b115c73c3f07fdae9b",
-    "semantic_hash": "a29859ce408ca7b115c73c3f07fdae9b"
+    "mtime": 1791388867.8312278,
+    "ast_hash": "28368f7204b5283df701149173b69864",
+    "semantic_hash": "28368f7204b5283df701149173b69864"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791385593.9444451,
-    "ast_hash": "a0138d1b45b4943c46b9a2654ac6e04a",
-    "semantic_hash": "a0138d1b45b4943c46b9a2654ac6e04a"
+    "mtime": 1791388867.832001,
+    "ast_hash": "afd4cfc3f7c26b07eeae7731a056ff5f",
+    "semantic_hash": "afd4cfc3f7c26b07eeae7731a056ff5f"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -175,9 +175,9 @@
     "semantic_hash": "eecbfdd3f9f9d419fbce9147d814df46"
   },
   "dev/src/main/java/net/decimation/worldgen/Building.java": {
-    "mtime": 1791384608.0215745,
-    "ast_hash": "d9b70c06663b69b8bbae8999a1c7060a",
-    "semantic_hash": "d9b70c06663b69b8bbae8999a1c7060a"
+    "mtime": 1791388758.520042,
+    "ast_hash": "6af9a669ecef6a4fd62943f21050adf6",
+    "semantic_hash": "6af9a669ecef6a4fd62943f21050adf6"
   },
   "dev/src/main/java/net/decimation/worldgen/CityDistrict.java": {
     "mtime": 1791369986.9502473,
@@ -330,9 +330,9 @@
     "semantic_hash": "44617037eeac4c4f3e53f42e6306550b"
   },
   "docs/shots_index.md": {
-    "mtime": 1791385593.9448085,
-    "ast_hash": "8dff6e4da5e64c6a47e21cc06fbe6fb9",
-    "semantic_hash": "8dff6e4da5e64c6a47e21cc06fbe6fb9"
+    "mtime": 1791388867.8325467,
+    "ast_hash": "7df65ba111426f15d874b5c1d9071ce0",
+    "semantic_hash": "7df65ba111426f15d874b5c1d9071ce0"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -355,9 +355,9 @@
     "semantic_hash": "104f17048f8e1e6dea21c1ef11f93abc"
   },
   "dev/src/main/java/net/decimation/worldgen/sets/FurnitureSets.java": {
-    "mtime": 1791383745.367953,
-    "ast_hash": "740c20a1fb76e4d47e47eee6271cf3df",
-    "semantic_hash": "740c20a1fb76e4d47e47eee6271cf3df"
+    "mtime": 1791387954.0344794,
+    "ast_hash": "47f4d8cce4e866486b687db62fb7c597",
+    "semantic_hash": "47f4d8cce4e866486b687db62fb7c597"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/bath_toilet_sink.json": {
     "mtime": 1791383829.5137563,
@@ -410,24 +410,24 @@
     "semantic_hash": "f408813edd77d61d4998a5875f54dc5d"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_4.json": {
-    "mtime": 1791383829.4374254,
-    "ast_hash": "b032413be3005caa7f8f4ab547532848",
-    "semantic_hash": "b032413be3005caa7f8f4ab547532848"
+    "mtime": 1791388159.001398,
+    "ast_hash": "f92e18ed13c5918ffc9a6b2d0629d115",
+    "semantic_hash": "f92e18ed13c5918ffc9a6b2d0629d115"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_5.json": {
-    "mtime": 1791383829.4309433,
-    "ast_hash": "550b73597b5d68dff95e252e9004eb73",
-    "semantic_hash": "550b73597b5d68dff95e252e9004eb73"
+    "mtime": 1791388159.0010557,
+    "ast_hash": "de3fbc26c2a64d6aba4d4b422598da2d",
+    "semantic_hash": "de3fbc26c2a64d6aba4d4b422598da2d"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_6.json": {
-    "mtime": 1791383829.4569209,
-    "ast_hash": "e61c5d80e925c2a79cb3f2e46cc46e2c",
-    "semantic_hash": "e61c5d80e925c2a79cb3f2e46cc46e2c"
+    "mtime": 1791388159.0016925,
+    "ast_hash": "47d9a44876bfc67269eedee6f9fff780",
+    "semantic_hash": "47d9a44876bfc67269eedee6f9fff780"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchenette_3.json": {
-    "mtime": 1791384281.5041044,
-    "ast_hash": "c5c8e2ea8f4aa11fb11cd2a42dbba8b7",
-    "semantic_hash": "c5c8e2ea8f4aa11fb11cd2a42dbba8b7"
+    "mtime": 1791388159.0024202,
+    "ast_hash": "88358b349c1e9b990d20ddda7acbe8a8",
+    "semantic_hash": "88358b349c1e9b990d20ddda7acbe8a8"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/living_couch_wall.json": {
     "mtime": 1791384452.5949144,
@@ -465,13 +465,28 @@
     "semantic_hash": "95dcb4fb9a5fdd69ca9d7150cf87cd78"
   },
   "tools/hotswap.py": {
-    "mtime": 1791385396.697566,
-    "ast_hash": "414677d2c1b022d3c897351b9b5c7ebc",
-    "semantic_hash": "414677d2c1b022d3c897351b9b5c7ebc"
+    "mtime": 1791385651.0708683,
+    "ast_hash": "ddc856a527654c00da45dc82887d74e8",
+    "semantic_hash": "ddc856a527654c00da45dc82887d74e8"
   },
   "docs/furniture_sets.md": {
-    "mtime": 1791385593.6777692,
-    "ast_hash": "c14df66a6bc1d65373e6922a3964d1e5",
-    "semantic_hash": "c14df66a6bc1d65373e6922a3964d1e5"
+    "mtime": 1791388867.8302708,
+    "ast_hash": "ddf98f53079b17d74f682b8cbeab3fcb",
+    "semantic_hash": "ddf98f53079b17d74f682b8cbeab3fcb"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/lobby_bench.json": {
+    "mtime": 1791388159.0348103,
+    "ast_hash": "d05e9d2646958a38973a377394185f5a",
+    "semantic_hash": "d05e9d2646958a38973a377394185f5a"
+  },
+  "docs/references/apartment.md": {
+    "mtime": 1791387227.3897967,
+    "ast_hash": "5d9b5bb1ef760546c2a2027ee463da0e",
+    "semantic_hash": "5d9b5bb1ef760546c2a2027ee463da0e"
+  },
+  "docs/references/critic_apartment_v0.20.md": {
+    "mtime": 1791388867.7723806,
+    "ast_hash": "c2cf781d7ba2ef1037dfb9142957a133",
+    "semantic_hash": "c2cf781d7ba2ef1037dfb9142957a133"
   }
 }

@@ -138,3 +138,19 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
 - audit_v0.19/audit_sets_v0.20.png: in buildings: a kitchen run with wall
   cabinets and a dining table in a flat; offices unchanged.
 
+## flats_v0.20/ and flats_v0.21/ (-Pflats: 3 apartment blocks, living / bedroom / ground)
+- v0.20: b0_1_0 (17x14): long oak floored hall (leftover space next to
+  the stairs, labelled living by the fallback), door lintels over empty
+  doorways, a debris slab mid floor; bedroom: bed along the window, chest,
+  grey carpet floor; ground: stone lobby with bikes. b0_1_3 (12x22, 8
+  storeys): every storey an empty hall with windows: NO flats (the stair
+  core took the width). b0_3_1: living with a colour-bar TV close to the
+  camera, bedroom with dark wardrobe, chest, bed.
+- v0.21: same spots before the narrow-block fix; b0_1_3 still empty halls
+  (fixed after these shots: ladder for blocks under 16 wide).
+## sets_v0.21/
+- sets_kitchen.png: kitchen runs with a 2 high silver iron fridge, one
+  counter material, dark cauldron sink with a tripwire hook tap above,
+  furnace oven, wall cabinets with trapdoor door fronts; kitchen_run_6
+  ends with the washing machine. lobby_bench: 2 street benches + plant.
+

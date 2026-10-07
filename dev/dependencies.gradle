@@ -79,6 +79,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("gallery")) {
         jvmArgs("-Ddeciworldgen.autotest.gallery=true")
     }
+    // -Pflats: interiors of 3 apartment blocks (flat_<n>.png)
+    if (project.hasProperty("flats")) {
+        jvmArgs("-Ddeciworldgen.autotest.flats=true")
+    }
     // -Psets: every furniture set staged in a bay and photographed (set_<n>.png)
     if (project.hasProperty("sets")) {
         jvmArgs("-Ddeciworldgen.autotest.sets=true")
