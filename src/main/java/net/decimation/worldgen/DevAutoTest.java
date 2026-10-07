@@ -80,22 +80,36 @@ public class DevAutoTest
         {
             return;
         }
+        if (waitTicks > 0)
+        {
+            waitTicks--;
+            return;
+        }
         try
         {
-            if (capCheckIn < 0)
+            switch (phase++)
             {
-                run(MinecraftServer.getServer().worldServerForDimension(0));
-                dropBottlecaps();
-                capCheckIn = 60; // give the player a few seconds to pick them up
-                return;
+                case 0: // instant checks, then drop caps and the supply crate
+                    run(MinecraftServer.getServer().worldServerForDimension(0));
+                    checkVehicle();
+                    checkHumanity();
+                    dropBottlecaps();
+                    deci.aJ.b.aAg = 0; // supplyDropCountdown: drop on the next tick
+                    waitTicks = 100;   // pickup, and spawn invulnerability runs out
+                    return;
+                case 1:
+                    checkBottlecaps();
+                    checkArmor();
+                    waitTicks = 100;
+                    return;
+                default: // poll until the crate has landed, at most ~60 s
+                    if (!checkSupplyDrop() && phase < 14)
+                    {
+                        waitTicks = 100;
+                        return;
+                    }
+                    break;
             }
-            if (--capCheckIn > 0)
-            {
-                return;
-            }
-            checkBottlecaps();
-            checkVehicle();
-            checkArmor();
         }
         catch (Throwable t)
         {
@@ -104,7 +118,62 @@ public class DevAutoTest
         finished = true;
     }
 
-    private int capCheckIn = -1;
+    private int phase;
+    private int waitTicks;
+
+    /** Humanity fix: a player killing an infected gains humanity (+1 from the
+     *  infected's own value, +1 from the formerly dedicated-only rule). */
+    private void checkHumanity()
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (p == null)
+        {
+            return;
+        }
+        deci.Q.b data = deci.Q.b.e(p);
+        int before = data.cd(); // getHumanity
+        deci.ag.d infected = new deci.ag.d(p.worldObj);
+        infected.setLocationAndAngles(p.posX + 2, p.posY, p.posZ, 0, 0);
+        p.worldObj.spawnEntityInWorld(infected);
+        infected.attackEntityFrom(net.minecraft.util.DamageSource.causePlayerDamage(p), 1000.0f);
+        FMLLog.info("[%s] AUTOTEST humanity: killed infected, humanity %d -> %d, dead=%s",
+                    DecimationWorldGen.MODID, before, data.cd(), infected.isDead || infected.getHealth() <= 0);
+        infected.setDead();
+    }
+
+    /** Supply drop fix: the forced drop must leave a crate block in its column.
+     *  Returns true once the crate has landed (or nothing was dropped). */
+    private boolean checkSupplyDrop()
+    {
+        int x = net.decimation.fixes.SupplyDropScheduler.lastDropX;
+        int z = net.decimation.fixes.SupplyDropScheduler.lastDropZ;
+        if (x == Integer.MIN_VALUE)
+        {
+            FMLLog.info("[%s] AUTOTEST supply drop: nothing dropped", DecimationWorldGen.MODID);
+            return true;
+        }
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        int landedY = -1;
+        for (int y = 255; y > 0; y--)
+        {
+            if (world.getBlock(x, y, z) == deci.aD.c.afA)
+            {
+                landedY = y;
+                break;
+            }
+        }
+        int falling = 0;
+        for (Object o : world.loadedEntityList)
+        {
+            if (o instanceof deci.ac.a)
+            {
+                falling++;
+            }
+        }
+        FMLLog.info("[%s] AUTOTEST supply drop: column %d/%d, crate block at y=%d, falling crates=%d",
+                    DecimationWorldGen.MODID, x, z, landedY, falling);
+        return landedY >= 0;
+    }
     private long capsBefore;
     private static final int CAPS = 5;
 
