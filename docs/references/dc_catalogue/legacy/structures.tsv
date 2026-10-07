@@ -1,0 +1,91 @@
+source	path	category	size	blocks	furniture	main blocks
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/1.nbt	other	15x15x15	259	4	white_wool 161, white_concrete 42, irongrid 15, red_wool 10, barbewire 8
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/1234.nbt	other	6x7x6	104	1	concretbricks 64, infested_stone_bricks 25, oak_planks 10, ladder 4, chest 1
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/17.nbt	other	12x12x12	58	1	concretbricks 23, concretbarrier 10, sandbags 8, sandbagsslab 7, barbewire 7
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/acampamentinho.nbt	wasteland / ruin	15x9x17	532	4	grass_block 207, light_gray_concrete 187, dirt 48, green_concrete 45, sandbags 12
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/acidentedeaviao.nbt	wasteland / ruin	48x48x48	1502	0	quartz_block 476, smooth_quartz_slab 339, quartz_slab 195, light_gray_concrete 158, prismarine_brick_stairs 72
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/baselooters.nbt	military	25x25x25	2933	153	light_gray_concrete 610, smooth_stone_slab 584, polished_andesite 560, stone_bricks 437, blue_concrete 109
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/bases.nbt	military	48x48x48	5442	144	grass_block 1676, dirt 560, oak_planks 408, polished_andesite 349, white_concrete 229
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/cabine.nbt	residential	16x16x16	661	8	spruce_planks 189, spruce_log 168, cobblestone 95, bricks 72, spruce_stairs 54
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/camp1.nbt	wasteland / ruin	8x8x8	61	4	red_wool 51, oak_fence 3, oak_log 2, blue_bed 2, crafting_table 1
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/camp2.nbt	wasteland / ruin	18x15x18	125	10	blue_wool 51, red_wool 51, oak_log 6, oak_fence 6, blue_bed 4
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/campoderefugiados2.nbt	wasteland / ruin	15x10x48	1939	60	yellow_terracotta 437, grass_block 387, irongrid 254, light_gray_concrete 186, dirt 146
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/canada1.nbt	wasteland / ruin	48x48x48	6056	254	green_concrete 1538, polished_andesite 747, green_terracotta 540, light_gray_concrete 535, tall_grass 438
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa1.nbt	residential	19x15x21	1280	35	yellow_concrete 454, polished_andesite 195, spruce_planks 175, stone_brick_slab 126, stone_brick_stairs 88
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa10.nbt	residential	18x17x19	1341	36	birch_planks 433, spruce_planks 265, cobblestone_stairs 254, polished_andesite 193, stripped_spruce_wood 59
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa2.nbt	residential	19x15x21	1242	27	red_concrete 441, polished_andesite 187, spruce_planks 175, stone_brick_slab 126, stone_brick_stairs 99
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa3.nbt	residential	13x7x13	373	19	polished_andesite 132, pink_concrete 98, stone_bricks 79, bricks 40, cyan_carpet 12
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa4.nbt	residential	17x13x22	1403	43	spruce_planks 370, cobblestone 280, infested_stone_bricks 219, smooth_stone 152, stone_brick_slab 109
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa5.nbt	residential	19x16x20	841	5	polished_andesite 219, bricks 198, stone_bricks 157, polished_andesite_stairs 132, smooth_stone_slab 76
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa6.nbt	residential	10x17x10	691	19	polished_andesite 230, light_gray_concrete 190, irongrid 72, polished_diorite 64, oak_planks 36
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa7.nbt	residential	23x23x21	861	12	yellow_terracotta 213, polished_andesite 195, smooth_sandstone_slab 133, spruce_stairs 132, spruce_slab 81
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa8.nbt	residential	16x16x19	768	8	polished_blackstone_brick_slab 246, quartz_bricks 239, black_concrete 168, smooth_quartz 62, gray_concrete 16
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/casa9.nbt	residential	16x16x16	1398	53	oak_planks 339, spruce_planks 321, stripped_spruce_wood 184, polished_andesite 149, spruce_stairs 97
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/cidade1.nbt	wasteland / ruin	48x48x48	13462	408	oak_leaves 2000, smooth_stone 1341, stone_bricks 1120, polished_andesite 1071, spruce_planks 737
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/city1.nbt	wasteland / ruin	48x48x48	8623	103	dirt 2881, grass_block 677, polished_andesite 574, bricks 365, black_concrete 353
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/construction1.nbt	wasteland / ruin	26x26x26	1826	50	red_terracotta 701, cobblestone 323, polished_andesite 314, concretbricks 220, cobblestone_wall 77
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/desert1.nbt	wasteland / ruin	25x25x25	1477	48	sandstone 551, irongrid 258, gray_concrete 180, light_gray_concrete 113, barbewire 61
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/factory.nbt	industrial	32x32x32	4274	76	polished_andesite 941, light_gray_concrete 798, smooth_stone 612, cyan_terracotta 452, polished_blackstone 374
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/farm.nbt	wasteland / ruin	25x25x25	2087	5	grass_block 408, red_concrete 396, dark_oak_planks 387, white_concrete 339, oak_leaves 148
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/farmacia.nbt	medical	20x20x20	1096	2	smooth_stone_slab 264, white_concrete 234, light_gray_terracotta 181, grass_block 137, dirt 82
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/firefighter.nbt	fire / public	37x37x37	5756	124	smooth_stone 1697, red_concrete 1525, polished_andesite 654, grass_block 377, oak_leaves 330
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/gasstation.nbt	retail / food	12x7x17	506	16	white_concrete 170, red_concrete 92, stone 67, smooth_stone_slab 53, red_terracotta 37
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/gunstore.nbt	retail / food	23x23x23	1920	71	cyan_terracotta 422, smooth_stone_slab 399, red_terracotta 298, polished_andesite 278, white_concrete 98
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/hospital.nbt	medical	40x32x39	9792	135	white_concrete 3387, quartz_bricks 2538, light_gray_concrete 1152, birch_planks 561, grass_block 366
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/lighthouse.nbt	fire / public	15x48x15	1218	61	white_concrete 478, smooth_quartz_slab 152, red_concrete 150, smooth_stone 101, polished_andesite 88
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/medic1.nbt	medical	15x15x15	484	4	grass_block 191, white_wool 161, white_concrete 42, dirt 34, irongrid 15
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/militaryairport.nbt	military	48x48x48	5813	37	grass_block 635, polished_andesite_slab 605, green_concrete 536, smooth_stone 502, polished_andesite 481
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/militarybase.nbt	military	48x48x48	9742	233	green_concrete 1555, smooth_stone 1110, light_gray_concrete 1054, gray_concrete 726, green_terracotta 711
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/militarycamp.nbt	military	30x30x30	1644	30	grass_block 629, irongrid 158, polished_andesite 108, green_wool 94, coarse_dirt 88
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/militarycamp2.nbt	military	21x16x21	830	2	grass_block 350, cyan_terracotta 130, irongrid 77, green_terracotta 73, dirt 43
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/policestation1.nbt	police	23x12x21	1158	32	smooth_stone_slab 364, polished_andesite 359, light_gray_concrete 227, cobblestone_slab 73, blue_concrete 56
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/policestation2.nbt	police	25x25x25	2986	116	light_gray_concrete 710, smooth_stone_slab 580, polished_andesite 555, stone_bricks 425, gray_concrete 118
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/prision.nbt	police	48x48x48	7635	87	polished_andesite 1545, smooth_stone_slab 1324, stone_bricks 1274, grass_block 1191, irongrid 539
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/refugecamp.nbt	wasteland / ruin	35x29x35	2702	72	grass_block 710, irongrid 381, coarse_dirt 275, dirt 224, red_wool 182
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina10.nbt	wasteland / ruin	14x14x14	441	1	oak_planks 129, cobblestone 109, smooth_stone_slab 93, stone_bricks 52, tall_grass 30
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina11.nbt	wasteland / ruin	13x13x13	689	11	white_terracotta 282, dark_prismarine 178, polished_andesite 103, protectiongrid 36, tall_grass 24
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina12.nbt	wasteland / ruin	13x13x13	536	6	polished_andesite 256, light_gray_concrete 175, protectiongrid 34, oak_leaves 33, cobblestone 25
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina13.nbt	wasteland / ruin	12x21x10	173	2	red_concrete 69, red_terracotta 55, orange_terracotta 24, oak_leaves 23, chest 2
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina14.nbt	wasteland / ruin	12x12x12	87	1	bricks 73, oak_leaves 13, cartography_table 1
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina15.nbt	wasteland / ruin	21x21x21	690	8	polished_andesite 501, bricks 119, light_gray_stained_glass 45, smooth_sandstone_slab 6, dried_kelp_block 5
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina16.nbt	wasteland / ruin	21x48x21	4455	46	bricks 1653, gray_terracotta 903, spruce_planks 645, vine 319, oak_leaves 212
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina18.nbt	wasteland / ruin	18x17x19	1169	20	birch_planks 383, spruce_planks 214, cobblestone_stairs 200, polished_andesite 177, stripped_spruce_wood 49
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina19.nbt	wasteland / ruin	22x48x22	7070	152	cyan_terracotta 2390, polished_andesite 1764, gray_concrete 850, spruce_slab 510, smooth_sandstone 288
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina3.nbt	wasteland / ruin	12x12x21	392	2	grass_block 192, cobblestone 102, dirt 60, oak_planks 30, stripped_spruce_log 6
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina4.nbt	wasteland / ruin	14x14x14	206	2	bricks 74, stone 54, polished_andesite 40, grass_block 25, grass 9
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina5.nbt	wasteland / ruin	12x12x12	290	3	polished_blackstone 62, oak_planks 40, oak_leaves 37, vine 37, polished_andesite 33
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina6.nbt	wasteland / ruin	12x12x12	146	0	oak_planks 88, polished_granite 30, polished_andesite 16, grass_block 12
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina7.nbt	wasteland / ruin	14x15x21	522	13	grass_block 220, stone_bricks 197, dirt 74, barbewire 16, woodencrate 11
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina7w.nbt	wasteland / ruin	14x15x21	219	13	stone_bricks 188, barbewire 16, woodencrate 11, petrolbarrel 1, infested_stone_bricks 1
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina8.nbt	wasteland / ruin	21x14x21	1460	11	polished_granite 926, polished_andesite 378, basalt 58, black_stained_glass 56, oak_slab 8
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruina9.nbt	wasteland / ruin	23x23x23	511	3	polished_andesite 196, stone_bricks 154, dark_prismarine 82, grass_block 33, tall_grass 22
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ruinas1.nbt	wasteland / ruin	11x5x12	206	4	brown_concrete 82, oak_planks 64, cobblestone 36, oak_leaves 19, gray_bed 2
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/store1.nbt	retail / food	15x6x17	672	4	red_concrete 196, smooth_stone 175, oak_slab 168, polished_andesite_stairs 50, spruce_stairs 46
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/store2.nbt	retail / food	20x9x28	1433	24	smooth_stone_slab 414, gray_concrete 397, white_concrete 244, stone_brick_stairs 173, blue_concrete 80
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/store3.nbt	retail / food	32x32x32	2749	78	cyan_terracotta 829, stone_slab 753, blue_concrete 374, polished_andesite_stairs 323, smooth_stone_slab 131
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/store5.nbt	retail / food	48x48x48	9638	251	cyan_terracotta 3367, stone_stairs 2094, stone_slab 1726, red_concrete 1022, white_concrete 310
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/tower1.nbt	office / tower	9x9x8	132	1	polished_andesite 73, cobblestone 23, light_gray_concrete 18, oak_planks 9, ladder 4
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/tower3.nbt	office / tower	15x27x15	232	1	spruce_slab 104, spruce_fence 49, spruce_log 26, spruce_planks 19, rope 14
+Apocalyspe_Now_1.18.2_v2.0.7.jar	data/apocalypsenow/structures/ussnavy.nbt	military	48x23x13	1678	33	light_gray_concrete 574, birch_planks 282, polished_andesite 181, red_concrete 149, protectiongrid 110
+Mutationcraft_1.18.2_1.0.6.jar	data/mutationcraft/structures/boss_arena.nbt	horror / boss	48x40x48	1721	24	deepslate_tiles 868, deepslate_bricks 616, cracked_deepslate_bricks 94, chain 57, polished_deepslate_stairs 48
+Mutationcraft_1.18.2_1.0.6.jar	data/mutationcraft/structures/death_toweraw.nbt	office / tower	6x8x6	33	2	spruce_fence 10, spruce_trapdoor 8, grass 7, chain 4, player_head 2
+Mutationcraft_1.18.2_1.0.6.jar	data/mutationcraft/structures/fire_wellda.nbt	other	3x6x3	35	0	dark_oak_fence 16, cracked_polished_blackstone_bricks 10, polished_deepslate 8, lava 1
+Mutationcraft_1.18.2_1.0.6.jar	data/mutationcraft/structures/hellgate.nbt	other	5x5x8	55	0	polished_blackstone_brick_slab 18, tall_grass 16, cracked_polished_blackstone_bricks 12, grass 9
+Mutationcraft_1.18.2_1.0.6.jar	data/mutationcraft/structures/slaughter_house.nbt	residential	10x10x11	270	1	deepslate_tile_stairs 91, oak_planks 70, gluttony_block 25, greed_block 25, deepslate_tiles 23
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/bohut_1.nbt	other	11x11x11	327	0	dirt 132, grass_block 108, stone 76, oak_fence 10, campfire 1
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/bostroxcamp1fixed.nbt	other	6x8x7	114	37	stone 67, moss_carpet 31, bostrokestone 7, flowering_azalea_leaves 4, cave_vines 2
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/camp_bostrox2.nbt	wasteland / ruin	9x8x9	91	0	stone 86, bostrokestone 4, campfire 1
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/cloggerplacetrue.nbt	horror / boss	5x5x5	0	0	
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/flowertomb.nbt	retail / food	4x7x3	53	0	coarse_dirt 36, grass_block 9, lily_of_the_valley 4, dirt 1, infested_stone 1
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/irontomb.nbt	other	4x7x3	49	0	coarse_dirt 36, grass_block 9, iron_block 1, dirt 1, infested_stone 1
+THEUNDEADREVAMPED_0.9e_1.18.2.jar	data/undead_revamp2/structures/tomb1.nbt	horror / boss	4x7x3	49	0	coarse_dirt 36, grass_block 9, dirt 1, infested_stone 1, stone_slab 1
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/build1.nbt	other	23x29x22	4139	76	bricks 2266, cobblestone 472, stone_bricks 342, smooth_stone_slab 339, polished_andesite 186
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/caff.nbt	retail / food	16x7x14	859	28	brown_concrete 252, cobblestone 176, polished_andesite 152, oak_planks 125, light_gray_concrete 70
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/gas_station1.nbt	retail / food	23x9x18	1515	44	cobblestone 472, white_terracotta 372, oak_planks 182, smooth_stone_slab 128, smooth_stone 126
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/lighthouse.nbt	fire / public	13x35x13	1132	17	white_concrete 302, red_concrete 187, stone_bricks 168, oak_planks 88, iron_bars 86
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/modern_house1.nbt	residential	16x12x24	1918	49	bricks 592, stone_brick_stairs 281, oak_planks 277, stone_brick_slab 127, quartz_block 88
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/ruin1.nbt	wasteland / ruin	14x6x14	429	13	oak_planks 126, bricks 115, cobblestone 57, grass_block 21, glass 19
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/ruin2.nbt	wasteland / ruin	9x4x10	164	3	cobblestone 101, mossy_cobblestone 30, gravel 16, glass 8, cobweb 5
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/ruin3.nbt	wasteland / ruin	8x6x7	78	4	cobblestone 27, bricks 22, mossy_cobblestone 12, cobweb 4, iron_bars 4
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/ruin4.nbt	wasteland / ruin	9x6x8	125	3	bricks 43, cobblestone 42, mossy_cobblestone 13, cobweb 6, sand_bag 5
+Zombie Extreme 1.18.2 0.2.4.jar	data/zombie_extreme/structures/ruin5.nbt	wasteland / ruin	8x7x9	338	4	cobblestone 144, stone_bricks 63, oak_planks 42, cracked_stone_bricks 30, mossy_stone_bricks 25

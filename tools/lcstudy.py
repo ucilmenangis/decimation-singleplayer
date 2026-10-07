@@ -136,10 +136,19 @@ def main():
     for f in sorted(os.listdir(os.path.join(root, "multibuildings"))):
         m = json.load(open(os.path.join(root, "multibuildings", f)))
         groups[f[:-5]] = m["buildings"]
+    multi_parts = {b.split(":")[-1] for g in groups.values() for row in g for b in row}
     for d in sorted(os.listdir(os.path.join(root, "buildings"))):
-        if d.startswith("multi_") or not os.path.isdir(os.path.join(root, "buildings", d)):
-            continue
-        groups[d] = [["%s:%s/%s" % (ns, d, d)]]
+        full = os.path.join(root, "buildings", d)
+        if os.path.isdir(full):
+            if not d.startswith("multi_"):
+                groups[d] = [["%s:%s/%s" % (ns, d, d)]]
+        elif d.endswith(".json"):
+            # flat layout (legacy c70cities): building_x.json + _90/_180/_270
+            # rotations; parts of multi buildings are listed by those
+            n = d[:-5]
+            if re.search(r"_(90|180|270)$", n) or n in multi_parts:
+                continue
+            groups[n] = [["%s:%s" % (ns, n)]]
     furniture = collections.Counter()
     rows = []
     for name, grid in groups.items():

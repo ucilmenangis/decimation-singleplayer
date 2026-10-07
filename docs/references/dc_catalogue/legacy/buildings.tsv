@@ -1,0 +1,59 @@
+building	category	chunks	floors	density	districts
+building_bank1	fire / public	1x1	4	0.16	standardcity 2%
+multi_communitycenter	fire / public	3x3	3	0.08	residential 20%, dummycity 8%
+multi_gallery	fire / public	2x2	3	0.03	standardcity 11%
+building_carfactory1	industrial	1x1	3	0.05	deadzone 2%
+building_factory1	industrial	1x1	3	0.04	deadzone 7%
+building_factory2	industrial	1x1	3	0.09	deadzone 2%
+building_warehouse1	industrial	1x1	3	0.0	deadzone 6%
+building_warehouse2	industrial	1x1	3	0.0	deadzone 6%
+multi_carservice	industrial	1x2	4	0.07	standardcity 11%
+multi_derrick	industrial	2x1	3	0.12	deadzone 10%
+multi_factory	industrial	1x2	3	0.05	deadzone 13%
+multi_pumpjack	industrial	2x2	3	0.1	deadzone 10%
+multi_warehouse	industrial	1x2	3	0.03	deadzone 7%
+building_lab1	medical	1x1	3	0.06	deadzone 2%
+multi_hospital	medical	2x2	3	0.09	standardcity 11%
+multi_laboratory1	medical	3x5	3	0.08	deadzone 37%
+building_bunker1	military	1x1	3	0.0	deadzone 1%
+multi_militarybase	military	3x2	3	0.04	deadzone 13%
+multi_militarycamp1	military	2x1	4	0.16	deadzone 10%
+building_office1	office / tower	1x1	4	0.13	standardcity 2%
+building_office2	office / tower	1x1	4	0.09	standardcity 2%
+building_office3	office / tower	1x1	5	0.06	standardcity 2%
+building_office4	office / tower	1x1	5	0.07	standardcity 2%
+building_office5	office / tower	1x1	4	0.12	standardcity 2%
+multi_megatower1	office / tower	3x3	16	0.13	dummycity 12%, standardcity 8%
+building_policeoffice1	police	1x1	4	0.13	standardcity 2%
+building_apartment1	residential	1x1	4	0.15	standardcity 2%
+building_hotel1	residential	1x1	5	0.12	standardcity 2%
+building_hotel2	residential	1x1	5	0.1	standardcity 2%
+building_hotel3	residential	1x1	5	0.06	standardcity 2%
+building_residential1	residential	1x1	3	0.06	dummycity 6%, residential 6%
+building_residential2	residential	1x1	3	0.07	dummycity 6%, residential 6%
+building_residential3	residential	1x1	3	0.1	dummycity 6%, residential 6%
+building_residential4	residential	1x1	3	0.08	dummycity 6%, residential 6%
+cabin_1	residential	1x1	1	0.0	scattered / unused
+cabin_2	residential	1x1	1	0.0	scattered / unused
+cabin_3	residential	2x1	1	0.0	scattered / unused
+cabin_4	residential	1x2	1	0.0	scattered / unused
+cabin_5	residential	1x1	1	0.0	scattered / unused
+cabin_6	residential	1x2	1	0.0	scattered / unused
+farmhouse_1	residential	3x3	1	0.0	scattered / unused
+multi_condo1	residential	2x3	9	0.23	dummycity 12%, standardcity 8%
+multi_flatapartment	residential	3x1	4	0.15	standardcity 14%, dummycity 4%
+multi_residential1	residential	1x2	3	0.11	residential 27%, dummycity 16%
+multi_residential2	residential	1x2	3	0.08	residential 27%, dummycity 16%
+seahouse_1	residential	1x1	1	0.0	scattered / unused
+treehouse_1	residential	1x1	1	0.0	scattered / unused
+villager_1	residential	1x1	1	0.0	scattered / unused
+building_gasstation1	retail / food	1x1	3	0.1	dummycity 1%, residential 1%, standardcity 1%
+building_restaurant1	retail / food	1x1	3	0.25	standardcity 2%
+building_restaurant2	retail / food	1x1	3	0.21	standardcity 2%, dummycity 1%, residential 1%
+foodtruck_1	retail / food	1x1	1	0.0	scattered / unused
+multi_cafe	retail / food	2x2	3	0.16	dummycity 16%, standardcity 11%
+multi_clubhouse1	retail / food	3x3	3	40.0	standardcity 8%, dummycity 8%
+multi_convenientstore	retail / food	2x2	3	0.07	residential 13%, standardcity 11%, dummycity 8%
+multi_gasstation	retail / food	1x2	3	0.1	residential 13%, standardcity 8%
+campsite_1	wasteland / ruin	1x2	1	0.0	scattered / unused
+hideout_1	wasteland / ruin	1x1	1	0.0	scattered / unused

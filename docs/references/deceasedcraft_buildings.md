@@ -207,3 +207,46 @@ if wanted) `[inferred]`.
   badlands: this world is the current beta, not legacy. Still useful as a
   real generated Lost Cities layout (levels, stairs, bridges, highways)
   for the city engine step.
+
+## Legacy DeceasedCraft 5.5.5 (Prism instance `legacy`, 8 Oktober 2026)
+
+Installed by the user from CurseForge (pack 490660, file 5525524):
+Minecraft 1.18.2, Forge 40.2.4, Lost Cities 1.18-5.3.29, 224 mods.
+DIFFERENT content from the current beta (user warning: same names can
+hold different buildings, keep the two apart). Catalogue tables in
+`docs/references/dc_catalogue/legacy/`.
+- City data lives in `kubejs/data/c70cities/lostcities/` (namespace
+  `c70cities`, flat files: building_x.json + _90/_180/_270): 58 building
+  types, 1149 parts, 1174 palettes. Profile `deceasedcraft`
+  (defaultconfigs/lostcities-server.toml): cities rare but large (chance
+  0.003, radius 150..200), city levels at y 75 / 83 / 91 / 99 (8 apart),
+  1..5 floors, no ruins or explosions.
+- City styles: standardcity (offices 1..5, apartment, police office,
+  hotels, bank, flat apartment, gas station, car service, gallery, cafe,
+  convenience, hospital, clubhouse, condo, mega tower 16 floors),
+  residential (houses 1..4, restaurants, gas stations, community centre),
+  dummycity, and **deadzone** = the WASTELAND district: the worldstyle
+  multiplies city chance by 10 in biomesoplenty:wasteland /
+  wooded_wasteland and those cities use deadzone: warehouses 1..2,
+  factories 1..2, car factory, lab, bunker, multi warehouse / factory, oil
+  pumpjack and derrick, **military base** (3x2 chunks: walled compound,
+  barracks, round pad, corner towers), **military camp**, **laboratory
+  complex** (3x5 chunks, glass dome, symmetric wings).
+- Legacy-only types (not in the beta): all deadzone buildings above,
+  bank, apartment1, restaurants 1..2, car service, clubhouse, condo1, mega
+  tower, sea house, cabins 1..6. Shared names (office1..5, police office,
+  hotels, residential, cafe, gallery, flat apartment, hospital, community
+  centre, convenience store, gas station) may differ in content `[not
+  verified]` per building.
+- City parts: 26 parks, 19 fountains, 9 fronts, 7 stairs, 2 bridges; no
+  street parts of its own (the base Lost Cities streets are used
+  `[inferred]`).
+- apocalypsenow 1.18 v2.0.7: 69 structures (current beta: 18): military
+  base (48^3), military airport, military camps 1..2, looters' base,
+  bases (48^3), prison (prision), police stations 1..2, fire station,
+  hospital (40x32x39), pharmacy (farmacia), gun store, stores 1..5, gas
+  station, factory, lighthouse, US navy ship, refugee camps, plane crash
+  (acidentedeaviao), construction site, towns (cidade1, city1, canada1,
+  desert1, farm), houses casa1..10, about 20 ruins (ruina*), camps.
+  Names are mostly Portuguese.
+- Vanilla structures are blanked here too (villages, mansions...).

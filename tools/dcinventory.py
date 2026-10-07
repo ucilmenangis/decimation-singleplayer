@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Catalogue of DeceasedCraft's world content (personal reference).
 
-    python3 tools/dcinventory.py DATA_DIR MODS_DIR LCSTUDY_DIR OUT_DIR
+    python3 tools/dcinventory.py DATA_DIR MODS_DIR LCSTUDY_DIR OUT_DIR [NAMESPACE]
 
 DATA_DIR: extracted `data/` of DCTweaks_*.jar (lostcities + structures);
 MODS_DIR: the instance's mods/ (structure .nbt files are read straight
@@ -30,10 +30,11 @@ import worldcheck as wc  # noqa: E402
 import lcstudy  # noqa: E402
 
 CATEGORIES = [  # first match wins, on the name
-    ("military", ("military", "army", "bunker", "barrack", "checkpoint", "camp_bostrox", "outpost", "base")),
-    ("police", ("police", "prison", "jail", "cell")),
-    ("medical", ("hospital", "clinic", "medical", "polyclinic", "asylum", "lab")),
-    ("industrial", ("workshop", "factory", "scrapyard", "storage", "warehouse", "hardware", "mines", "industrial",
+    ("military", ("military", "army", "bunker", "barrack", "checkpoint", "camp_bostrox", "outpost", "base",
+                  "ussnavy", "baselooters")),
+    ("police", ("police", "prison", "prision", "jail", "cell")),
+    ("medical", ("hospital", "clinic", "medical", "medic", "polyclinic", "asylum", "lab", "farmacia")),
+    ("industrial", ("workshop", "factory", "derrick", "pumpjack", "carservice", "scrapyard", "storage", "warehouse", "hardware", "mines", "industrial",
                     "datacenter", "data_center")),
     ("retail / food", ("store", "shop", "market", "cafe", "caff", "cloth", "premium", "fastfood", "restaurant", "sushi", "gas",
                        "casino", "club", "sunkenclub", "flower", "gun", "convenient", "bakery", "foodtruck")),
@@ -41,8 +42,9 @@ CATEGORIES = [  # first match wins, on the name
                        "post", "gallery", "bank", "film", "lighthouse", "station")),
     ("office / tower", ("office", "tower", "timbertower", "plaza", "courtyard", "thering", "terrace")),
     ("residential", ("house", "home", "apartment", "apartament", "flat", "residential", "condo", "cabin",
-                     "farmhouse", "hotel", "lodge", "residence", "condo", "taiga", "villager", "hut", "build1")),
-    ("wasteland / ruin", ("ruin", "camp", "crash", "planecrash", "hideout", "treehouse", "survivor", "mass", "grave",
+                     "farmhouse", "hotel", "lodge", "residence", "condo", "taiga", "casa", "cabine", "seahouse", "villager", "hut", "build1")),
+    ("wasteland / ruin", ("ruin", "camp", "crash", "planecrash", "acampament", "acidente", "refug", "campode",
+                          "construction", "cidade", "city", "canada", "desert", "farm", "hideout", "treehouse", "survivor", "mass", "grave",
                           "destroyed", "landslide", "path")),
     ("horror / boss", ("tomb", "boss", "ritual", "autel", "biomass", "labyrinth", "haunted", "sect", "entity",
                        "clogger", "pillar", "fabric", "farm_gone", "log_and_axe", "posess", "prisma", "flowertomb")),
@@ -93,8 +95,9 @@ def structure_summary(raw):
 
 def main():
     data, mods, lcs, out = sys.argv[1:5]
+    ns = sys.argv[5] if len(sys.argv) > 5 else "deceasedcraft"  # legacy pack: c70cities
     os.makedirs(out, exist_ok=True)
-    root = os.path.join(data, "deceasedcraft", "lostcities")
+    root = os.path.join(data, ns, "lostcities")
     dist = districts(root)
     study = {}
     for line in open(os.path.join(lcs, "buildings.tsv")):
