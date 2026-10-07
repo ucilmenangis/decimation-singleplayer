@@ -100,6 +100,7 @@ public class DevAutoTest
                 case 1:
                     checkBottlecaps();
                     checkArmor();
+                    checkHelmet();
                     waitTicks = 100;
                     return;
                 default: // poll until the crate has landed, at most ~60 s
@@ -256,6 +257,71 @@ public class DevAutoTest
         p.setHealth(p.getMaxHealth());
         FMLLog.info("[%s] AUTOTEST armor: 10 \"human\" damage, bare took %.2f, with %s (x%.3f) took %.2f",
                     DecimationWorldGen.MODID, bare, chest.getUnlocalizedName(), chest.getDamageMultiplier(), armored);
+    }
+
+    /**
+     * Helmet fix: NPC hits use the helmet on ~20% (random headshots); a
+     * player's gun uses it only when its aim line crosses the head.
+     */
+    private void checkHelmet()
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (p == null)
+        {
+            return;
+        }
+        net.decimation.mod.common.item.armor.ItemArmorDeci helm = null;
+        for (Object o : net.minecraft.item.Item.itemRegistry)
+        {
+            if (o instanceof net.decimation.mod.common.item.armor.ItemArmorDeci
+                && ((net.decimation.mod.common.item.armor.ItemArmorDeci) o).armorType == 0
+                && ((net.decimation.mod.common.item.armor.ItemArmorDeci) o).getDamageMultiplier() < 0.5f)
+            {
+                helm = (net.decimation.mod.common.item.armor.ItemArmorDeci) o;
+                break;
+            }
+        }
+        if (helm == null)
+        {
+            FMLLog.info("[%s] AUTOTEST helmet: no Decimation helmet found", DecimationWorldGen.MODID);
+            return;
+        }
+        p.setGameType(WorldSettings.GameType.SURVIVAL);
+        p.setCurrentItemOrArmor(4, new net.minecraft.item.ItemStack(helm)); // slot 4 = helmet
+        int reduced = 0, total = 400;
+        for (int i = 0; i < total; i++)
+        {
+            if (hit(p) < 9.99f)
+            {
+                reduced++;
+            }
+        }
+        // player shooter 5 blocks north, facing south (+z), aiming at head then chest
+        net.minecraftforge.common.util.FakePlayer shooter =
+            net.minecraftforge.common.util.FakePlayerFactory.getMinecraft((WorldServer) p.worldObj);
+        float headTaken = shoot(p, shooter, p.boundingBox.minY + 1.6);
+        float chestTaken = shoot(p, shooter, p.boundingBox.minY + 1.0);
+        p.setCurrentItemOrArmor(4, null);
+        p.setGameType(WorldSettings.GameType.CREATIVE);
+        p.setHealth(p.getMaxHealth());
+        FMLLog.info("[%s] AUTOTEST helmet %s (x%.3f): NPC hits reduced %d/%d (expect ~20%%);"
+                    + " player gun 10 dmg: head took %.2f, chest took %.2f",
+                    DecimationWorldGen.MODID, helm.getUnlocalizedName(), helm.getDamageMultiplier(),
+                    reduced, total, headTaken, chestTaken);
+    }
+
+    /** A 10 point gunDeci hit from a shooter aiming at the given height. */
+    private static float shoot(net.minecraft.entity.player.EntityPlayerMP p, net.minecraft.entity.player.EntityPlayer shooter, double aimY)
+    {
+        double sx = p.posX, sz = p.posZ - 5.0, sy = p.boundingBox.minY;
+        double eyeY = sy + shooter.getEyeHeight();
+        float pitch = (float) Math.toDegrees(-Math.atan2(aimY - eyeY, 5.0));
+        shooter.setLocationAndAngles(sx, sy, sz, 0.0F, pitch); // yaw 0 = facing +z
+        p.setHealth(p.getMaxHealth());
+        p.hurtResistantTime = 0;
+        float before = p.getHealth();
+        p.attackEntityFrom(deci.ab.a.c(shooter), 10.0f); // GunDamageSource.forShooter
+        return before - p.getHealth();
     }
 
     /** One 10 point "human" hit on a fully healed player, returns health lost. */
