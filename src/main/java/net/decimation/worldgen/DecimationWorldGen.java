@@ -115,6 +115,10 @@ public class DecimationWorldGen
             new net.decimation.fixes.VehicleHitHandler());
         FMLLog.info("[%s] vehicle hit fix registered", MODID);
 
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new net.decimation.fixes.ArmorGunfireHandler());
+        FMLLog.info("[%s] armor vs NPC gunfire fix registered", MODID);
+
         // PROPERTY is a compile-time constant, so a dedicated server never
         // loads DevAutoTest (it references client-only classes)
         if (Boolean.getBoolean(DevAutoTest.PROPERTY)

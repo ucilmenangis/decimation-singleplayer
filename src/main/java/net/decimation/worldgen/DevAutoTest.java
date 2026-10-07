@@ -95,6 +95,7 @@ public class DevAutoTest
             }
             checkBottlecaps();
             checkVehicle();
+            checkArmor();
         }
         catch (Throwable t)
         {
@@ -148,6 +149,54 @@ public class DevAutoTest
         }
         FMLLog.info("[%s] AUTOTEST bottlecaps: balance %d -> %d (dropped %d), caps left as items: %d",
                     DecimationWorldGen.MODID, capsBefore, after, CAPS, inInventory);
+    }
+
+    /**
+     * Armor fix: a "human" (NPC gun) hit must be reduced by Decimation chest
+     * armor exactly by its damage multiplier; without armor it must not be.
+     */
+    private void checkArmor()
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (p == null)
+        {
+            return;
+        }
+        net.decimation.mod.common.item.armor.ItemArmorDeci chest = null;
+        for (Object o : net.minecraft.item.Item.itemRegistry)
+        {
+            if (o instanceof net.decimation.mod.common.item.armor.ItemArmorDeci
+                && ((net.decimation.mod.common.item.armor.ItemArmorDeci) o).armorType == 1
+                && ((net.decimation.mod.common.item.armor.ItemArmorDeci) o).getDamageMultiplier() < 1.0f)
+            {
+                chest = (net.decimation.mod.common.item.armor.ItemArmorDeci) o;
+                break;
+            }
+        }
+        if (chest == null)
+        {
+            FMLLog.info("[%s] AUTOTEST armor: no Decimation chest armor found", DecimationWorldGen.MODID);
+            return;
+        }
+        p.setGameType(WorldSettings.GameType.SURVIVAL);
+        float bare = hit(p);
+        p.setCurrentItemOrArmor(3, new net.minecraft.item.ItemStack(chest)); // slot 3 = chest
+        float armored = hit(p);
+        p.setCurrentItemOrArmor(3, null);
+        p.setGameType(WorldSettings.GameType.CREATIVE);
+        p.setHealth(p.getMaxHealth());
+        FMLLog.info("[%s] AUTOTEST armor: 10 \"human\" damage, bare took %.2f, with %s (x%.3f) took %.2f",
+                    DecimationWorldGen.MODID, bare, chest.getUnlocalizedName(), chest.getDamageMultiplier(), armored);
+    }
+
+    /** One 10 point "human" hit on a fully healed player, returns health lost. */
+    private static float hit(net.minecraft.entity.player.EntityPlayerMP p)
+    {
+        p.setHealth(p.getMaxHealth());
+        p.hurtResistantTime = 0;
+        float before = p.getHealth();
+        p.attackEntityFrom(deci.aD.h.alh, 10.0f); // DamageSources.human
+        return before - p.getHealth();
     }
 
     /**
