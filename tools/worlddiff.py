@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """Block by block diff of two generated 1.7.10 worlds (refactor check).
 
-    python3 tools/worlddiff.py WORLD_A WORLD_B
+    python3 tools/worlddiff.py WORLD_A WORLD_B [--within R]
 
 Compares block ids and metadata of every chunk present in both worlds
 (chunk contents do not depend on generation order, so a refactor that
 keeps behaviour must give 0 differences). Only chunks final in both
 worlds count (it and its 3 lower neighbours populated); fluids and
-sand / gravel are ignored (they flow / fall while the server ticks). Prints counts and the first
+sand / gravel are ignored (they flow / fall while the server ticks).
+--within R: only chunks within R chunks of the spawn (default 10). The
+server generates the spawn area (12 chunks around spawn) in a fixed
+order; chunks loaded later (supply drop scheduler, timers) vary from run
+to run, and population order changes edge content (ore veins spilling
+over, building base height sampled from whatever chunks exist). Prints counts and the first
 differing positions. Needs numpy.
 """
 import os
@@ -43,7 +48,12 @@ def main():
     def done(w, k):
         return all(w.get((k[0] - dx, k[1] - dz), {}).get("TerrainPopulated") for dx in (0, 1) for dz in (0, 1))
 
-    common = sorted(k for k in set(a) & set(b) if done(a, k) and done(b, k))
+    import gzip
+    within = int(sys.argv[sys.argv.index("--within") + 1]) if "--within" in sys.argv else 10
+    lvl = ms.wc.read_nbt(gzip.decompress(open(os.path.join(sys.argv[1], "level.dat"), "rb").read()))["Data"]
+    scx, scz = lvl["SpawnX"] >> 4, lvl["SpawnZ"] >> 4
+    common = sorted(k for k in set(a) & set(b) if done(a, k) and done(b, k)
+                    and max(abs(k[0] - scx), abs(k[1] - scz)) <= within)
     diff_chunks, diff_blocks, shown = 0, 0, 0
     for key in common:
         ia, ma = arrays(a[key])

@@ -292,6 +292,21 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Not investigated yet
 
+### Building base height depends on chunk generation order (ours)
+- **Found**: 8 Oktober 2026 (fresh seed 1 worlds, `tools/worlddiff.py`):
+  apartments b-1_3_0 and b0_3_0 sat at y 64 in one run and y 63 in
+  another, with the same seed.
+- **Cause**: `Slices.decideBase` samples the footprint where
+  `world.blockExists` is true when the building's FIRST slice is written,
+  so the result depends on which neighbour chunks happen to exist then.
+  The chosen height is stored (StructureData), so a building is always
+  whole; only the height can vary between two new worlds of one seed,
+  near the edge of what was generated. Spawn area: identical.
+- **Impact**: low (no broken buildings); matters for "same seed, same
+  city" expectations and for refactor checks (use `--within`). A fix
+  would sample terrain height from the chunk generator (noise) instead of
+  the world `[not verified]` how costly that is.
+
 ### FPS drop while aiming through scopes (red dot/2x/4x/6x)
 - **Reported**: 26 Juli 2026
 - Needs live profiling, not static code reading - flagged as its own

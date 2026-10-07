@@ -254,11 +254,16 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   reads block ids straight from Anvil region files. `World.registry()` maps
   block names to ids from level.dat (Decimation ids can be below 256:
   BlockWreckage1..5 = 176..180, so "id >= 256 means mod block" is wrong).
-- `python3 tools/worlddiff.py WORLD_A WORLD_B`: block + metadata diff of
-  two generated worlds (only chunks final in both; fluids, sand, gravel
-  ignored). The refactor check: `servertest.py 1 type=decimation keep`
-  before and after, copy `dev/run/server/world` aside in between; same
-  code twice gives 0 (checked 2026-10-08).
+- `python3 tools/worlddiff.py WORLD_A WORLD_B [--within R]`: block +
+  metadata diff of two generated worlds (chunks final in both and within
+  R = 10 chunks of spawn; fluids, sand, gravel ignored). The refactor
+  check: `servertest.py 1 type=decimation` (NO `keep`: keep reuses the
+  old chunks, so nothing is regenerated) before and after, copy
+  `dev/run/server/world` aside in between. Same code twice gives 0
+  (checked 2026-10-08). Outside the spawn area runs differ even with the
+  same code: chunks loaded later vary per run, and a building's base
+  height is sampled from whatever chunks exist when its first slice is
+  written.
 - `python3 tools/worldmap.py WORLD OUT.png`: top down biome / height map
   of a generated world (read the PNG to judge terrain). `servertest.py`
   takes `type=decimation` for the world type.
@@ -480,7 +485,7 @@ of the last session:
   StoreyPlan, Apartment / Office / ShopPlanner, Furnisher, Facing,
   Surfaces, Interior, Ruins, Yard; code map in
   docs/worldgen_architecture.md); storey height per building (5); 0
-  blocks differ from 0.22.0 on seed 1.
+  blocks differ from 0.22.0 in the seed 1 spawn area (fresh worlds).
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

@@ -90,9 +90,11 @@ reachability, audit / flats / sets screenshots and the autotest.
    behaviour change (compare floor plans before / after).
    DONE 0.22.1: package `worldgen/building/` (code map below); storey
    height is a per building field (5 everywhere). Verified with
-   `tools/worlddiff.py`: seed 1 world before / after, 0 differing blocks
-   over 589 final chunks, 282 of them with building interiors (173701
-   interior blocks); autotest passes.
+   `tools/worlddiff.py`: fresh seed 1 worlds from 0.22.0 and 0.22.1, 0
+   differing blocks over the 441 spawn area chunks, 171 of them with
+   building interiors (119356 interior blocks); autotest passes. (A
+   first check reused the world with `servertest.py ... keep` and so
+   compared old chunks with themselves; corrected the same day.)
 3. Express apartment / office / shop as type JSON on top of the extracted
    modules; rotated stair core.
 4. PartPlanner: authored storey parts with room slots (first parts made
