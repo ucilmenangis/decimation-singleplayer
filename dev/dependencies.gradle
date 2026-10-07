@@ -79,6 +79,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("gallery")) {
         jvmArgs("-Ddeciworldgen.autotest.gallery=true")
     }
+    // -Pfootprint: top down shots of every prop, empty then placed (footprint_<n>.png)
+    if (project.hasProperty("footprint")) {
+        jvmArgs("-Ddeciworldgen.autotest.footprint=true")
+    }
     // -Pstudy=<save>|<cams.tsv>: photograph a copied reference map (study_<n>.png)
     if (project.hasProperty("study")) {
         jvmArgs("-Ddeciworldgen.autotest.study=" + project.property("study"))

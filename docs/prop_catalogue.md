@@ -180,3 +180,17 @@ Missing from Decimation, use vanilla stand-ins: bed (vanilla bed), sofa
 (cauldron), fridge (BlockElectricBoxBin or iron block), kitchen counter
 (quartz / stone slabs, trapdoor cupboards), bookcase (bookshelf), plant pot
 (flower_pot, BlockCocaPlant).
+
+## Measured footprints (8 Oktober 2026, `docs/prop_footprints.tsv`)
+
+The "Size" column above is eyeballed and wrong for some props (bicycle
+said 1.2 x 1; it draws about 2.4 long). Measured instead: `./gradlew
+runClient -Pautotest -Pfootprint` (dev/) photographs every prop alone
+from 40 blocks straight down (meta 3, front south) next to an empty
+reference shot, `python3 tools/footprint.py > docs/prop_footprints.tsv`
+turns the pixel difference into how far the model reaches past its own
+block (west / east / north / south, blocks) and the cells it covers
+(overhang under 0.3 counts as inside). A plain cube measures 0 on every
+side. 26 props show nothing from above (flat decals, signs and wall
+screens seen edge on, or no model) and are listed as "-". Footprints
+turn with facing (meta % 4 * 90). Not used by the placer yet.

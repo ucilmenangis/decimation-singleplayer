@@ -108,6 +108,7 @@ public class DevAutoTest
     private boolean takeViews(Minecraft mc)
     {
         int views = STUDY != null ? studyCams().size() : FLATS ? FLATS_VIEWS : SETS ? net.decimation.worldgen.sets.FurnitureSets.all().size()
+            : FOOTPRINT ? galleryNames().size() + 1
             : GALLERY ? (galleryNames().size() + GALLERY_PER_VIEW - 1) / GALLERY_PER_VIEW
             : AUDIT ? AUDIT_VIEWS : VIEWS.length;
         if (view >= views || "false".equals(System.getProperty(PROPERTY + ".views")))
@@ -119,6 +120,8 @@ public class DevAutoTest
                 mc.gameSettings.gammaSetting = savedGamma;
                 mc.gameSettings.hideGUI = false;
                 mc.gameSettings.particleSetting = savedParticles;
+                mc.gameSettings.ambientOcclusion = savedAo;
+                mc.gameSettings.clouds = savedClouds;
                 savedFov = 0;
             }
             return false;
@@ -128,9 +131,17 @@ public class DevAutoTest
             savedFov = mc.gameSettings.fovSetting;
             savedGamma = mc.gameSettings.gammaSetting;
             savedParticles = mc.gameSettings.particleSetting;
+            savedAo = mc.gameSettings.ambientOcclusion;
+            savedClouds = mc.gameSettings.clouds;
         }
         mc.gameSettings.hideGUI = true;
-        if (AUDIT || GALLERY || SETS || FLATS || STUDY != null)
+        if (FOOTPRINT)
+        {
+            mc.gameSettings.fovSetting = 16.0F; // narrow: one cell, little parallax
+            mc.gameSettings.ambientOcclusion = 0; // no dark halo on the floor around props
+            mc.gameSettings.clouds = false;
+        }
+        if (AUDIT || GALLERY || SETS || FLATS || FOOTPRINT || STUDY != null)
         {
             mc.gameSettings.gammaSetting = 1.0F;
         }
@@ -163,7 +174,7 @@ public class DevAutoTest
             mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = viewYaw;
             mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = viewPitch;
         }
-        if (viewReady < view || ++viewWait < ((GALLERY || SETS) && shotsTaken > 0 ? 80 : GALLERY || SETS ? 500 : 260))
+        if (viewReady < view || ++viewWait < (FOOTPRINT ? (shotsTaken > 0 ? 40 : 500) : (GALLERY || SETS) && shotsTaken > 0 ? 80 : GALLERY || SETS ? 500 : 260))
         {
             return true; // teleport pending, then let the chunks render
         }
@@ -174,7 +185,7 @@ public class DevAutoTest
             return true;
         }
         net.minecraft.util.IChatComponent msg = net.minecraft.util.ScreenShotHelper.saveScreenshot(
-            mc.mcDataDir, (STUDY != null ? "study_" : FLATS ? "flat_" : SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
+            mc.mcDataDir, (FOOTPRINT ? "footprint_" : STUDY != null ? "study_" : FLATS ? "flat_" : SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
             mc.displayWidth, mc.displayHeight,
             mc.getFramebuffer());
         FMLLog.info("[%s] AUTOTEST view %d at %s: %s", DecimationWorldGen.MODID, view, viewSpot,
@@ -187,7 +198,8 @@ public class DevAutoTest
     private int shotsTaken;
     private volatile String viewSpot = "";
     private float savedFov, savedGamma;
-    private int savedParticles;
+    private int savedParticles, savedAo;
+    private boolean savedClouds;
     private volatile float viewYaw, viewPitch;
     /** -Ddeciworldgen.autotest.only=0,23,70-76: take only these views (re-shoots). */
     private static final java.util.Set<Integer> ONLY = parseOnly(System.getProperty(PROPERTY + ".only"));
@@ -240,6 +252,90 @@ public class DevAutoTest
             galleryList = names;
         }
         return galleryList;
+    }
+
+    // ---- footprint mode (-Ddeciworldgen.autotest.footprint=true): measures
+    // how far each prop's MODEL reaches beyond its 1 block (bicycles, shelves
+    // and tables draw over neighbour cells). One cell on a white wool floor
+    // with black wool markers at +-4 blocks; camera straight down from 40 up
+    // (props are tile entity renderers, culled beyond 64 blocks). View 0 =
+    // the empty cell, view n = prop n-1 at meta 3; tools/footprint.py diffs
+    // every view against view 0.
+    private static final boolean FOOTPRINT = "true".equals(System.getProperty(PROPERTY + ".footprint"));
+    private static final int FX0 = 6000, FZ0 = 6000, FP_HEIGHT = 40;
+    private boolean footprintBuilt;
+
+    private void serveFootprintView(int v)
+    {
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        List<String> names = galleryNames();
+        if (!footprintBuilt)
+        {
+            footprintBuilt = true;
+            for (int cx = (FX0 - 16 >> 4); cx <= (FX0 + 16 >> 4); cx++)
+            {
+                for (int cz = (FZ0 - 16 >> 4); cz <= (FZ0 + 16 >> 4); cz++)
+                {
+                    world.getChunkProvider().loadChunk(cx, cz);
+                }
+            }
+            for (int x = FX0 - 12; x <= FX0 + 12; x++)
+            {
+                for (int z = FZ0 - 12; z <= FZ0 + 12; z++)
+                {
+                    boolean marker = Math.abs(x - FX0) == 4 && Math.abs(z - FZ0) == 4;
+                    world.setBlock(x, GY - 1, z, net.minecraft.init.Blocks.wool, marker ? 15 : 0, 2);
+                }
+            }
+        }
+        // clear the previous prop (multiblocks remove all their parts when broken)
+        for (int dx = -3; dx <= 3; dx++)
+        {
+            for (int dz = -3; dz <= 3; dz++)
+            {
+                for (int y = GY; y < GY + 8; y++)
+                {
+                    if (!world.isAirBlock(FX0 + dx, y, FZ0 + dz))
+                    {
+                        world.setBlock(FX0 + dx, y, FZ0 + dz, net.minecraft.init.Blocks.air, 0, 3);
+                    }
+                }
+            }
+        }
+        String name = v == 0 ? "empty" : names.get(v - 1);
+        if (v > 0)
+        {
+            net.minecraft.block.Block b = net.minecraft.block.Block.getBlockFromName(name);
+            try
+            {
+                if (b instanceof net.minecraft.block.BlockDoor || name.startsWith("deci:Door_"))
+                {
+                    world.setBlock(FX0, GY, FZ0, b, 3, 2);
+                    world.setBlock(FX0, GY + 1, FZ0, b, 8, 2);
+                }
+                else
+                {
+                    world.setBlock(FX0, GY, FZ0, b, 3, 2);
+                    if (b.hasTileEntity(3))
+                    {
+                        net.decimation.fixes.MultiblockRepairHandler.complete(world, FX0, GY, FZ0);
+                    }
+                }
+            }
+            catch (Throwable t)
+            {
+                FMLLog.info("[%s] AUTOTEST footprint could not place %s: %s", DecimationWorldGen.MODID, name, t);
+            }
+        }
+        world.setWorldTime(6000);
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        viewYaw = 180;
+        viewPitch = 90;
+        p.playerNetServerHandler.setPlayerLocation(FX0 + 0.5, GY + FP_HEIGHT, FZ0 + 0.5, 180, 90);
+        viewSpot = "footprint " + name;
+        viewReady = v;
     }
 
     private void serveGalleryView(int v)
@@ -735,6 +831,11 @@ public class DevAutoTest
         if (SETS)
         {
             serveSetView(v);
+            return;
+        }
+        if (FOOTPRINT)
+        {
+            serveFootprintView(v);
             return;
         }
         if (GALLERY)
