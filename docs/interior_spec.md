@@ -1,4 +1,10 @@
-# Building interior and exterior spec (round 2 step 4c, DRAFT for user review)
+# Building interior and exterior spec (round 2 step 4c, approved 7 Oktober 2026)
+
+User decisions (7 Oktober 2026): survivor camps yes (about 1 in 12
+buildings); shop signs use Decimation's own sign assets (BlockSign_*);
+more building types and categories come later (section 9), so everything
+here is built as reusable parts, not hardcoded into the 3 current kinds.
+Work starts by fixing the audited apartment / office / shop.
 
 Target: production quality ruins. Every room reads as what it was, before
 the reader notices it is a ruin. Built in layers so each can be tuned and
@@ -168,7 +174,28 @@ facade side, rubble in collapsed buildings only on landings.
 ## 8. Order of work (step 4d / 4e)
 
 1. Structure + circulation: doors, rubble redesign, stair core extras.
+   DONE v0.17.0 (doors + rubble; stair core extras moved to step 2):
+   DOOR plan cells get a Decimation door (both halves, meta 0/2 when the
+   wall runs along z, 1/3 along x, +4 open for 25%), 20% + decay * 50%
+   missing; one door type per building (apartments: office wood or a
+   coloured door with window; offices: office door; shops: metal door);
+   apartment entrance gets an office door. Debris on floors is low only
+   (cobble / stone brick / brick slabs, trash bags, cobwebs only next to
+   walls), never on the cells beside a door; full cubes only under a
+   collapse. Result seed 1: 373 doors in 105 buildings, storey
+   reachability median 100%, 90% of storeys >= 96%.
 2. Surfaces: floors, wall panels, ceilings, lights.
+   DONE v0.17.0: `Building` keeps a room grid per storey plan (R_CORRIDOR,
+   R_LIVING, R_BEDROOM, R_LOBBY, R_OFFICE, R_MEETING, R_STORAGE, R_SHOP,
+   R_STOCK), marked by the planners. Floors: corridor Stone_6/7 (light, as
+   the floor is the ceiling below), living planks, bedroom one carpet per
+   building, lobby Stone_6, office carpet 1..4 per storey, meeting carpet
+   5/6, storage / stock Stone_1, shop Stone_6 or checker tiles. Interior
+   walls: one BlockWallOffice set per building (Bottom on the first course,
+   Top above). Ceiling (within 3 of open cells): BlockLightOff panels on a
+   grid (8% BlockLight still glowing, some missing with decay), ceiling
+   vents in offices and shops. The light model hangs a little below the
+   ceiling: reads as a fixture.
 3. Apartment rooms (living, kitchen, bedroom, bathroom), lobby.
 4. Office storey programs + lobby.
 5. Shop floor polish + upper storey use.
@@ -176,3 +203,22 @@ facade side, rubble in collapsed buildings only on landings.
 7. Exterior: entrances, shopfronts + signs, balconies, fire escapes, roofs.
 Each step: implement, verify (section 7), commit, user look in game when
 convenient.
+
+## 9. Extensibility (user, 7 Oktober 2026)
+
+More types will follow, grouped by category:
+- civilian: apartment, office, shops (food store, vehicle dealer,
+  general store, gun shop), houses, garage;
+- police: police station;
+- military: base, checkpoint;
+- more categories later (medical, industrial: hospital, warehouse, gas
+  station, factory).
+So the polish work is built as reusable parts that any building type
+picks from: a shell (walls, storeys, stair core, facade palette), room
+programs (living room, kitchen, office cluster, stockroom, cell block...),
+surface sets, door rules, a story / decay layer and exterior add-ons.
+A new type then = a footprint rule + a list of room programs + a facade
+choice + a loot profile, not a new class full of special cases. Category
+decides the sector it appears in and the Decimation zone it gets
+(civilian / POLICE / MILITARY).
+

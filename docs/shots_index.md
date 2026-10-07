@@ -68,3 +68,23 @@ the first attempt (5 per view, far camera) was deleted; views 0, 23 and
 70..76 were re-shot (platform not rendered yet, camera turned by a touched
 mouse, doors placed without their upper half). Camera is now locked per
 tick and `-Ponly=` re-shoots single views.
+
+## audit_v0.17/ (after step 4d.1: doors + low debris)
+Same 3 buildings and camera spots as audit_v0.16.
+- apartment: dark wood office doors with a small window stand in the unit
+  doorways along the corridor (both halves, flush in the wall); corridor
+  debris is now a brick / stone slab instead of a mossy cube. Walls,
+  floors and ceilings are still all birch / oak planks (step 4d.2).
+- office: desks unchanged; floor debris now brick and stone slabs;
+  cobwebs were standing between desks (fixed right after: cobwebs only next
+  to walls). Ceiling still dark grey, no lights (step 4d.2).
+- shop: as v0.16 (shelves with goods), stockroom metal door.
+- audit_*_in.png (after step 4d.2 surfaces, ground storey + storey 1):
+  apartment corridor = white / pink plaster wall panels with a skirting
+  course, black tile floor (looked like a dark tunnel because the floor
+  above shows as ceiling -> corridor floors switched to light stone),
+  office doors. Office = grey carpet floor, the carpet of the storey above
+  as a grey ceiling, light panels / vents hanging as dark fixtures in a
+  grid, pink plaster walls. Shop = shelving aisles under hanging lights,
+  stone stockroom floor, white plaster walls upstairs.
+

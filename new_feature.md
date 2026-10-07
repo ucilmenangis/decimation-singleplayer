@@ -244,6 +244,15 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   room, each verified; e. exterior polish; f. user review in game.
   Then step 5: police station / hospital / gas station / warehouse, and
   step 6: loot balance per building.
+  User decisions on the spec (7 Oktober 2026): survivor camps yes, shop
+  signs from Decimation's assets, start with the audited apartment /
+  office / shop; later many more types in categories (civilian: houses,
+  garage, food store, vehicle store...; police; military base; more
+  categories to come). Build the polish as reusable parts (see
+  docs/interior_spec.md section 9) so new types are cheap.
+  4d.1 DONE v0.17.0: doors + low debris. 4d.2 DONE v0.17.0: surfaces
+  (room grid, floors, wall panels, ceiling lights / vents). Next 4d.3:
+  apartment rooms (living, kitchen, bedroom, bathroom, lobby).
 
 ---
 

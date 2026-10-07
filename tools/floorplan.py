@@ -30,6 +30,7 @@ STYLE = [
     ("door", (150, 95, 50), "D"),
     ("ladder", (230, 200, 60), "L"),
     ("stairs", (225, 150, 60), "/"),
+    ("stone_slab", (175, 160, 140), "s"),
     ("bed", (200, 60, 60), "B"),
     ("bookshelf", (120, 80, 40), "b"),
     ("chest", (160, 110, 40), "C"),
@@ -68,7 +69,7 @@ def style(name):
     if name == "minecraft:air":
         return AIR, ""
     for key, colour, letter in STYLE:
-        if key in name:
+        if key.lower() in name.lower():
             return colour, letter
     if any(r in name for r in RUBBLE):
         return (175, 160, 140), "r"
@@ -81,8 +82,10 @@ def walkable(names, x, z):
     b = names.get((x, 2, z))
 
     def free(n):
-        return n is not None and (n == "minecraft:air" or any(k in n for k in (
-            "door", "carpet", "vine", "web", "snow_layer", "tallgrass", "torch", "deci:BlockTrashBag")))
+        # passable: air, doors, things you walk through or step onto (half slabs)
+        return n is not None and (n == "minecraft:air" or any(k in n.lower() for k in (
+            "door", "carpet", "vine", "web", "snow_layer", "tallgrass", "torch", "trashbag", "stone_slab",
+            "wooden_slab")) and "double" not in n)
     return free(a) and free(b)
 
 
@@ -148,7 +151,7 @@ def main():
                 area = [(x, z) for x in range(1, wd + 1) for z in range(1, ld + 1)]
                 walk = {c for c in area if walkable(cells, *c)}
                 seeds = [c for c in area if cells.get((c[0], 1, c[1])) and any(
-                    k in cells[(c[0], 1, c[1])] for k in ("stairs", "ladder", "door"))]
+                    k in cells[(c[0], 1, c[1])].lower() for k in ("stairs", "ladder", "door"))]
                 if s == 0:
                     seeds += [c for c in walk if c[0] in (1, wd) or c[1] in (1, ld)]
                 seen, todo = set(), [c for c in seeds if c in walk or True]

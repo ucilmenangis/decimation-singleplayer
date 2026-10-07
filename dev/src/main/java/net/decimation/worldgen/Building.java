@@ -32,11 +32,17 @@ public class Building implements Graded
 
     // floor plan cell codes
     private static final byte OPEN = 0, WALL = 1, DOOR = 2, GLASS = 3, FURN = 4, CORE = 5;
+    // room codes (room grid beside each plan): decide floors, lights, later room programs
+    static final byte R_NONE = 0, R_CORRIDOR = 1, R_LIVING = 2, R_BEDROOM = 3, R_LOBBY = 4, R_OFFICE = 5,
+        R_MEETING = 6, R_STORAGE = 7, R_SHOP = 8, R_STOCK = 9;
 
     public final String id;
     public final int minX, minZ, width, length, floors, kind, front, style;
     public final long seed;
     private final Props props;
+    /** Door used for this building's unit / room doors (null: none resolved). */
+    private Block roomDoor;
+
     /** The lot this building stands on; the ground around it is graded. */
     public final int lotX, lotZ, lotSize;
 
@@ -53,6 +59,9 @@ public class Building implements Graded
     private final byte[][] groundPlan, upperPlan;
     private final Block[][] groundFurn, upperFurn;
     private final byte[][] groundFurnMeta, upperFurnMeta;
+    private final byte[][] groundRoom, upperRoom;
+    // surfaces chosen per building (Decimation blocks, null = fall back to vanilla)
+    private Block wallBottom, wallTop, corridorFloor, bedroomCarpet, meetingCarpet, lobbyFloor, shopFloor, stockFloor;
     /** Stair core origin (fx, fz) or -1 for a ladder shaft. */
     private final int coreFx, coreFz;
 
@@ -65,6 +74,12 @@ public class Building implements Graded
             trashcan, vending, mailbox, cardboard, woodCrate, medicalCrate, policeCrate, ammoCrate;
         public Block road;
         public Block[] cars = new Block[0];
+        /** Doors (DeciDoorBlock, vanilla door metadata): unit entrances per building, office, metal. */
+        public Block[] unitDoors = new Block[0];
+        public Block officeDoor, metalDoor;
+        public Block[] trashBags = new Block[0];
+        /** Any Decimation block by registry name without "deci:" (surfaces, lights...). */
+        public final java.util.Map<String, Block> named = new java.util.HashMap<String, Block>();
     }
 
     public Building(String id, int minX, int minZ, int width, int length, int floors,
@@ -131,6 +146,10 @@ public class Building implements Graded
             windowMeta = 0;
         }
         decay = 0.15 + unit(12, 12, 12) * 0.40;
+        roomDoor = kind == OFFICE ? props.officeDoor
+            : kind == SHOP ? props.metalDoor
+            : props.unitDoors.length > 0 ? props.unitDoors[(int) (unit(16, 16, 16) * props.unitDoors.length)]
+            : props.officeDoor;
         if (floors >= 2 && unit(13, 13, 13) < 0.45)
         {
             collapseCorner = (int) (unit(14, 14, 14) * 4);
@@ -152,6 +171,9 @@ public class Building implements Graded
         upperFurn = new Block[width][length];
         groundFurnMeta = new byte[width][length];
         upperFurnMeta = new byte[width][length];
+        groundRoom = new byte[width][length];
+        upperRoom = new byte[width][length];
+        chooseSurfaces();
         switch (kind)
         {
             case OFFICE:
@@ -165,6 +187,20 @@ public class Building implements Graded
             default:
                 planApartment(groundPlan, groundFurn, groundFurnMeta, true);
                 planApartment(upperPlan, upperFurn, upperFurnMeta, false);
+        }
+        byte fallback = kind == OFFICE ? R_OFFICE : kind == SHOP ? R_SHOP : R_LIVING;
+        for (byte[][] rooms : new byte[][][] {groundRoom, upperRoom})
+        {
+            for (int fx = 0; fx < width; fx++)
+            {
+                for (int z = 0; z < length; z++)
+                {
+                    if (rooms[fx][z] == R_NONE)
+                    {
+                        rooms[fx][z] = fallback;
+                    }
+                }
+            }
         }
     }
 
@@ -387,7 +423,7 @@ public class Building implements Graded
             {
                 return ladder(meta);
             }
-            return floorBlock(meta, storey);
+            return floorBlock(meta, storey, fx, z);
         }
         if (edge)
         {
@@ -410,6 +446,12 @@ public class Building implements Graded
             case WALL:
                 if (within == 3 || unit(fx, ly, z) > decay * 0.3)
                 {
+                    Block panel = within == 1 ? wallBottom : wallTop;
+                    if (panel != null)
+                    {
+                        meta[0] = 0;
+                        return panel;
+                    }
                     meta[0] = kind == OFFICE ? 0 : 2;
                     return kind == OFFICE ? Blocks.stonebrick : Blocks.planks;
                 }
@@ -421,7 +463,11 @@ public class Building implements Graded
                 }
                 return within == 3 ? Blocks.stonebrick : null;
             case DOOR:
-                return within == 3 ? (kind == OFFICE ? Blocks.stonebrick : Blocks.planks) : null;
+                if (within == 3)
+                {
+                    return kind == OFFICE ? Blocks.stonebrick : Blocks.planks;
+                }
+                return door(plan, fx, z, storey, within, meta);
             case FURN:
                 if (within != 1)
                 {
@@ -433,11 +479,39 @@ public class Building implements Graded
                 {
                     return debris(fx, ly, z, meta);
                 }
+                if (within == 3)
+                {
+                    return ceiling((storey == 0 ? groundRoom : upperRoom)[fx][z], fx, z, storey, meta);
+                }
                 return null;
         }
     }
 
     // ------------------------------------------------------------ parts
+
+    private Block floorBlock(int[] meta, int storey, int fx, int z)
+    {
+        byte room = (storey == 0 ? groundRoom : upperRoom)[fx][z];
+        Block b = null;
+        switch (room)
+        {
+            case R_CORRIDOR: b = corridorFloor; break;
+            case R_BEDROOM: b = bedroomCarpet; break;
+            case R_LOBBY: b = lobbyFloor; break;
+            case R_OFFICE: b = deci("BlockFloorCarpet_" + (1 + (int) (unit(storey, 22, 22) * 4))); break;
+            case R_MEETING: b = meetingCarpet; break;
+            case R_STORAGE:
+            case R_STOCK: b = stockFloor; break;
+            case R_SHOP: b = shopFloor; break;
+            default: break; // living rooms keep planks
+        }
+        if (b != null)
+        {
+            meta[0] = 0;
+            return b;
+        }
+        return floorBlock(meta, storey);
+    }
 
     private Block floorBlock(int[] meta, int storey)
     {
@@ -464,6 +538,12 @@ public class Building implements Graded
         if (frontWall && storey == 0 && within <= 2
             && Math.abs(along - span / 2) <= (kind == SHOP ? 1 : kind == OFFICE ? 1 : 0))
         {
+            if (kind == APARTMENT && within <= 2 && props.officeDoor != null && unit(3, storey, along) > decay)
+            {
+                // apartment entrance: a door in the 1 wide gap (wall along z)
+                meta[0] = within == 1 ? (unit(4, 4, along) < 0.3 ? 4 : 0) : 8;
+                return props.officeDoor;
+            }
             return null; // entrance
         }
         if (isWindow(along, within, storey, frontWall))
@@ -723,12 +803,50 @@ public class Building implements Graded
         return null;
     }
 
+    /**
+     * A door in a DOOR cell of the plan (both halves: within 1 lower, 2
+     * upper). Decimation doors copy vanilla door metadata: lower 0 / 2 for
+     * a door in a wall running north-south (plan z axis), 1 / 3 for a wall
+     * running along x, +4 = open; upper 8. Missing with a chance growing
+     * with decay; about a quarter of the rest stand open.
+     */
+    private Block door(byte[][] plan, int fx, int z, int storey, int within, int[] meta)
+    {
+        if (roomDoor == null || unit(fx, storey * 7 + 3, z) < 0.2 + decay * 0.5)
+        {
+            return null;
+        }
+        if (within == 2)
+        {
+            meta[0] = 8;
+            return roomDoor;
+        }
+        boolean wallAlongZ = (z > 0 && plan[fx][z - 1] == WALL) || (z < length - 1 && plan[fx][z + 1] == WALL);
+        int base = wallAlongZ ? 0 : 1;
+        meta[0] = base | (unit(fx, storey * 7 + 5, z) < 0.25 ? 4 : 0);
+        return roomDoor;
+    }
+
+    private boolean nearWall(byte[][] plan, int fx, int z)
+    {
+        return fx <= 1 || z <= 1 || fx >= width - 2 || z >= length - 2
+            || plan[fx - 1][z] == WALL || plan[fx + 1][z] == WALL || plan[fx][z - 1] == WALL || plan[fx][z + 1] == WALL;
+    }
+
+    /** True for the cells in front of / behind a door: no debris there. */
+    private boolean byDoor(byte[][] plan, int fx, int z)
+    {
+        return (fx > 0 && plan[fx - 1][z] == DOOR) || (fx < width - 1 && plan[fx + 1][z] == DOOR)
+            || (z > 0 && plan[fx][z - 1] == DOOR) || (z < length - 1 && plan[fx][z + 1] == DOOR);
+    }
+
     private Block debris(int fx, int ly, int z, int[] meta)
     {
         double d = unit(fx, ly, z);
-        if (d < decay * 0.10)
+        byte[][] plan = ly / FLOOR == 0 ? groundPlan : upperPlan;
+        if (d < decay * 0.10 && !byDoor(plan, fx, z))
         {
-            return debrisBlock(fx, ly, z, meta);
+            return lowDebris(fx, ly, z, meta);
         }
         boolean nearOutside = fx <= 1 || z <= 1 || fx >= width - 2 || z >= length - 2;
         if (nearOutside)
@@ -743,6 +861,30 @@ public class Building implements Graded
         return null;
     }
 
+    /**
+     * Debris on a walkable floor: never a full block (the audit found full
+     * mossy cobble cubes standing in corridors and doorways). Slabs of
+     * cobble / stone brick / brick, a cobweb, a trash bag.
+     */
+    private Block lowDebris(int fx, int ly, int z, int[] meta)
+    {
+        double d = unit(z, ly, fx);
+        byte[][] plan = ly / FLOOR == 0 ? groundPlan : upperPlan;
+        if (d < 0.12 && nearWall(plan, fx, z))
+        {
+            meta[0] = 0;
+            return Blocks.web; // cobwebs in corners and along walls, not mid-room
+        }
+        if (d < 0.22 && props.trashBags.length > 0)
+        {
+            meta[0] = 2 + (int) (unit(fx, 9, z) * 4);
+            return props.trashBags[(int) (unit(z, 9, fx) * props.trashBags.length)];
+        }
+        meta[0] = d < 0.6 ? 3 : d < 0.85 ? 5 : 4; // cobble / stone brick / brick slab
+        return Blocks.stone_slab;
+    }
+
+    /** Heavy rubble: only under a collapsed ceiling, where full blocks make sense. */
     private Block debrisBlock(int fx, int ly, int z, int[] meta)
     {
         double d = unit(z, ly, fx);
@@ -767,7 +909,7 @@ public class Building implements Graded
         // looted / thrown around: some furniture missing, loot varies per storey
         if (unit(fx, storey * 31, z) < 0.12 + decay * 0.25)
         {
-            return debris(fx, storey * FLOOR + 1, z, meta);
+            return unit(fx, storey * 33, z) < 0.5 ? lowDebris(fx, storey * FLOOR + 1, z, meta) : null;
         }
         if (isCrate(b) && unit(storey, fx, z) < 0.45)
         {
@@ -827,6 +969,95 @@ public class Building implements Graded
         }
     }
 
+    private byte[][] roomsOf(byte[][] plan)
+    {
+        return plan == groundPlan ? groundRoom : upperRoom;
+    }
+
+    private void markRoom(byte[][] plan, int fx0, int z0, int fx1, int z1, byte room)
+    {
+        byte[][] rooms = roomsOf(plan);
+        for (int fx = Math.max(0, fx0); fx <= Math.min(width - 1, fx1); fx++)
+        {
+            for (int z = Math.max(0, z0); z <= Math.min(length - 1, z1); z++)
+            {
+                rooms[fx][z] = room;
+            }
+        }
+    }
+
+    private Block deci(String name)
+    {
+        return props.named.get(name);
+    }
+
+    /**
+     * Interior surfaces per building (docs/interior_spec.md section 2): one
+     * wall panel colour set (Decimation BlockWallOffice_*: Bottom course
+     * with a skirting stripe, Top above), floors per room type.
+     */
+    private void chooseSurfaces()
+    {
+        String[][] sets = kind == OFFICE
+            ? new String[][] {{"BlockWallOffice_Bottom_3", "BlockWallOffice_Top"},
+                              {"BlockWallOffice_4_Bottom_2", "BlockWallOffice_4_Top"},
+                              {"BlockWallOffice_3_Bottom_2", "BlockWallOffice_3_Top"}}
+            : kind == SHOP
+            ? new String[][] {{"BlockWallOffice_Bottom_3", "BlockWallOffice_Top"},
+                              {"BlockWallOffice_2_Bottom_1", "BlockWallOffice_2_Top"}}
+            : new String[][] {{"BlockWallOffice_2_Bottom_1", "BlockWallOffice_2_Top"},
+                              {"BlockWallOffice_3_Bottom_2", "BlockWallOffice_3_Top"},
+                              {"BlockWallOffice_4_Bottom_1", "BlockWallOffice_4_Top"},
+                              {"BlockWallOffice_Bottom_1", "BlockWallOffice_Top"},
+                              {"BlockWallOffice_Bottom_2", "BlockWallOffice_Top"}};
+        String[] set = sets[(int) (unit(17, 17, 17) * sets.length)];
+        wallBottom = deci(set[0]);
+        wallTop = deci(set[1]);
+        // light floors only: a floor is also the ceiling of the storey below
+        // (black tiles made corridors read as a dark tunnel, audit 0.17)
+        corridorFloor = deci(unit(18, 18, 18) < 0.5 ? "BlockStone_7" : "BlockStone_6");
+        bedroomCarpet = deci("BlockFloorCarpet_" + (2 + (int) (unit(19, 19, 19) * 5)));
+        meetingCarpet = deci(unit(20, 20, 20) < 0.5 ? "BlockFloorCarpet_5" : "BlockFloorCarpet_6");
+        lobbyFloor = deci("BlockStone_6");
+        shopFloor = deci(unit(21, 21, 21) < 0.6 ? "BlockStone_6" : "BlockFloorTiles_2");
+        stockFloor = deci("BlockStone_1");
+    }
+
+    /**
+     * Ceiling fixtures at within 3 of an open cell: light panels (Decimation
+     * BlockLight has its box at the top of the cell, so it hangs from the
+     * floor above; BlockLight glows, BlockLightOff is dead), vents in
+     * offices and shops. Most lights are dead, some missing with decay.
+     */
+    private Block ceiling(byte room, int fx, int z, int storey, int[] meta)
+    {
+        boolean grid;
+        switch (room)
+        {
+            case R_CORRIDOR:
+                grid = fx % 4 == 1;
+                break;
+            case R_OFFICE:
+            case R_SHOP:
+            case R_MEETING:
+                if (fx % 6 == 5 && z % 6 == 5 && deci("BlockCeilingVent") != null)
+                {
+                    meta[0] = 2;
+                    return deci("BlockCeilingVent");
+                }
+                grid = fx % 4 == 2 && z % 4 == 2;
+                break;
+            default:
+                grid = fx % 5 == 2 && z % 5 == 2;
+        }
+        if (!grid || unit(fx, storey * 13 + 7, z) < 0.15 + decay * 0.3)
+        {
+            return null;
+        }
+        meta[0] = 2;
+        return unit(fx, storey * 13 + 8, z) < 0.08 ? deci("BlockLight") : deci("BlockLightOff");
+    }
+
     private void markCore(byte[][] plan)
     {
         if (coreFx < 0)
@@ -840,6 +1071,7 @@ public class Building implements Graded
                 plan[fx][z] = CORE;
             }
         }
+        markRoom(plan, coreFx - 1, coreFz - 1, coreFx + 6, coreFz + 4, R_CORRIDOR);
         // side walls of the core, open toward the front landing
         wallLine(plan, coreFx + 1, coreFz - 1, coreFx + 6, coreFz - 1, WALL);
         wallLine(plan, coreFx + 1, coreFz + 4, coreFx + 6, coreFz + 4, WALL);
@@ -851,6 +1083,7 @@ public class Building implements Graded
         int c0 = length / 2 - 1, c1 = length / 2;      // corridor rows
         int end = coreFx >= 0 ? coreFx - 1 : width - 2;
         boolean doubleLoaded = length >= 11;
+        markRoom(plan, 1, c0, end, c1, R_CORRIDOR);
         // corridor walls
         if (doubleLoaded)
         {
@@ -896,10 +1129,17 @@ public class Building implements Graded
         }
         if (lobby)
         {
+            markRoom(plan, fx0, z0, fx1, z1, R_LOBBY);
             return; // ground floor front unit stays an open lobby
         }
         int depth = z1 - z0 + 1;
         int split = depth >= 5 ? (corridorAtLowZ ? z0 + depth / 2 : z1 - depth / 2) : -1;
+        markRoom(plan, fx0, z0, fx1, z1, R_LIVING);
+        if (split >= 0)
+        {
+            // bedroom on the window side of the split wall
+            markRoom(plan, fx0, corridorAtLowZ ? split : z0, fx1, corridorAtLowZ ? z1 : split, R_BEDROOM);
+        }
         if (split >= 0)
         {
             wallLine(plan, fx0, split, fx1, split, WALL);
@@ -953,6 +1193,7 @@ public class Building implements Graded
         int coreEnd = coreFx >= 0 ? coreFx - 2 : width - 3;
         if (ground)
         {
+            markRoom(plan, 1, 1, 7, length - 2, R_LOBBY);
             // reception desk facing the entrance, waiting chairs, vending machine
             int mid = length / 2;
             for (int z = mid - 2; z <= mid + 2; z++)
@@ -972,6 +1213,7 @@ public class Building implements Graded
         int mx1 = Math.min(6, coreEnd), mz1 = Math.min(5, length / 2 - 2);
         if (mx1 >= 4 && mz1 >= 3)
         {
+            markRoom(plan, 1, 1, mx1, mz1, R_MEETING);
             wallLine(plan, 1, mz1 + 1, mx1, mz1 + 1, GLASS);
             wallLine(plan, mx1 + 1, 1, mx1 + 1, mz1 + 1, GLASS);
             plan[mx1 + 1][mz1 / 2 + 1] = DOOR;
@@ -985,6 +1227,7 @@ public class Building implements Graded
         // storage room beside the core: shelves and crates
         if (coreFx >= 0 && coreFz >= 4)
         {
+            markRoom(plan, coreFx + 1, 1, width - 2, coreFz - 2, R_STORAGE);
             wallLine(plan, coreFx, coreFz - 3, coreFx, coreFz - 2, WALL);
             for (int fx = coreFx + 1; fx <= width - 2; fx++)
             {
@@ -1016,6 +1259,8 @@ public class Building implements Graded
     private void planShop(byte[][] plan, Block[][] furn, byte[][] fm, boolean ground)
     {
         int stockWall = Math.max(5, width - 5);
+        markRoom(plan, 1, 1, stockWall - 1, length - 2, ground ? R_SHOP : R_STOCK);
+        markRoom(plan, stockWall + 1, 1, width - 2, length - 2, R_STOCK);
         wallLine(plan, stockWall, 1, stockWall, length - 2, WALL);
         plan[stockWall][length / 2] = DOOR;
         // stockroom: crates, boxes, shelves on the back wall

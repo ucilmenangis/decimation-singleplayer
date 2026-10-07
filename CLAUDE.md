@@ -88,7 +88,7 @@ Knowledge index:
   step 4a), findings with evidence, prop inventory.
 - `docs/interior_spec.md`: design spec for interiors and exteriors
   (surfaces, doors, room programs, story / decay layer, exterior, how to
-  verify); round 2 step 4c, DRAFT until the user approves it.
+  verify, building categories); round 2 step 4c, approved 2026-10-07.
 - `docs/prop_catalogue.md`: what every Decimation block looks like, its
   size and facing (from the prop gallery); doors use vanilla door meta.
 - `docs/shots_index.md`: what every saved screenshot in `docs/shots/`
@@ -416,6 +416,13 @@ of the last session:
   v0.16.0: multiblock props generated whole (shelves are 1x1x2 TALL; see
   docs/worldgen.md "Multiblock props"), `tools/multiscan.py` checks them.
   Supply drops skip columns topped by a prop (crate vanished on a trash bag).
+  v0.16.1: every storey reachable (ladder support, collapse spares the
+  stairs); building audit, prop gallery, catalogue, spec (step 4a..c).
+  v0.17.0: step 4d.1 doors in every DOOR cell and low debris; step 4d.2
+  surfaces: room grid beside each storey plan (corridor, living, bedroom,
+  lobby, office, meeting, storage, shop, stock), floors per room, wall
+  panels per building, ceiling lights / vents (docs/interior_spec.md
+  section 8). A floor block is also the ceiling below: keep floors light.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

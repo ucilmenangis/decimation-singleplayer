@@ -37,7 +37,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.16.1",
+     version = "0.17.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -304,6 +304,20 @@ public class DecimationWorldGen
         p.policeCrate = one("deci:BlockPoliceCrate");
         p.ammoCrate = one("deci:BlockAmmoCrate");
         p.road = one("deci:BlockRoad");
+        p.unitDoors = resolve("deci:Door_Office_1", "deci:Door_Blue_3", "deci:Door_Green_3",
+                              "deci:Door_Orange_3", "deci:Door_Blue_1");
+        p.officeDoor = one("deci:Door_Office_1");
+        p.metalDoor = one("deci:Door_Metal_3");
+        p.trashBags = resolve("deci:BlockTrashBag1", "deci:BlockTrashBag2");
+        // interior surfaces and fixtures (docs/interior_spec.md section 2)
+        for (Object o : cpw.mods.fml.common.registry.GameData.getBlockRegistry().getKeys())
+        {
+            String n = (String) o;
+            if (n.startsWith("deci:Block"))
+            {
+                p.named.put(n.substring(5), Block.getBlockFromName(n));
+            }
+        }
         p.cars = resolve("deci:BlockWreckage1", "deci:BlockWreckage2", "deci:BlockWreckage3",
                          "deci:BlockWreckage4", "deci:BlockWreckage5");
         return p;
