@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fresh dev dedicated server run: new world with SEED, wait for spawn
 generation, stop (saves), print our placement log lines.
-usage: python3 tools/servertest.py SEED [keep] [pregen=x,z,r] [type=decimation] [cmd="console command"]
+usage: python3 tools/servertest.py SEED [keep] [pregen=x,z,r] [type=decimation] [cmd="console command;;another"]
   keep = reuse the existing world; pregen = also generate chunks around x,z;
   type = level-type (default DEFAULT)"""
 import os, re, shutil, signal, subprocess, sys, time
@@ -47,8 +47,11 @@ if ok:
     # cmd="..." : a console command run before stopping (e.g. cmd="deciworldgen rebuild 64 0 100")
     for a in sys.argv[2:]:
         if a.startswith("cmd="):
-            p.stdin.write((a.split("=", 1)[1] + "\n").encode()); p.stdin.flush()
-            time.sleep(15)
+            # several commands: separated by ";;", 1 s apart, 15 s after the last
+            for c in a.split("=", 1)[1].split(";;"):
+                p.stdin.write((c.strip() + "\n").encode()); p.stdin.flush()
+                time.sleep(1)
+            time.sleep(14)
     try:
         p.stdin.write(b"stop\n"); p.stdin.flush()
     except Exception:

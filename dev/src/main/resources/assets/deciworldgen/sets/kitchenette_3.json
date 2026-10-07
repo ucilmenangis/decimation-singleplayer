@@ -4,6 +4,7 @@
     "kitchen"
   ],
   "weight": 8,
+  "style": "kitchen_wood",
   "comment": "Compact kitchen for small flats: fridge, sink, oven; fridge = 2 high iron block, tap (tripwire hook) over the sink, wall cabinets with trapdoor doors.",
   "layers": [
     [
@@ -29,10 +30,6 @@
       "block": "minecraft:furnace",
       "type": "vanilla",
       "face": "out"
-    },
-    "u": {
-      "block": "minecraft:planks",
-      "meta": 1
     },
     "h": {
       "block": "minecraft:tripwire_hook",

@@ -1,0 +1,22 @@
+{
+  "name": "kitchen_wood",
+  "comment": "One cabinet wood per kitchen; weights favour light woods.",
+  "palettes": [
+    {
+      "palette": "kitchen_oak",
+      "weight": 3
+    },
+    {
+      "palette": "kitchen_spruce",
+      "weight": 3
+    },
+    {
+      "palette": "kitchen_birch",
+      "weight": 2
+    },
+    {
+      "palette": "kitchen_dark_oak",
+      "weight": 2
+    }
+  ]
+}

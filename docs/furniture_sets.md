@@ -10,10 +10,18 @@ spirit of Lost Cities' data driven parts.
 
 - Built-in sets: `dev/src/main/resources/assets/deciworldgen/sets/*.json`
   (+ `index.txt`, regenerate with `ls *.json > index.txt`).
-- On first start they are copied to `config/decimation_worldgen/sets/`.
-  From then on a file there with the same name REPLACES the built-in; new
-  files are added. Delete the config folder to get the built-ins again.
-- `/deciworldgen reload` re-reads them in game.
+- They are copied to `config/decimation_worldgen/sets/`. A file there
+  with the same name REPLACES the built-in; new files are added.
+- Since 0.22.0 (`assets.AssetDir`, same for palettes, styles): at start a
+  config copy that equals an OLD built-in version (sha1 listed in the
+  built-in folder's `known.txt`) is replaced by the new built-in; a copy
+  the user edited is kept (logged "differs from the built-in (edited):
+  kept"). Missing built-ins are copied. After changing any built-in
+  asset run `python3 tools/asset_hashes.py` (rebuilds known.txt from git
+  history + working copy) BEFORE committing, else the old version counts
+  as user edited. Verified 0.22.0: dev client and server logged
+  "kitchen_run_4.json updated to the new built-in" for the 4 kitchens.
+- `/deciworldgen reload` re-reads sets, palettes and styles in game.
 
 ## Format
 
@@ -59,6 +67,55 @@ spirit of Lost Cities' data driven parts.
 - `rooms` = the slot the set fills: living, kitchen, dining, bed, storage,
   desk, bath, lobby, closet. `weight` = how often it is picked.
 - Prop looks and sizes: docs/prop_catalogue.md.
+- `"when"` (0.22.0, `assets.Condition`): where the set may be used, every
+  given test must pass: `{"kinds": ["apartment", "office", "shop"],
+  "storey": "ground" | "upper", "floors": [min, max]}`.
+- `"base": "<palette>"` and `"style": "<style>"` (0.22.0): chars missing
+  from the inline palette come from the named palette, then from the
+  palette the style picks (one pick per placement, so a whole set uses
+  one look). The inline palette always wins: put the chars that should
+  vary ONLY in the palettes. Example: the kitchen sets have no inline `u`
+  (wall cabinets); style `kitchen_wood` picks oak 3 / spruce 3 / birch 2 /
+  dark oak 2 (verified: birch planks, used by nothing else, appeared in a
+  seed 1 city; set placement unchanged on all 453 rooms seen by both runs).
+
+## Palettes and styles (0.22.0)
+
+Built-ins in `assets/deciworldgen/palettes/` and `styles/` (with
+index.txt and known.txt), copied to `config/decimation_worldgen/palettes/`
+and `styles/` like sets.
+```json
+{"name": "kitchen_oak", "palette": {"u": {"block": "minecraft:planks", "meta": 0}}}
+{"name": "kitchen_wood", "palettes": [{"palette": "kitchen_oak", "weight": 3},
+                                      {"palette": "kitchen_spruce", "weight": 3}]}
+```
+Palette entries use the set palette format above. Later the part planner
+and facades use the same palettes and styles (docs/worldgen_architecture.md).
+
+## Capture (0.22.0): design sets in game
+
+1. Build the furniture in creative against a wall, 3 blocks of air high
+   like a storey. Sponge = "keep free" (`.`, walking space).
+2. Stand in one corner of the group (on the floor) and type
+   `/deciworldgen pos1`, stand in the opposite corner, `/deciworldgen pos2`
+   (or give `x y z`). The box spans 3 layers from the lower corner.
+3. `/deciworldgen capture set <name> <room> [north|south|west|east]
+   [weight]`. Without a side, the back is the box side with the most solid
+   blocks right outside it. Writes `config/decimation_worldgen/sets/
+   <name>.json` and reloads; `/deciworldgen rebuild` shows it in the city.
+4. `/deciworldgen capture part <name>`: raw box (absolute metadata) to
+   `config/decimation_worldgen/parts/`, for the part planner (not used by
+   the generator yet).
+
+Facing is converted to `face` relative to the wall for stairs (seat), beds,
+chests / furnaces (vanilla), open trapdoors, tripwire hooks and Decimation
+tile entity props (meta 2..5, not doors); everything else keeps its
+metadata. Non master parts of Decimation multiblocks are skipped (the
+generator rebuilds them from the master). Verified 0.22.0 on a dev server
+with console setblocks: furnace out, stair stool in, BlockChair out, bed
+right (foot + head), hook in, open trapdoor in, sponge `.`; a lone chest
+placed facing east read "out" because vanilla turns a single chest away
+from the wall when placed `[inferred]`.
 
 ## How rooms use them (Building.apartmentUnit)
 

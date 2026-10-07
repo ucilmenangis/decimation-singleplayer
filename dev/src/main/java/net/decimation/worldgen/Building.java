@@ -1552,7 +1552,15 @@ public class Building implements Graded
                             int fx0, int z0, int fx1, int z1, String kind, int salt)
     {
         java.util.List<net.decimation.worldgen.sets.FurnitureSet> sets =
-            net.decimation.worldgen.sets.FurnitureSets.forRoom(kind);
+            new java.util.ArrayList<net.decimation.worldgen.sets.FurnitureSet>();
+        String kindName = this.kind == APARTMENT ? "apartment" : this.kind == OFFICE ? "office" : "shop";
+        for (net.decimation.worldgen.sets.FurnitureSet set : net.decimation.worldgen.sets.FurnitureSets.forRoom(kind))
+        {
+            if (set.when.test(kindName, plan == groundPlan, floors))
+            {
+                sets.add(set);
+            }
+        }
         if (sets.isEmpty() || fx1 < fx0 || z1 < z0)
         {
             return false;
@@ -1688,6 +1696,7 @@ public class Building implements Graded
     {
         boolean ground = plan == groundPlan;
         int[] o = SIDE_OUT[side], a = SIDE_ALONG[side];
+        double styleU = unit(salt + side, off * 5 + 17, fx0 * 31 + z0); // one style palette per placement
         for (int y = 0; y < set.layers.length && y < 3; y++)
         {
             for (int r = 0; r < set.depth; r++)
@@ -1705,7 +1714,7 @@ public class Building implements Graded
                         keep[p[0]][p[1]] = true;
                         continue;
                     }
-                    net.decimation.worldgen.sets.FurnitureSet.Entry e = set.palette.get(ch);
+                    net.decimation.worldgen.sets.FurnitureSet.Entry e = set.entry(ch, styleU);
                     if (e == null || e.blocks.isEmpty())
                     {
                         continue;

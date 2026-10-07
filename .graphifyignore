@@ -32,3 +32,5 @@ tools/shim_src/
 *.patched
 *.schematic
 dev/gradlew
+dev/src/main/resources/assets/deciworldgen/*/known.txt
+dev/src/main/resources/assets/deciworldgen/*/index.txt

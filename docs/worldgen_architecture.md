@@ -1,4 +1,4 @@
-# Worldgen architecture v3 (DRAFT for user review, 7 Oktober 2026)
+# Worldgen architecture v3 (APPROVED by the user 8 Oktober 2026)
 
 Why: `Building.java` (~2000 lines) does shell, facade, floor plans, rooms,
 furniture, decay and grading in one class; every new building type would
@@ -82,6 +82,10 @@ folder, reloads. Then `/deciworldgen rebuild` shows it in the city.
 Each step verified with wallscan, gradescan, multiscan, floorplan
 reachability, audit / flats / sets screenshots and the autotest.
 1. Asset core: palette / style / condition loaders; capture command.
+   DONE 0.22.0 (package `assets`: AssetDir, Palettes, Condition,
+   Capture; docs/furniture_sets.md). Conditions are inline `"when"`
+   objects for now (no conditions/ folder yet); captured parts are
+   written but not consumed until step 4.
 2. Extract Shell, StoreyPlan, Furnisher, layers out of `Building` without
    behaviour change (compare floor plans before / after).
 3. Express apartment / office / shop as type JSON on top of the extracted
@@ -107,7 +111,8 @@ docs/references/decimation_maps.md and deceasedcraft_buildings.md:
   first, holes second.
 - Building type list and district styles (suburb residential, retail,
   highrise residential / office / hotel) as the target catalogue.
-- Open: 6 high storeys (4 air) for public types.
+- Open: 6 high storeys (4 air) for public types (user did not decide
+  yet; stays 5 until asked).
 
 ## Open questions (for later)
 

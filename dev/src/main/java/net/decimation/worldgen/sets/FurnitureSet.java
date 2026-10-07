@@ -27,14 +27,22 @@ public final class FurnitureSet
     public final char[][][] layers;
     public final Map<Character, Entry> palette;
     public final int depth, width;
+    /** Where the set may be used (building kind, ground / upper storey, floors). */
+    public final net.decimation.worldgen.assets.Condition when;
+    /** Named palette and style (weighted palettes) under the inline one; null = none. */
+    public final String paletteRef, style;
 
-    public FurnitureSet(String name, List<String> rooms, int weight, char[][][] layers, Map<Character, Entry> palette)
+    public FurnitureSet(String name, List<String> rooms, int weight, char[][][] layers, Map<Character, Entry> palette,
+                        net.decimation.worldgen.assets.Condition when, String paletteRef, String style)
     {
         this.name = name;
         this.rooms = rooms;
         this.weight = weight;
         this.layers = layers;
         this.palette = palette;
+        this.when = when;
+        this.paletteRef = paletteRef;
+        this.style = style;
         int d = 0, w = 0;
         for (char[][] layer : layers)
         {
@@ -56,6 +64,27 @@ public final class FurnitureSet
             return ' ';
         }
         return layers[y][r][c];
+    }
+
+    /**
+     * Palette entry of a char for one placement: the inline palette wins,
+     * then the named palette, then the palette the style picks for u
+     * (u is fixed per placement, so a whole set uses one style palette).
+     */
+    public Entry entry(char ch, double u)
+    {
+        Entry e = palette.get(ch);
+        if (e != null)
+        {
+            return e;
+        }
+        Map<Character, Entry> named = net.decimation.worldgen.assets.Palettes.palette(paletteRef);
+        if (named != null && named.containsKey(ch))
+        {
+            return named.get(ch);
+        }
+        Map<Character, Entry> styled = net.decimation.worldgen.assets.Palettes.fromStyle(style, u);
+        return styled != null ? styled.get(ch) : null;
     }
 
     /** One palette letter. */

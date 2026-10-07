@@ -1,0 +1,10 @@
+{
+  "name": "kitchen_oak",
+  "comment": "Oak wall cabinets (u) for kitchen sets using the kitchen_wood style.",
+  "palette": {
+    "u": {
+      "block": "minecraft:planks",
+      "meta": 0
+    }
+  }
+}

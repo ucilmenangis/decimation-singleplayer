@@ -50,14 +50,14 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791388867.7242565,
-    "ast_hash": "a067d58411c6c929294d99a76d0bf5b7",
-    "semantic_hash": "a067d58411c6c929294d99a76d0bf5b7"
+    "mtime": 1791395937.0224955,
+    "ast_hash": "a4470efdb11cac25d00f5052e82e749e",
+    "semantic_hash": "a4470efdb11cac25d00f5052e82e749e"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791393624.660567,
-    "ast_hash": "447a9469024086e92326c3e159cf60bd",
-    "semantic_hash": "447a9469024086e92326c3e159cf60bd"
+    "mtime": 1791395757.5212138,
+    "ast_hash": "9608ac8c79b9fc81ff184749f7b20209",
+    "semantic_hash": "9608ac8c79b9fc81ff184749f7b20209"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -95,9 +95,9 @@
     "semantic_hash": "cb59b22ea5a1e4945106954431e9668a"
   },
   "tools/servertest.py": {
-    "mtime": 1791385417.7374516,
-    "ast_hash": "2497787737d8fd65a376239332b3d26c",
-    "semantic_hash": "2497787737d8fd65a376239332b3d26c"
+    "mtime": 1791395556.5760226,
+    "ast_hash": "96c7dcf397516d4df44474d3f41b5b67",
+    "semantic_hash": "96c7dcf397516d4df44474d3f41b5b67"
   },
   "tools/setup_toolchain.py": {
     "mtime": 1786559758.1743937,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791394706.1424553,
-    "ast_hash": "a6bd01dfde399aef77c88f931d494c3b",
-    "semantic_hash": "a6bd01dfde399aef77c88f931d494c3b"
+    "mtime": 1791395937.0180326,
+    "ast_hash": "66e85114cf7657d05d841459a0c4344d",
+    "semantic_hash": "66e85114cf7657d05d841459a0c4344d"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791390948.2766674,
-    "ast_hash": "d9cc7830f85b8f164310643cc8d16223",
-    "semantic_hash": "d9cc7830f85b8f164310643cc8d16223"
+    "mtime": 1791395948.0390978,
+    "ast_hash": "8e39443a1bdd352b305ddde347675d71",
+    "semantic_hash": "8e39443a1bdd352b305ddde347675d71"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -175,9 +175,9 @@
     "semantic_hash": "eecbfdd3f9f9d419fbce9147d814df46"
   },
   "dev/src/main/java/net/decimation/worldgen/Building.java": {
-    "mtime": 1791388758.520042,
-    "ast_hash": "6af9a669ecef6a4fd62943f21050adf6",
-    "semantic_hash": "6af9a669ecef6a4fd62943f21050adf6"
+    "mtime": 1791395757.5206435,
+    "ast_hash": "b8263abff96177a04a2a5931d868f99b",
+    "semantic_hash": "b8263abff96177a04a2a5931d868f99b"
   },
   "dev/src/main/java/net/decimation/worldgen/CityDistrict.java": {
     "mtime": 1791369986.9502473,
@@ -330,9 +330,9 @@
     "semantic_hash": "44617037eeac4c4f3e53f42e6306550b"
   },
   "docs/shots_index.md": {
-    "mtime": 1791394706.1262019,
-    "ast_hash": "2dfa6c358cf3c3596d28964daa2a9e7c",
-    "semantic_hash": "2dfa6c358cf3c3596d28964daa2a9e7c"
+    "mtime": 1791394862.7316031,
+    "ast_hash": "8e2899f0d20d514a69a38f73871b2d24",
+    "semantic_hash": "8e2899f0d20d514a69a38f73871b2d24"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -345,19 +345,19 @@
     "semantic_hash": "93ceaca2ef7ce3e2c45c4fe4dbab9bcf"
   },
   "dev/src/main/java/net/decimation/worldgen/WorldGenCommand.java": {
-    "mtime": 1791385410.315084,
-    "ast_hash": "3be958ba0835d8d940ba88ede8184d61",
-    "semantic_hash": "3be958ba0835d8d940ba88ede8184d61"
+    "mtime": 1791395757.521723,
+    "ast_hash": "32e3c17eae5f9a40c1622592926a8ee9",
+    "semantic_hash": "32e3c17eae5f9a40c1622592926a8ee9"
   },
   "dev/src/main/java/net/decimation/worldgen/sets/FurnitureSet.java": {
-    "mtime": 1791383745.3607893,
-    "ast_hash": "104f17048f8e1e6dea21c1ef11f93abc",
-    "semantic_hash": "104f17048f8e1e6dea21c1ef11f93abc"
+    "mtime": 1791395757.5220072,
+    "ast_hash": "e52b13e1c391da22fac865d112b0399f",
+    "semantic_hash": "e52b13e1c391da22fac865d112b0399f"
   },
   "dev/src/main/java/net/decimation/worldgen/sets/FurnitureSets.java": {
-    "mtime": 1791387954.0344794,
-    "ast_hash": "47f4d8cce4e866486b687db62fb7c597",
-    "semantic_hash": "47f4d8cce4e866486b687db62fb7c597"
+    "mtime": 1791395757.522563,
+    "ast_hash": "592ff50c6e4ca1de5733ac7374e51ea7",
+    "semantic_hash": "592ff50c6e4ca1de5733ac7374e51ea7"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/bath_toilet_sink.json": {
     "mtime": 1791383829.5137563,
@@ -410,24 +410,24 @@
     "semantic_hash": "f408813edd77d61d4998a5875f54dc5d"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_4.json": {
-    "mtime": 1791388159.001398,
-    "ast_hash": "f92e18ed13c5918ffc9a6b2d0629d115",
-    "semantic_hash": "f92e18ed13c5918ffc9a6b2d0629d115"
+    "mtime": 1791395757.522758,
+    "ast_hash": "5312f4b4d1e9257bd6830de1a1dd7794",
+    "semantic_hash": "5312f4b4d1e9257bd6830de1a1dd7794"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_5.json": {
-    "mtime": 1791388159.0010557,
-    "ast_hash": "de3fbc26c2a64d6aba4d4b422598da2d",
-    "semantic_hash": "de3fbc26c2a64d6aba4d4b422598da2d"
+    "mtime": 1791395757.5229223,
+    "ast_hash": "5d9f2baa73b7b1c5f6aedad4738e6c00",
+    "semantic_hash": "5d9f2baa73b7b1c5f6aedad4738e6c00"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_6.json": {
-    "mtime": 1791388159.0016925,
-    "ast_hash": "47d9a44876bfc67269eedee6f9fff780",
-    "semantic_hash": "47d9a44876bfc67269eedee6f9fff780"
+    "mtime": 1791395757.523076,
+    "ast_hash": "041a9d614d55900d13c7b2c589140c9c",
+    "semantic_hash": "041a9d614d55900d13c7b2c589140c9c"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/kitchenette_3.json": {
-    "mtime": 1791388159.0024202,
-    "ast_hash": "88358b349c1e9b990d20ddda7acbe8a8",
-    "semantic_hash": "88358b349c1e9b990d20ddda7acbe8a8"
+    "mtime": 1791395757.5232263,
+    "ast_hash": "b05326896b2548f802cc8a63900d6586",
+    "semantic_hash": "b05326896b2548f802cc8a63900d6586"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/living_couch_wall.json": {
     "mtime": 1791384452.5949144,
@@ -470,9 +470,9 @@
     "semantic_hash": "ddc856a527654c00da45dc82887d74e8"
   },
   "docs/furniture_sets.md": {
-    "mtime": 1791388867.8302708,
-    "ast_hash": "ddf98f53079b17d74f682b8cbeab3fcb",
-    "semantic_hash": "ddf98f53079b17d74f682b8cbeab3fcb"
+    "mtime": 1791395937.017067,
+    "ast_hash": "efc68d1c282e967aabb59133c9351fee",
+    "semantic_hash": "efc68d1c282e967aabb59133c9351fee"
   },
   "dev/src/main/resources/assets/deciworldgen/sets/lobby_bench.json": {
     "mtime": 1791388159.0348103,
@@ -515,9 +515,9 @@
     "semantic_hash": "86f35ec0dfac75a209b8ffdbee049fe2"
   },
   "docs/references/decimation_maps.md": {
-    "mtime": 1791394653.1681092,
-    "ast_hash": "b875bc5f1cae6012b9e98a43b2f17b03",
-    "semantic_hash": "b875bc5f1cae6012b9e98a43b2f17b03"
+    "mtime": 1791394862.7311602,
+    "ast_hash": "e3f2e3561dce8daaccd19f1234994ccf",
+    "semantic_hash": "e3f2e3561dce8daaccd19f1234994ccf"
   },
   "docs/references/worldgen_study.md": {
     "mtime": 1791390706.5427034,
@@ -525,8 +525,58 @@
     "semantic_hash": "3a2f289d90cd2e4376405e5d75e06e2f"
   },
   "docs/worldgen_architecture.md": {
-    "mtime": 1791394715.333505,
-    "ast_hash": "d00d1727b1967403fb099c3ada7c5e40",
-    "semantic_hash": "d00d1727b1967403fb099c3ada7c5e40"
+    "mtime": 1791395937.0174985,
+    "ast_hash": "b2d317b3a0ae40ce72d4fc36acf391d5",
+    "semantic_hash": "b2d317b3a0ae40ce72d4fc36acf391d5"
+  },
+  "dev/src/main/java/net/decimation/worldgen/assets/AssetDir.java": {
+    "mtime": 1791395494.3524773,
+    "ast_hash": "e6a3eed1f55996b937c0ac823cea5de2",
+    "semantic_hash": "e6a3eed1f55996b937c0ac823cea5de2"
+  },
+  "dev/src/main/java/net/decimation/worldgen/assets/Capture.java": {
+    "mtime": 1791395426.669187,
+    "ast_hash": "c69486f26d87a8432c159a809a8f718a",
+    "semantic_hash": "c69486f26d87a8432c159a809a8f718a"
+  },
+  "dev/src/main/java/net/decimation/worldgen/assets/Condition.java": {
+    "mtime": 1791395298.6961381,
+    "ast_hash": "6085ee6f0cd0f632f11c841cbf9cefa6",
+    "semantic_hash": "6085ee6f0cd0f632f11c841cbf9cefa6"
+  },
+  "dev/src/main/java/net/decimation/worldgen/assets/Palettes.java": {
+    "mtime": 1791395333.1847131,
+    "ast_hash": "ffef9b75cde3f6360f61d0e0573baaef",
+    "semantic_hash": "ffef9b75cde3f6360f61d0e0573baaef"
+  },
+  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_birch.json": {
+    "mtime": 1791395465.850849,
+    "ast_hash": "96a36b8eab154acc3d149db38b8a2013",
+    "semantic_hash": "96a36b8eab154acc3d149db38b8a2013"
+  },
+  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_dark_oak.json": {
+    "mtime": 1791395465.850904,
+    "ast_hash": "4ecd024c6cb65251a4c41fcabe251412",
+    "semantic_hash": "4ecd024c6cb65251a4c41fcabe251412"
+  },
+  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_oak.json": {
+    "mtime": 1791395465.8507216,
+    "ast_hash": "a04f022bf75e9d1376217538595bb127",
+    "semantic_hash": "a04f022bf75e9d1376217538595bb127"
+  },
+  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_spruce.json": {
+    "mtime": 1791395465.850791,
+    "ast_hash": "52d8261a08e381b2037dbad230729ca3",
+    "semantic_hash": "52d8261a08e381b2037dbad230729ca3"
+  },
+  "dev/src/main/resources/assets/deciworldgen/styles/kitchen_wood.json": {
+    "mtime": 1791395465.851016,
+    "ast_hash": "63c26d7f8fd16d92d147881d596a0063",
+    "semantic_hash": "63c26d7f8fd16d92d147881d596a0063"
+  },
+  "tools/asset_hashes.py": {
+    "mtime": 1791395508.1948228,
+    "ast_hash": "1acb8980a7cae31334bdf9e750c76291",
+    "semantic_hash": "1acb8980a7cae31334bdf9e750c76291"
   }
 }

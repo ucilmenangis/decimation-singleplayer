@@ -4,6 +4,7 @@
     "kitchen"
   ],
   "weight": 8,
+  "style": "kitchen_wood",
   "comment": "Long kitchen with a washing machine at the end.; fridge = 2 high iron block, tap (tripwire hook) over the sink, wall cabinets with trapdoor doors.",
   "layers": [
     [
@@ -37,10 +38,6 @@
       "block": "deci:BlockWashingMachine",
       "type": "prop",
       "face": "out"
-    },
-    "u": {
-      "block": "minecraft:planks",
-      "meta": 5
     },
     "h": {
       "block": "minecraft:tripwire_hook",

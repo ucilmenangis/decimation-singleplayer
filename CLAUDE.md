@@ -463,6 +463,14 @@ of the last session:
   (docs/references/apartment.md), kitchen sets with iron fridge, trapdoor
   cabinet doors and tap, wall breaches by column, narrow apartment blocks
   use the ladder, `-Pflats` audit (Building.lookCell camera).
+  v0.22.0: worldgen v3 step 1 (architecture approved 2026-10-08): asset
+  core `worldgen/assets/` (AssetDir loader shared by sets / palettes /
+  styles, named palettes, weighted styles, `"when"` conditions on sets,
+  in-game capture `/deciworldgen pos1|pos2|capture set|part`). Built-in
+  assets update unedited config copies via `known.txt`: after changing
+  ANY built-in asset run `python3 tools/asset_hashes.py` before
+  committing. Map studies: docs/references/decimation_maps.md,
+  deceasedcraft_buildings.md.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

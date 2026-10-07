@@ -511,7 +511,7 @@ public class DevAutoTest
                         for (int c = 0; c < set.width; c++)
                         {
                             char ch = set.at(y, r, c);
-                            net.decimation.worldgen.sets.FurnitureSet.Entry e = set.palette.get(ch);
+                            net.decimation.worldgen.sets.FurnitureSet.Entry e = set.entry(ch, 0);
                             if (ch == ' ' || ch == '.' || e == null || e.blocks.isEmpty())
                             {
                                 continue;

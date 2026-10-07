@@ -284,8 +284,12 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   + Recurrent Complex done (docs/references/worldgen_study.md); user
   decisions: hybrid content (authored parts + procedural), in-game
   capture tool early, footprint size classes. Architecture draft:
-  docs/worldgen_architecture.md (awaiting user review), migration in 6
-  steps.
+  docs/worldgen_architecture.md, migration in 6 steps. Map studies (8
+  Oktober): hand-built Decimation maps + DeceasedCraft's 79 building
+  types (docs/references/decimation_maps.md, deceasedcraft_buildings.md).
+  Architecture APPROVED 8 Oktober 2026. Step 1 (asset core + capture) DONE
+  v0.22.0. Next: step 2, extract Shell / StoreyPlan / Furnisher / layers
+  out of Building without behaviour change.
 
 ---
 
