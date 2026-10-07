@@ -429,6 +429,10 @@ of the last session:
   section 8). A floor block is also the ceiling below: keep floors light.
   v0.18.0: step 4d.3 apartment rooms (spec section 8 item 3); propFacing
   fixed: a BlockProp's FRONT points 2 E, 3 S, 4 W, 5 N.
+  v0.19.0: storeys 5 high with their own white plaster ceiling layer
+  (Building.FLOOR = 5, CEIL = 4), 5 step stair runs; after the user's
+  0.18 review ("not ready to be called interior"), see
+  docs/interior_spec.md section 8b for the revised order.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

@@ -223,6 +223,22 @@ facade side, rubble in collapsed buildings only on landings.
 Each step: implement, verify (section 7), commit, user look in game when
 convenient.
 
+## 8b. Revised order after the user's 0.18 review (structure first)
+
+1a. DONE v0.19.0: storey height 5 (`Building.FLOOR`): floor layer
+    (within 0), 3 air, own ceiling layer (within 4, `CEIL`). Ceilings are
+    white plaster (BlockWallOffice_Top) except storage / stock (Stone_1);
+    BlockCeiling_3/4 tiles looked like a dark lid because block undersides
+    are shaded. Lights hang at within 3 under the ceiling. Stair core:
+    FLOOR steps per storey (a 1..5 even storeys, 5..1 odd), ceiling layer
+    open above steps 1+, floor layer open above the arriving run. Door and
+    glass lintels use the wall's top panel. Buildings are 25% taller.
+1b. NEXT, with the furniture sets (room planners get rewritten then):
+    plaster lining on the inner face of outer walls (outer walls 2 thick:
+    facade outside, panel inside, recessed windows).
+2.  Furniture sets (data driven JSON + palette, in-game reload).
+3.  Reference library + per category checklist + one critic agent pass.
+
 ## 9. Extensibility (user, 7 Oktober 2026)
 
 More types will follow, grouped by category:

@@ -103,3 +103,12 @@ Same 3 buildings and camera spots as audit_v0.16.
   bathrooms, D doors. b-4_0_2 (18x16): small flats (bed, fridge, sofa),
   ground storey = lobby (plants p, bicycles y) + a furnished flat.
 
+## audit_v0.19/ (storey height 5, own ceilings)
+- audit_s5.png: first try, ceilings of BlockCeiling_3/4 tiles: rendered as
+  a dark grey lid (undersides are shaded); facades 25% taller, office
+  tower window rhythm now 2 solid rows between window bands.
+- audit_s5b.png: final: white plaster ceilings (shaded light grey) over
+  the kitchen and living room, plaster lintels above doors, offices with
+  plain ceilings and hanging fixtures. Remaining: outer walls still show
+  stone brick facade on the inside (step 1b lining).
+

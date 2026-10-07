@@ -253,6 +253,25 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   4d.1 DONE v0.17.0: doors + low debris. 4d.2 DONE v0.17.0: surfaces
   (room grid, floors, wall panels, ceiling lights / vents). 4d.3 DONE
   v0.18.0: apartment rooms. Next 4d.4: office storey programs + lobby.
+  REVISED after the user's in-game review of 0.18 (7 Oktober 2026, "not
+  ready to be called interior"): items stood on the floor along the walls
+  (TV and radio on the floor, sofa of bare stairs, kitchen = a row of loose
+  blocks, lime rug, empty room middle), ceilings were the floor of the
+  storey above, outer walls showed the facade inside. New order, approved:
+  1. structure: storeys 5 high (floor, 3 air, own ceiling layer), plaster
+     lining on the inner face of outer walls;
+  2. furniture SETS designed as groups (living, kitchen, bedroom,
+     bathroom first), DATA DRIVEN and user editable like Lost Cities parts
+     (JSON grid + palette in config/decimation_worldgen/sets/, in-game
+     reload command), each checked with close-up screenshots;
+  3. reference library per building category (real plans + good Minecraft
+     interiors) saved once in docs/, a checklist per category, and ONE
+     critic agent pass per milestone on the audit screenshots;
+  4. then offices / shops with sets + critic.
+  Lost Cities (McJty, MIT, data-driven JSON parts / palettes, 1.10.2+):
+  do not port the mod (replaces terrain, fights our world type, its
+  interiors are simple too); take the data-driven idea, maybe import its
+  parts later through a block translation tool with a license notice.
 
 ---
 

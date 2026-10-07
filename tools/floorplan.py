@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import worldcheck as wc  # noqa: E402
 
 PX = 14
-FLOOR = 4
+FLOOR = 5
 
 # (substring of the block name, colour, letter); first match wins
 STYLE = [

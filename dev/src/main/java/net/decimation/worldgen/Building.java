@@ -22,7 +22,14 @@ public class Building implements Graded
 {
     public static final int APARTMENT = 0, OFFICE = 1, SHOP = 2;
     public static final String[] KIND_NAME = {"apartment", "office", "shop"};
-    public static final int FLOOR = 4;
+    /**
+     * Storey height: floor layer (within 0), 3 air (1..3), ceiling layer
+     * (within 4). 5 since 0.19: with 4 the floor block was also the ceiling
+     * of the storey below (user review 0.18: plank / checker ceilings).
+     */
+    public static final int FLOOR = 5;
+    /** Within index of a storey's own ceiling layer. */
+    private static final int CEIL = FLOOR - 1;
     public static final int FRONT_WEST = 0, FRONT_EAST = 1;
     /** Overgrowth styles, from the biome at the building's centre. */
     public static final int TEMPERATE = 0, LUSH = 1, COLD = 2, DRY = 3;
@@ -452,6 +459,10 @@ public class Building implements Graded
             return ladder(meta);
         }
         byte[][] plan = storey == 0 ? groundPlan : upperPlan;
+        if (within == CEIL)
+        {
+            return ceilingLayer(plan[fx][z], (storey == 0 ? groundRoom : upperRoom)[fx][z], fx, storey, z, meta);
+        }
         switch (plan[fx][z])
         {
             case WALL:
@@ -472,11 +483,11 @@ public class Building implements Graded
                 {
                     return Blocks.glass_pane;
                 }
-                return within == 3 ? Blocks.stonebrick : null;
+                return within == 3 ? lintel(meta) : null;
             case DOOR:
                 if (within == 3)
                 {
-                    return kind == OFFICE ? Blocks.stonebrick : Blocks.planks;
+                    return lintel(meta);
                 }
                 return door(plan, fx, z, storey, within, meta);
             case FURN:
@@ -634,8 +645,9 @@ public class Building implements Graded
 
     /**
      * Stair core: 7 long (a, along fx) x 4 wide (b). Landings at a = 0 and
-     * a = 6. Storey s climbs on lane b 0..1 (even s, from a = 1 up to a = 4)
-     * or b 2..3 (odd s, from a = 4 down to a = 1); step j sits at height
+     * a = 6. Storey s climbs on lane b 0..1 (even s, from a = 1 up to a = 5)
+     * or b 2..3 (odd s, from a = 5 down to a = 1), FLOOR steps; the ceiling
+     * layer is open above the run's steps 1+; step j sits at height
      * s*FLOOR + 1 + j, so the top step lies in the next floor layer and the
      * floor above the three lower steps is left open. Returns with
      * meta[0] == Integer.MIN_VALUE for "plain floor here".
@@ -649,7 +661,7 @@ public class Building implements Graded
             if (s >= 0 && s < floors && onLane(s, b))
             {
                 int j = stepIndex(s, a);
-                if (j == 3)
+                if (j == FLOOR - 1)
                 {
                     meta[0] = stairMeta((s & 1) == 0);
                     return kind == OFFICE ? Blocks.stone_brick_stairs : Blocks.oak_stairs;
@@ -670,6 +682,16 @@ public class Building implements Graded
                 meta[0] = stairMeta((storey & 1) == 0);
                 return kind == OFFICE ? Blocks.stone_brick_stairs : Blocks.oak_stairs;
             }
+            if (within == CEIL && j >= 1)
+            {
+                return null; // headroom over the climbing run
+            }
+        }
+        if (within == CEIL)
+        {
+            meta[0] = 0;
+            Block c = deci("BlockWallOffice_Top");
+            return c != null ? c : Blocks.stone;
         }
         return null; // core interior stays open
     }
@@ -679,11 +701,11 @@ public class Building implements Graded
         return ((storey & 1) == 0) == (b <= 1);
     }
 
-    /** Step index 0..3 of storey's run at core position a, or -1. */
+    /** Step index 0..FLOOR-1 of storey's run at core position a, or -1. */
     private static int stepIndex(int storey, int a)
     {
-        int j = (storey & 1) == 0 ? a - 1 : 4 - a;
-        return j >= 0 && j <= 3 ? j : -1;
+        int j = (storey & 1) == 0 ? a - 1 : FLOOR - a;
+        return j >= 0 && j <= FLOOR - 1 ? j : -1;
     }
 
     private int stairMeta(boolean even)
@@ -1069,6 +1091,36 @@ public class Building implements Graded
                 rooms[fx][z] = room;
             }
         }
+    }
+
+    /**
+     * The storey's own ceiling (within CEIL): walls continue as their top
+     * panel, rooms get plaster (homes), ceiling tiles (offices, shops,
+     * kitchens, bathrooms) or bare concrete (storage). Decayed buildings
+     * lose some ceiling cells, showing the slab above.
+     */
+    private Block ceilingLayer(byte cell, byte room, int fx, int storey, int z, int[] meta)
+    {
+        meta[0] = 0;
+        if (cell == WALL || cell == DOOR || cell == GLASS)
+        {
+            return wallTop != null ? wallTop : Blocks.planks;
+        }
+        if (unit(fx, storey * 17 + 3, z) < decay * 0.12)
+        {
+            return null; // fallen ceiling panel
+        }
+        // white plaster everywhere: the underside of a block is shaded dark,
+        // so ceiling tiles (BlockCeiling_3/4) read as a dark lid (audit 0.19)
+        Block b = room == R_STORAGE || room == R_STOCK ? deci("BlockStone_1") : deci("BlockWallOffice_Top");
+        return b != null ? b : Blocks.quartz_block;
+    }
+
+    /** Above doors and glass partitions: the wall's own top panel. */
+    private Block lintel(int[] meta)
+    {
+        meta[0] = 0;
+        return wallTop != null ? wallTop : Blocks.stonebrick;
     }
 
     private Block deci(String name)
