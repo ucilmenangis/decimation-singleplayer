@@ -136,6 +136,14 @@ public class DecimationWorldGen
     public void serverStarting(cpw.mods.fml.common.event.FMLServerStartingEvent event)
     {
         event.registerServerCommand(new WorldGenCommand());
+        // dev workspace only (deobfuscated run, never the shipped jar): every
+        // singleplayer world allows commands, as if created with cheats on
+        if (Boolean.TRUE.equals(net.minecraft.launchwrapper.Launch.blackboard.get("fml.deobfuscatedEnvironment"))
+            && !event.getServer().isDedicatedServer())
+        {
+            event.getServer().getConfigurationManager().setCommandsAllowedForAll(true);
+            FMLLog.info("[%s] dev workspace: commands allowed in this world", MODID);
+        }
     }
 
     @Mod.EventHandler

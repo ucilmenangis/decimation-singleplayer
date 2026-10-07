@@ -222,6 +222,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   Plain `runClient` only; `runClient17/21/25` swap in lwjgl3ify, untested with
   Decimation. Schematics for dev live in `run/client/config/decimation_worldgen/`.
 - "Your session is invalid!" on the menu is harmless (offline dev user).
+- Dev client: every singleplayer world allows commands (cheats) since
+  2026-10-08 (`DecimationWorldGen.serverStarting`, deobfuscated runs only;
+  the shipped jar is unaffected).
 - Confirmed 2026-10-07: dev client boots with deci + deciworldgen + gvc, Play
   works, user created a world and saw structures.
 - Shipping: `./gradlew build` -> `build/libs/deciworldgen-<tag>.jar`
