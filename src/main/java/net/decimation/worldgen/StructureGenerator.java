@@ -217,14 +217,22 @@ public class StructureGenerator implements IWorldGenerator
         {
             paintStreets(world, chunkX, chunkZ);
         }
-        if (sector == CITY && city != null)
+        // Slice writers run for EVERY chunk: a population window reaches 8
+        // blocks into the neighbouring chunks, so it can cross a sector
+        // border, and the structure it touches may belong to the other
+        // sector. Both writers check the sector of each structure themselves.
+        // (Gating them on this chunk's sector left wall strips unwritten.)
+        if (city != null)
         {
             city.populate(world, chunkX, chunkZ, this);
-            return; // city blocks replace the small city_ schematics
         }
         if (large != null && !large.isEmpty())
         {
             large.populate(world, chunkX, chunkZ, this);
+        }
+        if (sector == CITY && city != null)
+        {
+            return; // city blocks replace the small city_ schematics
         }
         List<Schematic> pool = pool(sector);
         if (pool.isEmpty())
