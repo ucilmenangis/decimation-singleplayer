@@ -422,7 +422,7 @@ public class DevAutoTest
     // ---- study mode (-Ddeciworldgen.autotest.study=<save>|<cams.tsv>):
     // opens a copied reference map (dev/run/client/saves/<save>) and
     // photographs the camera spots from tools/mapbuildings.py (building,
-    // storey, x, y, z, yaw): study_<n>.png (docs/references/decimation_maps.md)
+    // storey, x, y, z, yaw[, pitch]): study_<n>.png (docs/references/decimation_maps.md)
     private static final String[] STUDY = System.getProperty(PROPERTY + ".study") != null
         ? System.getProperty(PROPERTY + ".study").split("\\|") : null;
     private static List<int[]> studyList;
@@ -440,8 +440,9 @@ public class DevAutoTest
                     String[] f = line.trim().split("\t");
                     if (f.length >= 6)
                     {
-                        int[] c = new int[6];
-                        for (int i = 0; i < 6; i++)
+                        int[] c = new int[7];
+                        c[6] = 8; // pitch (optional 7th column)
+                        for (int i = 0; i < Math.min(7, f.length); i++)
                         {
                             c[i] = Integer.parseInt(f[i]);
                         }
@@ -467,8 +468,8 @@ public class DevAutoTest
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = c[5];
-        viewPitch = 8;
-        p.playerNetServerHandler.setPlayerLocation(c[2] + 0.5, c[3], c[4] + 0.5, c[5], 8);
+        viewPitch = c[6];
+        p.playerNetServerHandler.setPlayerLocation(c[2] + 0.5, c[3], c[4] + 0.5, c[5], c[6]);
         viewSpot = "building " + c[0] + " storey " + c[1] + " at " + c[2] + "," + c[3] + "," + c[4];
         viewSkip = false;
         viewReady = v;

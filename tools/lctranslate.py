@@ -214,6 +214,33 @@ def translate(state):
         return "skip", 0
     if "lavabo" in path or "water_cauldron" in path:
         return "minecraft:cauldron", 0
+    # wasteland / industrial (legacy deadzone district)
+    if "dried_salt" in path or "salt" in path:
+        return "minecraft:sandstone", 0
+    if "paving" in path:
+        return ("deci:BlockStone_5" if "moist" in path else "deci:BlockStone_6"), 0
+    if "scoria" in path or "coral" in path:
+        return "deci:BlockStone_4", 0
+    if path == "dead_grass" or path == "dead_bush":
+        return "minecraft:deadbush", 0
+    if "razor_wire" in path or "barbed" in path:
+        return "deci:BlockConcertinaWire", 2
+    if "barrel" in path:
+        return "deci:BlockBarrel", 2
+    if path == "pallet":
+        return "minecraft:wooden_slab", 0
+    if any(k in path for k in ("cogwheel", "gearbox", "shaft", "blaze_burner", "engineering", "generator",
+                                "workshop", "industrial", "machine", "pipe", "tank")):
+        return "deci:BlockMetal_1", 0
+    if "shingles" in path:
+        c = colour_of(path)
+        return "minecraft:stained_hardened_clay", c if c is not None else 7
+    if ns == "car" or "crudeoil" in path or "cans" in path or "stick" in path:
+        return "skip", 0
+    if path == "coal_block":
+        return "minecraft:coal_block", 0
+    if path == "hopper":
+        return "minecraft:hopper", 0
     # ---- shapes
     if path.endswith("_stairs"):
         return stair_block(path), STAIR_FACING.get(face, 3) | (4 if half == "top" else 0)

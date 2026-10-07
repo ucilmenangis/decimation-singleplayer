@@ -223,3 +223,26 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
 - 24 office tower exterior: glass curtain wall, stone core, floor bands.
 - 11, 13, 22: the camera ended on the ground street (teleport issue),
   not the pasted buildings; 12, 23: inside a wall.
+
+## wasteland_legacy_v0.23/ (all 14 legacy deadzone buildings converted, pasted at y 150, x -420..84, z 40)
+- Order (building index): 0 warehouse1, 1 warehouse2, 2 factory1,
+  3 factory2, 4 carfactory1, 5 lab1, 6 bunker1, 7 multi_warehouse,
+  8 multi_factory, 9 multi_pumpjack, 10 multi_derrick, 11
+  multi_militarybase, 12 multi_militarycamp1, 13 multi_laboratory1.
+  "storey 99" = aerial view (pitch 40).
+- Every building stands on its own pale ground plate (dried salt ->
+  sandstone: reads too yellow, a grey / white stone would match salt
+  flats better).
+- 0, 1 warehouses: pitched grey roofs, plank walls, sandbags around.
+  2, 3 factories: dark metal roofs with vents, machinery, chimneys, red
+  stripe walls. 4 car factory: grey block with red band, wrecks outside.
+  5, 6 lab and bunker: small open compounds with crates, vehicles, sandbags.
+- 7, 8 multi warehouse / factory: long sheds with skylights, chimney and
+  crane tower on the factory.
+- 9, 10 pumpjack / derrick: oil rigs with derrick towers, tanks, pipes.
+- 11 military base: walled compound, barbed wire fences, sandbag walls,
+  watchtower, military truck in the court (19), parapets (18).
+- 12 military camp: open camp with tents / crates on a plate.
+- 13 laboratory complex: big walled block with the glass dome ring,
+  corridors (22), a room with rows of chairs (23).
+- Interior cameras (11) from tools/mapbuildings.py: some face walls.

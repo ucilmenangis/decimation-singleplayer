@@ -250,3 +250,13 @@ hold different buildings, keep the two apart). Catalogue tables in
   desert1, farm), houses casa1..10, about 20 ruins (ruina*), camps.
   Names are mostly Portuguese.
 - Vanilla structures are blanked here too (villages, mansions...).
+- All 14 deadzone (wasteland) buildings converted with
+  `tools/lc2schem.py <legacy>/kubejs/data c70cities ...` (flat layout
+  supported) plus wasteland rules in `tools/lctranslate.py` (salt flats,
+  paving, scoria, dead grass, razor wire, barrels, machinery). Sizes:
+  singles 16x18x16; multi warehouse / factory 16x32, pumpjack 32x32,
+  derrick 32x16, military base 48x32, military camp 32x16 (24 high),
+  laboratory 48x80. Leftovers: single digit decor. Shots and notes in
+  docs/shots_index.md "wasteland_legacy_v0.23". Schematics are local only
+  (dev/run/client/config/decimation_worldgen/paste/, git ignored):
+  `/deciworldgen paste multi_militarybase X Y Z` in the dev client.

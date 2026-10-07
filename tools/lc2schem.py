@@ -105,7 +105,12 @@ def main():
     missing = {}
     for name in names:
         multi = pack.load("multibuildings", name)
-        grid = multi["buildings"] if multi else [["%s:%s/%s" % (ns, name, name)]]
+        if multi:
+            grid = multi["buildings"]
+        elif pack.load("buildings", "%s:%s/%s" % (ns, name, name)):
+            grid = [["%s:%s/%s" % (ns, name, name)]]
+        else:
+            grid = [["%s:%s" % (ns, name)]]  # flat layout (legacy c70cities)
         cols = {}
         for gx, row in enumerate(grid):
             for gz, bref in enumerate(row):
