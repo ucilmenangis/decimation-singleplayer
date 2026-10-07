@@ -61,7 +61,7 @@ public class StructureGenerator implements IWorldGenerator
     private static final int SIDEWALK = 2;
     /** One car slot every this many blocks along a lane, filled with CAR_CHANCE / 256. */
     private static final int CAR_SPACING = 9;
-    private static final int CAR_CHANCE = 90;
+    private static final int CAR_CHANCE = 64;
     /** How far above a street plants and tree parts are cleared. */
     private static final int STREET_CLEARANCE = 8;
     /** Zone extends this many blocks past the footprint on every side. */
@@ -495,7 +495,7 @@ public class StructureGenerator implements IWorldGenerator
      * across the 5 wide street, one car slot every CAR_SPACING blocks along
      * it, never in intersections. Facing follows the street (PropRenderer
      * turns props by metadata % 4 * 90 degrees): north-south streets get
-     * 4 or 2, east-west streets 5 or 3, the two lanes opposite ways.
+     * 5 or 3, east-west streets 4 or 2, the two lanes opposite ways.
      * See docs/building_design.md.
      */
     private int carMeta(World world, int ox, int oz, int wx, int wz)
@@ -516,11 +516,14 @@ public class StructureGenerator implements IWorldGenerator
         {
             return -1;
         }
+        // The wreck model's long axis lies along x at 0 degrees (seen in game
+        // 2026-10-07: 4/2 put cars ACROSS a north-south street), so
+        // north-south streets need 90/270 degrees (5/3) and east-west 0/180 (4/2).
         if (northSouth)
         {
-            return across == 1 ? 2 : 4;
+            return across == 1 ? 3 : 5;
         }
-        return across == 1 ? 3 : 5;
+        return across == 1 ? 2 : 4;
     }
 
     private static long hash(long seed, int x, int z)
