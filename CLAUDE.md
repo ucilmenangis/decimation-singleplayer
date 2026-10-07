@@ -212,7 +212,11 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   placement/zone log lines. Seed 1 places POLICE-zoned `city_street`s near
   spawn. Decimation's ServerProxy runs here, so original server handlers fire.
 - `python3 tools/worldcheck.py WORLD column X Z [YMIN YMAX]` / `box ...`:
-  reads block ids straight from Anvil region files.
+  reads block ids straight from Anvil region files. `World.registry()` maps
+  block names to ids from level.dat (Decimation ids can be below 256:
+  BlockWreckage1..5 = 176..180, so "id >= 256 means mod block" is wrong).
+- `python3 tools/gradescan.py WORLD LOG`: graded city yards (floor vs ground
+  at the walls, steep neighbour pairs, lot edge vs sidewalk, parked cars).
 - `./gradlew runClient -Pautotest` (in `dev/`): unattended singleplayer run
   (`DevAutoTest`, inert without the flag): makes world
   `deciworldgen_autotest` from seed 1, spawns infected inside a generated
@@ -362,6 +366,13 @@ of the last session:
   master part; anything placing them outside player placement must call
   `setSelfMaster()` (done in Slices / small placer, plus
   `MultiblockRepairHandler` on chunk load).
+  v0.13.0: terrain blending. City lots are graded (`Graded`, Building.grade):
+  smoothstep ramp from the floor at the walls to natural height at the lot
+  edge, column keeps its own surface block; front yards (setback 6..9) get
+  asphalt parking where the ground is within 2 of the floor, a path to the
+  door, nose-in wrecks (metadata 4/2). Never fill with falling blocks.
+  `tools/gradescan.py` checks it. Supply drops clear flowers in their
+  column first (crate entities vanish in non-replaceable plants).
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

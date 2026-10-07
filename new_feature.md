@@ -216,7 +216,13 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   4. new procedural building types: police station, hospital, gas station,
      warehouse, with themed loot;
   5. loot balance per building.
-  Status: started with step 1.
+  Status: step 1 DONE in v0.13.0 (headless verified, in game look not yet
+  seen by the user). Implementation differs from the first sketch: the
+  Building plan keeps its own bounds; it implements `Graded` (lot bounds +
+  `grade(world, x, z, baseY)`) and `Slices` grades every lot column of a
+  window before writing the plan there. Buildings now keep a 2 block side
+  yard and a 3 block back yard where the lot allows, and a setback of 6..9
+  (75% of lots with room) for a front yard. Next: step 2, street life.
 
 ---
 

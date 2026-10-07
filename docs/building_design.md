@@ -69,6 +69,18 @@ biome generator, so it is deterministic even before chunks exist):
 Exterior vines need a 1 block ring outside the walls, so plans include a
 margin ring (written as SKIP except where overgrowth goes).
 
+## Lots and yards
+
+- A building no longer fills its lot edge to edge: 2 blocks free on the
+  sides, at least 3 behind, and (when there is room) a 6 to 9 block front
+  yard. Real buildings sit back from the street with a forecourt or car
+  park; it also gives the ground room to ramp.
+- The yard ramps from the floor level at the walls to the natural ground at
+  the lot edge, keeping the biome's own surface (grass, sand, snow).
+- Offices and shops: asphalt car park with nose-in wrecks, slab walkway to
+  the door. Apartments: gravel path to the door, lawn elsewhere.
+- Details and the grading formula: `docs/worldgen.md`, "Lot grading".
+
 ## Streets
 
 - Sidewalk: 2 block ring (cell offsets 5..6 and 62..63) of smooth stone

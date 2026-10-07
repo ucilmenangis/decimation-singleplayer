@@ -12,8 +12,9 @@ make it a complete singleplayer game.
 
 - **`dev/`**: our companion mod `deciworldgen` (Java, RetroFuturaGradle):
   - world generation: procedural ruined city blocks (apartments, offices,
-    shops up to 20 floors, real floor plans, biome overgrowth), street grid
-    with sidewalks and parked wrecks, small and large `.schematic` ruins,
+    shops up to 20 floors, real floor plans, biome overgrowth, yards graded
+    into the terrain with car parks), street grid with sidewalks and parked
+    wrecks, small and large `.schematic` ruins,
     Decimation zones on generated sites;
   - singleplayer fixes for logic that only ran on the official dedicated
     server: zones, bottlecap pickup, supply drops, humanity, armor against

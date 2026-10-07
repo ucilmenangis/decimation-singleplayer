@@ -123,6 +123,18 @@ def _meta(self, x, y, z):
 World.meta = _meta
 
 
+def _registry(self):
+    """Block name -> numeric id, from the FML id map in level.dat."""
+    if not hasattr(self, "_reg"):
+        with open(os.path.join(self.path, "level.dat"), "rb") as fh:
+            items = read_nbt(gzip.decompress(fh.read())).get("FML", {}).get("ItemData", [])
+        self._reg = {e["K"][1:]: e["V"] for e in items if e["K"].startswith("\x01")}
+    return self._reg
+
+
+World.registry = _registry
+
+
 def main():
     w = World(sys.argv[1])
     mode = sys.argv[2]

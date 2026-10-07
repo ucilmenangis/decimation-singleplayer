@@ -92,11 +92,22 @@ public class CityDistrict
             l = Math.min(l, LOT_SIZE);
             // left lots face the cell's own west street, right lots the next cell's
             int front = (lot & 1) == 0 ? Building.FRONT_WEST : Building.FRONT_EAST;
-            int x = front == Building.FRONT_WEST ? lotX : lotX + LOT_SIZE - w;
-            int z = lotZ + r.nextInt(LOT_SIZE - l + 1);
+            // a 2 block side yard where the lot allows, so the ground can ramp
+            int zSpace = LOT_SIZE - l, inset = Math.min(zSpace / 2, 2);
+            int z = lotZ + inset + r.nextInt(zSpace - 2 * inset + 1);
             long seed = r.nextLong();
+            // setback from the street: a front yard (parking, path) where the
+            // lot has room, taken from the seed so the stream stays aligned;
+            // at least 3 blocks stay behind it so the back can ramp too
+            int avail = LOT_SIZE - w, setback = Math.min(avail / 2, 3);
+            if (avail >= Building.MIN_YARD + 3 && ((seed >>> 3) & 3) != 0)
+            {
+                int most = Math.min(avail - 3, 9);
+                setback = Building.MIN_YARD + (int) ((seed >>> 5) % (most - Building.MIN_YARD + 1));
+            }
+            int x = front == Building.FRONT_WEST ? lotX + setback : lotX + LOT_SIZE - w - setback;
             out.add(new Building("b" + cellX + "_" + cellZ + "_" + lot, x, z, w, l, floors,
-                                 kind, front, style, seed, props));
+                                 kind, front, style, seed, props, lotX, lotZ, LOT_SIZE));
         }
         return out;
     }

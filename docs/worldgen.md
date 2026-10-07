@@ -112,6 +112,42 @@ Decimation loot inside it, put the placeholder blocks where crates should be
    `loaded large schematic '<name>' (WxHxL)` or why it was skipped.
 5. New chunks only; existing terrain is never regenerated.
 
+## Lot grading (city yards, 0.13.0)
+
+A `Plan` that also implements `Graded` (so far only `Building`) owns its
+whole city lot (26x26). `Slices.place` then works on the plan bounds widened
+to the lot, and for every lot column of the window calls
+`grade(world, x, z, baseY)` before writing the plan's own blocks there. If
+the first slice of a building is yard only, the floor height is still
+decided from the building's 5x5 footprint grid.
+
+`Building.grade` (columns outside the walls only):
+- natural height = `soilTop`; columns with water above are left alone;
+- `t` = d / (d + e), d = distance from the margin ring, e = distance from the
+  lot edge, then smoothstep; target = floor + (natural - floor) * t. So the
+  ring around the walls sits at floor level (doors are reachable) and the lot
+  edge stays at natural height (meets the sidewalk);
+- fill up (dirt under grass, sandstone under sand, stone under gravel, else
+  the surface block) or cut down, clearing plants and trees left hanging;
+  the column keeps its own surface block and snow cap, so yards match the
+  biome. NEVER fill with falling blocks: sand over a cave falls in (bug.md);
+- front yard (between the front wall and the street edge): a 3 wide path to
+  the door (gravel for apartments, slab for others); for offices and shops
+  with a setback of at least `Building.MIN_YARD` (6), asphalt (`deci:BlockRoad`)
+  where the ground is within 2 of the floor, and nose-in wrecks in the
+  middle of the strip every 4 blocks (45%, only on flat spots), metadata 4/2
+  (long axis along x, perpendicular to the north-south street).
+
+`CityDistrict.plan` placement inside the lot: a 2 block side yard where the
+length allows, setback 6..9 from the street (75% of lots with at least 9
+spare blocks, always leaving 3 behind), else min(spare / 2, 3). Both come
+from the building seed or the same single `nextInt`, so the random stream
+of the cell is unchanged.
+
+Limit: lots on a steep slope with a narrow yard still end in a step at the
+lot edge (worst seen: 17 blocks, natural cliffs and a ravine). The grader
+never touches sidewalks, streets or the 3 block gaps between lots.
+
 ## Testing without a player
 
 - `python3 tools/servertest.py SEED [keep] [pregen=x,z,r]`: dev dedicated
@@ -121,6 +157,9 @@ Decimation loot inside it, put the placeholder blocks where crates should be
 - `python3 tools/wallscan.py WORLD LOG`: checks every procedural building's
   4 walls, separates real missing walls (exit code 1) from unpopulated edge
   chunks. Run after any change to city or slice code.
+- `python3 tools/gradescan.py WORLD LOG`: graded yards per fully populated
+  lot: ring (ground vs floor next to the walls, expect 0..1), steep
+  neighbour pairs, lot edge vs outside, yard cars by metadata.
 - `tools/worldcheck.py` as a module: `World(path).block(x,y,z)` and
   `.meta(x,y,z)` (facing checks, e.g. every car's metadata vs its street).
 - `python3 tools/worldcheck.py WORLD column|box ...` to read blocks; map ids to

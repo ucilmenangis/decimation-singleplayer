@@ -10,6 +10,32 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Supply drop crate vanished when it landed in a flower
+- **Found**: 7 Oktober 2026 by the dev autotest (drop column 70/287: crate
+  entity fell, no crate block anywhere in the column).
+- **Root cause (vanilla behaviour, our column choice)**: the crate is an
+  `EntityFallingBlock` (`EntityFallingSupplyDrop`); on landing it turns into
+  a block only if the cell is replaceable. Flowers, saplings and the tall
+  flowers are not (`BlockDoublePlant.isReplaceable` is true only for tall
+  grass and fern), so the entity died and the drop was lost. The column had
+  a 2 block tall flower.
+- **Fix (v0.13.0)**: `SupplyDropScheduler.clearLanding` removes
+  non-replaceable plants in the drop column down to the first solid block or
+  liquid before deploying. Autotest passes again (crate block at y=71). The
+  flower case itself was not reproduced (drop columns are random).
+
+### Graded yard sand fell into caves (hole next to a building)
+- **Found**: 7 Oktober 2026 by `tools/gradescan.py` on seed 7 while building
+  terrain blending (a ring column 49 blocks below the floor).
+- **Root cause (ours)**: the grader filled raised yard columns with the
+  column's own surface block. Sand and gravel are `BlockFalling`;
+  `setBlock` calls `onBlockAdded`, which schedules the fall even during
+  generation, so a sand fill over a cave dropped into it.
+- **Fix (v0.13.0)**: falling blocks are never used as fill (sand fills with
+  sandstone, gravel with stone), and a sand or gravel top goes only on a
+  solid block. Rescan of 3 seeds: ground at the walls within 1 block of the
+  floor everywhere.
+
 ### Generated metal shelves invisible (multiblock master never set)
 - **Reported**: 7 Oktober 2026 by the user; the culling patch below did not
   fix it (still invisible right next to the prop).

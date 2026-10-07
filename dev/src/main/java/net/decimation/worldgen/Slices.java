@@ -33,10 +33,23 @@ public final class Slices
         return p.minX() <= w[2] && p.maxX() >= w[0] && p.minZ() <= w[3] && p.maxZ() >= w[1];
     }
 
+    /** Plan bounds, widened to the lot for a {@link Graded} plan: {x0, z0, x1, z1}. */
+    private static int[] extent(Plan p)
+    {
+        if (p instanceof Graded)
+        {
+            Graded g = (Graded) p;
+            return new int[] {Math.min(p.minX(), g.lotMinX()), Math.min(p.minZ(), g.lotMinZ()),
+                              Math.max(p.maxX(), g.lotMaxX()), Math.max(p.maxZ(), g.lotMaxZ())};
+        }
+        return new int[] {p.minX(), p.minZ(), p.maxX(), p.maxZ()};
+    }
+
     public static void place(World world, Plan p, int[] w)
     {
-        int x0 = Math.max(w[0], p.minX()), x1 = Math.min(w[2], p.maxX());
-        int z0 = Math.max(w[1], p.minZ()), z1 = Math.min(w[3], p.maxZ());
+        int[] e = extent(p);
+        int x0 = Math.max(w[0], e[0]), x1 = Math.min(w[2], e[2]);
+        int z0 = Math.max(w[1], e[1]), z1 = Math.min(w[3], e[3]);
         if (x0 > x1 || z0 > z1)
         {
             return;
@@ -45,7 +58,12 @@ public final class Slices
         Integer baseY = data.baseY(p.id());
         if (baseY == null)
         {
-            baseY = decideBase(world, p, x0, z0, x1, z1);
+            // window samples from the building itself when this slice has any
+            int sx0 = Math.max(x0, p.minX()), sx1 = Math.min(x1, p.maxX());
+            int sz0 = Math.max(z0, p.minZ()), sz1 = Math.min(z1, p.maxZ());
+            baseY = sx0 <= sx1 && sz0 <= sz1
+                ? decideBase(world, p, sx0, sz0, sx1, sz1)
+                : decideBase(world, p, x0, z0, x1, z1);
             data.setBaseY(p.id(), baseY);
             if (baseY != StructureData.CANCELLED)
             {
@@ -132,6 +150,14 @@ public final class Slices
         {
             for (int z = z0; z <= z1; z++)
             {
+                if (p instanceof Graded)
+                {
+                    ((Graded) p).grade(world, x, z, baseY);
+                }
+                if (x < p.minX() || x > p.maxX() || z < p.minZ() || z > p.maxZ())
+                {
+                    continue;
+                }
                 int lx = x - p.minX(), lz = z - p.minZ();
                 meta[0] = 0;
                 Block floor = p.blockAt(lx, 0, lz, meta);

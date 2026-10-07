@@ -2,6 +2,7 @@ package net.decimation.worldgen;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 
 /**
  * A procedurally generated ruined building on one city lot (v2).
@@ -17,7 +18,7 @@ import net.minecraft.init.Blocks;
  * normalised" coordinates: fx = 0 is the front wall (street side), fx = W-1
  * the back wall, fz across the front. A building facing east is mirrored.
  */
-public class Building implements Plan
+public class Building implements Graded
 {
     public static final int APARTMENT = 0, OFFICE = 1, SHOP = 2;
     public static final String[] KIND_NAME = {"apartment", "office", "shop"};
@@ -26,6 +27,8 @@ public class Building implements Plan
     /** Overgrowth styles, from the biome at the building's centre. */
     public static final int TEMPERATE = 0, LUSH = 1, COLD = 2, DRY = 3;
     public static final String[] STYLE_NAME = {"temperate", "lush", "cold", "dry"};
+    /** Smallest setback that gets a front yard (room for a nose-in car). */
+    public static final int MIN_YARD = 6;
 
     // floor plan cell codes
     private static final byte OPEN = 0, WALL = 1, DOOR = 2, GLASS = 3, FURN = 4, CORE = 5;
@@ -34,6 +37,8 @@ public class Building implements Plan
     public final int minX, minZ, width, length, floors, kind, front, style;
     public final long seed;
     private final Props props;
+    /** The lot this building stands on; the ground around it is graded. */
+    public final int lotX, lotZ, lotSize;
 
     // palette
     private final Block wall, trim, ground;
@@ -58,11 +63,17 @@ public class Building implements Plan
         public Block[] furniture = new Block[0];
         public Block table, chair, officeChair, metalTable, shelf, cabinet, cooking, washer,
             trashcan, vending, mailbox, cardboard, woodCrate, medicalCrate, policeCrate, ammoCrate;
+        public Block road;
+        public Block[] cars = new Block[0];
     }
 
     public Building(String id, int minX, int minZ, int width, int length, int floors,
-                    int kind, int front, int style, long seed, Props props)
+                    int kind, int front, int style, long seed, Props props,
+                    int lotX, int lotZ, int lotSize)
     {
+        this.lotX = lotX;
+        this.lotZ = lotZ;
+        this.lotSize = lotSize;
         this.id = id;
         this.minX = minX;
         this.minZ = minZ;
@@ -168,6 +179,122 @@ public class Building implements Plan
     public int clearAbove() { return 5; }
     public int maxSpread() { return 12; } // a stone brick plinth reads fine on slopes
     public Block foundation() { return Blocks.stonebrick; } // reads as a basement plinth
+
+    public int lotMinX() { return lotX; }
+    public int lotMinZ() { return lotZ; }
+    public int lotMaxX() { return lotX + lotSize - 1; }
+    public int lotMaxZ() { return lotZ + lotSize - 1; }
+
+    /**
+     * Grades one lot column outside the walls. The ground ramps from the
+     * floor level next to the building to the natural height at the lot
+     * edge (smoothstep), so a building on a slope sits in a levelled yard
+     * instead of on a plinth or in a pit. The column keeps its own surface
+     * block (grass, sand, snow...), so the yard matches the biome. In front
+     * of offices and shops with a setback: an asphalt parking strip (where
+     * the ground is near floor level) with a slab walkway to the door and
+     * some nose-in wrecks; apartments get a gravel path to the door.
+     */
+    public void grade(World world, int x, int z, int baseY)
+    {
+        int bx1 = minX + width - 1, bz1 = minZ + length - 1;
+        if (x < lotX || z < lotZ || x > lotMaxX() || z > lotMaxZ()
+            || x >= minX && x <= bx1 && z >= minZ && z <= bz1)
+        {
+            return;
+        }
+        int natural = StructureGenerator.soilTop(world, x, z);
+        if (natural < 5 || StructureGenerator.waterAbove(world, x, natural, z))
+        {
+            return;
+        }
+        // 0 on the margin ring, 0 at the lot edge
+        int d = Math.max(Math.max(minX - x, x - bx1), Math.max(minZ - z, z - bz1)) - 1;
+        int e = Math.min(Math.min(x - lotX, lotMaxX() - x), Math.min(z - lotZ, lotMaxZ() - z));
+        double t = d + e == 0 ? 0 : (double) d / (d + e);
+        t = t * t * (3 - 2 * t);
+        int target = baseY + (int) Math.round((natural - baseY) * t);
+
+        Block surface = world.getBlock(x, natural, z);
+        int surfaceMeta = world.getBlockMetadata(x, natural, z);
+        Block cap = world.getBlock(x, natural + 1, z);
+        if (surface == Blocks.air || surface.getMaterial().isLiquid())
+        {
+            return;
+        }
+        // sand and gravel fall into any cave under the yard (onBlockAdded
+        // schedules the fall even during generation): never use them as fill
+        Block filler = surface == Blocks.grass || surface == Blocks.mycelium ? Blocks.dirt
+            : surface instanceof net.minecraft.block.BlockFalling
+                ? (surface == Blocks.sand ? Blocks.sandstone : Blocks.stone)
+            : surface;
+        int fillerMeta = filler == surface ? surfaceMeta : 0;
+
+        // front yard: between the front wall and the street edge of the lot
+        boolean frontYard = front == FRONT_WEST ? x < minX : x > bx1;
+        int setback = front == FRONT_WEST ? minX - lotX : lotMaxX() - bx1;
+        boolean path = frontYard && Math.abs(z - (minZ + length / 2)) <= 1;
+        // asphalt only where the ground is near the floor level: on a slope
+        // the strip stays a grassy embankment instead of a tilted car park
+        boolean parking = frontYard && setback >= MIN_YARD && kind != APARTMENT && props.road != null
+            && Math.abs(natural - baseY) <= 2;
+        boolean paved = path || parking;
+        if (path)
+        {
+            surface = kind == APARTMENT ? Blocks.gravel : Blocks.double_stone_slab;
+            surfaceMeta = 0;
+        }
+        else if (parking)
+        {
+            surface = props.road;
+            surfaceMeta = 0;
+        }
+
+        for (int y = natural; y < target; y++)
+        {
+            world.setBlock(x, y, z, filler, fillerMeta, 2);
+        }
+        for (int y = target + 1; y <= natural; y++)
+        {
+            world.setBlock(x, y, z, Blocks.air, 0, 2);
+        }
+        if (surface instanceof net.minecraft.block.BlockFalling
+            && !world.getBlock(x, target - 1, z).getMaterial().isSolid())
+        {
+            surface = filler; // a gravel path or sand over a cut into a cave
+            surfaceMeta = fillerMeta;
+        }
+        world.setBlock(x, target, z, surface, surfaceMeta, 2);
+        // plants and trees left hanging over a cut, or on new paving
+        if (target < natural || paved)
+        {
+            for (int y = Math.max(target, natural) + 1, n = 0; n < 12; y++, n++)
+            {
+                Block b = world.getBlock(x, y, z);
+                if (b == Blocks.air || !StructureGenerator.clearable(b))
+                {
+                    break;
+                }
+                world.setBlock(x, y, z, Blocks.air, 0, 2);
+            }
+        }
+        if (cap == Blocks.snow_layer && !paved)
+        {
+            world.setBlock(x, target + 1, z, Blocks.snow_layer, 0, 2);
+        }
+
+        // nose-in wrecks across the middle of the parking strip
+        int stripMid = front == FRONT_WEST ? lotX + (setback - 1) / 2 : lotMaxX() - (setback - 1) / 2;
+        if (parking && !path && x == stripMid && props.cars.length > 0
+            && (z - lotZ) % 4 == 2 && Math.abs(z - (minZ + length / 2)) >= 3
+            && Math.abs(target - baseY) <= 1 && unit(x, 77, z) < 0.45)
+        {
+            Block car = props.cars[(int) (unit(x, 78, z) * props.cars.length)];
+            // long axis along x at rotation 0 / 180: metadata 4 or 2
+            world.setBlock(x, target + 1, z, car, unit(x, 79, z) < 0.5 ? 4 : 2, 2);
+            net.decimation.fixes.MultiblockRepairHandler.repair(world.getTileEntity(x, target + 1, z));
+        }
+    }
 
     public net.decimation.mod.server.zones.a zone()
     {

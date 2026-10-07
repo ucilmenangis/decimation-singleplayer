@@ -37,7 +37,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.12.3",
+     version = "0.13.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -284,6 +284,9 @@ public class DecimationWorldGen
         p.medicalCrate = one("deci:BlockMedicalCrate");
         p.policeCrate = one("deci:BlockPoliceCrate");
         p.ammoCrate = one("deci:BlockAmmoCrate");
+        p.road = one("deci:BlockRoad");
+        p.cars = resolve("deci:BlockWreckage1", "deci:BlockWreckage2", "deci:BlockWreckage3",
+                         "deci:BlockWreckage4", "deci:BlockWreckage5");
         return p;
     }
 

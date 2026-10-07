@@ -103,6 +103,7 @@ public class SupplyDropScheduler
             {
                 continue; // only loaded columns: never force chunk generation
             }
+            clearLanding(world, x, z);
             world.setBlock(x, world.getHeight() - 1, z, deci.aD.c.afA); // BlockRegistry.supplyDrop
             world.playSoundEffect(player.posX, player.posY, player.posZ,
                                   "deci:item.supplydropradio.radio", 3.0F, 1.0F);
@@ -112,6 +113,33 @@ public class SupplyDropScheduler
             lastDropX = x;
             lastDropZ = z;
             return;
+        }
+    }
+
+    /**
+     * The crate is an EntityFallingBlock: it only turns back into a block if
+     * the cell it lands in is replaceable. Flowers, saplings and the tall
+     * flowers (BlockDoublePlant.isReplaceable is true only for tall grass and
+     * fern) are not, so a crate falling into one vanished without a trace.
+     * Clears those down to the first solid block or liquid.
+     */
+    private static void clearLanding(WorldServer world, int x, int z)
+    {
+        for (int y = world.getHeightValue(x, z) + 1; y > 0; y--)
+        {
+            net.minecraft.block.Block b = world.getBlock(x, y, z);
+            if (b.isAir(world, x, y, z))
+            {
+                continue;
+            }
+            if (b.getMaterial().blocksMovement() || b.getMaterial().isLiquid())
+            {
+                return;
+            }
+            if (!b.isReplaceable(world, x, y, z))
+            {
+                world.setBlockToAir(x, y, z);
+            }
         }
     }
 

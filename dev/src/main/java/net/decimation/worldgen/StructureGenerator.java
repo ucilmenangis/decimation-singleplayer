@@ -537,7 +537,7 @@ public class StructureGenerator implements IWorldGenerator
     }
 
     /** Plants, snow and tree parts: things a street may remove or look through. */
-    private static boolean clearable(Block b)
+    static boolean clearable(Block b)
     {
         net.minecraft.block.material.Material m = b.getMaterial();
         return m == net.minecraft.block.material.Material.air
