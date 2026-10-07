@@ -288,3 +288,14 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
   brick sides and railings (12, 13), sandstone terraced steps with stone
   side blocks (14, 16, 19), a brick terrace with stone steps and a blue
   door wall (15, 17), an underpass like part (18).
+
+## lc_city_v0.24.1/ (street dressing + city edge ramp, seed 1, 19 views, all valid)
+- 0..11 streets: grey stone sidewalks 3 wide on both sides flush with the
+  asphalt, dashed white centre line, street lights on the road edge with
+  arms over the road (staggered sides), benches facing the road, bins,
+  scattered trash bags; a wreck now and then (an earlier run of this
+  version had a hash bug: wrecks and bags everywhere, no lamps; fixed).
+- 12..15 stairs between levels as before.
+- 16..18 city edge (north side, z 6): the land outside is ramped down to
+  the street over 10 blocks; it reads as grass terraces 1 block high up
+  to natural ground about 12 higher. Works, could be smoother / wider.

@@ -45,6 +45,16 @@ Cellar padding under multi building chunks with fewer cellars is bedrock
   - Streets: road surface at G; a street chunk whose street continues
     into a cell one level higher gets a stairs part of the district,
     turned so its high side (west in the data) faces that cell.
+  - Street dressing (v0.24.1): 3 wide sidewalks (double stone slab) flush
+    with the road on both sides of straight street chunks, corner squares
+    at crossings, dashed centre line (Road_CenterLine, meta 4 north-south /
+    2 east-west), street lights on the sidewalk's road edge (one per side
+    per chunk, sides staggered, 25% missing), benches and bins on the inner
+    column facing the road, trash bags (6 / 256 of sidewalk cells), wrecks
+    in lanes 5 / 10 (7% per lane per chunk). Facing rules are the old
+    street's (prop front east 2, south 3, west 4, north 5). Stairs chunks
+    get no furniture or cars. Chances use a full 64 bit integer hash (a
+    double scaled to a long had zero low bits: every chance passed).
   - Zones: POLICE per building, MILITARY in the deadzone district.
 - Rules taken from Lost Cities' source: street surface at G, ground floor
   floor layer at G, cellars below, stairs at G + 1 toward the higher
@@ -61,9 +71,11 @@ building fronts, several stairs designs joining levels.
 
 ## Open
 
-- City edge: higher natural land outside the city shows as a dirt cliff
-  beside edge streets (Lost Cities flattens around cities).
-- Streets are bare asphalt: sidewalks, lane lines, lamps, wrecks.
+- City edge: since v0.24.1 a 10 block band outside the city is ramped
+  (smoothstep) from street level to the natural height (`EdgePlan`, a
+  Graded plan that writes no blocks of its own); on higher land it reads
+  as 1 block grass terraces: smoother / wider ramp or raising edge cells
+  later.
 - Districts are uniform random; deadzone should follow dead land.
 - Bridges, building fronts, parks, highways of the packs are not used.
 - Multi buildings bigger than 3 x 3 chunks (towers, casino, school,

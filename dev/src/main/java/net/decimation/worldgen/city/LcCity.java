@@ -34,9 +34,26 @@ public final class LcCity
     public static final int BASE = 64;     // street surface at level 0
     public static final int LEVEL = 6;     // Lost Cities FLOORHEIGHT
     public static final int MAX_LEVEL = 2;
+    /** Width of the ramp graded into the land around the city. */
+    static final int EDGE = 10;
+    /** Sidewalk width on each side of a street chunk (flush with the road). */
+    static final int SIDEWALK = 3;
     private static final int TOP = 250;
 
     private final Block road;
+    /** Street furniture (same blocks and facing rules as StructureGenerator's streets). */
+    public static final class StreetProps
+    {
+        public Block lamp, bench, bin, centreLine, sidewalk = Blocks.double_stone_slab;
+        public Block[] trashBags = new Block[0], cars = new Block[0];
+    }
+
+    private StreetProps props = new StreetProps();
+
+    public void setStreetProps(StreetProps p)
+    {
+        props = p;
+    }
     private final Map<Long, List<Plan>> cache = new LinkedHashMap<Long, List<Plan>>(64, 0.75f, true)
     {
         protected boolean removeEldestEntry(Map.Entry<Long, List<Plan>> e)
@@ -120,6 +137,18 @@ public final class LcCity
         return a + (b - a) * t;
     }
 
+    /** Integer hash of a position (every bit usable). */
+    private static long hl(long seed, int x, int z)
+    {
+        long v = seed ^ (x * 0x9E3779B97F4A7C15L) ^ (z * 0xC2B2AE3D27D4EB4FL);
+        v ^= v >>> 31;
+        v *= 0xBF58476D1CE4E5B9L;
+        v ^= v >>> 29;
+        v *= 0x94D049BB133111EBL;
+        v ^= v >>> 32;
+        return v & Long.MAX_VALUE;
+    }
+
     private static double h(long seed, int x, int z)
     {
         long v = seed ^ (x * 0x9E3779B97F4A7C15L) ^ (z * 0xC2B2AE3D27D4EB4FL) ^ 0x4C43495459L;
@@ -175,6 +204,21 @@ public final class LcCity
         {
             int lx = k < CELL ? 0 : k - CELL + 1, lz = k < CELL ? k : 0;
             out.add(street(seed, cellX, cellZ, lx, lz, cellX * CELL + lx, cellZ * CELL + lz, g, style));
+        }
+        // land next to the city: a band ramping from street level to the natural height
+        int[][] sides = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int[] d : sides)
+        {
+            if (isCity(seed, cellX + d[0], cellZ + d[1]))
+            {
+                continue;
+            }
+            int x0 = d[0] < 0 ? bx - EDGE : d[0] > 0 ? bx + CELL * 16 : bx;
+            int x1 = d[0] < 0 ? bx - 1 : d[0] > 0 ? bx + CELL * 16 + EDGE - 1 : bx + CELL * 16 - 1;
+            int z0 = d[1] < 0 ? bz - EDGE : d[1] > 0 ? bz + CELL * 16 : bz;
+            int z1 = d[1] < 0 ? bz - 1 : d[1] > 0 ? bz + CELL * 16 + EDGE - 1 : bz + CELL * 16 - 1;
+            out.add(new EdgePlan("lce_" + cellX + "_" + cellZ + "_" + d[0] + "_" + d[1], x0, z0, x1, z1, g,
+                                 bx, bz, bx + CELL * 16 - 1, bz + CELL * 16 - 1));
         }
         // the 3 x 3 building block
         Random r = new Random(seed ^ (cellX * 341873128712L + cellZ * 132897987541L) ^ 0x4C4342L);
@@ -319,7 +363,10 @@ public final class LcCity
                 stairs = LcContent.shape(files.get((int) (h(seed, chx, chz) * files.size())));
             }
         }
-        return new StreetPlan("lcs_" + chx + "_" + chz, chx << 4, chz << 4, g, road, stairs, Math.max(0, turns));
+        // 0 = north-south street (cell column 0), 1 = east-west (row 0), 2 = crossing
+        int kind = lx == 0 && lz == 0 ? 2 : lx == 0 ? 0 : 1;
+        return new StreetPlan("lcs_" + chx + "_" + chz, chx << 4, chz << 4, g, road, stairs, Math.max(0, turns),
+                              kind, props, seed);
     }
 
     // ------------------------------------------------------------ plans
@@ -390,8 +437,16 @@ public final class LcCity
         private final Block road;
         private final LcContent.Shape stairs;
 
-        StreetPlan(String id, int minX, int minZ, int ground, Block road, LcContent.Shape stairs, int turns)
+        private final int kind;
+        private final StreetProps props;
+        private final long seed;
+
+        StreetPlan(String id, int minX, int minZ, int ground, Block road, LcContent.Shape stairs, int turns,
+                   int kind, StreetProps props, long seed)
         {
+            this.kind = kind;
+            this.props = props;
+            this.seed = seed;
             this.id = id;
             this.minX = minX;
             this.minZ = minZ;
@@ -417,11 +472,83 @@ public final class LcCity
         public Block blockAt(int lx, int ly, int lz, int[] meta)
         {
             meta[0] = 0;
+            // across = position across the street (0..15), along = along it
+            int across = kind == 1 ? lz : lx, along = kind == 1 ? lx : lz;
+            boolean sidewalk = kind == 2 ? (lx < SIDEWALK || lx > 15 - SIDEWALK) && (lz < SIDEWALK || lz > 15 - SIDEWALK)
+                : across < SIDEWALK || across > 15 - SIDEWALK;
             if (ly == 0)
             {
+                if (sidewalk)
+                {
+                    return props.sidewalk;
+                }
+                // dashed centre line (2 on, 2 off) on straight streets
+                if (kind != 2 && props.centreLine != null && across == 7 && (along & 3) < 2)
+                {
+                    meta[0] = kind == 0 ? 4 : 2;
+                    return props.centreLine;
+                }
                 return road;
             }
-            if (stairs == null || ly - 1 >= stairs.height)
+            if (stairs != null)
+            {
+                return stairsAt(lx, ly, lz, meta);
+            }
+            if (ly != 1 || kind == 2)
+            {
+                return null;
+            }
+            return furniture(across, along, sidewalk, meta);
+        }
+
+        /** Lamps on the road edge of each sidewalk, benches / bins / bags inside, a wreck now and then. */
+        private Block furniture(int across, int along, boolean sidewalk, int[] meta)
+        {
+            int wx = minX + (kind == 1 ? along : across), wz = minZ + (kind == 1 ? across : along);
+            long hv = hl(seed ^ 0x5354524545L, wx, wz); // all 64 bits random (low bits drive the chances)
+            boolean west = across < SIDEWALK; // west / north sidewalk; the road lies toward +across
+            // toward the road: across is x for kind 0 (east 2 / west 4), z for kind 1 (south 3 / north 5)
+            int towardRoad = kind == 0 ? (west ? 2 : 4) : (west ? 3 : 5);
+            if (sidewalk)
+            {
+                boolean roadEdge = across == SIDEWALK - 1 || across == 16 - SIDEWALK;
+                if (roadEdge && along == (west ? 4 : 12) && props.lamp != null && (hv & 3) != 0)
+                {
+                    meta[0] = towardRoad;
+                    return props.lamp;
+                }
+                if (across == (west ? 1 : 14))
+                {
+                    if (along == (west ? 10 : 2) && props.bench != null && (hv & 0xFF) < 110)
+                    {
+                        meta[0] = towardRoad;
+                        return props.bench;
+                    }
+                    if (along == (west ? 1 : 9) && props.bin != null && (hv & 0xFF) < 102)
+                    {
+                        meta[0] = 2 + (int) ((hv >>> 8) & 3);
+                        return props.bin;
+                    }
+                }
+                if (props.trashBags.length > 0 && (hv & 0xFF) < 6)
+                {
+                    meta[0] = 2 + (int) ((hv >>> 16) & 3);
+                    return props.trashBags[(int) ((hv >>> 8) % props.trashBags.length)];
+                }
+                return null;
+            }
+            // wrecks: lanes 5 and 10, one slot per chunk, 7% each
+            if ((across == 5 || across == 10) && along == 7 && props.cars.length > 0 && (hv & 0xFF) < 18)
+            {
+                meta[0] = kind == 0 ? (across == 5 ? 5 : 3) : (across == 5 ? 4 : 2);
+                return props.cars[(int) ((hv >>> 8) % props.cars.length)];
+            }
+            return null;
+        }
+
+        private Block stairsAt(int lx, int ly, int lz, int[] meta)
+        {
+            if (ly - 1 >= stairs.height)
             {
                 return null;
             }
@@ -446,6 +573,106 @@ public final class LcCity
             }
             meta[0] = net.decimation.worldgen.Rotation.rotateMeta(Block.getIdFromBlock(b), stairs.meta[i] & 15, turns);
             return b;
+        }
+    }
+
+    /**
+     * The land just outside a city cell (EDGE wide band): ramps from the
+     * city ground at the cell edge to the natural height (smoothstep),
+     * cutting or filling, keeping the column's own surface block. Writes no
+     * blocks of its own (blockAt is SKIP everywhere).
+     */
+    static final class EdgePlan implements net.decimation.worldgen.FixedBase, net.decimation.worldgen.Graded
+    {
+        private final String id;
+        private final int x0, z0, x1, z1, ground, cx0, cz0, cx1, cz1;
+
+        EdgePlan(String id, int x0, int z0, int x1, int z1, int ground, int cx0, int cz0, int cx1, int cz1)
+        {
+            this.id = id;
+            this.x0 = x0;
+            this.z0 = z0;
+            this.x1 = x1;
+            this.z1 = z1;
+            this.ground = ground;
+            this.cx0 = cx0;
+            this.cz0 = cz0;
+            this.cx1 = cx1;
+            this.cz1 = cz1;
+        }
+
+        public int fixedBaseY() { return ground; }
+        public String id() { return id; }
+        public int minX() { return x0; }
+        public int minZ() { return z0; }
+        public int maxX() { return x1; }
+        public int maxZ() { return z1; }
+        public int lotMinX() { return x0; }
+        public int lotMinZ() { return z0; }
+        public int lotMaxX() { return x1; }
+        public int lotMaxZ() { return z1; }
+        public int height() { return 0; }
+        public int clearAbove() { return 0; }
+        public int maxSpread() { return 255; }
+        public Block foundation() { return Blocks.dirt; }
+        public net.decimation.mod.server.zones.a zone() { return null; }
+        public String describe() { return null; }
+
+        public Block blockAt(int lx, int ly, int lz, int[] meta)
+        {
+            meta[0] = SKIP;
+            return null;
+        }
+
+        public void grade(World world, int x, int z, int baseY)
+        {
+            int natural = StructureGenerator.soilTop(world, x, z);
+            if (natural < 5 || StructureGenerator.waterAbove(world, x, natural, z))
+            {
+                return;
+            }
+            int d = Math.max(Math.max(cx0 - x, x - cx1), Math.max(cz0 - z, z - cz1)); // 1 .. EDGE
+            double t = Math.min(1, d / (double) (EDGE + 1));
+            t = t * t * (3 - 2 * t);
+            int target = ground + (int) Math.round((natural - ground) * t);
+            if (target == natural)
+            {
+                return;
+            }
+            Block surface = world.getBlock(x, natural, z);
+            int surfaceMeta = world.getBlockMetadata(x, natural, z);
+            if (surface == Blocks.air || surface.getMaterial().isLiquid())
+            {
+                return;
+            }
+            Block filler = surface == Blocks.grass || surface == Blocks.mycelium ? Blocks.dirt
+                : surface instanceof net.minecraft.block.BlockFalling ? Blocks.stone : surface;
+            for (int y = natural; y < target; y++)
+            {
+                world.setBlock(x, y, z, filler, 0, 2);
+            }
+            for (int y = target + 1; y <= natural + 12; y++)
+            {
+                Block b = world.getBlock(x, y, z);
+                if (y <= natural || StructureGenerator.clearable(b))
+                {
+                    if (b != Blocks.air)
+                    {
+                        world.setBlock(x, y, z, Blocks.air, 0, 2);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (surface instanceof net.minecraft.block.BlockFalling
+                && !world.getBlock(x, target - 1, z).getMaterial().isSolid())
+            {
+                surface = filler;
+                surfaceMeta = 0;
+            }
+            world.setBlock(x, target, z, surface, surfaceMeta, 2);
         }
     }
 
