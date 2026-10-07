@@ -44,6 +44,7 @@ public class DecimationWorldGen
     public static final String MODID = "deciworldgen";
 
     private final List<Schematic> schematics = new ArrayList<Schematic>();
+    private final List<Schematic> largeSchematics = new ArrayList<Schematic>();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -86,15 +87,49 @@ public class DecimationWorldGen
             }
         }
         FMLLog.info("[%s] %d schematic(s) ready", MODID, schematics.size());
+
+        // large schematics: any footprint up to LargeSites.MAX_SIZE
+        File largeDir = new File(dir, "large");
+        largeDir.mkdirs();
+        File[] largeFiles = largeDir.listFiles();
+        if (largeFiles != null)
+        {
+            for (File f : largeFiles)
+            {
+                if (!f.getName().toLowerCase().endsWith(".schematic"))
+                {
+                    continue;
+                }
+                try
+                {
+                    Schematic s = Schematic.load(f);
+                    if (s.width > LargeSites.MAX_SIZE || s.length > LargeSites.MAX_SIZE)
+                    {
+                        FMLLog.info("[%s] skipping large '%s': %dx%d exceeds %d",
+                                    MODID, s.name, s.width, s.length, LargeSites.MAX_SIZE);
+                        continue;
+                    }
+                    largeSchematics.add(s);
+                    FMLLog.info("[%s] loaded large schematic '%s' (%dx%dx%d)",
+                                MODID, s.name, s.width, s.height, s.length);
+                }
+                catch (Exception e)
+                {
+                    FMLLog.info("[%s] failed to load large '%s': %s", MODID, f.getName(), e);
+                }
+            }
+        }
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
+        Map<Integer, Sub> subs = buildSubstitutions();
         GameRegistry.registerWorldGenerator(
-            new StructureGenerator(schematics, buildSubstitutions(), roadBlocks(),
+            new StructureGenerator(schematics, subs, roadBlocks(),
                                    Block.getBlockFromName("deci:BlockRoad"),
-                                   new CityDistrict(cityProps())),
+                                   new CityDistrict(cityProps()),
+                                   new LargeSites(largeSchematics, subs)),
             100);
         FMLLog.info("[%s] structure generator registered", MODID);
 
@@ -125,6 +160,12 @@ public class DecimationWorldGen
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(
             new net.decimation.fixes.SupplyDropScheduler());
         FMLLog.info("[%s] humanity and supply drop fixes registered", MODID);
+
+        if (System.getProperty(DevPregen.PROPERTY) != null)
+        {
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new DevPregen());
+            FMLLog.info("[%s] PREGEN enabled", MODID);
+        }
 
         // PROPERTY is a compile-time constant, so a dedicated server never
         // loads DevAutoTest (it references client-only classes)

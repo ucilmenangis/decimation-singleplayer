@@ -64,3 +64,11 @@ tasks.matching { it.name == "runClient" }.configureEach {
         jvmArgs("-Ddeciworldgen.autotest=true")
     }
 }
+
+// `gradlew runServer -Ppregen=x,z,radiusChunks` generates that area on start
+// (net.decimation.worldgen.DevPregen) so large structures can be checked.
+tasks.matching { it.name == "runServer" }.configureEach {
+    if (project.hasProperty("pregen")) {
+        jvmArgs("-Ddeciworldgen.pregen=" + project.property("pregen"))
+    }
+}

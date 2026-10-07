@@ -18,7 +18,7 @@ import net.minecraft.init.Blocks;
  * Decay is a deterministic hash: missing and mossy wall blocks, broken
  * windows, rubble, and on some buildings a collapsed top corner.
  */
-public class Building
+public class Building implements Plan
 {
     public static final int APARTMENT = 0, OFFICE = 1, SHOP = 2;
     public static final String[] KIND_NAME = {"apartment", "office", "shop"};
@@ -72,6 +72,41 @@ public class Building
                 wallMeta = pick < 2 ? 0 : new int[] {0, 0, 12, 1}[pick];
         }
         collapsed = floors >= 2 && unit(1, 999, 1) < 0.35;
+    }
+
+    public String id()
+    {
+        return id;
+    }
+
+    public int minX()
+    {
+        return minX;
+    }
+
+    public int minZ()
+    {
+        return minZ;
+    }
+
+    public int clearAbove()
+    {
+        return 6;
+    }
+
+    public int maxSpread()
+    {
+        return 8;
+    }
+
+    public net.decimation.mod.server.zones.a zone()
+    {
+        return net.decimation.mod.server.zones.a.POLICE;
+    }
+
+    public String describe()
+    {
+        return "city " + KIND_NAME[kind] + " " + width + "x" + length + ", " + floors + " floor(s)";
     }
 
     public int maxX()

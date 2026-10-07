@@ -97,6 +97,8 @@ public class StructureGenerator implements IWorldGenerator
     private final Block streetBlock;
     /** Procedural city blocks for CITY sectors; null keeps the old city_ schematics. */
     private final CityDistrict city;
+    /** Large schematics, any size, written slice by slice. */
+    private final LargeSites large;
     private boolean disabled;
     private int errors;
     private boolean loggedBadId;
@@ -105,13 +107,15 @@ public class StructureGenerator implements IWorldGenerator
                               java.util.Map<Integer, Sub> substitutions,
                               Set<Block> roadBlocks,
                               Block streetBlock,
-                              CityDistrict city)
+                              CityDistrict city,
+                              LargeSites large)
     {
         this.schematics = schematics;
         this.substitutions = substitutions;
         this.roadBlocks = roadBlocks;
         this.streetBlock = streetBlock;
         this.city = city;
+        this.large = large;
     }
 
     @Override
@@ -218,6 +222,10 @@ public class StructureGenerator implements IWorldGenerator
             city.populate(world, chunkX, chunkZ, this);
             return; // city blocks replace the small city_ schematics
         }
+        if (large != null && !large.isEmpty())
+        {
+            large.populate(world, chunkX, chunkZ, this);
+        }
         List<Schematic> pool = pool(sector);
         if (pool.isEmpty())
         {
@@ -226,6 +234,12 @@ public class StructureGenerator implements IWorldGenerator
 
         int cellX = Math.floorDiv(chunkX, CELL);
         int cellZ = Math.floorDiv(chunkZ, CELL);
+        if (large != null && !large.isEmpty()
+            && large.covers(world, cellX * CELL * 16, cellZ * CELL * 16,
+                            cellX * CELL * 16 + CELL * 16 - 1, cellZ * CELL * 16 + CELL * 16 - 1, this))
+        {
+            return; // a large structure owns this cell
+        }
         // world.getSeed(); vanilla-style cell hash keeps this stable per world
         Random r = new Random(world.getSeed()
                               ^ (cellX * 341873128712L + cellZ * 132897987541L));
