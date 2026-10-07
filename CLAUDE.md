@@ -93,6 +93,8 @@ Knowledge index:
 - `docs/interior_spec.md`: design spec for interiors and exteriors
   (surfaces, doors, room programs, story / decay layer, exterior, how to
   verify, building categories); round 2 step 4c, approved 2026-10-07.
+- `docs/city_engine.md`: the Lost Cities style city from converted
+  DeceasedCraft content (tools/lcpack.py, city/LcContent, city/LcCity).
 - `docs/worldgen_architecture.md`: worldgen v3 design (engine + data
   assets, shell / storey plan / furnisher / layers, size classes, capture
   tool, migration order); `docs/references/worldgen_study.md`: what Lost
@@ -494,6 +496,10 @@ of the last session:
   gradescan read it; wallscan now scans the full wall height). Seed 1
   spawn area vs 0.22.1: changes only inside office / shop footprints;
   0 real missing walls, upper storeys 92 to 99% reachable.
+  v0.24.0: city engine (docs/city_engine.md): converted Lost Cities
+  buildings (DeceasedCraft current + legacy, tools/lcpack.py into
+  config/decimation_worldgen/lc, local only) replace the procedural city
+  when installed; chunk streets, city levels 6 apart, stairs parts.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

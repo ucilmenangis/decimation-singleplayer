@@ -275,3 +275,16 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
   city's tower in view, poor spot).
 - 6 base courtyard passage at street level. 7, 8 camera inside cellar
   walls (see-through), bunker levels with cell bars visible.
+
+## lc_city_v0.24/ (first Lost Cities style city, seed 1, 20 views, all valid)
+- 0..11 street views (pairs: along a north-south street, then facing the
+  block fronts): asphalt chunk wide streets flush with the buildings;
+  legacy deadzone sheds / factories / military base wall with razor wire
+  (0..3), white modern blocks (4, 5), timber framed / glass fronted
+  current beta buildings (6, 7), dark offices (8, 9), brick and white
+  facades (10, 11). City edge: the land beyond rises as a grass topped
+  dirt cliff next to the street (0, 2, 10).
+- 12..19 stairs between street levels (64 -> 70): wide stone stairs with
+  brick sides and railings (12, 13), sandstone terraced steps with stone
+  side blocks (14, 16, 19), a brick terrace with stone steps and a blue
+  door wall (15, 17), an underpass like part (18).

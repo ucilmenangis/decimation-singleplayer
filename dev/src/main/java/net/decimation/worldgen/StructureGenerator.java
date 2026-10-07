@@ -99,6 +99,14 @@ public class StructureGenerator implements IWorldGenerator
     private final Set<Block> roadBlocks;
     /** Surface for generated city streets; null disables street painting. */
     private final Block streetBlock;
+    /** Lost Cities style city when converted content is installed (config/decimation_worldgen/lc). */
+    private net.decimation.worldgen.city.LcCity lcCity;
+
+    public void setLcCity(net.decimation.worldgen.city.LcCity c)
+    {
+        lcCity = c;
+    }
+
     /** Procedural city blocks for CITY sectors; null keeps the old city_ schematics. */
     private final CityDistrict city;
     /** Large schematics, any size, written slice by slice. */
@@ -229,7 +237,8 @@ public class StructureGenerator implements IWorldGenerator
         }
 
         int sector = sector(world, chunkX, chunkZ);
-        if (sector == CITY && streetBlock != null)
+        boolean lc = lcCity != null && net.decimation.worldgen.city.LcCity.enabled();
+        if (sector == CITY && streetBlock != null && !lc)
         {
             paintStreets(world, chunkX, chunkZ);
         }
@@ -238,7 +247,12 @@ public class StructureGenerator implements IWorldGenerator
         // border, and the structure it touches may belong to the other
         // sector. Both writers check the sector of each structure themselves.
         // (Gating them on this chunk's sector left wall strips unwritten.)
-        if (city != null)
+        if (lc)
+        {
+            // Lost Cities style city from converted content (city.LcCity)
+            lcCity.populate(world, chunkX, chunkZ, this);
+        }
+        else if (city != null)
         {
             city.populate(world, chunkX, chunkZ, this);
         }
@@ -246,7 +260,7 @@ public class StructureGenerator implements IWorldGenerator
         {
             large.populate(world, chunkX, chunkZ, this);
         }
-        if (sector == CITY && city != null)
+        if (sector == CITY && (city != null || lc))
         {
             return; // city blocks replace the small city_ schematics
         }

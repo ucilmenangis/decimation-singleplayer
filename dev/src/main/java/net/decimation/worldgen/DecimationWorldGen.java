@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.23.0",
+     version = "0.24.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -165,6 +165,9 @@ public class DecimationWorldGen
         generator.setStreetProps(one("deci:BlockStreetLight"), one("deci:BlockStreetBench"),
                                  one("deci:BlockStreetBin"), resolve("deci:BlockTrashBag1", "deci:BlockTrashBag2"),
                                  one("deci:BlockRoad_CenterLine"));
+        net.decimation.worldgen.city.LcContent.init(new File(cpw.mods.fml.common.Loader.instance().getConfigDir(),
+                                                             "decimation_worldgen"));
+        generator.setLcCity(new net.decimation.worldgen.city.LcCity(Block.getBlockFromName("deci:BlockRoad")));
         GameRegistry.registerWorldGenerator(generator, 100);
         FMLLog.info("[%s] structure generator registered", MODID);
 

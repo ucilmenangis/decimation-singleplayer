@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+"""Build the content pack for the Lost Cities style city engine (LcCity):
+every building, multi building and stairs part that the packs' district
+styles (city styles) list, converted to 1.7.10 schematics, plus an index.
+
+    python3 tools/lcpack.py OUT_DIR PACK=DATA_DIR:NAMESPACE[:STYLE,STYLE...] ...
+
+e.g. dc=<v1>/../dc/data:deceasedcraft
+     legacy=<legacy>/kubejs/data:c70cities
+OUT_DIR is normally <instance>/config/decimation_worldgen/lc (local only:
+DeceasedCraft's content, never commit it). Writes OUT_DIR/<pack>/<name>.
+schematic and OUT_DIR/index.json:
+  {"buildings": [{"file", "pack", "name", "styles": {style: factor},
+                  "cx", "cz" (chunks), "groundY", "height"}],
+   "stairs": {"<pack>:<style>": [file, ...]},
+   "names": {"<id>": "<block name>"}}
+Bedrock (id 7) marks "keep the world" (cellar padding of multi building
+chunks with fewer cellars). Schematic ids are the ids of REGISTRY_WORLD below, "names" maps them back
+to block names so LcContent can remap them in any world.
+"""
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import lc2schem as lc  # noqa: E402
+import lctranslate as lt  # noqa: E402
+import mapsurvey as ms  # noqa: E402
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REGISTRY_WORLD = os.path.join(ROOT, "dev/run/client/saves/deciworldgen_autotest")
+SKIP_STYLES = ("dummycity",)
+
+
+def convert(pack, ns, ref, ids):
+    """Building / multi building ref -> (W, H, L, blocks, add, meta, groundY, cx, cz)."""
+    name = ref.split(":")[-1]
+    multi = pack.load("multibuildings", ref) if "/" not in name else None
+    if multi:
+        grid = multi["buildings"]
+    else:
+        grid = [[ref if ":" in ref else ns + ":" + ref]]
+    cols, grounds = {}, {}
+    for gx, row in enumerate(grid):
+        for gz, bref in enumerate(row):
+            cols[(gx, gz)], grounds[(gx, gz)] = lc.building_columns(pack, bref)
+    depth = max(grounds.values())
+    # chunks with fewer cellars than the deepest one: padding below them
+    # keeps the world (bedrock = skip marker, as in SchematicPlan)
+    cols = {k: [[["SKIP"] * 16 for _ in range(16)]] * (depth - grounds[k]) + v for k, v in cols.items()}
+    return rasterise(cols, len(grid), max(len(r) for r in grid), ids) + (depth, len(grid), max(len(r) for r in grid))
+
+
+def rasterise(cols, cx, cz, ids):
+    W, L = cx * 16, cz * 16
+    H = max(len(c) for c in cols.values())
+    blocks = bytearray(W * H * L)
+    add = bytearray((W * H * L + 1) // 2)
+    meta = bytearray(W * H * L)
+    for (gx, gz), layers in cols.items():
+        for y, s in enumerate(layers):
+            for z, row in enumerate(s[:16]):
+                for x, state in enumerate(row):
+                    if state is None:
+                        continue
+                    res = ("minecraft:bedrock", 0) if state == "SKIP" else lt.translate(state)
+                    if res is None or res[0] == "skip":
+                        continue
+                    bid = ids.get(res[0])
+                    if bid is None:
+                        continue
+                    i = (y * L + gz * 16 + z) * W + gx * 16 + x
+                    blocks[i] = bid & 255
+                    hi = (bid >> 8) & 15
+                    add[i >> 1] = (add[i >> 1] & 0x0F) | (hi << 4) if i & 1 else (add[i >> 1] & 0xF0) | hi
+                    meta[i] = res[1] & 15
+    return W, H, L, blocks, add, meta
+
+
+def main():
+    out = sys.argv[1]
+    reg = ms.registry(REGISTRY_WORLD)
+    ids = {n: i for i, n in reg.items()}
+    ids["minecraft:air"] = 0
+    index = {"buildings": [], "stairs": {}, "names": {str(i): n for i, n in reg.items()}}
+    for spec in sys.argv[2:]:
+        key, _, rest = spec.partition("=")
+        parts = rest.split(":")
+        data, ns = parts[0], parts[1]
+        only = parts[2].split(",") if len(parts) > 2 else None
+        pack = lc.Pack(data, ns)
+        root = os.path.join(data, ns, "lostcities", "citystyles")
+        wanted = {}   # ref -> {style: factor}
+        os.makedirs(os.path.join(out, key), exist_ok=True)
+        for f in sorted(os.listdir(root)):
+            style = f[:-5]
+            if style in SKIP_STYLES or (only and style not in only):
+                continue
+            cs = json.load(open(os.path.join(root, f)))
+            sel = cs.get("selectors", {})
+            for k in ("buildings", "multibuildings"):
+                for e in sel.get(k, []):
+                    wanted.setdefault(e["value"], {})[style] = wanted.get(e["value"], {}).get(style, 0) + e.get(
+                        "factor", 1)
+            stairs = []
+            for e in sel.get("stairs", []):
+                ref = e["value"]
+                fname = ref.split(":")[-1].replace("/", "__")
+                path = os.path.join(out, key, fname + ".schematic")
+                if not os.path.exists(path):
+                    sl = lc.part_slices(pack, ref, {}, {}, pack.palette(ns + ":common"))
+                    if not sl:
+                        continue
+                    W, H, L, b, a, m = rasterise({(0, 0): sl}, 1, 1, ids)
+                    lc.write_schematic(path, W, H, L, b, a, m)
+                stairs.extend([key + "/" + fname + ".schematic"] * max(1, int(e.get("factor", 1))))
+            if stairs:
+                index["stairs"]["%s:%s" % (key, style)] = stairs
+        done = 0
+        for ref, styles in sorted(wanted.items()):
+            fname = ref.split(":")[-1].replace("/", "__")
+            try:
+                W, H, L, b, a, m, g, cx, cz = convert(pack, ns, ref, ids)
+            except SystemExit as e:
+                print("  skip %s: %s" % (ref, e))
+                continue
+            lc.write_schematic(os.path.join(out, key, fname + ".schematic"), W, H, L, b, a, m)
+            index["buildings"].append({"file": key + "/" + fname + ".schematic", "pack": key, "name": fname,
+                                       "styles": styles, "cx": cx, "cz": cz, "groundY": g, "height": H})
+            done += 1
+        print("%s: %d buildings, stairs styles %s" % (key, done,
+                                                     [s for s in index["stairs"] if s.startswith(key + ":")]))
+    json.dump(index, open(os.path.join(out, "index.json"), "w"), indent=1)
+
+
+if __name__ == "__main__":
+    main()

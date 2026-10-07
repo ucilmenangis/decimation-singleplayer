@@ -56,6 +56,27 @@ public final class Slices
         }
         StructureData data = StructureData.get(world);
         Integer baseY = data.baseY(p.id());
+        if (p instanceof FixedBase && baseY == null && p.zone() == null && p.describe() == null)
+        {
+            // a plain city piece (street chunk): its height is computed, nothing to store
+            write(world, p, ((FixedBase) p).fixedBaseY(), x0, z0, x1, z1);
+            return;
+        }
+        if (baseY == null && p instanceof FixedBase)
+        {
+            baseY = ((FixedBase) p).fixedBaseY();
+            data.setBaseY(p.id(), baseY);
+            if (p.zone() != null)
+            {
+                ZoneStore.add(p.zone(), p.minX() - 2, baseY - 4, p.minZ() - 2,
+                              p.maxX() + 2, baseY + p.height() + 8, p.maxZ() + 2);
+            }
+            if (p.describe() != null)
+            {
+                FMLLog.info("[%s] %s %s at %d,%d,%d", DecimationWorldGen.MODID,
+                            p.describe(), p.id(), p.minX(), baseY, p.minZ());
+            }
+        }
         if (baseY == null)
         {
             // window samples from the building itself when this slice has any
