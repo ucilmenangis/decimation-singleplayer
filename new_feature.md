@@ -230,7 +230,10 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   (75% of lots with room) for a front yard.
   Step 2 (street life) DONE in v0.15.0: levelled streets, centre lines,
   lamps, benches, bins, trash bags, checked in autotest screenshots.
-  Next: step 3, full multiblocks.
+  Step 3 (full multiblocks) DONE in v0.16.0: generated shelves get their
+  upper part (they are 2 tall, not 2 wide); vending machines turned out to
+  be single block props. Next: step 4, police station / hospital / gas
+  station / warehouse building types.
 
 ---
 

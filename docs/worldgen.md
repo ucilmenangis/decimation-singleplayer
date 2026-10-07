@@ -116,6 +116,29 @@ Decimation loot inside it, put the placeholder blocks where crates should be
    `loaded large schematic '<name>' (WxHxL)` or why it was skipped.
 5. New chunks only; existing terrain is never regenerated.
 
+## Multiblock props (0.16.0)
+
+Decimation multiblocks (tile entity extends `deci.W.a` MultiblockPart) are
+drawn only by their master and, when placed by a player, fill their whole
+size box (`deci.W.e.a(world, x, y, z, block, meta)` =
+MultiblockHelper.formMultiblock: same block in every cell, each part's
+master set). Registered multiblocks in the game: metal shelf and empty
+shelf (1x1x2, two blocks TALL, not wide), phone box, street barrier, tall
+barrier, military wreck 2 (3x3x7). The name `deci:BlockVendingMachine_1`
+is a plain single block prop (`PropTile`, 2 high collision box), the
+multiblock vending class is not what gets registered.
+
+Generation (`Slices.write` and the small schematic placer) calls
+`MultiblockRepairHandler.complete` for every tile entity block it placed,
+AFTER the whole slice is written: overwriting a part with air later would
+break the whole multiblock (its breakBlock removes every part). Column
+multiblocks (1x1 footprint) with air above get their full height through
+Decimation's own helper; others just become their own master. Chunk load
+repair of old worlds still only sets the master (writing blocks during
+ChunkEvent.Load is unsafe), so shelves in pre 0.16 worlds stay one block
+tall. Check: `python3 tools/multiscan.py WORLD` (seed 1: 1499 of 1499
+shelves whole, no orphans, no broken parts).
+
 ## Lot grading (city yards, 0.13.0)
 
 A `Plan` that also implements `Graded` (so far only `Building`) owns its

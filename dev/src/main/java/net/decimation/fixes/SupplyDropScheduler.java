@@ -103,6 +103,15 @@ public class SupplyDropScheduler
             {
                 continue; // only loaded columns: never force chunk generation
             }
+            // the crate stops on a prop's collision box (trash bag, car,
+            // bench...) inside the prop's cell, cannot become a block there
+            // and vanishes: pick another column
+            int top = world.getTopSolidOrLiquidBlock(x, z);
+            net.minecraft.block.Block under = world.getBlock(x, top - 1, z);
+            if (under.hasTileEntity(world.getBlockMetadata(x, top - 1, z)))
+            {
+                continue;
+            }
             clearLanding(world, x, z);
             world.setBlock(x, world.getHeight() - 1, z, deci.aD.c.afA); // BlockRegistry.supplyDrop
             world.playSoundEffect(player.posX, player.posY, player.posZ,

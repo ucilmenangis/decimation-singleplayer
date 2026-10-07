@@ -10,6 +10,16 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Supply drop crate vanished on a street prop
+- **Found**: 7 Oktober 2026 by the dev autotest after street furniture
+  (0.15.0): drop column 14/62 was a sidewalk with a trash bag on it.
+- **Root cause**: same mechanism as the flower case below. Decimation props
+  have collision boxes, the falling crate stops on one inside the prop's
+  cell, cannot become a block there and dies.
+- **Fix (v0.16.0)**: `SupplyDropScheduler.drop` skips a candidate column
+  whose top block has a tile entity (any prop, chest, car) and tries the
+  next of its 12 random positions. Autotest passes again.
+
 ### Supply drop crate vanished when it landed in a flower
 - **Found**: 7 Oktober 2026 by the dev autotest (drop column 70/287: crate
   entity fell, no crate block anywhere in the column).

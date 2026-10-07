@@ -396,7 +396,7 @@ public class StructureGenerator implements IWorldGenerator
             world.setBlock(p[0], p[1], p[2], block,
                                 propMeta(world, sub.mode, p[0], p[1], p[2],
                                          pick, turns), 2);
-            net.decimation.fixes.MultiblockRepairHandler.repair(world.getTileEntity(p[0], p[1], p[2]));
+            net.decimation.fixes.MultiblockRepairHandler.complete(world, p[0], p[1], p[2]);
         }
 
         gradeRing(world, originX, originZ, maxX, maxZ, groundY,

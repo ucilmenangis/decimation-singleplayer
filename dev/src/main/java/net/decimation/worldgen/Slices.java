@@ -145,6 +145,7 @@ public final class Slices
     private static void write(World world, Plan p, int baseY, int x0, int z0, int x1, int z1)
     {
         int[] meta = new int[1];
+        java.util.List<int[]> props = new java.util.ArrayList<int[]>();
         int top = baseY + p.height();
         for (int x = x0; x <= x1; x++)
         {
@@ -195,12 +196,17 @@ public final class Slices
                         world.setBlock(x, y, z, block, meta[0], 2);
                         if (block.hasTileEntity(meta[0]))
                         {
-                            // multiblock props are drawn only by their master part
-                            net.decimation.fixes.MultiblockRepairHandler.repair(world.getTileEntity(x, y, z));
+                            props.add(new int[] {x, y, z});
                         }
                     }
                 }
             }
+        }
+        // multiblock props: master + their upper parts, once the whole slice
+        // (including the air above them) is written
+        for (int[] q : props)
+        {
+            net.decimation.fixes.MultiblockRepairHandler.complete(world, q[0], q[1], q[2]);
         }
     }
 }

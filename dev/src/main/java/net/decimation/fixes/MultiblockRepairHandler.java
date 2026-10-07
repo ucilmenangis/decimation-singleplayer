@@ -27,6 +27,39 @@ public class MultiblockRepairHandler
         }
     }
 
+    /**
+     * A multiblock prop just placed by world generation: make it a whole
+     * multiblock, as player placement does (BlockMetalShelf.onBlockPlacedBy
+     * calls deci.W.e.a = MultiblockHelper.formMultiblock: every cell of the
+     * size box gets the block, all pointing at the master). Only column
+     * multiblocks (1x1 footprint: metal shelves, vending machines, phone
+     * box, all 1x2x1) and only when the cells above are air; anything else
+     * just becomes its own master. Must run after the generator has written
+     * the cells above: overwriting a part with air breaks the WHOLE
+     * multiblock (BlockMetalShelf.breakBlock removes every part).
+     */
+    public static void complete(net.minecraft.world.World world, int x, int y, int z)
+    {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (!repair(te) || !(te instanceof deci.W.d))
+        {
+            return;
+        }
+        deci.W.d part = (deci.W.d) te;
+        if (part.getSizeX() != 1 || part.getSizeZ() != 1 || part.getSizeY() < 2)
+        {
+            return;
+        }
+        for (int i = 1; i < part.getSizeY(); i++)
+        {
+            if (!world.isAirBlock(x, y + i, z))
+            {
+                return;
+            }
+        }
+        deci.W.e.a(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+    }
+
     /** Make an orphaned multiblock part its own master; true if repaired. */
     public static boolean repair(TileEntity te)
     {

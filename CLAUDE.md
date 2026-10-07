@@ -389,6 +389,9 @@ of the last session:
   autotest_<n>.png` (along the street, a street light side-on, across the
   street); READ THEM to check anything visual (facing, levelling) instead
   of asking the user. `-Ddeciworldgen.autotest.views=false` skips them.
+  v0.16.0: multiblock props generated whole (shelves are 1x1x2 TALL; see
+  docs/worldgen.md "Multiblock props"), `tools/multiscan.py` checks them.
+  Supply drops skip columns topped by a prop (crate vanished on a trash bag).
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in
