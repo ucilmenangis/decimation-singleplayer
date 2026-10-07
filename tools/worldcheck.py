@@ -56,6 +56,8 @@ def read_nbt(buf):
                 out[k] = payload(et)
         if t == 11:
             n = u("i", 4); v = struct.unpack(">%di" % n, buf[pos:pos + 4 * n]); pos += 4 * n; return v
+        if t == 12:  # long array (1.13+ chunk formats)
+            n = u("i", 4); v = struct.unpack(">%dq" % n, buf[pos:pos + 8 * n]); pos += 8 * n; return v
         raise ValueError("tag %d" % t)
 
     t = u("b", 1)

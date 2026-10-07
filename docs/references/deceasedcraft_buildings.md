@@ -178,3 +178,32 @@ What a DeceasedCraft world is made of:
 There is no separate military "wasteland" base in the Lost Cities data;
 military content = apocalypsenow military.nbt (+ spore military_camp
 if wanted) `[inferred]`.
+
+## Versions and the wasteland (8 Oktober 2026)
+
+- Prism instances `v1` / `v2` and the user's server repo
+  `github.com/ucilmenangis/DeceasedCraft-Server-5.10` (public; server
+  files, mods, the played world) all run DeceasedCraft_Beta 5.10.15:
+  `DCTweaks_5.10.14.jar` and Lost Cities 7.4.11 are byte identical (git
+  blob hashes match). The user calls the server world the LEGACY one: it
+  was generated earlier, so its buildings can differ from what the current
+  data generates; treat the world and the data as two separate sources
+  (user warning: "some or most of the building is little bit different").
+- Wasteland in the current data is a BIOME, not structures: badlands are
+  replaced by `biomesoplenty:wasteland` (config/biome_replacer.properties),
+  kubejs groups them as `deceasedcraft:wasteland` for In Control spawns,
+  scattered buildings are blacklisted there. The user says the wasteland
+  feature is work in progress in the beta. The legacy version (with
+  wasteland and military buildings) was deleted; the user may reinstall
+  it as a Prism instance if CurseForge still lists it.
+- Server world: 131 overworld region files (regions -19..4 on both axes,
+  about 1.1 GB), plus dimensions deceasedcraft:abyss, lostcities:lostcity,
+  lostworlds:abyss (data only). Sparse clone in the session scratchpad;
+  never commit it. Reader for 1.18+ chunks: `tools/anvil118.py`.
+- Survey of the server world (`tools/anvil118.py`, 7 minutes): 95071
+  chunks in two areas: a pregenerated square of about 4000 x 4000 blocks
+  (snowy coniferous / taiga / plains, cities, straight highways) and a
+  travelled strip near -9700,-9700. 45 surface biomes, NO wasteland or
+  badlands: this world is the current beta, not legacy. Still useful as a
+  real generated Lost Cities layout (levels, stairs, bridges, highways)
+  for the city engine step.
