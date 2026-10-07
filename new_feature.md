@@ -291,6 +291,9 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   v0.22.0. Next: step 2, extract Shell / StoreyPlan / Furnisher / layers
   out of Building without behaviour change. User decision 8 Oktober:
   public buildings 6 high storeys, homes / apartments 5 (after step 2).
+  Step 2 DONE v0.22.1 (Building split into worldgen/building/, identical
+  output). Next: offices and shops 6 high (0.23.0), then step 3 (types
+  as JSON, rotated stair core).
 
 ---
 

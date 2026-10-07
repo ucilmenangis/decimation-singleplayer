@@ -14,6 +14,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.decimation.worldgen.StructureGenerator.Sub;
+import net.decimation.worldgen.building.Building;
 import net.minecraft.block.Block;
 
 /**
@@ -37,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.22.0",
+     version = "0.22.1",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {

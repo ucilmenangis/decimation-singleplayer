@@ -88,6 +88,11 @@ reachability, audit / flats / sets screenshots and the autotest.
    written but not consumed until step 4.
 2. Extract Shell, StoreyPlan, Furnisher, layers out of `Building` without
    behaviour change (compare floor plans before / after).
+   DONE 0.22.1: package `worldgen/building/` (code map below); storey
+   height is a per building field (5 everywhere). Verified with
+   `tools/worlddiff.py`: seed 1 world before / after, 0 differing blocks
+   over 589 final chunks, 282 of them with building interiors (173701
+   interior blocks); autotest passes.
 3. Express apartment / office / shop as type JSON on top of the extracted
    modules; rotated stair core.
 4. PartPlanner: authored storey parts with room slots (first parts made
@@ -117,6 +122,26 @@ docs/references/decimation_maps.md and deceasedcraft_buildings.md:
   3 air, ceiling). Plan: step 2 turns Building.FLOOR into a per building
   storey height (still 5 everywhere, identical output), then a separate
   version switches offices and shops to 6 (stair runs 6 steps).
+
+## Code map (0.22.1, `dev/src/main/java/net/decimation/worldgen/building/`)
+
+- `Building`: identity, lot, kind, floors, storey height, stair core /
+  corridor geometry, `blockAt` dispatcher (margin, collapse, roof, core,
+  floor layer, outer wall, ladder, then Interior), dev camera helpers,
+  the `unit` hash every part uses (pure: call order never matters).
+- `Shell`: facade palette, outer walls with windows and the entrance,
+  `liningOpen`, stair core runs, ladder, roof edge, margin vines.
+- `StoreyPlan`: cell grid, room grid, 3 furniture layers, `put`,
+  `wallLine`, `markRoom`, `lining`, `markCore`; cell and room constants.
+- `ApartmentPlanner`, `OfficePlanner`, `ShopPlanner`: fill a StoreyPlan.
+- `Furnisher`: furniture set placement (weighted order, fits, styles,
+  conditions); `Facing`: plan direction to metadata per block type.
+- `Surfaces`: wall panels, floors per room, ceiling layer, light grid and
+  vents, lintels, room doors.
+- `Interior`: plan cell to blocks above the floor layer.
+- `Ruins`: decay value, collapsed corner, rubble, debris, overgrowth on
+  surfaces, looted furniture.
+- `Yard`: lot grading, parking, paths, nose-in wrecks.
 
 ## Open questions (for later)
 

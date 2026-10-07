@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.decimation.worldgen.building.Building;
 import net.minecraft.world.World;
 
 /**

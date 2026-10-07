@@ -1,5 +1,6 @@
 package net.decimation.worldgen;
 
+import net.decimation.worldgen.building.Building;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;

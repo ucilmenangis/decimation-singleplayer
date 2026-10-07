@@ -254,6 +254,11 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   reads block ids straight from Anvil region files. `World.registry()` maps
   block names to ids from level.dat (Decimation ids can be below 256:
   BlockWreckage1..5 = 176..180, so "id >= 256 means mod block" is wrong).
+- `python3 tools/worlddiff.py WORLD_A WORLD_B`: block + metadata diff of
+  two generated worlds (only chunks final in both; fluids, sand, gravel
+  ignored). The refactor check: `servertest.py 1 type=decimation keep`
+  before and after, copy `dev/run/server/world` aside in between; same
+  code twice gives 0 (checked 2026-10-08).
 - `python3 tools/worldmap.py WORLD OUT.png`: top down biome / height map
   of a generated world (read the PNG to judge terrain). `servertest.py`
   takes `type=decimation` for the world type.
@@ -471,6 +476,11 @@ of the last session:
   ANY built-in asset run `python3 tools/asset_hashes.py` before
   committing. Map studies: docs/references/decimation_maps.md,
   deceasedcraft_buildings.md.
+  v0.22.1: step 2, `Building` split into `worldgen/building/` (Shell,
+  StoreyPlan, Apartment / Office / ShopPlanner, Furnisher, Facing,
+  Surfaces, Interior, Ruins, Yard; code map in
+  docs/worldgen_architecture.md); storey height per building (5); 0
+  blocks differ from 0.22.0 on seed 1.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

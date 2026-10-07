@@ -184,7 +184,7 @@ public class StructureGenerator implements IWorldGenerator
     }
 
     /** Y of the top soil block: ground() minus trunks, leaves and plants. */
-    static int soilTop(World world, int x, int z)
+    public static int soilTop(World world, int x, int z)
     {
         int y = ground(world, x, z) - 1;
         while (y > 4 && clearable(world.getBlock(x, y, z)))
@@ -195,7 +195,7 @@ public class StructureGenerator implements IWorldGenerator
     }
 
     /** Water directly above a soil block (ground() skips water). */
-    static boolean waterAbove(World world, int x, int y, int z)
+    public static boolean waterAbove(World world, int x, int y, int z)
     {
         return isWater(world, x, y + 1, z);
     }
@@ -695,7 +695,7 @@ public class StructureGenerator implements IWorldGenerator
     }
 
     /** Plants, snow and tree parts: things a street may remove or look through. */
-    static boolean clearable(Block b)
+    public static boolean clearable(Block b)
     {
         net.minecraft.block.material.Material m = b.getMaterial();
         return m == net.minecraft.block.material.Material.air

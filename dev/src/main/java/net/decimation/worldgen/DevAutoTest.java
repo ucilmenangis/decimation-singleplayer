@@ -8,6 +8,7 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.decimation.mod.server.zones.ObjectZone;
+import net.decimation.worldgen.building.Building;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -439,11 +440,11 @@ public class DevAutoTest
         }
         Integer baseY = StructureData.get(world).baseY(b.id);
         int storey = mode == 3 ? 0 : mode == 2 ? 2 : 1;
-        byte room = mode == 1 ? Building.R_BEDROOM : mode == 3 ? Building.R_LOBBY : Building.R_LIVING;
+        byte room = mode == 1 ? net.decimation.worldgen.building.StoreyPlan.R_BEDROOM : mode == 3 ? net.decimation.worldgen.building.StoreyPlan.R_LOBBY : net.decimation.worldgen.building.StoreyPlan.R_LIVING;
         int[] c = b.lookCell(storey, room);
         if (c == null && mode == 3)
         {
-            c = b.lookCell(0, Building.R_LIVING);
+            c = b.lookCell(0, net.decimation.worldgen.building.StoreyPlan.R_LIVING);
         }
         if (baseY == null || baseY == StructureData.CANCELLED || c == null)
         {
@@ -458,9 +459,9 @@ public class DevAutoTest
         p.sendPlayerAbilities();
         viewYaw = c[2];
         viewPitch = 12;
-        p.playerNetServerHandler.setPlayerLocation(c[0] + 0.5, baseY + storey * Building.FLOOR + 1, c[1] + 0.5, c[2], 12);
+        p.playerNetServerHandler.setPlayerLocation(c[0] + 0.5, baseY + storey * b.storeyHeight + 1, c[1] + 0.5, c[2], 12);
         viewSpot = b.describe() + " " + b.id + " storey " + storey + " " + (mode == 1 ? "bedroom" : mode == 3 ? "ground" : "living")
-            + " at " + c[0] + "," + (baseY + storey * Building.FLOOR + 1) + "," + c[1];
+            + " at " + c[0] + "," + (baseY + storey * b.storeyHeight + 1) + "," + c[1];
         viewReady = v;
     }
 
@@ -616,15 +617,15 @@ public class DevAutoTest
         {
             x = b.minX + b.width / 2.0;
             z = b.minZ + b.length + 6;
-            y = baseY + b.floors * Building.FLOOR + 10;
+            y = baseY + b.floors * b.storeyHeight + 10;
             yaw = 180;
             pitch = 45;
         }
         else
         {
             int storey = mode == 3 ? 1 : mode - 1;
-            byte second = b.kind == Building.APARTMENT ? Building.R_BEDROOM
-                : b.kind == Building.OFFICE ? Building.R_MEETING : Building.R_STOCK;
+            byte second = b.kind == Building.APARTMENT ? net.decimation.worldgen.building.StoreyPlan.R_BEDROOM
+                : b.kind == Building.OFFICE ? net.decimation.worldgen.building.StoreyPlan.R_MEETING : net.decimation.worldgen.building.StoreyPlan.R_STOCK;
             int[] c = storey < b.floors ? (mode == 3 ? b.viewCell(storey, second) : b.viewCell(storey)) : null;
             if (c == null)
             {
@@ -635,7 +636,7 @@ public class DevAutoTest
             }
             x = c[0] + 0.5;
             z = c[1] + 0.5;
-            y = baseY + storey * Building.FLOOR + 1;
+            y = baseY + storey * b.storeyHeight + 1;
             yaw = c[2];
             pitch = 8;
         }

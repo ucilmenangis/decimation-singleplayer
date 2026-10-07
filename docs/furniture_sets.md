@@ -117,7 +117,7 @@ right (foot + head), hook in, open trapdoor in, sponge `.`; a lone chest
 placed facing east read "out" because vanilla turns a single chest away
 from the wall when placed `[inferred]`.
 
-## How rooms use them (Building.apartmentUnit)
+## How rooms use them (building/ApartmentPlanner.unit)
 
 Flat: kitchen, then (studio) bed, then living, then dining in the living
 part; bed, storage, desk in the bedroom; bath twice in the bathroom; lobby
