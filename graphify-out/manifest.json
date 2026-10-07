@@ -50,12 +50,12 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791397145.3256679,
-    "ast_hash": "4cb18e83ce021221e902d0fdc6fc2920",
-    "semantic_hash": "4cb18e83ce021221e902d0fdc6fc2920"
+    "mtime": 1791397917.378735,
+    "ast_hash": "0d6a135af376e850b15e9871b20321c8",
+    "semantic_hash": "0d6a135af376e850b15e9871b20321c8"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791396954.4006693,
+    "mtime": 1791397375.8893821,
     "ast_hash": "f5912f6bc994a5370e2674fa0c3494d2",
     "semantic_hash": "f5912f6bc994a5370e2674fa0c3494d2"
   },
@@ -70,7 +70,7 @@
     "semantic_hash": "d4b685f732c9680f7e1309982fa104e7"
   },
   "dev/src/main/java/net/decimation/worldgen/StructureGenerator.java": {
-    "mtime": 1791396943.0331676,
+    "mtime": 1791397375.889776,
     "ast_hash": "5ea7b67db4ac1727a06ca8a6eb7d5f94",
     "semantic_hash": "5ea7b67db4ac1727a06ca8a6eb7d5f94"
   },
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791397145.3202345,
-    "ast_hash": "2806bf39bf11ee70a6aa2447ab0a8c02",
-    "semantic_hash": "2806bf39bf11ee70a6aa2447ab0a8c02"
+    "mtime": 1791397917.3738534,
+    "ast_hash": "ae274e76fd7e957991afd3025d132e13",
+    "semantic_hash": "ae274e76fd7e957991afd3025d132e13"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -120,9 +120,9 @@
     "semantic_hash": "aa4550575e47e7c1d0b020a51afbb501"
   },
   "bug.md": {
-    "mtime": 1791378342.2067301,
-    "ast_hash": "ece30a0b4f536e3febfa4d93c58e3b3a",
-    "semantic_hash": "ece30a0b4f536e3febfa4d93c58e3b3a"
+    "mtime": 1791397531.4111834,
+    "ast_hash": "7b04f8e238db973c50499097f587b15e",
+    "semantic_hash": "7b04f8e238db973c50499097f587b15e"
   },
   "create_weapons.md": {
     "mtime": 1791348916.8339295,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791397145.3205001,
-    "ast_hash": "83500d653db040054db067b9376a937c",
-    "semantic_hash": "83500d653db040054db067b9376a937c"
+    "mtime": 1791397917.374419,
+    "ast_hash": "44aaee656da8d6ed0dbcd0b0cbc36d55",
+    "semantic_hash": "44aaee656da8d6ed0dbcd0b0cbc36d55"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -175,7 +175,7 @@
     "semantic_hash": "eecbfdd3f9f9d419fbce9147d814df46"
   },
   "dev/src/main/java/net/decimation/worldgen/CityDistrict.java": {
-    "mtime": 1791396954.4003801,
+    "mtime": 1791397375.888657,
     "ast_hash": "26a78cfc223e9c6a3e103850b6aee241",
     "semantic_hash": "26a78cfc223e9c6a3e103850b6aee241"
   },
@@ -215,9 +215,9 @@
     "semantic_hash": "7f19f7ee84ca3e4f0c179f7f87628402"
   },
   "tools/wallscan.py": {
-    "mtime": 1791356207.3484309,
-    "ast_hash": "f706a72408e55786b95646cd5975c0b6",
-    "semantic_hash": "f706a72408e55786b95646cd5975c0b6"
+    "mtime": 1791397618.4328074,
+    "ast_hash": "87c46366369a5c581616f102476ca8b9",
+    "semantic_hash": "87c46366369a5c581616f102476ca8b9"
   },
   "docs/building_design.md": {
     "mtime": 1791374347.9711492,
@@ -240,9 +240,9 @@
     "semantic_hash": "e3adc1377cae6fb93ada535156fb812e"
   },
   "tools/gradescan.py": {
-    "mtime": 1791372913.817154,
-    "ast_hash": "a93e787ae827dc9d139a151a6699bfa5",
-    "semantic_hash": "a93e787ae827dc9d139a151a6699bfa5"
+    "mtime": 1791397429.7361543,
+    "ast_hash": "dfb5c8f9f68fd073fbc2394261b0c6dc",
+    "semantic_hash": "dfb5c8f9f68fd073fbc2394261b0c6dc"
   },
   "README.md": {
     "mtime": 1791373166.1444175,
@@ -310,9 +310,9 @@
     "semantic_hash": "40676f19f9256f8129e237f8ce8f295b"
   },
   "tools/floorplan.py": {
-    "mtime": 1791382834.6132193,
-    "ast_hash": "c6967969c05509a19d8ff9fd8dbfc906",
-    "semantic_hash": "c6967969c05509a19d8ff9fd8dbfc906"
+    "mtime": 1791397429.7359905,
+    "ast_hash": "89ea4c9971f7876f285ceffc0f73fc53",
+    "semantic_hash": "89ea4c9971f7876f285ceffc0f73fc53"
   },
   "docs/building_audit.md": {
     "mtime": 1791378342.2070649,
@@ -325,9 +325,9 @@
     "semantic_hash": "44617037eeac4c4f3e53f42e6306550b"
   },
   "docs/shots_index.md": {
-    "mtime": 1791394862.7316031,
-    "ast_hash": "8e2899f0d20d514a69a38f73871b2d24",
-    "semantic_hash": "8e2899f0d20d514a69a38f73871b2d24"
+    "mtime": 1791397917.357462,
+    "ast_hash": "9afc2bd6f5dd2df76942a9aed682055f",
+    "semantic_hash": "9afc2bd6f5dd2df76942a9aed682055f"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -340,7 +340,7 @@
     "semantic_hash": "93ceaca2ef7ce3e2c45c4fe4dbab9bcf"
   },
   "dev/src/main/java/net/decimation/worldgen/WorldGenCommand.java": {
-    "mtime": 1791396954.400868,
+    "mtime": 1791397375.8900952,
     "ast_hash": "b99ecfef72cd38fc80a3b5f0e626d19a",
     "semantic_hash": "b99ecfef72cd38fc80a3b5f0e626d19a"
   },
@@ -520,9 +520,9 @@
     "semantic_hash": "3a2f289d90cd2e4376405e5d75e06e2f"
   },
   "docs/worldgen_architecture.md": {
-    "mtime": 1791397145.3194275,
-    "ast_hash": "f3cd0c867dd1a658c98b4cd0e8cb3704",
-    "semantic_hash": "f3cd0c867dd1a658c98b4cd0e8cb3704"
+    "mtime": 1791397917.3735015,
+    "ast_hash": "0da6262d72beb0750d2a244fd9f0c3cf",
+    "semantic_hash": "0da6262d72beb0750d2a244fd9f0c3cf"
   },
   "dev/src/main/java/net/decimation/worldgen/assets/AssetDir.java": {
     "mtime": 1791395494.3524773,
@@ -575,68 +575,68 @@
     "semantic_hash": "1acb8980a7cae31334bdf9e750c76291"
   },
   "dev/src/main/java/net/decimation/worldgen/building/ApartmentPlanner.java": {
-    "mtime": 1791396867.6934164,
-    "ast_hash": "11555edebd40dd36d014eccc234ef5e7",
-    "semantic_hash": "11555edebd40dd36d014eccc234ef5e7"
+    "mtime": 1791397429.734674,
+    "ast_hash": "65d696d2aeaf65978cf9302cafa27294",
+    "semantic_hash": "65d696d2aeaf65978cf9302cafa27294"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Building.java": {
-    "mtime": 1791396931.9262073,
-    "ast_hash": "df00a96f50ea64db3372caea6d55302a",
-    "semantic_hash": "df00a96f50ea64db3372caea6d55302a"
+    "mtime": 1791397429.734926,
+    "ast_hash": "2c4e6a231bb5f0b47349864a22ff63d3",
+    "semantic_hash": "2c4e6a231bb5f0b47349864a22ff63d3"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Facing.java": {
-    "mtime": 1791396683.60852,
+    "mtime": 1791397375.8913965,
     "ast_hash": "55ae3eaeaab5a817772394e2b2b801d1",
     "semantic_hash": "55ae3eaeaab5a817772394e2b2b801d1"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Furnisher.java": {
-    "mtime": 1791396714.1966434,
+    "mtime": 1791397375.8916306,
     "ast_hash": "7ee6d28323a806bd5aa480c85fbd57d5",
     "semantic_hash": "7ee6d28323a806bd5aa480c85fbd57d5"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Interior.java": {
-    "mtime": 1791396817.0958447,
-    "ast_hash": "db5e8fabe65b6e713c8e23a9dfecef25",
-    "semantic_hash": "db5e8fabe65b6e713c8e23a9dfecef25"
+    "mtime": 1791397429.735139,
+    "ast_hash": "4d7dc1ac2892496ff10671f492a95b66",
+    "semantic_hash": "4d7dc1ac2892496ff10671f492a95b66"
   },
   "dev/src/main/java/net/decimation/worldgen/building/OfficePlanner.java": {
-    "mtime": 1791396867.8919168,
-    "ast_hash": "00e1279b34c960752cb03d2e81115402",
-    "semantic_hash": "00e1279b34c960752cb03d2e81115402"
+    "mtime": 1791397429.7353504,
+    "ast_hash": "96eb0b1aeeeed49089da53732b17a663",
+    "semantic_hash": "96eb0b1aeeeed49089da53732b17a663"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Ruins.java": {
-    "mtime": 1791396735.3514748,
+    "mtime": 1791397375.8922367,
     "ast_hash": "9e5c372aa6da8f67f5a3207a1012ea35",
     "semantic_hash": "9e5c372aa6da8f67f5a3207a1012ea35"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Shell.java": {
-    "mtime": 1791396769.7551427,
-    "ast_hash": "d9e4bf24d0ce14e8cf5b7941687ba61b",
-    "semantic_hash": "d9e4bf24d0ce14e8cf5b7941687ba61b"
+    "mtime": 1791397429.7355978,
+    "ast_hash": "506d52398905305ac7db85decd167d84",
+    "semantic_hash": "506d52398905305ac7db85decd167d84"
   },
   "dev/src/main/java/net/decimation/worldgen/building/ShopPlanner.java": {
-    "mtime": 1791396868.051485,
+    "mtime": 1791397375.8927176,
     "ast_hash": "d042e353640dd2829fa9284df8653daf",
     "semantic_hash": "d042e353640dd2829fa9284df8653daf"
   },
   "dev/src/main/java/net/decimation/worldgen/building/StoreyPlan.java": {
-    "mtime": 1791396683.4609041,
-    "ast_hash": "acdce517195b9397f3e3a97a8d9e0e78",
-    "semantic_hash": "acdce517195b9397f3e3a97a8d9e0e78"
+    "mtime": 1791397429.7357442,
+    "ast_hash": "3832419235077ab50146a523ace4356e",
+    "semantic_hash": "3832419235077ab50146a523ace4356e"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Surfaces.java": {
-    "mtime": 1791396816.964244,
+    "mtime": 1791397375.893093,
     "ast_hash": "235e25b68efe2b5fe3a05d3f92a87844",
     "semantic_hash": "235e25b68efe2b5fe3a05d3f92a87844"
   },
   "dev/src/main/java/net/decimation/worldgen/building/Yard.java": {
-    "mtime": 1791396889.689682,
+    "mtime": 1791397375.89327,
     "ast_hash": "9fda2ad50d16b616b73597b4878f06d3",
     "semantic_hash": "9fda2ad50d16b616b73597b4878f06d3"
   },
   "tools/worlddiff.py": {
-    "mtime": 1791396581.4498203,
-    "ast_hash": "9e323b01d796ea11bf383c56e15100be",
-    "semantic_hash": "9e323b01d796ea11bf383c56e15100be"
+    "mtime": 1791397488.481058,
+    "ast_hash": "e1f5edc1b4b7eec0848d7b133de03c31",
+    "semantic_hash": "e1f5edc1b4b7eec0848d7b133de03c31"
   }
 }

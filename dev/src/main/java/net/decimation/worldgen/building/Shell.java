@@ -74,7 +74,9 @@ final class Shell
         int along = (fx == 0 || fx == b.width - 1) ? z : fx;
         boolean frontWall = fx == 0;
         double decay = b.ruins.decay;
-        if (frontWall && storey == 0 && within <= 2
+        // entrance: 2 high door gap for homes, a gap up to the window head for public buildings
+        int entranceTop = b.kind == Building.APARTMENT ? 2 : b.storeyHeight - 3;
+        if (frontWall && storey == 0 && within <= entranceTop
             && Math.abs(along - b.entranceZ) <= (b.kind == Building.SHOP ? 1 : b.kind == Building.OFFICE ? 1 : 0))
         {
             if (b.kind == Building.APARTMENT && within <= 2 && b.props.officeDoor != null
@@ -132,13 +134,16 @@ final class Shell
 
     private boolean isWindow(int along, int within, int storey, boolean frontWall)
     {
+        // public buildings: window bands from the floor to 2 below the
+        // ceiling layer (2 high at storey height 5, 3 high at 6)
+        int head = b.storeyHeight - 3;
         if (b.kind == Building.SHOP && storey == 0)
         {
-            return frontWall && within >= 1 && within <= 2 && along % 4 != 0;
+            return frontWall && within >= 1 && within <= head && along % 4 != 0;
         }
         if (b.kind == Building.OFFICE)
         {
-            return within >= 1 && within <= 2 && along % 3 != 0;
+            return within >= 1 && within <= head && along % 3 != 0;
         }
         return within == 2 && along % 3 == 1 || (within == 1 && along % 3 == 1 && b.unit(along, storey, 3) < 0.3);
     }
@@ -167,10 +172,10 @@ final class Shell
     }
 
     /**
-     * Stair core: 7 long (a, along fx) x 4 wide (b). Landings at a = 0 and
-     * a = 6. Storey s climbs on lane b 0..1 (even s, from a = 1 up to a = 5)
-     * or b 2..3 (odd s, from a = 5 down to a = 1), one step per block of
-     * storey height; the ceiling layer is open above the run's steps 1+;
+     * Stair core: H + 2 long (a, along fx) x 4 wide (b), H = storey height.
+     * Landings at a = 0 and a = H + 1. Storey s climbs on lane b 0..1 (even
+     * s, from a = 1 up to a = H) or b 2..3 (odd s, from a = H down to a =
+     * 1), one step per block of storey height; the ceiling layer is open above the run's steps 1+;
      * step j sits at height s*H + 1 + j, so the top step lies in the next
      * floor layer and the floor above the lower steps is left open. Returns
      * with meta[0] == Integer.MIN_VALUE for "plain floor here".

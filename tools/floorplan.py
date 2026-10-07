@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import worldcheck as wc  # noqa: E402
 
 PX = 14
-FLOOR = 5
+FLOOR = 5  # storey height when the log line does not say (before 0.23)
 
 # (substring of the block name, colour, letter); first match wins
 STYLE = [
@@ -121,14 +121,17 @@ def main():
     w = wc.World(world_dir)
     names = {v: k for k, v in w.registry().items()}
     names[0] = "minecraft:air"
-    rx = re.compile(r"city (\w+) (\d+)x(\d+), (\d+) floor\(s\), (\w+), footprint (-?\d+),(-?\d+) (b\S+) at -?\d+,(-?\d+),-?\d+")
+    # "storey N" (storey height) since 0.23; older logs are all 5 high
+    rx = re.compile(r"city (\w+) (\d+)x(\d+), (\d+) floor\(s\), (\w+), (?:storey (\d+), )?footprint (-?\d+),(-?\d+) "
+                    r"(b\S+) at -?\d+,(-?\d+),-?\d+")
     per_kind = collections.Counter()
     for line in open(log, errors="ignore"):
         m = rx.search(line)
         if not m:
             continue
-        kind, wd, ld, fl, sty, fx, fz, bid, by = m.groups()
+        kind, wd, ld, fl, sty, sh, fx, fz, bid, by = m.groups()
         wd, ld, fl, fx, fz, by = map(int, (wd, ld, fl, fx, fz, by))
+        floor_h = int(sh) if sh else FLOOR
         if wanted and bid not in wanted:
             continue
         if not wanted:
@@ -143,7 +146,7 @@ def main():
         panels = []
         print("%s %s %dx%d %d floor(s) %s at %d,%d,%d" % (bid, kind, wd, ld, fl, sty, fx, by, fz))
         for s in storeys + ["roof"]:
-            y0 = by + (fl * FLOOR if s == "roof" else s * FLOOR)
+            y0 = by + (fl * floor_h if s == "roof" else s * floor_h)
             cells = {}
             for x in range(fx - 1, fx + wd + 1):
                 for z in range(fz - 1, fz + ld + 1):

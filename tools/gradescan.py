@@ -50,7 +50,7 @@ def surface(w, x, z, top):
 def main():
     world_dir, log = sys.argv[1], sys.argv[2]
     w = wc.World(world_dir)
-    rx = re.compile(r"city (\w+) (\d+)x(\d+), (\d+) floor\(s\), \w+, footprint (-?\d+),(-?\d+) "
+    rx = re.compile(r"city (\w+) (\d+)x(\d+), (\d+) floor\(s\), \w+(?:, storey \d+)?, footprint (-?\d+),(-?\d+) "
                     r"b(-?\d+)_(-?\d+)_(\d) at -?\d+,(-?\d+),-?\d+")
     worst_ring = worst_edge = 0
     steep_all = pairs_all = checked = 0

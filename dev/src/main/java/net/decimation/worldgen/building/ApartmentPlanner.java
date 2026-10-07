@@ -19,7 +19,7 @@ final class ApartmentPlanner
 
     void plan(StoreyPlan sp)
     {
-        sp.markCore(b.coreFx, b.coreFz);
+        sp.markCore(b.coreFx, b.coreFz, b.coreLen);
         // corridor rows: middle (double loaded) or along the low z side
         int c0 = b.doubleLoaded ? b.length / 2 - 1 : 2, c1 = b.doubleLoaded ? b.length / 2 : 3;
         int end = b.coreFx >= 0 ? b.coreFx - 1 : b.width - 3;

@@ -38,15 +38,18 @@ def populated(world_dir, cx, cz):
 def main():
     world_dir, log = sys.argv[1], sys.argv[2]
     w = wc.World(world_dir)
-    # v1: "city K WxL, N floor(s) ID at X,Y,Z"; v2 adds ", STYLE, footprint FX,FZ"
+    # v1: "city K WxL, N floor(s) ID at X,Y,Z"; v2 adds ", STYLE, footprint FX,FZ";
+    # 0.23 adds ", storey H" before footprint
     # and X,Z are then the plan bounds (1 block vine margin), so use FX,FZ
-    rx = re.compile(r"city (\w+) (\d+)x(\d+), (\d+) floor\(s\)(?:, \w+, footprint (-?\d+),(-?\d+))? (b\S+) at (-?\d+),(-?\d+),(-?\d+)")
+    rx = re.compile(r"city (\w+) (\d+)x(\d+), (\d+) floor\(s\)(?:, \w+(?:, storey (\d+))?, footprint (-?\d+),(-?\d+))? (b\S+) at (-?\d+),(-?\d+),(-?\d+)")
     bugs = edges = total = 0
     for line in open(log, errors="ignore"):
         m = rx.search(line)
         if not m:
             continue
-        kind, wd, ld, fl, fx, fz, bid, x0, by, z0 = m.groups()
+        kind, wd, ld, fl, sh, fx, fz, bid, x0, by, z0 = m.groups()
+        # whole wall height: storey height from the log (0.23+), else 5 (0.19+)
+        wall_h = int(fl) * (int(sh) if sh else 5)
         if fx is not None:
             x0, z0 = fx, fz
         wd, ld, fl, x0, by, z0 = int(wd), int(ld), int(fl), int(x0), int(by), int(z0)
@@ -59,7 +62,7 @@ def main():
             owners = set()
             for (x, z) in cols:
                 owners.add(((x - 8) >> 4, (z - 8) >> 4))
-                for y in range(by + 1, by + fl * 4):
+                for y in range(by + 1, by + wall_h):
                     b = w.block(x, y, z)
                     if b is None:
                         continue

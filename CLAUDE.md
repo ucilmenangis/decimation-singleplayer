@@ -486,6 +486,11 @@ of the last session:
   Surfaces, Interior, Ruins, Yard; code map in
   docs/worldgen_architecture.md); storey height per building (5); 0
   blocks differ from 0.22.0 in the seed 1 spawn area (fresh worlds).
+  v0.23.0: offices and shops 6 high storeys (user decision), stair core
+  H + 2 long; building log lines carry "storey H" (floorplan, wallscan,
+  gradescan read it; wallscan now scans the full wall height). Seed 1
+  spawn area vs 0.22.1: changes only inside office / shop footprints;
+  0 real missing walls, upper storeys 92 to 99% reachable.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

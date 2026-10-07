@@ -190,3 +190,20 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
 - 34..47 (b30, b34): hotel / cell corridors, rows of security doors,
   redstone lamps in the ceiling, empty.
 - 54..56 (b62, b63): empty office hall, stone corridor with lamps.
+
+## audit_v0.23/ (-Paudit, 0.23.0: offices and shops 6 high)
+- 0..4 apartment b0_1_0 (17x14, storey 5): unchanged look: stone brick
+  facade with vines, corridor with bike and benches, plaster walls,
+  kitchen with tiles, roof with leaves.
+- 5 office b0_1_1 (24x26, 11 floors, storey 6) facade: camera ends up
+  close above the window heads, mostly window recesses and vines.
+- 6, 7 office storey 1 and 2: open plan desk rows with office chairs,
+  3 high window bands, ceiling vents and light panels under the ceiling,
+  stone brick stair core; reads roomier than the 5 high offices.
+- 8 office ground: desk rows, stair core, broken glass bits in view.
+- 9 office roof: stone with leaves, parapet.
+- 10 shop b0_1_2 (12x15, 2 floors, storey 6) facade: orange clay, tall
+  front, cars parked in front. 11: stockroom with shelves and boxes.
+- 12, 13 shop storey 1: camera faces a plaster wall with a door (stock
+  partition) from up close: poor camera spot, not a building defect.
+- 14 shop roof with leaves.

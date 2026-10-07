@@ -122,23 +122,24 @@ public final class StoreyPlan
         }
     }
 
-    /** Stair core cells (7 along fx x 4) with side walls, open toward the front landing. */
-    void markCore(int coreFx, int coreFz)
+    /** Stair core cells (len along fx x 4) with side walls, open toward the front landing. */
+    void markCore(int coreFx, int coreFz, int len)
     {
         if (coreFx < 0)
         {
             return;
         }
-        for (int fx = coreFx; fx <= coreFx + 6 && fx < width - 1; fx++)
+        int last = coreFx + len - 1;
+        for (int fx = coreFx; fx <= last && fx < width - 1; fx++)
         {
             for (int z = coreFz; z <= coreFz + 3; z++)
             {
                 cells[fx][z] = CORE;
             }
         }
-        markRoom(coreFx - 1, coreFz - 1, coreFx + 6, coreFz + 4, R_CORRIDOR);
-        wallLine(coreFx + 1, coreFz - 1, coreFx + 6, coreFz - 1, WALL);
-        wallLine(coreFx + 1, coreFz + 4, coreFx + 6, coreFz + 4, WALL);
+        markRoom(coreFx - 1, coreFz - 1, last, coreFz + 4, R_CORRIDOR);
+        wallLine(coreFx + 1, coreFz - 1, last, coreFz - 1, WALL);
+        wallLine(coreFx + 1, coreFz + 4, last, coreFz + 4, WALL);
     }
 
     /** Cells no planner gave a room get the building's main room kind. */

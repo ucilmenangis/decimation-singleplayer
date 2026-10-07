@@ -292,7 +292,7 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   out of Building without behaviour change. User decision 8 Oktober:
   public buildings 6 high storeys, homes / apartments 5 (after step 2).
   Step 2 DONE v0.22.1 (Building split into worldgen/building/, identical
-  output). Next: offices and shops 6 high (0.23.0), then step 3 (types
+  output). Offices and shops 6 high DONE v0.23.0. Next: step 3 (types
   as JSON, rotated stair core).
 
 ---

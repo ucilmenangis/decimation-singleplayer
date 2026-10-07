@@ -41,8 +41,8 @@ public class Building implements Graded
     /**
      * Storey height: floor layer (within 0), air (1 .. H-2), the storey's own
      * ceiling layer (within H-1). 5 since 0.19 (with 4 the floor block was
-     * also the ceiling below). Per building since 0.23: public buildings
-     * will get 6 (user decision 2026-10-08), all 5 for now.
+     * also the ceiling below). Per building since 0.23: offices and shops
+     * 6 (user decision 2026-10-08: public buildings), homes 5.
      */
     public final int storeyHeight;
     public final long seed;
@@ -56,6 +56,8 @@ public class Building implements Graded
     final boolean doubleLoaded;
     /** Stair core origin (fx, fz) or -1 for a ladder shaft. */
     final int coreFx, coreFz;
+    /** Stair core length along fx: a landing, one step per block of storey height, a landing. */
+    final int coreLen;
 
     final Shell shell;
     final Ruins ruins;
@@ -100,14 +102,17 @@ public class Building implements Graded
         this.style = style;
         this.seed = seed;
         this.props = props;
-        this.storeyHeight = 5;
+        // public buildings get a taller storey (4 air): room for hanging
+        // lights and a less cramped look (user decision 2026-10-08)
+        this.storeyHeight = kind == OFFICE || kind == SHOP ? 6 : 5;
+        this.coreLen = storeyHeight + 2;
 
         // ---- vertical circulation and corridor layout
         // apartments need the width for flats: the 7 long stair core left a
         // 12 wide block no room for a single flat (empty storeys, review
         // 0.21); narrow blocks climb by the corner ladder shaft instead
         boolean core = width >= (kind == APARTMENT ? 16 : 12) && length >= 10 && kind != SHOP;
-        coreFx = core ? width - 8 : -1;
+        coreFx = core ? width - 1 - coreLen : -1;
         // shallow apartment blocks get a corridor along one side (flats ~6
         // deep) instead of a middle corridor leaving 2 to 3 deep flats
         doubleLoaded = kind != APARTMENT || length >= 18;
@@ -196,7 +201,7 @@ public class Building implements Graded
     public String describe()
     {
         return "city " + KIND_NAME[kind] + " " + width + "x" + length + ", " + floors + " floor(s), "
-            + STYLE_NAME[style] + ", footprint " + minX + "," + minZ;
+            + STYLE_NAME[style] + ", storey " + storeyHeight + ", footprint " + minX + "," + minZ;
     }
 
     public Block blockAt(int px, int ly, int pz, int[] meta)
@@ -212,7 +217,8 @@ public class Building implements Graded
         // the way up (ladder shaft or stair core) survives a collapse, so
         // every storey stays reachable
         boolean ladderShaft = coreFx < 0 && z == length - 2 && fx >= width - 2;
-        boolean stairCore = coreFx >= 0 && fx >= coreFx - 1 && fx <= coreFx + 7 && z >= coreFz - 1 && z <= coreFz + 4;
+        boolean stairCore = coreFx >= 0 && fx >= coreFx - 1 && fx <= coreFx + coreLen && z >= coreFz - 1
+            && z <= coreFz + 4;
         if (!ladderShaft && !stairCore && ruins.collapsed(fx, ly, z))
         {
             return ruins.rubbleBelowCollapse(fx, ly, z, meta);
@@ -225,7 +231,7 @@ public class Building implements Graded
         boolean edge = fx == 0 || fx == width - 1 || z == 0 || z == length - 1;
 
         // stair core first: it cuts through floor layers
-        if (coreFx >= 0 && fx >= coreFx && fx <= coreFx + 6 && z >= coreFz && z <= coreFz + 3)
+        if (coreFx >= 0 && fx >= coreFx && fx <= coreFx + coreLen - 1 && z >= coreFz && z <= coreFz + 3)
         {
             Block b = shell.core(fx - coreFx, z - coreFz, storey, within, meta);
             if (b != null || meta[0] != Integer.MIN_VALUE)

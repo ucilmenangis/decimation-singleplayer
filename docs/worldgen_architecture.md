@@ -121,9 +121,13 @@ docs/references/decimation_maps.md and deceasedcraft_buildings.md:
 - DECIDED (user, 8 Oktober 2026): storey height per building type.
   Public buildings (office, police, hospital, shop, military) get 6 high
   storeys (floor, 4 air, ceiling); houses and apartments stay 5 (floor,
-  3 air, ceiling). Plan: step 2 turns Building.FLOOR into a per building
-  storey height (still 5 everywhere, identical output), then a separate
-  version switches offices and shops to 6 (stair runs 6 steps).
+  3 air, ceiling). DONE 0.23.0: offices and shops 6 high (stair core
+  H + 2 long, 6 step runs; office and shop window bands and entrances 3
+  high; glass partitions up to the lintel; doors stay 2 high with wall
+  above). Police, hospital, military get 6 when they exist.
+  Furniture sets assume 3 air (layer 2 = under the ceiling): a set used
+  in a 6 high storey would need its top layer moved up `[not verified]`
+  (only apartments use sets so far).
 
 ## Code map (0.22.1, `dev/src/main/java/net/decimation/worldgen/building/`)
 

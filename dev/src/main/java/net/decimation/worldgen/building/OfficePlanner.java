@@ -24,7 +24,7 @@ final class OfficePlanner
     void plan(StoreyPlan sp)
     {
         Building.Props props = b.props;
-        sp.markCore(b.coreFx, b.coreFz);
+        sp.markCore(b.coreFx, b.coreFz, b.coreLen);
         int coreEnd = b.coreFx >= 0 ? b.coreFx - 2 : b.width - 3;
         int length = b.length;
         if (sp.ground)

@@ -39,15 +39,15 @@ final class Interior
                 }
                 return null;
             case StoreyPlan.GLASS:
-                if (within <= 2 && b.unit(fx, ly, z) > 0.5 + b.ruins.decay * 0.3)
+                if (within < top && b.unit(fx, ly, z) > 0.5 + b.ruins.decay * 0.3)
                 {
                     return Blocks.glass_pane;
                 }
                 return within == top ? s.lintel(meta) : null;
             case StoreyPlan.DOOR:
-                if (within == top)
+                if (within > 2)
                 {
-                    return s.lintel(meta);
+                    return s.lintel(meta); // doors are 2 high; wall above up to the ceiling
                 }
                 return s.door(sp, fx, z, storey, within, meta);
             case StoreyPlan.LINING:
