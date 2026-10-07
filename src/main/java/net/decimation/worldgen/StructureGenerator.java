@@ -95,6 +95,8 @@ public class StructureGenerator implements IWorldGenerator
     private final Set<Block> roadBlocks;
     /** Surface for generated city streets; null disables street painting. */
     private final Block streetBlock;
+    /** Procedural city blocks for CITY sectors; null keeps the old city_ schematics. */
+    private final CityDistrict city;
     private boolean disabled;
     private int errors;
     private boolean loggedBadId;
@@ -102,12 +104,14 @@ public class StructureGenerator implements IWorldGenerator
     public StructureGenerator(List<Schematic> schematics,
                               java.util.Map<Integer, Sub> substitutions,
                               Set<Block> roadBlocks,
-                              Block streetBlock)
+                              Block streetBlock,
+                              CityDistrict city)
     {
         this.schematics = schematics;
         this.substitutions = substitutions;
         this.roadBlocks = roadBlocks;
         this.streetBlock = streetBlock;
+        this.city = city;
     }
 
     @Override
@@ -153,6 +157,29 @@ public class StructureGenerator implements IWorldGenerator
         return MIL;
     }
 
+    /** Sector of a chunk, for the city planner. */
+    int sectorOf(World world, int chunkX, int chunkZ)
+    {
+        return sector(world, chunkX, chunkZ);
+    }
+
+    /** Y of the top soil block: ground() minus trunks, leaves and plants. */
+    static int soilTop(World world, int x, int z)
+    {
+        int y = ground(world, x, z) - 1;
+        while (y > 4 && clearable(world.getBlock(x, y, z)))
+        {
+            y--;
+        }
+        return y;
+    }
+
+    /** Water directly above a soil block (ground() skips water). */
+    static boolean waterAbove(World world, int x, int y, int z)
+    {
+        return isWater(world, x, y + 1, z);
+    }
+
     /** Schematics allowed in a sector: its own prefix + untagged ones. */
     private List<Schematic> pool(int sector)
     {
@@ -185,6 +212,11 @@ public class StructureGenerator implements IWorldGenerator
         if (sector == CITY && streetBlock != null)
         {
             paintStreets(world, chunkX, chunkZ);
+        }
+        if (sector == CITY && city != null)
+        {
+            city.populate(world, chunkX, chunkZ, this);
+            return; // city blocks replace the small city_ schematics
         }
         List<Schematic> pool = pool(sector);
         if (pool.isEmpty())

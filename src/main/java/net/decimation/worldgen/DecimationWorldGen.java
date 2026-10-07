@@ -93,7 +93,8 @@ public class DecimationWorldGen
     {
         GameRegistry.registerWorldGenerator(
             new StructureGenerator(schematics, buildSubstitutions(), roadBlocks(),
-                                   Block.getBlockFromName("deci:BlockRoad")),
+                                   Block.getBlockFromName("deci:BlockRoad"),
+                                   new CityDistrict(cityProps())),
             100);
         FMLLog.info("[%s] structure generator registered", MODID);
 
@@ -211,6 +212,32 @@ public class DecimationWorldGen
         add(subs, 159, 15, Sub.RANDOM, "deci:BlockHedgehog",
             "deci:BlockSkeletonGround");                              // black
         return subs;
+    }
+
+    /** Decimation crates and furniture for procedural buildings, by registry name. */
+    private Building.Props cityProps()
+    {
+        Building.Props p = new Building.Props();
+        p.crates = resolve("deci:BlockWoodCrate", "deci:BlockWoodCrate", "deci:BlockMedicalCrate",
+                           "deci:BlockPoliceCrate", "deci:BlockAmmoCrate");
+        p.furniture = resolve("deci:BlockWoodTable", "deci:BlockWoodTable2", "deci:BlockChair",
+                              "deci:BlockOfficeChair", "deci:BlockMetalShelf", "deci:BlockMetalShelf_Empty",
+                              "deci:BlockTrashcan", "deci:BlockCardboardBoxes1", "deci:BlockTrashBag1");
+        return p;
+    }
+
+    private static Block[] resolve(String... names)
+    {
+        List<Block> out = new ArrayList<Block>();
+        for (String n : names)
+        {
+            Block b = Block.getBlockFromName(n);
+            if (b != null)
+            {
+                out.add(b);
+            }
+        }
+        return out.toArray(new Block[0]);
     }
 
     /** Road-surface blocks, used by FACE_ROAD prop orientation. */
