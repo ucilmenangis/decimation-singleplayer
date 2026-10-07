@@ -142,6 +142,38 @@ public final class Slices
         return y;
     }
 
+    /**
+     * Rebuilds an already placed plan in loaded chunks with the current code
+     * and furniture sets (/deciworldgen rebuild): clears its bounds above
+     * the stored floor height, then writes it whole, lot grading included.
+     * Returns false when the plan was never placed (or cancelled).
+     */
+    public static boolean rebuild(World world, Plan p)
+    {
+        Integer baseY = StructureData.get(world).baseY(p.id());
+        if (baseY == null || baseY == StructureData.CANCELLED)
+        {
+            return false;
+        }
+        int top = baseY + p.height() + p.clearAbove() + 6;
+        for (int x = p.minX(); x <= p.maxX(); x++)
+        {
+            for (int z = p.minZ(); z <= p.maxZ(); z++)
+            {
+                for (int y = baseY; y <= Math.min(255, top); y++)
+                {
+                    if (!world.isAirBlock(x, y, z))
+                    {
+                        world.setBlock(x, y, z, Blocks.air, 0, 2);
+                    }
+                }
+            }
+        }
+        int[] e = extent(p);
+        write(world, p, baseY, e[0], e[1], e[2], e[3]);
+        return true;
+    }
+
     private static void write(World world, Plan p, int baseY, int x0, int z0, int x1, int z1)
     {
         int[] meta = new int[1];

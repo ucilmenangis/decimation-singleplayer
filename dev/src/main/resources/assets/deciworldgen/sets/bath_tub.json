@@ -1,0 +1,12 @@
+{
+  "name": "bath_tub",
+  "rooms": ["bath"],
+  "weight": 6,
+  "comment": "Bathtub of two cauldrons along the wall.",
+  "layers": [
+    ["uu"]
+  ],
+  "palette": {
+    "u": {"block": "minecraft:cauldron"}
+  }
+}

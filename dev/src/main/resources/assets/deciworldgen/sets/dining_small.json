@@ -1,0 +1,14 @@
+{
+  "name": "dining_small",
+  "rooms": ["dining"],
+  "weight": 6,
+  "comment": "Small table against the wall with one chair facing it.",
+  "layers": [
+    ["T",
+     "c"]
+  ],
+  "palette": {
+    "T": {"pick": ["deci:BlockWoodTable2", "deci:BlockMetalTable"], "type": "prop", "face": "left"},
+    "c": {"block": "deci:BlockChair", "type": "prop", "face": "in"}
+  }
+}

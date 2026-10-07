@@ -37,7 +37,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.19.0",
+     version = "0.20.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -129,6 +129,12 @@ public class DecimationWorldGen
                 }
             }
         }
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(cpw.mods.fml.common.event.FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new WorldGenCommand());
     }
 
     @Mod.EventHandler
@@ -309,6 +315,9 @@ public class DecimationWorldGen
         p.officeDoor = one("deci:Door_Office_1");
         p.metalDoor = one("deci:Door_Metal_3");
         p.trashBags = resolve("deci:BlockTrashBag1", "deci:BlockTrashBag2");
+        // furniture sets: built-ins copied to config/decimation_worldgen/sets/ once, then read from there
+        net.decimation.worldgen.sets.FurnitureSets.init(new File(cpw.mods.fml.common.Loader.instance().getConfigDir(),
+                                                                  "decimation_worldgen"));
         // interior surfaces and fixtures (docs/interior_spec.md section 2)
         for (Object o : cpw.mods.fml.common.registry.GameData.getBlockRegistry().getKeys())
         {

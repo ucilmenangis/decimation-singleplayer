@@ -1,0 +1,15 @@
+{
+  "name": "dining_table",
+  "rooms": ["dining"],
+  "weight": 10,
+  "comment": "Table against the wall, a chair each side facing it (a faces right toward the table, b faces left).",
+  "layers": [
+    ["aTb",
+     " . "]
+  ],
+  "palette": {
+    "T": {"pick": ["deci:BlockWoodTable", "deci:BlockWoodTable2"], "type": "prop", "face": "left"},
+    "a": {"block": "deci:BlockChair", "type": "prop", "face": "right"},
+    "b": {"block": "deci:BlockChair", "type": "prop", "face": "left"}
+  }
+}

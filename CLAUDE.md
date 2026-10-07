@@ -93,6 +93,9 @@ Knowledge index:
 - `docs/interior_spec.md`: design spec for interiors and exteriors
   (surfaces, doors, room programs, story / decay layer, exterior, how to
   verify, building categories); round 2 step 4c, approved 2026-10-07.
+- `docs/furniture_sets.md`: data driven furniture sets (JSON format,
+  placement rules, preview mode, live editing: /deciworldgen reload /
+  rebuild, tools/hotswap.py).
 - `docs/prop_catalogue.md`: what every Decimation block looks like, its
   size and facing (from the prop gallery); doors use vanilla door meta.
 - `docs/shots_index.md`: what every saved screenshot in `docs/shots/`
@@ -243,6 +246,10 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   takes `type=decimation` for the world type.
 - `python3 tools/gradescan.py WORLD LOG`: graded city yards (floor vs ground
   at the walls, steep neighbour pairs, lot edge vs sidewalk, parked cars).
+- Live loop (user request 2026-10-07: no restart per change): game via
+  `./gradlew runClient -Photswap`, code via `python3 tools/hotswap.py`
+  (method bodies only), sets via `/deciworldgen reload`, then
+  `/deciworldgen rebuild [radius]` regenerates nearby buildings in place.
 - Screenshot modes of the autotest (all switch to peaceful and remove
   mobs first, lock the camera each tick, restore fov / gamma at the end):
   default = 3 street views; `-Paudit` = facade / ground / storey 1 / roof
@@ -433,6 +440,10 @@ of the last session:
   (Building.FLOOR = 5, CEIL = 4), 5 step stair runs; after the user's
   0.18 review ("not ready to be called interior"), see
   docs/interior_spec.md section 8b for the revised order.
+  v0.20.0: furniture sets (docs/furniture_sets.md), plaster lining inside
+  apartment outer walls (LINING cells, window recesses), corner entry
+  doors, one-sided corridor for apartment blocks under 18 deep, closets,
+  /deciworldgen reload | rebuild, -Photswap + tools/hotswap.py.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

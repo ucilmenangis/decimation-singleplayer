@@ -39,12 +39,18 @@ public class Building implements Graded
 
     // floor plan cell codes
     private static final byte OPEN = 0, WALL = 1, DOOR = 2, GLASS = 3, FURN = 4, CORE = 5;
+    /** Plaster lining on the inner face of an outer wall (outer walls are 2 thick where used). */
+    private static final byte LINING = 6;
     // room codes (room grid beside each plan): decide floors, lights, later room programs
     static final byte R_NONE = 0, R_CORRIDOR = 1, R_LIVING = 2, R_BEDROOM = 3, R_LOBBY = 4, R_OFFICE = 5,
         R_MEETING = 6, R_STORAGE = 7, R_SHOP = 8, R_STOCK = 9, R_KITCHEN = 10, R_BATH = 11;
 
     public final String id;
     public final int minX, minZ, width, length, floors, kind, front, style;
+    /** z of the front entrance (and the front path): the corridor's row. */
+    private final int entranceZ;
+    /** Apartments: corridor down the middle with flats on both sides (deep buildings only). */
+    private final boolean doubleLoaded;
     public final long seed;
     private final Props props;
     /** Door used for this building's unit / room doors (null: none resolved). */
@@ -68,6 +74,9 @@ public class Building implements Graded
     /** Furniture layer at within 2 (2 high pieces: wardrobes, bookcases), same cells as FURN. */
     private final Block[][] groundFurn2, upperFurn2;
     private final byte[][] groundFurn2Meta, upperFurn2Meta;
+    /** Furniture layer at within 3, under the ceiling (wall cabinets). */
+    private final Block[][] groundFurn3, upperFurn3;
+    private final byte[][] groundFurn3Meta, upperFurn3Meta;
     private final byte[][] groundFurnMeta, upperFurnMeta;
     private final byte[][] groundRoom, upperRoom;
     // surfaces chosen per building (Decimation blocks, null = fall back to vanilla)
@@ -175,7 +184,11 @@ public class Building implements Graded
         // ---- floor plans
         boolean core = width >= 12 && length >= 10 && kind != SHOP;
         coreFx = core ? width - 8 : -1;
-        coreFz = core ? length / 2 - 2 : -1;
+        // shallow apartment blocks get a corridor along one side (flats ~6
+        // deep) instead of a middle corridor leaving 2 to 3 deep flats
+        doubleLoaded = kind != APARTMENT || length >= 18;
+        coreFz = !core ? -1 : doubleLoaded ? length / 2 - 2 : 2;
+        entranceZ = doubleLoaded ? length / 2 : 2;
         groundPlan = new byte[width][length];
         upperPlan = new byte[width][length];
         groundFurn = new Block[width][length];
@@ -184,6 +197,10 @@ public class Building implements Graded
         upperFurn2 = new Block[width][length];
         groundFurn2Meta = new byte[width][length];
         upperFurn2Meta = new byte[width][length];
+        groundFurn3 = new Block[width][length];
+        upperFurn3 = new Block[width][length];
+        groundFurn3Meta = new byte[width][length];
+        upperFurn3Meta = new byte[width][length];
         groundFurnMeta = new byte[width][length];
         upperFurnMeta = new byte[width][length];
         groundRoom = new byte[width][length];
@@ -200,6 +217,8 @@ public class Building implements Graded
                 planShop(upperPlan, upperFurn, upperFurnMeta, false);
                 break;
             default:
+                lining(groundPlan);
+                lining(upperPlan);
                 planApartment(groundPlan, groundFurn, groundFurnMeta, true);
                 planApartment(upperPlan, upperFurn, upperFurnMeta, false);
         }
@@ -284,7 +303,7 @@ public class Building implements Graded
         // front yard: between the front wall and the street edge of the lot
         boolean frontYard = front == FRONT_WEST ? x < minX : x > bx1;
         int setback = front == FRONT_WEST ? minX - lotX : lotMaxX() - bx1;
-        boolean path = frontYard && Math.abs(z - (minZ + length / 2)) <= 1;
+        boolean path = frontYard && Math.abs(z - (minZ + entranceZ)) <= 1;
         // asphalt only where the ground is near the floor level: on a slope
         // the strip stays a grassy embankment instead of a tilted car park
         boolean parking = frontYard && setback >= MIN_YARD && kind != APARTMENT && props.road != null
@@ -337,7 +356,7 @@ public class Building implements Graded
         // nose-in wrecks across the middle of the parking strip
         int stripMid = front == FRONT_WEST ? lotX + (setback - 1) / 2 : lotMaxX() - (setback - 1) / 2;
         if (parking && !path && x == stripMid && props.cars.length > 0
-            && (z - lotZ) % 4 == 2 && Math.abs(z - (minZ + length / 2)) >= 3
+            && (z - lotZ) % 4 == 2 && Math.abs(z - (minZ + entranceZ)) >= 3
             && Math.abs(target - baseY) <= 1 && unit(x, 77, z) < 0.45)
         {
             Block car = props.cars[(int) (unit(x, 78, z) * props.cars.length)];
@@ -354,9 +373,13 @@ public class Building implements Graded
      */
     int[] viewCell(int storey)
     {
+        return viewCell(storey, kind == APARTMENT ? R_LIVING : kind == OFFICE ? R_OFFICE : R_SHOP);
+    }
+
+    int[] viewCell(int storey, byte want)
+    {
         byte[][] plan = storey == 0 ? groundPlan : upperPlan;
         byte[][] rooms = storey == 0 ? groundRoom : upperRoom;
-        byte want = kind == APARTMENT ? R_LIVING : kind == OFFICE ? R_OFFICE : R_SHOP;
         int best = Integer.MAX_VALUE, bx = -1, bz = -1;
         for (int fx = 1; fx < width - 1; fx++)
         {
@@ -490,7 +513,25 @@ public class Building implements Graded
                     return lintel(meta);
                 }
                 return door(plan, fx, z, storey, within, meta);
+            case LINING:
+                if (liningOpen(fx, z, storey, within))
+                {
+                    return null; // window recess / entrance passage
+                }
+                meta[0] = 0;
+                return within == 1 ? (wallBottom != null ? wallBottom : Blocks.planks)
+                    : (wallTop != null ? wallTop : Blocks.planks);
             case FURN:
+                if (within == 3)
+                {
+                    Block b3 = (storey == 0 ? groundFurn3 : upperFurn3)[fx][z];
+                    if (b3 != null)
+                    {
+                        meta[0] = (storey == 0 ? groundFurn3Meta : upperFurn3Meta)[fx][z];
+                        return b3;
+                    }
+                    return ceiling((storey == 0 ? groundRoom : upperRoom)[fx][z], fx, z, storey, meta);
+                }
                 if (within == 2)
                 {
                     return furniture2(fx, z, storey, meta);
@@ -566,7 +607,7 @@ public class Building implements Graded
         int span = (fx == 0 || fx == width - 1) ? length : width;
         boolean frontWall = fx == 0;
         if (frontWall && storey == 0 && within <= 2
-            && Math.abs(along - span / 2) <= (kind == SHOP ? 1 : kind == OFFICE ? 1 : 0))
+            && Math.abs(along - entranceZ) <= (kind == SHOP ? 1 : kind == OFFICE ? 1 : 0))
         {
             if (kind == APARTMENT && within <= 2 && props.officeDoor != null && unit(3, storey, along) > decay)
             {
@@ -1102,7 +1143,7 @@ public class Building implements Graded
     private Block ceilingLayer(byte cell, byte room, int fx, int storey, int z, int[] meta)
     {
         meta[0] = 0;
-        if (cell == WALL || cell == DOOR || cell == GLASS)
+        if (cell == WALL || cell == DOOR || cell == GLASS || cell == LINING)
         {
             return wallTop != null ? wallTop : Blocks.planks;
         }
@@ -1216,21 +1257,61 @@ public class Building implements Graded
         wallLine(plan, coreFx + 1, coreFz + 4, coreFx + 6, coreFz + 4, WALL);
     }
 
+    /** Marks the ring just inside the outer walls as plaster lining (2 thick outer walls). */
+    private void lining(byte[][] plan)
+    {
+        for (int fx = 1; fx < width - 1; fx++)
+        {
+            for (int z = 1; z < length - 1; z++)
+            {
+                if (fx == 1 || z == 1 || fx == width - 2 || z == length - 2)
+                {
+                    plan[fx][z] = LINING;
+                }
+            }
+        }
+    }
+
+    /**
+     * A lining cell stays open where the outer wall next to it is open at
+     * that height (window, broken window, entrance): a recess, not a wall.
+     */
+    private boolean liningOpen(int fx, int z, int storey, int within)
+    {
+        int[] tmp = new int[1];
+        int ly = storey * FLOOR + within;
+        int[][] around = {{fx - 1, z}, {fx + 1, z}, {fx, z - 1}, {fx, z + 1}};
+        for (int[] n : around)
+        {
+            if (n[0] == 0 || n[1] == 0 || n[0] == width - 1 || n[1] == length - 1)
+            {
+                Block w = outerWall(n[0], ly, n[1], storey, within, tmp);
+                if (w == null || w == Blocks.glass_pane || w == Blocks.stained_glass_pane)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Apartment storey: a corridor along fx through the middle, flats on one
+     * or both sides. Interior starts at 2 (ring 1 is the wall lining).
+     */
     private void planApartment(byte[][] plan, Block[][] furn, byte[][] fm, boolean ground)
     {
         markCore(plan);
-        int c0 = length / 2 - 1, c1 = length / 2;      // corridor rows
-        int end = coreFx >= 0 ? coreFx - 1 : width - 2;
-        boolean doubleLoaded = length >= 11;
+        // corridor rows: middle (double loaded) or along the low z side
+        int c0 = doubleLoaded ? length / 2 - 1 : 2, c1 = doubleLoaded ? length / 2 : 3;
+        int end = coreFx >= 0 ? coreFx - 1 : width - 3;
         markRoom(plan, 1, c0, end, c1, R_CORRIDOR);
-        // corridor walls
         if (doubleLoaded)
         {
-            wallLine(plan, 1, c0 - 1, end, c0 - 1, WALL);
+            wallLine(plan, 2, c0 - 1, end, c0 - 1, WALL);
         }
-        wallLine(plan, 1, c1 + 1, end, c1 + 1, WALL);
-        // units along the corridor
-        int fx = 1;
+        wallLine(plan, 2, c1 + 1, end, c1 + 1, WALL);
+        int fx = 2;
         int unitNo = 0;
         while (fx < end - 2)
         {
@@ -1238,214 +1319,150 @@ public class Building implements Graded
             int ux0 = fx, ux1 = fx + len - 1;
             if (ux1 < end - 1)
             {
-                wallLine(plan, ux1 + 1, 1, ux1 + 1, c0 - 2, WALL);
-                wallLine(plan, ux1 + 1, c1 + 2, ux1 + 1, length - 2, WALL);
+                wallLine(plan, ux1 + 1, 2, ux1 + 1, c0 - 2, WALL);
+                wallLine(plan, ux1 + 1, c1 + 2, ux1 + 1, length - 3, WALL);
             }
-            int door = (ux0 + ux1) / 2;
+            // entry door near a corner (as in real flats): leaves a long free
+            // wall for the kitchen run; the side alternates per flat
+            boolean entryLow = unit(ux0, unitNo, 42) < 0.5;
+            int door = entryLow ? ux0 : ux1;
             if (doubleLoaded)
             {
                 plan[door][c0 - 1] = DOOR;
-                apartmentUnit(plan, furn, fm, ux0, ux1, 1, c0 - 2, false, ground && fx <= 2);
+                apartmentUnit(plan, furn, fm, ux0, ux1, 2, c0 - 2, false, ground && fx <= 3, door);
             }
             plan[door][c1 + 1] = DOOR;
             // lobby on one side of the entrance only, a furnished flat opposite
-            apartmentUnit(plan, furn, fm, ux0, ux1, c1 + 2, length - 2, true, ground && fx <= 2 && !doubleLoaded);
+            apartmentUnit(plan, furn, fm, ux0, ux1, c1 + 2, length - 3, true, ground && fx <= 3 && !doubleLoaded, door);
             fx = ux1 + 2;
             unitNo++;
         }
     }
 
     /**
-     * One flat (docs/interior_spec.md section 4): living part on the corridor
-     * side (kitchen run on the far side wall, dining table, sofa facing a TV),
-     * bedroom on the window side (bed head against the wall, nightstand,
-     * wardrobe), a tiled bathroom in wider flats. Rows are counted from the
-     * corridor (k = 0 next to the entry door). The line from the entry door
-     * to the bedroom door stays free.
+     * One flat, furnished with furniture SETS (docs/furniture_sets.md):
+     * living part on the corridor side (kitchen set, living set, dining
+     * set), bedroom on the window side (bed, wardrobe, desk), a bathroom in
+     * wider flats. Rows k count from the corridor. The walking line from the
+     * entry door to the bedroom (and bathroom) door is kept free.
      */
     private void apartmentUnit(byte[][] plan, Block[][] furn, byte[][] fm, int fx0, int fx1,
-                               int z0, int z1, boolean corridorAtLowZ, boolean lobby)
+                               int z0, int z1, boolean corridorAtLowZ, boolean lobby, int entry)
     {
         if (z1 - z0 < 1 || fx1 - fx0 < 2)
         {
             return;
         }
+        boolean[][] keep = new boolean[width][length];
+        int salt = fx0 * 7 + z0 * 13 + (plan == groundPlan ? 0 : 1000);
+        keep[entry][row(z0, z1, corridorAtLowZ, 0)] = true;
         if (lobby)
         {
             markRoom(plan, fx0, z0, fx1, z1, R_LOBBY);
-            lobby(plan, furn, fm, fx0, fx1, z0, z1, corridorAtLowZ);
+            furnish(plan, furn, fm, keep, fx0, z0, fx1, z1, "lobby", salt);
+            furnish(plan, furn, fm, keep, fx0, z0, fx1, z1, "lobby", salt + 1);
             return;
         }
         final int depth = z1 - z0 + 1, w = fx1 - fx0 + 1;
-        final int in = corridorAtLowZ ? 1 : -1; // +z direction into the flat
+        if (w < 4 || depth < 3)
+        {
+            // a leftover sliver is no flat: a storage closet
+            markRoom(plan, fx0, z0, fx1, z1, R_STORAGE);
+            furnish(plan, furn, fm, keep, fx0, z0, fx1, z1, "closet", salt);
+            return;
+        }
         int ks = depth >= 5 ? depth / 2 : -1;    // split wall row (k), -1 = studio
-        int entry = (fx0 + fx1) / 2;
-        // a bathroom takes the 2 far columns of the bedroom in wider flats; the
-        // bedroom door must then open left of the bathroom wall (fx1 - 2)
-        boolean bath = ks >= 0 && w >= 6 && depth - ks - 1 >= 3;
-        int bedDoor = bath ? Math.min(entry, fx1 - 3) : entry + (w > 3 ? 1 : 0);
+        boolean bath = ks >= 0 && w >= 5 && depth - ks - 1 >= 2;
+        boolean entryLow = entry == fx0;
+        int bedDoor = entry; // bedroom door in line with the entry; the bathroom takes the far end
         markRoom(plan, fx0, z0, fx1, z1, R_LIVING);
         int livingRows = ks >= 0 ? ks : depth;
+        for (int k = 0; k < livingRows; k++)
+        {
+            keep[entry][row(z0, z1, corridorAtLowZ, k)] = true; // straight line to the bedroom door
+        }
+        int lz0 = Math.min(row(z0, z1, corridorAtLowZ, 0), row(z0, z1, corridorAtLowZ, livingRows - 1));
+        int lz1 = Math.max(row(z0, z1, corridorAtLowZ, 0), row(z0, z1, corridorAtLowZ, livingRows - 1));
         if (ks >= 0)
         {
             int zs = row(z0, z1, corridorAtLowZ, ks);
             wallLine(plan, fx0, zs, fx1, zs, WALL);
             plan[bedDoor][zs] = DOOR;
+            keep[bedDoor][row(z0, z1, corridorAtLowZ, ks + 1)] = true;
+            keep[bedDoor][row(z0, z1, corridorAtLowZ, ks - 1)] = true;
+            if (bedDoor != entry)
+            {
+                int zr = row(z0, z1, corridorAtLowZ, ks - 1);
+                for (int fx = Math.min(entry, bedDoor); fx <= Math.max(entry, bedDoor); fx++)
+                {
+                    keep[fx][zr] = true;
+                }
+            }
             for (int k = ks + 1; k < depth; k++)
             {
                 markRoom(plan, fx0, row(z0, z1, corridorAtLowZ, k), fx1, row(z0, z1, corridorAtLowZ, k), R_BEDROOM);
             }
         }
-        // keep the walking line free: entry column and bedroom door column
-        boolean[][] keep = new boolean[width][length];
-        for (int k = 0; k < livingRows; k++)
-        {
-            keep[entry][row(z0, z1, corridorAtLowZ, k)] = true;
-            keep[bedDoor][row(z0, z1, corridorAtLowZ, k)] = true;
-        }
-        if (ks >= 0 && ks + 1 < depth)
-        {
-            keep[bedDoor][row(z0, z1, corridorAtLowZ, ks + 1)] = true;
-        }
-
-        // ---- kitchen run along the far side wall (fx1)
-        for (int k = 0; k < livingRows; k++)
-        {
-            int z = row(z0, z1, corridorAtLowZ, k);
-            markRoom(plan, fx1 - 1, z, fx1, z, R_KITCHEN);
-            if (keep[fx1][z])
-            {
-                continue;
-            }
-            Block b;
-            int m;
-            switch (k)
-            {
-                case 0: b = deci("BlockElectricBoxBin"); m = propFacing(-1, 0); break; // fridge
-                case 1: b = Blocks.furnace; m = vanillaFacing(-1, 0); break;          // oven
-                case 2: b = Blocks.cauldron; m = 0; break;                              // sink
-                default:
-                    b = k == livingRows - 1 && deci("BlockWashingMachine") != null ? deci("BlockWashingMachine")
-                        : Blocks.double_stone_slab;                                     // counter
-                    m = b == Blocks.double_stone_slab ? 0 : propFacing(-1, 0);
-            }
-            if (b == null)
-            {
-                b = Blocks.double_stone_slab;
-                m = 0;
-            }
-            put(plan, furn, fm, fx1, z, b, m);
-        }
-        // ---- dining table with chairs facing it, in front of the kitchen
-        int tx = fx1 - 2;
-        if (livingRows >= 3 && tx > fx0 + 1 && !keep[tx][row(z0, z1, corridorAtLowZ, 1)])
-        {
-            int tz = row(z0, z1, corridorAtLowZ, 1);
-            put(plan, furn, fm, tx, tz, unit(fx0, z0, 53) < 0.5 ? props.table : deci("BlockWoodTable2"), 2);
-            if (!keep[tx][tz - in])
-            {
-                put(plan, furn, fm, tx, tz - in, props.chair, propFacing(0, in));
-            }
-            if (!keep[tx][tz + in])
-            {
-                put(plan, furn, fm, tx, tz + in, props.chair, propFacing(0, -in));
-            }
-        }
-        else if (livingRows >= 2 && tx > fx0)
-        {
-            int tz = row(z0, z1, corridorAtLowZ, livingRows - 1);
-            if (!keep[tx][tz])
-            {
-                put(plan, furn, fm, tx, tz, props.table, 2);
-                put(plan, furn, fm, tx - 1, tz, props.chair, propFacing(1, 0));
-            }
-        }
-        // ---- TV against the corridor wall, sofa facing it, rug between
-        if (livingRows >= 2 && !keep[fx0][row(z0, z1, corridorAtLowZ, 0)])
-        {
-            String[] tvs = {"BlockFlatscreenTV", "BlockFlatscreenTV_News", "BlockFlatscreenTV_Emergency",
-                            "BlockFlatscreenTV_Youtube"};
-            int zTv = row(z0, z1, corridorAtLowZ, 0);
-            put(plan, furn, fm, fx0, zTv, deci(tvs[(int) (unit(fx0, z0, 54) * tvs.length)]), propFacing(0, in));
-            if (!keep[fx0 + 1][zTv])
-            {
-                put(plan, furn, fm, fx0 + 1, zTv, unit(fx0, z0, 55) < 0.5 ? deci("BlockStereo") : deci("BlockRadio1"),
-                    propFacing(0, in));
-            }
-            int zSofa = row(z0, z1, corridorAtLowZ, livingRows - 1);
-            Block sofa = unit(fx0, z0, 56) < 0.5 ? Blocks.oak_stairs : Blocks.spruce_stairs;
-            for (int fx = fx0; fx <= fx0 + 1; fx++)
-            {
-                if (!keep[fx][zSofa])
-                {
-                    put(plan, furn, fm, fx, zSofa, sofa, seatStairs(0, -in));
-                }
-            }
-            int carpet = (int) (unit(fx0, z0, 57) * 16);
-            for (int k = 1; k < livingRows - 1; k++)
-            {
-                int z = row(z0, z1, corridorAtLowZ, k);
-                for (int fx = fx0; fx <= fx0 + 1; fx++)
-                {
-                    if (!keep[fx][z])
-                    {
-                        put(plan, furn, fm, fx, z, Blocks.carpet, carpet);
-                    }
-                }
-            }
-        }
+        // ---- living part: kitchen run first (it needs a long wall); a studio
+        // places its bed next, then living and dining fill what is left
+        furnish(plan, furn, fm, keep, fx0, lz0, fx1, lz1, "kitchen", salt);
+        markKitchenFloor(plan, fx0, lz0, fx1, lz1);
         if (ks < 0)
         {
-            // studio: the bed against the window wall at fx0, head on the side wall
-            int zb = row(z0, z1, corridorAtLowZ, depth - 1);
-            if (livingRows <= 2 || depth >= 3)
-            {
-                bed(plan, furn, fm, fx0, zb);
-            }
+            furnish(plan, furn, fm, keep, fx0, lz0, fx1, lz1, "bed", salt + 4);
+        }
+        furnish(plan, furn, fm, keep, fx0, lz0, fx1, lz1, "living", salt + 2);
+        furnish(plan, furn, fm, keep, fx0, lz0, fx1, lz1, "dining", salt + 3);
+        if (ks < 0)
+        {
             return;
         }
-        // ---- bedroom
-        int nb = depth - ks - 1;
-        int bedroomEnd = fx1;
+        // ---- bedroom (+ bathroom in the 2 far columns)
+        int bz0 = Math.min(row(z0, z1, corridorAtLowZ, ks + 1), row(z0, z1, corridorAtLowZ, depth - 1));
+        int bz1 = Math.max(row(z0, z1, corridorAtLowZ, ks + 1), row(z0, z1, corridorAtLowZ, depth - 1));
+        int bedFrom = fx0, bedTo = fx1;
         if (bath)
         {
-            int wx = fx1 - 2;
-            int zA = row(z0, z1, corridorAtLowZ, ks + 1), zB = row(z0, z1, corridorAtLowZ, depth - 1);
-            wallLine(plan, wx, Math.min(zA, zB), wx, Math.max(zA, zB), WALL);
-            plan[wx][row(z0, z1, corridorAtLowZ, ks + 1)] = DOOR;
-            for (int k = ks + 1; k < depth; k++)
+            // bathroom: the 2 columns at the end away from the entry
+            int wx = entryLow ? fx1 - 2 : fx0 + 2;
+            int b0 = entryLow ? fx1 - 1 : fx0, b1 = entryLow ? fx1 : fx0 + 1;
+            wallLine(plan, wx, bz0, wx, bz1, WALL);
+            int zd = row(z0, z1, corridorAtLowZ, ks + 1);
+            plan[wx][zd] = DOOR;
+            keep[wx - 1][zd] = true;
+            keep[wx + 1][zd] = true;
+            markRoom(plan, b0, bz0, b1, bz1, R_BATH);
+            furnish(plan, furn, fm, keep, b0, bz0, b1, bz1, "bath", salt + 5);
+            furnish(plan, furn, fm, keep, b0, bz0, b1, bz1, "bath", salt + 6);
+            if (entryLow)
             {
-                int z = row(z0, z1, corridorAtLowZ, k);
-                markRoom(plan, fx1 - 1, z, fx1, z, R_BATH);
+                bedTo = wx - 1;
             }
-            int zFar = row(z0, z1, corridorAtLowZ, depth - 1);
-            put(plan, furn, fm, fx1, zFar, Blocks.quartz_stairs, seatStairs(-1, 0));   // toilet
-            put(plan, furn, fm, fx1 - 1, zFar, Blocks.cauldron, 0);                   // sink
-            if (nb >= 3)
+            else
             {
-                int zMid = row(z0, z1, corridorAtLowZ, depth - 2);
-                put(plan, furn, fm, fx1, zMid, Blocks.cauldron, 0);                   // bath / shower
+                bedFrom = wx + 1;
             }
-            bedroomEnd = wx - 1;
         }
-        int kb = ks + 1 + (nb - 1) / 2;
-        int zBed = row(z0, z1, corridorAtLowZ, kb);
-        bed(plan, furn, fm, fx0, zBed);
-        int zNight = row(z0, z1, corridorAtLowZ, kb + 1 < depth ? kb + 1 : kb - 1);
-        if (zNight != row(z0, z1, corridorAtLowZ, ks))
+        furnish(plan, furn, fm, keep, bedFrom, bz0, bedTo, bz1, "bed", salt + 7);
+        furnish(plan, furn, fm, keep, bedFrom, bz0, bedTo, bz1, "storage", salt + 8);
+        furnish(plan, furn, fm, keep, bedFrom, bz0, bedTo, bz1, "desk", salt + 9);
+    }
+
+    /** Tiles under the kitchen run: the cells where a kitchen set stood (fridge, counters, oven, sink). */
+    private void markKitchenFloor(byte[][] plan, int fx0, int z0, int fx1, int z1)
+    {
+        Block[][] f = plan == groundPlan ? groundFurn : upperFurn;
+        for (int fx = fx0; fx <= fx1; fx++)
         {
-            put(plan, furn, fm, fx0, zNight, Blocks.chest, vanillaFacing(1, 0));       // nightstand
-        }
-        // wardrobe: 2 high in the far corner of the bedroom
-        int zW = row(z0, z1, corridorAtLowZ, depth - 1);
-        if (bedroomEnd > fx0 + 2 && !keep[bedroomEnd][zW])
-        {
-            put2(plan, furn, fm, bedroomEnd, zW, Blocks.planks, 1);
-        }
-        if (unit(fx0, z0, 58) < 0.4)
-        {
-            put(plan, furn, fm, bedroomEnd, row(z0, z1, corridorAtLowZ, ks + 1),
-                unit(fx0, z0, 52) < 0.5 ? props.woodCrate : props.medicalCrate, 2);
+            for (int z = z0; z <= z1; z++)
+            {
+                Block b = f[fx][z];
+                if (b == Blocks.furnace || b == Blocks.cauldron || b == Blocks.double_stone_slab
+                    || b == Blocks.quartz_block || b == deci("BlockElectricBoxBin") || b == deci("BlockWashingMachine"))
+                {
+                    markRoom(plan, fx - 1, z - 1, fx + 1, z + 1, R_KITCHEN);
+                }
+            }
         }
     }
 
@@ -1455,30 +1472,223 @@ public class Building implements Graded
         return corridorAtLowZ ? z0 + k : z1 - k;
     }
 
-    /** Vanilla bed: head against the side wall at fx, foot at fx + 1. */
-    private void bed(byte[][] plan, Block[][] furn, byte[][] fm, int fx, int z)
+    // ------------------------------------------------------------ furniture sets
+
+    // sides of a room rectangle the set's back (row 0) can stand against:
+    // 0 = low z wall, 1 = high z wall, 2 = low fx wall, 3 = high fx wall
+    private static final int[][] SIDE_OUT = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    private static final int[][] SIDE_ALONG = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+
+    /**
+     * Places one set for this room kind into the rectangle, against one of
+     * its walls, all cells free and off the kept walkway; tries the sets
+     * (weighted, seeded order), every wall side and every offset. Returns
+     * whether one was placed.
+     */
+    private boolean furnish(byte[][] plan, Block[][] furn, byte[][] fm, boolean[][] keep,
+                            int fx0, int z0, int fx1, int z1, String kind, int salt)
     {
-        if (fx + 1 >= width - 1 || plan[fx][z] != OPEN || plan[fx + 1][z] != OPEN)
+        java.util.List<net.decimation.worldgen.sets.FurnitureSet> sets =
+            net.decimation.worldgen.sets.FurnitureSets.forRoom(kind);
+        if (sets.isEmpty() || fx1 < fx0 || z1 < z0)
         {
-            return;
+            return false;
         }
-        int dir = bedDir(-1, 0); // foot -> head points to -fx
-        plan[fx + 1][z] = FURN; furn[fx + 1][z] = Blocks.bed; fm[fx + 1][z] = (byte) dir;
-        plan[fx][z] = FURN; furn[fx][z] = Blocks.bed; fm[fx][z] = (byte) (dir | 8);
+        java.util.List<net.decimation.worldgen.sets.FurnitureSet> order =
+            new java.util.ArrayList<net.decimation.worldgen.sets.FurnitureSet>(sets);
+        // weighted shuffle: sort by -log(u) / weight
+        final java.util.Map<net.decimation.worldgen.sets.FurnitureSet, Double> key =
+            new java.util.HashMap<net.decimation.worldgen.sets.FurnitureSet, Double>();
+        for (int i = 0; i < order.size(); i++)
+        {
+            double u = Math.max(1e-6, unit(salt, i * 31 + 7, fx0 + z0));
+            key.put(order.get(i), -Math.log(u) / Math.max(1, order.get(i).weight));
+        }
+        java.util.Collections.sort(order, new java.util.Comparator<net.decimation.worldgen.sets.FurnitureSet>()
+        {
+            public int compare(net.decimation.worldgen.sets.FurnitureSet a, net.decimation.worldgen.sets.FurnitureSet b)
+            {
+                return Double.compare(key.get(a), key.get(b));
+            }
+        });
+        int sideStart = (int) (unit(fx0, salt, z0) * 4);
+        for (net.decimation.worldgen.sets.FurnitureSet set : order)
+        {
+            for (int si = 0; si < 4; si++)
+            {
+                int side = (sideStart + si) % 4;
+                int len = side < 2 ? fx1 - fx0 + 1 : z1 - z0 + 1;
+                int span = len - set.width + 1;
+                if (span <= 0)
+                {
+                    continue;
+                }
+                int offStart = (int) (unit(fx0 + si, salt + 1, z0) * span);
+                for (int oi = 0; oi < span; oi++)
+                {
+                    int off = (offStart + oi) % span;
+                    if (fits(plan, keep, set, side, off, fx0, z0, fx1, z1))
+                    {
+                        placeSet(plan, furn, fm, keep, set, side, off, fx0, z0, fx1, z1, salt);
+                        if (DEBUG_SETS)
+                        {
+                            cpw.mods.fml.common.FMLLog.info("[deciworldgen] sets: ok %s %s %s room %dx%d (fx %d..%d z %d..%d)",
+                                kind, set.name, id, fx1 - fx0 + 1, z1 - z0 + 1, fx0, fx1, z0, z1);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        if (DEBUG_SETS)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] sets: no %s fits %s room %dx%d (fx %d..%d z %d..%d)",
+                                            kind, id, fx1 - fx0 + 1, z1 - z0 + 1, fx0, fx1, z0, z1);
+        }
+        return false;
     }
 
-    /** Ground storey lobby: plants, bicycles, a bin; the middle stays open. */
-    private void lobby(byte[][] plan, Block[][] furn, byte[][] fm, int fx0, int fx1, int z0, int z1,
-                       boolean corridorAtLowZ)
+    private static final boolean DEBUG_SETS = System.getProperty("deciworldgen.debugsets") != null;
+
+    /** Plan cell of set position (r, c) for a side and offset: {fx, z}. */
+    private static int[] setCell(int side, int r, int c, int off, int fx0, int z0, int fx1, int z1)
     {
-        int far = row(z0, z1, corridorAtLowZ, z1 - z0);
-        put(plan, furn, fm, fx0, far, deci("BlockCocaPlant"), 2);
-        put(plan, furn, fm, fx1, far, deci("BlockCocaPlant"), 2);
-        for (int k = 1; k < Math.min(3, z1 - z0); k++)
+        switch (side)
         {
-            put(plan, furn, fm, fx1, row(z0, z1, corridorAtLowZ, k), deci("BlockBicycle"), propFacing(0, 1));
+            case 0: return new int[] {fx0 + off + c, z0 + r};
+            case 1: return new int[] {fx1 - off - c, z1 - r};
+            case 2: return new int[] {fx0 + r, z1 - off - c};
+            default: return new int[] {fx1 - r, z0 + off + c};
         }
-        put(plan, furn, fm, fx0, row(z0, z1, corridorAtLowZ, 1), props.trashcan, 2);
+    }
+
+    private boolean fits(byte[][] plan, boolean[][] keep, net.decimation.worldgen.sets.FurnitureSet set, int side,
+                         int off, int fx0, int z0, int fx1, int z1)
+    {
+        for (int y = 0; y < set.layers.length; y++)
+        {
+            for (int r = 0; r < set.depth; r++)
+            {
+                for (int c = 0; c < set.width; c++)
+                {
+                    char ch = set.at(y, r, c);
+                    if (ch == ' ')
+                    {
+                        continue;
+                    }
+                    int[] p = setCell(side, r, c, off, fx0, z0, fx1, z1);
+                    if (p[0] < fx0 || p[0] > fx1 || p[1] < z0 || p[1] > z1)
+                    {
+                        return false;
+                    }
+                    byte cell = plan[p[0]][p[1]];
+                    char base = set.at(0, r, c);
+                    boolean ownBase = base != ' ' && base != '.';
+                    if (cell != OPEN && !(y > 0 && ownBase))
+                    {
+                        return false;
+                    }
+                    if (ch != '.' && keep[p[0]][p[1]] && y == 0)
+                    {
+                        return false;
+                    }
+                    if (y == 0 && r == 0 && ch != '.')
+                    {
+                        // the back must stand against a wall, never in front of a door or opening
+                        int[] o = SIDE_OUT[side];
+                        int bx = p[0] - o[0], bz = p[1] - o[1];
+                        byte back = bx <= 0 || bz <= 0 || bx >= width - 1 || bz >= length - 1 ? WALL : plan[bx][bz];
+                        if (back != WALL && back != LINING && back != GLASS)
+                        {
+                            return false;
+                        }
+                        if (back == LINING && set.at(2, r, c) != ' ' && set.at(2, r, c) != '.' && wallOpening(bx, bz))
+                        {
+                            return false; // full height pieces (wardrobe, wall cabinets) never cover a window
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /** True when a lining cell is a window recess or passage on any storey height (checked on storey 1). */
+    private boolean wallOpening(int fx, int z)
+    {
+        return liningOpen(fx, z, 1, 1) || liningOpen(fx, z, 1, 2) || liningOpen(fx, z, 0, 1) || liningOpen(fx, z, 0, 2);
+    }
+
+    private void placeSet(byte[][] plan, Block[][] furn, byte[][] fm, boolean[][] keep,
+                          net.decimation.worldgen.sets.FurnitureSet set, int side, int off,
+                          int fx0, int z0, int fx1, int z1, int salt)
+    {
+        boolean ground = plan == groundPlan;
+        int[] o = SIDE_OUT[side], a = SIDE_ALONG[side];
+        for (int y = 0; y < set.layers.length && y < 3; y++)
+        {
+            for (int r = 0; r < set.depth; r++)
+            {
+                for (int c = 0; c < set.width; c++)
+                {
+                    char ch = set.at(y, r, c);
+                    if (ch == ' ')
+                    {
+                        continue;
+                    }
+                    int[] p = setCell(side, r, c, off, fx0, z0, fx1, z1);
+                    if (ch == '.')
+                    {
+                        keep[p[0]][p[1]] = true;
+                        continue;
+                    }
+                    net.decimation.worldgen.sets.FurnitureSet.Entry e = set.palette.get(ch);
+                    if (e == null || e.blocks.isEmpty())
+                    {
+                        continue;
+                    }
+                    Block b = e.blocks.get((int) (unit(p[0] + salt, y * 7 + 3, p[1]) * e.blocks.size()));
+                    int meta = setMeta(e, o, a);
+                    plan[p[0]][p[1]] = FURN;
+                    keep[p[0]][p[1]] = true;
+                    if (y == 0)
+                    {
+                        furn[p[0]][p[1]] = b;
+                        fm[p[0]][p[1]] = (byte) meta;
+                    }
+                    else if (y == 1)
+                    {
+                        (ground ? groundFurn2 : upperFurn2)[p[0]][p[1]] = b;
+                        (ground ? groundFurn2Meta : upperFurn2Meta)[p[0]][p[1]] = (byte) meta;
+                    }
+                    else
+                    {
+                        (ground ? groundFurn3 : upperFurn3)[p[0]][p[1]] = b;
+                        (ground ? groundFurn3Meta : upperFurn3Meta)[p[0]][p[1]] = (byte) meta;
+                    }
+                }
+            }
+        }
+    }
+
+    /** Metadata of a palette entry placed with wall-out vector o and along vector a (plan coords). */
+    private int setMeta(net.decimation.worldgen.sets.FurnitureSet.Entry e, int[] o, int[] a)
+    {
+        if (e.face == null)
+        {
+            return e.meta;
+        }
+        int dfx, dz;
+        if ("in".equals(e.face)) { dfx = -o[0]; dz = -o[1]; }
+        else if ("right".equals(e.face)) { dfx = a[0]; dz = a[1]; }
+        else if ("left".equals(e.face)) { dfx = -a[0]; dz = -a[1]; }
+        else { dfx = o[0]; dz = o[1]; }
+        String type = e.type != null ? e.type : "prop";
+        if ("vanilla".equals(type)) return vanillaFacing(dfx, dz);
+        if ("seat".equals(type)) return seatStairs(dfx, dz);
+        if ("bed".equals(type)) return bedDir(dfx, dz) | ("head".equals(e.part) ? 8 : 0);
+        if ("meta".equals(type)) return e.meta;
+        return propFacing(dfx, dz);
     }
 
     private void planOffice(byte[][] plan, Block[][] furn, byte[][] fm, boolean ground)

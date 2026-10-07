@@ -233,10 +233,14 @@ convenient.
     FLOOR steps per storey (a 1..5 even storeys, 5..1 odd), ceiling layer
     open above steps 1+, floor layer open above the arriving run. Door and
     glass lintels use the wall's top panel. Buildings are 25% taller.
-1b. NEXT, with the furniture sets (room planners get rewritten then):
-    plaster lining on the inner face of outer walls (outer walls 2 thick:
-    facade outside, panel inside, recessed windows).
-2.  Furniture sets (data driven JSON + palette, in-game reload).
+1b. DONE v0.20.0 for apartments: LINING cells (ring 1) are plaster
+    panels, open where the outer wall is open at that height (window
+    recess, entrance). Offices / shops get it when their planners move to
+    sets.
+2.  DONE v0.20.0 for apartments: furniture sets, docs/furniture_sets.md
+    (21 built-in sets, set preview mode, live reload / rebuild). Flats:
+    entry door near a corner, bathroom at the far end, shallow blocks get
+    a one-sided corridor (flats about 6 deep), tiny units are closets.
 3.  Reference library + per category checklist + one critic agent pass.
 
 ## 9. Extensibility (user, 7 Oktober 2026)

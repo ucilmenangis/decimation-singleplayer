@@ -1,0 +1,14 @@
+{
+  "name": "closet_boxes",
+  "rooms": ["closet"],
+  "weight": 10,
+  "comment": "Storage closet: metal shelving and cardboard boxes.",
+  "layers": [
+    ["Sx",
+     ".."]
+  ],
+  "palette": {
+    "S": {"block": "deci:BlockMetalShelf_Empty", "type": "prop", "face": "out"},
+    "x": {"pick": ["deci:BlockCardboardBoxes1", "deci:BlockCardboardBoxes2", "deci:BlockCardboardBoxes3"], "type": "prop", "face": "out"}
+  }
+}

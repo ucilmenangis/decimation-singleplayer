@@ -1,0 +1,18 @@
+{
+  "name": "kitchenette_3",
+  "rooms": ["kitchen"],
+  "weight": 8,
+  "comment": "Compact kitchen for small flats: fridge, sink, oven; one free row in front.",
+  "layers": [
+    ["FSO",
+     "..."],
+    ["   "],
+    [" uu"]
+  ],
+  "palette": {
+    "F": {"block": "deci:BlockElectricBoxBin", "type": "prop", "face": "out"},
+    "S": {"block": "minecraft:cauldron"},
+    "O": {"block": "minecraft:furnace", "type": "vanilla", "face": "out"},
+    "u": {"block": "minecraft:planks", "meta": 1}
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "desk_chair",
+  "rooms": [
+    "desk"
+  ],
+  "weight": 6,
+  "comment": "Writing desk against the wall with a chair facing it.",
+  "layers": [
+    [
+      "d",
+      "c"
+    ],
+    [
+      "m"
+    ]
+  ],
+  "palette": {
+    "d": {
+      "block": "minecraft:planks",
+      "meta": 0
+    },
+    "c": {
+      "block": "deci:BlockChair",
+      "type": "prop",
+      "face": "in"
+    },
+    "m": {
+      "block": "minecraft:flower_pot"
+    }
+  }
+}

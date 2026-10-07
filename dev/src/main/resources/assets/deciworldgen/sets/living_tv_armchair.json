@@ -1,0 +1,17 @@
+{
+  "name": "living_tv_armchair",
+  "rooms": ["living"],
+  "weight": 6,
+  "comment": "Tiny living corner: TV on a cabinet, an armchair facing it.",
+  "layers": [
+    ["d",
+     ".",
+     "s"],
+    ["V"]
+  ],
+  "palette": {
+    "d": {"block": "minecraft:planks", "meta": 5},
+    "s": {"block": "minecraft:oak_stairs", "type": "seat", "face": "in"},
+    "V": {"pick": ["deci:BlockFlatscreenTV", "deci:BlockFlatscreenTV_News", "deci:BlockFlatscreenTV_Emergency"], "type": "prop", "face": "out"}
+  }
+}

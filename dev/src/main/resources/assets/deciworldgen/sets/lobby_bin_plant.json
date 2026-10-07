@@ -1,0 +1,13 @@
+{
+  "name": "lobby_bin_plant",
+  "rooms": ["lobby"],
+  "weight": 8,
+  "comment": "Bin and a plant by the wall.",
+  "layers": [
+    ["tP"]
+  ],
+  "palette": {
+    "t": {"block": "deci:BlockTrashcan", "type": "prop", "face": "out"},
+    "P": {"block": "deci:BlockCocaPlant", "type": "prop", "face": "out"}
+  }
+}

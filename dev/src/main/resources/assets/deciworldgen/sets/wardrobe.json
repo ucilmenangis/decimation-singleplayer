@@ -1,0 +1,23 @@
+{
+  "name": "wardrobe",
+  "rooms": [
+    "storage"
+  ],
+  "weight": 10,
+  "comment": "Wardrobe, 2 wide and 2 high, dark wood (3 high read as a wall chunk in the set preview).",
+  "layers": [
+    [
+      "ww",
+      ".."
+    ],
+    [
+      "ww"
+    ]
+  ],
+  "palette": {
+    "w": {
+      "block": "minecraft:planks",
+      "meta": 5
+    }
+  }
+}

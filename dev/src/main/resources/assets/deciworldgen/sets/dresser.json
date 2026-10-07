@@ -1,0 +1,15 @@
+{
+  "name": "dresser",
+  "rooms": ["storage"],
+  "weight": 6,
+  "comment": "Low dresser of two chests (fits under a window), a plant on top.",
+  "layers": [
+    ["cc",
+     ".."],
+    ["p "]
+  ],
+  "palette": {
+    "c": {"block": "minecraft:chest", "type": "vanilla", "face": "out"},
+    "p": {"block": "minecraft:flower_pot"}
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "kitchen_run_6",
+  "rooms": ["kitchen"],
+  "weight": 8,
+  "comment": "Long kitchen with a washing machine at the end.",
+  "layers": [
+    ["FCSCOW",
+     "......"],
+    ["      "],
+    ["uuuuu "]
+  ],
+  "palette": {
+    "F": {"block": "deci:BlockElectricBoxBin", "type": "prop", "face": "out"},
+    "C": {"block": "minecraft:double_stone_slab"},
+    "S": {"block": "minecraft:cauldron"},
+    "O": {"block": "minecraft:furnace", "type": "vanilla", "face": "out"},
+    "W": {"block": "deci:BlockWashingMachine", "type": "prop", "face": "out"},
+    "u": {"block": "minecraft:planks", "meta": 5}
+  }
+}

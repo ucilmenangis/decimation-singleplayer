@@ -1,0 +1,19 @@
+{
+  "name": "kitchen_run_5",
+  "rooms": ["kitchen"],
+  "weight": 10,
+  "comment": "Fridge, counter, sink, counter, oven against the wall; wall cabinets under the ceiling; one free row in front.",
+  "layers": [
+    ["FCSCO",
+     "....."],
+    ["     "],
+    ["uuuuu"]
+  ],
+  "palette": {
+    "F": {"block": "deci:BlockElectricBoxBin", "type": "prop", "face": "out"},
+    "C": {"block": "minecraft:double_stone_slab"},
+    "S": {"block": "minecraft:cauldron"},
+    "O": {"block": "minecraft:furnace", "type": "vanilla", "face": "out"},
+    "u": {"block": "minecraft:planks", "meta": 1}
+  }
+}

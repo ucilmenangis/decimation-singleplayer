@@ -1,0 +1,45 @@
+{
+  "name": "bed_nightstands",
+  "rooms": [
+    "bed"
+  ],
+  "weight": 10,
+  "comment": "Bed with its head against the wall, a nightstand (chest) on each side with a lamp plant / radio on top.",
+  "layers": [
+    [
+      "nHn",
+      " B ",
+      " . "
+    ],
+    [
+      "p o"
+    ]
+  ],
+  "palette": {
+    "H": {
+      "block": "minecraft:bed",
+      "type": "bed",
+      "part": "head",
+      "face": "in"
+    },
+    "B": {
+      "block": "minecraft:bed",
+      "type": "bed",
+      "part": "foot",
+      "face": "in"
+    },
+    "n": {
+      "block": "minecraft:chest",
+      "type": "vanilla",
+      "face": "out"
+    },
+    "p": {
+      "block": "minecraft:flower_pot"
+    },
+    "o": {
+      "block": "deci:BlockRadio1",
+      "type": "prop",
+      "face": "out"
+    }
+  }
+}

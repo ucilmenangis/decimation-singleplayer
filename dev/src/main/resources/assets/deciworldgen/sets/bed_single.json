@@ -1,0 +1,18 @@
+{
+  "name": "bed_single",
+  "rooms": ["bed"],
+  "weight": 6,
+  "comment": "Single bed, head against the wall, one nightstand.",
+  "layers": [
+    ["Hn",
+     "B ",
+     ". "],
+    [" p"]
+  ],
+  "palette": {
+    "H": {"block": "minecraft:bed", "type": "bed", "part": "head", "face": "in"},
+    "B": {"block": "minecraft:bed", "type": "bed", "part": "foot", "face": "in"},
+    "n": {"block": "minecraft:chest", "type": "vanilla", "face": "out"},
+    "p": {"block": "minecraft:flower_pot"}
+  }
+}

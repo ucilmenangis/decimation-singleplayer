@@ -1,0 +1,14 @@
+{
+  "name": "living_couch_wall",
+  "rooms": ["living"],
+  "weight": 6,
+  "comment": "Shallow living rooms: couch against the wall facing the room, rug in front.",
+  "layers": [
+    ["sss",
+     "rrr"]
+  ],
+  "palette": {
+    "s": {"block": "minecraft:spruce_stairs", "type": "seat", "face": "out"},
+    "r": {"block": "minecraft:carpet", "meta": 8}
+  }
+}

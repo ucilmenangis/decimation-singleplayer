@@ -272,6 +272,10 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   do not port the mod (replaces terrain, fights our world type, its
   interiors are simple too); take the data-driven idea, maybe import its
   parts later through a block translation tool with a license notice.
+  Steps 1a (v0.19.0) and 1b + 2 for apartments (v0.20.0) DONE; live loop
+  added on user request (no restart per change): /deciworldgen reload /
+  rebuild, -Photswap + tools/hotswap.py. Next: step 3 reference library +
+  critic pass on apartments, then offices / shops on sets.
 
 ---
 

@@ -1,0 +1,25 @@
+{
+  "name": "lobby_bikes",
+  "rooms": [
+    "lobby"
+  ],
+  "weight": 10,
+  "comment": "Bicycles parked along the wall with a gap (the model is wider than a block), a plant at the end.",
+  "layers": [
+    [
+      "y y P"
+    ]
+  ],
+  "palette": {
+    "y": {
+      "block": "deci:BlockBicycle",
+      "type": "prop",
+      "face": "left"
+    },
+    "P": {
+      "block": "deci:BlockCocaPlant",
+      "type": "prop",
+      "face": "out"
+    }
+  }
+}

@@ -99,7 +99,8 @@ public class DevAutoTest
     /** Client side: one view after another; false once all are saved. */
     private boolean takeViews(Minecraft mc)
     {
-        int views = GALLERY ? (galleryNames().size() + GALLERY_PER_VIEW - 1) / GALLERY_PER_VIEW
+        int views = SETS ? net.decimation.worldgen.sets.FurnitureSets.all().size()
+            : GALLERY ? (galleryNames().size() + GALLERY_PER_VIEW - 1) / GALLERY_PER_VIEW
             : AUDIT ? AUDIT_VIEWS : VIEWS.length;
         if (view >= views || "false".equals(System.getProperty(PROPERTY + ".views")))
         {
@@ -119,11 +120,11 @@ public class DevAutoTest
             savedGamma = mc.gameSettings.gammaSetting;
         }
         mc.gameSettings.hideGUI = true;
-        if (AUDIT || GALLERY)
+        if (AUDIT || GALLERY || SETS)
         {
             mc.gameSettings.gammaSetting = 1.0F;
         }
-        if (GALLERY)
+        if (GALLERY || SETS)
         {
             mc.gameSettings.fovSetting = 45.0F;
         }
@@ -144,7 +145,7 @@ public class DevAutoTest
             mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = viewYaw;
             mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = viewPitch;
         }
-        if (viewReady < view || ++viewWait < (GALLERY && shotsTaken > 0 ? 80 : GALLERY ? 500 : 260))
+        if (viewReady < view || ++viewWait < ((GALLERY || SETS) && shotsTaken > 0 ? 80 : GALLERY || SETS ? 500 : 260))
         {
             return true; // teleport pending, then let the chunks render
         }
@@ -155,7 +156,7 @@ public class DevAutoTest
             return true;
         }
         net.minecraft.util.IChatComponent msg = net.minecraft.util.ScreenShotHelper.saveScreenshot(
-            mc.mcDataDir, (GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
+            mc.mcDataDir, (SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
             mc.displayWidth, mc.displayHeight,
             mc.getFramebuffer());
         FMLLog.info("[%s] AUTOTEST view %d at %s: %s", DecimationWorldGen.MODID, view, viewSpot,
@@ -303,11 +304,106 @@ public class DevAutoTest
         viewReady = v;
     }
 
+    // ---- furniture set preview (-Ddeciworldgen.autotest.sets=true): every
+    // furniture set staged alone in a bay (plaster back wall, plank floor),
+    // photographed front-on: set_<n>.png, set name logged per view
+    private static final boolean SETS = "true".equals(System.getProperty(PROPERTY + ".sets"));
+    private static final int SX = 4000, SY = 150, SZ = 5000, BAY = 10;
+    private boolean setsBuilt;
+
+    private void serveSetView(int v)
+    {
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        java.util.List<net.decimation.worldgen.sets.FurnitureSet> sets = net.decimation.worldgen.sets.FurnitureSets.all();
+        if (!setsBuilt)
+        {
+            setsBuilt = true;
+            net.minecraft.block.Block wall = net.minecraft.block.Block.getBlockFromName("deci:BlockWallOffice_Top");
+            net.minecraft.block.Block wallLow = net.minecraft.block.Block.getBlockFromName("deci:BlockWallOffice_Bottom_1");
+            for (int i = 0; i < sets.size(); i++)
+            {
+                int bx = SX + i * BAY;
+                for (int cx = (bx >> 4) - 1; cx <= ((bx + BAY) >> 4) + 1; cx++)
+                {
+                    for (int cz = (SZ >> 4) - 1; cz <= ((SZ + 16) >> 4) + 1; cz++)
+                    {
+                        world.getChunkProvider().loadChunk(cx, cz);
+                    }
+                }
+                for (int x = bx; x < bx + BAY; x++)
+                {
+                    for (int z = SZ - 1; z < SZ + 12; z++)
+                    {
+                        world.setBlock(x, SY - 1, z, net.minecraft.init.Blocks.planks, 1, 2);
+                        for (int y = SY; y < SY + 5; y++)
+                        {
+                            boolean back = z == SZ - 1, side = (x == bx || x == bx + BAY - 1) && z < SZ + 6;
+                            world.setBlock(x, y, z, back || side ? (y == SY ? wallLow : wall) : net.minecraft.init.Blocks.air, 0, 2);
+                        }
+                    }
+                }
+                net.decimation.worldgen.sets.FurnitureSet set = sets.get(i);
+                int x0 = bx + (BAY - set.width) / 2;
+                for (int y = 0; y < set.layers.length && y < 3; y++)
+                {
+                    for (int r = 0; r < set.depth; r++)
+                    {
+                        for (int c = 0; c < set.width; c++)
+                        {
+                            char ch = set.at(y, r, c);
+                            net.decimation.worldgen.sets.FurnitureSet.Entry e = set.palette.get(ch);
+                            if (ch == ' ' || ch == '.' || e == null || e.blocks.isEmpty())
+                            {
+                                continue;
+                            }
+                            world.setBlock(x0 + c, SY + y, SZ + r, e.blocks.get(0), previewMeta(e), 2);
+                            net.decimation.fixes.MultiblockRepairHandler.complete(world, x0 + c, SY + y, SZ + r);
+                        }
+                    }
+                }
+            }
+        }
+        world.setWorldTime(6000);
+        net.decimation.worldgen.sets.FurnitureSet set = sets.get(v);
+        double x = SX + v * BAY + BAY / 2.0;
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        viewYaw = 180;
+        viewPitch = 25;
+        p.playerNetServerHandler.setPlayerLocation(x, SY + 2.5, SZ + 8.5, 180, 25);
+        viewSpot = "set " + set.name;
+        viewReady = v;
+    }
+
+    /**
+     * Metadata for the preview bay: back wall to the north, so the set's
+     * "out" is south (+z) and "right" is east (+x); same tables as Building.
+     */
+    private static int previewMeta(net.decimation.worldgen.sets.FurnitureSet.Entry e)
+    {
+        if (e.face == null)
+        {
+            return e.meta;
+        }
+        int dx = 0, dz = 0;
+        if ("in".equals(e.face)) dz = -1;
+        else if ("right".equals(e.face)) dx = 1;
+        else if ("left".equals(e.face)) dx = -1;
+        else dz = 1;
+        String type = e.type != null ? e.type : "prop";
+        if ("vanilla".equals(type)) return dx < 0 ? 4 : dx > 0 ? 5 : dz < 0 ? 2 : 3;
+        if ("seat".equals(type)) return dx < 0 ? 0 : dx > 0 ? 1 : dz < 0 ? 2 : 3;
+        if ("bed".equals(type)) return (dx < 0 ? 1 : dx > 0 ? 3 : dz < 0 ? 2 : 0) | ("head".equals(e.part) ? 8 : 0);
+        if ("meta".equals(type)) return e.meta;
+        return dx < 0 ? 4 : dx > 0 ? 2 : dz < 0 ? 5 : 3;
+    }
+
     // ---- audit mode (-Ddeciworldgen.autotest.audit=true): instead of the
     // street views, 4 views each of a sample apartment, office and shop:
     // facade from the street, ground storey, first upper storey, roof
     private static final boolean AUDIT = "true".equals(System.getProperty(PROPERTY + ".audit"));
-    private static final int AUDIT_VIEWS = 12;
+    private static final int AUDIT_VIEWS = 15;
     private List<Building> auditBuildings;
 
     private void serveAuditView(int v)
@@ -318,7 +414,7 @@ public class DevAutoTest
             auditBuildings = pickAuditBuildings(world);
         }
         viewSkip = false;
-        int i = v / 4, mode = v % 4;
+        int i = v / 5, mode = v % 5; // facade, ground, storey 1, storey 1 second room, roof
         Building b = i < auditBuildings.size() ? auditBuildings.get(i) : null;
         if (b == null)
         {
@@ -354,7 +450,7 @@ public class DevAutoTest
             yaw = west ? 270 : 90;
             pitch = b.floors > 4 ? -30 : -12;
         }
-        else if (mode == 3)
+        else if (mode == 4)
         {
             x = b.minX + b.width / 2.0;
             z = b.minZ + b.length + 6;
@@ -364,8 +460,10 @@ public class DevAutoTest
         }
         else
         {
-            int storey = mode - 1;
-            int[] c = storey < b.floors ? b.viewCell(storey) : null;
+            int storey = mode == 3 ? 1 : mode - 1;
+            byte second = b.kind == Building.APARTMENT ? Building.R_BEDROOM
+                : b.kind == Building.OFFICE ? Building.R_MEETING : Building.R_STOCK;
+            int[] c = storey < b.floors ? (mode == 3 ? b.viewCell(storey, second) : b.viewCell(storey)) : null;
             if (c == null)
             {
                 viewSkip = true;
@@ -460,6 +558,11 @@ public class DevAutoTest
                     ((net.minecraft.entity.Entity) o).setDead();
                 }
             }
+        }
+        if (SETS)
+        {
+            serveSetView(v);
+            return;
         }
         if (GALLERY)
         {

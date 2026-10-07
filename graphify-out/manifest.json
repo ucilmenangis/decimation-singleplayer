@@ -20,9 +20,9 @@
     "semantic_hash": "f6d0ec3d1c5bb5c1802a7544eafa4896"
   },
   "dev/dependencies.gradle": {
-    "mtime": 1791377682.708828,
-    "ast_hash": "eb685e95501825db4873b8fbde460c8c",
-    "semantic_hash": "eb685e95501825db4873b8fbde460c8c"
+    "mtime": 1791385378.0514934,
+    "ast_hash": "88f003c0cd7a3a912b141d30b40561b6",
+    "semantic_hash": "88f003c0cd7a3a912b141d30b40561b6"
   },
   "dev/repositories.gradle": {
     "mtime": 1791314872.0,
@@ -50,14 +50,14 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791383354.293387,
-    "ast_hash": "00ee587075207bd2d47fcedccea8f48e",
-    "semantic_hash": "00ee587075207bd2d47fcedccea8f48e"
+    "mtime": 1791385593.9216795,
+    "ast_hash": "e4c3d30ccdfabbd06ee81a4aebd16a36",
+    "semantic_hash": "e4c3d30ccdfabbd06ee81a4aebd16a36"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791377696.66105,
-    "ast_hash": "b9b414070186015dd92924b1bff66c07",
-    "semantic_hash": "b9b414070186015dd92924b1bff66c07"
+    "mtime": 1791385556.753598,
+    "ast_hash": "ee956b1188685a54ca40ddd4fa13504a",
+    "semantic_hash": "ee956b1188685a54ca40ddd4fa13504a"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -95,9 +95,9 @@
     "semantic_hash": "cb59b22ea5a1e4945106954431e9668a"
   },
   "tools/servertest.py": {
-    "mtime": 1791372709.7565958,
-    "ast_hash": "fce98a10e28c13384304f848eb526dbc",
-    "semantic_hash": "fce98a10e28c13384304f848eb526dbc"
+    "mtime": 1791385417.7374516,
+    "ast_hash": "2497787737d8fd65a376239332b3d26c",
+    "semantic_hash": "2497787737d8fd65a376239332b3d26c"
   },
   "tools/setup_toolchain.py": {
     "mtime": 1786559758.1743937,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791383354.3174582,
-    "ast_hash": "208d33e4559876ec99acf10e4f8f952c",
-    "semantic_hash": "208d33e4559876ec99acf10e4f8f952c"
+    "mtime": 1791385593.9431014,
+    "ast_hash": "a29859ce408ca7b115c73c3f07fdae9b",
+    "semantic_hash": "a29859ce408ca7b115c73c3f07fdae9b"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791382751.7245517,
-    "ast_hash": "dd4fb278ae92348f5e58639e8b5290ad",
-    "semantic_hash": "dd4fb278ae92348f5e58639e8b5290ad"
+    "mtime": 1791385593.9444451,
+    "ast_hash": "a0138d1b45b4943c46b9a2654ac6e04a",
+    "semantic_hash": "a0138d1b45b4943c46b9a2654ac6e04a"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -175,9 +175,9 @@
     "semantic_hash": "eecbfdd3f9f9d419fbce9147d814df46"
   },
   "dev/src/main/java/net/decimation/worldgen/Building.java": {
-    "mtime": 1791383185.271473,
-    "ast_hash": "def073a1be77974cfea7c30173cd82b0",
-    "semantic_hash": "def073a1be77974cfea7c30173cd82b0"
+    "mtime": 1791384608.0215745,
+    "ast_hash": "d9b70c06663b69b8bbae8999a1c7060a",
+    "semantic_hash": "d9b70c06663b69b8bbae8999a1c7060a"
   },
   "dev/src/main/java/net/decimation/worldgen/CityDistrict.java": {
     "mtime": 1791369986.9502473,
@@ -205,9 +205,9 @@
     "semantic_hash": "5a47d466f4f2ee73537e60df815df068"
   },
   "dev/src/main/java/net/decimation/worldgen/Slices.java": {
-    "mtime": 1791374696.9971232,
-    "ast_hash": "5c181ed066bae231a72c505b1ebb0def",
-    "semantic_hash": "5c181ed066bae231a72c505b1ebb0def"
+    "mtime": 1791385378.0338416,
+    "ast_hash": "01aa4deab6a7220afec453640edbeb44",
+    "semantic_hash": "01aa4deab6a7220afec453640edbeb44"
   },
   "dev/src/main/java/net/decimation/worldgen/StructureData.java": {
     "mtime": 1791351467.1489036,
@@ -330,18 +330,148 @@
     "semantic_hash": "44617037eeac4c4f3e53f42e6306550b"
   },
   "docs/shots_index.md": {
-    "mtime": 1791383354.31774,
-    "ast_hash": "ef80917826990ec03b07fd99c023c25a",
-    "semantic_hash": "ef80917826990ec03b07fd99c023c25a"
+    "mtime": 1791385593.9448085,
+    "ast_hash": "8dff6e4da5e64c6a47e21cc06fbe6fb9",
+    "semantic_hash": "8dff6e4da5e64c6a47e21cc06fbe6fb9"
   },
   "docs/interior_spec.md": {
-    "mtime": 1791383354.316995,
-    "ast_hash": "8596fa581878475ebba8e61800d9e0a8",
-    "semantic_hash": "8596fa581878475ebba8e61800d9e0a8"
+    "mtime": 1791385593.9436893,
+    "ast_hash": "aa7200600ef260c20f0383be6c6c4bc6",
+    "semantic_hash": "aa7200600ef260c20f0383be6c6c4bc6"
   },
   "tools/graph_carry.py": {
     "mtime": 1791381072.6757774,
     "ast_hash": "93ceaca2ef7ce3e2c45c4fe4dbab9bcf",
     "semantic_hash": "93ceaca2ef7ce3e2c45c4fe4dbab9bcf"
+  },
+  "dev/src/main/java/net/decimation/worldgen/WorldGenCommand.java": {
+    "mtime": 1791385410.315084,
+    "ast_hash": "3be958ba0835d8d940ba88ede8184d61",
+    "semantic_hash": "3be958ba0835d8d940ba88ede8184d61"
+  },
+  "dev/src/main/java/net/decimation/worldgen/sets/FurnitureSet.java": {
+    "mtime": 1791383745.3607893,
+    "ast_hash": "104f17048f8e1e6dea21c1ef11f93abc",
+    "semantic_hash": "104f17048f8e1e6dea21c1ef11f93abc"
+  },
+  "dev/src/main/java/net/decimation/worldgen/sets/FurnitureSets.java": {
+    "mtime": 1791383745.367953,
+    "ast_hash": "740c20a1fb76e4d47e47eee6271cf3df",
+    "semantic_hash": "740c20a1fb76e4d47e47eee6271cf3df"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/bath_toilet_sink.json": {
+    "mtime": 1791383829.5137563,
+    "ast_hash": "5dd4458a2e70bff15a780d9f71c0f295",
+    "semantic_hash": "5dd4458a2e70bff15a780d9f71c0f295"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/bath_tub.json": {
+    "mtime": 1791383829.5205846,
+    "ast_hash": "418cf37d971004ee0157fa61d4f500f9",
+    "semantic_hash": "418cf37d971004ee0157fa61d4f500f9"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/bed_along_wall.json": {
+    "mtime": 1791384452.5910404,
+    "ast_hash": "92ab9cde92a51298c9eb0ba755f64dd9",
+    "semantic_hash": "92ab9cde92a51298c9eb0ba755f64dd9"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/bed_nightstands.json": {
+    "mtime": 1791383941.430944,
+    "ast_hash": "555bc626171b4edead3b60eb8923b9cd",
+    "semantic_hash": "555bc626171b4edead3b60eb8923b9cd"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/bed_single.json": {
+    "mtime": 1791384281.5096564,
+    "ast_hash": "8727dc9ef45920f4ee52a5f7f770a22d",
+    "semantic_hash": "8727dc9ef45920f4ee52a5f7f770a22d"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/closet_boxes.json": {
+    "mtime": 1791384547.4953558,
+    "ast_hash": "4b774c5a07868b30815e05c53b9cc7a3",
+    "semantic_hash": "4b774c5a07868b30815e05c53b9cc7a3"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/desk_chair.json": {
+    "mtime": 1791383941.4318764,
+    "ast_hash": "688c8f2a95fad3b18c055900e982ff89",
+    "semantic_hash": "688c8f2a95fad3b18c055900e982ff89"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/dining_small.json": {
+    "mtime": 1791384281.5212173,
+    "ast_hash": "afe8086564ac0563a631829aef217312",
+    "semantic_hash": "afe8086564ac0563a631829aef217312"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/dining_table.json": {
+    "mtime": 1791383837.068114,
+    "ast_hash": "8a6fc147ba414d87d6c32bc3dfc9316b",
+    "semantic_hash": "8a6fc147ba414d87d6c32bc3dfc9316b"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/dresser.json": {
+    "mtime": 1791384452.6000073,
+    "ast_hash": "f408813edd77d61d4998a5875f54dc5d",
+    "semantic_hash": "f408813edd77d61d4998a5875f54dc5d"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_4.json": {
+    "mtime": 1791383829.4374254,
+    "ast_hash": "b032413be3005caa7f8f4ab547532848",
+    "semantic_hash": "b032413be3005caa7f8f4ab547532848"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_5.json": {
+    "mtime": 1791383829.4309433,
+    "ast_hash": "550b73597b5d68dff95e252e9004eb73",
+    "semantic_hash": "550b73597b5d68dff95e252e9004eb73"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_6.json": {
+    "mtime": 1791383829.4569209,
+    "ast_hash": "e61c5d80e925c2a79cb3f2e46cc46e2c",
+    "semantic_hash": "e61c5d80e925c2a79cb3f2e46cc46e2c"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/kitchenette_3.json": {
+    "mtime": 1791384281.5041044,
+    "ast_hash": "c5c8e2ea8f4aa11fb11cd2a42dbba8b7",
+    "semantic_hash": "c5c8e2ea8f4aa11fb11cd2a42dbba8b7"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/living_couch_wall.json": {
+    "mtime": 1791384452.5949144,
+    "ast_hash": "bfc96670f340e38e1f220ef43629f57c",
+    "semantic_hash": "bfc96670f340e38e1f220ef43629f57c"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/living_tv_armchair.json": {
+    "mtime": 1791384281.5153985,
+    "ast_hash": "72e1d52eaf7de50bb80911e1521cb97d",
+    "semantic_hash": "72e1d52eaf7de50bb80911e1521cb97d"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/living_tv_small.json": {
+    "mtime": 1791385022.202564,
+    "ast_hash": "4920d2821d622927f320b8ce6d06276a",
+    "semantic_hash": "4920d2821d622927f320b8ce6d06276a"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/living_tv_sofa.json": {
+    "mtime": 1791385022.2022622,
+    "ast_hash": "4395a6fbfa72f4de669ec286b11db601",
+    "semantic_hash": "4395a6fbfa72f4de669ec286b11db601"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/lobby_bikes.json": {
+    "mtime": 1791385022.2019007,
+    "ast_hash": "752e728886c48c42ec0747894fde70c7",
+    "semantic_hash": "752e728886c48c42ec0747894fde70c7"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/lobby_bin_plant.json": {
+    "mtime": 1791383829.532019,
+    "ast_hash": "53d95eb1265fb57db8acc06c025771df",
+    "semantic_hash": "53d95eb1265fb57db8acc06c025771df"
+  },
+  "dev/src/main/resources/assets/deciworldgen/sets/wardrobe.json": {
+    "mtime": 1791385022.2028313,
+    "ast_hash": "95dcb4fb9a5fdd69ca9d7150cf87cd78",
+    "semantic_hash": "95dcb4fb9a5fdd69ca9d7150cf87cd78"
+  },
+  "tools/hotswap.py": {
+    "mtime": 1791385396.697566,
+    "ast_hash": "414677d2c1b022d3c897351b9b5c7ebc",
+    "semantic_hash": "414677d2c1b022d3c897351b9b5c7ebc"
+  },
+  "docs/furniture_sets.md": {
+    "mtime": 1791385593.6777692,
+    "ast_hash": "c14df66a6bc1d65373e6922a3964d1e5",
+    "semantic_hash": "c14df66a6bc1d65373e6922a3964d1e5"
   }
 }

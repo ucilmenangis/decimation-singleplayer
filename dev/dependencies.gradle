@@ -57,6 +57,14 @@ tasks.matching { it.name == "runClient" }.configureEach {
     dependsOn(installVoiceChat)
 }
 
+// `gradlew runClient -Photswap`: debug agent on port 5005 so changed classes
+// can be pushed into the running game (tools/hotswap.py), no restart
+tasks.matching { it.name == "runClient" }.configureEach {
+    if (project.hasProperty("hotswap")) {
+        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005")
+    }
+}
+
 // `gradlew runClient -Pautotest` runs the unattended singleplayer smoke test
 // (net.decimation.worldgen.DevAutoTest) and quits the game when done.
 tasks.matching { it.name == "runClient" }.configureEach {
@@ -71,6 +79,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("gallery")) {
         jvmArgs("-Ddeciworldgen.autotest.gallery=true")
     }
+    // -Psets: every furniture set staged in a bay and photographed (set_<n>.png)
+    if (project.hasProperty("sets")) {
+        jvmArgs("-Ddeciworldgen.autotest.sets=true")
+    }
     // -Ponly=0,23,70-76: re-shoot only these views
     if (project.hasProperty("only")) {
         jvmArgs("-Ddeciworldgen.autotest.only=" + project.property("only"))
@@ -82,5 +94,8 @@ tasks.matching { it.name == "runClient" }.configureEach {
 tasks.matching { it.name == "runServer" }.configureEach {
     if (project.hasProperty("pregen")) {
         jvmArgs("-Ddeciworldgen.pregen=" + project.property("pregen"))
+    }
+    if (project.hasProperty("debugsets")) {
+        jvmArgs("-Ddeciworldgen.debugsets=true")
     }
 }

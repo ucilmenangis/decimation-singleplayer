@@ -1,0 +1,17 @@
+{
+  "name": "bed_along_wall",
+  "rooms": ["bed"],
+  "weight": 8,
+  "comment": "Narrow bedrooms: bed lying along the wall, nightstand at the head end.",
+  "layers": [
+    ["nHB",
+     "..."],
+    ["p  "]
+  ],
+  "palette": {
+    "H": {"block": "minecraft:bed", "type": "bed", "part": "head", "face": "left"},
+    "B": {"block": "minecraft:bed", "type": "bed", "part": "foot", "face": "left"},
+    "n": {"block": "minecraft:chest", "type": "vanilla", "face": "out"},
+    "p": {"block": "minecraft:flower_pot"}
+  }
+}

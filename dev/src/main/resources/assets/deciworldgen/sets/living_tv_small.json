@@ -1,0 +1,49 @@
+{
+  "name": "living_tv_small",
+  "rooms": [
+    "living"
+  ],
+  "weight": 6,
+  "comment": "Small flat: TV cabinet, grey rug, 2 seat sofa.",
+  "layers": [
+    [
+      "dc",
+      "rr",
+      "ss"
+    ],
+    [
+      "Vp"
+    ]
+  ],
+  "palette": {
+    "c": {
+      "block": "minecraft:planks",
+      "meta": 1
+    },
+    "d": {
+      "block": "minecraft:planks",
+      "meta": 1
+    },
+    "r": {
+      "block": "minecraft:carpet",
+      "meta": 8
+    },
+    "s": {
+      "block": "minecraft:oak_stairs",
+      "type": "seat",
+      "face": "in"
+    },
+    "p": {
+      "block": "minecraft:flower_pot"
+    },
+    "V": {
+      "pick": [
+        "deci:BlockFlatscreenTV",
+        "deci:BlockFlatscreenTV_News",
+        "deci:BlockFlatscreenTV_Youtube"
+      ],
+      "type": "prop",
+      "face": "out"
+    }
+  }
+}

@@ -112,3 +112,29 @@ Same 3 buildings and camera spots as audit_v0.16.
   plain ceilings and hanging fixtures. Remaining: outer walls still show
   stone brick facade on the inside (step 1b lining).
 
+## sets_v0.20/ (furniture set preview, -Psets)
+Each set alone in a plaster bay on a spruce floor, seen front-on;
+set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
+- dresser: double chest with a plant pot. dining_table: X leg wooden table,
+  a chair each side facing it. bed_along_wall: chest + red bed lying along
+  the wall, pillow at the chest. lobby_bin_plant: bin + leafy plant.
+  lobby_bikes: 2 bicycles + plants (first version overlapped; now a gap).
+  kitchen_run_4: tall grey fridge, cauldron sink, quartz counter, furnace,
+  oak wall cabinets above. bath_tub: 2 cauldrons. wardrobe: first 3 high
+  spruce block (read as a wall chunk) -> now 2 high dark oak cabinet.
+  kitchen_run_6: fridge, counter, sink, counter, oven, washing machine,
+  dark oak cabinets above. desk_chair: chair facing an oak block desk with
+  a pot. closet_boxes: empty metal shelving + cardboard boxes.
+  bed_nightstands: bed head to the wall between 2 chests, pot and radio on
+  top. living_couch_wall: spruce stair couch facing the room, light grey
+  rug. bath_toilet_sink: white quartz stair toilet + cauldron basin.
+  living_tv_small: TV on a spruce cabinet, oak stair sofa facing it.
+  living_tv_sofa: TV + stereo + pot on a dark oak cabinet, red rug (brown
+  was invisible on the floor), dark oak slab coffee table, spruce sofa.
+  dining_small: table + chair. kitchenette_3: fridge, sink, oven, cabinets.
+  bed_single: bed + chest nightstand. living_tv_armchair: TV on cabinet,
+  oak stair armchair. kitchen_run_5: fridge, counter, sink, counter, oven.
+- sets_fix.png: the 4 sets after the fixes above.
+- audit_v0.19/audit_sets_v0.20.png: in buildings: a kitchen run with wall
+  cabinets and a dining table in a flat; offices unchanged.
+

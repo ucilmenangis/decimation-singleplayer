@@ -1,0 +1,14 @@
+{
+  "name": "bath_toilet_sink",
+  "rooms": ["bath"],
+  "weight": 10,
+  "comment": "Toilet (quartz stairs) and washbasin (cauldron) against the wall.",
+  "layers": [
+    ["ts",
+     ".."]
+  ],
+  "palette": {
+    "t": {"block": "minecraft:quartz_stairs", "type": "seat", "face": "out"},
+    "s": {"block": "minecraft:cauldron"}
+  }
+}

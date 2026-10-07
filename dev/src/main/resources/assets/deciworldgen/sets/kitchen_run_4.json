@@ -1,0 +1,19 @@
+{
+  "name": "kitchen_run_4",
+  "rooms": ["kitchen"],
+  "weight": 8,
+  "comment": "Short kitchen: fridge, sink, counter, oven.",
+  "layers": [
+    ["FSCO",
+     "...."],
+    ["    "],
+    [" uuu"]
+  ],
+  "palette": {
+    "F": {"block": "deci:BlockElectricBoxBin", "type": "prop", "face": "out"},
+    "C": {"block": "minecraft:quartz_block"},
+    "S": {"block": "minecraft:cauldron"},
+    "O": {"block": "minecraft:furnace", "type": "vanilla", "face": "out"},
+    "u": {"block": "minecraft:planks", "meta": 0}
+  }
+}
