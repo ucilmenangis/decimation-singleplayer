@@ -64,29 +64,64 @@ public final class Slices
         }
     }
 
+    /**
+     * Floor height from the terrain, or CANCELLED. Samples a 5x5 grid over
+     * the WHOLE footprint, but only where the chunk already exists (never
+     * forces generation); the first slice's own window is always loaded, so
+     * there are at least those samples. Median of the samples; rejected on
+     * water or a spread above maxSpread.
+     */
     private static int decideBase(World world, Plan p, int x0, int z0, int x1, int z1)
     {
-        int[] ys = new int[9];
+        int[] ys = new int[25 + 9];
         int n = 0;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
-            for (int k = 0; k < 3; k++)
+            for (int k = 0; k < 5; k++)
             {
-                int x = x0 + (x1 - x0) * i / 2, z = z0 + (z1 - z0) * k / 2;
-                int y = StructureGenerator.soilTop(world, x, z);
-                if (y < 5 || StructureGenerator.waterAbove(world, x, y, z))
+                int x = p.minX() + (p.maxX() - p.minX()) * i / 4;
+                int z = p.minZ() + (p.maxZ() - p.minZ()) * k / 4;
+                if (!world.blockExists(x, 64, z))
+                {
+                    continue;
+                }
+                int y = sample(world, x, z);
+                if (y == Integer.MIN_VALUE)
                 {
                     return StructureData.CANCELLED;
                 }
                 ys[n++] = y;
             }
         }
-        Arrays.sort(ys);
-        if (ys[8] - ys[0] > p.maxSpread())
+        for (int i = 0; i < 3; i++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
+                int y = sample(world, x0 + (x1 - x0) * i / 2, z0 + (z1 - z0) * k / 2);
+                if (y == Integer.MIN_VALUE)
+                {
+                    return StructureData.CANCELLED;
+                }
+                ys[n++] = y;
+            }
+        }
+        Arrays.sort(ys, 0, n);
+        if (ys[n - 1] - ys[0] > p.maxSpread())
         {
             return StructureData.CANCELLED;
         }
-        return ys[4];
+        return ys[n / 2];
+    }
+
+    /** Soil height at a column, or MIN_VALUE for water / void. */
+    private static int sample(World world, int x, int z)
+    {
+        int y = StructureGenerator.soilTop(world, x, z);
+        if (y < 5 || StructureGenerator.waterAbove(world, x, y, z))
+        {
+            return Integer.MIN_VALUE;
+        }
+        return y;
     }
 
     private static void write(World world, Plan p, int baseY, int x0, int z0, int x1, int z1)
@@ -111,7 +146,7 @@ public final class Slices
                         {
                             break;
                         }
-                        world.setBlock(x, y, z, Blocks.stonebrick, 0, 2);
+                        world.setBlock(x, y, z, p.foundation(), 0, 2);
                     }
                 }
                 for (int y = baseY; y <= top + p.clearAbove(); y++)

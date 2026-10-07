@@ -37,6 +37,9 @@ public interface Plan
     /** Ground height spread the first slice tolerates before rejecting the site. */
     int maxSpread();
 
+    /** Block that fills the gap between the floor and lower ground. */
+    net.minecraft.block.Block foundation();
+
     /** Decimation zone to tag the site with, or null. */
     net.decimation.mod.server.zones.a zone();
 

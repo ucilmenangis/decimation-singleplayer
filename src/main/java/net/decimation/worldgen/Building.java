@@ -166,7 +166,8 @@ public class Building implements Plan
     public int maxZ() { return minZ + length; }
     public int height() { return floors * FLOOR + 2; }
     public int clearAbove() { return 5; }
-    public int maxSpread() { return 8; }
+    public int maxSpread() { return 12; } // a stone brick plinth reads fine on slopes
+    public Block foundation() { return Blocks.stonebrick; } // reads as a basement plinth
 
     public net.decimation.mod.server.zones.a zone()
     {

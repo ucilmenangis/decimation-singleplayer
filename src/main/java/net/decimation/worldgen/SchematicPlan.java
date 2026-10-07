@@ -46,7 +46,8 @@ public class SchematicPlan implements Plan
     public int maxZ() { return minZ + (swapped() ? s.width : s.length) - 1; }
     public int height() { return s.height - 1; }
     public int clearAbove() { return 0; }
-    public int maxSpread() { return 10; }
+    public int maxSpread() { return 7; }
+    public Block foundation() { return net.minecraft.init.Blocks.dirt; } // reads as ground, not a wall
     public net.decimation.mod.server.zones.a zone() { return zone; }
 
     public String describe()
