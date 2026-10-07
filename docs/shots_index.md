@@ -299,3 +299,13 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
 - 16..18 city edge (north side, z 6): the land outside is ramped down to
   the street over 10 blocks; it reads as grass terraces 1 block high up
   to natural ground about 12 higher. Works, could be smoother / wider.
+
+## lc_interiors_v0.24.1/ and lc_interiors_v0.24.2/ (interiors of converted city buildings, 24 views each, same spots)
+- v0.24.1: offices with desk rows, monitors and chairs, restaurant tables,
+  kitchens; BUT rows of sandstone cubes on floors (7, 13, 15: basalt
+  translated as salt flat) and many open window holes (glass panes were
+  skipped: the frying pan rule matched "pane").
+- v0.24.2 (translator fixed): glass walls and windows back (4, 6, 8, 14,
+  23), stone floors instead of sandstone cubes, stone bricks grey (were red
+  brick). Several camera spots face a wall or stand in a corridor (3, 5,
+  10, 16, 17).

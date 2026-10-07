@@ -287,3 +287,11 @@ hold different buildings, keep the two apart). Catalogue tables in
   road and the staircase meeting the upper street. Verified for one
   stairs part without rotation; rotated stairs, bridges and fronts not
   tested yet `[not verified]`.
+- Translator audit (8 Oktober 2026, top 300 block types by use): fixed
+  stone_bricks -> red brick (material order), every "...pane" skipped by
+  the frying pan rule (windows missing), basalt -> sandstone (the "salt"
+  rule), wooden vertical slabs -> stone. Buttons (wall only) and pressure
+  plates map to 1.7 ones, tanks to dark metal, barbed wire to Decimation
+  razor wire, salt flats to pale grey stone. Still skipped on purpose:
+  structure void, papers / books / towels / paintings / light switches /
+  fluid pipes / small food items (decor without a 1.7 block).

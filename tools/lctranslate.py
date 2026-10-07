@@ -51,8 +51,9 @@ def wood_of(path):
 MATERIAL = [
     (("quartz", "calcite", "marble", "white_concrete", "snow"), ("minecraft:quartz_block", 0)),
     (("nether_brick",), ("minecraft:nether_brick", 0)),
+    (("stone_brick", "stonebrick", "tile", "deepslate_brick", "concrete_brick", "concretbrick"),
+     ("minecraft:stonebrick", 0)),
     (("brick",), ("minecraft:brick_block", 0)),
-    (("stone_brick", "stonebrick", "tile"), ("minecraft:stonebrick", 0)),
     (("mossy",), ("minecraft:mossy_cobblestone", 0)),
     (("cobble",), ("minecraft:cobblestone", 0)),
     (("sandstone",), ("minecraft:sandstone", 2)),
@@ -179,7 +180,9 @@ def furniture(ns, path, p):
         return "minecraft:carpet" if False else "minecraft:wool", c if c is not None else 8
     if "towel" in path or "toalla" in path or "papel" in path or "regadera" in path or "llaves" in path:
         return "skip", 0
-    if any(k in path for k in ("plate", "pan", "toaster", "microwave", "range_hood", "jar", "tray", "bread",
+    if (path.endswith("_pan") or path == "pan") and "pane" not in path:
+        return "skip", 0
+    if any(k in path for k in ("plate", "toaster", "microwave", "range_hood", "jar", "tray", "bread",
                                "lightswitch", "switch", "doorbell", "painting", "picture", "clock", "mirror",
                                "book", "cup", "mug", "bottle", "phone", "keyboard")) and "pressure" not in path \
             and "metal_plate" not in path:
@@ -209,14 +212,14 @@ def translate(state):
         return "minecraft:glass_pane", 0
     if "air_duct" in path or "vent" in path:
         return "minecraft:iron_block" if "vent" not in path else "deci:BlockCeilingVent", 0 if "vent" not in path else 2
-    if path in ("spawner", "gold_block") or "plushie" in ns or "decal" in path or "barbed" in path \
-            or "documento" in path or "libro" in path or "display_board" in path or "fluid" in path:
+    if path in ("spawner", "gold_block") or "plushie" in ns or "decal" in path \
+            or "documento" in path or "libro" in path or "display_board" in path or "fluid_pipe" in path:
         return "skip", 0
     if "lavabo" in path or "water_cauldron" in path:
         return "minecraft:cauldron", 0
     # wasteland / industrial (legacy deadzone district)
-    if "dried_salt" in path or "salt" in path:
-        return "minecraft:sandstone", 0
+    if path in ("dried_salt", "salt_block", "salt"):  # not basalt
+        return "deci:BlockStone_8", 0  # pale grey salt flat
     if "paving" in path:
         return ("deci:BlockStone_5" if "moist" in path else "deci:BlockStone_6"), 0
     if "scoria" in path or "coral" in path:
@@ -245,6 +248,9 @@ def translate(state):
     if path.endswith("_stairs"):
         return stair_block(path), STAIR_FACING.get(face, 3) | (4 if half == "top" else 0)
     if path.endswith("vertical_slab"):
+        w = wood_of(path)
+        if w and "stone" not in path:
+            return "minecraft:planks", WOODS[w]
         return material(path) or ("minecraft:stone", 0)
     if path.endswith("_slab"):
         name, m = slab_meta(path)
@@ -295,7 +301,19 @@ def translate(state):
         return "minecraft:ladder", VANILLA_FACE.get(face, 2)
     if "torch" in path or "candle" in path:
         return "minecraft:torch", TORCH.get(face, 5) if "wall" in path else 5
-    if "button" in path or "lever" in path or "pressure_plate" in path or "sign" in path or "banner" in path \
+    if path.endswith("_button"):
+        # 1.7 buttons only hang on walls: 1 east, 2 west, 3 south, 4 north
+        if p.get("face", "wall") != "wall":
+            return "skip", 0
+        wood = wood_of(path) is not None and "stone" not in path
+        return ("minecraft:wooden_button" if wood else "minecraft:stone_button"), {"east": 1, "west": 2, "south": 3,
+                                                                                   "north": 4}.get(face, 1)
+    if path.endswith("pressure_plate"):
+        wood = wood_of(path) is not None and "stone" not in path
+        return ("minecraft:wooden_pressure_plate" if wood else "minecraft:stone_pressure_plate"), 0
+    if "fluid_tank" in path or path.endswith("_tank"):
+        return "deci:BlockMetal_1", 0
+    if "lever" in path or "sign" in path or "banner" in path \
             or "item_frame" in path or "rail" == path or path.endswith("_rail"):
         return "skip", 0
     if path.endswith("_planks") or path == "planks" or re.search(r"planks_\d+$", path):
