@@ -86,7 +86,8 @@ docs/shots_index.md `sets_v0.20`.
   city buildings around you with the current code and sets; console:
   `/deciworldgen rebuild <radius> <x> <z>`).
 - Code: start the game with `cd dev && ./gradlew runClient -Photswap`
-  (debug port 5005); after a code change `python3 tools/hotswap.py`
+  (debug port 5005, bound to 127.0.0.1 only: on Java 8 a bare port listens
+  on every interface and would let anyone on the network run code); after a code change `python3 tools/hotswap.py`
   compiles and pushes the changed classes into the running game (verified
   2026-10-07: a changed log text appeared without restart), then
   `/deciworldgen rebuild`. Only method body changes swap; new fields /

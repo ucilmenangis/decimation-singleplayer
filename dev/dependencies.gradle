@@ -61,7 +61,7 @@ tasks.matching { it.name == "runClient" }.configureEach {
 // can be pushed into the running game (tools/hotswap.py), no restart
 tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("hotswap")) {
-        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005")
+        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005")
     }
 }
 
