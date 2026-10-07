@@ -162,6 +162,10 @@ public class DecimationWorldGen
             new net.decimation.fixes.SupplyDropScheduler());
         FMLLog.info("[%s] humanity and supply drop fixes registered", MODID);
 
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+            new net.decimation.fixes.MultiblockRepairHandler());
+        FMLLog.info("[%s] multiblock prop repair registered", MODID);
+
         if (System.getProperty(DevPregen.PROPERTY) != null)
         {
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new DevPregen());

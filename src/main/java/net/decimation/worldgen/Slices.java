@@ -167,6 +167,11 @@ public final class Slices
                     else
                     {
                         world.setBlock(x, y, z, block, meta[0], 2);
+                        if (block.hasTileEntity(meta[0]))
+                        {
+                            // multiblock props are drawn only by their master part
+                            net.decimation.fixes.MultiblockRepairHandler.repair(world.getTileEntity(x, y, z));
+                        }
                     }
                 }
             }
