@@ -207,3 +207,19 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
 - 12, 13 shop storey 1: camera faces a plaster wall with a door (stock
   partition) from up close: poor camera spot, not a building defect.
 - 14 shop roof with leaves.
+
+## dc_proof_v0.23/ (DeceasedCraft buildings converted to 1.7.10, pasted at y 150)
+- tools/lc2schem.py + lctranslate.py, `/deciworldgen paste`; buildings
+  0 apartmentsmalla, 1 residentiala, 2 policeoffice1, 3 fastfood,
+  4 office1a, pasted at x -140, -114, -88, -62, -36 (z 20). Cameras were
+  naive (fixed spot per storey): many face a wall or the sky.
+- 0 apartment ground: white walls, light tile floor, doorways, glass
+  doors, wooden furniture: clean, detailed. 1..3: closet corner + door.
+  4: facade, white quartz bands, dark stone, window strips.
+- 5 house: brick, dark oak, chairs + table, birch floor.
+- 10 police ground: glass front, stone counters, metal doors, tiles.
+- 15 fast food: tables with chairs, glass + brick front, counter, door.
+- 20, 21 office: stone counters, desk with monitor and chair, glass walls.
+- 24 office tower exterior: glass curtain wall, stone core, floor bands.
+- 11, 13, 22: the camera ended on the ground street (teleport issue),
+  not the pasted buildings; 12, 23: inside a wall.

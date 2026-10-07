@@ -105,3 +105,20 @@ street parts). Matches our planned "types per sector / district".
    changes.
 6. A building type catalogue and district styles to copy as our own
    types (names only, our own layouts with Decimation props).
+
+## Conversion to 1.7.10 (proof, 8 Oktober 2026)
+
+`tools/lc2schem.py DATA_DIR deceasedcraft REGISTRY_WORLD OUT_DIR BUILDING...`
+(venv python: needs numpy for mapsurvey) turns a Lost Cities building
+(single or multi) into a raw .schematic with this instance's block ids;
+`tools/lctranslate.py` translates 1.20 states by rules (shape words:
+stairs / slab / wall / pane / door / trapdoor; materials; colours;
+furniture categories to ONE CELL Decimation props or vanilla stand-ins, so
+no model draws over its neighbours, see docs/prop_footprints.tsv).
+5 buildings: about 98% of blocks translated; leftovers are small decor
+(soap dish, plush toys, food). `/deciworldgen paste NAME X Y Z` writes
+`config/decimation_worldgen/paste/NAME.schematic` raw. Result in
+docs/shots_index.md "dc_proof_v0.23": interiors read clean and detailed.
+Converted files are DeceasedCraft content: never commit them.
+Open: stair / door metadata mapping checked only by eye `[not verified]`;
+rotations (the _90/_180/_270 variants exist in the data).

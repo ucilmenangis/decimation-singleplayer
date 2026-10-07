@@ -26,7 +26,7 @@ public class WorldGenCommand extends CommandBase
     public String getCommandUsage(ICommandSender sender)
     {
         return "/deciworldgen reload | rebuild [radius] [x z] | pos1|pos2 [x y z]"
-               + " | capture set <name> <room> [north|south|west|east] [weight] | capture part <name>";
+               + " | capture set <name> <room> [north|south|west|east] [weight] | capture part <name> | paste <name> <x> <y> <z>";
     }
 
     @Override
@@ -75,6 +75,11 @@ public class WorldGenCommand extends CommandBase
             sender.addChatMessage(new ChatComponentText("[deciworldgen] " + args[0] + " = " + x + " " + y + " " + z));
             return;
         }
+        if (args.length >= 5 && "paste".equals(args[0]))
+        {
+            paste(sender, args[1], parseInt(sender, args[2]), parseInt(sender, args[3]), parseInt(sender, args[4]));
+            return;
+        }
         if (args.length >= 3 && "capture".equals(args[0]))
         {
             capture(sender, args);
@@ -88,6 +93,50 @@ public class WorldGenCommand extends CommandBase
             return;
         }
         sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
+    }
+
+    /**
+     * Writes config/decimation_worldgen/paste/NAME.schematic as it is (no
+     * placeholder swaps, no rotation) with its lower north west corner at
+     * x y z; air in the schematic clears the world. For converted reference
+     * buildings (tools/lc2schem.py).
+     */
+    private void paste(ICommandSender sender, String name, int x0, int y0, int z0)
+    {
+        java.io.File f = new java.io.File(net.decimation.worldgen.sets.FurnitureSets.SETS.dir().getParentFile(),
+                                          "paste/" + name + ".schematic");
+        try
+        {
+            Schematic s = Schematic.load(f);
+            net.minecraft.world.World world = sender.getEntityWorld();
+            java.util.List<int[]> tiles = new java.util.ArrayList<int[]>();
+            for (int y = 0; y < s.height; y++)
+            {
+                for (int z = 0; z < s.length; z++)
+                {
+                    for (int x = 0; x < s.width; x++)
+                    {
+                        int i = s.index(x, y, z);
+                        net.minecraft.block.Block b = net.minecraft.block.Block.getBlockById(s.blocks[i]);
+                        world.setBlock(x0 + x, y0 + y, z0 + z, b, s.data[i], 2);
+                        if (b.hasTileEntity(s.data[i]))
+                        {
+                            tiles.add(new int[] {x0 + x, y0 + y, z0 + z});
+                        }
+                    }
+                }
+            }
+            for (int[] t : tiles)
+            {
+                net.decimation.fixes.MultiblockRepairHandler.complete(world, t[0], t[1], t[2]);
+            }
+            sender.addChatMessage(new ChatComponentText("[deciworldgen] pasted " + name + " (" + s.width + "x"
+                + s.height + "x" + s.length + ") at " + x0 + " " + y0 + " " + z0));
+        }
+        catch (Exception e)
+        {
+            sender.addChatMessage(new ChatComponentText("[deciworldgen] paste failed: " + e));
+        }
     }
 
     private void capture(ICommandSender sender, String[] args)
