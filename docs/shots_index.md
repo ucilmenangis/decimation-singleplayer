@@ -260,3 +260,18 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
   -6, -3 show the same office / lab layout (one part used for a floor
   range in the data): rows of chairs and desks, glass walls. Several
   manual spots (x 28, z 60) face a wall.
+
+## lc_alignment_v0.23/ (alignment test scene, tools/lcscene.py, pasted at -120 70 30)
+- Low street (level A) road surface y 70, high street (level B) y 76,
+  buildings' ground floors at y 70, military base cellars below.
+- 0 along street A: road level with the building fronts on the left
+  (sheds with dead bushes on their salt plates), our generated city on
+  the right (the scene was pasted inside it).
+- 1 lab / factory fronts: plates and doorways flush with the road.
+- 2 military base: outer wall with razor wire right at the street edge.
+- 3 the deadzone stairs part from street A: a wide stone staircase with
+  brick sides and railings climbing to street B: lines up.
+- 4 from street B looking back east; 5 overview from above (mostly our
+  city's tower in view, poor spot).
+- 6 base courtyard passage at street level. 7, 8 camera inside cellar
+  walls (see-through), bunker levels with cell bars visible.

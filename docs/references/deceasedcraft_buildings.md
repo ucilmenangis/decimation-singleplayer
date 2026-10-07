@@ -274,3 +274,16 @@ hold different buildings, keep the two apart). Catalogue tables in
   of the deepest cellar; NAME.json {"groundY": n} tells /deciworldgen
   paste where the ground floor goes. Military base: 24 blocks of cellars,
   laboratory: 90. A city engine must dig these below street level.
+- ALIGNMENT TEST (8 Oktober 2026, `tools/lcscene.py`): Lost Cities
+  rules read from source: street surface block at the city ground level
+  G = groundLevel + cityLevel * 6 (FLOORHEIGHT 6), a building's ground
+  floor part starts at G (floor layer at G, walls from G + 1), cellars
+  stacked below, a stairs part goes into the lower street chunk at G + 1
+  rotated toward the higher neighbour (XMIN = no rotation). Scene with
+  two street levels 6 apart, 5 converted buildings and stair_deadzone_1:
+  world scan confirmed road at y 70 / 76, ground floor layers at 70,
+  stairs rising from 71 to 76 (the high street's surface); shots in
+  docs/shots_index.md "lc_alignment_v0.23" show fronts flush with the
+  road and the staircase meeting the upper street. Verified for one
+  stairs part without rotation; rotated stairs, bridges and fronts not
+  tested yet `[not verified]`.
