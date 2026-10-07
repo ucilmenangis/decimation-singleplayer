@@ -309,3 +309,12 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
   23), stone floors instead of sandstone cubes, stone bricks grey (were red
   brick). Several camera spots face a wall or stand in a corridor (3, 5,
   10, 16, 17).
+
+## lc_superblock_v0.24.3/ (superblock with the courtyard office tower, 0.24.2 code)
+- 0 from the street next to a legacy military base wall: the 192 high
+  courtyard office tower (4 x 4 chunks), lamps, other towers behind.
+- 1 from above (y 140): a real skyline: white and glass towers, the
+  chunk street grid with sidewalks and stairs, lots; reads like the
+  DeceasedCraft screenshots the user sent.
+- 2 street level between the tower's columns and a pink glass fronted
+  block; 3 a rooftop terrace of a neighbouring tower.

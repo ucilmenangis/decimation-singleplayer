@@ -78,7 +78,12 @@ building fronts, several stairs designs joining levels.
   later.
 - Districts are uniform random; deadzone should follow dead land.
 - Bridges, building fronts, parks, highways of the packs are not used.
-- Multi buildings bigger than 3 x 3 chunks (towers, casino, school,
-  laboratory) need bigger blocks (merge cells).
+- Superblocks (v0.24.2): 30% of aligned 2 x 2 city cell groups (all 4
+  city) become one block: streets only on its first chunk row / column,
+  7 x 7 building chunks, one level (the lowest of the 4), a landmark
+  (multi building over 3 x 3 chunks) placed first at its corner. Seed 1:
+  the courtyard office tower (4 x 4, 192 high). Still too big / tall:
+  casino (276 high), oasis condo (top above 250 with its cellars),
+  laboratory (90 deep cellars), terrace plaza 5 x 7 fits.
 - Building rotation: only the rotation variants the data lists.
 - Loot: chests became Decimation wood crates (loot works by block).

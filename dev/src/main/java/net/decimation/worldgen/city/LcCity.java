@@ -34,6 +34,8 @@ public final class LcCity
     public static final int BASE = 64;     // street surface at level 0
     public static final int LEVEL = 6;     // Lost Cities FLOORHEIGHT
     public static final int MAX_LEVEL = 2;
+    /** Share of aligned 2 x 2 city cell groups that become one superblock. */
+    static final float SUPER_CHANCE = 0.3f;
     /** Width of the ramp graded into the land around the city. */
     static final int EDGE = 10;
     /** Sidewalk width on each side of a street chunk (flush with the road). */
@@ -82,15 +84,22 @@ public final class LcCity
         int[] w = Slices.window(chunkX, chunkZ);
         int c0x = Math.floorDiv(w[0] >> 4, CELL), c1x = Math.floorDiv(w[2] >> 4, CELL);
         int c0z = Math.floorDiv(w[1] >> 4, CELL), c1z = Math.floorDiv(w[3] >> 4, CELL);
+        java.util.Set<Long> done = new java.util.HashSet<Long>();
+        long seed = world.getSeed();
         for (int cx = c0x; cx <= c1x; cx++)
         {
             for (int cz = c0z; cz <= c1z; cz++)
             {
-                if (!isCity(world.getSeed(), cx, cz))
+                if (!isCity(seed, cx, cz))
                 {
                     continue;
                 }
-                for (Plan p : plan(world.getSeed(), cx, cz))
+                int[] b = block(seed, cx, cz);
+                if (!done.add(((long) b[0] << 32) ^ (b[1] & 0xffffffffL)))
+                {
+                    continue; // a superblock already handled through another of its cells
+                }
+                for (Plan p : plan(seed, b[0], b[1]))
                 {
                     if (Slices.intersects(p, w))
                     {
@@ -181,14 +190,51 @@ public final class LcCity
         return styles.get((int) (v * styles.size()));
     }
 
+    /**
+     * The block a cell belongs to: {origin cell x, origin cell z, size in
+     * cells}. Aligned 2 x 2 cell groups become one SUPERBLOCK (the inner
+     * streets dropped, 7 x 7 building chunks) with SUPER_CHANCE when all 4
+     * cells are city: room for the big multi buildings (towers, school).
+     */
+    public static int[] block(long seed, int cellX, int cellZ)
+    {
+        int ox = Math.floorDiv(cellX, 2) * 2, oz = Math.floorDiv(cellZ, 2) * 2;
+        if (h(seed ^ 0x5355504552L, ox, oz) < SUPER_CHANCE && isCity(seed, ox, oz) && isCity(seed, ox + 1, oz)
+            && isCity(seed, ox, oz + 1) && isCity(seed, ox + 1, oz + 1))
+        {
+            return new int[] {ox, oz, 2};
+        }
+        return new int[] {cellX, cellZ, 1};
+    }
+
+    /** True for a chunk in the first chunk row or column of its block (a street chunk). */
+    static boolean isStreetChunk(long seed, int chx, int chz)
+    {
+        int[] b = block(seed, Math.floorDiv(chx, CELL), Math.floorDiv(chz, CELL));
+        return chx - b[0] * CELL == 0 || chz - b[1] * CELL == 0;
+    }
+
+    /** City ground of a cell (a superblock uses its lowest member level, so one level for all). */
     public static int ground(long seed, int cellX, int cellZ)
     {
-        return BASE + level(seed, cellX, cellZ) * LEVEL;
+        int[] b = block(seed, cellX, cellZ);
+        int l = level(seed, b[0], b[1]);
+        if (b[2] == 2)
+        {
+            l = Math.min(Math.min(l, level(seed, b[0] + 1, b[1])),
+                         Math.min(level(seed, b[0], b[1] + 1), level(seed, b[0] + 1, b[1] + 1)));
+        }
+        return BASE + l * LEVEL;
     }
 
     /** Every piece of one cell: 7 street chunks and the buildings / lots of the 3 x 3 block. */
     public synchronized List<Plan> plan(long seed, int cellX, int cellZ)
     {
+        int[] blk = block(seed, cellX, cellZ);
+        if (blk[0] != cellX || blk[1] != cellZ)
+        {
+            return plan(seed, blk[0], blk[1]); // a superblock is planned from its origin cell
+        }
         long key = ((long) cellX << 32) ^ (cellZ & 0xffffffffL);
         List<Plan> out = cache.get(key);
         if (out != null)
@@ -196,53 +242,70 @@ public final class LcCity
             return out;
         }
         out = new ArrayList<Plan>();
+        int size = blk[2] * CELL; // chunks per block side: 4, or 8 for a superblock
         int g = ground(seed, cellX, cellZ);
         String style = style(seed, cellX, cellZ);
         int bx = cellX * CELL * 16, bz = cellZ * CELL * 16;
-        // street chunks: the cell's first column (rows 0..3) and first row (columns 1..3)
-        for (int k = 0; k < 2 * CELL - 1; k++)
+        // street chunks: the block's first column and first row
+        for (int k = 0; k < 2 * size - 1; k++)
         {
-            int lx = k < CELL ? 0 : k - CELL + 1, lz = k < CELL ? k : 0;
+            int lx = k < size ? 0 : k - size + 1, lz = k < size ? k : 0;
             out.add(street(seed, cellX, cellZ, lx, lz, cellX * CELL + lx, cellZ * CELL + lz, g, style));
         }
         // land next to the city: a band ramping from street level to the natural height
         int[][] sides = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        for (int[] d : sides)
+        for (int mx = 0; mx < blk[2]; mx++)
         {
-            if (isCity(seed, cellX + d[0], cellZ + d[1]))
+            for (int mz = 0; mz < blk[2]; mz++)
             {
-                continue;
+                int ccx = cellX + mx, ccz = cellZ + mz;
+                int cbx = ccx * CELL * 16, cbz = ccz * CELL * 16;
+                for (int[] d : sides)
+                {
+                    if (isCity(seed, ccx + d[0], ccz + d[1]))
+                    {
+                        continue;
+                    }
+                    int x0 = d[0] < 0 ? cbx - EDGE : d[0] > 0 ? cbx + CELL * 16 : cbx;
+                    int x1 = d[0] < 0 ? cbx - 1 : d[0] > 0 ? cbx + CELL * 16 + EDGE - 1 : cbx + CELL * 16 - 1;
+                    int z0 = d[1] < 0 ? cbz - EDGE : d[1] > 0 ? cbz + CELL * 16 : cbz;
+                    int z1 = d[1] < 0 ? cbz - 1 : d[1] > 0 ? cbz + CELL * 16 + EDGE - 1 : cbz + CELL * 16 - 1;
+                    out.add(new EdgePlan("lce_" + ccx + "_" + ccz + "_" + d[0] + "_" + d[1], x0, z0, x1, z1, g,
+                                         cbx, cbz, cbx + CELL * 16 - 1, cbz + CELL * 16 - 1));
+                }
             }
-            int x0 = d[0] < 0 ? bx - EDGE : d[0] > 0 ? bx + CELL * 16 : bx;
-            int x1 = d[0] < 0 ? bx - 1 : d[0] > 0 ? bx + CELL * 16 + EDGE - 1 : bx + CELL * 16 - 1;
-            int z0 = d[1] < 0 ? bz - EDGE : d[1] > 0 ? bz + CELL * 16 : bz;
-            int z1 = d[1] < 0 ? bz - 1 : d[1] > 0 ? bz + CELL * 16 + EDGE - 1 : bz + CELL * 16 - 1;
-            out.add(new EdgePlan("lce_" + cellX + "_" + cellZ + "_" + d[0] + "_" + d[1], x0, z0, x1, z1, g,
-                                 bx, bz, bx + CELL * 16 - 1, bz + CELL * 16 - 1));
         }
-        // the 3 x 3 building block
+        // the building block (3 x 3 chunks, 7 x 7 in a superblock)
         Random r = new Random(seed ^ (cellX * 341873128712L + cellZ * 132897987541L) ^ 0x4C4342L);
-        boolean[][] used = new boolean[CELL][CELL];
+        boolean[][] used = new boolean[size][size];
         List<LcContent.Building> pool = new ArrayList<LcContent.Building>();
+        List<LcContent.Building> big = new ArrayList<LcContent.Building>();
         for (LcContent.Building b : LcContent.buildings())
         {
-            if (b.styles.containsKey(style) && b.cx < CELL && b.cz < CELL
+            if (b.styles.containsKey(style) && b.cx < size && b.cz < size
                 && g - b.groundY >= 4 && g - b.groundY + b.height <= TOP)
             {
                 pool.add(b);
+                if (b.cx * b.cz > 9)
+                {
+                    big.add(b);
+                }
             }
         }
         net.decimation.mod.server.zones.a zone = style.endsWith(":deadzone")
             ? net.decimation.mod.server.zones.a.MILITARY : net.decimation.mod.server.zones.a.POLICE;
-        for (int i = 1; i < CELL; i++)
+        for (int i = 1; i < size; i++)
         {
-            for (int j = 1; j < CELL; j++)
+            for (int j = 1; j < size; j++)
             {
                 if (used[i][j])
                 {
                     continue;
                 }
-                LcContent.Building pick = r.nextFloat() < 0.06f ? null : pick(pool, style, used, i, j, r);
+                // a superblock gets its landmark (a multi building over 3 x 3) first
+                List<LcContent.Building> from = i == 1 && j == 1 && !big.isEmpty() ? big : pool;
+                LcContent.Building pick = from == pool && r.nextFloat() < 0.06f ? null
+                    : pick(from, style, used, i, j, r);
                 int minX = bx + i * 16, minZ = bz + j * 16;
                 if (pick == null)
                 {
@@ -279,7 +342,7 @@ public final class LcCity
         int total = 0;
         for (LcContent.Building b : pool)
         {
-            if (i + b.cx > CELL || j + b.cz > CELL)
+            if (i + b.cx > used.length || j + b.cz > used.length)
             {
                 continue;
             }
@@ -332,8 +395,8 @@ public final class LcCity
         {
             int nx = chx + dirs[d][0], nz = chz + dirs[d][1];
             int ncx = Math.floorDiv(nx, CELL), ncz = Math.floorDiv(nz, CELL);
-            boolean nStreet = Math.floorMod(nx, CELL) == 0 || Math.floorMod(nz, CELL) == 0;
-            if ((ncx == cellX && ncz == cellZ) || !nStreet || !isCity(seed, ncx, ncz))
+            int[] nb = block(seed, ncx, ncz);
+            if ((nb[0] == cellX && nb[1] == cellZ) || !isStreetChunk(seed, nx, nz) || !isCity(seed, ncx, ncz))
             {
                 continue;
             }
