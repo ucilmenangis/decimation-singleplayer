@@ -99,30 +99,343 @@ public class DevAutoTest
     /** Client side: one view after another; false once all are saved. */
     private boolean takeViews(Minecraft mc)
     {
-        if (view >= VIEWS.length || "false".equals(System.getProperty(PROPERTY + ".views")))
+        int views = GALLERY ? (galleryNames().size() + GALLERY_PER_VIEW - 1) / GALLERY_PER_VIEW
+            : AUDIT ? AUDIT_VIEWS : VIEWS.length;
+        if (view >= views || "false".equals(System.getProperty(PROPERTY + ".views")))
         {
+            if (savedFov > 0)
+            {
+                // the dev client is also used for play: leave its options as they were
+                mc.gameSettings.fovSetting = savedFov;
+                mc.gameSettings.gammaSetting = savedGamma;
+                mc.gameSettings.hideGUI = false;
+                savedFov = 0;
+            }
             return false;
         }
+        if (savedFov == 0)
+        {
+            savedFov = mc.gameSettings.fovSetting;
+            savedGamma = mc.gameSettings.gammaSetting;
+        }
         mc.gameSettings.hideGUI = true;
+        if (AUDIT || GALLERY)
+        {
+            mc.gameSettings.gammaSetting = 1.0F;
+        }
+        if (GALLERY)
+        {
+            mc.gameSettings.fovSetting = 45.0F;
+        }
+        if (ONLY != null && !ONLY.contains(view))
+        {
+            view++;
+            return true;
+        }
         if (viewRequested < view)
         {
             viewRequested = view;
             viewWait = 0;
             return true;
         }
-        if (viewReady < view || ++viewWait < 260)
+        if (viewReady >= view && mc.thePlayer != null)
+        {
+            // hold the camera: a touched mouse or touchpad must not turn the shot
+            mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = viewYaw;
+            mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = viewPitch;
+        }
+        if (viewReady < view || ++viewWait < (GALLERY && shotsTaken > 0 ? 80 : GALLERY ? 500 : 260))
         {
             return true; // teleport pending, then let the chunks render
         }
+        if (viewSkip)
+        {
+            FMLLog.info("[%s] AUTOTEST view %d skipped: %s", DecimationWorldGen.MODID, view, viewSpot);
+            view++;
+            return true;
+        }
         net.minecraft.util.IChatComponent msg = net.minecraft.util.ScreenShotHelper.saveScreenshot(
-            mc.mcDataDir, "autotest_" + view + ".png", mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+            mc.mcDataDir, (GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
+            mc.displayWidth, mc.displayHeight,
+            mc.getFramebuffer());
         FMLLog.info("[%s] AUTOTEST view %d at %s: %s", DecimationWorldGen.MODID, view, viewSpot,
                     msg == null ? "?" : msg.getUnformattedText());
         view++;
+        shotsTaken++;
         return true;
     }
 
+    private int shotsTaken;
     private volatile String viewSpot = "";
+    private float savedFov, savedGamma;
+    private volatile float viewYaw, viewPitch;
+    /** -Ddeciworldgen.autotest.only=0,23,70-76: take only these views (re-shoots). */
+    private static final java.util.Set<Integer> ONLY = parseOnly(System.getProperty(PROPERTY + ".only"));
+
+    private static java.util.Set<Integer> parseOnly(String spec)
+    {
+        if (spec == null || spec.isEmpty())
+        {
+            return null;
+        }
+        java.util.Set<Integer> out = new java.util.HashSet<Integer>();
+        for (String part : spec.split(","))
+        {
+            String[] r = part.trim().split("-");
+            int a = Integer.parseInt(r[0]), b = r.length > 1 ? Integer.parseInt(r[1]) : a;
+            for (int i = a; i <= b; i++)
+            {
+                out.add(i);
+            }
+        }
+        return out;
+    }
+    private boolean peaceful;
+    private volatile boolean viewSkip;
+
+    // ---- gallery mode (-Ddeciworldgen.autotest.gallery=true): every
+    // Decimation block on a sky platform, 5 per screenshot (gallery_<n>.png),
+    // names logged per view, for the prop catalogue (docs/prop_catalogue.md)
+    private static final boolean GALLERY = "true".equals(System.getProperty(PROPERTY + ".gallery"));
+    private static final int GALLERY_PER_VIEW = 3, GALLERY_SPACING = 4, GALLERY_ROW = 15, GALLERY_ROW_GAP = 24;
+    private static final int GX = 4000, GY = 150, GZ = 4000;
+    private static List<String> galleryList;
+    private boolean galleryBuilt;
+
+    static synchronized List<String> galleryNames()
+    {
+        if (galleryList == null)
+        {
+            List<String> names = new ArrayList<String>();
+            for (Object o : cpw.mods.fml.common.registry.GameData.getBlockRegistry().getKeys())
+            {
+                String n = (String) o;
+                if (n.startsWith("deci:") && !n.startsWith("deci:BlockRoad") && !n.startsWith("deci:BlockMapBarrier")
+                    && !n.startsWith("deci:BlockSoundBlock"))
+                {
+                    names.add(n);
+                }
+            }
+            java.util.Collections.sort(names);
+            galleryList = names;
+        }
+        return galleryList;
+    }
+
+    private void serveGalleryView(int v)
+    {
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        List<String> names = galleryNames();
+        int rows = (names.size() + GALLERY_ROW - 1) / GALLERY_ROW;
+        if (!galleryBuilt)
+        {
+            galleryBuilt = true;
+            for (int cx = (GX >> 4) - 1; cx <= ((GX + GALLERY_ROW * GALLERY_SPACING) >> 4) + 1; cx++)
+            {
+                for (int cz = (GZ >> 4) - 1; cz <= ((GZ + rows * GALLERY_ROW_GAP + 16) >> 4) + 1; cz++)
+                {
+                    world.getChunkProvider().loadChunk(cx, cz);
+                }
+            }
+            for (int x = GX - 4; x < GX + GALLERY_ROW * GALLERY_SPACING + 4; x++)
+            {
+                for (int z = GZ - 6; z < GZ + rows * GALLERY_ROW_GAP + 16; z++)
+                {
+                    world.setBlock(x, GY - 1, z, net.minecraft.init.Blocks.stone, 0, 2);
+                }
+            }
+            for (int i = 0; i < names.size(); i++)
+            {
+                net.minecraft.block.Block b = net.minecraft.block.Block.getBlockFromName(names.get(i));
+                int x = GX + (i % GALLERY_ROW) * GALLERY_SPACING, z = GZ + (i / GALLERY_ROW) * GALLERY_ROW_GAP;
+                for (int dx = -2; dx < GALLERY_SPACING - 2; dx++)
+                {
+                    for (int y = GY; y < GY + 3; y++)
+                    {
+                        world.setBlock(x + dx, y, z - 4, net.minecraft.init.Blocks.quartz_block, 0, 2); // backdrop
+                    }
+                }
+                try
+                {
+                    // Decimation doors (DeciDoorBlock) copy vanilla door logic
+                    // without extending BlockDoor: place both halves
+                    if (b instanceof net.minecraft.block.BlockDoor || names.get(i).startsWith("deci:Door_"))
+                    {
+                        world.setBlock(x, GY, z, b, 3, 2);
+                        world.setBlock(x, GY + 1, z, b, 8, 2);
+                    }
+                    else
+                    {
+                        world.setBlock(x, GY, z, b, 3, 2);
+                        if (b.hasTileEntity(3))
+                        {
+                            net.decimation.fixes.MultiblockRepairHandler.complete(world, x, GY, z);
+                        }
+                    }
+                }
+                catch (Throwable t)
+                {
+                    FMLLog.info("[%s] AUTOTEST gallery could not place %s: %s", DecimationWorldGen.MODID, names.get(i), t);
+                }
+            }
+        }
+        world.setWorldTime(6000);
+        int first = v * GALLERY_PER_VIEW;
+        int row = first / GALLERY_ROW, col = first % GALLERY_ROW;
+        double x = GX + col * GALLERY_SPACING + (GALLERY_PER_VIEW - 1) * GALLERY_SPACING / 2.0 + 0.5;
+        double z = GZ + row * GALLERY_ROW_GAP + 9.5;
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        viewYaw = 180;
+        viewPitch = 12;
+        p.playerNetServerHandler.setPlayerLocation(x, GY + 1.5, z, 180, 12);
+        StringBuilder sb = new StringBuilder();
+        for (int i = first; i < Math.min(names.size(), first + GALLERY_PER_VIEW); i++)
+        {
+            if (i / GALLERY_ROW != row)
+            {
+                break; // the rest of this view's slots are on the next row
+            }
+            sb.append(names.get(i).substring(5)).append(i + 1 < first + GALLERY_PER_VIEW ? " | " : "");
+        }
+        viewSpot = "gallery " + sb;
+        viewReady = v;
+    }
+
+    // ---- audit mode (-Ddeciworldgen.autotest.audit=true): instead of the
+    // street views, 4 views each of a sample apartment, office and shop:
+    // facade from the street, ground storey, first upper storey, roof
+    private static final boolean AUDIT = "true".equals(System.getProperty(PROPERTY + ".audit"));
+    private static final int AUDIT_VIEWS = 12;
+    private List<Building> auditBuildings;
+
+    private void serveAuditView(int v)
+    {
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        if (auditBuildings == null)
+        {
+            auditBuildings = pickAuditBuildings(world);
+        }
+        viewSkip = false;
+        int i = v / 4, mode = v % 4;
+        Building b = i < auditBuildings.size() ? auditBuildings.get(i) : null;
+        if (b == null)
+        {
+            viewSkip = true;
+            viewSpot = "no building " + i;
+            viewReady = v;
+            return;
+        }
+        for (int cx = (b.minX >> 4) - 2; cx <= ((b.minX + b.width) >> 4) + 2; cx++)
+        {
+            for (int cz = (b.minZ >> 4) - 2; cz <= ((b.minZ + b.length) >> 4) + 2; cz++)
+            {
+                world.getChunkProvider().loadChunk(cx, cz);
+            }
+        }
+        Integer baseY = StructureData.get(world).baseY(b.id);
+        if (baseY == null || baseY == StructureData.CANCELLED)
+        {
+            viewSkip = true;
+            viewSpot = b.id + " not placed (" + baseY + ")";
+            viewReady = v;
+            return;
+        }
+        world.setWorldTime(6000);
+        boolean west = b.front == Building.FRONT_WEST;
+        double x, y, z;
+        float yaw, pitch;
+        if (mode == 0)
+        {
+            x = west ? b.lotX - 5 : b.lotMaxX() + 5;
+            z = b.minZ + b.length / 2.0;
+            y = baseY + 3;
+            yaw = west ? 270 : 90;
+            pitch = b.floors > 4 ? -30 : -12;
+        }
+        else if (mode == 3)
+        {
+            x = b.minX + b.width / 2.0;
+            z = b.minZ + b.length + 6;
+            y = baseY + b.floors * Building.FLOOR + 10;
+            yaw = 180;
+            pitch = 45;
+        }
+        else
+        {
+            int storey = mode - 1;
+            int[] c = storey < b.floors ? b.viewCell(storey) : null;
+            if (c == null)
+            {
+                viewSkip = true;
+                viewSpot = b.id + " has no storey " + storey;
+                viewReady = v;
+                return;
+            }
+            x = c[0] + 0.5;
+            z = c[1] + 0.5;
+            y = baseY + storey * Building.FLOOR + 1;
+            yaw = c[2];
+            pitch = 8;
+        }
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        viewYaw = yaw;
+        viewPitch = pitch;
+        p.playerNetServerHandler.setPlayerLocation(x, y, z, yaw, pitch);
+        viewSpot = b.describe() + " " + b.id + " mode " + mode + " at " + (int) x + "," + (int) y + "," + (int) z;
+        viewReady = v;
+    }
+
+    /** First apartment (3+ floors), tallest office and a shop of the city region nearest spawn. */
+    private List<Building> pickAuditBuildings(WorldServer world)
+    {
+        List<Building> out = new ArrayList<Building>();
+        long seed = world.getSeed();
+        Building apt = null, office = null, shop = null;
+        for (int r = 0; r < 6 && (apt == null || office == null || shop == null); r++)
+        {
+            for (int rx = -r; rx <= r; rx++)
+            {
+                for (int rz = -r; rz <= r; rz++)
+                {
+                    if (Math.max(Math.abs(rx), Math.abs(rz)) != r
+                        || Sectors.regionSector(seed, rx, rz) != StructureGenerator.CITY)
+                    {
+                        continue;
+                    }
+                    for (int cx = rx * 4; cx < rx * 4 + 4; cx++)
+                    {
+                        for (int cz = rz * 4; cz < rz * 4 + 4; cz++)
+                        {
+                            for (Building b : DecimationWorldGen.city.plan(world, cx, cz))
+                            {
+                                if (b.kind == Building.APARTMENT && b.floors >= 3 && apt == null)
+                                {
+                                    apt = b;
+                                }
+                                else if (b.kind == Building.OFFICE && (office == null || b.floors > office.floors)
+                                         && b.floors <= 12)
+                                {
+                                    office = b;
+                                }
+                                else if (b.kind == Building.SHOP && shop == null)
+                                {
+                                    shop = b;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        out.add(apt);
+        out.add(office);
+        out.add(shop);
+        return out;
+    }
 
     /** Server side: move the player to the requested view over a city street. */
     private void serveView()
@@ -133,6 +446,31 @@ public class DevAutoTest
             return;
         }
         viewSpot = "";
+        if (!peaceful)
+        {
+            // screenshots only after the tests (those need monsters): no mob
+            // may walk into a shot or attack the camera
+            peaceful = true;
+            MinecraftServer.getServer().func_147139_a(net.minecraft.world.EnumDifficulty.PEACEFUL);
+            WorldServer w = MinecraftServer.getServer().worldServerForDimension(0);
+            for (Object o : new ArrayList<Object>(w.loadedEntityList))
+            {
+                if (o instanceof net.minecraft.entity.EntityLiving)
+                {
+                    ((net.minecraft.entity.Entity) o).setDead();
+                }
+            }
+        }
+        if (GALLERY)
+        {
+            serveGalleryView(v);
+            return;
+        }
+        if (AUDIT)
+        {
+            serveAuditView(v);
+            return;
+        }
         net.minecraft.entity.player.EntityPlayerMP p = player();
         WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
         long seed = world.getSeed();
@@ -191,6 +529,8 @@ public class DevAutoTest
         }
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
+        viewYaw = yaw;
+        viewPitch = pitch;
         p.playerNetServerHandler.setPlayerLocation(px, py, pz, yaw, pitch);
         viewSpot += " " + (int) px + "," + (int) py + "," + (int) pz;
         viewReady = v;

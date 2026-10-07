@@ -296,6 +296,36 @@ public class Building implements Graded
         }
     }
 
+    /**
+     * Dev audit: a standing spot inside a storey, {world x, world z, yaw}
+     * looking from the front third towards the back wall. Null if the
+     * storey plan has no open cell.
+     */
+    int[] viewCell(int storey)
+    {
+        byte[][] plan = storey == 0 ? groundPlan : upperPlan;
+        int best = Integer.MAX_VALUE, bx = -1, bz = -1;
+        for (int fx = 1; fx < width - 1; fx++)
+        {
+            for (int z = 1; z < length - 1; z++)
+            {
+                int d = Math.abs(fx - width / 4) * 2 + Math.abs(z - length / 2);
+                if (plan[fx][z] == OPEN && d < best)
+                {
+                    best = d;
+                    bx = fx;
+                    bz = z;
+                }
+            }
+        }
+        if (bx < 0)
+        {
+            return null;
+        }
+        int x = front == FRONT_WEST ? minX + bx : minX + width - 1 - bx;
+        return new int[] {x, minZ + bz, front == FRONT_WEST ? 270 : 90};
+    }
+
     public net.decimation.mod.server.zones.a zone()
     {
         return net.decimation.mod.server.zones.a.POLICE;
@@ -317,7 +347,11 @@ public class Building implements Graded
         }
         int fx = front == FRONT_WEST ? x : width - 1 - x;
         int top = floors * FLOOR;
-        if (collapsed(fx, ly, z))
+        // the way up (ladder shaft or stair core) survives a collapse, so
+        // every storey stays reachable
+        boolean ladderShaft = coreFx < 0 && z == length - 2 && fx >= width - 2;
+        boolean stairCore = coreFx >= 0 && fx >= coreFx - 1 && fx <= coreFx + 7 && z >= coreFz - 1 && z <= coreFz + 4;
+        if (!ladderShaft && !stairCore && collapsed(fx, ly, z))
         {
             return rubbleBelowCollapse(fx, ly, z, meta);
         }
@@ -357,6 +391,13 @@ public class Building implements Graded
         }
         if (edge)
         {
+            if (coreFx < 0 && fx == width - 1 && z == length - 2)
+            {
+                // the ladder hangs on this wall cell: never a window or a
+                // decay hole, or the ladder pops off at the first block update
+                meta[0] = wallMeta;
+                return wall;
+            }
             return outerWall(fx, ly, z, storey, within, meta);
         }
         if (coreFx < 0 && fx == width - 2 && z == length - 2)
@@ -747,6 +788,13 @@ public class Building implements Graded
     {
         if (b == null || fx <= 0 || z <= 0 || fx >= width - 1 || z >= length - 1 || plan[fx][z] != OPEN)
         {
+            return;
+        }
+        if (coreFx < 0 && Math.abs(fx - (width - 2)) + Math.abs(z - (length - 2)) <= 1)
+        {
+            // nothing next to the ladder: a multiblock completed there sends
+            // block updates, and if the wall behind the ladder belongs to a
+            // window not written yet, the unsupported ladder pops off
             return;
         }
         plan[fx][z] = FURN;

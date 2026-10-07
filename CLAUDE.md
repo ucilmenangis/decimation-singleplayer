@@ -61,6 +61,14 @@ finding (not only at the end of a task), before moving on:
    covers them (a pass over CLAUDE.md costs about 85k tokens).
 3. Mark anything not verified in game or in code `[not verified]` /
    `[inferred]` in the doc itself.
+4. Visual evidence (user rule 2026-10-07: never re-shoot or re-analyse
+   what was already seen): every screenshot / render worth keeping goes to
+   `docs/shots/<topic>_v<version>/` (git ignored, local only: shows
+   Decimation art) AND gets a written description in
+   `docs/shots_index.md` (committed). Later sessions read the index, not
+   the images; open an image only for a detail not written down; re-shoot
+   only when the code behind it changed. Same for analysis results: write
+   the conclusion into the matching doc the moment it is reached.
 
 Before starting work in an area, query the graph first
 (`graphify query "<question>"`, or read `graphify-out/GRAPH_REPORT.md`) and
@@ -76,6 +84,15 @@ Knowledge index:
 - `docs/worldgen.md`: our structure generation (sectors, cells, sites, city
   blocks, large schematics, slice placement, placeholders, how to add
   community schematics, how to test).
+- `docs/building_audit.md`: quality audit of city buildings (round 2
+  step 4a), findings with evidence, prop inventory.
+- `docs/interior_spec.md`: design spec for interiors and exteriors
+  (surfaces, doors, room programs, story / decay layer, exterior, how to
+  verify); round 2 step 4c, DRAFT until the user approves it.
+- `docs/prop_catalogue.md`: what every Decimation block looks like, its
+  size and facing (from the prop gallery); doors use vanilla door meta.
+- `docs/shots_index.md`: what every saved screenshot in `docs/shots/`
+  shows (read this instead of opening images).
 - `deobf/notes/architecture.md`: package by package architecture of the mod,
   singleplayer gaps, dead backend calls, suspected bugs.
 - `deobf/names.tsv`: every class, obfuscated -> readable name + purpose.
@@ -222,6 +239,13 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   takes `type=decimation` for the world type.
 - `python3 tools/gradescan.py WORLD LOG`: graded city yards (floor vs ground
   at the walls, steep neighbour pairs, lot edge vs sidewalk, parked cars).
+- Screenshot modes of the autotest (all switch to peaceful and remove
+  mobs first, lock the camera each tick, restore fov / gamma at the end):
+  default = 3 street views; `-Paudit` = facade / ground / storey 1 / roof
+  of a sample apartment, office, shop; `-Pgallery` = every Decimation
+  block, 3 per shot; `-Ponly=0,23,70-76` re-shoots single views. Output
+  `dev/run/client/screenshots/`; copy keepers to `docs/shots/` and describe
+  them in `docs/shots_index.md`.
 - `./gradlew runClient -Pautotest` (in `dev/`): unattended singleplayer run
   (`DevAutoTest`, inert without the flag): makes world
   `deciworldgen_autotest` from seed 1, spawns infected inside a generated

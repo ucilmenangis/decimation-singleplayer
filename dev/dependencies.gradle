@@ -63,6 +63,18 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("autotest")) {
         jvmArgs("-Ddeciworldgen.autotest=true")
     }
+    // -Paudit: screenshots inside sample buildings instead of the street views
+    if (project.hasProperty("audit")) {
+        jvmArgs("-Ddeciworldgen.autotest.audit=true")
+    }
+    // -Pgallery: every Decimation block photographed 5 at a time
+    if (project.hasProperty("gallery")) {
+        jvmArgs("-Ddeciworldgen.autotest.gallery=true")
+    }
+    // -Ponly=0,23,70-76: re-shoot only these views
+    if (project.hasProperty("only")) {
+        jvmArgs("-Ddeciworldgen.autotest.only=" + project.property("only"))
+    }
 }
 
 // `gradlew runServer -Ppregen=x,z,radiusChunks` generates that area on start

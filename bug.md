@@ -10,6 +10,24 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Upper storeys unreachable (ladder popped off, stair core collapsed)
+- **Found**: 7 Oktober 2026 by the building audit (`tools/floorplan.py`
+  reachability): shop b-4_1_0 storey 1 0% reachable, office b-3_2_2 top
+  storey 0% reachable (seed 1, Decimation world type).
+- **Root causes (ours)**: (1) buildings without a stair core use a ladder
+  at (W-2, L-2) hanging on the back wall. The wall cell could be a window
+  or a decay hole, and the wall column often belongs to the NEXT population
+  window, so it does not exist yet when the ladder is written; any block
+  update meanwhile (a metal shelf next to the ladder being completed with
+  flag 3 since 0.16.0) makes the unsupported ladder pop off. (2) The
+  collapsed corner cone also removed ladder and stair core cells on the
+  top storeys.
+- **Fix (v0.16.1)**: the wall cell behind the ladder is always solid wall;
+  no furniture on the 4 cells around the ladder; ladder shaft and stair
+  core (plus a 1 block ring) are exempt from the collapse. Rescan of 105
+  buildings: no storey 0% reachable. Remaining low reachability comes from
+  full rubble cubes in doorways (step 4d rubble redesign; jumpable in game).
+
 ### Supply drop crate vanished on a street prop
 - **Found**: 7 Oktober 2026 by the dev autotest after street furniture
   (0.15.0): drop column 14/62 was a sidewalk with a trash bag on it.

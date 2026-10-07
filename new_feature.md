@@ -232,8 +232,18 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   lamps, benches, bins, trash bags, checked in autotest screenshots.
   Step 3 (full multiblocks) DONE in v0.16.0: generated shelves get their
   upper part (they are 2 tall, not 2 wide); vending machines turned out to
-  be single block props. Next: step 4, police station / hospital / gas
-  station / warehouse building types.
+  be single block props.
+  NEW step 4 (user, 7 Oktober 2026): building quality pass BEFORE new
+  types. User: buildings still need improvement and polish in every
+  aspect, interior and exterior; people love small details; design the
+  interiors in many deliberate steps so future buildings are production
+  quality. Sub-steps: a. audit (floor plan renders per storey + in game
+  screenshots per kind, findings with evidence); b. prop catalogue
+  (screenshot gallery of every Decimation prop); c. design spec per room
+  type and for exteriors in docs/building_design.md; d. interiors room by
+  room, each verified; e. exterior polish; f. user review in game.
+  Then step 5: police station / hospital / gas station / warehouse, and
+  step 6: loot balance per building.
 
 ---
 

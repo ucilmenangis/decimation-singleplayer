@@ -37,11 +37,13 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.16.0",
+     version = "0.16.1",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
     public static final String MODID = "deciworldgen";
+    /** The city planner, for the dev autotest's audit views. */
+    static CityDistrict city;
 
     private final List<Schematic> schematics = new ArrayList<Schematic>();
     private final List<Schematic> largeSchematics = new ArrayList<Schematic>();
@@ -141,7 +143,7 @@ public class DecimationWorldGen
         Map<Integer, Sub> subs = buildSubstitutions();
         StructureGenerator generator = new StructureGenerator(schematics, subs, roadBlocks(),
                                    Block.getBlockFromName("deci:BlockRoad"),
-                                   new CityDistrict(cityProps()),
+                                   city = new CityDistrict(cityProps()),
                                    new LargeSites(largeSchematics, subs));
         generator.setCars(resolve("deci:BlockWreckage1", "deci:BlockWreckage2", "deci:BlockWreckage3",
                                   "deci:BlockWreckage4", "deci:BlockWreckage5", "deci:BlockTruckWreckage1"));

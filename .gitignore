@@ -38,3 +38,6 @@ __pycache__/
 
 # Gradle wrapper is meant to be committed
 !dev/gradle/wrapper/gradle-wrapper.jar
+
+# ---- Local screenshots (show Decimation models / textures: never public) ----
+docs/shots/
