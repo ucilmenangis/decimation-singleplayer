@@ -93,6 +93,10 @@ Knowledge index:
 - `docs/interior_spec.md`: design spec for interiors and exteriors
   (surfaces, doors, room programs, story / decay layer, exterior, how to
   verify, building categories); round 2 step 4c, approved 2026-10-07.
+- `docs/worldgen_architecture.md`: worldgen v3 design (engine + data
+  assets, shell / storey plan / furnisher / layers, size classes, capture
+  tool, migration order); `docs/references/worldgen_study.md`: what Lost
+  Cities and Recurrent Complex do (read from source, 2026-10-07).
 - `docs/references/apartment.md`: real-world clearances, 1.7.10 furniture
   techniques, the apartment review checklist; critic reports in
   `docs/references/critic_*.md`.

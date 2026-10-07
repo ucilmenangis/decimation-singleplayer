@@ -1,0 +1,99 @@
+# Worldgen architecture v3 (DRAFT for user review, 7 Oktober 2026)
+
+Why: `Building.java` (~2000 lines) does shell, facade, floor plans, rooms,
+furniture, decay and grading in one class; every new building type would
+add special cases. Goal: a generic engine + data assets, so new building
+types (houses, garage, vehicle / food stores, police station, military
+base...) are mostly data, interiors improve version by version, and the
+user can design content in game. Based on docs/references/worldgen_study.md
+(Lost Cities, Recurrent Complex).
+
+User decisions (7 Oktober 2026):
+- Content: HYBRID. Hand-designed storey parts / special rooms where quality
+  matters + procedural planners and furniture sets for variety and for
+  footprints no part fits.
+- In-game CAPTURE tool early: build in creative, save as a part or set.
+- Footprints snap to SIZE CLASSES so designed parts fit exactly.
+
+## Layers (each with its own package and data)
+
+1. **City planner** (`city/`): sectors -> cells -> lots (exists), plus the
+   choice of building TYPE per lot by weighted selectors per sector /
+   district (like Lost Cities city styles), streets, yards.
+2. **Building types** (`types/*.json`): category (civilian / police /
+   military / medical / industrial), zone, sectors allowed, size classes,
+   floors min / max, facade style(s), storey programme (which planner or
+   parts per storey, with conditions: ground, top, floor range, cellar),
+   loot profile, weight.
+3. **Shell** (`building/shell/`): footprint, storeys (5 high), outer walls
+   + lining, facade from a FACADE STYLE (palette + window pattern + trim +
+   entrance + ground storey treatment), vertical circulation (stair core,
+   ROTATED core for narrow blocks, ladder shaft, later lift shaft), roof.
+4. **Storey plan** (`building/plan/`): a grid per storey: cell kind (open,
+   wall, door, glass, lining, core, furniture) + ROOM id and room type,
+   doors with connections. Produced by a planner:
+   - `PartPlanner`: an authored storey part (char grids per layer, palette,
+     ROOM SLOT chars that tell the furnisher which room type a region is,
+     fixed furniture allowed);
+   - procedural planners (current code, extracted): `CorridorFlats`
+     (apartments), `OpenPlan` / `Cellular` (offices), `SalesFloor` (shops),
+     later `HouseRooms` (rooms composed by connections, maze style).
+5. **Furnisher** (`building/furnish/`): furniture SETS per room type (exists:
+   docs/furniture_sets.md), room programmes (which slots in which order),
+   walkway keeping, later wall decor (paintings as entities, curtains).
+6. **Layers / transformers** (`building/layers/`), applied in order:
+   `Ruins` (smooth decay field + structural support: nothing floats;
+   breaches, collapsed corners, rubble only where something fell),
+   `Story` (bodies, notes, blood, survivor camps, barricades, looting),
+   `Overgrowth` (biome vines, moss, leaves, snow, sand), `Loot` (crates by
+   loot profile and room type).
+7. **Writer** (exists): `Plan` + `Slices` + `StructureData`, slice by slice.
+
+## Assets (data, user editable, `/deciworldgen reload`)
+
+`config/decimation_worldgen/` gets `types/`, `parts/`, `palettes/`,
+`styles/`, `sets/` (exists), `conditions/`. Built-ins ship in the jar and
+are copied on first start (as sets already are); a config file with the
+same name replaces the built-in.
+- palette: char -> block[:meta] | weighted list | prop with facing |
+  special (loot crate by profile, set slot, door by role).
+- style: weighted palette lists (one part, many looks).
+- condition: ground / top / floor / range / cellar / biome / sector /
+  category tests, used by parts, sets and loot.
+
+## Size classes
+
+Footprints snap to classes so parts fit: S 12x12, M 16x16, L 24x24,
+LONG 12x24 (and 24x12), WIDE 16x24. A 26x26 lot holds any of them with a
+yard. Types list the classes they allow; the procedural planners still
+handle any size, so classes constrain only where parts are used.
+
+## Capture tool (early)
+
+`/deciworldgen capture set <name>` and `/deciworldgen capture part <name>`
+with two corners marked by a wand item or `pos1` / `pos2` subcommands:
+reads the blocks, builds the char grids and an automatic palette (one
+char per block+meta, props with their facing converted to "face"
+relative to the chosen back wall / front), writes JSON to the config
+folder, reloads. Then `/deciworldgen rebuild` shows it in the city.
+
+## Migration (one step per version, no regressions)
+
+Each step verified with wallscan, gradescan, multiscan, floorplan
+reachability, audit / flats / sets screenshots and the autotest.
+1. Asset core: palette / style / condition loaders; capture command.
+2. Extract Shell, StoreyPlan, Furnisher, layers out of `Building` without
+   behaviour change (compare floor plans before / after).
+3. Express apartment / office / shop as type JSON on top of the extracted
+   modules; rotated stair core.
+4. PartPlanner: authored storey parts with room slots (first parts made
+   with the capture tool).
+5. Ruins transformer replaces the per-cell decay rules.
+6. New types: house, garage, food store, vehicle store, police station,
+   military base (each = type JSON + parts / sets + maybe one planner).
+
+## Open questions (for later)
+
+- Interiors spanning several storeys (atriums, stair halls).
+- Basements / cellars (Lost Cities style) and underground parking.
+- How many footprint classes the city planner should mix per block.

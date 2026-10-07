@@ -278,6 +278,14 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   reference + checklist, critic pass 1 (overall 3/10 on v0.20), fixes for
   the verified findings. Open items listed in
   docs/references/critic_apartment_v0.20.md; then offices / shops on sets.
+  DIRECTION CHANGE (user, 7 Oktober 2026): no fixed score target, steady
+  improvement per version; first restructure the worldgen code so new
+  building types are easy and interiors manageable. Study of Lost Cities
+  + Recurrent Complex done (docs/references/worldgen_study.md); user
+  decisions: hybrid content (authored parts + procedural), in-game
+  capture tool early, footprint size classes. Architecture draft:
+  docs/worldgen_architecture.md (awaiting user review), migration in 6
+  steps.
 
 ---
 
