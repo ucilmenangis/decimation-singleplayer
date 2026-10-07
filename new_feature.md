@@ -289,7 +289,8 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   types (docs/references/decimation_maps.md, deceasedcraft_buildings.md).
   Architecture APPROVED 8 Oktober 2026. Step 1 (asset core + capture) DONE
   v0.22.0. Next: step 2, extract Shell / StoreyPlan / Furnisher / layers
-  out of Building without behaviour change.
+  out of Building without behaviour change. User decision 8 Oktober:
+  public buildings 6 high storeys, homes / apartments 5 (after step 2).
 
 ---
 

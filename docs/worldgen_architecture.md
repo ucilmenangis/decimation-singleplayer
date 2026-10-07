@@ -111,8 +111,12 @@ docs/references/decimation_maps.md and deceasedcraft_buildings.md:
   first, holes second.
 - Building type list and district styles (suburb residential, retail,
   highrise residential / office / hotel) as the target catalogue.
-- Open: 6 high storeys (4 air) for public types (user did not decide
-  yet; stays 5 until asked).
+- DECIDED (user, 8 Oktober 2026): storey height per building type.
+  Public buildings (office, police, hospital, shop, military) get 6 high
+  storeys (floor, 4 air, ceiling); houses and apartments stay 5 (floor,
+  3 air, ceiling). Plan: step 2 turns Building.FLOOR into a per building
+  storey height (still 5 everywhere, identical output), then a separate
+  version switches offices and shops to 6 (stair runs 6 steps).
 
 ## Open questions (for later)
 
