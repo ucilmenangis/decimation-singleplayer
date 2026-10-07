@@ -93,6 +93,7 @@ public class DevAutoTest
                     run(MinecraftServer.getServer().worldServerForDimension(0));
                     checkVehicle();
                     checkHumanity();
+                    checkPropBox();
                     dropBottlecaps();
                     deci.aJ.b.aAg = 0; // supplyDropCountdown: drop on the next tick
                     waitTicks = 100;   // pickup, and spawn invulnerability runs out
@@ -121,6 +122,24 @@ public class DevAutoTest
 
     private int phase;
     private int waitTicks;
+
+    /** Prop culling patch: a table's render box must be the rotation proof 2x2 box. */
+    private void checkPropBox()
+    {
+        net.minecraft.block.Block table = net.minecraft.block.Block.getBlockFromName("deci:BlockWoodTable");
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        if (table == null || p == null)
+        {
+            return;
+        }
+        net.minecraft.tileentity.TileEntity te = table.createTileEntity(p.worldObj, 2);
+        te.xCoord = 100;
+        te.yCoord = 64;
+        te.zCoord = 100;
+        net.minecraft.util.AxisAlignedBB bb = te.getRenderBoundingBox();
+        FMLLog.info("[%s] AUTOTEST prop box: table at 100,64,100 -> %.2f..%.2f x %.2f..%.2f y %.2f..%.2f z (old 1x1 cell = 100..101)",
+                    DecimationWorldGen.MODID, bb.minX, bb.maxX, bb.minY, bb.maxY, bb.minZ, bb.maxZ);
+    }
 
     /** Humanity fix: a player killing an infected gains humanity (+1 from the
      *  infected's own value, +1 from the formerly dedicated-only rule). */
