@@ -57,6 +57,11 @@ public class StructureGenerator implements IWorldGenerator
     private static final int RING = 3;
     /** City street width in blocks, along each cell's west and north edge. */
     private static final int STREET_WIDTH = 5;
+    /** Sidewalk width on every side of a city block. */
+    private static final int SIDEWALK = 2;
+    /** One car slot every this many blocks along a lane, filled with CAR_CHANCE / 256. */
+    private static final int CAR_SPACING = 9;
+    private static final int CAR_CHANCE = 90;
     /** How far above a street plants and tree parts are cleared. */
     private static final int STREET_CLEARANCE = 8;
     /** Zone extends this many blocks past the footprint on every side. */
@@ -99,6 +104,13 @@ public class StructureGenerator implements IWorldGenerator
     private final CityDistrict city;
     /** Large schematics, any size, written slice by slice. */
     private final LargeSites large;
+    /** Car wreck props parked on city streets (may be empty). */
+    private Block[] cars = new Block[0];
+
+    public void setCars(Block[] cars)
+    {
+        this.cars = cars;
+    }
     private boolean disabled;
     private int errors;
     private boolean loggedBadId;
@@ -433,28 +445,21 @@ public class StructureGenerator implements IWorldGenerator
      */
     private void paintStreets(World world, int chunkX, int chunkZ)
     {
-        boolean northSouth = Math.floorMod(chunkX, CELL) == 0;
-        boolean eastWest = Math.floorMod(chunkZ, CELL) == 0;
-        if (!northSouth && !eastWest)
-        {
-            return;
-        }
         int baseX = chunkX << 4, baseZ = chunkZ << 4;
         for (int x = 0; x < 16; x++)
         {
             for (int z = 0; z < 16; z++)
             {
-                if (!((northSouth && x < STREET_WIDTH) || (eastWest && z < STREET_WIDTH)))
+                int wx = baseX + x, wz = baseZ + z;
+                int ox = Math.floorMod(wx, CELL * 16), oz = Math.floorMod(wz, CELL * 16);
+                boolean street = ox < STREET_WIDTH || oz < STREET_WIDTH;
+                boolean sidewalk = !street && (ox < STREET_WIDTH + SIDEWALK || oz < STREET_WIDTH + SIDEWALK
+                    || ox >= CELL * 16 - SIDEWALK || oz >= CELL * 16 - SIDEWALK);
+                if (!street && !sidewalk)
                 {
                     continue;
                 }
-                int wx = baseX + x, wz = baseZ + z;
-                int y = ground(world, wx, wz) - 1;
-                // ground() stops on tree trunks; walk down to the real soil
-                while (y > 4 && clearable(world.getBlock(wx, y, wz)))
-                {
-                    y--;
-                }
+                int y = soilTop(world, wx, wz);
                 if (y <= 4 || y > 250 || isWater(world, wx, y + 1, wz))
                 {
                     continue;
@@ -464,7 +469,7 @@ public class StructureGenerator implements IWorldGenerator
                 {
                     continue;
                 }
-                world.setBlock(wx, y, wz, streetBlock, 0, 2);
+                world.setBlock(wx, y, wz, street ? streetBlock : Blocks.double_stone_slab, 0, 2);
                 for (int above = y + 1; above <= y + STREET_CLEARANCE; above++)
                 {
                     if (clearable(world.getBlock(wx, above, wz)))
@@ -472,8 +477,59 @@ public class StructureGenerator implements IWorldGenerator
                         world.setBlock(wx, above, wz, Blocks.air, 0, 2);
                     }
                 }
+                if (street && cars.length > 0)
+                {
+                    int carMeta = carMeta(world, ox, oz, wx, wz);
+                    if (carMeta >= 0)
+                    {
+                        Block car = cars[(int) ((hash(world.getSeed(), wx, wz) >>> 8) % cars.length)];
+                        world.setBlock(wx, y + 1, wz, car, carMeta, 2);
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Parked / wrecked car on this street column, or -1. Lanes are 1 and 3
+     * across the 5 wide street, one car slot every CAR_SPACING blocks along
+     * it, never in intersections. Facing follows the street (PropRenderer
+     * turns props by metadata % 4 * 90 degrees): north-south streets get
+     * 4 or 2, east-west streets 5 or 3, the two lanes opposite ways.
+     * See docs/building_design.md.
+     */
+    private int carMeta(World world, int ox, int oz, int wx, int wz)
+    {
+        boolean northSouth = ox < STREET_WIDTH && oz >= STREET_WIDTH;
+        boolean eastWest = oz < STREET_WIDTH && ox >= STREET_WIDTH;
+        if (!northSouth && !eastWest)
+        {
+            return -1; // intersection
+        }
+        int across = northSouth ? ox : oz;
+        int along = northSouth ? oz : ox;
+        if ((across != 1 && across != 3) || (along - STREET_WIDTH) % CAR_SPACING != CAR_SPACING / 2)
+        {
+            return -1;
+        }
+        if ((hash(world.getSeed(), wx, wz) & 0xFF) >= CAR_CHANCE)
+        {
+            return -1;
+        }
+        if (northSouth)
+        {
+            return across == 1 ? 2 : 4;
+        }
+        return across == 1 ? 3 : 5;
+    }
+
+    private static long hash(long seed, int x, int z)
+    {
+        long h = seed ^ (x * 0x9E3779B97F4A7C15L) ^ (z * 0xC2B2AE3D27D4EB4FL);
+        h ^= h >>> 31;
+        h *= 0xBF58476D1CE4E5B9L;
+        h ^= h >>> 29;
+        return h & Long.MAX_VALUE;
     }
 
     /** Plants, snow and tree parts: things a street may remove or look through. */

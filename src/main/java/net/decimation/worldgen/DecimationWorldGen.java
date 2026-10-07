@@ -125,12 +125,13 @@ public class DecimationWorldGen
     public void init(FMLInitializationEvent event)
     {
         Map<Integer, Sub> subs = buildSubstitutions();
-        GameRegistry.registerWorldGenerator(
-            new StructureGenerator(schematics, subs, roadBlocks(),
+        StructureGenerator generator = new StructureGenerator(schematics, subs, roadBlocks(),
                                    Block.getBlockFromName("deci:BlockRoad"),
                                    new CityDistrict(cityProps()),
-                                   new LargeSites(largeSchematics, subs)),
-            100);
+                                   new LargeSites(largeSchematics, subs));
+        generator.setCars(resolve("deci:BlockWreckage1", "deci:BlockWreckage2", "deci:BlockWreckage3",
+                                  "deci:BlockWreckage4", "deci:BlockWreckage5", "deci:BlockTruckWreckage1"));
+        GameRegistry.registerWorldGenerator(generator, 100);
         FMLLog.info("[%s] structure generator registered", MODID);
 
         // singleplayer fixes that don't belong to world generation but need
@@ -259,12 +260,37 @@ public class DecimationWorldGen
     private Building.Props cityProps()
     {
         Building.Props p = new Building.Props();
-        p.crates = resolve("deci:BlockWoodCrate", "deci:BlockWoodCrate", "deci:BlockMedicalCrate",
-                           "deci:BlockPoliceCrate", "deci:BlockAmmoCrate");
-        p.furniture = resolve("deci:BlockWoodTable", "deci:BlockWoodTable2", "deci:BlockChair",
-                              "deci:BlockOfficeChair", "deci:BlockMetalShelf", "deci:BlockMetalShelf_Empty",
-                              "deci:BlockTrashcan", "deci:BlockCardboardBoxes1", "deci:BlockTrashBag1");
+        p.crates = resolve("deci:BlockWoodCrate", "deci:BlockMedicalCrate", "deci:BlockPoliceCrate",
+                           "deci:BlockAmmoCrate");
+        p.furniture = resolve("deci:BlockWoodTable", "deci:BlockChair", "deci:BlockOfficeChair",
+                              "deci:BlockMetalShelf");
+        p.table = one("deci:BlockWoodTable");
+        p.chair = one("deci:BlockChair");
+        p.officeChair = one("deci:BlockOfficeChair");
+        p.metalTable = one("deci:BlockMetalTable");
+        p.shelf = one("deci:BlockMetalShelf");
+        p.cabinet = one("deci:BlockWeaponCabinet");
+        p.cooking = one("deci:BlockCookingStation");
+        p.washer = one("deci:BlockWashingMachine");
+        p.trashcan = one("deci:BlockTrashcan");
+        p.vending = one("deci:BlockVendingMachine_1");
+        p.mailbox = one("deci:BlockMailbox");
+        p.cardboard = one("deci:BlockCardboardBoxes1");
+        p.woodCrate = one("deci:BlockWoodCrate");
+        p.medicalCrate = one("deci:BlockMedicalCrate");
+        p.policeCrate = one("deci:BlockPoliceCrate");
+        p.ammoCrate = one("deci:BlockAmmoCrate");
         return p;
+    }
+
+    private static Block one(String name)
+    {
+        Block b = Block.getBlockFromName(name);
+        if (b == null)
+        {
+            FMLLog.info("[%s] city prop '%s' not found", MODID, name);
+        }
+        return b;
     }
 
     private static Block[] resolve(String... names)

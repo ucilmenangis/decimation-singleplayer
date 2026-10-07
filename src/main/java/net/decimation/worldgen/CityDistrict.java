@@ -34,42 +34,58 @@ public class CityDistrict
         this.props = props;
     }
 
-    /** All buildings of one cell, from the world seed only (no world access). */
-    public List<Building> plan(long worldSeed, int cellX, int cellZ)
+    /**
+     * All buildings of one cell. Deterministic: world seed, cell coords and
+     * the biome generator (which answers for chunks not generated yet).
+     */
+    public List<Building> plan(World world, int cellX, int cellZ)
     {
         List<Building> out = new ArrayList<Building>();
-        Random r = new Random(worldSeed ^ (cellX * 7123479127L + cellZ * 912374191L) ^ 0x5EED_C17EL);
+        Random r = new Random(world.getSeed() ^ (cellX * 7123479127L + cellZ * 912374191L) ^ 0x5EEDC17EL);
         int baseX = cellX * CELL_BLOCKS, baseZ = cellZ * CELL_BLOCKS;
+        int style = style(world, baseX + CELL_BLOCKS / 2, baseZ + CELL_BLOCKS / 2);
         for (int lot = 0; lot < 4; lot++)
         {
             int lotX = baseX + LOT_OFFSETS[lot & 1];
             int lotZ = baseZ + LOT_OFFSETS[lot >> 1];
             float roll = r.nextFloat();
+            float sizeRoll = r.nextFloat();
             int kind, w, l, floors;
-            if (roll < 0.12f)
+            if (roll < 0.10f)
             {
                 r.nextInt(); // keep the stream aligned whatever the roll
                 continue; // empty lot
             }
-            if (roll < 0.55f)
+            if (roll < 0.52f)
             {
                 kind = Building.APARTMENT;
-                w = 13 + r.nextInt(12);
-                l = 13 + r.nextInt(12);
-                floors = 2 + r.nextInt(4);
+                w = 11 + r.nextInt(14);
+                l = 11 + r.nextInt(16);
+                floors = sizeRoll < 0.75f ? 2 + r.nextInt(4) : 6 + r.nextInt(4);
             }
             else if (roll < 0.80f)
             {
                 kind = Building.OFFICE;
-                w = 15 + r.nextInt(10);
-                l = 15 + r.nextInt(10);
-                floors = 3 + r.nextInt(4);
+                if (sizeRoll < 0.60f)
+                {
+                    floors = 3 + r.nextInt(4);
+                }
+                else if (sizeRoll < 0.85f)
+                {
+                    floors = 7 + r.nextInt(5);
+                }
+                else
+                {
+                    floors = 12 + r.nextInt(9); // towers, up to 20
+                }
+                w = 15 + r.nextInt(12);
+                l = 15 + r.nextInt(12);
             }
             else
             {
                 kind = Building.SHOP;
-                w = 9 + r.nextInt(10);
-                l = 9 + r.nextInt(12);
+                w = 9 + r.nextInt(12);
+                l = 9 + r.nextInt(14);
                 floors = 1 + r.nextInt(2);
             }
             w = Math.min(w, LOT_SIZE);
@@ -80,9 +96,37 @@ public class CityDistrict
             int z = lotZ + r.nextInt(LOT_SIZE - l + 1);
             long seed = r.nextLong();
             out.add(new Building("b" + cellX + "_" + cellZ + "_" + lot, x, z, w, l, floors,
-                                 kind, front, seed, props));
+                                 kind, front, style, seed, props));
         }
         return out;
+    }
+
+    /** Overgrowth style from the biome at a point. */
+    static int style(World world, int x, int z)
+    {
+        net.minecraft.world.biome.BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+        if (biome == null)
+        {
+            return Building.TEMPERATE;
+        }
+        if (net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.SNOWY)
+            || biome.getEnableSnow())
+        {
+            return Building.COLD;
+        }
+        if (net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.SANDY)
+            || net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.MESA)
+            || net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.SAVANNA)
+            || biome.rainfall < 0.15f)
+        {
+            return Building.DRY;
+        }
+        if (net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.JUNGLE)
+            || net.minecraftforge.common.BiomeDictionary.isBiomeOfType(biome, net.minecraftforge.common.BiomeDictionary.Type.SWAMP))
+        {
+            return Building.LUSH;
+        }
+        return Building.TEMPERATE;
     }
 
     /** Write every building slice inside this chunk's population window. */
@@ -100,7 +144,7 @@ public class CityDistrict
                 {
                     continue;
                 }
-                for (Building b : plan(world.getSeed(), cx, cz))
+                for (Building b : plan(world, cx, cz))
                 {
                     Slices.place(world, b, w);
                 }
