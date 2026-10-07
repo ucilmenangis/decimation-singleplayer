@@ -291,6 +291,13 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   v0.22.0. Next: step 2, extract Shell / StoreyPlan / Furnisher / layers
   out of Building without behaviour change. User decision 8 Oktober:
   public buildings 6 high storeys, homes / apartments 5 (after step 2).
+  DIRECTION CHANGE (user, 8 Oktober 2026): DeceasedCraft's buildings as
+  the city content (current beta + legacy 5.5.5 with the wasteland
+  district), Lost Cities layout (chunk streets, levels 6 apart, stairs).
+  v0.24.0..0.24.3 (docs/city_engine.md): content pack tool, city engine,
+  street dressing, city edge ramp, superblocks for towers, wasteland
+  district next to military sectors. Procedural buildings stay as the
+  fallback when no pack is installed.
   Step 2 DONE v0.22.1 (Building split into worldgen/building/, identical
   output). Offices and shops 6 high DONE v0.23.0. Next: step 3 (types
   as JSON, rotated stair core).
