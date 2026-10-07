@@ -35,7 +35,10 @@ Cellar padding under multi building chunks with fewer cellars is bedrock
     the distance in cells to a non city cell, so the city meets the land
     at level 0. Ground G = 64 + 6 * level (Lost Cities FLOORHEIGHT).
   - District style per 2 x 2 cells ("dc:suburb_residential",
-    "legacy:deadzone"...), uniform over the styles in the content.
+    "legacy:deadzone"...): since v0.24.3 the wasteland district (legacy
+    deadzone) within 2 cells of a military sector, elsewhere a weighted
+    pick (current beta districts weight 2, legacy town styles 1). Seed 1
+    spawn area: 98 current, 35 deadzone buildings.
   - Buildings: weighted pick (style factors) of buildings that fit the
     free part of the 3 x 3 block (multi buildings up to 3 x 3 chunks),
     cellars must stay above y 4 and the top below 250 (laboratory with 90
@@ -76,7 +79,6 @@ building fronts, several stairs designs joining levels.
   Graded plan that writes no blocks of its own); on higher land it reads
   as 1 block grass terraces: smoother / wider ramp or raising edge cells
   later.
-- Districts are uniform random; deadzone should follow dead land.
 - Bridges, building fronts, parks, highways of the packs are not used.
 - Superblocks (v0.24.2): 30% of aligned 2 x 2 city cell groups (all 4
   city) become one block: streets only on its first chunk row / column,

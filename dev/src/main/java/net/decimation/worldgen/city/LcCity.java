@@ -36,6 +36,8 @@ public final class LcCity
     public static final int MAX_LEVEL = 2;
     /** Share of aligned 2 x 2 city cell groups that become one superblock. */
     static final float SUPER_CHANCE = 0.3f;
+    /** City cells this close (in cells) to a military sector form the wasteland district. */
+    static final int DEADZONE_RANGE = 2;
     /** Width of the ramp graded into the land around the city. */
     static final int EDGE = 10;
     /** Sidewalk width on each side of a street chunk (flush with the road). */
@@ -167,9 +169,16 @@ public final class LcCity
         return (v >>> 11) * 0x1.0p-53;
     }
 
-    /** District style ("<pack>:<style>") of a cell: shared by 2 x 2 cell blocks. */
+    /**
+     * District style ("<pack>:<style>") of a cell, shared by 2 x 2 cell
+     * blocks: the wasteland district (legacy deadzone: factories, bunkers,
+     * military base) within DEADZONE_RANGE cells of a military sector;
+     * elsewhere a weighted pick, the current beta districts twice as likely
+     * as the legacy town styles.
+     */
     public static String style(long seed, int cellX, int cellZ)
     {
+        int gx = Math.floorDiv(cellX, 2) * 2, gz = Math.floorDiv(cellZ, 2) * 2;
         List<String> styles = new ArrayList<String>();
         for (LcContent.Building b : LcContent.buildings())
         {
@@ -186,8 +195,36 @@ public final class LcCity
         {
             return "";
         }
-        double v = h(seed ^ 0x5354594C45L, Math.floorDiv(cellX, 2), Math.floorDiv(cellZ, 2));
-        return styles.get((int) (v * styles.size()));
+        String dead = styles.contains("legacy:deadzone") ? "legacy:deadzone" : null;
+        if (dead != null)
+        {
+            for (int dx = -DEADZONE_RANGE; dx <= DEADZONE_RANGE + 1; dx++)
+            {
+                for (int dz = -DEADZONE_RANGE; dz <= DEADZONE_RANGE + 1; dz++)
+                {
+                    if (Sectors.sector(seed, (gx + dx) * CELL, (gz + dz) * CELL) == StructureGenerator.MIL)
+                    {
+                        return dead;
+                    }
+                }
+            }
+            styles.remove(dead);
+        }
+        int total = 0;
+        for (String st : styles)
+        {
+            total += st.startsWith("dc:") ? 2 : 1;
+        }
+        double v = h(seed ^ 0x5354594C45L, gx, gz) * total;
+        for (String st : styles)
+        {
+            v -= st.startsWith("dc:") ? 2 : 1;
+            if (v < 0)
+            {
+                return st;
+            }
+        }
+        return styles.get(styles.size() - 1);
     }
 
     /**
