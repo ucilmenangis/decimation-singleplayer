@@ -1,0 +1,91 @@
+source	path	category	size	blocks	furniture	main blocks
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/bigbossroom.nbt	other	16x8x16	966	2	chiseleddripstoneblock 364, blackstone_wall 248, chiseled_dripstonepillar 184, polished_basalt 80, chiseleddripstonepillarbottom 52
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/bohut_1.nbt	other	11x11x11	327	0	dirt 132, grass_block 108, stone 76, oak_fence 10, campfire 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/bossroom.nbt	horror / boss	8x8x8	253	5	chiseleddripstoneblock 76, blackstone_wall 68, chiseled_dripstonepillar 60, polished_basalt 28, chiseleddripstonepillarbottom 12
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/bostroxcamp1fixed.nbt	other	6x8x7	114	37	stone 67, moss_carpet 31, bostrokestone 7, flowering_azalea_leaves 4, cave_vines 2
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/camp_bostrox2.nbt	wasteland / ruin	9x8x9	91	0	stone 86, bostrokestone 4, campfire 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/cloggerplacetrue.nbt	horror / boss	5x5x5	0	0	
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/empty_pillar1.nbt	horror / boss	5x25x5	225	0	chiseled_dripstonepillar 199, chiseleddripstonepillarbottom 9, chiseleddripstonepillartop 9, dripstone_block 8
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/flowertomb.nbt	retail / food	4x7x3	53	0	coarse_dirt 36, grass_block 9, lily_of_the_valley 4, dirt 1, infested_stone 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/goldentomb.nbt	other	10x7x10	47	0	dirt 35, grass_block 7, rareimmortalsummonblock 3, stone 1, stone_slab 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/goldentombblock.nbt	other	10x7x10	62	0	coarse_dirt 45, grass_block 9, dirt 5, gold_block 1, stone 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/hugelavaboss.nbt	other	20x20x20	1568	3	chiseleddripstoneblock 670, chiseled_dripstonepillar 411, lava 316, polished_basalt 64, blackstone_wall 47
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/irontomb.nbt	other	4x7x3	49	0	coarse_dirt 36, grass_block 9, iron_block 1, dirt 1, infested_stone 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/landslide_dripstone1.nbt	wasteland / ruin	10x5x10	77	0	chiseleddripstoneblock 48, chiseled_dripstonepillar 27, chiseleddripstonepillarbottom 2
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/landslide_dripstone2.nbt	wasteland / ruin	10x5x10	106	0	chiseleddripstoneblock 67, chiseled_dripstonepillar 35, chiseleddripstonepillartop 3, altarnom 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/landslide_dripstone3.nbt	wasteland / ruin	10x5x10	100	0	chiseleddripstoneblock 49, chiseled_dripstonepillar 40, dripstone_block 5, chiseleddripstonepillarbottom 4, chiseleddripstonepillartop 2
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/longpath1.nbt	other	20x5x5	115	0	chiseleddripstoneblock 62, chiseled_dripstonepillar 47, chiseleddripstonepillartop 4, chiseleddripstonepillarbottom 2
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/posessivebank.nbt	horror / boss	16x25x25	1545	139	dark_prismarine 459, prismarine_bricks 378, prismarine 305, sea_lantern 135, dark_prismarine_stairs 80
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/posessivebankies.nbt	horror / boss	16x25x25	1545	139	dark_prismarine 459, prismarine_bricks 378, prismarine 305, sea_lantern 135, dark_prismarine_stairs 80
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/posessivehome1.nbt	horror / boss	16x25x25	1395	163	prismarine_bricks 381, prismarine 305, dark_prismarine 280, sea_lantern 159, dark_prismarine_stairs 80
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/posessivehomenew.nbt	horror / boss	16x25x25	1405	163	prismarine_bricks 383, prismarine 305, dark_prismarine 290, sea_lantern 159, dark_prismarine_stairs 80
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/prismavillage.nbt	horror / boss	16x20x16	596	11	dark_prismarine 236, prismarine_bricks 201, dark_prismarine_slab 118, prismarine_brick_slab 30, sea_lantern 10
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/prismavillagies.nbt	horror / boss	16x20x16	594	9	dark_prismarine 236, prismarine_bricks 201, dark_prismarine_slab 118, prismarine_brick_slab 30, sea_lantern 8
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/ruinscave1.nbt	wasteland / ruin	15x8x15	154	0	chiseleddripstoneblock 95, chiseled_dripstonepillar 45, chiseleddripstonepillarbottom 6, chiseleddripstonepillartop 6, chain 1
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/spawn_pillar1.nbt	horror / boss	5x25x5	225	0	chiseled_dripstonepillar 174, iron_bars 24, chiseleddripstonepillarbottom 9, chiseleddripstonepillartop 9, dripstone_block 8
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/spawnposess.nbt	horror / boss	3x4x3	0	0	
+THEUNDEADREVAMPED_1.9M_1.20.1.jar	data/undead_revamp2/structures/tomb1.nbt	horror / boss	4x7x3	49	0	coarse_dirt 36, grass_block 9, dirt 1, infested_stone 1, stone_slab 1
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/build1.nbt	other	23x29x22	4139	76	bricks 2266, cobblestone 472, stone_bricks 342, smooth_stone_slab 339, polished_andesite 186
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/caff.nbt	retail / food	16x7x14	859	28	brown_concrete 252, cobblestone 176, polished_andesite 152, oak_planks 125, light_gray_concrete 70
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/gas_station1.nbt	retail / food	23x9x18	1515	44	cobblestone 472, white_terracotta 372, oak_planks 182, smooth_stone_slab 128, smooth_stone 126
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/lighthouse.nbt	fire / public	13x35x13	1132	17	white_concrete 302, red_concrete 187, stone_bricks 168, oak_planks 88, iron_bars 86
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/modern_house1.nbt	residential	16x12x24	1918	49	bricks 592, stone_brick_stairs 281, oak_planks 277, stone_brick_slab 127, quartz_block 88
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/ruin1.nbt	wasteland / ruin	14x6x14	429	13	oak_planks 126, bricks 115, cobblestone 57, grass_block 21, glass 19
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/ruin2.nbt	wasteland / ruin	9x4x10	164	3	cobblestone 101, mossy_cobblestone 30, gravel 16, glass 8, cobweb 5
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/ruin3.nbt	wasteland / ruin	8x6x7	78	4	cobblestone 27, bricks 22, mossy_cobblestone 12, cobweb 4, iron_bars 4
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/ruin4.nbt	wasteland / ruin	9x6x8	125	3	bricks 43, cobblestone 42, mossy_cobblestone 13, cobweb 6, sand_bag 5
+Zombie Extreme 1.20.1 0.2.6.jar	data/zombie_extreme/structures/ruin5.nbt	wasteland / ruin	8x7x9	338	4	cobblestone 144, stone_bricks 63, oak_planks 42, cracked_stone_bricks 30, mossy_stone_bricks 25
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/1.nbt	other	11x7x9	271	20	green_terracotta 106, light_gray_concrete 66, green_concrete 48, sandbagbarrier 16, barbed_wire 8
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/1234.nbt	other	6x7x6	104	1	concretbricks 64, infested_stone_bricks 25, oak_planks 10, ladder 4, chest 1
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/17.nbt	other	12x12x12	58	1	concretbricks 23, concretbarrier 10, sandbags 8, sandbagsslab 7, barbewire 7
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/apartament.nbt	residential	45x35x30	16570	771	gray_terracotta 7321, black_terracotta 6282, polished_andesite 299, glass_pane 227, dark_oak_door 222
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/clinic.nbt	medical	35x12x45	4195	107	spruce_planks 1148, white_concrete 1143, polished_diorite 471, white_concrete_bricks 453, oak_leaves 224
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/destroyed_survivor_camp.nbt	wasteland / ruin	16x6x16	474	29	grass_block 118, rooted_dirt 98, dirt 39, gray_wool 26, cyan_wool 23
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/firefighter.nbt	fire / public	42x20x42	5890	512	smooth_stone 1960, redconcretebricks 982, black_concrete 608, red_concrete 478, polished_andesite_slab 243
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/house.nbt	residential	17x15x17	2018	103	polished_andesite 666, concrete_bricks 484, dark_oak_slab 173, stone_bricks 155, oak_leaves 143
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/mansion.nbt	other	33x25x33	5302	42	bricks 929, dark_oak_planks 834, spruce_planks 802, brick_stairs 504, polished_diorite 412
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/market.nbt	retail / food	23x7x40	3111	354	smooth_stone 675, dirt 651, white_concrete 651, red_concrete 308, grass_block 268
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/medicalpost.nbt	medical	11x7x9	273	16	yellow_terracotta 154, light_gray_concrete 66, sandbags 16, white_bed 12, spikes 8
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/military.nbt	military	26x8x37	2329	222	light_gray_concrete 794, black_concrete_bricks 294, green_terracotta 248, gray_concrete 219, oak_leaves 207
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/police.nbt	police	33x16x45	5957	259	polished_andesite 2467, blue_concrete_bricks 1539, stone_slab 408, iron_grid 269, oak_leaves 253
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/post.nbt	fire / public	11x7x9	272	21	green_terracotta 106, light_gray_concrete 66, green_concrete 48, sandbagbarrier 16, barbed_wire 8
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/ruins1.nbt	wasteland / ruin	18x6x20	524	26	oak_planks 135, light_gray_concrete_bricks 130, cobblestone 72, white_concrete_bricks 50, cobbled_deepslate 43
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/ruins2.nbt	wasteland / ruin	18x6x20	632	25	yellow_concrete_bricks 257, oak_planks 135, cobblestone 72, cobbled_deepslate 43, oak_log 37
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/scrapyard.nbt	industrial	45x12x45	5098	210	coarse_dirt 865, rooted_dirt 601, metal_bars 484, dirt 363, exposed_copper 340
+apocalypsenow-3.0.4NS-forge-1.20.1.jar	data/apocalypsenow/structures/storage.nbt	industrial	20x20x20	1693	291	smooth_stone_slab 389, black_concrete_bricks 367, gray_concrete 324, large_shelves_fill 151, white_concrete_bricks 148
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/camp_of_death.nbt	wasteland / ruin	7x7x8	115	1	grass_block 37, oak_leaves 19, grass 8, white_wool 6, fern 5
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/crucified_sect.nbt	horror / boss	7x7x7	147	1	spruce_log 29, oak_leaves 23, cracked_stone_bricks 19, smooth_basalt 14, pointed_dripstone 9
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/entity_tower.nbt	office / tower	7x12x7	226	1	deepslate 64, iron_bars 44, cobbled_deepslate 31, chain 20, grass_block 17
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/farm_gone_wrong.nbt	other	15x8x17	566	2	grass_block 156, dirt 66, dark_oak_fence 60, bamboo 47, grass 31
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/graveyard.nbt	wasteland / ruin	8x9x12	323	0	dirt 90, grass_block 80, iron_bars 28, andesite_wall 26, tall_grass 18
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/haunted_church.nbt	fire / public	7x12x10	487	16	sculk_vein 76, cracked_deepslate_bricks 59, dark_oak_log 49, dirt 48, polished_deepslate 37
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/herobrine_autel.nbt	horror / boss	7x7x7	162	7	dirt 41, deepslate_tile_stairs 29, sculk_vein 25, dark_oak_planks 23, sculk_catalyst 10
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/horror_fabric.nbt	horror / boss	10x7x16	659	21	dirt 140, vine 102, dark_oak_planks 65, dark_oak_stairs 48, dark_oak_log 39
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/indigenous_autel.nbt	horror / boss	7x8x7	163	0	mangrove_roots 87, iron_bars 18, deepslate_brick_stairs 15, dark_oak_log 13, dark_oak_planks 7
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/laboratory.nbt	medical	18x8x40	3882	271	stone_bricks 1053, polished_deepslate 708, spruce_planks 588, quartz_block 319, dirt 187
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/last_stand_house.nbt	residential	10x6x10	290	4	mossy_stone_bricks 40, spruce_planks 37, dark_oak_stairs 36, oak_planks 34, grass_block 28
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/log_and_axe_body.nbt	other	7x3x5	42	3	vine 11, oak_leaves 10, oak_log 4, grass 4, moss_block 2
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/military_ritual.nbt	military	7x8x5	80	0	oak_leaves 26, vine 16, mossy_cobblestone 7, black_candle 6, grass 6
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/small_labyrinth.nbt	medical	8x4x8	236	1	cobbled_deepslate 95, cracked_deepslate_tiles 59, cracked_deepslate_bricks 35, vine 22, moss_block 5
+horror_element_mod-1.6.2-forge-1.20.1.jar	data/horror_element_mod/structures/villager_tree.nbt	residential	5x10x5	51	0	oak_leaves 28, oak_log 9, vine 9, blood_3 1, spiked_villager 1
+spore_2.1.5c_1.20.1.jar	data/spore/structures/asylum.nbt	medical	48x48x48	43764	405	stone 12779, deepslate_tiles 8119, smooth_stone 4400, spruce_planks 3748, rotten_planks 3384
+spore_2.1.5c_1.20.1.jar	data/spore/structures/biomass_tower.nbt	office / tower	7x13x7	132	0	biomass_block 55, rooted_mycelium 48, rooted_biomass 20, fungal_roots 8, organite 1
+spore_2.1.5c_1.20.1.jar	data/spore/structures/biomass_tower_small.nbt	office / tower	5x8x5	75	0	biomass_block 26, rooted_biomass 25, rooted_mycelium 15, fungal_roots 8, organite 1
+spore_2.1.5c_1.20.1.jar	data/spore/structures/biomass_tower_tall.nbt	office / tower	7x12x7	182	0	biomass_block 76, rooted_biomass 56, rooted_mycelium 33, fungal_roots 16, organite 1
+spore_2.1.5c_1.20.1.jar	data/spore/structures/cathedral.nbt	fire / public	25x48x43	10719	363	polished_andesite 2948, mud_brick_stairs 736, stone_bricks 663, wall_growths 547, dirt 518
+spore_2.1.5c_1.20.1.jar	data/spore/structures/cell.nbt	police	11x48x5	492	1	smooth_stone 160, stone_bricks 81, stone_brick_wall 66, iron_bars 58, stone_brick_slab 30
+spore_2.1.5c_1.20.1.jar	data/spore/structures/celltower.nbt	police	32x48x32	8390	60	dirt 2293, stone 965, polished_deepslate_wall 528, mycelium 351, infested_stone 333
+spore_2.1.5c_1.20.1.jar	data/spore/structures/church.nbt	fire / public	14x21x19	1503	6	stone 363, stone_bricks 242, spruce_planks 200, dark_oak_stairs 108, quartz_block 76
+spore_2.1.5c_1.20.1.jar	data/spore/structures/church1.nbt	fire / public	13x28x26	2528	16	dirt 820, birch_planks 261, rotten_planks 254, birch_slab 117, cobblestone 109
+spore_2.1.5c_1.20.1.jar	data/spore/structures/church2.nbt	fire / public	7x13x10	258	3	polished_diorite_slab 52, stone_brick_wall 52, grass_block 27, stone_bricks 25, oak_log 19
+spore_2.1.5c_1.20.1.jar	data/spore/structures/hospital.nbt	medical	48x48x48	45992	1006	smooth_stone 8382, quartz_block 7684, stone 6244, dirt 6217, gray_concrete 5187
+spore_2.1.5c_1.20.1.jar	data/spore/structures/iceberg_mines.nbt	industrial	31x48x27	15724	41	blue_ice 14695, spruce_planks 179, iron_ladder 98, deepslate_bricks 95, stripped_spruce_wood 77
+spore_2.1.5c_1.20.1.jar	data/spore/structures/lab.nbt	medical	48x48x48	29595	145	lab_block3 8720, lab_block 3423, infested_laboratory_block3 2226, stone 1917, mycelium 1062
+spore_2.1.5c_1.20.1.jar	data/spore/structures/lodge.nbt	residential	21x23x21	2530	75	rotten_planks 504, cobblestone 420, dirt 386, oak_stairs 243, grass_block 158
+spore_2.1.5c_1.20.1.jar	data/spore/structures/massgrave1.nbt	wasteland / ruin	34x11x16	2048	35	coarse_dirt 1645, gravel 76, infested_dirt 67, infested_gravel 62, spruce_trapdoor 52
+spore_2.1.5c_1.20.1.jar	data/spore/structures/massgrave3.nbt	wasteland / ruin	40x15x20	4145	1	rooted_dirt 1301, infested_dirt 1175, coarse_dirt 1143, grass_block 122, cobblestone 43
+spore_2.1.5c_1.20.1.jar	data/spore/structures/massgrave4.nbt	wasteland / ruin	13x7x13	517	0	infested_dirt 111, rooted_dirt 103, coarse_dirt 94, dirt 70, remains 54
+spore_2.1.5c_1.20.1.jar	data/spore/structures/mega_biomass_tower.nbt	office / tower	9x16x9	398	0	mycelium_block 113, fungal_shell 97, rooted_mycelium 46, fungal_roots 33, membrane_block 32
+spore_2.1.5c_1.20.1.jar	data/spore/structures/military_camp.nbt	military	48x30x48	27873	177	sandstone 12966, sand 9530, stone 1385, infested_sand 668, smooth_sandstone 373
+spore_2.1.5c_1.20.1.jar	data/spore/structures/mines.nbt	industrial	48x28x23	9122	13	stone 5385, cobblestone 722, lab_block3 497, andesite 342, lab_slab3 257
+spore_2.1.5c_1.20.1.jar	data/spore/structures/prison.nbt	police	48x48x48	30892	305	stone_bricks 8120, cracked_stone_bricks 5527, quartz_block 3049, cobblestone 1685, stone 1635

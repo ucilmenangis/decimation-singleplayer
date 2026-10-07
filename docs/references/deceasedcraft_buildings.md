@@ -122,3 +122,59 @@ docs/shots_index.md "dc_proof_v0.23": interiors read clean and detailed.
 Converted files are DeceasedCraft content: never commit them.
 Open: stair / door metadata mapping checked only by eye `[not verified]`;
 rotations (the _90/_180/_270 variants exist in the data).
+
+## Full catalogue (step 1 of the DeceasedCraft plan, 8 Oktober 2026)
+
+`tools/dcinventory.py DATA_DIR MODS_DIR LCSTUDY_DIR OUT_DIR` (venv python)
+reads the DCTweaks data, the structure files inside the mod jars and the
+lcstudy output. Tables (names, sizes, counts only, no content) in
+`docs/references/dc_catalogue/`: `buildings.tsv`, `infra.tsv`,
+`structures.tsv`.
+
+What a DeceasedCraft world is made of:
+1. **Lost Cities city** (the main content): 79 building groups. Counts by
+   category: residential 30 (small apartments a..d plus broken versions,
+   hotels a..d, houses residential a..f, survivor house, flats small /
+   medium / large, condo tower 34 floors, taiga residence, cabins,
+   farmhouse, treehouse), office / tower 15 (office 1..5, bank, courtyard
+   tower 24 floors, ring tower 27 floors, timber tower, terrace plaza),
+   retail / food 13 (clothes, premium clothes, fast food, sushi, flower
+   shop, cafe, convenience store, gun store, casino 33 floors, club, gas
+   stations, food truck), public 5 (community centre, film studio
+   tower, gallery, vertical school 33 floors), industrial 4 (hardware
+   stores, workshop), police 3 (police office, police station, police
+   apartment), medical 3 (hospital, damaged hospital, polyclinic),
+   wasteland 3 (campsite, plane crash, hideout), other 1 (sunken
+   monument park).
+   Districts (city styles, share of each style's building picks):
+   suburb_residential (houses, survivor house, community centre, police
+   station, polyclinic), retail_district (shops, cafe, convenience,
+   gun store, hospital, gas station, terrace plaza), highrise_residential
+   (small apartments, flats, condo, school, taiga residence, police
+   apartment), highrise_office (offices, bank, workshop, towers, film
+   studio), highrise_hotel (hotels, casino, ring tower, gallery, club,
+   monument park). Scattered outside cities (worldstyle "modern"): cabins
+   1..3, food truck, treehouse, hideout, campsite, plane crash, farmhouse.
+   Infrastructure parts: 68 streets, 25 parks, 20 fronts (building
+   entrances to the street), 14 fountains, 12 highway, 12 rail, 7 stairs
+   (between city levels), 2 bridges.
+   The base Lost Cities jar adds its own 35 buildings / 14 multi
+   buildings / 187 parts (vanilla style ruins) `[not catalogued]`.
+2. **apocalypsenow structures** (mod jar, NOT disabled by DeceasedCraft):
+   military base (26x8x37), police station (33x16x45), fire station
+   (42x20x42), clinic (35x12x45), market (23x7x40), apartment block
+   (45x35x30), house, mansion, scrapyard (45x12x45), storage (20x20x20),
+   medical post, post, ruins 1..2, destroyed survivor camp, plus 3 small
+   unnamed (sandbag posts). This is the "military base" content.
+3. **Disabled by DeceasedCraft**: DCTweaks ships empty 1x1x1 copies of
+   every vanilla structure (villages, mansions, shipwrecks, ancient city,
+   ruined portals, igloo, outpost) and of the spore, horror_element,
+   undead_revamp2 and zombie_extreme structures. Those mods' real files
+   are still in their jars (spore: hospital 48^3, prison, military camp,
+   lab, asylum, cathedral; zombie_extreme: gas station, cafe, modern house,
+   lighthouse, ruins; horror_element: laboratory, small horror sites)
+   and could be used anyway.
+4. DeceasedCraft's own worldgen features are only ores.
+There is no separate military "wasteland" base in the Lost Cities data;
+military content = apocalypsenow military.nbt (+ spore military_camp
+if wanted) `[inferred]`.

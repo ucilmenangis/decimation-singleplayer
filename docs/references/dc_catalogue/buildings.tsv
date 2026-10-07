@@ -1,0 +1,80 @@
+building	category	chunks	floors	density	districts
+multi_communitycenter	fire / public	3x3	3	0.07	suburb_residential 11%
+multi_filmworkstower	fire / public	6x4	13	0.13	highrise_office 19%
+multi_gallery	fire / public	6x2	5	0.01	highrise_hotel 13%
+multi_verticalschool	fire / public	5x5	33	0.19	highrise_residential 8%
+building_hardwarestorece	industrial	1x1	2	0.09	retail_district 8%
+building_hardwarestorecedamaged	industrial	1x1	2	0.06	retail_district 8%
+building_hardwarestoreie	industrial	1x1	2	0.1	retail_district 17%
+multi_workshop	industrial	1x2	5	0.06	highrise_office 37%
+multi_hospital	medical	3x2	2	0.1	retail_district 14%
+multi_hospitaldamaged	medical	2x3	2	0.11	highrise_residential 12%
+multi_polyclinic	medical	2x1	3	0.09	dummycity 100%, suburb_residential 16%
+building_office1a	office / tower	1x1	5	0.27	highrise_office 10%
+building_office1b	office / tower	1x1	5	0.25	highrise_office 10%
+building_office2a	office / tower	1x1	5	0.27	highrise_office 10%
+building_office2b	office / tower	1x1	5	0.27	highrise_office 10%
+building_office3a	office / tower	1x1	6	0.26	highrise_office 10%
+building_office3b	office / tower	1x1	5	0.24	highrise_office 10%
+building_office3c	office / tower	1x1	6	0.3	highrise_office 10%
+building_office4	office / tower	1x1	6	0.23	highrise_office 10%
+building_office5	office / tower	1x1	6	0.28	highrise_office 10%
+building_officebank	office / tower	1x1	5	0.23	highrise_office 10%
+multi_courtyardofficetower	office / tower	4x4	24	0.15	highrise_office 12%
+multi_officethefirst	office / tower	2x2	14	0.16	highrise_office 19%
+multi_terraceplaza	office / tower	5x7	8	0.1	retail_district 14%
+multi_thering	office / tower	5x5	27	0.22	highrise_hotel 9%
+multi_timbertower	office / tower	3x3	16	0.14	highrise_office 12%, highrise_hotel 9%
+multi_sunkenmonumentpark	other	4x4	8	0.1	highrise_hotel 22%
+building_policeoffice1	police	1x1	5	0.24	highrise_office 5%
+multi_policeapartment	police	3x2	6	0.22	highrise_residential 12%
+multi_policestation	police	1x2	3	0.05	suburb_residential 16%
+building_apartmentsmalla	residential	1x1	5	0.37	highrise_residential 13%
+building_apartmentsmallabroken	residential	1x1	2	0.25	highrise_residential 13%
+building_apartmentsmallb	residential	1x1	5	0.35	highrise_residential 13%
+building_apartmentsmallbbroken	residential	1x1	2	0.14	highrise_residential 13%
+building_apartmentsmallc	residential	1x1	5	0.37	highrise_residential 13%
+building_apartmentsmallcbroken	residential	1x1	2	0.28	highrise_residential 13%
+building_apartmentsmalld	residential	1x1	5	0.36	highrise_residential 13%
+building_hotela	residential	1x1	6	0.53	highrise_hotel 20%
+building_hotelb	residential	1x1	7	0.49	highrise_hotel 20%
+building_hotelc	residential	1x1	5	0.33	highrise_hotel 20%
+building_hoteld	residential	1x1	5	0.48	highrise_hotel 20%
+building_residentiala	residential	1x1	3	0.11	suburb_residential 24%
+building_residentialb	residential	1x1	3	0.11	suburb_residential 24%
+building_residentialc	residential	1x1	3	0.11	suburb_residential 24%
+building_residentiald	residential	1x1	4	0.14	suburb_residential 24%
+multi_apartmentmedium	residential	1x2	5	0.26	scattered / unused
+multi_cabin1	residential	1x2	3	0.0	scattered / unused
+multi_cabin2	residential	1x2	3	0.02	scattered / unused
+multi_cabin3	residential	2x1	3	0.01	scattered / unused
+multi_farmhouse1	residential	3x3	3	0.0	scattered / unused
+multi_flatapartment	residential	3x1	5	0.24	highrise_residential 17%
+multi_flatlarge	residential	4x2	5	0.2	highrise_residential 12%
+multi_flatmedium	residential	1x4	6	0.35	highrise_residential 17%
+multi_oasiscondo	residential	4x4	34	0.31	highrise_residential 8%
+multi_residentiale	residential	1x2	3	0.12	suburb_residential 21%
+multi_residentialf	residential	1x2	3	0.1	suburb_residential 21%
+multi_residentialsurvivor	residential	2x1	3	0.14	suburb_residential 16%
+multi_taigaresidence	residential	2x3	9	0.21	highrise_residential 12%
+scattered_cabin_1	residential	1x1	3	0.01	scattered / unused
+scattered_cabin_2	residential	1x1	3	0.01	scattered / unused
+scattered_cabin_3	residential	1x1	3	0.0	scattered / unused
+scattered_treehouse_1	residential	1x1	5	0.0	scattered / unused
+villager_1	residential	1x1	4	0.0	scattered / unused
+building_clothstore	retail / food	1x1	2	0.14	retail_district 17%
+building_fastfood	retail / food	1x1	2	0.14	retail_district 17%
+building_flowershop	retail / food	1x1	2	0.36	retail_district 17%
+building_gasstation	retail / food	1x1	3	0.13	highrise_residential 7%, suburb_residential 6%
+building_premiumclothstore	retail / food	1x1	2	0.01	highrise_hotel 20%
+building_restaurantsushi	retail / food	1x1	2	0.18	dummycity 100%, retail_district 17%
+multi_cafe	retail / food	2x2	3	0.17	retail_district 19%
+multi_casino	retail / food	4x4	33	0.19	highrise_hotel 9%
+multi_convenientstore	retail / food	2x2	2	0.12	retail_district 19%
+multi_gasstation	retail / food	1x2	3	0.11	highrise_hotel 22%, retail_district 19%
+multi_gunstore	retail / food	4x1	3	0.01	retail_district 14%
+multi_sunkenclub	retail / food	3x3	3	3.56	highrise_hotel 17%
+scattered_foodtruck_1	retail / food	1x1	3	0.0	scattered / unused
+multi_campsite1	wasteland / ruin	1x2	3	0.02	scattered / unused
+multi_planecrash1	wasteland / ruin	3x3	3	0.0	scattered / unused
+scattered_hideout_1	wasteland / ruin	1x1	3	0.02	scattered / unused
