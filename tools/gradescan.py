@@ -89,24 +89,25 @@ def main():
                 if n in h and y is not None and h[n] is not None:
                     pairs += 1
                     steep += abs(y - h[n]) > 1
-        edge = 0
+        edge, edge_at = 0, None
         for x in range(lx0, lx1 + 1):
             for (z, zo) in ((lz0, lz0 - 1), (lz1, lz1 + 1)):
                 if (x, z) in h and h[(x, z)] is not None:
                     o = surface(w, x, zo, by + 40)
-                    if o is not None:
-                        edge = max(edge, abs(h[(x, z)] - o))
+                    if o is not None and abs(h[(x, z)] - o) > edge:
+                        edge, edge_at = abs(h[(x, z)] - o), (x, zo)
         for z in range(lz0, lz1 + 1):
             for (x, xo) in ((lx0, lx0 - 1), (lx1, lx1 + 1)):
                 if (x, z) in h and h[(x, z)] is not None:
                     o = surface(w, xo, z, by + 40)
-                    if o is not None:
-                        edge = max(edge, abs(h[(x, z)] - o))
+                    if o is not None and abs(h[(x, z)] - o) > edge:
+                        edge, edge_at = abs(h[(x, z)] - o), (xo, z)
         worst_ring, worst_edge = max(worst_ring, ring), max(worst_edge, edge)
         steep_all += steep
         pairs_all += pairs
-        print("b%d_%d_%d %-9s floor %d  ring %d  steep %d/%d  edge %d"
-              % (cx, cz, lot, kind, by, ring, steep, pairs, edge))
+        print("b%d_%d_%d %-9s floor %d  ring %d  steep %d/%d  edge %d%s"
+              % (cx, cz, lot, kind, by, ring, steep, pairs, edge,
+                 "  (outside column %d,%d)" % edge_at if edge > 6 else ""))
     print("lots checked %d, worst ring %d, steep pairs %d/%d, worst edge %d, yard cars by meta %s"
           % (checked, worst_ring, steep_all, pairs_all, worst_edge, cars))
 

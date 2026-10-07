@@ -58,8 +58,12 @@ public class DevAutoTest
             launched = true;
             deleteRecursive(new File(mc.mcDataDir, "saves/" + SAVE));
             FMLLog.info("[%s] AUTOTEST creating world %s", DecimationWorldGen.MODID, SAVE);
+            // -Ddeciworldgen.autotest.type=default tests on vanilla terrain
+            WorldType type = "default".equalsIgnoreCase(System.getProperty(PROPERTY + ".type"))
+                ? WorldType.DEFAULT : net.decimation.worldgen.terrain.DecimationWorldType.INSTANCE;
+            FMLLog.info("[%s] AUTOTEST world type %s", DecimationWorldGen.MODID, type.getWorldTypeName());
             mc.launchIntegratedServer(SAVE, SAVE, new WorldSettings(1L,
-                WorldSettings.GameType.CREATIVE, true, false, WorldType.DEFAULT));
+                WorldSettings.GameType.CREATIVE, true, false, type));
             return;
         }
         if (launched && mc.theWorld != null && !requested && ++worldTicks > 100)
@@ -384,6 +388,20 @@ public class DevAutoTest
     {
         FMLLog.info("[%s] AUTOTEST generated zones in this world: %d",
                     DecimationWorldGen.MODID, ZoneStore.size());
+        // Decimation's spawns must reach the biomes of the Decimation world type
+        net.minecraft.entity.player.EntityPlayerMP sp = player();
+        net.minecraft.world.biome.BiomeGenBase biome =
+            world.getBiomeGenForCoords((int) sp.posX, (int) sp.posZ);
+        int deciMonsters = 0;
+        for (Object o : biome.getSpawnableList(net.minecraft.entity.EnumCreatureType.monster))
+        {
+            if (((net.minecraft.world.biome.BiomeGenBase.SpawnListEntry) o).entityClass.getName().startsWith("deci."))
+            {
+                deciMonsters++;
+            }
+        }
+        FMLLog.info("[%s] AUTOTEST biome at spawn: %s (id %d), Decimation monster spawn entries %d",
+                    DecimationWorldGen.MODID, biome.biomeName, biome.biomeID, deciMonsters);
         ObjectZone zone = null;
         if (deci.aJ.b.aAc != null)
         {

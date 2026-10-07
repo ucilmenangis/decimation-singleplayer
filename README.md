@@ -11,6 +11,8 @@ make it a complete singleplayer game.
 ## What is in here
 
 - **`dev/`**: our companion mod `deciworldgen` (Java, RetroFuturaGradle):
+  - a "Decimation" world type: flat dead land around cities, overgrown
+    wilderness further out, rivers, no ocean;
   - world generation: procedural ruined city blocks (apartments, offices,
     shops up to 20 floors, real floor plans, biome overgrowth, yards graded
     into the terrain with car parks), street grid with sidewalks and parked

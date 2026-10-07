@@ -50,14 +50,14 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791369792.1797388,
-    "ast_hash": "a63a892fe4ddbbc7507c7a7980ac94c6",
-    "semantic_hash": "a63a892fe4ddbbc7507c7a7980ac94c6"
+    "mtime": 1791372696.2989397,
+    "ast_hash": "6128c859183d4ee79726951aff9159ce",
+    "semantic_hash": "6128c859183d4ee79726951aff9159ce"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791358001.2261288,
-    "ast_hash": "0c4b22a4e640c6009ee30ed9fd24de5b",
-    "semantic_hash": "0c4b22a4e640c6009ee30ed9fd24de5b"
+    "mtime": 1791373044.5185084,
+    "ast_hash": "4635d3dbaab8084d40d9b11c722b3925",
+    "semantic_hash": "4635d3dbaab8084d40d9b11c722b3925"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -70,9 +70,9 @@
     "semantic_hash": "d4b685f732c9680f7e1309982fa104e7"
   },
   "dev/src/main/java/net/decimation/worldgen/StructureGenerator.java": {
-    "mtime": 1791360895.0937054,
-    "ast_hash": "4ebf980a29c1bdbfc24e5aba819b778c",
-    "semantic_hash": "4ebf980a29c1bdbfc24e5aba819b778c"
+    "mtime": 1791372606.5305393,
+    "ast_hash": "3e9a3a227d8bd785a8831a34bdc61d2e",
+    "semantic_hash": "3e9a3a227d8bd785a8831a34bdc61d2e"
   },
   "dev/src/main/java/net/decimation/worldgen/ZoneStore.java": {
     "mtime": 1791318417.960504,
@@ -95,9 +95,9 @@
     "semantic_hash": "cb59b22ea5a1e4945106954431e9668a"
   },
   "tools/servertest.py": {
-    "mtime": 1791359385.7676258,
-    "ast_hash": "363ddb44d71ab9f2514cfb893ad4d4a0",
-    "semantic_hash": "363ddb44d71ab9f2514cfb893ad4d4a0"
+    "mtime": 1791372709.7565958,
+    "ast_hash": "fce98a10e28c13384304f848eb526dbc",
+    "semantic_hash": "fce98a10e28c13384304f848eb526dbc"
   },
   "tools/setup_toolchain.py": {
     "mtime": 1786559758.1743937,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791370564.1540465,
-    "ast_hash": "fdca6bbc2c192a92610ff994b57d7441",
-    "semantic_hash": "fdca6bbc2c192a92610ff994b57d7441"
+    "mtime": 1791373332.8893058,
+    "ast_hash": "d3b203519e2e64ffe97d9299e6bdb833",
+    "semantic_hash": "d3b203519e2e64ffe97d9299e6bdb833"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791370564.1531575,
-    "ast_hash": "6e38bf31f82879bd97f94cef754ca4b1",
-    "semantic_hash": "6e38bf31f82879bd97f94cef754ca4b1"
+    "mtime": 1791373166.1439154,
+    "ast_hash": "673a3f2f6548dfcbb5f374bccd90cad4",
+    "semantic_hash": "673a3f2f6548dfcbb5f374bccd90cad4"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -215,9 +215,9 @@
     "semantic_hash": "25ef67e9afe50ac29ec5766d9023bde8"
   },
   "docs/worldgen.md": {
-    "mtime": 1791370583.7320242,
-    "ast_hash": "8b6060ca7675d3d6715b5c718ea2a87b",
-    "semantic_hash": "8b6060ca7675d3d6715b5c718ea2a87b"
+    "mtime": 1791373166.144176,
+    "ast_hash": "b7b617c47ad54119d74efb2e512e474b",
+    "semantic_hash": "b7b617c47ad54119d74efb2e512e474b"
   },
   "tools/wallscan.py": {
     "mtime": 1791356207.3484309,
@@ -245,13 +245,68 @@
     "semantic_hash": "e3adc1377cae6fb93ada535156fb812e"
   },
   "tools/gradescan.py": {
-    "mtime": 1791370150.166401,
-    "ast_hash": "8cd905bc7b661d914c8124319df7d4a6",
-    "semantic_hash": "8cd905bc7b661d914c8124319df7d4a6"
+    "mtime": 1791372913.817154,
+    "ast_hash": "a93e787ae827dc9d139a151a6699bfa5",
+    "semantic_hash": "a93e787ae827dc9d139a151a6699bfa5"
   },
   "README.md": {
-    "mtime": 1791370589.5536253,
-    "ast_hash": "bdf1e08426f69217bd414e5723da3710",
-    "semantic_hash": "bdf1e08426f69217bd414e5723da3710"
+    "mtime": 1791373166.1444175,
+    "ast_hash": "534b007f9bf9926459fc574457fe25dd",
+    "semantic_hash": "534b007f9bf9926459fc574457fe25dd"
+  },
+  "dev/src/main/java/net/decimation/worldgen/Sectors.java": {
+    "mtime": 1791372606.5393977,
+    "ast_hash": "e561180070fcf1c0125fd6eb73122a4c",
+    "semantic_hash": "e561180070fcf1c0125fd6eb73122a4c"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/BiomeMap.java": {
+    "mtime": 1791372819.9051223,
+    "ast_hash": "129d751cc5985ad12f3880df105eb20f",
+    "semantic_hash": "129d751cc5985ad12f3880df105eb20f"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/DeadTree.java": {
+    "mtime": 1791372630.2927902,
+    "ast_hash": "5d2737c3a4527b1a1749f9c09f22f44f",
+    "semantic_hash": "5d2737c3a4527b1a1749f9c09f22f44f"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/DeciBiome.java": {
+    "mtime": 1791372630.2905912,
+    "ast_hash": "c2eb9fab0fa197982f7b92c2ae9b9958",
+    "semantic_hash": "c2eb9fab0fa197982f7b92c2ae9b9958"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/DeciGenLayer.java": {
+    "mtime": 1791372683.6927204,
+    "ast_hash": "51a1514316a0b913419f05ed014e5b6e",
+    "semantic_hash": "51a1514316a0b913419f05ed014e5b6e"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/DecimationBiomes.java": {
+    "mtime": 1791372683.6888561,
+    "ast_hash": "a18c8ecefca15c6722af0a46ad1dccc8",
+    "semantic_hash": "a18c8ecefca15c6722af0a46ad1dccc8"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/DecimationWorldType.java": {
+    "mtime": 1791372683.694567,
+    "ast_hash": "c86ccd0d45d33d82d06d75eb594dc226",
+    "semantic_hash": "c86ccd0d45d33d82d06d75eb594dc226"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/SealedCaves.java": {
+    "mtime": 1791372958.1952028,
+    "ast_hash": "a8d56e85b0e3997c3e93012729e1edb5",
+    "semantic_hash": "a8d56e85b0e3997c3e93012729e1edb5"
+  },
+  "dev/src/main/java/net/decimation/worldgen/terrain/TerrainEvents.java": {
+    "mtime": 1791372958.2253256,
+    "ast_hash": "ebce9418d7bd9395976e75b29d64f1eb",
+    "semantic_hash": "ebce9418d7bd9395976e75b29d64f1eb"
+  },
+  "tools/worldmap.py": {
+    "mtime": 1791372727.9316144,
+    "ast_hash": "6e62af87573866fb726b901889de7f34",
+    "semantic_hash": "6e62af87573866fb726b901889de7f34"
+  },
+  "docs/terrain.md": {
+    "mtime": 1791373165.9525788,
+    "ast_hash": "e0b6651fa3d0adb8c3284a199ad40096",
+    "semantic_hash": "e0b6651fa3d0adb8c3284a199ad40096"
   }
 }

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Fresh dev dedicated server run: new world with SEED, wait for spawn
 generation, stop (saves), print our placement log lines.
-usage: python3 tools/servertest.py SEED [keep] [pregen=x,z,r]
-  keep = reuse the existing world; pregen = also generate chunks around x,z"""
+usage: python3 tools/servertest.py SEED [keep] [pregen=x,z,r] [type=decimation]
+  keep = reuse the existing world; pregen = also generate chunks around x,z;
+  type = level-type (default DEFAULT)"""
 import os, re, shutil, signal, subprocess, sys, time
 
 PROJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,6 +17,9 @@ if "keep" not in sys.argv:
     shutil.rmtree(RUN + "/world", ignore_errors=True)
 props = open(RUN + "/server.properties").read()
 props = re.sub(r"level-seed=.*", "level-seed=" + seed, props)
+# type=decimation selects our world type; anything else is the default
+wtype = next((a.split("=", 1)[1] for a in sys.argv[2:] if a.startswith("type=")), "DEFAULT")
+props = re.sub(r"level-type=.*", "level-type=" + wtype, props)
 open(RUN + "/server.properties", "w").write(props)
 
 log = open(LOG, "w")

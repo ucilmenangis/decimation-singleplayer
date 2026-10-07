@@ -46,7 +46,6 @@ public class StructureGenerator implements IWorldGenerator
     /** Cell edge in chunks; one potential structure per cell. */
     private static final int CELL = 4;
     /** Sector edge in chunks (16 chunks = 256 blocks). */
-    private static final int REGION = 16;
     /** Max footprint that stays inside the safe population window. */
     public static final int MAX_FOOTPRINT = 24;
     /** Corner-to-corner ground height spread beyond which the site is rejected. */
@@ -162,15 +161,7 @@ public class StructureGenerator implements IWorldGenerator
     /** Which sector a chunk belongs to - deterministic per world seed. */
     private int sector(World world, int chunkX, int chunkZ)
     {
-        int regionX = Math.floorDiv(chunkX, REGION);
-        int regionZ = Math.floorDiv(chunkZ, REGION);
-        Random r = new Random(world.getSeed()
-                              ^ (regionX * 875949887L + regionZ * 656887297L));
-        float roll = r.nextFloat();
-        if (roll < 0.40f) return WILD;
-        if (roll < 0.65f) return CIV;
-        if (roll < 0.80f) return CITY;
-        return MIL;
+        return Sectors.sector(world.getSeed(), chunkX, chunkZ);
     }
 
     /** Sector of a chunk, for the city planner. */

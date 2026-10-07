@@ -8,6 +8,10 @@ registered in `DecimationWorldGen.init`).
 
 ## Layout of the world
 
+Terrain: any world type works; the "Decimation" world type (docs/terrain.md)
+gives flat urban ground exactly on city sectors and dead / overgrown land
+around them.
+
 | Grid | Size | Decided by | Holds |
 |---|---|---|---|
 | Sector | 16x16 chunks (256 blocks) | seed + region coords | WILD 40%, CIV 25%, CITY 15%, MIL 20% |

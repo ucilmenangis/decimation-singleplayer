@@ -204,6 +204,11 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   apartments, 72/72 cars aligned with their street, 3000 sidewalk columns.
   User checked in game: cars sat across the road (model long axis is x, not
   z), swapped in v0.12.2 (north-south 5/3, east-west 4/2), fewer cars.
+- **Decimation world type (user chose A over re-skinning vanilla / RTG,
+  7 Oktober 2026)**: flat rolling land, rivers and lakes no ocean, dead near
+  cities and overgrown far away, one temperate climate. DONE in v0.14.0
+  (docs/terrain.md); seen in game by the user (screenshot). Inserted before
+  round 2 step 2. Open: fog colour, more dead decoration (rubble, ash).
 - **Worldgen round 2 (user chose option A, 7 Oktober 2026), plan in order**:
   1. terrain blending: Building plan covers its whole 26x26 lot; yard
      columns graded from the building floor (at the walls) to the natural

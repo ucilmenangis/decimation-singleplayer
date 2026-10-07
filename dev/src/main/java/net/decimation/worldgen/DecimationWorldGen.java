@@ -37,7 +37,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.13.0",
+     version = "0.14.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -49,6 +49,14 @@ public class DecimationWorldGen
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        // Decimation world type: biomes must exist before Decimation's init
+        // strips vanilla monsters from every biome (see DecimationBiomes)
+        net.decimation.worldgen.terrain.DecimationBiomes.create();
+        net.decimation.worldgen.terrain.DecimationWorldType.INSTANCE =
+            new net.decimation.worldgen.terrain.DecimationWorldType();
+        net.minecraftforge.common.MinecraftForge.TERRAIN_GEN_BUS.register(
+            new net.decimation.worldgen.terrain.TerrainEvents());
+
         File dir = new File(event.getModConfigurationDirectory(), "decimation_worldgen");
         if (!dir.isDirectory() && !dir.mkdirs())
         {
@@ -119,6 +127,12 @@ public class DecimationWorldGen
                 }
             }
         }
+    }
+
+    @Mod.EventHandler
+    public void postInit(cpw.mods.fml.common.event.FMLPostInitializationEvent event)
+    {
+        net.decimation.worldgen.terrain.DecimationBiomes.copySpawns();
     }
 
     @Mod.EventHandler

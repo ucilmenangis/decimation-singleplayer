@@ -71,6 +71,8 @@ Knowledge index:
   new gun checklist.
 - `docs/building_design.md`: researched floor plans (apartment / office /
   shop), palettes, decay, biome overgrowth, street and car facing rules.
+- `docs/terrain.md`: the "Decimation" world type (biome map, biomes,
+  spawn copy, sealed caves under cities, how to test).
 - `docs/worldgen.md`: our structure generation (sectors, cells, sites, city
   blocks, large schematics, slice placement, placeholders, how to add
   community schematics, how to test).
@@ -215,6 +217,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   reads block ids straight from Anvil region files. `World.registry()` maps
   block names to ids from level.dat (Decimation ids can be below 256:
   BlockWreckage1..5 = 176..180, so "id >= 256 means mod block" is wrong).
+- `python3 tools/worldmap.py WORLD OUT.png`: top down biome / height map
+  of a generated world (read the PNG to judge terrain). `servertest.py`
+  takes `type=decimation` for the world type.
 - `python3 tools/gradescan.py WORLD LOG`: graded city yards (floor vs ground
   at the walls, steep neighbour pairs, lot edge vs sidewalk, parked cars).
 - `./gradlew runClient -Pautotest` (in `dev/`): unattended singleplayer run
@@ -373,14 +378,18 @@ of the last session:
   door, nose-in wrecks (metadata 4/2). Never fill with falling blocks.
   `tools/gradescan.py` checks it. Supply drops clear flowers in their
   column first (crate entities vanish in non-replaceable plants).
+  v0.14.0: "Decimation" world type (docs/terrain.md): own biome map on
+  vanilla's terrain generator, flat cities on the exact city sectors
+  (`Sectors` is now shared), dead land near cities, overgrown far away,
+  rivers, no ocean. Autotest now runs on this world type.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in
   `src/net/decimation/worldgen/`, compiled via `tools/build.py` into the same
   jar — Forge scans all jar classes for `@Mod`, so no bytecode edit to the
-  obfuscated mod class needed. Uses `IWorldGenerator` (rides on any terrain
-  gen, no custom WorldType); terrain itself comes from companion mod RTG
-  1.7.10-1.1.1.7 (not yet installed). Milestones 2 (marker) and 3 (real
+  obfuscated mod class needed. Structures use `IWorldGenerator` (ride on any
+  terrain gen). Terrain: since v0.14.0 our own "Decimation" world type
+  (docs/terrain.md); RTG 1.7.10-1.1.1.7 still works as an alternative. Milestones 2 (marker) and 3 (real
   `.schematic` structure placer: cell-based deterministic placement, dirt
   foundation, slope/water site checks, 24x24 footprint cap, schematics read
   from `config/decimation_worldgen/`) both user-confirmed in-game 2026-08-15.
