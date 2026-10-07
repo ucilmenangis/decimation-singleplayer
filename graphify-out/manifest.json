@@ -20,9 +20,9 @@
     "semantic_hash": "f6d0ec3d1c5bb5c1802a7544eafa4896"
   },
   "dev/dependencies.gradle": {
-    "mtime": 1791387258.7462919,
-    "ast_hash": "3023b21decb9ac868cae8e8f962927a6",
-    "semantic_hash": "3023b21decb9ac868cae8e8f962927a6"
+    "mtime": 1791391769.8630419,
+    "ast_hash": "eef88d664f4ecf1ec8522b5c52ffa164",
+    "semantic_hash": "eef88d664f4ecf1ec8522b5c52ffa164"
   },
   "dev/repositories.gradle": {
     "mtime": 1791314872.0,
@@ -55,9 +55,9 @@
     "semantic_hash": "a067d58411c6c929294d99a76d0bf5b7"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791388140.4991004,
-    "ast_hash": "37d3a63d1edd3dc0f695e898dbf1bbea",
-    "semantic_hash": "37d3a63d1edd3dc0f695e898dbf1bbea"
+    "mtime": 1791393624.660567,
+    "ast_hash": "447a9469024086e92326c3e159cf60bd",
+    "semantic_hash": "447a9469024086e92326c3e159cf60bd"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791388867.8312278,
-    "ast_hash": "28368f7204b5283df701149173b69864",
-    "semantic_hash": "28368f7204b5283df701149173b69864"
+    "mtime": 1791394706.1424553,
+    "ast_hash": "a6bd01dfde399aef77c88f931d494c3b",
+    "semantic_hash": "a6bd01dfde399aef77c88f931d494c3b"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791388867.832001,
-    "ast_hash": "afd4cfc3f7c26b07eeae7731a056ff5f",
-    "semantic_hash": "afd4cfc3f7c26b07eeae7731a056ff5f"
+    "mtime": 1791390948.2766674,
+    "ast_hash": "d9cc7830f85b8f164310643cc8d16223",
+    "semantic_hash": "d9cc7830f85b8f164310643cc8d16223"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -330,9 +330,9 @@
     "semantic_hash": "44617037eeac4c4f3e53f42e6306550b"
   },
   "docs/shots_index.md": {
-    "mtime": 1791388867.8325467,
-    "ast_hash": "7df65ba111426f15d874b5c1d9071ce0",
-    "semantic_hash": "7df65ba111426f15d874b5c1d9071ce0"
+    "mtime": 1791394706.1262019,
+    "ast_hash": "2dfa6c358cf3c3596d28964daa2a9e7c",
+    "semantic_hash": "2dfa6c358cf3c3596d28964daa2a9e7c"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -488,5 +488,45 @@
     "mtime": 1791388867.7723806,
     "ast_hash": "c2cf781d7ba2ef1037dfb9142957a133",
     "semantic_hash": "c2cf781d7ba2ef1037dfb9142957a133"
+  },
+  "tools/contactsheet.py": {
+    "mtime": 1791393593.620146,
+    "ast_hash": "847473ea9768735784a2e4c46c5f8b77",
+    "semantic_hash": "847473ea9768735784a2e4c46c5f8b77"
+  },
+  "tools/lcstudy.py": {
+    "mtime": 1791394540.347271,
+    "ast_hash": "ab28f290b6faffc68dbf00e69ac88d9f",
+    "semantic_hash": "ab28f290b6faffc68dbf00e69ac88d9f"
+  },
+  "tools/mapbuildings.py": {
+    "mtime": 1791393130.2442317,
+    "ast_hash": "12792a5ac4e9a282d562bc1eacaefb40",
+    "semantic_hash": "12792a5ac4e9a282d562bc1eacaefb40"
+  },
+  "tools/mapsurvey.py": {
+    "mtime": 1791391564.4306915,
+    "ast_hash": "6a2c0646abcc3e50827598c21c88e247",
+    "semantic_hash": "6a2c0646abcc3e50827598c21c88e247"
+  },
+  "docs/references/deceasedcraft_buildings.md": {
+    "mtime": 1791394690.2939634,
+    "ast_hash": "86f35ec0dfac75a209b8ffdbee049fe2",
+    "semantic_hash": "86f35ec0dfac75a209b8ffdbee049fe2"
+  },
+  "docs/references/decimation_maps.md": {
+    "mtime": 1791394653.1681092,
+    "ast_hash": "b875bc5f1cae6012b9e98a43b2f17b03",
+    "semantic_hash": "b875bc5f1cae6012b9e98a43b2f17b03"
+  },
+  "docs/references/worldgen_study.md": {
+    "mtime": 1791390706.5427034,
+    "ast_hash": "3a2f289d90cd2e4376405e5d75e06e2f",
+    "semantic_hash": "3a2f289d90cd2e4376405e5d75e06e2f"
+  },
+  "docs/worldgen_architecture.md": {
+    "mtime": 1791394715.333505,
+    "ast_hash": "d00d1727b1967403fb099c3ada7c5e40",
+    "semantic_hash": "d00d1727b1967403fb099c3ada7c5e40"
   }
 }

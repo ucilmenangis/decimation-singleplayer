@@ -154,3 +154,39 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
   furnace oven, wall cabinets with trapdoor door fronts; kitchen_run_6
   ends with the washing machine. lobby_bench: 2 street benches + plant.
 
+
+## study_usa_coast/ (-Pstudy on the USA coast map, 8 Okt, roof filter + night vision)
+- Rerun after the camera fix; the first run had an Options menu in view
+  1, black rooms and roof spots. views.txt has every spot. Night vision
+  swirls (blue) sit in some frames; replaced by gamma 8 full bright
+  afterwards (tested clean on 4 views).
+- 4 (b4 s0): waiting room, rows of wooden chairs facing a long white
+  counter with a purple stripe, ceiling light panel grid, white tiles.
+- 5 (b4 s1): corridor, white office panels with a dark dado stripe,
+  doors. 6 (b4 s2): empty hall, plank wall decor, blood decal.
+- 7, 8 (b5): military hall, dark walls, oak fence queue rows, ladder,
+  blue grey carpet, stone brick room boxes.
+- 9 (b6 s0): office cubicles of 2 high cracked stone partitions, desk +
+  computer, ceiling light strip + vent.
+- 10 (b8): weapon room with metal shelves, a glass case, posters, a
+  dead body prop. 12 (b9): brick corridor, red carpet, cracked glass.
+- 14, 15, 16 (b12): store / office with metal shelves, office chairs,
+  white walls, stone brick pillars, light panels, dirt and leaf patches
+  on the floor (decay), desk + computer, camo vehicle and crates.
+- 17 (b13): long hall, tables in a row, rose planters along the wall.
+  18: bookshelves, red couch, cracked window. 21 (b14): water channel.
+- 26 (b29): office with white chairs, flooded floor, exit sign, office
+  chairs. 28: helicopter on the roof.
+
+## study_decicraft/ (-Pstudy on Decicraft spawn town, 57 views)
+- Mostly a converted vanilla city: 0..1, 7..10 street views from under
+  overhangs (lane lines, sidewalks, hedges, towers, red cranes).
+- 2..5 (b3): mall like hall, white pillars, wooden floor, cots (camp).
+- 12..16 (b24): market street with awnings and cobwebs; supermarket with
+  double metal shelf aisles, planks floor.
+- 17..25 (b25): dark tower corridors, plank floor, nothing inside.
+- 26..30 (b26): office floors with desk islands of computers, white
+  floors, glass atrium with balconies.
+- 34..47 (b30, b34): hotel / cell corridors, rows of security doors,
+  redstone lamps in the ceiling, empty.
+- 54..56 (b62, b63): empty office hall, stone corridor with lamps.

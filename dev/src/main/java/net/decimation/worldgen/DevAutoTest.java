@@ -49,13 +49,20 @@ public class DevAutoTest
         // an unfocused window opens the pause menu, and a paused
         // singleplayer server stops ticking
         mc.gameSettings.pauseOnLostFocus = false;
-        if (launched && mc.theWorld != null && mc.currentScreen != null && !finished)
+        if (launched && mc.theWorld != null && mc.currentScreen != null)
         {
             mc.displayGuiScreen(null);
         }
         if (!launched && mc.theWorld == null && mc.currentScreen != null && clientTicks > 100)
         {
             launched = true;
+            if (STUDY != null)
+            {
+                // open a copied reference map as it is (no tests, no new world)
+                FMLLog.info("[%s] AUTOTEST study: opening %s", DecimationWorldGen.MODID, STUDY[0]);
+                mc.launchIntegratedServer(STUDY[0], STUDY[0], null);
+                return;
+            }
             deleteRecursive(new File(mc.mcDataDir, "saves/" + SAVE));
             FMLLog.info("[%s] AUTOTEST creating world %s", DecimationWorldGen.MODID, SAVE);
             // -Ddeciworldgen.autotest.type=default tests on vanilla terrain
@@ -99,7 +106,7 @@ public class DevAutoTest
     /** Client side: one view after another; false once all are saved. */
     private boolean takeViews(Minecraft mc)
     {
-        int views = FLATS ? FLATS_VIEWS : SETS ? net.decimation.worldgen.sets.FurnitureSets.all().size()
+        int views = STUDY != null ? studyCams().size() : FLATS ? FLATS_VIEWS : SETS ? net.decimation.worldgen.sets.FurnitureSets.all().size()
             : GALLERY ? (galleryNames().size() + GALLERY_PER_VIEW - 1) / GALLERY_PER_VIEW
             : AUDIT ? AUDIT_VIEWS : VIEWS.length;
         if (view >= views || "false".equals(System.getProperty(PROPERTY + ".views")))
@@ -110,6 +117,7 @@ public class DevAutoTest
                 mc.gameSettings.fovSetting = savedFov;
                 mc.gameSettings.gammaSetting = savedGamma;
                 mc.gameSettings.hideGUI = false;
+                mc.gameSettings.particleSetting = savedParticles;
                 savedFov = 0;
             }
             return false;
@@ -118,11 +126,20 @@ public class DevAutoTest
         {
             savedFov = mc.gameSettings.fovSetting;
             savedGamma = mc.gameSettings.gammaSetting;
+            savedParticles = mc.gameSettings.particleSetting;
         }
         mc.gameSettings.hideGUI = true;
-        if (AUDIT || GALLERY || SETS || FLATS)
+        if (AUDIT || GALLERY || SETS || FLATS || STUDY != null)
         {
             mc.gameSettings.gammaSetting = 1.0F;
+        }
+        if (STUDY != null)
+        {
+            // unlit rooms of a reference map photograph black at slider
+            // gamma; above 1 the lightmap is close to full bright (no
+            // night vision potion: its swirls sat in front of the lens)
+            mc.gameSettings.gammaSetting = 8.0F;
+            mc.gameSettings.particleSetting = 2;
         }
         if (GALLERY || SETS)
         {
@@ -156,7 +173,7 @@ public class DevAutoTest
             return true;
         }
         net.minecraft.util.IChatComponent msg = net.minecraft.util.ScreenShotHelper.saveScreenshot(
-            mc.mcDataDir, (FLATS ? "flat_" : SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
+            mc.mcDataDir, (STUDY != null ? "study_" : FLATS ? "flat_" : SETS ? "set_" : GALLERY ? "gallery_" : AUDIT ? "audit_" : "autotest_") + view + ".png",
             mc.displayWidth, mc.displayHeight,
             mc.getFramebuffer());
         FMLLog.info("[%s] AUTOTEST view %d at %s: %s", DecimationWorldGen.MODID, view, viewSpot,
@@ -169,6 +186,7 @@ public class DevAutoTest
     private int shotsTaken;
     private volatile String viewSpot = "";
     private float savedFov, savedGamma;
+    private int savedParticles;
     private volatile float viewYaw, viewPitch;
     /** -Ddeciworldgen.autotest.only=0,23,70-76: take only these views (re-shoots). */
     private static final java.util.Set<Integer> ONLY = parseOnly(System.getProperty(PROPERTY + ".only"));
@@ -301,6 +319,61 @@ public class DevAutoTest
             sb.append(names.get(i).substring(5)).append(i + 1 < first + GALLERY_PER_VIEW ? " | " : "");
         }
         viewSpot = "gallery " + sb;
+        viewReady = v;
+    }
+
+    // ---- study mode (-Ddeciworldgen.autotest.study=<save>|<cams.tsv>):
+    // opens a copied reference map (dev/run/client/saves/<save>) and
+    // photographs the camera spots from tools/mapbuildings.py (building,
+    // storey, x, y, z, yaw): study_<n>.png (docs/references/decimation_maps.md)
+    private static final String[] STUDY = System.getProperty(PROPERTY + ".study") != null
+        ? System.getProperty(PROPERTY + ".study").split("\\|") : null;
+    private static List<int[]> studyList;
+
+    private static synchronized List<int[]> studyCams()
+    {
+        if (studyList == null)
+        {
+            studyList = new ArrayList<int[]>();
+            try
+            {
+                for (String line : java.nio.file.Files.readAllLines(new File(STUDY[1]).toPath(),
+                                                                       java.nio.charset.StandardCharsets.UTF_8))
+                {
+                    String[] f = line.trim().split("\t");
+                    if (f.length >= 6)
+                    {
+                        int[] c = new int[6];
+                        for (int i = 0; i < 6; i++)
+                        {
+                            c[i] = Integer.parseInt(f[i]);
+                        }
+                        studyList.add(c);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                FMLLog.info("[%s] AUTOTEST study: cannot read %s: %s", DecimationWorldGen.MODID, STUDY[1], e);
+            }
+        }
+        return studyList;
+    }
+
+    private void serveStudyView(int v)
+    {
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
+        int[] c = studyCams().get(v);
+        world.getChunkProvider().loadChunk(c[2] >> 4, c[4] >> 4);
+        world.setWorldTime(6000);
+        net.minecraft.entity.player.EntityPlayerMP p = player();
+        p.capabilities.isFlying = true;
+        p.sendPlayerAbilities();
+        viewYaw = c[5];
+        viewPitch = 8;
+        p.playerNetServerHandler.setPlayerLocation(c[2] + 0.5, c[3], c[4] + 0.5, c[5], 8);
+        viewSpot = "building " + c[0] + " storey " + c[1] + " at " + c[2] + "," + c[3] + "," + c[4];
+        viewSkip = false;
         viewReady = v;
     }
 
@@ -648,6 +721,11 @@ public class DevAutoTest
                 }
             }
         }
+        if (STUDY != null)
+        {
+            serveStudyView(v);
+            return;
+        }
         if (FLATS)
         {
             serveFlatView(v);
@@ -755,6 +833,10 @@ public class DevAutoTest
             switch (phase++)
             {
                 case 0: // instant checks, then drop caps and the supply crate
+                    if (STUDY != null)
+                    {
+                        break; // study mode: straight to the screenshots
+                    }
                     run(MinecraftServer.getServer().worldServerForDimension(0));
                     checkVehicle();
                     checkHumanity();

@@ -92,6 +92,23 @@ reachability, audit / flats / sets screenshots and the autotest.
 6. New types: house, garage, food store, vehicle store, police station,
    military base (each = type JSON + parts / sets + maybe one planner).
 
+## Input from the map studies (8 Oktober 2026)
+
+docs/references/decimation_maps.md and deceasedcraft_buildings.md:
+- DeceasedCraft (79 building types) is 100% authored storey parts, no
+  procedural rooms: supports the PartPlanner + capture tool priority.
+- Room scale: 3x4..5x5 rooms, 6 to 8 per flat, a door each; furniture
+  density 0.35 in flats, 0.25 offices, 0.12 shops / houses.
+- Public rooms use rows and islands (waiting rows, desk islands, booths,
+  shelf aisles): a row / island placer next to the wall sets.
+- Style layer: two tone walls (WallOffice bottom + top), ceiling light
+  grid + vents, floor by room function.
+- Ruins layer: dirt / leaves / water / cracked glass on intact shells
+  first, holes second.
+- Building type list and district styles (suburb residential, retail,
+  highrise residential / office / hotel) as the target catalogue.
+- Open: 6 high storeys (4 air) for public types.
+
 ## Open questions (for later)
 
 - Interiors spanning several storeys (atriums, stair halls).

@@ -97,6 +97,12 @@ Knowledge index:
   assets, shell / storey plan / furnisher / layers, size classes, capture
   tool, migration order); `docs/references/worldgen_study.md`: what Lost
   Cities and Recurrent Complex do (read from source, 2026-10-07).
+- `docs/references/decimation_maps.md`: hand-built Decimation maps
+  (USA coast, Decicraft, Cloverfield, world-e161) surveyed + photographed
+  (tools mapsurvey / mapbuildings / contactsheet, autotest `-Pstudy`).
+- `docs/references/deceasedcraft_buildings.md`: DeceasedCraft's 79 Lost
+  Cities building types (data in DCTweaks jar, tool `tools/lcstudy.py`),
+  room sizes, densities, storey 6 high.
 - `docs/references/apartment.md`: real-world clearances, 1.7.10 furniture
   techniques, the apartment review checklist; critic reports in
   `docs/references/critic_*.md`.

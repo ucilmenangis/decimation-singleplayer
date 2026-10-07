@@ -79,6 +79,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("gallery")) {
         jvmArgs("-Ddeciworldgen.autotest.gallery=true")
     }
+    // -Pstudy=<save>|<cams.tsv>: photograph a copied reference map (study_<n>.png)
+    if (project.hasProperty("study")) {
+        jvmArgs("-Ddeciworldgen.autotest.study=" + project.property("study"))
+    }
     // -Pflats: interiors of 3 apartment blocks (flat_<n>.png)
     if (project.hasProperty("flats")) {
         jvmArgs("-Ddeciworldgen.autotest.flats=true")
