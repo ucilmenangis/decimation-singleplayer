@@ -26,6 +26,14 @@ Files in this directory:
   fine, matches the user's own voice).
 - `DECIMATION_MOD_TASK.md` — the original task brief that kicked this off.
 
+## Repository (public)
+
+The project root is a git repo (`main`), public on GitHub as
+`decimation-singleplayer`. NEVER commit anything of Decimation: no jars, no
+decompiled code (`deobf/src`), no `tools/lib`; `.gitignore` enforces it and
+every commit should be checked (`git ls-files` for *.jar other than the
+Gradle wrapper, nothing over 5 MB). Commit at the root; the user pushes.
+
 ## Knowledge maintenance (mandatory, user rule 2026-10-07)
 
 This session can vanish; the files are the memory. After EVERY analysis or
@@ -155,8 +163,10 @@ of relying on `grep`/`find` directly.
 
 ## Dev workspace (`dev/`, set up 2026-10-07): live play and debugging
 
-RetroFuturaGradle workspace from the GTNH ExampleMod1.7.10 template, its own git
-repo. Minecraft/Forge decompiled with **MCP names** (`setBlock`, not
+RetroFuturaGradle workspace from the GTNH ExampleMod1.7.10 template. Since
+2026-10-07 part of the ONE repo at the project root (public on GitHub as
+`decimation-singleplayer`, branch `main`; dev history and version tags were
+imported, old `dev/.git` kept only as a scratch backup). Minecraft/Forge decompiled with **MCP names** (`setBlock`, not
 `func_147465_d`). `dev/src/main/java` holds our code (worldgen + fixes) converted
 SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
 `tools/build.py` copy is now stale unless the user decides otherwise.
