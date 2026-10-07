@@ -1,0 +1,413 @@
+C	deci/a/a	RenderLayerRegistry	render	H	Client helper that registers world render layers into the client lists consumed by the RenderWorldLast handler
+M	deci/a/a	a	(b)	registerWorldLayer	H
+M	deci/a/a	a	(deci.M.a)	registerChunkLayer	M
+C	deci/a/b	DecimationMod	core	H	The @Mod entry point (modid deci): creates proxy, runs registries, loot table, backend connection, commands
+F	deci/a/b	a	MOD_ID	H
+F	deci/a/b	b	MOD_NAME	H
+F	deci/a/b	c	VERSION	H
+F	deci/a/b	d	EDITION	M
+F	deci/a/b	e	DEBUG	L
+F	deci/a/b	f	instance	H
+F	deci/a/b	g	proxy	H
+F	deci/a/b	h	backendHost	H
+F	deci/a/b	i	backendTcpPort	H
+F	deci/a/b	j	backendUdpPort	H
+F	deci/a/b	k	backendClient	H
+F	deci/a/b	l	lootTable	H
+F	deci/a/b	m	extraBlockRegistry	M
+F	deci/a/b	n	itemRegistry	H
+F	deci/a/b	o	armorMaterials	H
+F	deci/a/b	p	recipeRegistry	H
+F	deci/a/b	q	tileEntityRegistry	H
+F	deci/a/b	r	weaponSkinRegistry	H
+F	deci/a/b	s	networkRegistry	H
+F	deci/a/b	t	entityRegistry	H
+F	deci/a/b	u	entitySpawnRegistry	H
+F	deci/a/b	v	soundRegistry	H
+F	deci/a/b	A	startTime	H
+F	deci/a/b	B	fakePlayerProfile	L
+M	deci/a/b	a	()	getInstance	H
+M	deci/a/b	a	(FMLCommonHandler)	registerCommonHandlers	H
+M	deci/a/b	a	(FMLInitializationEvent)	init	H
+M	deci/a/b	a	(FMLServerStartedEvent)	serverStarted	H
+M	deci/a/b	a	(FMLServerStartingEvent)	serverStarting	H
+M	deci/a/b	a	(FMLServerStoppingEvent)	serverStopping	H
+M	deci/a/b	b	()	getProxy	H
+M	deci/a/b	c	()	getClientProxy	H
+M	deci/a/b	d	()	getServerProxy	H
+M	deci/a/b	e	()	getBackendClient	H
+M	deci/a/b	f	()	getLootTable	H
+M	deci/a/b	g	()	getExtraBlockRegistry	M
+M	deci/a/b	h	()	getItemRegistry	H
+M	deci/a/b	i	()	getArmorMaterials	H
+M	deci/a/b	j	()	getRecipeRegistry	H
+M	deci/a/b	k	()	getTileEntityRegistry	H
+M	deci/a/b	l	()	getWeaponSkinRegistry	H
+M	deci/a/b	m	()	getNetworkRegistry	H
+M	deci/a/b	n	()	getEntityRegistry	H
+M	deci/a/b	o	()	getEntitySpawnRegistry	H
+M	deci/a/b	p	()	getSoundRegistry	H
+C	deci/a/c	ClientProxy	proxy	H	Client side proxy: client config, Discord RPC, anti cheat, render layers and client event handlers
+F	deci/a/c	C	menuNotificationTexture	H
+F	deci/a/c	D	configDir	H
+F	deci/a/c	E	eulaFile	H
+F	deci/a/c	F	antiCheat	M
+F	deci/a/c	G	shutdownHook	M
+F	deci/a/c	H	discordPresence	H
+F	deci/a/c	I	clientConfig	H
+F	deci/a/c	J	mod	H
+M	deci/a/c	q	()	downloadOptionsFile	H
+M	deci/a/c	a	(a.Y)	applyPlayerData	M
+M	deci/a/c	a	(int,a.Z)	applyOtherPlayerData	M
+M	deci/a/c	r	()	getAntiCheat	M
+M	deci/a/c	s	()	getShutdownHook	M
+M	deci/a/c	t	()	getDiscordPresence	H
+M	deci/a/c	u	()	getClientConfig	H
+C	deci/a/c$a	LineOfSight	util	H	Client raytrace helpers testing whether a player can see a tile entity or entity through opaque blocks
+M	deci/a/c$a	a	(EntityPlayer,TileEntity)	canSeeTileEntity	H
+M	deci/a/c$a	a	(EntityPlayer,Entity)	canSeeEntity	H
+M	deci/a/c$a	a	(World,Vec3,Vec3,boolean,boolean,boolean)	rayTraceOpaqueBlocks	M
+C	deci/a/d	CommonProxy	proxy	H	Proxy interface with default common behaviour (vanilla mob spawn removal, player data sync)
+M	deci/a/d	a	(FMLInitializationEvent)	init	H
+M	deci/a/d	a	(a.Y)	applyPlayerData	M
+M	deci/a/d	a	(a.Y,EntityPlayer)	applyPlayerDataTo	M
+M	deci/a/d	a	(int,a.Z)	applyOtherPlayerData	M
+C	deci/a/e	ServerProxy	proxy	H	Dedicated server proxy: server config, clans, turf, zones and all deci.aK server event handlers
+F	deci/a/e	K	clanStore	M
+F	deci/a/e	L	clanManager	H
+F	deci/a/e	M	turfManager	H
+F	deci/a/e	N	serverConfig	H
+M	deci/a/e	a	(FMLInitializationEvent)	init	H
+M	deci/a/e	v	()	getClanStore	M
+M	deci/a/e	w	()	getClanManager	H
+M	deci/a/e	x	()	getTurfManager	H
+M	deci/a/e	y	()	getServerConfig	H
+C	deci/M/a	ChunkRenderLayer	render	M	Abstract client layer hooked into RenderWorldEvent Pre and Post
+M	deci/M/a	b	(RenderWorldEvent.Pre)	onRenderWorldPre	H
+M	deci/M/a	a	(RenderWorldEvent.Post)	onRenderWorldPost	H
+C	deci/M/b	WorldRenderLayer	render	H	Abstract layer called from RenderWorldLastEvent, globally and per loaded entity, with debug variants
+M	deci/M/b	g	(int,int,int)	isBetween	H
+M	deci/M/b	c	(RenderWorldLastEvent)	render	H
+M	deci/M/b	d	(RenderWorldLastEvent)	renderDebug	H
+M	deci/M/b	a	(RenderWorldLastEvent,Entity)	renderEntity	H
+M	deci/M/b	b	(RenderWorldLastEvent,Entity)	renderEntityDebug	H
+C	deci/M/c	GrenadeTimerLayer	render	M	Draws a countdown billboard over active smoke and tear gas grenades
+C	deci/M/d	LaserDotLayer	render	H	Draws the red laser dot where a gun with the laser attachment points
+M	deci/M/d	a	(EntityPlayer,double,float)	rayTraceBlocks	H
+C	deci/M/e	EmptyRenderLayer	render	H	Render layer with no behaviour
+C	deci/M/f	VehiclePartDebugLayer	render	M	Debug layer drawing coloured bounding boxes around vehicle parts and seats
+C	deci/M/g	WorldIconLayer	render	H	Draws queued point icons in the world, cleared each frame
+F	deci/M/g	TZ	queuedIcons	H
+M	deci/M/g	a	(a)	queueIcon	H
+C	deci/M/g$a	WorldIcon	render	H	Position plus icon name for a queued world icon
+F	deci/M/g$a	Qw	x	H
+F	deci/M/g$a	Z	y	H
+F	deci/M/g$a	Qx	z	H
+F	deci/M/g$a	Ua	iconName	H
+C	deci/M/h	UnusedModelLayer	render	L	Empty layer holding a static model instance, no rendering
+F	deci/M/h	Ub	model	L
+C	deci/M/i	BlockTipLayer	render	H	Shows the interaction hint text (loot, drink, read, elevator) for the block under the crosshair
+C	deci/M/j	BulletTracerLayer	render	M	Renders bullet tracers each frame
+C	deci/M/k	NpcIconLayer	render	H	Queues an icon above NPCs that report one (e.g. trader point icons)
+C	deci/M/l	ClanTurfLayer	render	H	Draws clan turf names and, in creative with the selection tool, turf bounding boxes
+C	deci/M/m	VehicleSpawnLayer	render	H	Draws vehicle spawn point markers
+C	deci/M/n	VehicleDebugLayer	render	M	Debug box around vehicle entities
+C	deci/M/o	ZoneDebugLayer	render	H	In creative with the selection tool, draws all zone areas colour coded
+C	deci/C/a	PropLightFlare	render	H	A light flare point (offset, colour, width) attached to a prop block, can be disabled
+F	deci/C/a	Qw	offsetX	H
+F	deci/C/a	Z	offsetY	H
+F	deci/C/a	Qx	offsetZ	H
+F	deci/C/a	Qy	enabled	M
+M	deci/C/a	bo	()	disable	M
+M	deci/C/a	bp	()	isEnabled	M
+C	deci/G/a	SupplyDropRenderer	render	H	Tile entity renderer for the supply drop crate
+F	deci/G/a	Rx	model	H
+F	deci/G/a	fP	texture	H
+C	deci/G/b	SupplyDropParachuteRenderer	render	H	Entity renderer for the falling supply drop parachute
+F	deci/G/b	fP	texture	H
+F	deci/G/b	Ry	model	H
+C	deci/G/c	PropellerTrapRenderer	render	H	Tile entity renderer for the propeller trap, rotated by metadata
+F	deci/G/c	fP	texture	H
+C	deci/N/a	SoundRegistry	sound	H	Builds an external sounds.json under Decimation/SoundLoader and mounts it as a resource pack mod container
+F	deci/N/a	Uc	STATISTICS_OPEN_SOUND	H
+F	deci/N/a	Ud	STATISTICS_CLOSE_SOUND	H
+F	deci/N/a	Ue	sounds	H
+M	deci/N/a	a	(c)	addSound	H
+M	deci/N/a	bw	()	writeSoundsJsonAndMount	H
+C	deci/N/b	PropLoopSound	sound	H	Repeating positional sound bound to a prop tile entity, stops when the tile is gone
+F	deci/N/b	x	x	H
+F	deci/N/b	y	y	H
+F	deci/N/b	z	z	H
+C	deci/N/c	SoundEntry	sound	H	One sounds.json entry: name, path, category, optional numbered variant count
+F	deci/N/c	Uf	category	H
+F	deci/N/c	Ug	hasVariants	H
+F	deci/N/c	Uh	variantCount	H
+C	deci/Z/a	StaticTileEntity	tileentity	H	Non ticking TileEntity base used by all prop tile entities
+C	deci/ab/a	GunDamageSource	weapon	H	DamageSource "gunDeci" for player fired shots, plus an explosion damage factory
+F	deci/ab/a	XN	shooter	H
+M	deci/ab/a	c	(Entity)	forShooter	H
+M	deci/ab/a	a	(deci.ak.a)	forExplosion	H
+C	deci/aw/a	RotationToolItem	item	M	Admin tool item with a description and an invert flag toggled by sneak right click
+M	deci/aw/a	n	(ItemStack)	initTag	H
+M	deci/aw/a	r	(ItemStack)	isInverted	H
+C	deci/aw/b	SelectionToolItem	item	H	Admin selection wand: right click sets position 1, sneak right click position 2 (zones, turfs)
+C	deci/v/a	CubeModel	model	H	Plain 16 cube model, used to draw the sun and earth in a GUI
+F	deci/v/a	nx	cube	H
+M	deci/v/a	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/v/a	a	(Entity,float,float,float,float,float,float)	setAngles	L
+C	deci/v/b	FlatPlaneModel	model	H	Flat 16x16 plane model (no known users)
+F	deci/v/b	nx	plane	H
+M	deci/v/b	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/v/b	a	(Entity,float,float,float,float,float,float)	setAngles	L
+C	net/decimation/mod/common/handlers/a	GuiHandler	gui	H	IGuiHandler mapping GUI ids to containers (server) and screens (client)
+C	net/decimation/mod/common/handlers/b	LockpickAttemptHandler	network	H	Server handler for a lockpick pin attempt: checks the pin, plays sound, may consume the lockpick
+F	net/decimation/mod/common/handlers/b	XS	random	H
+F	net/decimation/mod/common/handlers/b	acM	lastPickBroke	M
+M	net/decimation/mod/common/handlers/b	a	(a.I,MessageContext)	handle	H
+M	net/decimation/mod/common/handlers/b	a	(EntityPlayer,d)	handleFailedPin	M
+M	net/decimation/mod/common/handlers/b	l	(ItemStack)	rollLockpickBreak	M
+C	net/decimation/mod/common/handlers/c	LockpickResultHandler	network	H	Client handler that forwards the lockpick result to the open lockpick GUI
+M	net/decimation/mod/common/handlers/c	a	(a.J,MessageContext)	handle	H
+C	net/decimation/mod/common/handlers/d	LockpickUnlockHandler	network	M	Server handler that tells a lockable tile entity to unlock for the sending player
+M	net/decimation/mod/common/handlers/d	a	(a.H,MessageContext)	handle	H
+C	deci/aA/a	GrenadeItem	weapon	H	Frag grenade item and base of all throwables: client tracks mouse buttons, sends throw strength to server, server spawns the entity
+F	deci/aA/a	aeO	rightMouseDown	H
+F	deci/aA/a	aeP	prevRightMouseDown	H
+F	deci/aA/a	aeQ	leftMouseDown	H
+F	deci/aA/a	aeR	prevLeftMouseDown	H
+F	deci/aA/a	aeS	throwPending	H
+F	deci/aA/a	aeT	unusedFlag	L
+F	deci/aA/a	aeU	throwStrength	H
+M	deci/aA/a	a	(ItemStack,World,EntityPlayer,double)	throwGrenade	H
+M	deci/aA/a	a	(EntityLivingBase,ItemStack)	onEntitySwingUnlinked	M
+M	deci/aA/a	a	(ItemStack,EntityPlayer,Entity)	onLeftClickEntityUnlinked	M
+M	deci/aA/a	a	(ItemStack,int,int,int,EntityPlayer)	onBlockStartBreakUnlinked	M
+C	deci/aA/b	MolotovItem	weapon	H	Throwable that spawns a molotov entity
+C	deci/aA/c	MortarDeployItem	weapon	H	Right click a floor block to deploy a mortar gun entity
+C	deci/aA/d	MortarRoundItem	weapon	H	Mortar shell, used while riding a mortar to fire one round
+C	deci/aA/e	SignalSmokeGrenadeItem	weapon	H	Throwable that spawns a green or red signal smoke grenade
+F	deci/aA/e	aeV	smokeColor	H
+C	deci/aA/f	SmokeGrenadeItem	weapon	H	Throwable that spawns a smoke grenade
+C	deci/aA/g	StunGrenadeItem	weapon	H	Throwable that spawns a stun grenade
+C	deci/aA/h	TearGasGrenadeItem	weapon	H	Throwable that spawns a tear gas grenade
+C	deci/U/a	DeciDoorBlock	block	H	Two block tall openable door (emergency, security, coloured, office variants) with custom textures and sound
+F	deci/U/a	XE	upperTextureName	H
+F	deci/U/a	XF	lowerTextureName	H
+F	deci/U/a	XG	openSound	H
+F	deci/U/a	XH	upperIcons	H
+F	deci/U/a	XI	lowerIcons	H
+M	deci/U/a	W	(int)	setBoundsFromState	H
+C	deci/U/b	ElevatorBlock	block	H	Elevator platform block owning an elevator tile entity
+C	deci/U/c	ElevatorButtonBlock	block	H	Button that triggers every open elevator tile within 3 blocks
+C	deci/U/d	KeycardReaderBlock	block	H	Keycard screen prop; a matching keycard unlocks nearby locked door tiles
+F	deci/U/d	XJ	keycardLevel	H
+C	deci/U/e	LockableBlock	block	H	Base block whose tile entity is a lockpickable lock; activation delegates to the tile
+F	deci/U/e	hx	lockPinCount	M
+M	deci/U/e	b	(World,int,int,int)	getLockTile	H
+C	deci/U/f	LockedSafeBlock	block	M	Lockable chest style container block, drops its contents when broken
+F	deci/U/f	XK	inventorySize	M
+C	deci/U/g	LockedDoorBlock	block	H	Lockpickable two block door; opens directly once unlocked
+F	deci/U/g	XL	doorItem	H
+F	deci/U/g	XE	upperTextureName	H
+F	deci/U/g	XF	lowerTextureName	H
+F	deci/U/g	XH	upperIcons	H
+F	deci/U/g	XI	lowerIcons	H
+M	deci/U/g	W	(int)	setBoundsFromState	H
+M	deci/U/g	a	(IBlockAccess,int,int,int)	isUnlocked	M
+M	deci/U/g	a	(World,int,int,int,EntityPlayer)	toggleDoor	H
+C	deci/U/h	RopeBlock	block	M	Climbable rope segment, breaks without support; sneaking holds the player in place
+M	deci/U/h	a	(IBlockAccess,int,int,int,EntityLivingBase)	isLadderUnlinked	M
+C	deci/U/i	RopeAnchorBlock	block	M	Rope top block that extends rope segments down to the ground when placed
+M	deci/U/i	a	(IBlockAccess,int,int,int,EntityLivingBase)	isLadderUnlinked	M
+C	deci/U/j	DeciBlockContainer	block	H	BlockContainer base in the Decimation creative tab with no tile entity by default
+C	deci/af/a	AttackOnCollideAI	ai	H	Copy of vanilla EntityAIAttackOnCollide: path to the target and melee it when close
+F	deci/af/a	ZD	world	H
+F	deci/af/a	ZE	attacker	H
+F	deci/af/a	ZF	attackTick	H
+F	deci/af/a	ZG	speed	H
+F	deci/af/a	ZH	longMemory	H
+F	deci/af/a	ZI	path	H
+F	deci/af/a	ZJ	targetClass	H
+F	deci/af/a	ZK	delayCounter	H
+F	deci/af/a	ZL	targetX	H
+F	deci/af/a	ZM	targetY	H
+F	deci/af/a	ZN	targetZ	H
+F	deci/af/a	ZO	failedPathPenalty	H
+C	deci/af/b	WatchClosestAI	ai	H	Copy of vanilla EntityAIWatchClosest
+F	deci/af/b	ZP	VANILLA_CLASS_ID	H
+F	deci/af/b	ZQ	entity	H
+F	deci/af/b	ZR	maxDistance	H
+F	deci/af/b	ZS	chance	H
+F	deci/af/b	ZT	watchedClass	H
+F	deci/af/b	ZU	closestEntity	H
+F	deci/af/b	ZV	lookTime	H
+C	deci/af/c	WatchAndGestureAI	ai	M	WatchClosest variant that also sets gesture 2 on a civilian human (prints Updating! to stdout every tick)
+F	deci/af/c	ZQ	entity	H
+F	deci/af/c	ZR	maxDistance	H
+F	deci/af/c	ZS	chance	H
+F	deci/af/c	ZT	watchedClass	H
+F	deci/af/c	ZU	closestEntity	H
+F	deci/af/c	ZV	lookTime	H
+C	deci/af/d	HumanEntity	entity	H	Base for all human NPCs: random name and appearance, gesture and stance, backpack, vest and mask slots, client animation state
+F	deci/af/d	ZW	RANDOM	H
+F	deci/af/d	ZX	blinkTicks	M
+F	deci/af/d	VU	gesture	H
+F	deci/af/d	Wu	stance	H
+F	deci/af/d	ZY	skinTone	H
+F	deci/af/d	ZZ	hair	H
+F	deci/af/d	aaa	eyes	H
+F	deci/af/d	aab	mouth	H
+F	deci/af/d	aac	beard	H
+F	deci/af/d	aad	shirt	H
+F	deci/af/d	aae	pants	H
+F	deci/af/d	aaf	shoes	H
+F	deci/af/d	aag	firstName	H
+F	deci/af/d	aah	lastName	H
+F	deci/af/d	Vy	stanceAnim	M
+F	deci/af/d	Vz	secondaryAnim	L
+F	deci/af/d	VA	weaponAnim	M
+F	deci/af/d	VB	lastHeldItem	H
+F	deci/af/d	VC	prevStance	H
+F	deci/af/d	aai	backpack	H
+F	deci/af/d	aaj	mask	H
+F	deci/af/d	aak	vest	H
+F	deci/af/d	aal	visibleTicks	M
+M	deci/af/d	ei	()	isRecentlyVisible	M
+M	deci/af/d	ej	()	getFirstName	H
+M	deci/af/d	ek	()	getLastName	H
+M	deci/af/d	a	(int,int,int,int,int,int,int,int)	setAppearance	H
+M	deci/af/d	a	(d)	copyAppearance	H
+M	deci/af/d	el	()	getSkinTone	H
+M	deci/af/d	em	()	getHair	H
+M	deci/af/d	en	()	getEyes	H
+M	deci/af/d	eo	()	getMouth	H
+M	deci/af/d	ep	()	getBeard	H
+M	deci/af/d	eq	()	getShirt	H
+M	deci/af/d	er	()	getPants	H
+M	deci/af/d	es	()	getShoes	H
+M	deci/af/d	et	()	randomizeIdentity	H
+M	deci/af/d	r	(int,int)	randomBetween	H
+M	deci/af/d	eu	()	isBlinking	M
+M	deci/af/d	ev	()	startBlink	M
+M	deci/af/d	bX	()	getGesture	H
+M	deci/af/d	G	(int)	setGesture	H
+M	deci/af/d	ew	()	getSkinFolder	M
+M	deci/af/d	cv	()	getBackpack	H
+M	deci/af/d	h	(ItemStack)	setBackpack	H
+M	deci/af/d	cw	()	getVest	H
+M	deci/af/d	i	(ItemStack)	setVest	H
+M	deci/af/d	cx	()	getMask	H
+M	deci/af/d	j	(ItemStack)	setMask	H
+M	deci/af/d	bM	()	getStance	H
+M	deci/af/d	u	(int)	setStance	H
+M	deci/af/d	cI	()	getSecondaryAnim	L
+M	deci/af/d	o	(float)	setStanceAnim	M
+M	deci/af/d	p	(float)	setSecondaryAnim	L
+M	deci/af/d	cG	()	getStanceAnim	M
+M	deci/af/d	cH	()	getWeaponAnim	M
+M	deci/af/d	n	(float)	setWeaponAnim	M
+M	deci/af/d	cu	()	getPrevStance	H
+M	deci/af/d	P	(int)	setPrevStance	H
+M	deci/af/d	cy	()	getLastHeldItem	H
+M	deci/af/d	a	(Item)	setLastHeldItem	H
+M	deci/af/d	ex	()	updateAnimations	H
+M	deci/af/d	ey	()	getHumanityOnKill	H
+M	deci/af/d	ez	()	markVisible	M
+C	deci/ag/a	BanditEntity	entity	H	Hostile armed human (Bandit): random armour and gun, hunts zombies, soldiers, civilians and high humanity players, shoots via direct attackEntityFrom
+F	deci/ag/a	aam	HELMET_POOL	H
+F	deci/ag/a	aan	CHEST_POOL	H
+F	deci/ag/a	aao	LEGS_POOL	H
+F	deci/ag/a	aap	BOOTS_POOL	H
+F	deci/ag/a	aaq	BACKPACK_POOL	H
+F	deci/ag/a	ZW	random	H
+F	deci/ag/a	aar	gun	H
+F	deci/ag/a	aas	alert	H
+F	deci/ag/a	aat	alertTimer	H
+F	deci/ag/a	aau	shotCooldown	H
+F	deci/ag/a	aav	maxShotDelay	H
+F	deci/ag/a	aaw	minShotDelay	H
+F	deci/ag/a	aax	unusedTimer	L
+M	deci/ag/a	eA	()	findTarget	H
+M	deci/ag/a	c	(EntityLivingBase)	isHostileTo	H
+M	deci/ag/a	d	(EntityLivingBase)	throwMolotovAt	H
+M	deci/ag/a	e	(EntityLivingBase)	shootAt	H
+M	deci/ag/a	eB	()	isAlert	H
+M	deci/ag/a	eC	()	getHeardSound	M
+M	deci/ag/a	b	(ArrayList<Item>)	randomItem	H
+M	deci/ag/a	eD	()	getGun	H
+M	deci/ag/a	k	(ItemStack)	setGun	H
+M	deci/ag/a	s	(int,int)	setShotDelayRange	H
+M	deci/ag/a	eE	()	randomizeStance	M
+M	deci/ag/a	ey	()	getHumanityOnKill	H
+C	deci/ag/b	DemonEntity	entity	H	Flying dragon like Demon mob that circles, grabs and carries entities and damages those below it
+F	deci/ag/b	aay	movementHistory	H
+F	deci/ag/b	aaz	movementHistoryIndex	H
+F	deci/ag/b	aaA	prevWingAnim	H
+F	deci/ag/b	aaB	wingAnim	H
+F	deci/ag/b	aaC	forceNewTarget	H
+F	deci/ag/b	aaD	slowed	M
+F	deci/ag/b	aaE	attackCooldown	H
+F	deci/ag/b	aaF	carryTicks	H
+F	deci/ag/b	Wt	grabCooldown	M
+M	deci/ag/b	a	(int,float)	getMovementOffsets	H
+M	deci/ag/b	b	(List)	attackEntitiesBelow	H
+M	deci/ag/b	eF	()	pickNewTarget	H
+M	deci/ag/b	eG	()	getWingSound	H
+M	deci/ag/b	eH	()	alwaysTrue	L
+C	deci/ag/c	HazmatSoldierEntity	entity	H	Soldier variant in a hazmat suit with a gun skinned green
+C	deci/ag/d	InfectedEntity	entity	H	Base zombie (Infected): melee AI, horde speed boost, variant based sounds and armour, 8 percent bite infection
+F	deci/ag/d	aaG	horde	H
+F	deci/ag/d	aaH	hordeLeader	M
+M	deci/ag/d	eI	()	getVariant	H
+M	deci/ag/d	af	(int)	setVariant	H
+M	deci/ag/d	eJ	()	animateAggression	M
+M	deci/ag/d	ew	()	getSkinFolder	M
+M	deci/ag/d	a	(deci.af.d)	copyAppearance	H
+M	deci/ag/d	ey	()	getHumanityOnKill	H
+C	deci/ag/e	BloaterEntity	entity	H	Big infected that explodes after standing near its target for a fuse or on death
+F	deci/ag/e	aaI	FUSE_RANGE	M
+F	deci/ag/e	aaJ	fuse	H
+M	deci/ag/e	eK	()	explode	H
+M	deci/ag/e	ew	()	getSkinFolder	M
+C	deci/ag/f	InfectedCrawlerEntity	entity	H	Low, slow crawling infected
+C	deci/ag/g	InfectedDogEntity	entity	H	Infected dog with random skin
+F	deci/ag/g	aaK	headTilt	L
+F	deci/ag/g	aaL	prevHeadTilt	L
+F	deci/ag/g	Qs	skin	H
+M	deci/ag/g	eL	()	getSkin	H
+M	deci/ag/g	ag	(int)	setSkin	H
+M	deci/ag/g	eM	()	getTailRotation	M
+C	deci/ag/h	FrailEntity	entity	H	Hunched crying infected that screams and speeds up when it has a target
+M	deci/ag/h	ew	()	getSkinFolder	M
+C	deci/ag/i	GawkerEntity	entity	H	Stationary infected that jumpscares and damages players who can see it
+C	deci/ag/j	HulkEntity	entity	H	Large infected with a knock up melee attack and ground shake steps
+F	deci/ag/j	aaM	attackAnimTicks	L
+M	deci/ag/j	eN	()	isAttackAnimating	L
+C	deci/ag/k	MechEntity	entity	H	Hostile walking mech with a machine gun burst and mortar barrage against zombies, bandits and low humanity players
+F	deci/ag/k	aaN	variant	H
+F	deci/ag/k	aaO	mortarShotDelay	M
+F	deci/ag/k	aaP	mortarShotsLeft	M
+F	deci/ag/k	aaQ	mortarCooldown	M
+F	deci/ag/k	aaR	gunShotDelay	M
+F	deci/ag/k	aaS	gunAmmo	M
+F	deci/ag/k	aaT	gunReloadTicks	M
+F	deci/ag/k	aax	heardSoundCooldown	M
+M	deci/ag/k	eO	()	fireMachineGun	H
+M	deci/ag/k	eA	()	findTarget	H
+M	deci/ag/k	c	(EntityLivingBase)	isHostileTo	H
+M	deci/ag/k	eC	()	getHeardSound	M
+M	deci/ag/k	eP	()	getVariant	H
+C	deci/ag/l	SoldierEntity	entity	H	Military human; 10 percent are medics that heal or cure nearby players; hostile to bandits, zombies, low humanity players
+F	deci/ag/l	aaU	medic	H
+F	deci/ag/l	aaV	healCooldown	H
+M	deci/ag/l	k	(EntityPlayer)	healPlayer	H
+M	deci/ag/l	eQ	()	canHeal	H
+M	deci/ag/l	eC	()	getHeardSound	M
+M	deci/ag/l	c	(EntityLivingBase)	isHostileTo	H
+M	deci/ag/l	ey	()	getHumanityOnKill	H
+C	deci/ag/m	SovietEntity	entity	H	Soviet faction human, hostile to everything except other Soviets
+M	deci/ag/m	c	(EntityLivingBase)	isHostileTo	H
+C	deci/ag/n	HumanNameGenerator	entity	H	First and last name lists for human NPCs
+F	deci/ag/n	aaW	FIRST_NAMES	H
+F	deci/ag/n	aaX	LAST_NAMES	H
+M	deci/ag/n	a	(Random)	randomFirstName	H

@@ -1,0 +1,1 @@
+C	net/decimation/mod/common/handlers/a	DeciGuiHandler	gui	H	IGuiHandler mapping DeciConstants GUI ids to containers (server) and screens (client)

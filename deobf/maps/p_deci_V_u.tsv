@@ -1,0 +1,3 @@
+C	deci/V/a	SupplyDropBlock	loot	H	Supply drop crate block (falls, smoke particles, loot pool with 8 rolls); implements LootCloseCallback so it breaks itself once the loot GUI is closed
+M	deci/V/a	a	(EntityPlayer,World,int,int,int)	onLootClosed	H
+M	deci/V/a	c	(World,int,int,int)	canFallThrough	M

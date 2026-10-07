@@ -1,0 +1,6 @@
+C	deci/r/a	ModelBarbedWire	model	H	Barbed wire entity model
+C	deci/r/b	ModelCampFire	model	H	Campfire entity model
+C	deci/r/c	ModelUnusedPlaceable	model	L	Placeable model not referenced anywhere
+C	deci/r/d	ModelLandmine	model	H	Landmine entity model
+C	deci/r/e	ModelPunjiSticks	model	H	Punji sticks entity model
+C	deci/r/f	ModelStorageCrate	model	H	Storage crate model

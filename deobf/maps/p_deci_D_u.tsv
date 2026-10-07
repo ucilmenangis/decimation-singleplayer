@@ -1,0 +1,6 @@
+C	deci/D/a	DiscordPresence	misc	H	Discord Rich Presence integration (app id 580018394888273931) with a callback thread polling the supporter flag every 2 s
+F	deci/D/a	Qz	APP_ID	H
+F	deci/D/a	QA	STEAM_ID	H
+F	deci/D/a	QB	presence	H
+F	deci/D/a	QC	handlers	H
+M	deci/D/a	b	(boolean)	setSupporterIcon	H

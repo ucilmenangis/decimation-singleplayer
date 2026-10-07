@@ -1,0 +1,4 @@
+C	deci/z/a	MuzzleFlashModel	render	H	Muzzle flash model with random flame textures, drawn at the gun's flamePos (used by GunItemRenderer and turrets)
+M	deci/z/a	q	(int,int)	randomInclusive	H
+M	deci/z/a	b	(float,float,float)	renderAt	M
+M	deci/z/a	a	(boolean,deci.ay.i,ItemStack,float,float,float)	render	H

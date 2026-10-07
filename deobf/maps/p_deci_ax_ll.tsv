@@ -1,0 +1,7 @@
+C	deci/ax/a	VehicleItem	vehicle	H	Abstract item that places a vehicle entity where the player looks
+M	deci/ax/a	b	(World,double,double,double)	createVehicle	H
+C	deci/ax/b	ATVItem	vehicle	H	Places an ATV
+C	deci/ax/c	BTR70Item	vehicle	H	Places a BTR70
+C	deci/ax/d	BuggyItem	vehicle	H	Places a Buggy
+C	deci/ax/e	HummerItem	vehicle	H	Places a Hummer
+C	deci/ax/f	M35Item	vehicle	H	Places an M35 truck

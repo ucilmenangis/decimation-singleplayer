@@ -1,0 +1,2 @@
+C	deci/t/a	ModelATV	vehicle	H	ATV vehicle model (BModel subclass, hard coded parts) with fuel HUD text
+C	deci/t/b	ModelUnusedVehicle	vehicle	L	Very large hard coded vehicle model (BModel subclass) not referenced anywhere

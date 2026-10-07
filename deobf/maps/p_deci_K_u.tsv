@@ -1,0 +1,37 @@
+C	deci/K/a	GpsItemRenderer	render	H	IItemRenderer for the GPS item model
+F	deci/K/a	TG	model	H
+C	deci/K/b	GunItemRenderer	render	H	IItemRenderer for every GunItem: first/third person bmodel rendering with animations, attachments, skins, muzzle flash and smoke puffs; static TI is the active instance
+F	deci/K/b	TI	INSTANCE	H
+F	deci/K/b	TK	smokeTextures	H
+F	deci/K/b	TL	smokePuffs	H
+F	deci/K/b	lf	RAD_TO_DEG	H
+F	deci/K/b	TM	currentAnimation	H
+F	deci/K/b	TB	muzzleFlashModel	H
+F	deci/K/b	TN	textureN	L
+F	deci/K/b	TO	timer	L
+M	deci/K/b	a	(deci.ay.i,ItemStack)	renderAttachments	M
+M	deci/K/b	a	(deci.ay.i,float)	renderMuzzleFlash	L
+M	deci/K/b	b	(deci.ay.i,float)	renderSmokePuffs	L
+M	deci/K/b	a	(deci.ay.i)	addSmokePuff	H
+M	deci/K/b	bu	()	tickSmokePuffs	H
+M	deci/K/b	b	(deci.ay.i,Object[])	renderThirdPerson	M
+M	deci/K/b	bt	()	getMuzzleFlashModel	H
+C	deci/K/c	ModelItemRenderer	render	M	Generic IItemRenderer drawing a ModelBase with a texture (melee/tools)
+F	deci/K/c	TP	model	H
+F	deci/K/c	TQ	texture	H
+M	deci/K/c	a	(ItemStack)	applyItemTransform	L
+M	deci/K/c	a	(EntityPlayer,ItemStack)	renderFirstPerson	M
+C	deci/K/d	BModelItemRenderer	render	M	Generic IItemRenderer drawing a bmodel (deci.n.f) with a texture, with throwable charge handling
+F	deci/K/d	TR	ITEM_RENDERER	H
+F	deci/K/d	TS	model	H
+F	deci/K/d	TQ	texture	H
+M	deci/K/d	b	(EntityPlayer,ItemStack)	renderFirstPerson	M
+M	deci/K/d	a	(Entity,ItemStack)	renderEquipped	M
+M	deci/K/d	bv	()	applyInventoryTransform	L
+M	deci/K/d	f	(int,int,int)	setOffset	H
+C	deci/K/e	MapItemRenderer	render	H	IItemRenderer for the map item
+F	deci/K/e	TT	model	H
+C	deci/K/f	RadioItemRenderer	render	H	IItemRenderer for the radio item, shows its frequency
+F	deci/K/f	TU	model	H
+C	deci/K/g	SupplyDropRadioItemRenderer	render	H	IItemRenderer for the supply drop radio
+F	deci/K/g	TU	model	H

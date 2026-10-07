@@ -1,0 +1,15 @@
+C	deci/az/a	ChainsawItem	weapon	H	Fuel powered chainsaw melee weapon (toggle on/off, uses jerry can fuel)
+F	deci/az/a	aeL	intL	L
+F	deci/az/a	aeM	intM	L
+M	deci/az/a	a	(EntityLivingBase,ItemStack)	onSwing	M
+M	deci/az/a	n	(ItemStack)	initTag	H
+M	deci/az/a	h	(EntityPlayer)	consumeFuel	H
+M	deci/az/a	N	(ItemStack)	isOn	H
+M	deci/az/a	a	(ItemStack,Entity)	toggle	M
+C	deci/az/b	MeleeWeaponItem	weapon	H	Melee weapon with fixed damage (applied directly in CombatHurtHandler)
+F	deci/az/b	aeN	damage	H
+M	deci/az/b	fZ	()	getDamage	H
+C	deci/az/c	ShieldItem	weapon	H	Riot shield style melee item: right click toggles defence which halves gunshot damage while held
+M	deci/az/c	n	(ItemStack)	initTag	H
+M	deci/az/c	O	(ItemStack)	isDefending	H
+M	deci/az/c	b	(ItemStack,Entity)	toggleDefence	M

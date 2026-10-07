@@ -1,0 +1,53 @@
+C	deci/J/A	TearGasGrenadeRenderer	render	H	Renderer for TearGasGrenadeEntity
+C	deci/J/B	SantaTraderRenderer	render	H	Biped renderer for TraderSanta
+C	deci/J/C	WitchTraderRenderer	render	H	Biped renderer for TraderWitch
+C	deci/J/D	TurretRenderer	render	H	Renderer for the Turret entity (bmodel head and stand)
+M	deci/J/D	bt	()	loadModels	L
+C	deci/J/E	VehicleRenderer	render	H	Renderer for vehicles (ATV, Hummer, Buggy, M35) from deci:models/vehicles/<name>.bmodel
+C	deci/J/F	BTR70Renderer	render	H	Vehicle renderer for the BTR70 with its turret model
+C	deci/J/a	BarbedWireRenderer	render	H	Renderer for BarbedWireEntity
+C	deci/J/b	BoarRenderer	render	H	Renderer for BoarEntity
+C	deci/J/c	CrossbowBoltRenderer	render	H	Renderer for CrossbowBoltEntity
+C	deci/J/d	CampFireRenderer	render	H	Renderer for CampFireEntity
+C	deci/J/e	PlayerModelSwapper	render	H	Swaps the vanilla player model for the Decimation player model via reflection (stance, gestures, armor slots), per player model cache
+F	deci/J/e	SS	bipedModel	M
+F	deci/J/e	ST	modelsByPlayer	H
+F	deci/J/e	SU	mainModelField	H
+F	deci/J/e	SV	bipedMainField	M
+F	deci/J/e	SW	bipedArmorField	L
+F	deci/J/e	SX	bipedChestField	L
+F	deci/J/e	SY	renderPlayer	H
+F	deci/J/e	SZ	flagZ	L
+M	deci/J/e	c	(EntityPlayer)	applyStancePose	M
+M	deci/J/e	b	(RenderWorldLastEvent)	onRenderWorldLast	H
+M	deci/J/e	a	(RenderPlayerEvent.Pre)	onRenderPlayerPre	H
+M	deci/J/e	a	(EntityPlayer,RenderPlayer)	installModels	H
+M	deci/J/e	a	(RenderPlayer)	hasCustomModels	H
+C	deci/J/f	BuckRenderer	render	H	Renderer for BuckEntity
+C	deci/J/g	DemonRenderer	render	H	Renderer for DemonEntity
+C	deci/J/h	DoggoRenderer	render	H	Renderer for DoggoEntity with skin variants and collar
+C	deci/J/i	GawkerRenderer	render	H	Renderer for GawkerEntity
+C	deci/J/j	GrenadeRenderer	render	H	Renderer for GrenadeEntity (with rocket smoke trail)
+C	deci/J/k	HumanRenderer	render	H	Biped renderer for HumanEntity and subclasses (bandits, soldiers, traders)
+C	deci/J/l	InfectedCrawlerRenderer	render	H	Renderer for InfectedCrawlerEntity
+C	deci/J/m	InfectedDogRenderer	render	H	Renderer for InfectedDogEntity
+C	deci/J/n	InvisibleRenderer	render	H	Empty renderer for VehicleSeat, VehicleEmitter and PlayerSeat entities
+C	deci/J/o	LandmineRenderer	render	H	Renderer for LandmineEntity
+C	deci/J/p	MechRenderer	render	H	Renderer for MechEntity
+C	deci/J/q	MolotovRenderer	render	H	Renderer for MolotovEntity
+C	deci/J/r	MortarGunRenderer	render	H	Renderer for MortarGunEntity
+C	deci/J/s	MortarRoundRenderer	render	H	Renderer for MortarRoundEntity
+C	deci/J/t	PunjiSticksRenderer	render	H	Renderer for PunjiSticksEntity
+C	deci/J/u	RocketRenderer	render	H	Renderer for RocketEntity and HeatSeekingRocketEntity
+C	deci/J/v	TankShellRenderer	render	H	Renderer for TankShellEntity (draws nothing)
+C	deci/J/w	SignalGrenadeRenderer	render	H	Renderer for signal grenades (colour from getColor)
+C	deci/J/x	CorpseRenderer	render	H	Biped renderer for EntityCorpse (player skin, equipment)
+F	deci/J/x	Tt	STEVE_TEXTURE	H
+M	deci/J/x	a	(ModelRenderer,ModelRenderer)	copyRotation	H
+M	deci/J/x	a	(EntityLivingBase,double,double,double,float,float)	renderLiving	H
+M	deci/J/x	a	(deci.ae.a,double,double,double,float,float)	renderCorpse	H
+M	deci/J/x	a	(deci.ae.a)	getTexture	H
+M	deci/J/x	d	(float,float,float)	interpolateRotation	H
+M	deci/J/x	b	(EntityLivingBase)	getTextureFor	H
+C	deci/J/y	SmokeGrenadeRenderer	render	H	Renderer for SmokeGrenadeEntity
+C	deci/J/z	StunGrenadeRenderer	render	H	Renderer for StunGrenadeEntity

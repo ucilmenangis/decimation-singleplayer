@@ -1,0 +1,58 @@
+C	deci/aN/a	AntiCheatScanner	misc	H	Client anticheat: hashes every jar in mods/ (SHA style hex), whitelist of known hashes, and scans processes and folders for cheat tools (Cheat Engine, Process Hacker, ehacks, xenobyte, Cheating Essentials, LiteLoader)
+F	deci/aN/a	aBo	WHITELISTED_HASHES	H
+F	deci/aN/a	aBp	modHashes	H
+F	deci/aN/a	aBq	modFileNames	H
+F	deci/aN/a	aBr	MODS_DIR	H
+F	deci/aN/a	aBs	STR_CHEATING	H
+F	deci/aN/a	aBt	STR_ESSENTIALS	H
+F	deci/aN/a	aBu	OS_WINDOWS	H
+F	deci/aN/a	aBv	OS_MAC	H
+F	deci/aN/a	aBw	OS_NIX	H
+F	deci/aN/a	aBx	OS_NUX	H
+F	deci/aN/a	aBy	OS_AIX	H
+F	deci/aN/a	aBz	OS_SUNOS	H
+F	deci/aN/a	aBA	STR_LITELOADER	H
+F	deci/aN/a	aBB	STR_LITE	H
+F	deci/aN/a	aBC	STR_CHEAT	H
+F	deci/aN/a	aBD	STR_ENGINE	H
+F	deci/aN/a	aBE	STR_PROCESS	H
+F	deci/aN/a	aBF	STR_HACKER	H
+F	deci/aN/a	aBG	STR_SYSTEM32	H
+F	deci/aN/a	aBH	STR_TASKLIST	H
+F	deci/aN/a	aBI	STR_WINDIR	H
+F	deci/aN/a	aBJ	STR_EHACKS	H
+F	deci/aN/a	aBK	XENOBYTE_DIR	H
+F	deci/aN/a	aBL	EHACKS_CONFIG	H
+F	deci/aN/a	aBM	cachedOsName	H
+F	deci/aN/a	aBN	processListing	H
+M	deci/aN/a	a	(File)	hashFile	H
+M	deci/aN/a	b	(File)	readAllBytes	M
+M	deci/aN/a	hl	()	collectModHashes	H
+M	deci/aN/a	hm	()	detectCheats	H
+M	deci/aN/a	hn	()	hasCheatClientFiles	H
+C	deci/aN/a$a	MisplacedParticleFX	render	L	Inner EntityFX particle class with a particle type (deci.B.a) and direction; unrelated to the anticheat, appears to be leftover
+F	deci/aN/a$a	Qj	particleType	M
+F	deci/aN/a$a	Qs	maxAge	L
+F	deci/aN/a$a	dir	direction	L
+F	deci/aN/a$a	fW	scale	L
+C	deci/aN/b	WeightedRandomCollection	util	H	Weighted random selection (duplicate of deci.aB.f), used for weather selection
+F	deci/aN/b	afn	entries	H
+F	deci/aN/b	XS	random	H
+F	deci/aN/b	afo	totalWeight	H
+M	deci/aN/b	b	(double,E)	add	H
+C	deci/aN/c	UuidFetcher	util	H	Resolves player names to UUIDs in batches through the dead mcapi.ca web API, with name/uuid caches
+F	deci/aN/c	aBP	nameToUuid	H
+F	deci/aN/c	aBQ	uuidToName	H
+F	deci/aN/c	aBR	BATCH_SIZE	H
+F	deci/aN/c	aBS	pendingNames	H
+F	deci/aN/c	aBT	jsonParser	H
+M	deci/aN/c	ak	(String)	getNameForUuid	H
+M	deci/aN/c	al	(String)	getUuidOrQueue	H
+M	deci/aN/c	am	(String)	getUuidBlocking	M
+M	deci/aN/c	an	(String)	fetchFromApi	H
+M	deci/aN/c	a	(HttpURLConnection,String)	writeBody	H
+M	deci/aN/c	ao	(String)	parseUndashedUuid	H
+M	deci/aN/c	ap	(String)	openPostConnection	H
+M	deci/aN/c	ho	()	startBatchFetch	H
+M	deci/aN/c	hp	()	processPendingBatch	H
+C	deci/aN/c$a	UuidFetchThread	util	H	Background thread that runs processPendingBatch

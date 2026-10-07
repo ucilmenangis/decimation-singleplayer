@@ -1,0 +1,188 @@
+C	deci/ay/a	AmmoFeedType	weapon	H	Ammo item kind: magazine, belt, stripper clip, single bullet
+C	deci/ay/b	AttachmentSlot	weapon	H	Attachment slot enum: barrel, grip, sight, stock, selector, bolt
+C	deci/ay/c	WeaponCategory	weapon	H	Weapon category enum (pistol, revolver, rifle, smg, lmg, shotgun, mg, rocket, flamethrower, crossbow, all)
+C	deci/ay/d	LauncherAmmoKind	weapon	H	Launcher projectile kind: rocket or grenade
+C	deci/ay/e	GunStats	weapon	H	Per gun stat block: recoil pitch/yaw, fire modes, zoom/sway table, recoil recovery, fire rate (seconds between shots), manufacturer
+F	deci/ay/e	adk	aimTable	M
+F	deci/ay/e	adl	recoilPitch	M
+F	deci/ay/e	adm	recoilYaw	M
+F	deci/ay/e	adn	recoilRecovery	M
+F	deci/ay/e	ado	openBolt	L
+F	deci/ay/e	adp	fireModes	H
+F	deci/ay/e	adq	modeParams	L
+F	deci/ay/e	adr	manufacturer	H
+F	deci/ay/e	ads	secondsPerShot	H
+F	deci/ay/e	adt	flagT	L
+F	deci/ay/e	adu	flagU	L
+F	deci/ay/e	adv	flagV	L
+F	deci/ay/e	adw	flagW	L
+F	deci/ay/e	adx	impactParticle	M
+F	deci/ay/e	ady	flameParticle	M
+F	deci/ay/e	adz	flameParticleAlt	M
+F	deci/ay/e	adA	forcedTracer	H
+F	deci/ay/e	adB	forcedTracerColor	H
+M	deci/ay/e	a	(deci.ay.i.a)	setForcedTracer	H
+M	deci/ay/e	fC	()	disableFlagT	L
+M	deci/ay/e	fD	()	disableFlagU	L
+M	deci/ay/e	fE	()	disableFlagV	L
+M	deci/ay/e	fF	()	disableFlagW	L
+M	deci/ay/e	F	(String)	setImpactParticle	M
+M	deci/ay/e	G	(String)	setFlameParticle	M
+M	deci/ay/e	H	(String)	setFlameParticleAlt	M
+M	deci/ay/e	I	(String)	setManufacturer	H
+C	deci/ay/e$a	FireMode	weapon	H	Fire mode enum: single, auto, burst, pump, bolt
+M	deci/ay/e$a	Action	(String)	fromString	H
+C	deci/ay/f	AmmoItem	weapon	H	Bullet or magazine item: feed type, capacity, damage per bullet, pellet count, casing model; right click a magazine to load bullets
+F	deci/ay/f	adC	fullTag	H
+F	deci/ay/f	adD	emptyTag	H
+F	deci/ay/f	adE	feedType	H
+F	deci/ay/f	adF	capacity	H
+F	deci/ay/f	abZ	damage	H
+F	deci/ay/f	adG	flagG	L
+F	deci/ay/f	adH	hasEmptyIcon	H
+F	deci/ay/f	adI	bulletItem	H
+F	deci/ay/f	adJ	maxStack	H
+F	deci/ay/f	adK	name	H
+F	deci/ay/f	adL	casingType	H
+F	deci/ay/f	adM	emptyIcon	H
+F	deci/ay/f	adN	pelletCount	H
+M	deci/ay/f	a	(CharSequence,int,CharSequence,int)	regionMatchesIgnoreCase	H
+M	deci/ay/f	y	(float)	setDamage	H
+M	deci/ay/f	aj	(int)	setPelletCount	H
+M	deci/ay/f	s	(ItemStack)	getAmmo	H
+M	deci/ay/f	c	(ItemStack,int)	setAmmo	H
+M	deci/ay/f	d	(ItemStack,int)	setAmmoWithTag	H
+M	deci/ay/f	ak	(int)	getDescForCount	H
+M	deci/ay/f	a	(ItemStack,int,EntityPlayer,ItemStack,int)	getIcon	M
+C	deci/ay/g	AmmoBoxItem	weapon	H	Ammo box: right click gives one bullet item and damages the box
+F	deci/ay/g	adP	bulletItem	H
+M	deci/ay/g	fG	()	getBulletItem	H
+C	deci/ay/h	AttachmentItem	weapon	H	Gun attachment (sight, grip, barrel, stock...): zoom, sway, suppressor and flashlight flags, per gun model cache
+F	deci/ay/h	adQ	slot	H
+F	deci/ay/h	adR	isScope	H
+F	deci/ay/h	adS	zoomFov	H
+F	deci/ay/h	adT	flagT	L
+F	deci/ay/h	adU	isSuppressor	H
+F	deci/ay/h	adV	isFlashlight	H
+F	deci/ay/h	adW	floatW	L
+F	deci/ay/h	adX	offsetsX	L
+F	deci/ay/h	adY	modelOverride	L
+F	deci/ay/h	adZ	offsetsZ	L
+F	deci/ay/h	aea	offsetsA	L
+F	deci/ay/h	aeb	offsetsB	L
+F	deci/ay/h	aec	sway	M
+F	deci/ay/h	aed	category	H
+F	deci/ay/h	aee	flagE	L
+F	deci/ay/h	Wv	fireSpeedModifier	H
+F	deci/ay/h	aef	flagF	L
+F	deci/ay/h	aeg	flagG	L
+F	deci/ay/h	adK	name	H
+M	deci/ay/h	w	(boolean)	setFlagT	L
+M	deci/ay/h	b	(deci.ay.i)	getModelFor	H
+M	deci/ay/h	a	(ItemStack,int,EntityPlayer,ItemStack,int)	getIcon	M
+C	deci/ay/i	GunItem	weapon	H	Base gun item: client side firing, hitscan raycast, recoil, sounds, ammo NBT, attachments, skins, mud/blood dirt, tracer colour
+F	deci/ay/i	aeh	cameraKick	M
+F	deci/ay/i	aei	prevCameraKick	M
+F	deci/ay/i	aej	leftMouseDown	H
+F	deci/ay/i	aek	rightMouseDown	H
+F	deci/ay/i	ael	random	H
+F	deci/ay/i	aem	passThroughMaterials	M
+F	deci/ay/i	aen	passThroughBlocks	M
+F	deci/ay/i	aeo	heavyCalibres	M
+F	deci/ay/i	aep	ammoTypes	H
+F	deci/ay/i	aeq	stats	H
+F	deci/ay/i	aer	gunName	H
+F	deci/ay/i	aes	category	H
+F	deci/ay/i	aet	casingModelPath	H
+F	deci/ay/i	aeu	model	H
+F	deci/ay/i	aev	casingModel	H
+F	deci/ay/i	aew	damage	H
+F	deci/ay/i	aex	launcherAmmoKind	H
+F	deci/ay/i	aey	reducedBass	M
+F	deci/ay/i	aez	emptyClickPlayed	H
+F	deci/ay/i	aeA	noFireSounds	M
+F	deci/ay/i	aeB	integralSuppressor	H
+F	deci/ay/i	aeC	hasIntegratedScope	M
+F	deci/ay/i	aeD	integratedScopeName	M
+F	deci/ay/i	aeE	movementSlowdown	H
+M	deci/ay/i	a	(EntityPlayer,int)	alertNearbyInfected	H
+M	deci/ay/i	a	(EntityLivingBase)	isUnderRoof	H
+M	deci/ay/i	t	(int,int)	randomInclusive	H
+M	deci/ay/i	fH	()	setIntegralSuppressor	H
+M	deci/ay/i	a	(deci.ay.d)	setLauncherAmmoKind	H
+M	deci/ay/i	a	(ItemStack,EntityLivingBase)	playFireEffects	H
+M	deci/ay/i	fI	()	setNoFireSounds	M
+M	deci/ay/i	f	(double)	setMovementSlowdown	H
+M	deci/ay/i	f	(EntityLivingBase)	tickMuzzleFlash	M
+M	deci/ay/i	fJ	()	setCapacityFour	H
+M	deci/ay/i	al	(int)	setCapacity	H
+M	deci/ay/i	t	(ItemStack)	getAmmo	H
+M	deci/ay/i	e	(ItemStack,int)	setAmmo	H
+M	deci/ay/i	u	(ItemStack)	getLoadedAmmoType	H
+M	deci/ay/i	v	(ItemStack)	getFireMode	H
+M	deci/ay/i	f	(ItemStack,int)	setFireMode	H
+M	deci/ay/i	w	(ItemStack)	getMaxAmmo	H
+M	deci/ay/i	a	(ItemStack,EntityPlayer)	fire	H
+M	deci/ay/i	a	(ItemStack,EntityPlayer,int)	fireRay	H
+M	deci/ay/i	a	(deci.ay.i,int,EntityPlayer)	consumeAmmoForShot	H
+M	deci/ay/i	a	(Vec3,Vec3,EntityPlayer,deci.ay.i)	rayTraceBlocks	H
+M	deci/ay/i	a	(Block,MutableInt,MutableInt,MutableInt,int,int,int,EntityPlayer)	handleBlockHit	M
+M	deci/ay/i	r	(EntityPlayer)	getShotOrigin	H
+M	deci/ay/i	a	(deci.ay.i,float,EntityPlayer,float,float)	getShotDirection	H
+M	deci/ay/i	b	(ItemStack,EntityPlayer)	onServerFire	H
+M	deci/ay/i	c	(ItemStack,EntityPlayer)	applyRecoil	H
+M	deci/ay/i	fK	()	hasNoFireSounds	M
+M	deci/ay/i	d	(ItemStack,EntityPlayer)	clientHeldTick	H
+M	deci/ay/i	n	(ItemStack)	initTag	H
+M	deci/ay/i	x	(ItemStack)	hasTracer	H
+M	deci/ay/i	a	(ItemStack,deci.ay.i.a)	setTracerColor	H
+M	deci/ay/i	y	(ItemStack)	clearTracer	H
+M	deci/ay/i	z	(ItemStack)	getTracerColor	H
+M	deci/ay/i	A	(ItemStack)	getSkin	H
+M	deci/ay/i	B	(ItemStack)	getSkinName	H
+M	deci/ay/i	a	(ItemStack,String,String)	setSkin	H
+M	deci/ay/i	C	(ItemStack)	getMud	H
+M	deci/ay/i	g	(ItemStack,int)	setMud	H
+M	deci/ay/i	D	(ItemStack)	getBlood	H
+M	deci/ay/i	h	(ItemStack,int)	setBlood	H
+M	deci/ay/i	E	(ItemStack)	hasFlashlight	H
+M	deci/ay/i	F	(ItemStack)	isSuppressed	H
+M	deci/ay/i	fL	()	isIntegrallySuppressed	H
+M	deci/ay/i	fM	()	hasIntegratedScope	M
+M	deci/ay/i	J	(String)	setIntegratedScope	M
+M	deci/ay/i	G	(ItemStack)	hasScope	H
+M	deci/ay/i	H	(ItemStack)	getSightAttachment	H
+M	deci/ay/i	I	(ItemStack)	getStockAttachment	H
+M	deci/ay/i	J	(ItemStack)	getGripAttachment	H
+M	deci/ay/i	K	(ItemStack)	getBarrelAttachment	H
+M	deci/ay/i	L	(ItemStack)	getTriggerAttachment	H
+M	deci/ay/i	fN	()	getModel	H
+M	deci/ay/i	fO	()	enableReducedBass	M
+M	deci/ay/i	fP	()	withReducedBass	M
+M	deci/ay/i	fQ	()	getIntegratedScopeName	M
+M	deci/ay/i	M	(ItemStack)	getFlashTime	H
+M	deci/ay/i	i	(ItemStack,int)	setFlashTime	H
+M	deci/ay/i	g	(double)	setLootChance	H
+M	deci/ay/i	c	(EntityPlayer,ItemStack)	shouldSlowPlayer	H
+M	deci/ay/i	m	(ItemStack)	getMovementSlowdown	H
+M	deci/ay/i	am	(int)	setDamage	H
+M	deci/ay/i	a	(EntityLivingBase,ItemStack)	onEntitySwing	L
+C	deci/ay/i$a	TracerColor	weapon	H	Tracer colour enum with id, hex and English name
+C	deci/ay/j	WeaponSkinItem	weapon	H	Spray can that applies a named colour skin to one specific gun
+F	deci/ay/j	aeF	skinId	H
+F	deci/ay/j	aeG	skinName	H
+F	deci/ay/j	aeH	gunName	H
+F	deci/ay/j	aeI	primaryColor	H
+F	deci/ay/j	aeJ	secondaryColor	H
+F	deci/ay/j	aeK	overlayIcon	H
+M	deci/ay/j	fR	()	getGunName	H
+M	deci/ay/j	fS	()	getSkinId	H
+M	deci/ay/j	fT	()	getSkinName	H
+M	deci/ay/j	u	(int,int)	setColors	H
+M	deci/ay/j	fU	()	getPrimaryColor	H
+M	deci/ay/j	fV	()	getSecondaryColor	H
+C	deci/ay/k	TracerItem	weapon	H	Accessory item that sets a gun's tracer colour
+F	deci/ay/k	kj	color	H
+M	deci/ay/k	fW	()	getColorId	H
+M	deci/ay/k	fX	()	getColorName	H
+M	deci/ay/k	fY	()	getColor	H

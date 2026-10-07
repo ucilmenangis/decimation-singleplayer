@@ -1,0 +1,4 @@
+C	deci/at/a	BarbedWireKitItem	item	H	Tool kit that places a barbed wire entity
+C	deci/at/b	MetalWallKitItem	item	H	Tool kit that places a metal wall block
+C	deci/at/c	SandbagKitItem	item	H	Tool kit that places a green sandbag block
+C	deci/at/d	SandbagBeigeKitItem	item	H	Tool kit that places a beige sandbag block

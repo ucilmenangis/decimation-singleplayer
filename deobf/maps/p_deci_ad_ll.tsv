@@ -1,0 +1,122 @@
+C	deci/ad/a	VehicleEmitterEntity	vehicle	H	Child entity of a vehicle that emits particles (exhaust) at an offset when the driver is present
+F	deci/ad/a	Yj	particleName	H
+F	deci/ad/a	Yk	offsetX	H
+F	deci/ad/a	Yl	offsetY	H
+F	deci/ad/a	Ym	offsetZ	H
+M	deci/ad/a	c	(double,double,double)	setOffset	H
+M	deci/ad/a	dz	()	emitParticles	H
+C	deci/ad/b	VehiclePartEntity	vehicle	H	Base child entity attached to a vehicle at an offset (seats, emitters)
+F	deci/ad/b	Yn	nextIndex	M
+F	deci/ad/b	Yo	vehicle	H
+F	deci/ad/b	Yp	index	H
+F	deci/ad/b	Yq	offsetX	H
+F	deci/ad/b	Yr	yaw	M
+F	deci/ad/b	Ys	offsetZ	L
+F	deci/ad/b	Yt	turretYaw	L
+F	deci/ad/b	Yu	lastRider	L
+C	deci/ad/c	VehicleSeatEntity	vehicle	H	Rideable vehicle seat: driver flag, protect player, hide player, overlay, forced perspective
+F	deci/ad/c	Yy	DW_SHOW_OVERLAY	H
+F	deci/ad/c	Yz	DW_FORCE_PERSPECTIVE	H
+F	deci/ad/c	YA	DW_PERSPECTIVE	H
+F	deci/ad/c	YB	isDriver	H
+F	deci/ad/c	YC	flagC	L
+F	deci/ad/c	YD	hidePlayer	H
+F	deci/ad/c	YE	protectPlayer	H
+F	deci/ad/c	YF	forcePerspective	H
+F	deci/ad/c	YG	perspective	H
+F	deci/ad/c	YH	showOverlay	H
+M	deci/ad/c	dA	()	setDriver	H
+M	deci/ad/c	dB	()	setFlagC	L
+M	deci/ad/c	dC	()	setHidePlayer	H
+M	deci/ad/c	dD	()	setProtectPlayer	H
+M	deci/ad/c	Y	(int)	setForcedPerspective	H
+M	deci/ad/c	dE	()	setShowOverlay	H
+M	deci/ad/c	s	(float)	addTurretYaw	L
+M	deci/ad/c	dF	()	getFlagC	L
+M	deci/ad/c	dG	()	isDriver	H
+M	deci/ad/c	dH	()	isPlayerHidden	H
+M	deci/ad/c	dI	()	isPlayerProtected	H
+M	deci/ad/c	dJ	()	isOverlayShown	H
+M	deci/ad/c	dK	()	isPerspectiveForced	H
+M	deci/ad/c	dL	()	getForcedPerspective	H
+C	deci/ad/d	TurretSeatEntity	vehicle	H	Vehicle gunner seat that fires shells (TankShellEntity) with an ammo type and fire delay
+F	deci/ad/d	YI	fireDelay	H
+F	deci/ad/d	YJ	cooldown	H
+F	deci/ad/d	YK	ammoType	H
+M	deci/ad/d	a	(deci.ay.f)	setAmmoType	H
+M	deci/ad/d	Z	(int)	setFireDelay	H
+C	deci/ad/e	VehicleEntity	vehicle	H	Base drivable vehicle: health, fuel, speed, seats list, lights, despawn timer (900 s), damage handling, boat style client interpolation
+F	deci/ad/e	YL	DW_SPEED	M
+F	deci/ad/e	YM	DW_ENGINE	M
+F	deci/ad/e	YO	driverSeat	H
+F	deci/ad/e	YP	serverX	M
+F	deci/ad/e	YQ	serverY	M
+F	deci/ad/e	YR	serverZ	M
+F	deci/ad/e	YS	flagS	L
+F	deci/ad/e	YT	wheelRotation	L
+F	deci/ad/e	YU	prevWheelRotation	L
+F	deci/ad/e	YV	initialized	M
+F	deci/ad/e	YW	speed	M
+F	deci/ad/e	YX	maxSpeed	M
+F	deci/ad/e	YY	maxHealth	M
+F	deci/ad/e	YZ	canDrive	L
+F	deci/ad/e	Za	interpolationSteps	M
+F	deci/ad/e	Zb	interpX	M
+F	deci/ad/e	Zc	interpY	M
+F	deci/ad/e	Yk	velocityX	M
+F	deci/ad/e	Yl	velocityY	M
+F	deci/ad/e	Ym	velocityZ	M
+F	deci/ad/e	Zd	flagD	L
+F	deci/ad/e	XL	dropItem	H
+F	deci/ad/e	Ze	seatsSpawned	M
+F	deci/ad/e	Zf	lightsOn	H
+F	deci/ad/e	Zg	placedByPlayer	M
+F	deci/ad/e	Zh	intH	L
+F	deci/ad/e	dN	seats	H
+M	deci/ad/e	dM	()	markPlacedByPlayer	M
+M	deci/ad/e	dN	()	updateSeatPositions	M
+M	deci/ad/e	c	(World)	createSeats	H
+M	deci/ad/e	c	(Item)	setDropItem	H
+M	deci/ad/e	dO	()	hasTurret	H
+M	deci/ad/e	d	(Entity)	isPartOrPassenger	H
+M	deci/ad/e	dP	()	getDamage	H
+M	deci/ad/e	t	(float)	setDamage	H
+M	deci/ad/e	dQ	()	getTimeSinceHit	H
+M	deci/ad/e	aa	(int)	setTimeSinceHit	H
+M	deci/ad/e	dR	()	getForwardDirection	H
+M	deci/ad/e	ab	(int)	setForwardDirection	H
+M	deci/ad/e	q	(boolean)	setCanDrive	L
+M	deci/ad/e	h	(EntityPlayer)	consumeFuel	M
+M	deci/ad/e	dS	()	getMaxSpeed	M
+M	deci/ad/e	dT	()	randomVariant	L
+M	deci/ad/e	dU	()	getDespawnSecondsLeft	H
+M	deci/ad/e	a	(Date,Date)	secondsBetween	H
+M	deci/ad/e	dV	()	getSeats	H
+M	deci/ad/e	dW	()	getMaxHealth	M
+M	deci/ad/e	u	(float)	setMaxHealth	M
+M	deci/ad/e	dX	()	getMaxSpeedB	L
+M	deci/ad/e	v	(float)	setMaxSpeed	M
+M	deci/ad/e	dY	()	getVehicleName	H
+M	deci/ad/e	dZ	()	getSpeed	M
+M	deci/ad/e	w	(float)	setSpeed	M
+M	deci/ad/e	ea	()	isEngineOn	M
+M	deci/ad/e	r	(boolean)	setEngineOn	M
+M	deci/ad/e	eb	()	areLightsOn	H
+M	deci/ad/e	s	(boolean)	setLightsOn	H
+M	deci/ad/e	ec	()	toggleLights	H
+M	deci/ad/e	i	(EntityPlayer)	isPassenger	H
+C	deci/ad/f	ATVEntity	vehicle	H	ATV vehicle
+C	deci/ad/g	BTR70Entity	vehicle	H	BTR70 armoured vehicle with a turret seat
+F	deci/ad/g	Zi	DW_TURRET_ROTATION	M
+F	deci/ad/g	Zj	turretSeat	H
+F	deci/ad/g	Zk	gunner	M
+M	deci/ad/g	ed	()	getTurretRotation	M
+M	deci/ad/g	ac	(int)	setTurretRotation	M
+M	deci/ad/g	j	(EntityPlayer)	setGunner	M
+M	deci/ad/g	ee	()	getTurretSeat	H
+C	deci/ad/h	BuggyEntity	vehicle	H	Buggy vehicle
+C	deci/ad/i	HummerEntity	vehicle	H	Hummer vehicle
+C	deci/ad/j	M35Entity	vehicle	H	M35 truck vehicle
+C	deci/ad/k	VehicleMovingSound	sound	H	Base looping MovingSound bound to a vehicle
+C	deci/ad/l	VehicleIdleSound	sound	H	Vehicle engine idle loop sound
+C	deci/ad/m	VehicleThrottleSound	sound	H	Vehicle engine throttle loop sound

@@ -1,0 +1,17 @@
+C	deci/al/a	PlayerSeatEntity	entity	H	Invisible sittable seat entity (chairs, benches)
+C	deci/al/b	TurretEntity	entity	H	Placed automatic turret: finds hostile mobs within 32 blocks, rotates and shoots them
+F	deci/al/b	acG	RANGE	H
+F	deci/al/b	acH	yaw	H
+F	deci/al/b	aas	isShooting	M
+F	deci/al/b	aat	shootCooldown	L
+F	deci/al/b	acI	target	H
+F	deci/al/b	aau	burstLeft	L
+F	deci/al/b	acJ	pitch	L
+F	deci/al/b	acK	shotCounter	L
+M	deci/al/b	eA	()	findTarget	H
+M	deci/al/b	a	(EntityMob)	shootAt	H
+M	deci/al/b	fs	()	getYaw	H
+M	deci/al/b	x	(float)	setYaw	H
+M	deci/al/b	ft	()	aimAtTarget	H
+M	deci/al/b	fu	()	getShotCounter	L
+M	deci/al/b	fv	()	getTarget	H

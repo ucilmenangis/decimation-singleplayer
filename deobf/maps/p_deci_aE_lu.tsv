@@ -1,0 +1,538 @@
+C	deci/aE/a	NetworkMessages	network	H	Holder of every SimpleNetworkWrapper message and handler pair (registered in deci.aD.n)
+F	deci/aE/a	TV	mc	H
+C	deci/aE/a$ab	PacketClearPlayerSlot	network	H	S2C: clear an inventory slot of another player on the client
+F	deci/aE/a$ab	axF	entityId	H
+C	deci/aE/a$ab$a	PacketClearPlayerSlotHandler	network	H	Client handler
+M	deci/aE/a$ab$a	a	(deci.aE.a.ab,MessageContext)	handle	H
+C	deci/aE/a$aa	PacketSyncPlayerSlot	network	H	S2C: set an inventory slot (and optionally held item) of another player, used to show held guns
+F	deci/aE/a$aa	axF	entityId	H
+F	deci/aE/a$aa	ayO	alsoSetHeld	H
+C	deci/aE/a$aa$a	PacketSyncPlayerSlotHandler	network	H	Client handler
+M	deci/aE/a$aa$a	a	(deci.aE.a.aa,MessageContext)	handle	H
+C	deci/aE/a$Z	PacketSyncPlayerDataPublic	network	H	S2C to trackers: public part of PlayerData (stance, gesture, parachute, armor slots, cape, clan, humanity)
+F	deci/aE/a$Z	axy	entityId	H
+F	deci/aE/a$Z	ayH	flagH	L
+F	deci/aE/a$Z	ayJ	spectating	H
+M	deci/aE/a$Z	gy	()	getFlagH	L
+M	deci/aE/a$Z	x	(boolean)	setFlagH	L
+M	deci/aE/a$Z	gz	()	isHolstered	H
+M	deci/aE/a$Z	y	(boolean)	setCapeEnabled	H
+M	deci/aE/a$Z	z	(boolean)	setSpectating	H
+M	deci/aE/a$Z	gA	()	getEntityId	H
+M	deci/aE/a$Z	ar	(int)	setEntityId	H
+C	deci/aE/a$Z$a	PacketSyncPlayerDataPublicHandler	network	H	Client handler, stores into the client player data cache
+M	deci/aE/a$Z$a	a	(deci.aE.a.Z,MessageContext)	handle	H
+C	deci/aE/a$Y	PacketSyncPlayerData	network	H	S2C to owner: full PlayerData snapshot
+F	deci/aE/a$Y	ayF	irradiated	H
+F	deci/aE/a$Y	ayG	inScaryZone	H
+F	deci/aE/a$Y	ayH	flagH	L
+F	deci/aE/a$Y	ayI	hasTouchedGround	H
+F	deci/aE/a$Y	ayJ	spectating	H
+F	deci/aE/a$Y	ayK	targetScore	H
+F	deci/aE/a$Y	ayL	emblemId	H
+F	deci/aE/a$Y	ayM	unusedInt	L
+F	deci/aE/a$Y	ayN	unusedInt2	L
+M	deci/aE/a$Y	s	(EntityPlayer)	setPlayer	H
+C	deci/aE/a$Y$a	PacketSyncPlayerDataHandler	network	H	Client handler
+M	deci/aE/a$Y$a	a	(deci.aE.a.Y,MessageContext)	handle	H
+C	deci/aE/a$W	PacketSpawnDeciParticle	network	H	S2C: spawn a Decimation particle by name at a position
+C	deci/aE/a$W$a	PacketSpawnDeciParticleHandler	network	H	Client handler
+M	deci/aE/a$W$a	a	(deci.aE.a.W,MessageContext)	handle	H
+C	deci/aE/a$V	PacketSpawnVanillaParticle	network	H	S2C: spawn a vanilla particle by name at a position
+F	deci/aE/a$V	ayA	motionX	L
+F	deci/aE/a$V	ayB	motionY	L
+F	deci/aE/a$V	ayC	motionZ	L
+C	deci/aE/a$V$a	PacketSpawnVanillaParticleHandler	network	H	Client handler
+M	deci/aE/a$V$a	a	(deci.aE.a.V,MessageContext)	handle	H
+C	deci/aE/a$U	PacketNukeFlash	network	H	S2C: nuclear warhead explosion sound plus screen flash for a player (0 = all)
+F	deci/aE/a$U	ayb	entityId	H
+F	deci/aE/a$U	ayc	flashAmount	H
+C	deci/aE/a$U$a	PacketNukeFlashHandler	network	H	Client handler
+M	deci/aE/a$U$a	a	(deci.aE.a.U,MessageContext)	handle	H
+C	deci/aE/a$T	PacketShowNotification	network	H	S2C: show a notification text to one player
+F	deci/aE/a$T	axF	entityId	H
+F	deci/aE/a$T	ayy	message	H
+F	deci/aE/a$T	ayz	extra	L
+C	deci/aE/a$T$a	PacketShowNotificationHandler	network	H	Client handler
+M	deci/aE/a$T$a	a	(deci.aE.a.T,MessageContext)	handle	H
+C	deci/aE/a$S	PacketServerTickTime	network	M	S2C: server tick countdown value shown on the client
+F	deci/aE/a$S	ayx	ticks	M
+C	deci/aE/a$S$a	PacketServerTickTimeHandler	network	M	Client handler
+M	deci/aE/a$S$a	a	(deci.aE.a.S,MessageContext)	handle	H
+C	deci/aE/a$R	PacketLootInventory	network	H	S2C: the rolled loot inventory contents, stored in client PlayerData before the loot GUI opens
+F	deci/aE/a$R	ayw	inventory	H
+C	deci/aE/a$R$a	PacketLootInventoryHandler	network	H	Client handler
+M	deci/aE/a$R$a	a	(deci.aE.a.R,MessageContext)	handle	H
+M	deci/aE/a$R$a	a	(deci.aE.a.R)	applyClient	H
+C	deci/aE/a$P	PacketPlayerAction	network	H	C2S: key action (whistle, stance, firemode, gestures, attach/craft GUI, holster, vehicle lights, unharness dog)
+F	deci/aE/a$P	ayv	action	H
+C	deci/aE/a$P$a	PacketPlayerActionHandler	network	H	Server handler
+M	deci/aE/a$P$a	a	(deci.aE.a.P,MessageContext)	handle	H
+C	deci/aE/a$P$b	PlayerAction	network	H	Enum of player key actions
+C	deci/aE/a$O	PacketJetParticle	network	L	S2C: spawns a Jet particle at the local player
+F	deci/aE/a$O	axF	entityId	H
+C	deci/aE/a$O$a	PacketJetParticleHandler	network	L	Client handler
+M	deci/aE/a$O$a	a	(deci.aE.a.O,MessageContext)	handle	H
+C	deci/aE/a$N	PacketClimbState	network	M	C2S: player starts or stops climbing (gesture 4), ignored when disableClimbing
+F	deci/aE/a$N	axF	entityId	H
+F	deci/aE/a$N	ayu	climbing	M
+C	deci/aE/a$N$a	PacketClimbStateHandler	network	M	Server handler
+M	deci/aE/a$N$a	a	(deci.aE.a.N,MessageContext)	handle	H
+C	deci/aE/a$ac	PacketRenameBackpack	network	H	C2S: rename the held backpack
+F	deci/aE/a$ac	XC	name	H
+C	deci/aE/a$ac$a	PacketRenameBackpackHandler	network	H	Server handler
+M	deci/aE/a$ac$a	a	(deci.aE.a.ac,MessageContext)	handle	H
+C	deci/aE/a$X	PacketPlaySound	network	H	S2C: play a sound at a position or at the player
+F	deci/aE/a$X	ayD	soundName	H
+F	deci/aE/a$X	ayE	hasPosition	H
+F	deci/aE/a$X	QR	x	H
+F	deci/aE/a$X	QS	y	H
+F	deci/aE/a$X	QT	z	H
+C	deci/aE/a$X$a	PacketPlaySoundHandler	network	H	Client handler
+M	deci/aE/a$X$a	a	(deci.aE.a.X,MessageContext)	handle	H
+C	deci/aE/a$ad	PacketScreenshotChunkToClient	network	H	S2C: one chunk of an admin requested screenshot, reassembled and shown in a viewer GUI
+F	deci/aE/a$ad	ayP	MAX_CHUNK_SIZE	H
+F	deci/aE/a$ad	ayQ	chunkIndex	H
+F	deci/aE/a$ad	ayR	chunkCount	H
+F	deci/aE/a$ad	ayS	data	H
+C	deci/aE/a$ad$a	PacketScreenshotChunkToClientHandler	network	H	Client handler
+F	deci/aE/a$ad$a	ayT	chunks	H
+M	deci/aE/a$ad$a	a	(deci.aE.a.ad,MessageContext)	handle	H
+C	deci/aE/a$ae	PacketRequestScreenshot	network	H	S2C: asks the client to take a screenshot (hides GUI for 2 frames)
+F	deci/aE/a$ae	ayU	screenshotFrameCountdown	H
+C	deci/aE/a$ae$a	PacketRequestScreenshotHandler	network	H	Client handler
+M	deci/aE/a$ae$a	a	(deci.aE.a.ae,MessageContext)	handle	H
+C	deci/aE/a$af	PacketScreenshotChunkToServer	network	H	C2S: one chunk of the client screenshot sent to the server
+F	deci/aE/a$af	ayP	MAX_CHUNK_SIZE	H
+F	deci/aE/a$af	ayR	chunkIndex	M
+F	deci/aE/a$af	ayQ	chunkCount	M
+F	deci/aE/a$af	ayZ	data	H
+F	deci/aE/a$af	ayV	unusedA	L
+F	deci/aE/a$af	ayW	unusedB	L
+F	deci/aE/a$af	ayX	unusedC	L
+F	deci/aE/a$af	ayY	unusedD	L
+M	deci/aE/a$af	m	(int,int,int)	noopA	L
+M	deci/aE/a$af	n	(int,int,int)	noopB	L
+C	deci/aE/a$af$a	PacketScreenshotChunkToServerHandler	network	H	Server handler, kicks on invalid data
+M	deci/aE/a$af$a	a	(deci.aE.a.af,MessageContext)	handle	H
+C	deci/aE/a$ax	PacketZoneLists	network	H	S2C: zone boxes per type (safezone, military, radiation, scary, police) as "x/y/z=x/y/z" strings, stored in deci.b.i for client rendering
+F	deci/aE/a$ax	azk	safezones	H
+F	deci/aE/a$ax	azl	militaryZones	H
+F	deci/aE/a$ax	azm	radiationZones	H
+F	deci/aE/a$ax	azn	scaryZones	H
+F	deci/aE/a$ax	azo	policeZones	H
+F	deci/aE/a$ax	azp	text	L
+C	deci/aE/a$ax$a	PacketZoneListsHandler	network	M	Client handler
+M	deci/aE/a$ax$a	a	(deci.aE.a.ax,MessageContext)	handle	H
+C	deci/aE/a$aw	PacketSetWeather	network	H	S2C: set the client weather type (deci.aI.a) for a player or everyone
+F	deci/aE/a$aw	axF	entityId	H
+F	deci/aE/a$aw	azj	weatherId	H
+C	deci/aE/a$aw$a	PacketSetWeatherHandler	network	H	Client handler
+M	deci/aE/a$aw$a	a	(deci.aE.a.aw,MessageContext)	handle	H
+C	deci/aE/a$av	PacketSetSignTextClient	network	M	S2C: set text of a deci.ac.h tile entity
+F	deci/aE/a$av	azg	x	H
+F	deci/aE/a$av	azh	y	H
+F	deci/aE/a$av	azi	z	H
+F	deci/aE/a$av	XC	text	H
+C	deci/aE/a$av$a	PacketSetSignTextClientHandler	network	M	Client handler
+M	deci/aE/a$av$a	a	(deci.aE.a.av,MessageContext)	handle	H
+C	deci/aE/a$au	PacketSetSignTextServer	network	M	C2S: creative player edits the text of a deci.ac.h tile entity
+F	deci/aE/a$au	azg	x	H
+F	deci/aE/a$au	azh	y	H
+F	deci/aE/a$au	azi	z	H
+F	deci/aE/a$au	XC	text	H
+C	deci/aE/a$au$a	PacketSetSignTextServerHandler	network	M	Server handler
+M	deci/aE/a$au$a	a	(deci.aE.a.au,MessageContext)	handle	H
+C	deci/aE/a$at	PacketSetTileRotationClient	network	M	S2C: set two float values (rotation, scale) on a deci.ac.g tile entity
+F	deci/aE/a$at	azg	x	H
+F	deci/aE/a$at	azh	y	H
+F	deci/aE/a$at	azi	z	H
+F	deci/aE/a$at	Yb	rotation	M
+F	deci/aE/a$at	eg	scale	L
+C	deci/aE/a$at$a	PacketSetTileRotationClientHandler	network	M	Client handler
+M	deci/aE/a$at$a	a	(deci.aE.a.at,MessageContext)	handle	H
+C	deci/aE/a$as	PacketSetPropRotationClient	network	H	S2C: sync TileEntityProp rotation
+F	deci/aE/a$as	azg	x	H
+F	deci/aE/a$as	azh	y	H
+F	deci/aE/a$as	azi	z	H
+C	deci/aE/a$as$a	PacketSetPropRotationClientHandler	network	H	Client handler
+M	deci/aE/a$as$a	a	(deci.aE.a.as,MessageContext)	handle	H
+C	deci/aE/a$ar	PacketSetPropRotationServer	network	H	C2S: creative player rotates a TileEntityProp
+F	deci/aE/a$ar	azg	x	H
+F	deci/aE/a$ar	azh	y	H
+F	deci/aE/a$ar	azi	z	H
+C	deci/aE/a$ar$a	PacketSetPropRotationServerHandler	network	H	Server handler
+M	deci/aE/a$ar$a	a	(deci.aE.a.ar,MessageContext)	handle	H
+C	deci/aE/a$aq	PacketSetTileTextClient	network	M	S2C: set text field of a deci.S.f tile entity
+F	deci/aE/a$aq	azg	x	H
+F	deci/aE/a$aq	azh	y	H
+F	deci/aE/a$aq	azi	z	H
+F	deci/aE/a$aq	XC	text	H
+C	deci/aE/a$aq$a	PacketSetTileTextClientHandler	network	M	Client handler
+M	deci/aE/a$aq$a	a	(deci.aE.a.aq,MessageContext)	handle	H
+C	deci/aE/a$ap	PacketSetTileTextServer	network	M	C2S: creative player edits text of a deci.S.f tile entity
+F	deci/aE/a$ap	azg	x	H
+F	deci/aE/a$ap	azh	y	H
+F	deci/aE/a$ap	azi	z	H
+F	deci/aE/a$ap	XC	text	H
+C	deci/aE/a$ap$a	PacketSetTileTextServerHandler	network	M	Server handler
+M	deci/aE/a$ap$a	a	(deci.aE.a.ap,MessageContext)	handle	H
+C	deci/aE/a$ao	PacketSetDecalClient	network	M	S2C: set decal name and size on a deci.S.e tile entity
+F	deci/aE/a$ao	azg	x	H
+F	deci/aE/a$ao	azh	y	H
+F	deci/aE/a$ao	azi	z	H
+F	deci/aE/a$ao	XA	decalName	H
+F	deci/aE/a$ao	XB	decalSize	H
+C	deci/aE/a$ao$a	PacketSetDecalClientHandler	network	M	Client handler
+M	deci/aE/a$ao$a	a	(deci.aE.a.ao,MessageContext)	handle	H
+C	deci/aE/a$an	PacketSetDecalServer	network	M	C2S: creative player edits decal name and size on a deci.S.e tile entity
+F	deci/aE/a$an	azg	x	H
+F	deci/aE/a$an	azh	y	H
+F	deci/aE/a$an	azi	z	H
+F	deci/aE/a$an	XA	decalName	H
+F	deci/aE/a$an	XB	decalSize	H
+C	deci/aE/a$an$a	PacketSetDecalServerHandler	network	M	Server handler
+M	deci/aE/a$an$a	a	(deci.aE.a.an,MessageContext)	handle	H
+C	deci/aE/a$am	PacketSetTyping	network	H	C2S: player typing indicator on or off
+F	deci/aE/a$am	WF	typing	H
+C	deci/aE/a$am$a	PacketSetTypingHandler	network	H	Server handler
+M	deci/aE/a$am$a	a	(deci.aE.a.am,MessageContext)	handle	H
+C	deci/aE/a$al	PacketBulletTracer	network	H	S2C: add a white bullet tracer line from start to end
+F	deci/aE/a$al	QR	startX	H
+F	deci/aE/a$al	QS	startY	H
+F	deci/aE/a$al	QT	startZ	H
+F	deci/aE/a$al	azd	endX	H
+F	deci/aE/a$al	aze	endY	H
+F	deci/aE/a$al	azf	endZ	H
+C	deci/aE/a$al$a	PacketBulletTracerHandler	network	H	Client handler
+M	deci/aE/a$al$a	a	(deci.aE.a.al,MessageContext)	handle	H
+C	deci/aE/a$ak	PacketApplyPoison	network	M	C2S: apply poison to an entity by id (no validation, exploitable)
+F	deci/aE/a$ak	axF	entityId	H
+C	deci/aE/a$ak$a	PacketApplyPoisonHandler	network	M	Server handler
+M	deci/aE/a$ak$a	a	(deci.aE.a.ak,MessageContext)	handle	H
+C	deci/aE/a$aj	PacketFlashbangDetonate	network	H	C2S: flashbang entity (deci.ak.o) detonated; server sends flash strength to every player looking at it
+F	deci/aE/a$aj	axF	entityId	H
+C	deci/aE/a$aj$a	PacketFlashbangDetonateHandler	network	H	Server handler with line of sight check
+M	deci/aE/a$aj$a	a	(deci.aE.a.aj,MessageContext)	handle	H
+M	deci/aE/a$aj$a	a	(Entity,EntityLivingBase)	isLookingAt	H
+M	deci/aE/a$aj$a	a	(EntityLivingBase,Entity,float,float)	faceEntity	H
+M	deci/aE/a$aj$a	e	(float,float,float)	updateRotation	H
+C	deci/aE/a$ai	PacketSetStance	network	H	C2S: set stance when not riding
+F	deci/aE/a$ai	Wu	stance	H
+C	deci/aE/a$ai$a	PacketSetStanceHandler	network	H	Server handler
+M	deci/aE/a$ai$a	a	(deci.aE.a.ai,MessageContext)	handle	H
+C	deci/aE/a$ah	PacketSetAimMode	network	L	C2S: set aim down sights mode (PlayerData VI)
+F	deci/aE/a$ah	VI	aimMode	M
+C	deci/aE/a$ah$a	PacketSetAimModeHandler	network	L	Server handler
+M	deci/aE/a$ah$a	a	(deci.aE.a.ah,MessageContext)	handle	H
+C	deci/aE/a$ag	PacketExplosionShake	network	M	S2C: camera shake from an explosion, scaled by distance
+F	deci/aE/a$ag	iz	strength	H
+F	deci/aE/a$ag	aza	x	H
+F	deci/aE/a$ag	azb	y	H
+F	deci/aE/a$ag	azc	z	H
+C	deci/aE/a$ag$a	PacketExplosionShakeHandler	network	M	Client handler
+M	deci/aE/a$ag$a	a	(deci.aE.a.ag,MessageContext)	handle	H
+C	deci/aE/a$M	PacketTraderTransaction	network	H	C2S: buy (id 0) or sell (id 1) an item at a trader NPC for caps (hW 0) or gold caps (hW 1), validated against the trader offer list
+F	deci/aE/a$M	ays	payload	H
+F	deci/aE/a$M	ayt	traderEntityId	H
+F	deci/aE/a$M	hW	currencyType	H
+M	deci/aE/a$M	a	(EntityPlayer,Item)	hasUndamagedItem	H
+M	deci/aE/a$M	b	(EntityPlayer,Item)	removeOneItem	H
+M	deci/aE/a$M	a	(boolean,deci.ai.a,ItemStack,int,int)	isValidOffer	H
+C	deci/aE/a$M$a	PacketTraderTransactionHandler	network	H	Server handler
+M	deci/aE/a$M$a	a	(deci.aE.a.M,MessageContext)	handle	H
+C	deci/aE/a$L	PacketStopStereo	network	H	S2C: stop the stereo music playing at a block position
+C	deci/aE/a$L$a	PacketStopStereoHandler	network	H	Client handler
+M	deci/aE/a$L$a	a	(deci.aE.a.L,MessageContext)	handle	H
+C	deci/aE/a$K	PacketToggleStereo	network	H	S2C: toggle stereo music track index at a position
+C	deci/aE/a$K$a	PacketToggleStereoHandler	network	H	Client handler
+M	deci/aE/a$K$a	a	(deci.aE.a.K,MessageContext)	handle	H
+C	deci/aE/a$H	PacketLockpickAttempt	network	H	C2S: player starts lockpicking the lock at a position (handler net.decimation.mod.common.handlers.d)
+M	deci/aE/a$H	gp	()	getPosX	H
+M	deci/aE/a$H	gq	()	getPosY	H
+M	deci/aE/a$H	gr	()	getPosZ	H
+C	deci/aE/a$J	PacketLockpickResult	network	M	S2C: lockpick result (success, code, flags) (handler net.decimation.mod.common.handlers.c)
+F	deci/aE/a$J	ayq	successful	H
+F	deci/aE/a$J	hD	code	M
+F	deci/aE/a$J	ayr	flagA	L
+F	deci/aE/a$J	acM	flagB	L
+M	deci/aE/a$J	gs	()	getCode	M
+M	deci/aE/a$J	gu	()	getFlagA	L
+M	deci/aE/a$J	gv	()	getFlagB	L
+C	deci/aE/a$I	PacketLockpickUnlock	network	M	C2S: submit a code for the lock at a position (handler net.decimation.mod.common.handlers.b)
+F	deci/aE/a$I	hD	code	M
+F	deci/aE/a$I	hE	extra	L
+M	deci/aE/a$I	gp	()	getPosX	H
+M	deci/aE/a$I	gq	()	getPosY	H
+M	deci/aE/a$I	gr	()	getPosZ	H
+M	deci/aE/a$I	gs	()	getCode	M
+M	deci/aE/a$I	gt	()	getExtra	L
+C	deci/aE/a$G	PacketPlaceBounty	network	H	C2S: place a cap bounty (150 to 10000) on an online player
+F	deci/aE/a$G	ayp	amount	H
+C	deci/aE/a$G$a	PacketPlaceBountyHandler	network	H	Server handler
+M	deci/aE/a$G$a	a	(deci.aE.a.G,MessageContext)	handle	H
+C	deci/aE/a$F	PacketHurtSound	network	H	S2C: play the human hurt sound at an entity if close
+F	deci/aE/a$F	axF	entityId	H
+C	deci/aE/a$F$a	PacketHurtSoundHandler	network	H	Client handler
+M	deci/aE/a$F$a	a	(deci.aE.a.F,MessageContext)	handle	H
+C	deci/aE/a$E	PacketReload	network	H	C2S: reload step for the held gun (0 unload magazine and choose ammo type, 1 bolt and insert ammo, 2 store prevAmmo)
+F	deci/aE/a$E	type	step	H
+C	deci/aE/a$E$a	PacketReloadHandler	network	H	Server handler
+M	deci/aE/a$E$a	a	(deci.aE.a.E,MessageContext)	handle	H
+C	deci/aE/a$D	PacketBulletRicochet	network	H	S2C: bullet bounce sound by surface type
+F	deci/aE/a$D	ayn	BOUNCE_SOUNDS	H
+F	deci/aE/a$D	axF	entityId	H
+F	deci/aE/a$D	ayo	surfaceType	H
+C	deci/aE/a$D$a	PacketBulletRicochetHandler	network	H	Client handler
+M	deci/aE/a$D$a	a	(deci.aE.a.D,MessageContext)	handle	H
+C	deci/aE/a$B	PacketGunFireEffects	network	H	S2C: another entity fired; play gun sound and spawn tracer lines (6 pellets for shotguns)
+F	deci/aE/a$B	axF	entityId	H
+C	deci/aE/a$B$a	PacketGunFireEffectsHandler	network	H	Client handler
+M	deci/aE/a$B$a	a	(deci.aE.a.B,MessageContext)	handle	H
+C	deci/aE/a$Q	PacketFireProjectileWeapon	network	H	C2S: fire held crossbow or rocket launcher, server spawns bolt, rocket (HS, NWH variants) or grenade entity
+C	deci/aE/a$Q$a	PacketFireProjectileWeaponHandler	network	H	Server handler
+M	deci/aE/a$Q$a	a	(deci.aE.a.Q,MessageContext)	handle	H
+C	deci/aE/a$z	PacketGunHit	network	H	C2S: client reports a hitscan hit (target id, damage, hit height, time); server applies leg break chance, armor damageMultiplier (not helmet) and gunDeci damage
+F	deci/aE/a$z	axF	targetEntityId	H
+F	deci/aE/a$z	abZ	damage	H
+F	deci/aE/a$z	ayg	hitY	H
+F	deci/aE/a$z	QL	didHit	H
+F	deci/aE/a$z	ayh	shotIndex	M
+F	deci/aE/a$z	time	timestamp	H
+C	deci/aE/a$z$a	PacketGunHitHandler	network	H	Server handler (the only reader of ItemArmorDeci.damageMultiplier)
+F	deci/aE/a$z$a	ayi	debug	L
+M	deci/aE/a$z$a	a	(deci.aE.a.z,MessageContext)	handle	H
+C	deci/aE/a$C	PacketBlockHitParticles	network	H	C2S: bullet hit a block; server broadcasts explode and blockcrack particles there
+F	deci/aE/a$C	ayk	x	H
+F	deci/aE/a$C	ayl	y	H
+F	deci/aE/a$C	aym	z	H
+C	deci/aE/a$C$a	PacketBlockHitParticlesHandler	network	H	Server handler
+M	deci/aE/a$C$a	a	(deci.aE.a.C,MessageContext)	handle	H
+C	deci/aE/a$A	PacketGunFire	network	H	C2S: player fired the held gun; server consumes the shot and broadcasts PacketGunFireEffects
+F	deci/aE/a$A	ayj	firing	L
+C	deci/aE/a$A$a	PacketGunFireHandler	network	H	Server handler
+M	deci/aE/a$A$a	a	(deci.aE.a.A,MessageContext)	handle	H
+C	deci/aE/a$y	PacketThrowItem	network	H	C2S: throw the held throwable (deci.aA.a) with a charge strength 0..10, refused near safezones on dedicated servers only
+F	deci/aE/a$y	ayf	strength	H
+C	deci/aE/a$y$a	PacketThrowItemHandler	network	H	Server handler
+M	deci/aE/a$y$a	a	(deci.aE.a.y,MessageContext)	handle	H
+C	deci/aE/a$x	PacketAddClientMessage	network	L	S2C: append a string to client list deci.b.i.bX
+F	deci/aE/a$x	ayd	text	H
+C	deci/aE/a$x$a	PacketAddClientMessageHandler	network	L	Client handler
+M	deci/aE/a$x$a	a	(deci.aE.a.x,MessageContext)	handle	H
+C	deci/aE/a$w	PacketSetClientStringList	network	L	S2C: replace client list deci.b.i.bY
+F	deci/aE/a$w	aye	list	H
+C	deci/aE/a$w$a	PacketSetClientStringListHandler	network	L	Client handler
+M	deci/aE/a$w$a	a	(deci.aE.a.w,MessageContext)	handle	H
+C	deci/aE/a$v	PacketAddKillFeed	network	L	S2C: append a string to client list deci.b.j.cM (kill feed or notices)
+F	deci/aE/a$v	ayd	text	H
+C	deci/aE/a$v$a	PacketAddKillFeedHandler	network	L	Client handler
+M	deci/aE/a$v$a	a	(deci.aE.a.v,MessageContext)	handle	H
+C	deci/aE/a$u	PacketFlashbang	network	H	S2C: flash a player (or all with 0) with given strength and play the flashed sound
+F	deci/aE/a$u	aya	FLASHED_SOUND	H
+F	deci/aE/a$u	ayb	entityId	H
+F	deci/aE/a$u	ayc	strength	H
+C	deci/aE/a$u$a	PacketFlashbangHandler	network	H	Client handler
+M	deci/aE/a$u$a	a	(deci.aE.a.u,MessageContext)	handle	H
+C	deci/aE/a$t	PacketExplosionSound	network	H	S2C: play random.explode loudly at a position
+C	deci/aE/a$t$a	PacketExplosionSoundHandler	network	H	Client handler; also hosts the static kick helper used by the anticheat
+M	deci/aE/a$t$a	a	(EntityPlayerMP,String,String,int)	kickPlayer	H
+M	deci/aE/a$t$a	a	(deci.aE.a.t,MessageContext)	handle	H
+C	deci/aE/a$s	PacketVehicleYawClient	network	H	S2C: set the yaw of the vehicle another player drives
+F	deci/aE/a$s	axZ	entityId	H
+F	deci/aE/a$s	axY	yaw	H
+C	deci/aE/a$s$a	PacketVehicleYawClientHandler	network	H	Client handler
+M	deci/aE/a$s$a	a	(deci.aE.a.s,MessageContext)	handle	H
+C	deci/aE/a$r	PacketVehicleInput	network	M	C2S: driver input (PlayerData Vp/Vq) and vehicle yaw, relayed to everyone
+F	deci/aE/a$r	Vp	unknownIntA	L
+F	deci/aE/a$r	Vq	unknownIntB	L
+F	deci/aE/a$r	axY	yaw	H
+C	deci/aE/a$r$a	PacketVehicleInputHandler	network	M	Server handler
+M	deci/aE/a$r$a	a	(deci.aE.a.r,MessageContext)	handle	H
+C	deci/aE/a$q	PacketClearClientMessages	network	L	S2C: clear client list deci.b.i.bX for a player or everyone
+F	deci/aE/a$q	axF	entityId	H
+C	deci/aE/a$q$a	PacketClearClientMessagesHandler	network	L	Client handler
+M	deci/aE/a$q$a	a	(deci.aE.a.q,MessageContext)	handle	H
+C	deci/aE/a$p	PacketDeathSound	network	H	S2C: play near or distant human death sound at an entity
+F	deci/aE/a$p	axF	entityId	H
+C	deci/aE/a$p$a	PacketDeathSoundHandler	network	H	Client handler
+M	deci/aE/a$p$a	a	(deci.aE.a.p,MessageContext)	handle	H
+C	deci/aE/a$o	PacketReopenLootGui	network	H	C2S: reopen the loot GUI (GUI_LOOT) on the server
+C	deci/aE/a$o$a	PacketReopenLootGuiHandler	network	H	Server handler
+M	deci/aE/a$o$a	a	(deci.aE.a.o,MessageContext)	handle	H
+C	deci/aE/a$n	PacketPickupItem	network	H	C2S: pick up an EntityItem with the pickup key (respects spectator and pickup timer)
+F	deci/aE/a$n	axF	itemEntityId	H
+F	deci/aE/a$n	axX	playerEntityId	H
+C	deci/aE/a$n$a	PacketPickupItemHandler	network	H	Server handler
+M	deci/aE/a$n$a	a	(deci.aE.a.n,MessageContext)	handle	H
+C	deci/aE/a$m	PacketCopyToClipboard	network	H	S2C: copy a string to the player's system clipboard
+F	deci/aE/a$m	axF	entityId	H
+C	deci/aE/a$m$a	PacketCopyToClipboardHandler	network	H	Client handler
+M	deci/aE/a$m$a	a	(deci.aE.a.m,MessageContext)	handle	H
+C	deci/aE/a$l	PacketClearClanInfo	network	H	S2C: clear the client clan info lists
+F	deci/aE/a$l	axF	entityId	H
+C	deci/aE/a$l$a	PacketClearClanInfoHandler	network	H	Client handler
+M	deci/aE/a$l$a	a	(deci.aE.a.l,MessageContext)	handle	H
+C	deci/aE/a$k	PacketClanInfo	network	H	S2C: clan members, allies and a third list for the clan GUI
+F	deci/aE/a$k	axT	memberUUIDs	H
+F	deci/aE/a$k	axU	clan	H
+F	deci/aE/a$k	axV	allies	H
+F	deci/aE/a$k	axW	thirdList	L
+C	deci/aE/a$k$a	PacketClanInfoHandler	network	H	Client handler
+M	deci/aE/a$k$a	a	(deci.aE.a.k,MessageContext)	handle	H
+C	deci/aE/a$j	PacketSetCosmetics	network	H	C2S: player cape design, cape toggle and emblem id
+F	deci/aE/a$j	WI	emblemId	H
+C	deci/aE/a$j$a	PacketSetCosmeticsHandler	network	H	Server handler
+M	deci/aE/a$j$a	a	(deci.aE.a.j,MessageContext)	handle	H
+C	deci/aE/a$i	PacketRequestCosmetics	network	H	S2C: asks the client to send its cosmetics (PacketSetCosmetics)
+C	deci/aE/a$i$a	PacketRequestCosmeticsHandler	network	H	Client handler
+M	deci/aE/a$i$a	a	(deci.aE.a.i,MessageContext)	handle	H
+C	deci/aE/a$h	PacketRequestModHashes	network	H	S2C: anticheat, asks the client to send its mod file hashes (sent on login unless allowAdditionalMods)
+F	deci/aE/a$h	axF	entityId	H
+C	deci/aE/a$h$a	PacketRequestModHashesHandler	network	H	Client handler
+M	deci/aE/a$h$a	a	(deci.aE.a.h,MessageContext)	handle	H
+C	deci/aE/a$g	PacketModHashes	network	H	C2S: anticheat, client mod file hashes and names; server kicks on unknown hashes (BoehMod Anticheat)
+F	deci/aE/a$g	axG	KEY_CLAN_NAME	L
+F	deci/aE/a$g	axH	KEY_CLAN_LEADER	L
+F	deci/aE/a$g	axI	KEY_CLAN_SCORE	L
+F	deci/aE/a$g	axJ	KICK_TITLE	H
+F	deci/aE/a$g	axK	KICK_REASON	H
+F	deci/aE/a$g	axL	KICK_UPDATE_HINT	H
+F	deci/aE/a$g	axM	KICK_UPDATE_HINT2	H
+F	deci/aE/a$g	axN	KEY_VIEW_X	L
+F	deci/aE/a$g	axO	KEY_VIEW_Y	L
+F	deci/aE/a$g	axP	KEY_VIEW_Z	L
+F	deci/aE/a$g	axQ	flag	M
+F	deci/aE/a$g	axR	hashes	H
+F	deci/aE/a$g	axS	fileNames	H
+M	deci/aE/a$g	a	(EntityPlayerMP,String,String)	kick	H
+M	deci/aE/a$g	a	(EntityPlayerMP,String,String,String)	kick1	H
+M	deci/aE/a$g	b	(EntityPlayerMP,String,String,String)	kick2	H
+M	deci/aE/a$g	c	(EntityPlayerMP,String,String,String)	kick3	H
+C	deci/aE/a$g$a	PacketModHashesHandler	network	H	Server handler
+M	deci/aE/a$g$a	a	(deci.aE.a.g,MessageContext)	handle	H
+C	deci/aE/a$f	PacketHitMarker	network	M	S2C: bumps a client hit indicator alpha (deci.b.i.cs) by 0.25
+F	deci/aE/a$f	axF	entityId	H
+C	deci/aE/a$f$a	PacketHitMarkerHandler	network	M	Client handler
+M	deci/aE/a$f$a	a	(deci.aE.a.f,MessageContext)	handle	H
+C	deci/aE/a$e	PacketSetClientBoundsB	network	L	S2C: four doubles stored in deci.b.j cS..cV (no sender found, likely unused)
+F	deci/aE/a$e	axD	valueA	L
+F	deci/aE/a$e	axE	valueB	L
+F	deci/aE/a$e	axB	valueC	L
+F	deci/aE/a$e	axC	valueD	L
+C	deci/aE/a$e$a	PacketSetClientBoundsBHandler	network	L	Client handler
+M	deci/aE/a$e$a	a	(deci.aE.a.e,MessageContext)	handle	H
+C	deci/aE/a$d	PacketSetClientBoundsA	network	L	S2C: four doubles stored in deci.b.j cO..cR (no sender found, likely unused)
+F	deci/aE/a$d	axD	valueA	L
+F	deci/aE/a$d	axE	valueB	L
+F	deci/aE/a$d	axB	valueC	L
+F	deci/aE/a$d	axC	valueD	L
+C	deci/aE/a$d$a	PacketSetClientBoundsAHandler	network	L	Client handler
+M	deci/aE/a$d$a	a	(deci.aE.a.d,MessageContext)	handle	H
+C	deci/aE/a$c	PacketClientStats	network	L	S2C: two longs and a string stored in deci.b.j cW, cX, cY
+F	deci/aE/a$c	cW	valueA	L
+F	deci/aE/a$c	axA	valueB	L
+F	deci/aE/a$c	cY	text	L
+C	deci/aE/a$c$a	PacketClientStatsHandler	network	L	Client handler
+M	deci/aE/a$c$a	a	(deci.aE.a.c,MessageContext)	handle	H
+C	deci/aE/a$b	PacketBackpackContents	network	H	S2C: contents of the player's backpack container, written into the client backpack item
+F	deci/aE/a$b	axz	payload	H
+C	deci/aE/a$b$a	PacketBackpackContentsHandler	network	H	Client handler
+M	deci/aE/a$b$a	a	(deci.aE.a.b,MessageContext)	handle	H
+M	deci/aE/a$b$a	a	(deci.aE.a.b)	applyClient	H
+C	deci/aE/a$a	PacketSyncExtraArmor	network	H	S2C: backpack, vest and mask of a player for other clients
+F	deci/aE/a$a	VO	backpack	H
+F	deci/aE/a$a	VQ	vest	H
+F	deci/aE/a$a	VP	mask	H
+F	deci/aE/a$a	axy	entityId	H
+C	deci/aE/a$a$a	PacketSyncExtraArmorHandler	network	H	Client handler
+M	deci/aE/a$a$a	a	(deci.aE.a.a,MessageContext)	handle	H
+M	deci/aE/a$a$a	a	(deci.aE.a.a)	applyClient	H
+F	deci/aE/a$Y	Wf	brokenLeg	H
+F	deci/aE/a$Y	Wg	infected	H
+F	deci/aE/a$Y	Wh	bleeding	H
+F	deci/aE/a$Y	Wb	bottlecaps	H
+F	deci/aE/a$Y	Wc	goldBottlecaps	H
+F	deci/aE/a$Y	VO	backpack	H
+F	deci/aE/a$Y	VQ	vest	H
+F	deci/aE/a$Y	VP	mask	H
+F	deci/aE/a$Y	VM	combatTimer	H
+F	deci/aE/a$Y	Wk	holstered	H
+F	deci/aE/a$Y	Wy	parachuting	H
+F	deci/aE/a$Y	Wz	gliding	H
+F	deci/aE/a$Y	WF	typing	H
+F	deci/aE/a$Y	WJ	bounty	H
+F	deci/aE/a$Y	Wd	humanity	H
+F	deci/aE/a$Y	VW	water	H
+F	deci/aE/a$Y	VZ	blood	H
+F	deci/aE/a$Y	Wn	pos1X	H
+F	deci/aE/a$Y	Wo	pos1Y	H
+F	deci/aE/a$Y	Wp	pos1Z	H
+F	deci/aE/a$Y	Wq	pos2X	H
+F	deci/aE/a$Y	Wr	pos2Y	H
+F	deci/aE/a$Y	Ws	pos2Z	H
+F	deci/aE/a$Y	VU	gesture	H
+F	deci/aE/a$Y	WA	targetBestScore	H
+F	deci/aE/a$Y	WB	targetTimer	H
+F	deci/aE/a$Y	WE	targetLastEntity	H
+F	deci/aE/a$Y	WO	daysSurvived	H
+F	deci/aE/a$Y	Wu	stance	H
+M	deci/aE/a$Y	bM	()	getStance	H
+M	deci/aE/a$Y	cv	()	getBackpack	H
+M	deci/aE/a$Y	c	(ItemStack)	setBackpack	H
+M	deci/aE/a$Y	cw	()	getVest	H
+M	deci/aE/a$Y	d	(ItemStack)	setVest	H
+M	deci/aE/a$Y	cx	()	getMask	H
+M	deci/aE/a$Y	e	(ItemStack)	setMask	H
+M	deci/aE/a$Y	cR	()	isSupporter	H
+M	deci/aE/a$Y	b	(boolean)	setSupporter	H
+M	deci/aE/a$Y	cY	()	getClanName	H
+M	deci/aE/a$Y	B	(String)	setClanName	H
+M	deci/aE/a$Y	dk	()	getPlayerKills	H
+F	deci/aE/a$Z	Wy	parachuting	H
+F	deci/aE/a$Z	Wz	gliding	H
+F	deci/aE/a$Z	WF	typing	H
+F	deci/aE/a$Z	Wk	holstered	H
+F	deci/aE/a$Z	VO	backpack	H
+F	deci/aE/a$Z	VQ	vest	H
+F	deci/aE/a$Z	VP	mask	H
+F	deci/aE/a$Z	WJ	bounty	H
+F	deci/aE/a$Z	Wu	stance	H
+F	deci/aE/a$Z	VC	previousStance	H
+F	deci/aE/a$Z	Wd	humanity	H
+F	deci/aE/a$Z	VU	gesture	H
+F	deci/aE/a$Z	VI	aimMode	M
+F	deci/aE/a$Z	WI	emblemId	H
+M	deci/aE/a$Z	bM	()	getStance	H
+M	deci/aE/a$Z	u	(int)	setStance	H
+M	deci/aE/a$Z	cu	()	getPreviousStance	H
+M	deci/aE/a$Z	P	(int)	setPreviousStance	H
+M	deci/aE/a$Z	cd	()	getHumanity	H
+M	deci/aE/a$Z	K	(int)	setHumanity	H
+M	deci/aE/a$Z	bX	()	getGesture	H
+M	deci/aE/a$Z	G	(int)	setGesture	H
+M	deci/aE/a$Z	bJ	()	isParachuting	H
+M	deci/aE/a$Z	c	(boolean)	setParachuting	H
+M	deci/aE/a$Z	bK	()	isGliding	H
+M	deci/aE/a$Z	d	(boolean)	setGliding	H
+M	deci/aE/a$Z	cR	()	isSupporter	H
+M	deci/aE/a$Z	b	(boolean)	setSupporter	H
+M	deci/aE/a$Z	cV	()	isTyping	H
+M	deci/aE/a$Z	p	(boolean)	setTyping	H
+M	deci/aE/a$Z	ci	()	getAimMode	M
+M	deci/aE/a$Z	M	(int)	setAimMode	M
+M	deci/aE/a$Z	cv	()	getBackpack	H
+M	deci/aE/a$Z	c	(ItemStack)	setBackpack	H
+M	deci/aE/a$Z	cw	()	getVest	H
+M	deci/aE/a$Z	d	(ItemStack)	setVest	H
+M	deci/aE/a$Z	cx	()	getMask	H
+M	deci/aE/a$Z	e	(ItemStack)	setMask	H
+M	deci/aE/a$Z	cU	()	getCapeID	H
+M	deci/aE/a$Z	m	(long)	setCapeID	H
+M	deci/aE/a$Z	cT	()	isCapeEnabled	H
+M	deci/aE/a$Z	cY	()	getClanName	H
+M	deci/aE/a$Z	B	(String)	setClanName	H
+M	deci/aE/a$Z	cZ	()	getEmblemId	H
+M	deci/aE/a$Z	R	(int)	setEmblemId	H
+M	deci/aE/a$Z	cc	()	getBounty	H
+M	deci/aE/a$Z	h	(long)	setBounty	H

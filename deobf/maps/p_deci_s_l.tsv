@@ -1,0 +1,3 @@
+C	deci/s/a	ModelFragGrenade	model	H	Frag grenade model (also used as an item model)
+C	deci/s/b	ModelMolotov	model	H	Molotov model
+C	deci/s/c	ModelThrowableCanister	model	H	Canister grenade model shared by signal, tear gas and stun grenades

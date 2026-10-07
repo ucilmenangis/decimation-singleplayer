@@ -1,0 +1,22 @@
+C	net/decimation/mod/server/turf/a	TurfManager	zone	H	Clan turf manager: decimation_turfs.json load/save, capture and ownership checks, turf list sync to clients
+F	net/decimation/mod/server/turf/a	J	mod	H
+M	net/decimation/mod/server/turf/a	a	(Date,Date)	secondsBetween	H
+M	net/decimation/mod/server/turf/a	hg	()	readTurfsFile	H
+M	net/decimation/mod/server/turf/a	a	(EntityPlayer,ObjectTurf)	isPlayerInTurf	H
+M	net/decimation/mod/server/turf/a	b	(EntityPlayer,ObjectTurf)	isPlayerNearTurf	H
+M	net/decimation/mod/server/turf/a	c	(UUID)	getPlayersInTurf	H
+M	net/decimation/mod/server/turf/a	d	(UUID)	getTurfById	H
+M	net/decimation/mod/server/turf/a	a	(int,int,int,int,int,int,String)	addTurf	H
+M	net/decimation/mod/server/turf/a	hh	()	reloadTurfs	H
+M	net/decimation/mod/server/turf/a	A	(EntityPlayer)	removeTurfAtPlayer	H
+M	net/decimation/mod/server/turf/a	hi	()	reloadAndSyncTurfs	H
+M	net/decimation/mod/server/turf/a	a	(String,ObjectTurf)	setTurfOwner	H
+M	net/decimation/mod/server/turf/a	a	(ObjectTurf)	isCapturable	H
+M	net/decimation/mod/server/turf/a	q	(int,int,int)	isBetweenWithMargin	H
+M	net/decimation/mod/server/turf/a	e	(int,int,int,int)	isBetweenWithMargin	H
+M	net/decimation/mod/server/turf/a	e	(int,int,int)	isBetween	H
+M	net/decimation/mod/server/turf/a	aj	(String)	releaseTurfsOfClan	H
+M	net/decimation/mod/server/turf/a	a	(Entity,ObjectTurf)	isEntityInTurf	H
+M	net/decimation/mod/server/turf/a	q	(String,String)	renameTurfOwner	H
+M	net/decimation/mod/server/turf/a	h	(Entity)	isEntityInAnyTurf	H
+M	net/decimation/mod/server/turf/a	c	(EntityPlayer,int,int,int)	canPlayerUseInTurf	H

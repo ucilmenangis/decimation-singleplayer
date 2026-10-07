@@ -1,0 +1,299 @@
+C	deci/I/A	Graffiti4Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_4
+C	deci/I/B	Graffiti5Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_5
+C	deci/I/C	Graffiti6Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_6
+C	deci/I/D	Graffiti7Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_7
+C	deci/I/E	Graffiti8Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_8
+C	deci/I/F	Graffiti9Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_9
+C	deci/I/G	HangingPlayerRenderer	render	H	TileEntitySpecialRenderer for EntityHangingPlayer
+C	deci/I/H	HazardLampRenderer	render	H	TileEntitySpecialRenderer for EntityHazardLamp
+C	deci/I/I	HazardScreen1Renderer	render	H	TileEntitySpecialRenderer for EntityHazardScreen_1
+C	deci/I/J	HazardScreen2Renderer	render	H	TileEntitySpecialRenderer for EntityHazardScreen_2
+C	deci/I/K	HazardbarrierRenderer	render	H	TileEntitySpecialRenderer for EntityHazardbarrier
+C	deci/I/L	HazardpoleRenderer	render	H	TileEntitySpecialRenderer for EntityHazardpole
+C	deci/I/M	LightRenderer	render	H	TileEntitySpecialRenderer for EntityLight
+C	deci/I/N	LightOffRenderer	render	H	TileEntitySpecialRenderer for EntityLightOff
+C	deci/I/O	MailboxRenderer	render	H	TileEntitySpecialRenderer for EntityMailbox
+C	deci/I/P	MedicalCrateRenderer	render	H	TileEntitySpecialRenderer for EntityMedicalCrate
+C	deci/I/Q	MetalShelfRenderer	render	H	TileEntitySpecialRenderer for EntityMetalShelf
+C	deci/I/R	MetalShelfEmptyRenderer	render	H	TileEntitySpecialRenderer for EntityMetalShelf_Empty
+C	deci/I/S	MetroRailing1Renderer	render	H	TileEntitySpecialRenderer for EntityMetroRailing1
+C	deci/I/T	MetroRailing2Renderer	render	H	TileEntitySpecialRenderer for EntityMetroRailing2
+C	deci/I/U	MilitaryCrateRenderer	render	H	TileEntitySpecialRenderer for EntityMilitaryCrate
+C	deci/I/V	MonitorRenderer	render	H	TileEntitySpecialRenderer for EntityMonitor
+C	deci/I/W	OfficeChairRenderer	render	H	TileEntitySpecialRenderer for EntityOfficeChair
+C	deci/I/X	PhoneBoothRenderer	render	H	TileEntitySpecialRenderer for EntityPhoneBooth
+C	deci/I/Y	PhoneboxRenderer	render	H	TileEntitySpecialRenderer for EntityPhonebox
+C	deci/I/Z	PoliceCrateRenderer	render	H	TileEntitySpecialRenderer for EntityPoliceCrate
+C	deci/I/a	AcidPitRenderer	render	H	TileEntitySpecialRenderer for EntityAcidPit
+C	deci/I/aA	StreetBenchRenderer	render	H	TileEntitySpecialRenderer for EntityStreetBench
+C	deci/I/aB	StudioCameraRenderer	render	H	TileEntitySpecialRenderer for EntityStudioCamera
+C	deci/I/aC	TargetRenderer	render	H	TileEntitySpecialRenderer for EntityTarget
+C	deci/I/aD	TicketGateRenderer	render	H	TileEntitySpecialRenderer for EntityTicketGate
+C	deci/I/aE	TicketGateOpenRenderer	render	H	TileEntitySpecialRenderer for EntityTicketGate_Open
+C	deci/I/aF	TireStackRenderer	render	H	TileEntitySpecialRenderer for EntityTireStack
+C	deci/I/aG	TrashcanRenderer	render	H	TileEntitySpecialRenderer for EntityTrashcan
+C	deci/I/aH	VendingMachine1Renderer	render	H	TileEntitySpecialRenderer for EntityVendingMachine_1
+C	deci/I/aI	VendingMachine2Renderer	render	H	TileEntitySpecialRenderer for EntityVendingMachine_2
+C	deci/I/aJ	WallflagRenderer	render	H	TileEntitySpecialRenderer for EntityWallflag
+C	deci/I/aK	WashingMachineRenderer	render	H	TileEntitySpecialRenderer for EntityWashingMachine
+C	deci/I/aL	WaterfountainRenderer	render	H	TileEntitySpecialRenderer for EntityWaterfountain
+C	deci/I/aM	WaterpumpRenderer	render	H	TileEntitySpecialRenderer for EntityWaterpump
+C	deci/I/aN	WeaponCabinetRenderer	render	H	TileEntitySpecialRenderer for EntityWeaponCabinet
+C	deci/I/aO	WoodTableRenderer	render	H	TileEntitySpecialRenderer for EntityWoodTable
+C	deci/I/aP	WreckageMilitary1Renderer	render	H	TileEntitySpecialRenderer for EntityWreckageMilitary1
+C	deci/I/aQ	WreckageMilitary2Renderer	render	H	TileEntitySpecialRenderer for EntityWreckageMilitary2
+C	deci/I/aR	WreckageMilitary3Renderer	render	H	TileEntitySpecialRenderer for EntityWreckageMilitary3
+C	deci/I/aa	PowerGeneratorRenderer	render	H	TileEntitySpecialRenderer for EntityPowerGenerator
+C	deci/I/ab	PowerPoleRenderer	render	H	TileEntitySpecialRenderer for EntityPowerPole
+C	deci/I/ac	PresentRenderer	render	H	TileEntitySpecialRenderer for EntityPresent
+C	deci/I/ad	Present2Renderer	render	H	TileEntitySpecialRenderer for EntityPresent2
+C	deci/I/ae	Present3Renderer	render	H	TileEntitySpecialRenderer for EntityPresent3
+C	deci/I/af	RedlightRenderer	render	H	TileEntitySpecialRenderer for EntityRedlight
+C	deci/I/ag	Roadsign20Renderer	render	H	TileEntitySpecialRenderer for EntityRoadsign20
+C	deci/I/ah	Roadsign30Renderer	render	H	TileEntitySpecialRenderer for EntityRoadsign30
+C	deci/I/ai	Roadsign40Renderer	render	H	TileEntitySpecialRenderer for EntityRoadsign40
+C	deci/I/aj	Roadsign50Renderer	render	H	TileEntitySpecialRenderer for EntityRoadsign50
+C	deci/I/ak	Roadsign60Renderer	render	H	TileEntitySpecialRenderer for EntityRoadsign60
+C	deci/I/al	RoadsignOnewayRenderer	render	H	TileEntitySpecialRenderer for EntityRoadsignOneway
+C	deci/I/am	RoadsignParkingRenderer	render	H	TileEntitySpecialRenderer for EntityRoadsignParking
+C	deci/I/an	RoadsignStopRenderer	render	H	TileEntitySpecialRenderer for EntityRoadsignStop
+C	deci/I/ao	SafezoneSignEntryRenderer	render	H	TileEntitySpecialRenderer for EntitySafezoneSignEntry
+C	deci/I/ap	SafezoneSignExitRenderer	render	H	TileEntitySpecialRenderer for EntitySafezoneSignExit
+C	deci/I/aq	ShopDisplay1Renderer	render	H	TileEntitySpecialRenderer for EntityShopDisplay_1
+C	deci/I/ar	SignDecimunitionRenderer	render	H	TileEntitySpecialRenderer for EntitySign_Decimunition
+C	deci/I/as	SignGunsrusRenderer	render	H	TileEntitySpecialRenderer for EntitySign_Gunsrus
+C	deci/I/at	SignMetroRenderer	render	H	TileEntitySpecialRenderer for EntitySign_Metro
+C	deci/I/au	SignMinebayRenderer	render	H	TileEntitySpecialRenderer for EntitySign_Minebay
+C	deci/I/av	SignMinedonaldsRenderer	render	H	TileEntitySpecialRenderer for EntitySign_Minedonalds
+C	deci/I/aw	SignMinewayRenderer	render	H	TileEntitySpecialRenderer for EntitySign_Mineway
+C	deci/I/ax	StereoRenderer	render	H	TileEntitySpecialRenderer for EntityStereo
+C	deci/I/ay	StorageCrateRenderer	render	H	TileEntitySpecialRenderer for i
+C	deci/I/az	StreetBarrierRenderer	render	H	TileEntitySpecialRenderer for EntityStreetBarrier
+C	deci/I/c	BarrierTallRenderer	render	H	TileEntitySpecialRenderer for EntityBarrierTall
+C	deci/I/d	BicycleRenderer	render	H	TileEntitySpecialRenderer for EntityBicycle
+C	deci/I/e	CCTVRenderer	render	H	TileEntitySpecialRenderer for EntityCCTV
+C	deci/I/f	CeilingVentRenderer	render	H	TileEntitySpecialRenderer for EntityCeilingVent
+C	deci/I/g	CeilingVentCornerRenderer	render	H	TileEntitySpecialRenderer for EntityCeilingVentCorner
+C	deci/I/i	ChesstableRenderer	render	H	TileEntitySpecialRenderer for EntityChesstable
+C	deci/I/j	CookingStationRenderer	render	H	TileEntitySpecialRenderer for EntityCookingStation
+C	deci/I/k	ElectricBox1Renderer	render	H	TileEntitySpecialRenderer for EntityElectricBox1
+C	deci/I/l	PropRenderer	render	H	TileEntitySpecialRenderer for TileEntityProp
+C	deci/I/m	ExitLightRenderer	render	H	TileEntitySpecialRenderer for EntityExitLight
+C	deci/I/n	FlagPollUAHDRenderer	render	H	TileEntitySpecialRenderer for EntityFlagPollUAHD
+C	deci/I/o	FlagPollUSSRRenderer	render	H	TileEntitySpecialRenderer for EntityFlagPollUSSR
+C	deci/I/p	FlatscreenTVRenderer	render	H	TileEntitySpecialRenderer for EntityFlatscreenTV
+C	deci/I/q	FlatscreenTVEmergencyRenderer	render	H	TileEntitySpecialRenderer for EntityFlatscreenTV_Emergency
+C	deci/I/r	FlatscreenTVNewsRenderer	render	H	TileEntitySpecialRenderer for EntityFlatscreenTV_News
+C	deci/I/s	FlatscreenTVTargetRenderer	render	H	TileEntitySpecialRenderer for EntityFlatscreenTV_Target
+C	deci/I/t	FlatscreenTVYoutubeRenderer	render	H	TileEntitySpecialRenderer for EntityFlatscreenTV_Youtube
+C	deci/I/u	Graffiti1Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_1
+C	deci/I/v	Graffiti10Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_10
+C	deci/I/w	Graffiti11Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_11
+C	deci/I/x	Graffiti12Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_12
+C	deci/I/y	Graffiti2Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_2
+C	deci/I/z	Graffiti3Renderer	render	H	TileEntitySpecialRenderer for EntityGraffiti_3
+C	deci/I/b	MapBarrierRenderer	render	L	TileEntitySpecialRenderer using barrier.png, not bound in the client proxy (unused) [guess]
+C	deci/I/h	ChairRenderer	render	L	TileEntitySpecialRenderer using chair.png, not bound in the client proxy (unused) [guess]
+F	deci/I/A	fP	texture	M
+F	deci/I/A	RT	model	M
+F	deci/I/B	fP	texture	M
+F	deci/I/B	RT	model	M
+F	deci/I/C	fP	texture	M
+F	deci/I/C	RT	model	M
+F	deci/I/D	fP	texture	M
+F	deci/I/D	RT	model	M
+F	deci/I/E	fP	texture	M
+F	deci/I/E	RT	model	M
+F	deci/I/F	fP	texture	M
+F	deci/I/F	RT	model	M
+F	deci/I/G	fP	texture	M
+F	deci/I/G	RD	texture2	M
+F	deci/I/G	RE	texture3	M
+F	deci/I/G	RU	model	M
+F	deci/I/H	fP	texture	M
+F	deci/I/H	RV	model	M
+F	deci/I/I	fP	texture	M
+F	deci/I/I	RD	texture2	M
+F	deci/I/I	RE	texture3	M
+F	deci/I/I	RW	model	M
+F	deci/I/J	fP	texture	M
+F	deci/I/J	RW	model	M
+F	deci/I/K	fP	texture	M
+F	deci/I/K	RX	model	M
+F	deci/I/L	fP	texture	M
+F	deci/I/L	RY	model	M
+F	deci/I/M	fP	texture	M
+F	deci/I/M	RZ	model	M
+F	deci/I/N	fP	texture	M
+F	deci/I/N	RZ	model	M
+F	deci/I/O	fP	texture	M
+F	deci/I/O	Sa	model	M
+F	deci/I/P	fP	texture	M
+F	deci/I/P	Sb	model	M
+F	deci/I/Q	fP	texture	M
+F	deci/I/Q	RD	texture2	M
+F	deci/I/Q	RE	texture3	M
+F	deci/I/Q	Sc	model	M
+F	deci/I/R	fP	texture	M
+F	deci/I/R	Sd	model	M
+F	deci/I/S	fP	texture	M
+F	deci/I/S	Se	model	M
+F	deci/I/T	fP	texture	M
+F	deci/I/T	Sf	model	M
+F	deci/I/U	fP	texture	M
+F	deci/I/U	Sb	model	M
+F	deci/I/V	fP	texture	M
+F	deci/I/V	Sg	model	M
+F	deci/I/W	fP	texture	M
+F	deci/I/W	RD	texture2	M
+F	deci/I/W	RE	texture3	M
+F	deci/I/W	Sh	model	M
+F	deci/I/X	fP	texture	M
+F	deci/I/X	Si	model	M
+F	deci/I/Y	fP	texture	M
+F	deci/I/Y	Sj	model	M
+F	deci/I/Z	fP	texture	M
+F	deci/I/Z	Sb	model	M
+F	deci/I/a	fP	texture	M
+F	deci/I/a	RB	model	M
+F	deci/I/aA	fP	texture	M
+F	deci/I/aA	Sv	model	M
+F	deci/I/aB	fP	texture	M
+F	deci/I/aB	Sw	model	M
+F	deci/I/aC	fP	texture	M
+F	deci/I/aC	Sx	model	M
+F	deci/I/aD	fP	texture	M
+F	deci/I/aD	Sy	model	M
+F	deci/I/aE	fP	texture	M
+F	deci/I/aE	Sz	model	M
+F	deci/I/aF	fP	texture	M
+F	deci/I/aF	SA	model	M
+F	deci/I/aG	fP	texture	M
+F	deci/I/aG	RD	texture2	M
+F	deci/I/aG	RE	texture3	M
+F	deci/I/aG	SB	model	M
+F	deci/I/aH	fP	texture	M
+F	deci/I/aH	SC	model	M
+F	deci/I/aI	fP	texture	M
+F	deci/I/aI	SC	model	M
+F	deci/I/aJ	fP	texture	M
+F	deci/I/aJ	SD	model	M
+F	deci/I/aK	fP	texture	M
+F	deci/I/aK	SE	model	M
+F	deci/I/aL	fP	texture	M
+F	deci/I/aL	SF	model	M
+F	deci/I/aM	fP	texture	M
+F	deci/I/aM	SG	model	M
+F	deci/I/aN	fP	texture	M
+F	deci/I/aN	SH	model	M
+F	deci/I/aO	fP	texture	M
+F	deci/I/aO	SI	model	M
+F	deci/I/aP	fP	texture	M
+F	deci/I/aP	SJ	model	M
+F	deci/I/aQ	fP	texture	M
+F	deci/I/aQ	SK	model	M
+F	deci/I/aR	fP	texture	M
+F	deci/I/aR	model	model	M
+F	deci/I/aa	fP	texture	M
+F	deci/I/aa	Sk	model	M
+F	deci/I/ab	fP	texture	M
+F	deci/I/ab	Sl	model	M
+F	deci/I/ac	fP	texture	M
+F	deci/I/ac	Sm	texture2	M
+F	deci/I/ac	Sn	texture3	M
+F	deci/I/ac	So	model	M
+F	deci/I/ad	Sm	texture	M
+F	deci/I/ad	So	model	M
+F	deci/I/ae	Sn	texture	M
+F	deci/I/ae	So	model	M
+F	deci/I/af	fP	texture	M
+F	deci/I/af	Sp	model	M
+F	deci/I/ag	fP	texture	M
+F	deci/I/ag	Sq	model	M
+F	deci/I/ah	fP	texture	M
+F	deci/I/ah	Sq	model	M
+F	deci/I/ai	fP	texture	M
+F	deci/I/ai	Sq	model	M
+F	deci/I/aj	fP	texture	M
+F	deci/I/aj	Sq	model	M
+F	deci/I/ak	fP	texture	M
+F	deci/I/ak	Sq	model	M
+F	deci/I/al	fP	texture	M
+F	deci/I/al	Sq	model	M
+F	deci/I/am	fP	texture	M
+F	deci/I/am	Sq	model	M
+F	deci/I/an	fP	texture	M
+F	deci/I/an	Sq	model	M
+F	deci/I/aq	fP	texture	M
+F	deci/I/aq	Sr	model	M
+F	deci/I/ar	fP	texture	M
+F	deci/I/ar	RT	model	M
+F	deci/I/as	fP	texture	M
+F	deci/I/as	RT	model	M
+F	deci/I/at	fP	texture	M
+F	deci/I/at	RT	model	M
+F	deci/I/au	fP	texture	M
+F	deci/I/au	RT	model	M
+F	deci/I/av	fP	texture	M
+F	deci/I/av	RT	model	M
+F	deci/I/aw	fP	texture	M
+F	deci/I/aw	RT	model	M
+F	deci/I/ax	fP	texture	M
+F	deci/I/ax	Ss	model	M
+F	deci/I/ay	fP	texture	M
+F	deci/I/ay	St	model	M
+F	deci/I/az	fP	texture	M
+F	deci/I/az	Su	model	M
+F	deci/I/b	fP	texture	M
+F	deci/I/b	RC	model	M
+F	deci/I/c	fP	texture	M
+F	deci/I/c	RD	texture2	M
+F	deci/I/c	RE	texture3	M
+F	deci/I/c	RF	model	M
+F	deci/I/d	fP	texture	M
+F	deci/I/d	RD	texture2	M
+F	deci/I/d	RE	texture3	M
+F	deci/I/d	RG	model	M
+F	deci/I/e	fP	texture	M
+F	deci/I/e	RH	model	M
+F	deci/I/f	fP	texture	M
+F	deci/I/f	RI	model	M
+F	deci/I/g	fP	texture	M
+F	deci/I/g	RJ	model	M
+F	deci/I/h	RK	model	M
+F	deci/I/h	fP	texture	M
+F	deci/I/i	fP	texture	M
+F	deci/I/i	RL	model	M
+F	deci/I/j	fP	texture	M
+F	deci/I/j	RM	model	M
+F	deci/I/k	fP	texture	M
+F	deci/I/k	RN	model	M
+F	deci/I/l	mc	model	M
+F	deci/I/m	fP	texture	M
+F	deci/I/m	RP	model	M
+F	deci/I/n	fP	texture	M
+F	deci/I/n	RQ	model	M
+F	deci/I/o	fP	texture	M
+F	deci/I/o	RQ	model	M
+F	deci/I/p	fP	texture	M
+F	deci/I/p	RR	model	M
+F	deci/I/q	fP	texture	M
+F	deci/I/q	RS	model	M
+F	deci/I/r	fP	texture	M
+F	deci/I/r	RS	model	M
+F	deci/I/s	fP	texture	M
+F	deci/I/s	RS	model	M
+F	deci/I/t	fP	texture	M
+F	deci/I/t	RS	model	M
+F	deci/I/u	fP	texture	M
+F	deci/I/u	RT	model	M
+F	deci/I/v	fP	texture	M
+F	deci/I/v	RT	model	M
+F	deci/I/w	fP	texture	M
+F	deci/I/w	RT	model	M
+F	deci/I/x	fP	texture	M
+F	deci/I/x	RT	model	M
+F	deci/I/y	fP	texture	M
+F	deci/I/y	RT	model	M
+F	deci/I/z	fP	texture	M
+F	deci/I/z	RT	model	M

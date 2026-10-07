@@ -1,0 +1,34 @@
+# Knowledge graph = project docs + our own code. Keep the 142k line decompiled
+# reference tree, build outputs, jars and run folders out.
+deobf/src/
+deobf/src_vineflower/
+deobf/maps/
+deobf/*.jar
+deobf/*.srg
+deobf/names.tsv
+deobf/cs.sparseimage
+deobf/apply_report.txt
+build/
+dist/
+structures/
+WorldGenerator/
+.remember/
+dev/run/
+dev/build/
+dev/libs/
+dev/.gradle/
+dev/.idea/
+dev/gradle/
+dev/gtnhShared/
+dev/docs/
+dev/README.md
+dev/LICENSE
+dev/LICENSE-template
+tools/lib/
+tools/shim_src/
+/src/
+*.jar
+*.bak
+*.patched
+*.schematic
+dev/gradlew

@@ -1,0 +1,97 @@
+C	deci/n/a	BModelBox	model	H	One box or arbitrary 8 corner shape of a BModelPart, built from textured quads
+F	deci/n/a	jC	part	H
+F	deci/n/a	jD	quads	H
+M	deci/n/a	a	(Tessellator,float)	render	H
+M	deci/n/a	a	(Tessellator,float,float,float,float,float)	renderTinted	L
+M	deci/n/a	a	(Tessellator,float,float,float,float[][])	renderWithUV	L
+C	deci/n/b	BModelPart	model	H	ModelRenderer subclass used by bmodels: named part, boxes and shapes, children, rest pose, display list compilation, per part scale
+F	deci/n/b	jF	tessellator	H
+F	deci/n/b	jG	visible	L
+F	deci/n/b	jH	ownerModel	H
+F	deci/n/b	jI	faceUVs	L
+F	deci/n/b	jJ	textureOffsetU	H
+F	deci/n/b	jK	textureOffsetV	H
+F	deci/n/b	jL	variant	M
+F	deci/n/b	jM	age	M
+F	deci/n/b	jN	scaleN	L
+F	deci/n/b	jO	scaleO	L
+F	deci/n/b	fW	scale	H
+M	deci/n/b	a	(deci.n.b)	addChildPart	H
+M	deci/n/b	a	(ModelRenderer)	copyPoseFrom	M
+M	deci/n/b	n	(int,int)	setTextureOffsetUV	H
+M	deci/n/b	a	(float,float,float,int,int,int)	addBox	H
+M	deci/n/b	a	(String,float,float,float,float,float,float)	addNamedBox	H
+M	deci/n/b	a	(float[][],double,double,double)	addShape	H
+M	deci/n/b	a	(float,float,float,float[][],float,float,float)	addShape	H
+M	deci/n/b	a	(float,float,float,float,float,float)	addBox	H
+M	deci/n/b	a	(float,float,float,float,float,float,float)	addBox	H
+M	deci/n/b	bj	()	resetRotationPoint	H
+M	deci/n/b	bk	()	resetRotation	H
+M	deci/n/b	a	(float,float,float)	setRotation	H
+M	deci/n/b	a	(float,boolean)	render	M
+M	deci/n/b	b	(float,boolean)	applyTransform	L
+M	deci/n/b	c	(float,boolean)	applyScale	L
+M	deci/n/b	f	(float)	compileDisplayList	H
+M	deci/n/b	o	(int,int)	setTextureSize	H
+M	deci/n/b	g	(float)	renderBoxes	M
+C	deci/n/c	BModelQuad	model	H	TexturedQuad subclass for bmodel boxes (flip, draw)
+C	deci/n/d	BulletTracerRenderer	render	H	Static list of bullet tracers (start, end, colour) drawn and aged every frame with pass/snap sounds
+F	deci/n/d	kd	tracers	H
+F	deci/n/d	ke	textureManager	H
+M	deci/n/d	a	(deci.n.d.a)	add	H
+M	deci/n/d	a	(Minecraft,float)	renderAll	H
+M	deci/n/d	b	(Minecraft)	tickAll	H
+C	deci/n/d$a	BulletTracer	render	H	One tracer line: start, end, width, speed, colour, progress
+F	deci/n/d$a	kf	start	H
+F	deci/n/d$a	kg	end	H
+F	deci/n/d$a	kh	offset	L
+F	deci/n/d$a	ki	speed	H
+F	deci/n/d$a	kj	color	H
+F	deci/n/d$a	kl	ticks	H
+M	deci/n/d$a	z	(String)	parseHexColor	H
+M	deci/n/d$a	c	(Minecraft)	tick	H
+M	deci/n/d$a	b	(Minecraft,float)	render	H
+C	deci/n/e	DeciPlayerModel	model	H	ModelBiped replacement for players and humans with extra parts (boots, shoes, legs, held gun model)
+F	deci/n/e	ko	partA	L
+F	deci/n/e	kw	heldGunModel	M
+F	deci/n/e	kx	self	L
+C	deci/n/f	BModel	model	H	Gun/attachment model loaded from a text .bmodel: parts plus anchor points (sight, muzzle flash, eject port, left/right hand pose, model offset, scale); renders gun, hands, scope glass
+F	deci/n/f	kA	leftArm	M
+F	deci/n/f	kB	rightArm	M
+F	deci/n/f	kC	parts	H
+F	deci/n/f	kE	sightX	H
+F	deci/n/f	kF	sightY	H
+F	deci/n/f	kG	sightZ	H
+F	deci/n/f	kK	leftHandX	H
+F	deci/n/f	kL	leftHandY	H
+F	deci/n/f	kM	leftHandZ	H
+F	deci/n/f	kN	rightHandX	H
+F	deci/n/f	kO	rightHandY	H
+F	deci/n/f	kP	rightHandZ	H
+F	deci/n/f	kQ	rightHandRotX	H
+F	deci/n/f	kR	rightHandRotY	H
+F	deci/n/f	kS	rightHandRotZ	H
+F	deci/n/f	kT	leftHandRotX	H
+F	deci/n/f	kU	leftHandRotY	H
+F	deci/n/f	kV	leftHandRotZ	H
+F	deci/n/f	kW	muzzleX	H
+F	deci/n/f	kX	muzzleY	H
+F	deci/n/f	kY	muzzleZ	H
+F	deci/n/f	kZ	ejectX	H
+F	deci/n/f	la	ejectY	H
+F	deci/n/f	lb	ejectZ	H
+F	deci/n/f	lc	offsetX	H
+F	deci/n/f	ld	offsetY	H
+F	deci/n/f	le	offsetZ	H
+F	deci/n/f	fW	scale	H
+F	deci/n/f	lg	displayList	L
+F	deci/n/f	lh	reflectedField	L
+M	deci/n/f	a	(deci.Q.b,deci.n.f)	updateCasings	M
+M	deci/n/f	a	(deci.ay.i,Object[])	renderMuzzleFlash	M
+M	deci/n/f	bm	()	renderParts	H
+M	deci/n/f	a	(Minecraft,deci.ay.i,ItemStack,float)	renderGun	M
+M	deci/n/f	b	(deci.n.b)	renderScopeGlass	M
+M	deci/n/f	a	(Entity)	renderLeftArm	M
+M	deci/n/f	b	(Entity)	renderRightArm	M
+C	deci/n/g	BModelLoader	model	H	Parses .bmodel files: header lines (mOff:, sPos:, flamePos:, lhPos:, lhRot:, rhPos:, rhRot:, Scale:, ejectPos:, textureWidth, textureHeight) then Java style model lines (new ModelRenderer(this,u,v), addBox, addShape, setRotationPoint, setRotation, addChild)
+M	deci/n/g	a	(ResourceLocation)	load	H

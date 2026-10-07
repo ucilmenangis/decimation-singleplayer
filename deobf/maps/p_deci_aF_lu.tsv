@@ -1,0 +1,5 @@
+C	deci/aF/a	AsmHookDecoy	network	M	Empty IASMHook implementation used as an obfuscation decoy; nested class holds the network channel
+C	deci/aF/a$a	AsmHookDecoyInner	network	M	Second empty IASMHook decoy layer
+C	deci/aF/a$a$a	NetworkChannel	network	H	Holds the SimpleNetworkWrapper channel "ctx"; gB() is the global accessor
+F	deci/aF/a$a$a	azq	CHANNEL	H
+M	deci/aF/a$a$a	gB	()	getChannel	H

@@ -1,0 +1,82 @@
+C	net/decimation/mod/common/utils/a	InventoryUtils	util	H	Inventory helpers: find empty slot, merge an ItemStack into a player inventory with crash report details, hotbar checks
+M	net/decimation/mod/common/utils/a	b	(InventoryPlayer)	findLastEmptySlot	H
+M	net/decimation/mod/common/utils/a	a	(ItemStack,InventoryPlayer)	addToInventory	H
+M	net/decimation/mod/common/utils/a	b	(ItemStack,InventoryPlayer)	storePartialStack	H
+M	net/decimation/mod/common/utils/a	c	(ItemStack,InventoryPlayer)	findStackableSlot	H
+M	net/decimation/mod/common/utils/a	d	(EntityPlayer,ItemStack)	hasOtherItemInHotbar	L
+C	net/decimation/mod/common/utils/a$a	ItemNameCallable	util	M	Callable returning an ItemStack display name for crash reports
+F	net/decimation/mod/common/utils/a$a	azs	stack	H
+F	net/decimation/mod/common/utils/a$a	azt	inventory	H
+M	net/decimation/mod/common/utils/a$a	gC	()	getItemName	H
+C	net/decimation/mod/common/utils/b	TickScheduler	util	H	Tick driven task queue (an ExecutorService): gD() server instance ticked by ServerTickHandler, gE() client instance ticked by ClientEventHandler; supports delayed and repeating tasks
+F	net/decimation/mod/common/utils/b	azu	SERVER	H
+F	net/decimation/mod/common/utils/b	azv	CLIENT	H
+F	net/decimation/mod/common/utils/b	azw	pending	H
+F	net/decimation/mod/common/utils/b	azx	active	H
+M	net/decimation/mod/common/utils/b	gD	()	server	H
+M	net/decimation/mod/common/utils/b	gE	()	client	H
+M	net/decimation/mod/common/utils/b	a	(Side)	forSide	H
+M	net/decimation/mod/common/utils/b	a	(net.decimation.mod.common.utils.b.a)	runTask	H
+M	net/decimation/mod/common/utils/b	a	(Runnable,long)	schedule	H
+M	net/decimation/mod/common/utils/b	b	(net.decimation.mod.common.utils.b.a)	submit	H
+C	net/decimation/mod/common/utils/b$a	ScheduledTask	util	H	Task interface: execute() returns true while it should keep running
+C	net/decimation/mod/common/utils/b$b	DelayedTask	util	H	Runs a Runnable once after N ticks
+F	net/decimation/mod/common/utils/b$b	azy	runnable	H
+F	net/decimation/mod/common/utils/b$b	azz	remainingTicks	H
+C	net/decimation/mod/common/utils/b$c	ImmediateTask	util	H	Runs a Runnable on the next tick
+F	net/decimation/mod/common/utils/b$c	azA	runnable	H
+C	net/decimation/mod/common/utils/c	ResourceFiles	util	M	Resolves files from the classpath or assets/deci/
+M	net/decimation/mod/common/utils/c	N	(String)	getResourceFile	H
+M	net/decimation/mod/common/utils/c	O	(String)	getAssetFile	H
+C	net/decimation/mod/common/utils/d	ItemStackUtils	util	H	ItemStack helpers (copy, equality, merging, parsing "NxItem@meta" strings into stacks and predicates, NBT access)
+M	net/decimation/mod/common/utils/d	R	(ItemStack)	copy	H
+M	net/decimation/mod/common/utils/d	c	(ItemStack,ItemStack)	areEqual	H
+M	net/decimation/mod/common/utils/d	d	(ItemStack,ItemStack)	sameItemAndMeta	H
+M	net/decimation/mod/common/utils/d	e	(ItemStack,ItemStack)	areEqualIgnoringSize	M
+M	net/decimation/mod/common/utils/d	S	(ItemStack)	hashStack	H
+M	net/decimation/mod/common/utils/d	P	(String)	parseStack	H
+M	net/decimation/mod/common/utils/d	Q	(String)	parsePredicate	H
+M	net/decimation/mod/common/utils/d	c	(List)	anyOf	H
+M	net/decimation/mod/common/utils/d	R	(String)	parseCount	H
+M	net/decimation/mod/common/utils/d	S	(String)	parseItem	H
+M	net/decimation/mod/common/utils/d	f	(String,int)	parseIntOr	H
+M	net/decimation/mod/common/utils/d	f	(ItemStack,ItemStack)	canMerge	H
+M	net/decimation/mod/common/utils/d	g	(ItemStack,ItemStack)	canMergeFully	H
+M	net/decimation/mod/common/utils/d	h	(ItemStack,ItemStack)	merge	H
+M	net/decimation/mod/common/utils/d	a	(ItemStack,ItemStack,boolean)	merge	H
+M	net/decimation/mod/common/utils/d	T	(ItemStack)	getBlock	H
+M	net/decimation/mod/common/utils/d	U	(ItemStack)	nullIfEmpty	H
+M	net/decimation/mod/common/utils/d	V	(ItemStack)	copyOne	H
+M	net/decimation/mod/common/utils/d	j	(ItemStack,int)	copyWithSize	H
+M	net/decimation/mod/common/utils/d	W	(ItemStack)	getOrCreateTag	H
+M	net/decimation/mod/common/utils/d	a	(ItemStack,String)	getOrCreateSubTag	H
+C	net/decimation/mod/common/utils/d$a	ItemParseException	util	H	Exception thrown by the item string parser
+C	net/decimation/mod/common/utils/e	MathUtils	util	H	Fast atan2 lookup, random int in range, percentage, and gF() random 40 bit base32 id used as item uniqueID
+M	net/decimation/mod/common/utils/e	b	(float,float)	atan2Deg	H
+M	net/decimation/mod/common/utils/e	c	(float,float)	atan2DegExact	H
+M	net/decimation/mod/common/utils/e	d	(float,float)	fastAtan2	H
+M	net/decimation/mod/common/utils/e	a	(int,int,Random)	randomInRange	H
+M	net/decimation/mod/common/utils/e	gF	()	newUniqueId	H
+M	net/decimation/mod/common/utils/e	e	(float,float)	percent	H
+C	net/decimation/mod/common/utils/f	StaffRankNames	util	H	Maps a staff rank id to Player/Staff/Developer/Unknown
+M	net/decimation/mod/common/utils/f	as	(int)	getRankName	H
+C	net/decimation/mod/common/utils/g	FortificationBlocks	block	H	isFortification(Block): sandbags, metal wall, concertina wire, cocaine stack, storage crate (blocks players may place/break in turfs)
+M	net/decimation/mod/common/utils/g	e	(Block)	isFortification	H
+C	net/decimation/mod/common/utils/h	UpdateChecker	management	H	Version check against GitHub latestversion.txt (every 1200 ticks), self updater download/move, update GUI; also requires mods/DecimationVoiceChat.jar
+F	net/decimation/mod/common/utils/h	azL	downloadUrl	L
+F	net/decimation/mod/common/utils/h	azM	downloadPercent	H
+F	net/decimation/mod/common/utils/h	azN	downloading	M
+F	net/decimation/mod/common/utils/h	azO	downloadedBytes	L
+F	net/decimation/mod/common/utils/h	azP	totalBytes	L
+F	net/decimation/mod/common/utils/h	azQ	latestVersion	H
+F	net/decimation/mod/common/utils/h	azR	downloadDone	M
+F	net/decimation/mod/common/utils/h	azS	intS	L
+F	net/decimation/mod/common/utils/h	azT	checkCountdown	H
+F	net/decimation/mod/common/utils/h	azU	checkInProgress	H
+M	net/decimation/mod/common/utils/h	gG	()	getLatestVersion	H
+M	net/decimation/mod/common/utils/h	gH	()	tickVersionCheck	H
+M	net/decimation/mod/common/utils/h	gI	()	isUpdateRequired	H
+M	net/decimation/mod/common/utils/h	d	(String,String)	serverUpdate	M
+M	net/decimation/mod/common/utils/h	e	(String,String)	downloadUpdate	M
+M	net/decimation/mod/common/utils/h	gJ	()	openUpdateScreen	M
+M	net/decimation/mod/common/utils/h	gK	()	requestLatestVersionFromNetwork	H

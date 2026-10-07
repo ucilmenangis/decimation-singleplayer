@@ -1,0 +1,12 @@
+C	deci/E/a	StanceEntityRenderer	render	H	EntityRenderer subclass swapped in while crouched or prone to lower the camera by an eye offset (uses reflection on private renderer fields)
+F	deci/E/a	QD	eyeOffset	H
+F	deci/E/a	QE	prevEyeOffset	M
+F	deci/E/a	QF	reflectedFieldA	L
+F	deci/E/a	QG	reflectedFieldB	L
+F	deci/E/a	QH	reflectedFieldC	L
+F	deci/E/a	QI	reflectedFieldD	L
+F	deci/E/a	QJ	reflectedFieldE	L
+F	deci/E/a	QK	fieldsResolved	L
+F	deci/E/a	ER	floatR	L
+F	deci/E/a	QL	flagL	L
+M	deci/E/a	bs	()	smoothEyeOffset	M

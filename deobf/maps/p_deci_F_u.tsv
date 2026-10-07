@@ -1,0 +1,24 @@
+C	deci/F/a	GunAnimation	render	H	Keyframe gun animation loaded from deci:animations/<gun>/<gun><Name>.anib (length, hand, frames with positions/rotations, sounds, shake, frame skip, STATIC); cached per ResourceLocation
+F	deci/F/a	QM	cache	H
+F	deci/F/a	QN	soundFrames	M
+F	deci/F/a	QO	hand	H
+F	deci/F/a	QP	frames	H
+F	deci/F/a	QQ	currentFrame	H
+F	deci/F/a	Rn	isRackAnimation	M
+F	deci/F/a	Ro	isStatic	H
+M	deci/F/a	b	(ResourceLocation)	get	H
+M	deci/F/a	c	(ResourceLocation)	load	H
+M	deci/F/a	a	(ModelBase,deci.ay.i)	apply	M
+C	deci/F/b	AnimationFrame	render	H	One frame of a GunAnimation: gun and hand transforms, part poses, and event flags (frame skip, unload/load ammo triggers, loop until full, rack)
+F	deci/F/b	Rp	loopUntilFull	M
+F	deci/F/b	Rq	loopTargetFrame	M
+F	deci/F/b	Rr	skipFrame	H
+F	deci/F/b	Rs	flagS	L
+F	deci/F/b	Rt	triggerUnload	M
+F	deci/F/b	Ru	triggerLoad	M
+F	deci/F/b	Rv	needsRack	M
+F	deci/F/b	Rw	partPoses	H
+C	deci/F/c	Easing	render	H	Interpolation helpers: lerp and an easing curve
+M	deci/F/c	c	(float,float,float)	lerp	H
+M	deci/F/c	i	(float)	ease	M
+C	deci/F/d	PartPose	render	H	Named model part position and rotation inside an animation frame

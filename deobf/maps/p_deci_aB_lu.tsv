@@ -1,0 +1,36 @@
+C	deci/aB/a	IntRange	loot	H	Integer range [lower, upper) with random pick; an(n) builds the range 1..n
+F	deci/aB/a	aeX	lower	H
+F	deci/aB/a	aeY	upper	H
+M	deci/aB/a	an	(int)	upTo	H
+M	deci/aB/a	b	(Random)	pick	H
+C	deci/aB/b	LootCloseCallback	loot	H	Implemented by loot blocks that react when the player closes the loot GUI (called from LootInteractHandler)
+M	deci/aB/b	a	(EntityPlayer,World,int,int,int)	onLootClosed	M
+C	deci/aB/c	LootPool	loot	H	Rolls weighted entries (item getLootChance, default 0.9) into random free slots of an inventory and clears the rest
+F	deci/aB/c	aeZ	rolls	H
+F	deci/aB/c	afa	entries	H
+F	deci/aB/c	afb	sound	H
+M	deci/aB/c	ga	()	getSound	H
+M	deci/aB/c	a	(IInventory)	fillInventory	H
+C	deci/aB/d	LootEntry	loot	H	An ItemStack plus a stack size range
+F	deci/aB/d	afc	countRange	H
+M	deci/aB/d	c	(Random)	roll	H
+C	deci/aB/e	LootCooldownRegistry	loot	H	Per dimension map of packed block position to last looted time; ready again after lootRespawnTime seconds
+F	deci/aB/e	afd	byDimension	H
+F	deci/aB/e	afe	X_BITS	H
+F	deci/aB/e	aff	Z_BITS	H
+F	deci/aB/e	afg	Y_BITS	H
+F	deci/aB/e	afh	Z_SHIFT	M
+F	deci/aB/e	afi	X_SHIFT	H
+F	deci/aB/e	afj	X_MASK	H
+F	deci/aB/e	afk	Y_MASK	H
+F	deci/aB/e	afl	Z_MASK	H
+F	deci/aB/e	afm	lastLootTimes	H
+M	deci/aB/e	d	(World)	forWorld	H
+M	deci/aB/e	j	(int,int,int)	packPos	H
+M	deci/aB/e	k	(int,int,int)	isReady	H
+M	deci/aB/e	l	(int,int,int)	markLooted	H
+C	deci/aB/f	WeightedRandom	util	H	Weighted random selection over a cumulative TreeMap
+F	deci/aB/f	afn	entries	H
+F	deci/aB/f	XS	random	H
+F	deci/aB/f	afo	totalWeight	H
+M	deci/aB/f	a	(double,E)	add	H

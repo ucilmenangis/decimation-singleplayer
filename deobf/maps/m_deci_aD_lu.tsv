@@ -1,0 +1,59 @@
+C	deci/aD/a	IRegistry	core	H	Interface every registry implements: init()
+C	deci/aD/b	ArmorMaterials	armor	H	Armor materials Civilian, BulletProof, BlastProof, BasicProtection
+F	deci/aD/b	afw	civilian	H
+F	deci/aD/b	afx	bulletProof	H
+F	deci/aD/b	afy	blastProof	H
+F	deci/aD/b	afz	basicProtection	H
+C	deci/aD/c	BlockRegistry	block	M	Master block registry: doors, supply drop (afA) and the sub registries for props, office walls, decals, sound blocks
+F	deci/aD/c	afA	supplyDrop	H
+F	deci/aD/c	agj	propBlocks	M
+F	deci/aD/c	agk	officeBlocks	M
+F	deci/aD/c	agl	soundBlocks	M
+F	deci/aD/c	agm	decalBlocks	M
+C	deci/aD/d	OfficeBlockRegistry	block	M	Office wall and interior blocks (BlockWallOffice_*)
+C	deci/aD/e	DecalBlockRegistry	block	M	Flat decal blocks: hazard signs, blood splats
+C	deci/aD/f	SoundBlockRegistry	block	M	Ambient sound emitter blocks (car alarm, street alarm)
+C	deci/aD/g	PropBlockRegistry	block	H	Registers the ~163 prop blocks (pumps, fountains, generators, furniture, street props)
+C	deci/aD/h	DamageSources	core	H	Every custom DamageSource the mod uses
+F	deci/aD/h	akT	thirst	H
+F	deci/aD/h	akU	infected	H
+F	deci/aD/h	akV	bleeding	H
+F	deci/aD/h	akW	irradiated	H
+F	deci/aD/h	akX	gun	H
+F	deci/aD/h	akY	suicideVest	H
+F	deci/aD/h	akZ	despawning	H
+F	deci/aD/h	ala	landMine	H
+F	deci/aD/h	alb	punjiSticks	H
+F	deci/aD/h	alc	barbedWire	H
+F	deci/aD/h	ald	fuelBurn	H
+F	deci/aD/h	ale	tearGas	H
+F	deci/aD/h	alf	propellerTrap	H
+F	deci/aD/h	alg	turret	H
+F	deci/aD/h	alh	human	H
+F	deci/aD/h	ali	vehicle	H
+F	deci/aD/h	alj	tankShell	H
+F	deci/aD/h	alk	customExplosion	H
+C	deci/aD/i	EntityRegistryDeci	entity	H	Registers every entity (Infected, crawler, Hulk, dog, NPCs, vehicles, projectiles)
+F	deci/aD/i	alm	nextEntityId	H
+M	deci/aD/i	gc	()	nextEntityId	H
+C	deci/aD/j	EmptyRegistryJ	misc	L	Registry with an empty init()
+C	deci/aD/k	ItemRegistry	item	H	Registers every item: bottlecaps, guns, magazines, ammo boxes, armor, consumables
+M	deci/aD/k	gd	()	registerAmmoTypes	M
+M	deci/aD/k	ge	()	registerMagazines	M
+M	deci/aD/k	gf	()	registerAmmoBoxes	H
+M	deci/aD/k	gg	()	registerGuns	H
+C	deci/aD/l	LootTableRegistry	loot	H	Hardcoded Block -> loot pool table (the crate loot)
+F	deci/aD/l	afq	poolsByBlock	H
+M	deci/aD/l	c	(Block)	getPool	H
+M	deci/aD/l	d	(Block)	hasPool	H
+M	deci/aD/l	gh	()	buildLootTables	H
+C	deci/aD/m	CustomMaterials	block	M	Custom block Material(s)
+C	deci/aD/n	NetworkMessageRegistry	network	H	Registers every SimpleNetworkWrapper message both sides
+F	deci/aD/n	awE	lastMessageId	M
+M	deci/aD/n	gi	()	nextMessageId	M
+C	deci/aD/o	EmptyRegistryO	misc	L	Class with an empty init()
+C	deci/aD/p	IdHelper	util	L	Single static int helper aq(int)
+C	deci/aD/q	SkinRegistry	weapon	M	Weapon skin (spray can) items per gun
+F	deci/aD/q	awF	allSkins	M
+C	deci/aD/r	CreativeTabRegistry	item	M	Creative tabs
+C	deci/aD/s	TileEntityRegistry	tileentity	H	Registers every tile entity (wreckage, crates, props)

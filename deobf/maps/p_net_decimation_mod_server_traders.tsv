@@ -1,0 +1,7 @@
+C	net/decimation/mod/server/traders/a	TraderSpawnManager	trader	H	Trader NPC placement from decimation_traders.json: removes all trader entities and respawns one per saved position (run every 3000 server ticks)
+M	net/decimation/mod/server/traders/a	hf	()	readTradersFile	H
+M	net/decimation/mod/server/traders/a	a	(int,int,int,EnumTraderType)	addTrader	H
+M	net/decimation/mod/server/traders/a	d	(MinecraftServer)	spawnTraders	H
+M	net/decimation/mod/server/traders/a	e	(MinecraftServer)	removeTraders	H
+M	net/decimation/mod/server/traders/a	f	(MinecraftServer)	respawnTraders	H
+M	net/decimation/mod/server/traders/a	a	(double,double,double,MinecraftServer,EntityPlayer)	removeTraderNear	M

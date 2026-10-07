@@ -1,0 +1,101 @@
+C	deci/d/a	ButtonLayoutUtil	gui	L	Static helpers laying out a list of GuiButtons
+C	deci/d/b	MenuPanel	gui	M	Base menu panel widget with its own button list and drawing
+C	deci/d/c	ArticlePanel	gui	M	Menu panel showing a news article with a clickable URL
+C	deci/d/d	DeciButton	gui	M	Custom GuiButton (text, item icon or texture)
+C	deci/d/e	DeciButtonHover	gui	L	Custom GuiButton variant with hover sound and texture
+C	deci/d/f	DeciMenuButton	gui	M	Main menu button style (red background texture)
+C	deci/d/g	OptionButton	gui	M	Button bound to a GameSettings option
+C	deci/d/h	OptionSlider	gui	M	Slider bound to a GameSettings option
+C	deci/d/i	DeciScreen	gui	M	Base GuiScreen holding menu panels
+C	deci/d/j	DeciSubScreen	gui	L	Abstract sub screen with a parent screen
+C	deci/d/k	SupporterOnlyScreen	gui	M	Screen telling non supporters a feature is locked
+C	deci/d/l	ScrollPanel	gui	L	Scrollable panel constants and layout
+C	deci/d/m	PanelElement	gui	L	Abstract element inside a panel
+C	deci/d/n	ImageElement	gui	L	Panel element drawing a named texture
+C	deci/d/o	TextElement	gui	L	Panel element drawing formatted text
+C	deci/d/p	ListElement	gui	L	Panel element with a list texture
+C	deci/d/q	TextInputScreen	gui	L	Abstract screen with a text field
+C	deci/d/r	EditStatusScreen	gui	H	Edit your status text (max 36 characters)
+C	deci/d/s	ConfirmScreen	gui	L	Screen with fixed button ids 200 and 201
+C	deci/d/t	IPanelCallback	gui	L	Interface for panel callbacks
+C	deci/d/u	GuiUtilU	gui	L	Unclear GUI helper
+C	deci/f/a	WeaponModifyContainer	gui	H	Container for the weapon attachment table (barrel, sight)
+C	deci/f/b	BackpackContainer	gui	L	Container over a custom inventory with type/size
+C	deci/f/c	PlayerCraftingContainer	gui	M	Player inventory with a 2x2 crafting grid
+C	deci/f/d	PlayerGearContainer	gui	L	Container for player gear (vest/backpack slots)
+C	deci/f/e	LootContainer	gui	L	Container keyed by UUID (loot or storage)
+C	deci/f/f	ContainerKind	gui	L	Enum (ITEMS)
+C	deci/f/g	BackpackInventory	gui	L	InventoryBasic backing a backpack
+C	deci/f/h	PlayerGearInventory	gui	L	InventoryBasic for player gear
+C	deci/f/i	PlayerExtraInventory	gui	L	InventoryBasic tied to a player
+C	deci/f/j	UuidInventory	gui	L	InventoryBasic keyed by UUID
+C	deci/f/k	FilteredSlot	gui	L	Slot restricted by an index/type
+C	deci/f/l	KindSlot	gui	L	Slot restricted to a ContainerKind
+C	deci/b/a	FakeClientPlayer	render	L	Abstract EntityPlayer used for menu previews
+C	deci/b/b	ToastNotification	hud	M	Sliding HUD notification
+C	deci/b/c	ClientResources	core	M	Texture, sound and URL constants
+C	deci/b/d	TipPopup	hud	M	Sliding tips popup, remembers shown tips in a local file
+C	deci/b/e	UpdaterLauncher	util	M	Launches deci-updater.jar (dead BoehMod updater)
+C	deci/b/f	ClientConfigLoader	config	H	Reads decimation_client.properties
+C	deci/b/g	ClientEmptyB	misc	L	Empty class
+C	deci/b/h	SmoothSwingThread	render	H	Thread advancing the weapon sway clock (ClientState.bz) at 60 Hz
+F	deci/b/h	bn	lastNanos	H
+F	deci/b/h	bo	pendingTicks	H
+C	deci/b/i	ClientState	core	H	Huge static client state holder
+F	deci/b/i	bz	swayClock	H
+C	deci/b/j	ClientStats	core	L	Static client counters and timers
+C	deci/e/a	MenuPreviewPlayer	gui	M	Player model for the main menu preview
+C	deci/e/b	MenuPreviewWorld	gui	M	Holds the preview player and its fake world
+C	deci/e/c	MenuPreviewRenderer	gui	M	RenderPlayer for the menu preview
+C	deci/e/d	MenuFakeWorld	gui	M	Dummy World for the menu preview
+C	deci/am/a	StringEnumA	misc	L	Enum with string values
+C	deci/am/b	InfectedVariant	entity	H	COMMON, MILITARY, POLICE infected variants
+C	deci/am/c	StringEnumC	misc	L	Enum with string values
+C	deci/am/d	HumanityRank	player	L	Enum including HERO
+C	deci/ao/a	ILootable	item	L	Marker interface for items
+C	deci/ao/b	DescribedItem	item	L	Item with description, type and a numeric property
+C	deci/ao/c	OwnedItem	item	M	Item base with loot chance and owner tagging on update
+C	deci/ao/d	LootChanceItem	item	M	Item base with a loot chance
+C	deci/R/a	DeciBlock	block	M	Base Block with custom metal sound types
+C	deci/R/b	DeciBlockAbstract	block	L	Abstract DeciBlock
+C	deci/R/c	BlockMapBarrier	block	H	Invisible map barrier
+C	deci/R/d	BlockMapBarrierInfected	block	H	Map barrier for infected only
+C	deci/R/e	BlockMapBarrierPlayer	block	H	Map barrier for players only
+C	deci/R/f	DeciTexturedBlock	block	L	Block with 5 icons
+C	deci/R/g	DeciTexturedBlockAbstract	block	L	Abstract variant with 5 icons
+C	deci/R/h	ContainerBlockH	block	L	BlockContainer (pickaxe)
+C	deci/R/i	ContainerBlockI	block	L	BlockContainer (pickaxe)
+C	deci/R/j	ContainerBlockJ	block	L	BlockContainer (pickaxe)
+C	deci/R/k	ContainerBlockK	block	L	BlockContainer (pickaxe)
+C	deci/R/l	ContainerBlockL	block	L	BlockContainer (pickaxe)
+C	deci/R/m	ContainerBlockM	block	L	BlockContainer (pickaxe)
+C	deci/T/a	BlockConcertinaWire	block	H	Concertina wire
+C	deci/T/b	BlockMetalWall	block	H	Metal wall
+C	deci/T/c	BlockPackagedCocaineStack	block	H	Stack of packaged cocaine
+C	deci/T/d	BlockSandbagStack	block	H	Green sandbag stack
+C	deci/T/e	BlockSandbagStackBeige	block	H	Beige sandbag stack
+C	deci/T/f	BlockStorageCrate	block	H	Storage crate (chest based)
+C	deci/W/a	MultiblockPart	block	L	Abstract multiblock part with master coordinates
+C	deci/W/b	IMultiblockB	block	L	Multiblock interface
+C	deci/W/c	IMultiblockC	block	L	Multiblock interface
+C	deci/W/d	IMultiblockD	block	L	Multiblock interface
+C	deci/W/e	MultiblockHelper	block	L	Multiblock helper
+C	deci/W/f	IMultiblockF	block	L	Multiblock interface
+C	deci/X/a	IMultiblockXA	block	L	Interface
+C	deci/X/b	IMultiblockXB	block	L	Interface
+C	deci/X/c	IMultiblockXC	block	L	Interface
+C	deci/aI/a	WeatherType	world	H	Abstract dynamic weather type with weighted registry
+C	deci/aI/b	WeatherDefault	world	H	Default (misty) weather
+C	deci/aI/c	WeatherStorm	world	H	Storm weather
+C	deci/j/a	RenderUtil	render	M	Shared GUI render helpers
+C	deci/j/b	GlBufferPool	render	L	Pool of IntBuffers
+C	deci/j/c	TextWrapUtil	render	M	Splits text on [br] / [nl] and width
+C	deci/P/a	DiscordRichPresence	management	M	Discord rich presence and backend shutdown
+C	deci/P/b	DiscordEmptyB	management	L	Empty class
+C	deci/k/a	ServerListEntry	gui	M	Official server list entry (name, ip, port)
+C	deci/k/b	ServerListPinger	gui	M	Pings the hardcoded official servers
+C	deci/aP/a	BackendClient	management	H	KryoNet client to BoehMod's dead backend network
+C	deci/h/a	ScreenshotViewer	gui	M	Shows a screenshot BufferedImage
+C	deci/aK/a	BlockBreakProtectionHandler	event	H	Server: cancels block breaking unless allowed
+C	deci/aJ/a	ServerConfigLoader	config	H	Reads decimation_server.properties
+C	deci/aL/a	LegacyHandlerUnused	event	H	Old copy of the server handlers, never registered (dead code)

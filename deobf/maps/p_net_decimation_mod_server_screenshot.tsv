@@ -1,0 +1,13 @@
+C	net/decimation/mod/server/screenshot/a	ScreenshotTracker	player	H	Per player IExtendedEntityProperties tracking an admin screenshot request: state, timeout (10 s, kicks if unanswered), chunk reassembly into a BufferedImage future
+F	net/decimation/mod/server/screenshot/a	aBi	TIMEOUT_MS	H
+F	net/decimation/mod/server/screenshot/a	aBj	state	H
+F	net/decimation/mod/server/screenshot/a	aBk	deadline	H
+F	net/decimation/mod/server/screenshot/a	ayT	chunks	H
+F	net/decimation/mod/server/screenshot/a	aBl	result	H
+M	net/decimation/mod/server/screenshot/a	z	(EntityPlayer)	get	H
+M	net/decimation/mod/server/screenshot/a	b	(EntityPlayerMP)	register	H
+M	net/decimation/mod/server/screenshot/a	hd	()	getState	H
+M	net/decimation/mod/server/screenshot/a	he	()	requestScreenshot	H
+M	net/decimation/mod/server/screenshot/a	a	(int,int,ByteBuf)	receiveChunk	H
+M	net/decimation/mod/server/screenshot/a	s	(long)	checkTimeout	H
+C	net/decimation/mod/server/screenshot/a$a	ScreenshotState	player	H	IDLE or waiting states of a screenshot request

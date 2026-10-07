@@ -1,0 +1,7 @@
+C	deci/L/a	ClientContext	core	M	Static snapshot of the client Minecraft, player, world and PlayerData for render helpers
+F	deci/L/a	J	mod	H
+F	deci/L/a	TV	mc	H
+F	deci/L/a	TW	player	H
+F	deci/L/a	TX	world	H
+F	deci/L/a	TY	playerData	H
+M	deci/L/a	d	(Minecraft)	update	H

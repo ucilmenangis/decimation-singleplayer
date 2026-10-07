@@ -1,0 +1,347 @@
+C	deci/Q/a	ClientConfig	config	H	Reads decimation.properties (allowVanillaMonsters)
+M	deci/Q/a	C	()	loadProperties	H
+F	deci/Q/a	Uj	properties	L
+C	deci/Q/c	DeciConstants	core	H	GUI ids, BoehMod web base URLs, global stats, network reconnect timer
+F	deci/Q/c	WX	guiIdCounter	H
+F	deci/Q/c	WY	GUI_KEYPAD_LOCK	H
+F	deci/Q/c	WZ	GUI_NPC_DIALOGUE	M
+F	deci/Q/c	Xa	GUI_LOOT	H
+F	deci/Q/c	Xb	GUI_BANKER	H
+F	deci/Q/c	Xc	GUI_ATTACHMENTS	H
+F	deci/Q/c	Xd	GUI_CRAFTING	H
+F	deci/Q/c	Xe	GUI_LIST_SCREEN	L
+F	deci/Q/c	Xf	GUI_INSPECT_BANKER	M
+F	deci/Q/c	Xg	allowVanillaMonsters	H
+F	deci/Q/c	Xh	boehmodBaseUrl	H
+F	deci/Q/c	Xi	serverFilesUrl	H
+F	deci/Q/c	Xj	globalHumanDeaths	H
+F	deci/Q/c	Xk	globalZombieDeaths	H
+F	deci/Q/c	Xl	networkReconnectCountdown	H
+F	deci/Q/c	Xm	networkReconnectInterval	H
+C	deci/Q/b	PlayerData	player	H	IExtendedEntityProperties for every player: conditions, thirst, blood, humanity, currency, stance, recoil, extra armor slots, stats, sync
+C	deci/Q/b$a	HumanityRank	player	H	Humanity tier with lang key, colour and chat colour (hero, survivor, bandit)
+F	deci/Q/b$a	WW	chatColor	H
+M	deci/Q/b$a	dp	()	getDisplayName	M
+M	deci/Q/b$a	dq	()	getLocalizedName	M
+F	deci/Q/b	Uk	MAX_WATER	M
+F	deci/Q/b	Ul	MAX_BLOOD	M
+F	deci/Q/b	Um	BLEED_INTERVAL	M
+F	deci/Q/b	Un	DAMAGE_INTERVAL	L
+F	deci/Q/b	Uo	THIRST_INTERVAL	M
+F	deci/Q/b	Up	INVENTORY_SYNC_INTERVAL	M
+F	deci/Q/b	Uq	BLEED_DAMAGE_INTERVAL	L
+F	deci/Q/b	Ur	KEY_HUMANITY	H
+F	deci/Q/b	Us	KEY_BROKEN_LEG	H
+F	deci/Q/b	Ut	KEY_INFECTED	H
+F	deci/Q/b	Uu	KEY_BLEEDING	H
+F	deci/Q/b	Uv	KEY_IRRADIATED	H
+F	deci/Q/b	Uw	KEY_SCARY	H
+F	deci/Q/b	Ux	KEY_HOLSTERED	H
+F	deci/Q/b	Uy	KEY_SPECTATING	H
+F	deci/Q/b	Uz	KEY_WATER	H
+F	deci/Q/b	UA	KEY_BLOOD	H
+F	deci/Q/b	UB	KEY_RADIO	H
+F	deci/Q/b	UC	KEY_BOTTLECAPS	H
+F	deci/Q/b	UD	KEY_GOLD_BOTTLECAPS	H
+F	deci/Q/b	UE	KEY_POS1_X	H
+F	deci/Q/b	UF	KEY_POS1_Y	H
+F	deci/Q/b	UG	KEY_POS1_Z	H
+F	deci/Q/b	UH	KEY_POS2_X	H
+F	deci/Q/b	UI	KEY_POS2_Y	H
+F	deci/Q/b	UJ	KEY_POS2_Z	H
+F	deci/Q/b	UK	KEY_PARACHUTE	H
+F	deci/Q/b	UL	KEY_GLIDER	H
+F	deci/Q/b	UM	KEY_TOUCHED_GROUND	H
+F	deci/Q/b	UN	KEY_GESTURE	H
+F	deci/Q/b	UO	KEY_PICKUP_TIMER	H
+F	deci/Q/b	UP	KEY_STEP_TIMER	H
+F	deci/Q/b	UQ	KEY_PVP_TIMER	H
+F	deci/Q/b	UR	KEY_FIRST_LOGIN	H
+F	deci/Q/b	US	KEY_TARGET_SCORE	H
+F	deci/Q/b	UT	KEY_TARGET_TIMER	H
+F	deci/Q/b	UU	KEY_TARGET_CURRENT	H
+F	deci/Q/b	UV	KEY_TARGET_LAST_ENTITY	H
+F	deci/Q/b	UW	KEY_EMBLEM_ID	H
+F	deci/Q/b	UX	KEY_SUPPORTER	H
+F	deci/Q/b	UY	KEY_STANCE	H
+F	deci/Q/b	UZ	KEY_TYPING	H
+F	deci/Q/b	Va	KEY_TYPING_STATUS	H
+F	deci/Q/b	Vb	KEY_CAPE_ID	H
+F	deci/Q/b	Vc	KEY_ENABLE_CAPE	H
+F	deci/Q/b	Vd	KEY_CLAN_NAME	H
+F	deci/Q/b	Ve	KEY_BOUNTY	H
+F	deci/Q/b	Vf	KEY_CLAN_JOIN_TIME	H
+F	deci/Q/b	Vg	KEY_PLAYER_KILLS	H
+F	deci/Q/b	Vh	KEY_ZOMBIE_KILLS	H
+F	deci/Q/b	Vi	KEY_PLAYER_DEATHS	H
+F	deci/Q/b	Vj	KEY_DAYS_SURVIVED	H
+F	deci/Q/b	Vk	LONG_TIMER_MS	L
+F	deci/Q/b	Vl	SHORT_TIMER_MS	L
+F	deci/Q/b	Vm	network	H
+F	deci/Q/b	Vn	STANCE_SPEED_MODIFIER_UUID	H
+F	deci/Q/b	J	mod	H
+F	deci/Q/b	Vo	maxBottlecaps	H
+F	deci/Q/b	Vp	unknownIntA	L
+F	deci/Q/b	Vq	unknownIntB	L
+F	deci/Q/b	Vr	loggedOutCleanly	H
+F	deci/Q/b	Vs	unusedLong	L
+F	deci/Q/b	Vt	syncTickCounter	H
+F	deci/Q/b	Vu	currentAnimation	M
+F	deci/Q/b	Vv	savedRegenRule	H
+F	deci/Q/b	Vw	creativeFlag	M
+F	deci/Q/b	Vx	lastSneaking	H
+F	deci/Q/b	Vy	floatA	L
+F	deci/Q/b	Vz	floatB	L
+F	deci/Q/b	VA	floatC	L
+F	deci/Q/b	VB	lastHeldItem	H
+F	deci/Q/b	VC	previousStance	H
+F	deci/Q/b	VD	recoilYaw	M
+F	deci/Q/b	VE	recoilPitch	M
+F	deci/Q/b	VF	recoilRecovery	M
+F	deci/Q/b	VG	shotCounter	L
+F	deci/Q/b	VH	isFiring	L
+F	deci/Q/b	VI	aimMode	M
+F	deci/Q/b	VJ	clientCooldown	L
+F	deci/Q/b	VK	clapSoundCooldown	H
+F	deci/Q/b	VL	juggernautStepTimer	H
+F	deci/Q/b	VM	combatTimer	H
+F	deci/Q/b	VN	flagN	L
+F	deci/Q/b	VO	backpack	H
+F	deci/Q/b	VP	mask	H
+F	deci/Q/b	VQ	vest	H
+F	deci/Q/b	VR	pendingRecoilShots	M
+F	deci/Q/b	VS	lootInventory	H
+F	deci/Q/b	VT	bankerItems	H
+F	deci/Q/b	VU	gesture	H
+F	deci/Q/b	VV	radioValue	L
+F	deci/Q/b	VW	water	H
+F	deci/Q/b	VX	thirstTimer	H
+F	deci/Q/b	VY	inventorySyncTimer	H
+F	deci/Q/b	VZ	blood	H
+F	deci/Q/b	Wa	bleedTimer	H
+F	deci/Q/b	Wb	bottlecaps	H
+F	deci/Q/b	Wc	goldBottlecaps	H
+F	deci/Q/b	Wd	humanity	H
+F	deci/Q/b	We	humanityResetValue	M
+F	deci/Q/b	Wf	brokenLeg	H
+F	deci/Q/b	Wg	infected	H
+F	deci/Q/b	Wh	bleeding	H
+F	deci/Q/b	Wi	irradiated	H
+F	deci/Q/b	Wj	scarySaved	M
+F	deci/Q/b	Wk	holstered	H
+F	deci/Q/b	Wl	spectating	H
+F	deci/Q/b	Wm	lastActionTime	L
+F	deci/Q/b	Wn	pos1X	H
+F	deci/Q/b	Wo	pos1Y	H
+F	deci/Q/b	Wp	pos1Z	H
+F	deci/Q/b	Wq	pos2X	H
+F	deci/Q/b	Wr	pos2Y	H
+F	deci/Q/b	Ws	pos2Z	H
+F	deci/Q/b	Wt	pickupTimer	H
+F	deci/Q/b	Wu	stance	H
+F	deci/Q/b	Wv	actionDelay	M
+F	deci/Q/b	Ww	recoilAnimCooldown	M
+F	deci/Q/b	Wx	inScaryZone	H
+F	deci/Q/b	Wy	parachuting	H
+F	deci/Q/b	Wz	gliding	H
+F	deci/Q/b	WA	targetBestScore	H
+F	deci/Q/b	WB	targetTimer	H
+F	deci/Q/b	WC	nightVisionActive	H
+F	deci/Q/b	WD	targetScore	H
+F	deci/Q/b	WE	targetLastEntity	H
+F	deci/Q/b	WF	typing	H
+F	deci/Q/b	WG	typingStatus	H
+F	deci/Q/b	WH	countdownH	L
+F	deci/Q/b	WI	emblemId	H
+F	deci/Q/b	WJ	bounty	H
+F	deci/Q/b	WK	clanJoinTime	H
+F	deci/Q/b	WL	hasTouchedGround	H
+F	deci/Q/b	WM	entityTracker	H
+F	deci/Q/b	WN	countdownN	L
+F	deci/Q/b	WO	daysSurvived	H
+F	deci/Q/b	WP	stanceChangeCooldown	H
+F	deci/Q/b	WQ	dirty	H
+F	deci/Q/b	WR	safezoneGraceTicks	H
+F	deci/Q/b	WS	lastPosX	H
+F	deci/Q/b	WT	lastPosY	H
+F	deci/Q/b	WU	lastPosZ	H
+F	deci/Q/b	WV	inspectedPlayerUUID	M
+M	deci/Q/b	d	(EntityPlayer)	register	H
+M	deci/Q/b	e	(EntityPlayer)	get	H
+M	deci/Q/b	bx	()	tickMovementAndRecoil	M
+M	deci/Q/b	by	()	clientTick	H
+M	deci/Q/b	bz	()	getTargetBestScore	H
+M	deci/Q/b	q	(int)	setTargetBestScore	H
+M	deci/Q/b	bA	()	getTargetTimer	H
+M	deci/Q/b	r	(int)	setTargetTimer	H
+M	deci/Q/b	bB	()	getTargetScore	H
+M	deci/Q/b	s	(int)	setTargetScore	H
+M	deci/Q/b	bC	()	getTargetLastEntity	H
+M	deci/Q/b	t	(int)	setTargetLastEntity	H
+M	deci/Q/b	a	(double)	applyStanceSpeedModifier	H
+M	deci/Q/b	bD	()	tickActionDelay	M
+M	deci/Q/b	bE	()	isPlayingRackAnimation	M
+M	deci/Q/b	b	(ItemStack)	canFireCurrentMode	M
+M	deci/Q/b	bF	()	clearConditions	H
+M	deci/Q/b	bG	()	clearConditionsInternal	H
+M	deci/Q/b	bH	()	healFully	H
+M	deci/Q/b	bI	()	applyBrokenLegEffects	H
+M	deci/Q/b	bJ	()	isParachuting	H
+M	deci/Q/b	c	(boolean)	setParachuting	H
+M	deci/Q/b	bK	()	isGliding	H
+M	deci/Q/b	d	(boolean)	setGliding	H
+M	deci/Q/b	bL	()	getActionDelay	M
+M	deci/Q/b	bM	()	getStance	H
+M	deci/Q/b	u	(int)	setStance	H
+M	deci/Q/b	a	(Block)	isClearForStanceChange	H
+M	deci/Q/b	bN	()	getWater	H
+M	deci/Q/b	v	(int)	setWater	H
+M	deci/Q/b	bO	()	getBlood	H
+M	deci/Q/b	w	(int)	setBlood	H
+M	deci/Q/b	x	(int)	addBlood	H
+M	deci/Q/b	y	(int)	removeBlood	H
+M	deci/Q/b	bP	()	clampBlood	H
+M	deci/Q/b	z	(int)	addWater	H
+M	deci/Q/b	bQ	()	clampWater	H
+M	deci/Q/b	bR	()	getPos1X	H
+M	deci/Q/b	bS	()	getPos1Y	H
+M	deci/Q/b	bT	()	getPos1Z	H
+M	deci/Q/b	bU	()	getPos2X	H
+M	deci/Q/b	bV	()	getPos2Y	H
+M	deci/Q/b	bW	()	getPos2Z	H
+M	deci/Q/b	A	(int)	setPos1X	H
+M	deci/Q/b	B	(int)	setPos1Y	H
+M	deci/Q/b	C	(int)	setPos1Z	H
+M	deci/Q/b	D	(int)	setPos2X	H
+M	deci/Q/b	E	(int)	setPos2Y	H
+M	deci/Q/b	F	(int)	setPos2Z	H
+M	deci/Q/b	bX	()	getGesture	H
+M	deci/Q/b	G	(int)	setGesture	H
+M	deci/Q/b	bY	()	resetHumanity	H
+M	deci/Q/b	bZ	()	getPickupTimer	H
+M	deci/Q/b	H	(int)	setPickupTimer	H
+M	deci/Q/b	ca	()	getGoldBottlecaps	H
+M	deci/Q/b	d	(long)	setGoldBottlecaps	H
+M	deci/Q/b	e	(long)	removeGoldBottlecaps	H
+M	deci/Q/b	f	(long)	addGoldBottlecaps	H
+M	deci/Q/b	cb	()	getBottlecaps	H
+M	deci/Q/b	g	(long)	setBottlecaps	H
+M	deci/Q/b	cc	()	getBounty	H
+M	deci/Q/b	h	(long)	setBounty	H
+M	deci/Q/b	i	(long)	addBounty	H
+M	deci/Q/b	j	(long)	removeBottlecaps	H
+M	deci/Q/b	k	(long)	addBottlecaps	H
+M	deci/Q/b	I	(int)	addHumanity	H
+M	deci/Q/b	J	(int)	removeHumanity	H
+M	deci/Q/b	cd	()	getHumanity	H
+M	deci/Q/b	K	(int)	setHumanity	H
+M	deci/Q/b	ce	()	getHumanityResetValue	M
+M	deci/Q/b	L	(int)	setHumanityResetValue	M
+M	deci/Q/b	l	(long)	setCombatTimer	H
+M	deci/Q/b	cf	()	getCombatTimer	H
+M	deci/Q/b	e	(boolean)	setBrokenLeg	H
+M	deci/Q/b	f	(boolean)	setInfected	H
+M	deci/Q/b	g	(boolean)	setBleeding	H
+M	deci/Q/b	cg	()	isHolstered	H
+M	deci/Q/b	h	(boolean)	setHolstered	H
+M	deci/Q/b	i	(boolean)	setIrradiated	H
+M	deci/Q/b	j	(boolean)	setSpectating	H
+M	deci/Q/b	ch	()	isSpectating	H
+M	deci/Q/b	ci	()	getAimMode	M
+M	deci/Q/b	M	(int)	setAimMode	M
+M	deci/Q/b	cj	()	isLongTimerElapsed	L
+M	deci/Q/b	ck	()	isShortTimerElapsed	L
+M	deci/Q/b	cl	()	hasBrokenLeg	H
+M	deci/Q/b	cm	()	isInfected	H
+M	deci/Q/b	cn	()	isBleeding	H
+M	deci/Q/b	co	()	isIrradiated	H
+M	deci/Q/b	cp	()	isThirsty	H
+M	deci/Q/b	cq	()	markActionTime	L
+M	deci/Q/b	a	(deci.Q.b)	copyFrom	H
+M	deci/Q/b	cr	()	getHumanityRank	H
+M	deci/Q/b	N	(int)	getHumanityRankComponent	H
+M	deci/Q/b	O	(int)	getHumanityRankText	H
+M	deci/Q/b	cs	()	getRecoilPitch	M
+M	deci/Q/b	j	(float)	setRecoilPitch	M
+M	deci/Q/b	ct	()	getRecoilYaw	M
+M	deci/Q/b	k	(float)	setRecoilYaw	M
+M	deci/Q/b	cu	()	getPreviousStance	H
+M	deci/Q/b	P	(int)	setPreviousStance	H
+M	deci/Q/b	cv	()	getBackpack	H
+M	deci/Q/b	c	(ItemStack)	setBackpack	H
+M	deci/Q/b	cw	()	getVest	H
+M	deci/Q/b	d	(ItemStack)	setVest	H
+M	deci/Q/b	cx	()	getMask	H
+M	deci/Q/b	e	(ItemStack)	setMask	H
+M	deci/Q/b	cy	()	getLastHeldItem	H
+M	deci/Q/b	a	(Item)	setLastHeldItem	H
+M	deci/Q/b	cz	()	isFiring	L
+M	deci/Q/b	k	(boolean)	setFiring	L
+M	deci/Q/b	cA	()	getPendingRecoilShots	M
+M	deci/Q/b	Q	(int)	setPendingRecoilShots	M
+M	deci/Q/b	l	(float)	addRecoilPitch	M
+M	deci/Q/b	m	(float)	addRecoilYaw	M
+M	deci/Q/b	cB	()	getShotCounter	L
+M	deci/Q/b	cC	()	resetShotCounter	L
+M	deci/Q/b	cD	()	resetRecoilRecovery	M
+M	deci/Q/b	cE	()	incrementShotCounter	L
+M	deci/Q/b	cF	()	getFlagN	L
+M	deci/Q/b	l	(boolean)	setFlagN	L
+M	deci/Q/b	cG	()	getFloatA	L
+M	deci/Q/b	cH	()	getFloatC	L
+M	deci/Q/b	n	(float)	setFloatC	L
+M	deci/Q/b	cI	()	getFloatB	L
+M	deci/Q/b	cJ	()	getClientCooldown	L
+M	deci/Q/b	cK	()	startClientCooldown	L
+M	deci/Q/b	cL	()	getBankerItems	H
+M	deci/Q/b	a	(ItemStack[])	setBankerItems	H
+M	deci/Q/b	cM	()	getSavedRegenRule	H
+M	deci/Q/b	A	(String)	setSavedRegenRule	H
+M	deci/Q/b	cN	()	getLootInventory	H
+M	deci/Q/b	a	(InventoryBasic)	setLootInventory	H
+M	deci/Q/b	cO	()	getInspectedPlayerUUID	M
+M	deci/Q/b	b	(UUID)	setInspectedPlayerUUID	M
+M	deci/Q/b	o	(float)	setFloatA	L
+M	deci/Q/b	p	(float)	setFloatB	L
+M	deci/Q/b	cP	()	getCreativeFlag	M
+M	deci/Q/b	m	(boolean)	setCreativeFlag	M
+M	deci/Q/b	cQ	()	isInScaryZone	H
+M	deci/Q/b	n	(boolean)	setInScaryZone	H
+M	deci/Q/b	cR	()	isSupporter	H
+M	deci/Q/b	b	(boolean)	setSupporter	H
+M	deci/Q/b	cS	()	syncHotbarGunsToTrackers	H
+M	deci/Q/b	b	(Item)	hasInHotbar	H
+M	deci/Q/b	cT	()	isCapeEnabled	H
+M	deci/Q/b	o	(boolean)	setCapeEnabled	H
+M	deci/Q/b	cU	()	getCapeID	H
+M	deci/Q/b	m	(long)	setCapeID	H
+M	deci/Q/b	cV	()	isTyping	H
+M	deci/Q/b	p	(boolean)	setTyping	H
+M	deci/Q/b	cW	()	hasTouchedGround	H
+M	deci/Q/b	cX	()	markTouchedGround	H
+M	deci/Q/b	cY	()	getClanName	H
+M	deci/Q/b	B	(String)	setClanName	H
+M	deci/Q/b	cZ	()	getEmblemId	H
+M	deci/Q/b	R	(int)	setEmblemId	H
+M	deci/Q/b	da	()	getCountdownN	L
+M	deci/Q/b	S	(int)	setCountdownN	L
+M	deci/Q/b	db	()	getClanJoinTime	H
+M	deci/Q/b	dc	()	resetClanJoinTime	H
+M	deci/Q/b	dd	()	isUnderRoof	H
+M	deci/Q/b	de	()	getNameTag	H
+M	deci/Q/b	df	()	markDirty	H
+M	deci/Q/b	dg	()	getEntityTracker	H
+M	deci/Q/b	dh	()	playArmorEquipSound	H
+M	deci/Q/b	di	()	getStanceChangeCooldown	H
+M	deci/Q/b	dj	()	getDaysSurvived	H
+M	deci/Q/b	n	(long)	setDaysSurvived	H
+M	deci/Q/b	dk	()	getPlayerKills	H
+M	deci/Q/b	o	(long)	setPlayerKills	H
+M	deci/Q/b	dl	()	getZombieKills	H
+M	deci/Q/b	p	(long)	setZombieKills	H
+M	deci/Q/b	dm	()	getPlayerDeaths	H
+M	deci/Q/b	q	(long)	setPlayerDeaths	H
+M	deci/Q/b	dn	()	getSafezoneGraceTicks	H
+M	deci/Q/b	T	(int)	setSafezoneGraceTicks	H
+M	deci/Q/b	do	()	getTypingStatus	H
+M	deci/Q/b	C	(String)	setTypingStatus	H

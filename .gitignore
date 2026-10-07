@@ -1,0 +1,40 @@
+# ---- Closed-source Decimation: never commit (size limit + not ours) ----
+*.jar
+*.jar.*
+Decimation.jar*
+dist/
+dev/libs/
+deobf/src/
+deobf/src_vineflower/
+deobf/*.jar
+deobf/*.srg
+deobf/names.tsv
+deobf/apply_report.txt
+deobf/cs.sparseimage
+*.sparseimage
+*.dmg
+
+# ---- Downloaded / regenerated tools (tools/setup_toolchain.py) ----
+tools/lib/
+
+# ---- Third-party mod archives ----
+WorldGenerator/
+
+# ---- Build output, runs, caches ----
+build/
+dev/build/
+dev/run/
+dev/.gradle/
+dev/.idea/
+graphify-out/cache/
+graphify-out/.graphify_*
+__pycache__/
+*.class
+
+# ---- Personal / OS ----
+.remember/
+.DS_Store
+.claude/
+
+# Gradle wrapper is meant to be committed
+!dev/gradle/wrapper/gradle-wrapper.jar

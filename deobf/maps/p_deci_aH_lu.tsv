@@ -1,0 +1,23 @@
+C	deci/aH/a	ReadableVector	util	H	Vector interface (length, lengthSquared, store into FloatBuffer), copy of LWJGL ReadableVector
+M	deci/aH/a	a	(FloatBuffer)	store	H
+C	deci/aH/b	AbstractVector	util	H	Base vector with length and normalise (LWJGL Vector copy)
+M	deci/aH/b	gP	()	normalise	H
+M	deci/aH/b	gO	()	negate	H
+M	deci/aH/b	b	(FloatBuffer)	load	H
+M	deci/aH/b	z	(float)	scale	H
+C	deci/aH/c	Vector3i	util	H	Integer 3D vector (add, sub, cross, dot, angle, normalise), also used as a light update position
+M	deci/aH/c	a	(deci.aH.c,deci.aH.c,deci.aH.c)	add	H
+M	deci/aH/c	b	(deci.aH.c,deci.aH.c,deci.aH.c)	sub	H
+M	deci/aH/c	c	(deci.aH.c,deci.aH.c,deci.aH.c)	cross	H
+M	deci/aH/c	a	(deci.aH.c,deci.aH.c)	dot	H
+M	deci/aH/c	b	(deci.aH.c,deci.aH.c)	angle	H
+M	deci/aH/c	gQ	()	toVec3	H
+M	deci/aH/c	o	(int,int,int)	translate	H
+M	deci/aH/c	gO	()	negate	H
+M	deci/aH/c	a	(deci.aH.c)	negate	H
+M	deci/aH/c	b	(deci.aH.c)	normalise	H
+M	deci/aH/c	b	(FloatBuffer)	load	H
+M	deci/aH/c	z	(float)	scale	H
+M	deci/aH/c	a	(FloatBuffer)	store	H
+M	deci/aH/c	gR	()	getZ	H
+M	deci/aH/c	au	(int)	setZ	H

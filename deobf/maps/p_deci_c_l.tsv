@@ -1,0 +1,81 @@
+C	deci/c/a	KeyBindingHandler	player	H	Registers Decimation key bindings (whistle, crouch, prone, firemode, reload, gestures, attach, craft, holster, unharness, tip close) and maps each to a PlayerAction packet; middle click gun bash
+F	deci/c/a	di	keyToAction	H
+F	deci/c/a	dj	keyCancelGui	H
+F	deci/c/a	dk	keyWhistle	H
+F	deci/c/a	dl	keyCrouch	H
+F	deci/c/a	dm	keyProne	H
+F	deci/c/a	dn	keyFireMode	H
+F	deci/c/a	do	keyReload	H
+F	deci/c/a	dp	keySurrender	H
+F	deci/c/a	dq	keyWave	H
+F	deci/c/a	dr	keyClap	H
+F	deci/c/a	ds	keyDab	H
+F	deci/c/a	dt	keyAttach	H
+F	deci/c/a	du	keyCraft	H
+F	deci/c/a	dv	keyHolster	H
+F	deci/c/a	dw	keyUnharness	H
+F	deci/c/a	dx	keyTipClose	H
+F	deci/c/a	dy	flagY	L
+F	deci/c/a	dz	gunBashCooldown	H
+M	deci/c/a	a	(KeyBinding,deci.aE.a.P.b)	register	H
+M	deci/c/a	a	(TickEvent.ClientTickEvent)	onClientTick	H
+C	deci/c/b	ClientRenderHandler	render	H	Render tick: toast rendering, camera roll/sway, stance camera renderer swap, admin screenshot capture, scope picture in picture (renders the world a second time into a texture), name tags
+F	deci/c/b	dB	scopeFov	H
+F	deci/c/b	dC	scopeTextureId	H
+F	deci/c/b	dD	pixelBuffer	H
+F	deci/c/b	dE	canRenderNameHandle	H
+F	deci/c/b	dF	renderEndNanoTimeField	H
+F	deci/c/b	dG	originalRenderer	H
+M	deci/c/b	L	()	createScopeTexture	H
+M	deci/c/b	a	(TickEvent.RenderTickEvent)	onRenderTick	H
+M	deci/c/b	M	()	captureScreenshot	H
+M	deci/c/b	b	(TickEvent.RenderTickEvent)	onRenderTickStart	H
+M	deci/c/b	a	(Float)	renderScopeView	H
+M	deci/c/b	a	(RenderLivingEvent.Specials.Pre)	onRenderNameTag	H
+C	deci/c/c	ClientEventHandler	event	H	Main client event handler: GUI replacement, hand/overlay rendering, HUD (thirst, blood, conditions), fog, client tick (dynamic flashlight lights, item pickup ray, zone sounds, menu), tooltips, sounds
+F	deci/c/c	dJ	pendingLightUpdates	H
+F	deci/c/c	dK	ONE	L
+F	deci/c/c	dL	aimProgress	M
+F	deci/c/c	dM	aimProgressPrev	M
+F	deci/c/c	dN	propLightFlares	M
+F	deci/c/c	dO	headYawSway	L
+F	deci/c/c	dR	prevHeadYawSway	L
+F	deci/c/c	ee	doubleE	L
+F	deci/c/c	ef	tickCounter	M
+F	deci/c/c	eg	floatG	L
+F	deci/c/c	eh	resourcePackMap	L
+F	deci/c/c	ej	lastDisplayWidth	M
+F	deci/c/c	ek	lastDisplayHeight	M
+F	deci/c/c	el	intL	L
+M	deci/c/c	c	(int)	isValidLightLevel	L
+M	deci/c/c	N	()	updateDynamicLights	H
+M	deci/c/c	a	(GuiOpenEvent)	onGuiOpen	H
+M	deci/c/c	a	(LivingHurtEvent)	onLivingHurt	H
+M	deci/c/c	a	(RenderBlockOverlayEvent)	onRenderBlockOverlay	H
+M	deci/c/c	a	(RenderHandEvent)	onRenderHand	H
+M	deci/c/c	a	(DrawBlockHighlightEvent)	onDrawBlockHighlight	H
+M	deci/c/c	a	(PlayerEvent.PlayerLoggedInEvent)	onPlayerLogin	H
+M	deci/c/c	a	(MouseEvent)	onMouse	H
+M	deci/c/c	a	(RenderLivingEvent.Pre)	onRenderLivingPre	H
+M	deci/c/c	a	(EntityViewRenderEvent.FogDensity)	onFogDensity	H
+M	deci/c/c	b	(TickEvent.ClientTickEvent)	onClientTick	H
+M	deci/c/c	a	(ItemTooltipEvent)	onItemTooltip	H
+M	deci/c/c	a	(EntityPlayer)	updateVehicleCamera	M
+M	deci/c/c	a	(Minecraft,EntityPlayer)	handleVehicleInput	M
+M	deci/c/c	a	(LivingEvent.LivingUpdateEvent)	onLivingUpdate	H
+M	deci/c/c	a	(PlayerEvent.ItemPickupEvent)	onItemPickup	H
+M	deci/c/c	a	(TickEvent.PlayerTickEvent)	onPlayerTick	H
+M	deci/c/c	a	(RenderGameOverlayEvent)	onRenderOverlay	H
+M	deci/c/c	a	(FMLNetworkEvent.ClientDisconnectionFromServerEvent)	onDisconnect	H
+M	deci/c/c	a	(RenderGameOverlayEvent.Pre)	onRenderOverlayPre	H
+M	deci/c/c	a	(RenderGameOverlayEvent.Post)	onRenderOverlayPost	H
+M	deci/c/c	a	(ExplosionEvent)	onExplosion	H
+M	deci/c/c	a	(PlaySoundEvent17)	onPlaySound	H
+C	deci/c/d	WorldRenderLayerDispatcher	render	H	Calls every registered WorldRenderLayer on RenderWorldLastEvent and ChunkRenderLayer on RenderWorldEvent.Pre
+M	deci/c/d	a	(RenderWorldLastEvent)	onRenderWorldLast	H
+M	deci/c/d	a	(RenderWorldEvent.Pre)	onRenderWorldPre	H
+C	deci/c/e	AmbientMusicPlayer	sound	H	Plays ambient music by time of day and biome (forest, desert, plains) when no GUI is open
+M	deci/c/e	b	(EntityPlayer)	tick	H
+M	deci/c/e	h	(String)	playMusic	H
+M	deci/c/e	a	(long)	getTimeOfDay	H
+M	deci/c/e	a	(EntityLivingBase)	isUnderRoof	H

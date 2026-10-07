@@ -1,0 +1,86 @@
+C	deci/ai/a	TraderEntity	trader	H	Base trader NPC (FactionHumanEntity, IMob): static per class offer list, opens the trader GUI on interact (refuses bandits/heroes by clientele), invulnerable, never despawns
+F	deci/ai/a	abd	OFFERS_BY_CLASS	H
+F	deci/ai/a	abe	customer	H
+F	deci/ai/a	abf	clientele	H
+M	deci/ai/a	a	(Item,int,boolean)	addOfferAutoSell	H
+M	deci/ai/a	a	(Item,int)	addOffer	H
+M	deci/ai/a	b	(ItemStack,int,int)	addOffer	H
+M	deci/ai/a	a	(Item,int,int)	addOffer	H
+M	deci/ai/a	a	(Item,int,int,int)	addOfferWithCurrency	H
+M	deci/ai/a	eW	()	equipRandomItem	M
+M	deci/ai/a	a	(String,float)	playSound	H
+M	deci/ai/a	m	(EntityPlayer)	setCustomer	H
+M	deci/ai/a	a	(deci.am.d)	setClientele	H
+M	deci/ai/a	eX	()	getClientele	H
+M	deci/ai/a	eY	()	getTraderType	H
+C	deci/ai/b	AmmunitionTrader	trader	H	Ammunition trader (armed)
+C	deci/ai/c	ArmorTrader	trader	H	Armor trader (armed)
+C	deci/ai/d	BackpackTrader	trader	H	Backpack trader
+C	deci/ai/e	BankerTrader	trader	H	Banker: opens the banker storage GUI (GUI_BANKER)
+C	deci/ai/f	BlackMarketTrader	trader	H	Black market trader (armed)
+C	deci/ai/g	BountyTrader	trader	H	Bounty board trader (place bounties on players)
+C	deci/ai/h	CarDealerTrader	trader	H	Car dealer trader
+C	deci/ai/i	ConvenienceTrader	trader	H	Convenience store trader
+C	deci/ai/j	DrugDealerTrader	trader	H	Drug dealer trader (armed)
+C	deci/ai/k	FoodTrader	trader	H	Food trader
+C	deci/ai/l	FortificationTrader	trader	H	Fortification materials trader
+C	deci/ai/m	GoldenCapTrader	trader	H	Gold bottlecap exchange trader
+C	deci/ai/n	GuardTrader	trader	H	Armed guard NPC (trader subclass) protecting a safezone
+C	deci/ai/o	GuitarTrader	trader	H	Guitar playing NPC that plays notes
+C	deci/ai/p	GunsTrader	trader	H	Guns trader (armed)
+C	deci/ai/q	GunsTraderAlt	trader	M	Second guns trader variant, not registered as an entity [guess]
+C	deci/ai/r	HeavyGunsTrader	trader	H	Heavy guns trader (armed)
+C	deci/ai/s	MedicalTrader	trader	H	Medical trader (armed)
+C	deci/ai/t	SantaTrader	trader	H	Christmas Santa trader
+C	deci/ai/u	ScrapTrader	trader	H	Scrap materials trader
+C	deci/ai/v	ArmedTraderEntity	trader	H	Trader base that shoots hostile entities (infected, bandits) within 32 blocks with its held gun
+F	deci/ai/v	aar	heldGun	M
+F	deci/ai/v	aas	isShooting	M
+F	deci/ai/v	aat	shootCooldown	L
+F	deci/ai/v	aau	burstLeft	L
+F	deci/ai/v	aav	burstDelayMax	L
+F	deci/ai/v	aaw	burstDelayMin	L
+M	deci/ai/v	eA	()	findTarget	M
+M	deci/ai/v	c	(EntityLivingBase)	isHostileTarget	H
+M	deci/ai/v	eD	()	getHeldGun	M
+M	deci/ai/v	k	(ItemStack)	setHeldGun	M
+M	deci/ai/v	s	(int,int)	setBurstDelays	L
+M	deci/ai/v	e	(EntityLivingBase)	shootAt	M
+M	deci/ai/v	eB	()	isShooting	M
+C	deci/ai/w	SkinsTrader	trader	H	Weapon skins trader
+C	deci/ai/x	WitchTrader	trader	H	Halloween witch trader
+C	deci/ai/y	TraderOffer	trader	H	One trader offer: item, buy price, sell price, currency (0 caps, 1 gold caps)
+F	deci/ai/y	abi	buyPrice	H
+F	deci/ai/y	abj	sellPrice	H
+F	deci/ai/y	hW	currencyType	H
+C	deci/ai/z	Quest	trader	M	Quest with tasks and a reward; completes when every task is done (system appears unused) [guess]
+F	deci/ai/z	abk	reward	H
+F	deci/ai/z	abl	name	H
+F	deci/ai/z	abm	description	H
+F	deci/ai/z	abn	tasks	H
+F	deci/ai/z	abo	player	H
+F	deci/ai/z	abp	completed	H
+M	deci/ai/z	eZ	()	allTasksDone	H
+M	deci/ai/z	fa	()	isCompleted	H
+M	deci/ai/z	fb	()	complete	H
+C	deci/ai/z$a	QuestReward	trader	M	Abstract quest reward
+M	deci/ai/z$a	n	(EntityPlayer)	give	H
+C	deci/ai/z$a$b	ItemReward	trader	M	Quest reward giving an ItemStack
+F	deci/ai/z$a$b	abr	stack	H
+C	deci/ai/z$a$a	CapsReward	trader	M	Quest reward giving caps
+F	deci/ai/z$a$a	abq	caps	H
+C	deci/ai/z$b	QuestTask	trader	M	Abstract quest task
+F	deci/ai/z$b	abs	done	H
+F	deci/ai/z$b	abt	name	H
+F	deci/ai/z$b	abu	description	H
+M	deci/ai/z$b	o	(EntityPlayer)	check	H
+M	deci/ai/z$b	p	(EntityPlayer)	isSatisfied	H
+M	deci/ai/z$b	fc	()	markDone	H
+M	deci/ai/z$b	fd	()	getDescription	H
+C	deci/ai/z$b$b	ReachLocationTask	trader	M	Task satisfied within a radius of a position
+F	deci/ai/z$b$b	abw	x	H
+F	deci/ai/z$b$b	abx	y	H
+F	deci/ai/z$b$b	aby	z	H
+F	deci/ai/z$b$b	abz	radius	H
+C	deci/ai/z$b$a	DeliverItemTask	trader	M	Task satisfied by handing over an item
+F	deci/ai/z$b$a	abv	item	H

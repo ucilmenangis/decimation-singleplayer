@@ -1,0 +1,15 @@
+C	deci/aO/a	BackendServerList	management	H	Requests the community server list and player count from the BoehMod management server and converts ObjectServer entries to ServerInfo
+M	deci/aO/a	hr	()	requestServerList	H
+M	deci/aO/a	hs	()	buildServerInfos	H
+M	deci/aO/a	ht	()	requestPlayerCount	H
+C	deci/aO/b	BackendProfileCache	management	H	Polls the management server every 300 ticks for the local player profile (supporter flag, cosmetics); cached ObjectPlayerProfile
+F	deci/aO/b	aBV	profile	H
+F	deci/aO/b	aBW	pollCounter	H
+M	deci/aO/b	aq	(String)	getProfile	H
+C	deci/aO/c	BackendClientListener	management	H	Kryonet listener that runs incoming backend packets on the client side
+C	deci/aO/d	BackendServerListener	management	H	Kryonet listener for a dedicated server; on connect registers the server in the community list
+C	deci/aO/e	UnusedVehicleYawMessage	network	L	Standalone IMessage plus handler for vehicle yaw (duplicate of PacketVehicleYawClient), not registered [guess]
+F	deci/aO/e	axZ	entityId	H
+F	deci/aO/e	axY	yaw	H
+M	deci/aO/e	a	(deci.aO.e,MessageContext)	handle	H
+M	deci/aO/e	b	(deci.aO.e,MessageContext)	applyClient	H

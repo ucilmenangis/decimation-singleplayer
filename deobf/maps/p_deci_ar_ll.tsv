@@ -1,0 +1,17 @@
+C	deci/ar/a	FoodItem	item	H	Base food item with hydration/nutrition ratings, optional water restore, empty container return (tin can) and open sound
+F	deci/ar/a	acS	hydrationRating	H
+F	deci/ar/a	acT	nutritionRating	H
+F	deci/ar/a	acU	restoresWater	H
+F	deci/ar/a	acV	waterAmount	H
+M	deci/ar/a	ai	(int)	setWaterRestore	H
+M	deci/ar/a	a	(deci.am.a)	setHydrationRating	H
+M	deci/ar/a	a	(deci.am.c)	setNutritionRating	H
+M	deci/ar/a	fw	()	returnsContainer	H
+M	deci/ar/a	fx	()	getContainerItem	H
+M	deci/ar/a	fy	()	hasOpenSound	H
+M	deci/ar/a	fz	()	getOpenSound	H
+M	deci/ar/a	fA	()	getEatSound	L
+C	deci/ar/b	RawMeatFoodItem	item	M	Food with a chance to infect the eater
+C	deci/ar/c	PacketFoodItem	item	H	Packaged food (MRE, energy bars) with packet open sound
+C	deci/ar/d	CannedFoodItem	item	H	Canned food returning an empty tin
+C	deci/ar/e	InfectedFleshItem	item	H	Infected flesh: eating it infects the player

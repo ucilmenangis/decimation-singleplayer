@@ -1,0 +1,145 @@
+C	deci/g/a	AttachmentScreen	gui	H	Weapon modify GUI (attach.png) for AttachmentContainer
+M	deci/g/a	a	(int,int)	drawSlotLabels	L
+C	deci/g/b	RenameBackpackScreen	gui	H	Text field to rename the held backpack (sends PacketRenameBackpack)
+F	deci/g/b	gX	textField	H
+F	deci/g/b	gY	confirmButton	H
+F	deci/g/b	gZ	cancelButton	H
+M	deci/g/b	d	(GuiButton)	onButton	H
+M	deci/g/b	aJ	()	submit	H
+M	deci/g/b	aK	()	rebuildButtons	H
+C	deci/g/e	PlaceBountyScreen	gui	H	Enter a cap amount to place a bounty on a player (max 10000)
+F	deci/g/e	gX	textField	H
+F	deci/g/e	gY	confirmButton	H
+F	deci/g/e	gZ	cancelButton	H
+M	deci/g/e	d	(GuiButton)	onButton	H
+M	deci/g/e	aJ	()	submit	H
+M	deci/g/e	aK	()	rebuildButtons	H
+C	deci/g/h	EditDecalImageScreen	gui	H	Creative editor for a decal image tile entity URL and size
+F	deci/g/h	gX	textField	H
+F	deci/g/h	gY	confirmButton	H
+F	deci/g/h	gZ	cancelButton	H
+M	deci/g/h	d	(GuiButton)	onButton	H
+M	deci/g/h	aJ	()	submit	H
+M	deci/g/h	aK	()	rebuildButtons	H
+C	deci/g/l	EditNoteScreen	gui	H	Creative editor for a note decal text
+F	deci/g/l	gX	textField	H
+F	deci/g/l	gY	confirmButton	H
+F	deci/g/l	gZ	cancelButton	H
+M	deci/g/l	d	(GuiButton)	onButton	H
+M	deci/g/l	aJ	()	submit	H
+M	deci/g/l	aK	()	rebuildButtons	H
+C	deci/g/o	EditRoadSignScreen	gui	H	Creative editor for road sign text
+F	deci/g/o	gX	textField	H
+F	deci/g/o	gY	confirmButton	H
+F	deci/g/o	gZ	cancelButton	H
+M	deci/g/o	d	(GuiButton)	onButton	H
+M	deci/g/o	aJ	()	submit	H
+M	deci/g/o	aK	()	rebuildButtons	H
+F	deci/g/b	ha	backpackStack	H
+F	deci/g/e	hg	targetName	H
+F	deci/g/h	hk	decalTile	H
+F	deci/g/h	hl	sizeField	H
+F	deci/g/l	hK	noteTile	H
+F	deci/g/o	hN	roadSignTile	H
+C	deci/g/c	BankerScreen	gui	H	Banker GUI showing the 24 banker slots with the trader model
+F	deci/g/c	hc	currentTrader	H
+F	deci/g/c	hd	guiId	M
+F	deci/g/c	he	mouseX	M
+F	deci/g/c	hf	mouseY	M
+M	deci/g/c	aL	()	bindBankSlotTexture	H
+M	deci/g/c	h	(int,int)	drawSlotOverlay	M
+M	deci/g/c	a	(deci.ai.a,int,int,int)	drawTraderModel	H
+C	deci/g/n	InspectBankerScreen	gui	H	Admin GUI showing another player banker slots
+F	deci/g/n	hc	currentTrader	H
+F	deci/g/n	hd	guiId	M
+F	deci/g/n	he	mouseX	M
+F	deci/g/n	hf	mouseY	M
+M	deci/g/n	aL	()	bindBankSlotTexture	H
+M	deci/g/n	h	(int,int)	drawSlotOverlay	M
+M	deci/g/n	a	(deci.ai.a,int,int,int)	drawTraderModel	H
+F	deci/g/n	gG	inspectedUUID	H
+C	deci/g/d	BountyPlayerListScreen	gui	H	Lists online players to choose a bounty target
+C	deci/g/f	BountyPlayerEntry	gui	H	List entry with a place bounty button for one player
+F	deci/g/f	hh	BUTTON_ID	H
+F	deci/g/f	hg	playerName	H
+F	deci/g/f	hi	placeButton	H
+C	deci/g/g	PlayerInventoryScreen	gui	H	Main Decimation inventory GUI (GUI_LOOT): player model, armor/backpack/vest/mask slots, loot area, hints for crafting and attachments keys
+F	deci/g/g	hd	guiId	M
+F	deci/g/g	he	mouseX	M
+F	deci/g/g	hf	mouseY	M
+F	deci/g/g	hj	rotation	L
+M	deci/g/g	a	(int,int,float,EntityPlayer)	drawPlayerModel	H
+M	deci/g/g	u	(String)	bindSlotTexture	H
+M	deci/g/g	h	(int,int)	drawSlotBackgrounds	H
+M	deci/g/g	a	(Slot,int,int)	isMouseOverSlot	H
+C	deci/g/i	HudIconHelper	hud	M	Static helpers drawing a HUD stat icon with a value
+M	deci/g/i	a	(int,ResourceLocation)	drawStatIconLeft	L
+M	deci/g/i	b	(int,ResourceLocation)	drawStatIconRight	L
+C	deci/g/j	IngameHud	hud	H	Singleton in game HUD: gas mask and viewport blur, conditions, stats, compass/zone info, ammo display
+F	deci/g/j	ho	INSTANCE	H
+F	deci/g/j	hp	intP	L
+F	deci/g/j	hq	floatQ	L
+F	deci/g/j	hr	zoneName	L
+F	deci/g/j	hs	zoneSubtitle	L
+M	deci/g/j	aM	()	getInstance	H
+M	deci/g/j	e	(int,int,int)	isBetween	H
+M	deci/g/j	b	(int,int,float)	render	H
+M	deci/g/j	i	(int,int)	renderSecondary	L
+M	deci/g/j	a	(Minecraft,int,int,ResourceLocation)	drawFullscreenOverlay	H
+C	deci/g/k	LockpickingScreen	gui	H	Lockpicking minigame screen (pins, attempts, progress)
+F	deci/g/k	hu	lockX	L
+F	deci/g/k	hv	lockY	L
+F	deci/g/k	hw	lockZ	L
+F	deci/g/k	hx	difficulty	L
+F	deci/g/k	hy	pinsSet	L
+F	deci/g/k	hz	pinPositions	L
+F	deci/g/k	hA	pinAnim	L
+F	deci/g/k	hB	pinFlagsB	L
+F	deci/g/k	hC	pinFlagsC	L
+F	deci/g/k	hD	attempts	L
+F	deci/g/k	hE	pinsSetCount	L
+M	deci/g/k	a	(boolean[])	allTrue	M
+M	deci/g/k	l	(int)	addProgress	L
+M	deci/g/k	aN	()	failFlash	L
+M	deci/g/k	b	(int,boolean)	animatePin	L
+M	deci/g/k	a	(boolean,int)	onServerResult	M
+M	deci/g/k	m	(int)	setPin	M
+M	deci/g/k	n	(int)	tryPin	L
+M	deci/g/k	aO	()	closeAndReset	M
+M	deci/g/k	aP	()	reset	M
+C	deci/g/m	ReadNoteScreen	gui	H	Read only view of a note decal text
+F	deci/g/m	hK	noteTile	H
+F	deci/g/m	gZ	closeButton	H
+F	deci/g/m	hM	page	L
+M	deci/g/m	d	(GuiButton)	onButton	H
+M	deci/g/m	aK	()	rebuildButtons	H
+C	deci/g/p	CraftingScreen	gui	H	2x2 crafting GUI (craft.png)
+C	deci/g/q	TraderScreen	gui	H	Trader shop GUI listing buy and sell offers of the current trader NPC
+F	deci/g/q	hc	currentTrader	H
+F	deci/g/q	hR	offerList	H
+M	deci/g/q	c	(int,int,float)	drawBackgroundLayer	M
+M	deci/g/q	a	(deci.ai.a,int,int,int)	drawTraderModel	H
+C	deci/g/r	TraderOfferEntry	gui	H	One trader offer row with buy/sell buttons, price in caps or gold caps; sends PacketTraderTransaction
+F	deci/g/r	hh	BUY_ID	H
+F	deci/g/r	hS	SELL_ID	H
+F	deci/g/r	hc	trader	H
+F	deci/g/r	hT	buyPrice	H
+F	deci/g/r	hU	sellPrice	H
+F	deci/g/r	hV	itemRenderer	H
+F	deci/g/r	hW	currencyType	H
+F	deci/g/r	hX	capIcon	H
+F	deci/g/r	hY	goldCapIcon	H
+F	deci/g/r	gJ	playerData	H
+M	deci/g/r	j	(int,int)	drawItem	H
+C	deci/g/s	AttachmentInventory	gui	H	15 slot inventory of the attachment GUI; writes attachment and skin/tracer NBT onto the gun when changed
+F	deci/g/s	ib	gunStack	H
+F	deci/g/s	ic	intC	L
+F	deci/g/s	ie	updating	L
+M	deci/g/s	aQ	()	clearAttachmentSlots	M
+C	deci/g/t	BlockTip	hud	H	Floating interaction hint text in the world for the block under the crosshair (queued list, fades in when looked at)
+F	deci/g/t	if	ACTIVE	H
+F	deci/g/t	ez	alpha	H
+F	deci/g/t	ig	expired	H
+M	deci/g/t	b	(String,double,double,double)	show	H
+M	deci/g/t	a	(double,double,double)	existsAt	H
+M	deci/g/t	e	(float)	render	H

@@ -1,0 +1,56 @@
+C	net/decimation/mod/server/clans/a	ClanManagerV1	clan	H	Live clan system: clans/<name>.json files cached in a TreeMap, userData.json membership index, turf income every 18000 ticks (20 caps per owned turf, capped at 1,000,000), humanity/score, allies/enemies, invites, ranks
+F	net/decimation/mod/server/clans/a	aAU	USER_DATA_FILE	H
+F	net/decimation/mod/server/clans/a	aAV	TURF_INCOME_INTERVAL	H
+F	net/decimation/mod/server/clans/a	aAW	MAX_CLAN_CAPS	H
+F	net/decimation/mod/server/clans/a	aAX	clansByName	H
+F	net/decimation/mod/server/clans/a	aAY	turfIncomeCountdown	H
+F	net/decimation/mod/server/clans/a	aAZ	clearCacheRequested	H
+F	net/decimation/mod/server/clans/a	aBa	saveThreadStarted	H
+F	net/decimation/mod/server/clans/a	aBb	userDataCache	H
+M	net/decimation/mod/server/clans/a	a	(MinecraftServer)	tick	H
+M	net/decimation/mod/server/clans/a	gU	()	requestCacheClear	H
+M	net/decimation/mod/server/clans/a	b	(MinecraftServer)	payTurfIncome	H
+M	net/decimation/mod/server/clans/a	T	(String)	getClan	H
+M	net/decimation/mod/server/clans/a	gV	()	saveAllClans	H
+M	net/decimation/mod/server/clans/a	U	(String)	saveClan	H
+M	net/decimation/mod/server/clans/a	a	(ObjectClan)	writeClanFile	H
+M	net/decimation/mod/server/clans/a	t	(EntityPlayer)	syncPlayerClan	H
+M	net/decimation/mod/server/clans/a	gW	()	syncAllPlayers	H
+M	net/decimation/mod/server/clans/a	a	(String,EntityPlayer)	createClan	H
+M	net/decimation/mod/server/clans/a	b	(String,EntityPlayer)	joinClan	H
+M	net/decimation/mod/server/clans/a	c	(String,EntityPlayer)	addUserDataEntry	H
+M	net/decimation/mod/server/clans/a	gX	()	getUserData	H
+M	net/decimation/mod/server/clans/a	gY	()	createUserData	H
+M	net/decimation/mod/server/clans/a	d	(String,EntityPlayer)	disbandClan	M
+M	net/decimation/mod/server/clans/a	V	(String)	addClanHumanity	H
+M	net/decimation/mod/server/clans/a	W	(String)	removeClanHumanity	H
+M	net/decimation/mod/server/clans/a	X	(String)	getClanHumanity	H
+M	net/decimation/mod/server/clans/a	g	(String,String)	isAlly	H
+M	net/decimation/mod/server/clans/a	h	(String,String)	removeAlly	H
+M	net/decimation/mod/server/clans/a	i	(String,String)	addAlly	H
+M	net/decimation/mod/server/clans/a	g	(String,int)	addClanScore	H
+M	net/decimation/mod/server/clans/a	h	(String,int)	removeClanScore	H
+M	net/decimation/mod/server/clans/a	Y	(String)	getClanScore	H
+M	net/decimation/mod/server/clans/a	Z	(String)	removeUserDataForClan	M
+M	net/decimation/mod/server/clans/a	u	(EntityPlayer)	removeUserDataForPlayer	M
+M	net/decimation/mod/server/clans/a	aa	(String)	loadClanFile	H
+M	net/decimation/mod/server/clans/a	ab	(String)	clanExists	H
+M	net/decimation/mod/server/clans/a	ac	(String)	getClanNameOfPlayerName	H
+M	net/decimation/mod/server/clans/a	v	(EntityPlayer)	getClanName	H
+M	net/decimation/mod/server/clans/a	w	(EntityPlayer)	getRank	H
+M	net/decimation/mod/server/clans/a	ad	(String)	getMemberNames	H
+M	net/decimation/mod/server/clans/a	ae	(String)	formatMembersByRank	M
+M	net/decimation/mod/server/clans/a	af	(String)	formatMembersOnline	M
+M	net/decimation/mod/server/clans/a	ag	(String)	isLeaderOnline	H
+M	net/decimation/mod/server/clans/a	j	(String,String)	isMemberOnline	H
+M	net/decimation/mod/server/clans/a	ah	(String)	getOnlineLeader	H
+M	net/decimation/mod/server/clans/a	ai	(String)	broadcast	H
+M	net/decimation/mod/server/clans/a	k	(String,String)	isEnemy	H
+M	net/decimation/mod/server/clans/a	l	(String,String)	removeEnemy	H
+M	net/decimation/mod/server/clans/a	m	(String,String)	hasInvite	H
+M	net/decimation/mod/server/clans/a	n	(String,String)	addInvite	H
+M	net/decimation/mod/server/clans/a	o	(String,String)	removeInvite	H
+M	net/decimation/mod/server/clans/a	a	(ObjectClan,String)	removeMemberByName	H
+M	net/decimation/mod/server/clans/a	p	(String,String)	addEnemy	H
+M	net/decimation/mod/server/clans/a	a	(String,String,EnumClanRank)	setMemberRank	H
+M	net/decimation/mod/server/clans/a	c	(MinecraftServer)	syncOnlinePlayers	H

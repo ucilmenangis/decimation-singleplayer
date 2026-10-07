@@ -1,0 +1,6 @@
+C	deci/ap/a	DoorItem	item	H	Item that places a two block Decimation door (block given in the constructor)
+C	deci/ap/b	DoorItemEmergency2	item	L	Legacy door item hardwired to the Door_Emergency_2 block (not used by ItemRegistry)
+C	deci/ap/c	DoorItemEmergency3	item	L	Legacy door item hardwired to the Door_Emergency_3 block (not used by ItemRegistry)
+C	deci/ap/d	DoorItemInfektorSecurity	item	L	Legacy door item hardwired to the Door_InfektorSecurity_1 block (not used by ItemRegistry)
+C	deci/ap/e	DoorItemSecurity	item	L	Legacy door item hardwired to the Door_security_1 block (not used by ItemRegistry)
+C	deci/ap/f	LockedDoorItem	item	H	Item that places a locked (key/lockpick) door, extends the lockpick item base deci.av.m

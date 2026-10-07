@@ -1,0 +1,1282 @@
+C	deci/ac/a	FallingSupplyDropEntity	entity	L	auto: registry name
+C	deci/ac/d	LockableBaseTileEntity	tileentity	L	auto: registry name
+C	deci/ac/e	LockableContainerTileEntity	tileentity	L	auto: registry name
+C	deci/ac/f	LockableDoorTileEntity	tileentity	L	auto: registry name
+C	deci/ad/a	VehicleEmitterEntity	entity	L	auto: registry name
+C	deci/ad/b	VehiclePlacementEntity	entity	L	auto: registry name
+C	deci/ad/c	VehicleSeatEntity	entity	L	auto: registry name
+C	deci/ad/e	VehicleEntity	entity	L	auto: registry name
+C	deci/ad/i	HummerEntity	entity	L	auto: registry name
+C	deci/ae/a	CorpseEntity	entity	L	auto: registry name
+C	deci/ag/a	BanditEntity	entity	L	auto: registry name
+C	deci/ag/b	DemonEntity	entity	L	auto: registry name
+C	deci/ag/c	HazmatEntity	entity	L	auto: registry name
+C	deci/ag/d	InfectedEntity	entity	L	auto: registry name
+C	deci/ag/e	BloaterEntity	entity	L	auto: registry name
+C	deci/ag/f	InfectedCrawlerEntity	entity	L	auto: registry name
+C	deci/ag/g	InfectedDogEntity	entity	L	auto: registry name
+C	deci/ag/h	FrailEntity	entity	L	auto: registry name
+C	deci/ag/i	GawkerEntity	entity	L	auto: registry name
+C	deci/ag/j	HulkEntity	entity	L	auto: registry name
+C	deci/ag/k	MechEntity	entity	L	auto: registry name
+C	deci/ag/l	SoldierEntity	entity	L	auto: registry name
+C	deci/ag/m	SovietEntity	entity	L	auto: registry name
+C	deci/ah/a	BoarEntity	entity	L	auto: registry name
+C	deci/ah/b	BuckEntity	entity	L	auto: registry name
+C	deci/ah/c	DoggoEntity	entity	L	auto: registry name
+C	deci/ah/d	HumanEntity	entity	L	auto: registry name
+C	deci/ai/b	TraderAmmunitionEntity	entity	L	auto: registry name
+C	deci/ai/c	TraderArmorEntity	entity	L	auto: registry name
+C	deci/ai/d	TraderBackpackEntity	entity	L	auto: registry name
+C	deci/ai/e	TraderBankerEntity	entity	L	auto: registry name
+C	deci/ai/f	TraderBlackMarketEntity	entity	L	auto: registry name
+C	deci/ai/g	TraderBountyEntity	entity	L	auto: registry name
+C	deci/ai/h	TraderCarDealerEntity	entity	L	auto: registry name
+C	deci/ai/i	TraderConvenienceEntity	entity	L	auto: registry name
+C	deci/ai/j	TraderDrugDealerEntity	entity	L	auto: registry name
+C	deci/ai/k	TraderFoodEntity	entity	L	auto: registry name
+C	deci/ai/n	TraderGuardEntity	entity	L	auto: registry name
+C	deci/ai/o	TraderGuitarEntity	entity	L	auto: registry name
+C	deci/aj/a	BarbedWireEntity	entity	L	auto: registry name
+C	deci/aj/b	CampFireEntity	entity	L	auto: registry name
+C	deci/ak/b	DeciCrossbowBoltEntity	entity	L	auto: registry name
+C	deci/ak/c	GrenadeEntity	entity	L	auto: registry name
+C	deci/ak/d	MolotovEntity	entity	L	auto: registry name
+C	deci/ak/e	DeciMortarRoundEntity	entity	L	auto: registry name
+C	deci/ak/f	DeciRocketEntity	entity	L	auto: registry name
+C	deci/ak/g	DeciRocketHeatSeekingEntity	entity	L	auto: registry name
+C	deci/ak/i	DeciRocketTargetEntity	entity	L	auto: registry name
+C	deci/ak/j	DeciShellEntity	entity	L	auto: registry name
+C	deci/ak/l	SignalGrenadeGreenEntity	entity	L	auto: registry name
+C	deci/ak/m	SignalGrenadeRedEntity	entity	L	auto: registry name
+C	deci/ak/p	TearGasGrenadeEntity	entity	L	auto: registry name
+C	deci/al/a	PlayerSeatEntity	entity	L	auto: registry name
+C	deci/al/b	TurretEntity	entity	L	auto: registry name
+F	deci/H/a	fP	deciTexturesBlocksDecal	L
+F	deci/J/E	TD	deciTexturesModelEntitiesVehicle	L
+F	deci/S/d	Xy	decalName	L
+F	deci/S/d	Xz	decalSize	L
+F	deci/S/e	XA	imageUrl	L
+F	deci/S/e	XB	imageScale	L
+F	deci/S/f	XC	noteContents	L
+F	deci/a/c	E	deciEULA	L
+F	deci/aD/c	afE	blockSafezoneSignExit	L
+F	deci/aD/c	afF	blockSafezoneSignEntry	L
+F	deci/aD/c	afM	doorEmergency_1	L
+F	deci/aD/c	afN	doorEmergency_1Locked	L
+F	deci/aD/c	afO	doorEmergency_2	L
+F	deci/aD/c	afP	doorEmergency_3	L
+F	deci/aD/c	afQ	doorSecurity_1	L
+F	deci/aD/c	afR	doorInfektorSecurity_1	L
+F	deci/aD/c	afS	doorGreen_1	L
+F	deci/aD/c	afT	doorGreen_2	L
+F	deci/aD/c	afU	doorGreen_3	L
+F	deci/aD/c	afV	doorOrange_1	L
+F	deci/aD/c	afW	doorOrange_2	L
+F	deci/aD/c	afX	doorOrange_3	L
+F	deci/aD/c	afY	doorBlue_1	L
+F	deci/aD/c	afZ	doorBlue_2	L
+F	deci/aD/c	aga	doorBlue_3	L
+F	deci/aD/c	agb	doorMetal_3	L
+F	deci/aD/c	agc	doorOffice_1	L
+F	deci/aD/c	agd	blockRope	L
+F	deci/aD/c	age	blockRopeTop	L
+F	deci/aD/c	agg	blockElevator	L
+F	deci/aD/c	agh	blockElevatorButton	L
+F	deci/aD/c	agi	blockPropellerTrap	L
+F	deci/aD/d	agA	blockWallOffice_4Top	L
+F	deci/aD/d	agB	blockCeiling_1	L
+F	deci/aD/d	agC	blockCeiling_2	L
+F	deci/aD/d	agD	blockCeiling_3	L
+F	deci/aD/d	agE	blockCeiling_4	L
+F	deci/aD/d	agF	blockFloorTiles_1	L
+F	deci/aD/d	agG	blockFloorTiles_2	L
+F	deci/aD/d	agH	blockFloorTiles_3	L
+F	deci/aD/d	agI	blockFloorCarpet_1	L
+F	deci/aD/d	agJ	blockFloorCarpet_2	L
+F	deci/aD/d	agK	blockFloorCarpet_3	L
+F	deci/aD/d	agL	blockFloorCarpet_4	L
+F	deci/aD/d	agM	blockFloorCarpet_5	L
+F	deci/aD/d	agN	blockFloorCarpet_6	L
+F	deci/aD/d	agO	blockBrick_1	L
+F	deci/aD/d	agP	blockBrick_2	L
+F	deci/aD/d	agQ	blockBrick_3	L
+F	deci/aD/d	agR	blockStone_1	L
+F	deci/aD/d	agS	blockStone_2	L
+F	deci/aD/d	agT	blockStone_3	L
+F	deci/aD/d	agU	blockStone_4	L
+F	deci/aD/d	agV	blockStone_5	L
+F	deci/aD/d	agW	blockStone_6	L
+F	deci/aD/d	agX	blockStone_7	L
+F	deci/aD/d	agY	blockStone_8	L
+F	deci/aD/d	agZ	blockHazard_1	L
+F	deci/aD/d	agn	blockWallOfficeBottom_1	L
+F	deci/aD/d	ago	blockWallOfficeBottom_2	L
+F	deci/aD/d	agp	blockWallOfficeBottom_3	L
+F	deci/aD/d	agq	blockWallOfficeBottom_4	L
+F	deci/aD/d	agr	blockWallOfficeTop	L
+F	deci/aD/d	ags	blockWallOffice_2Bottom_1	L
+F	deci/aD/d	agt	blockWallOffice_2Top	L
+F	deci/aD/d	agu	blockWallOffice_3Bottom_1	L
+F	deci/aD/d	agv	blockWallOffice_3Bottom_2	L
+F	deci/aD/d	agw	blockWallOffice_3Top	L
+F	deci/aD/d	agx	blockWallOffice_4Bottom_1	L
+F	deci/aD/d	agy	blockWallOffice_4Bottom_2	L
+F	deci/aD/d	agz	blockWallOffice_4Bottom_3	L
+F	deci/aD/d	aha	blockMetal_1	L
+F	deci/aD/d	ahb	blockMetal_2	L
+F	deci/aD/d	ahc	blockMetal_3	L
+F	deci/aD/d	ahd	blockRoad	L
+F	deci/aD/d	ahe	blockRoadCenterLine	L
+F	deci/aD/d	ahf	blockRoadDoubleYellowLine	L
+F	deci/aD/d	ahg	blockRoadRedLine	L
+F	deci/aD/d	ahh	blockRoadStopLine	L
+F	deci/aD/d	ahi	blockRoadYellowLine	L
+F	deci/aD/d	ahj	blockRoadSlab	L
+F	deci/aD/d	ahk	blockRoadSlabCenterLine	L
+F	deci/aD/d	ahl	blockRoadSlabDoubleYellowLine	L
+F	deci/aD/d	ahm	blockRoadSlabRedLine	L
+F	deci/aD/d	ahn	blockRoadSlabStopLine	L
+F	deci/aD/d	aho	blockRoadSlabYellowLine	L
+F	deci/aD/e	ahA	warningtrespass	L
+F	deci/aD/e	ahB	warningwatchstep	L
+F	deci/aD/e	ahC	warningxray	L
+F	deci/aD/e	ahD	sovietsymbol	L
+F	deci/aD/e	ahE	usflag	L
+F	deci/aD/e	ahF	notegeneric	L
+F	deci/aD/e	ahG	imagegeneric	L
+F	deci/aD/e	ahp	hazardnuclear	L
+F	deci/aD/e	ahq	hazardbio	L
+F	deci/aD/e	ahr	bloodsplat1	L
+F	deci/aD/e	ahs	bloodsplat2	L
+F	deci/aD/e	aht	bloodsplat3	L
+F	deci/aD/e	ahu	bloodsplat4	L
+F	deci/aD/e	ahv	bloodsplat5	L
+F	deci/aD/e	ahw	warningchemicalstorage	L
+F	deci/aD/e	ahx	warningcctv	L
+F	deci/aD/e	ahy	warninglights	L
+F	deci/aD/e	ahz	warningslipperyfloor	L
+F	deci/aD/f	ahH	blockSoundBlockCarAlarm	L
+F	deci/aD/f	ahI	blockSoundBlockAlarm	L
+F	deci/aD/f	ahJ	blockSoundBlockRange	L
+F	deci/aD/f	ahK	blockSoundBlockScaryLab	L
+F	deci/aD/f	ahL	blockSoundBlockMorsecodeBukovka	L
+F	deci/aD/g	ahM	deciPropWaterpump	L
+F	deci/aD/g	ahN	deciPropWaterfountain	L
+F	deci/aD/g	ahO	deciPropStereo	L
+F	deci/aD/g	ahP	radio1	L
+F	deci/aD/g	ahQ	deci	L
+F	deci/aD/g	ahR	wreckage1	L
+F	deci/aD/g	ahS	wreckage2	L
+F	deci/aD/g	ahT	wreckage3	L
+F	deci/aD/g	ahU	wreckage4	L
+F	deci/aD/g	ahV	wreckage5	L
+F	deci/aD/g	ahW	truckwreckage1	L
+F	deci/aD/g	ahX	truckwreckage2	L
+F	deci/aD/g	ahY	truckwreckage3	L
+F	deci/aD/g	ahZ	truckwreckage4	L
+F	deci/aD/g	aiA	deciPropStreetbarrier	L
+F	deci/aD/g	aiB	deciPropMetalshelf	L
+F	deci/aD/g	aiC	deciPropMetalshelfEmpty	L
+F	deci/aD/g	aiD	deciPropTicketgate	L
+F	deci/aD/g	aiE	deciPropTicketgateOpen	L
+F	deci/aD/g	aiF	deciPropShopdisplay_1	L
+F	deci/aD/g	aiG	deciPropHazardscreen_1	L
+F	deci/aD/g	aiH	deciPropHazardscreen_2	L
+F	deci/aD/g	aiI	hazardlight	L
+F	deci/aD/g	aiJ	deciPropHazardlamp	L
+F	deci/aD/g	aiK	deciPropMetrorailing1	L
+F	deci/aD/g	aiL	deciPropMetrorailing2	L
+F	deci/aD/g	aiM	deciPropPhonebox	L
+F	deci/aD/g	aiN	deciPropMailbox	L
+F	deci/aD/g	aiO	streetbench	L
+F	deci/aD/g	aiP	deciPropExitlight	L
+F	deci/aD/g	aiQ	deciPropCctv	L
+F	deci/aD/g	aiR	chair	L
+F	deci/aD/g	aiS	deciPropFlatscreentv	L
+F	deci/aD/g	aiT	deciPropFlatscreentvEmergency	L
+F	deci/aD/g	aiU	deciPropFlatscreentvNews	L
+F	deci/aD/g	aiV	deciPropFlatscreentvYoutube	L
+F	deci/aD/g	aiW	deciPropFlatscreentvTarget	L
+F	deci/aD/g	aiX	deciPropStudiocamera	L
+F	deci/aD/g	aiY	deciPropChesstable	L
+F	deci/aD/g	aiZ	deciPropWallflag	L
+F	deci/aD/g	aia	truckwreckage5	L
+F	deci/aD/g	aib	truckwreckage6	L
+F	deci/aD/g	aic	deciPropWreckageMilitary_1	L
+F	deci/aD/g	aid	deciPropWreckageMilitary_2	L
+F	deci/aD/g	aie	deciPropWreckageMilitary_3	L
+F	deci/aD/g	aif	deciPropMilitarycrate	L
+F	deci/aD/g	aig	deciPropMedicalcrate	L
+F	deci/aD/g	aih	deciPropPolicecrate	L
+F	deci/aD/g	aii	woodtable	L
+F	deci/aD/g	aij	woodtable	L
+F	deci/aD/g	aik	deciPropCeilingvent	L
+F	deci/aD/g	ail	deciPropCeilingventCorner	L
+F	deci/aD/g	aim	deciPropWeaponcabinet	L
+F	deci/aD/g	ain	deciPropPowerpole	L
+F	deci/aD/g	aio	deciPropPhonebooth	L
+F	deci/aD/g	aip	officechair	L
+F	deci/aD/g	aiq	trashcan	L
+F	deci/aD/g	air	monitor	L
+F	deci/aD/g	ais	vendingmachine_1	L
+F	deci/aD/g	ait	vendingmachine_2	L
+F	deci/aD/g	aiu	light	L
+F	deci/aD/g	aiv	lightoff	L
+F	deci/aD/g	aiw	barrier	L
+F	deci/aD/g	aix	deciPropBarriertall	L
+F	deci/aD/g	aiy	blockHazardbarrier	L
+F	deci/aD/g	aiz	deciPropHazardpole	L
+F	deci/aD/g	ajA	keycardscreenmilitary	L
+F	deci/aD/g	ajB	keycardscreenlaboratory	L
+F	deci/aD/g	ajC	militarybarrier	L
+F	deci/aD/g	ajD	missilelauncher	L
+F	deci/aD/g	ajE	newsstand1	L
+F	deci/aD/g	ajF	newsstand2	L
+F	deci/aD/g	ajG	stretcher	L
+F	deci/aD/g	ajH	woodcrate	L
+F	deci/aD/g	ajI	woodcrateopen	L
+F	deci/aD/g	ajJ	spotlight	L
+F	deci/aD/g	ajK	metaltable	L
+F	deci/aD/g	ajL	bodybagblack	L
+F	deci/aD/g	ajM	bodybagblue	L
+F	deci/aD/g	ajN	bodybaggreen	L
+F	deci/aD/g	ajO	bodybagorange	L
+F	deci/aD/g	ajP	cardboardboxes1	L
+F	deci/aD/g	ajQ	cardboardboxes2	L
+F	deci/aD/g	ajR	cardboardboxes3	L
+F	deci/aD/g	ajS	electricboxbin	L
+F	deci/aD/g	ajT	skeleton	L
+F	deci/aD/g	ajU	skeleton	L
+F	deci/aD/g	ajV	streetbin	L
+F	deci/aD/g	ajW	streetlight	L
+F	deci/aD/g	ajX	streetlightmiddle	L
+F	deci/aD/g	ajY	trafficlights	L
+F	deci/aD/g	ajZ	trafficlightsmiddle	L
+F	deci/aD/g	aja	deciPropBicycle	L
+F	deci/aD/g	ajb	deciPropHangingplayer	L
+F	deci/aD/g	ajc	deciPropRedlight	L
+F	deci/aD/g	ajl	deciPropElectricbox1	L
+F	deci/aD/g	ajm	electricbox2	L
+F	deci/aD/g	ajn	deciPropWashingmachine	L
+F	deci/aD/g	ajo	deciPropCookingstation	L
+F	deci/aD/g	ajp	deciPropAcidpit	L
+F	deci/aD/g	ajq	deciPropFlagpollUahd	L
+F	deci/aD/g	ajr	deciPropFlagpollUssr	L
+F	deci/aD/g	ajs	deciPropTirestack	L
+F	deci/aD/g	ajt	ammocrate	L
+F	deci/aD/g	aju	ammocratelarge	L
+F	deci/aD/g	ajv	barrel	L
+F	deci/aD/g	ajw	cone	L
+F	deci/aD/g	ajx	dumpster	L
+F	deci/aD/g	ajy	hedgehog	L
+F	deci/aD/g	ajz	keycardscreen	L
+F	deci/aD/g	akA	blockSignMineway	L
+F	deci/aD/g	akB	blockSignMinedonalds	L
+F	deci/aD/g	akC	blockSignMinebay	L
+F	deci/aD/g	akD	blockSignMetro	L
+F	deci/aD/g	akE	blockSignDecimunition	L
+F	deci/aD/g	akF	blockSignGunsrus	L
+F	deci/aD/g	akG	blockGraffiti_1	L
+F	deci/aD/g	akH	blockGraffiti_2	L
+F	deci/aD/g	akI	blockGraffiti_3	L
+F	deci/aD/g	akJ	blockGraffiti_4	L
+F	deci/aD/g	akK	blockGraffiti_5	L
+F	deci/aD/g	akL	blockGraffiti_6	L
+F	deci/aD/g	akM	blockGraffiti_7	L
+F	deci/aD/g	akN	blockGraffiti_8	L
+F	deci/aD/g	akO	blockGraffiti_9	L
+F	deci/aD/g	akP	blockGraffiti_10	L
+F	deci/aD/g	akQ	blockGraffiti_11	L
+F	deci/aD/g	akR	blockGraffiti_12	L
+F	deci/aD/g	akS	deciPropTarget	L
+F	deci/aD/g	aka	wreckagepolice	L
+F	deci/aD/g	akb	wreckagepolice	L
+F	deci/aD/g	akc	wreckagepolice	L
+F	deci/aD/g	akd	waterpallet	L
+F	deci/aD/g	ake	waterpallettarp	L
+F	deci/aD/g	akf	carepackage	L
+F	deci/aD/g	akg	trashbag	L
+F	deci/aD/g	akh	trashbag	L
+F	deci/aD/g	aki	tire	L
+F	deci/aD/g	akj	lantern	L
+F	deci/aD/g	akk	militaryradio	L
+F	deci/aD/g	akl	militaryradiooff	L
+F	deci/aD/g	akm	militaryradiosmall	L
+F	deci/aD/g	akn	militaryradiosmalloff	L
+F	deci/aD/g	ako	maintenancescreen	L
+F	deci/aD/g	akp	alarmbell	L
+F	deci/aD/g	akq	cantrap	L
+F	deci/aD/g	akr	canfire	L
+F	deci/aD/g	aks	russianroadsign	L
+F	deci/aD/g	akt	russianroadsignarrow	L
+F	deci/aD/g	aku	russianroadsignwarning	L
+F	deci/aD/g	akv	mechwreckage	L
+F	deci/aD/g	akw	radiotower	L
+F	deci/aD/g	akx	present	L
+F	deci/aD/g	aky	present2	L
+F	deci/aD/g	akz	present3	L
+F	deci/aD/k	alA	itemCocaLeaves	L
+F	deci/aD/k	alB	itemChoppedCocaLeaves	L
+F	deci/aD/k	alC	itemDustedCocaLeaves	L
+F	deci/aD/k	alD	itemPastyDustedCocaLeaves	L
+F	deci/aD/k	alE	itemCocaineProduce	L
+F	deci/aD/k	alF	itemMethProduce	L
+F	deci/aD/k	alG	itemPackagingPaper	L
+F	deci/aD/k	alH	itemPackagedCocaine	L
+F	deci/aD/k	alI	itemPackagedMeth	L
+F	deci/aD/k	alJ	itemSupplyDropRadio	L
+F	deci/aD/k	alK	itemLockpick	L
+F	deci/aD/k	alL	itemRadio	L
+F	deci/aD/k	alM	itemVestDetonator	L
+F	deci/aD/k	alN	itemRangeFinder	L
+F	deci/aD/k	alO	itemGuitar	L
+F	deci/aD/k	alP	itemParachute	L
+F	deci/aD/k	alQ	itemGlider	L
+F	deci/aD/k	alR	itemGPS	L
+F	deci/aD/k	alS	itemMapDeci	L
+F	deci/aD/k	alT	itemPartyHorn	L
+F	deci/aD/k	alU	itemSecurityKeycard	L
+F	deci/aD/k	alV	itemMilitaryKeycard	L
+F	deci/aD/k	alW	itemLaboratoryKeycard	L
+F	deci/aD/k	alX	itemConstructionHammer	L
+F	deci/aD/k	alY	itemSyringeEmpty	L
+F	deci/aD/k	alZ	itemSyringeMorphine	L
+F	deci/aD/k	aln	itemBottlecap	L
+F	deci/aD/k	alo	itemBottlecapGold	L
+F	deci/aD/k	alp	vehicleSpawnerATV	L
+F	deci/aD/k	alq	vehicleSpawnerHummer	L
+F	deci/aD/k	alr	vehicleSpawnerBuggy	L
+F	deci/aD/k	als	vehicleSpawnerM35	L
+F	deci/aD/k	alt	vehicleSpawnerBTR70	L
+F	deci/aD/k	alu	itemSelectionTool	L
+F	deci/aD/k	alv	itemRotationToolX	L
+F	deci/aD/k	alw	itemRotationToolY	L
+F	deci/aD/k	alx	itemRotationToolZ	L
+F	deci/aD/k	aly	itemRotationToolReset	L
+F	deci/aD/k	alz	itemTrimmingScissors	L
+F	deci/aD/k	amA	itemDrainCleaner	L
+F	deci/aD/k	amB	itemAcidCanister	L
+F	deci/aD/k	amC	itemK9Harness	L
+F	deci/aD/k	amD	itemScrapAcetone	L
+F	deci/aD/k	amE	itemScrapCigarettes	L
+F	deci/aD/k	amF	itemScrapDuctTape	L
+F	deci/aD/k	amG	itemScrapPhone	L
+F	deci/aD/k	amH	itemScrapPliers	L
+F	deci/aD/k	amI	itemScrapPropaneTank	L
+F	deci/aD/k	amJ	itemScrapScrewdriver	L
+F	deci/aD/k	amK	itemScrapWaterFilter	L
+F	deci/aD/k	amL	itemScrapWD40	L
+F	deci/aD/k	amM	itemScrapWrench	L
+F	deci/aD/k	amN	itemScrapLyePacket	L
+F	deci/aD/k	amO	itemScrapMonitorCapacitors	L
+F	deci/aD/k	amP	itemScrapMonitorCPU	L
+F	deci/aD/k	amQ	itemScrapMonitorFlashdrive	L
+F	deci/aD/k	amR	itemScrapMonitorGraphicsCard	L
+F	deci/aD/k	amS	itemScrapMonitorGraphicsCardFixed	L
+F	deci/aD/k	amT	itemScrapMonitorRAM	L
+F	deci/aD/k	amU	itemScrapMonitorSSD	L
+F	deci/aD/k	amV	itemScrapMilitaryGasAnalyzer	L
+F	deci/aD/k	amW	itemScrapMilitaryGasMaskFilter	L
+F	deci/aD/k	amX	itemScrapMilitaryGunPowder	L
+F	deci/aD/k	amY	itemKitConcertina	L
+F	deci/aD/k	amZ	itemKitSandbagStack	L
+F	deci/aD/k	ama	itemSyringeAdrenaline	L
+F	deci/aD/k	amb	itemVitaminCapsules	L
+F	deci/aD/k	amc	itemSplint	L
+F	deci/aD/k	amd	itemSyringeBlood	L
+F	deci/aD/k	ame	itemSyringeCure	L
+F	deci/aD/k	amf	itemSyringeInfection	L
+F	deci/aD/k	amg	itemBandage	L
+F	deci/aD/k	amh	itemBandageDirty	L
+F	deci/aD/k	ami	itemRag	L
+F	deci/aD/k	amj	itemRagDirty	L
+F	deci/aD/k	amk	itemPainKillers	L
+F	deci/aD/k	aml	itemFirstAidKit	L
+F	deci/aD/k	amm	itemEmptyBloodBag	L
+F	deci/aD/k	amn	itemBloodBag	L
+F	deci/aD/k	amo	itemCampfire	L
+F	deci/aD/k	amp	itemLandmine	L
+F	deci/aD/k	amq	itemPunjiSticks	L
+F	deci/aD/k	amr	itemBarbedWire	L
+F	deci/aD/k	ams	itemMortarGun	L
+F	deci/aD/k	amt	itemTurret	L
+F	deci/aD/k	amu	itemMetalRod	L
+F	deci/aD/k	amv	itemWire	L
+F	deci/aD/k	amw	itemWireCoil	L
+F	deci/aD/k	amx	itemEmptyCan	L
+F	deci/aD/k	amy	itemJerryCan	L
+F	deci/aD/k	amz	itemBattery	L
+F	deci/aD/k	anA	banditVest	L
+F	deci/aD/k	anB	banditPants	L
+F	deci/aD/k	anC	banditBoots	L
+F	deci/aD/k	anD	militiaHelm	L
+F	deci/aD/k	anE	militiaVest	L
+F	deci/aD/k	anF	militiaPants	L
+F	deci/aD/k	anG	militiaBoots	L
+F	deci/aD/k	anH	wristTimer	L
+F	deci/aD/k	anI	wristTimer2	L
+F	deci/aD/k	anJ	marineHelm	L
+F	deci/aD/k	anK	marineVest	L
+F	deci/aD/k	anL	marinePants	L
+F	deci/aD/k	anM	marineBoots	L
+F	deci/aD/k	anN	marineVestMedical	L
+F	deci/aD/k	anO	marineHat	L
+F	deci/aD/k	anP	marineforestHelm	L
+F	deci/aD/k	anQ	marineforestVest	L
+F	deci/aD/k	anR	marineforestPants	L
+F	deci/aD/k	anS	marineforestBoots	L
+F	deci/aD/k	anT	marineforestVestMedical	L
+F	deci/aD/k	anU	marineforestHat	L
+F	deci/aD/k	anV	marineurbanHelm	L
+F	deci/aD/k	anW	marineurbanVest	L
+F	deci/aD/k	anX	marineurbanPants	L
+F	deci/aD/k	anY	marineurbanBoots	L
+F	deci/aD/k	anZ	marineurbanVestMedical	L
+F	deci/aD/k	ana	itemKitSandbagStackBeige	L
+F	deci/aD/k	anb	itemKitMetalWall	L
+F	deci/aD/k	anc	policevest	L
+F	deci/aD/k	and	militaryvest	L
+F	deci/aD/k	ane	militaryvestbeige	L
+F	deci/aD/k	anf	militaryvestsnow	L
+F	deci/aD/k	ang	militaryvesthunter	L
+F	deci/aD/k	anh	militaryvestblack	L
+F	deci/aD/k	ani	suicidevest	L
+F	deci/aD/k	anj	pressvest	L
+F	deci/aD/k	ank	bulletproofvest	L
+F	deci/aD/k	anl	testvest	L
+F	deci/aD/k	anm	spetsnazHelm	L
+F	deci/aD/k	ann	spetsnazVest	L
+F	deci/aD/k	ano	spetsnazPants	L
+F	deci/aD/k	anp	spetsnazBoots	L
+F	deci/aD/k	anq	sasHelm	L
+F	deci/aD/k	anr	sasVest	L
+F	deci/aD/k	ans	sasPants	L
+F	deci/aD/k	ant	sasBoots	L
+F	deci/aD/k	anu	nypdHelm	L
+F	deci/aD/k	anv	nypdShirt	L
+F	deci/aD/k	anw	nypdCoat	L
+F	deci/aD/k	anx	nypdPants	L
+F	deci/aD/k	any	nypdBoots	L
+F	deci/aD/k	anz	banditHelm	L
+F	deci/aD/k	aoA	casual2Boots	L
+F	deci/aD/k	aoB	casual3Vest	L
+F	deci/aD/k	aoC	casual3Pants	L
+F	deci/aD/k	aoD	casual3Boots	L
+F	deci/aD/k	aoE	casual4Vest	L
+F	deci/aD/k	aoF	casual5Vest	L
+F	deci/aD/k	aoG	hoodie1	L
+F	deci/aD/k	aoH	hoodie2	L
+F	deci/aD/k	aoI	hoodie3	L
+F	deci/aD/k	aoJ	hoodie4	L
+F	deci/aD/k	aoK	hoodie5	L
+F	deci/aD/k	aoL	hoodie6	L
+F	deci/aD/k	aoM	hoodie7	L
+F	deci/aD/k	aoN	hoodie8	L
+F	deci/aD/k	aoO	hoodie9	L
+F	deci/aD/k	aoP	santahat	L
+F	deci/aD/k	aoQ	juggernautHelm	L
+F	deci/aD/k	aoR	juggernautVest	L
+F	deci/aD/k	aoS	juggernautPants	L
+F	deci/aD/k	aoT	juggernautBoots	L
+F	deci/aD/k	aoU	juggernautHelmGray	L
+F	deci/aD/k	aoV	juggernautVestGray	L
+F	deci/aD/k	aoW	juggernautPantsGray	L
+F	deci/aD/k	aoX	juggernautBootsGray	L
+F	deci/aD/k	aoY	hazmatHelm	L
+F	deci/aD/k	aoZ	hazmatVest	L
+F	deci/aD/k	aoa	marineurbanHat	L
+F	deci/aD/k	aob	marinesnowHelm	L
+F	deci/aD/k	aoc	marinesnowVest	L
+F	deci/aD/k	aod	marinesnowPants	L
+F	deci/aD/k	aoe	marinesnowBoots	L
+F	deci/aD/k	aof	marinesnowVestMedical	L
+F	deci/aD/k	aog	marinesnowHat	L
+F	deci/aD/k	aoh	marineblackHelm	L
+F	deci/aD/k	aoi	marineblackVest	L
+F	deci/aD/k	aoj	marineblackPants	L
+F	deci/aD/k	aok	marineblackBoots	L
+F	deci/aD/k	aol	marineblackHat	L
+F	deci/aD/k	aom	marineblueHelm	L
+F	deci/aD/k	aon	marineblueVest	L
+F	deci/aD/k	aoo	marinebluePants	L
+F	deci/aD/k	aop	marineblueBoots	L
+F	deci/aD/k	aoq	marinefuryHelm	L
+F	deci/aD/k	aor	marinefuryVest	L
+F	deci/aD/k	aos	marinefuryPants	L
+F	deci/aD/k	aot	marinefuryBoots	L
+F	deci/aD/k	aou	uahdHelmet	L
+F	deci/aD/k	aov	casual1Vest	L
+F	deci/aD/k	aow	casual1Pants	L
+F	deci/aD/k	aox	casual1Boots	L
+F	deci/aD/k	aoy	casual2Vest	L
+F	deci/aD/k	aoz	casual2Pants	L
+F	deci/aD/k	apA	itemCookedDeerMeat	L
+F	deci/aD/k	apB	itemCannedAppleGreen	L
+F	deci/aD/k	apC	itemCannedAppleRed	L
+F	deci/aD/k	apD	itemCannedBlackberry	L
+F	deci/aD/k	apE	itemCannedBlueberry	L
+F	deci/aD/k	apF	itemCannedCarrot	L
+F	deci/aD/k	apG	itemCannedChocolatePowder	L
+F	deci/aD/k	apH	itemCannedGrape	L
+F	deci/aD/k	apI	itemCannedLemon	L
+F	deci/aD/k	apJ	itemCannedLime	L
+F	deci/aD/k	apK	itemCannedMushroom	L
+F	deci/aD/k	apL	itemCannedPeach	L
+F	deci/aD/k	apM	itemCannedPear	L
+F	deci/aD/k	apN	itemCannedSweetcorn	L
+F	deci/aD/k	apO	itemCannedTuna	L
+F	deci/aD/k	apP	itemCannedMacncheese	L
+F	deci/aD/k	apQ	itemCannedApplesauce	L
+F	deci/aD/k	apR	itemCannedCustard	L
+F	deci/aD/k	apS	itemCannedKebab	L
+F	deci/aD/k	apT	itemCandyCorn	L
+F	deci/aD/k	apU	itemToffeeApple	L
+F	deci/aD/k	apV	itemMarshmallows	L
+F	deci/aD/k	apW	itemReeses	L
+F	deci/aD/k	apX	itemChocolateApple	L
+F	deci/aD/k	apY	itemMRE	L
+F	deci/aD/k	apZ	itemMRECooked	L
+F	deci/aD/k	apa	hazmatPants	L
+F	deci/aD/k	apb	hazmatBoots	L
+F	deci/aD/k	apc	ghillieHelm	L
+F	deci/aD/k	apd	ghillieVest	L
+F	deci/aD/k	ape	ghilliePants	L
+F	deci/aD/k	apf	ghillieBoots	L
+F	deci/aD/k	apg	ghillieHelmSnow	L
+F	deci/aD/k	aph	ghillieVestSnow	L
+F	deci/aD/k	api	ghilliePantsSnow	L
+F	deci/aD/k	apj	ghillieBootsSnow	L
+F	deci/aD/k	apk	capRed	L
+F	deci/aD/k	apl	capBlue	L
+F	deci/aD/k	apm	capGreen	L
+F	deci/aD/k	apn	capMaga	L
+F	deci/aD/k	apo	gasmask	L
+F	deci/aD/k	app	gasmaskmilitary	L
+F	deci/aD/k	apq	nvgoggles	L
+F	deci/aD/k	apr	nvgogglesFury	L
+F	deci/aD/k	aps	balaclava	L
+F	deci/aD/k	apt	itemInfectedFlesh	L
+F	deci/aD/k	apu	itemDemonFlesh	L
+F	deci/aD/k	apv	itemBirdMeat	L
+F	deci/aD/k	apw	itemCookedBirdMeat	L
+F	deci/aD/k	apx	itemBoarMeat	L
+F	deci/aD/k	apy	itemCookedBoarMeat	L
+F	deci/aD/k	apz	itemDeerMeat	L
+F	deci/aD/k	aqA	itemDoorGreen_1	L
+F	deci/aD/k	aqB	itemDoorGreen_2	L
+F	deci/aD/k	aqC	itemDoorGreen_3	L
+F	deci/aD/k	aqD	itemDoorOrange_1	L
+F	deci/aD/k	aqE	itemDoorOrange_2	L
+F	deci/aD/k	aqF	itemDoorOrange_3	L
+F	deci/aD/k	aqG	itemDoorBlue_1	L
+F	deci/aD/k	aqH	itemDoorBlue_2	L
+F	deci/aD/k	aqI	itemDoorBlue_3	L
+F	deci/aD/k	aqJ	itemDoorMetal_1	L
+F	deci/aD/k	aqK	itemDoorOffice_1	L
+F	deci/aD/k	aqL	itemCrowbar	L
+F	deci/aD/k	aqM	itemFireaxe	L
+F	deci/aD/k	aqN	itemBaseballBat	L
+F	deci/aD/k	aqO	itemBaseballBatNails	L
+F	deci/aD/k	aqP	itemCombatKnife	L
+F	deci/aD/k	aqQ	itemHammer	L
+F	deci/aD/k	aqR	itemCricketbat	L
+F	deci/aD/k	aqS	itemButcherKnife	L
+F	deci/aD/k	aqT	itemPoliceBaton	L
+F	deci/aD/k	aqU	itemChainsaw	L
+F	deci/aD/k	aqV	itemRiotshield	L
+F	deci/aD/k	aqW	itemMachete	L
+F	deci/aD/k	aqX	itemIcePick	L
+F	deci/aD/k	aqY	ak74	L
+F	deci/aD/k	aqZ	aks74	L
+F	deci/aD/k	aqa	itemBarChocolate	L
+F	deci/aD/k	aqb	itemBarEnergyApple	L
+F	deci/aD/k	aqc	itemBarEnergyBlueberry	L
+F	deci/aD/k	aqd	itemCrispsCoolranch	L
+F	deci/aD/k	aqe	itemCrispsBBQ	L
+F	deci/aD/k	aqf	itemCrispsNachocheese	L
+F	deci/aD/k	aqg	itemBottledWater	L
+F	deci/aD/k	aqh	itemBottledBerryade	L
+F	deci/aD/k	aqi	itemBottledCoke	L
+F	deci/aD/k	aqj	itemBottledIrnbru	L
+F	deci/aD/k	aqk	itemBottledLemonade	L
+F	deci/aD/k	aql	itemBottledLimeade	L
+F	deci/aD/k	aqm	itemBottledWhiskey	L
+F	deci/aD/k	aqn	itemBottledCherryade	L
+F	deci/aD/k	aqo	itemDrinkCanWater	L
+F	deci/aD/k	aqp	itemDrinkCanEnergy	L
+F	deci/aD/k	aqq	itemDrinkCanEnergyBlueberry	L
+F	deci/aD/k	aqr	itemDrinkCanEnergyCitrus	L
+F	deci/aD/k	aqs	itemCandyCane	L
+F	deci/aD/k	aqt	itemPeppermint	L
+F	deci/aD/k	aqu	itemDoorEmergency_1	L
+F	deci/aD/k	aqv	itemDoorEmergency_1Locked	L
+F	deci/aD/k	aqw	itemDoorEmergency_2	L
+F	deci/aD/k	aqx	itemDoorEmergency_3	L
+F	deci/aD/k	aqy	itemDoorSecurity_1	L
+F	deci/aD/k	aqz	itemDoorInfektorSecurity_1	L
+F	deci/aD/k	arA	vz52	L
+F	deci/aD/k	arB	l85a1	L
+F	deci/aD/k	arC	galil	L
+F	deci/aD/k	arD	galilsar	L
+F	deci/aD/k	arE	mpt76	L
+F	deci/aD/k	arF	kar98k	L
+F	deci/aD/k	arG	svt40	L
+F	deci/aD/k	arH	fnscar	L
+F	deci/aD/k	arI	fnscarhamr	L
+F	deci/aD/k	arJ	fnscarl	L
+F	deci/aD/k	arK	fnscarsc	L
+F	deci/aD/k	arL	fnscarssr	L
+F	deci/aD/k	arM	ar15beowulf	L
+F	deci/aD/k	arN	famas	L
+F	deci/aD/k	arO	famasi	L
+F	deci/aD/k	arP	g36c	L
+F	deci/aD/k	arQ	mosinnagant	L
+F	deci/aD/k	arR	aug1	L
+F	deci/aD/k	arS	aug3	L
+F	deci/aD/k	arT	aug3para	L
+F	deci/aD/k	arU	m79	L
+F	deci/aD/k	arV	mglml1l	L
+F	deci/aD/k	arW	ump45	L
+F	deci/aD/k	arX	mp5a3	L
+F	deci/aD/k	arY	uzi	L
+F	deci/aD/k	arZ	vz24	L
+F	deci/aD/k	ara	aks74u	L
+F	deci/aD/k	arb	akms	L
+F	deci/aD/k	arc	akm	L
+F	deci/aD/k	ard	ak12	L
+F	deci/aD/k	are	asval	L
+F	deci/aD/k	arf	m110	L
+F	deci/aD/k	arg	m4a4	L
+F	deci/aD/k	arh	insas	L
+F	deci/aD/k	ari	m14	L
+F	deci/aD/k	arj	parafal	L
+F	deci/aD/k	ark	fal	L
+F	deci/aD/k	arl	g3a3	L
+F	deci/aD/k	arm	g3a4	L
+F	deci/aD/k	arn	m16a1	L
+F	deci/aD/k	aro	m16a2	L
+F	deci/aD/k	arp	m231	L
+F	deci/aD/k	arq	ar15	L
+F	deci/aD/k	arr	rpk	L
+F	deci/aD/k	ars	rpk74	L
+F	deci/aD/k	art	sks	L
+F	deci/aD/k	aru	vz58	L
+F	deci/aD/k	arv	xm177	L
+F	deci/aD/k	arw	kms72	L
+F	deci/aD/k	arx	acr	L
+F	deci/aD/k	ary	honeybadger	L
+F	deci/aD/k	arz	m1garand	L
+F	deci/aD/k	asA	deagle	L
+F	deci/aD/k	asB	cz52	L
+F	deci/aD/k	asC	glock17	L
+F	deci/aD/k	asD	m1934	L
+F	deci/aD/k	asE	browninghp	L
+F	deci/aD/k	asF	ragingbull	L
+F	deci/aD/k	asG	model642	L
+F	deci/aD/k	asH	barettam9	L
+F	deci/aD/k	asI	r870	L
+F	deci/aD/k	asJ	spas12	L
+F	deci/aD/k	asK	ks23	L
+F	deci/aD/k	asL	aa12	L
+F	deci/aD/k	asM	dbarrel	L
+F	deci/aD/k	asN	dbarrels	L
+F	deci/aD/k	asO	benellim4	L
+F	deci/aD/k	asP	crotchbow	L
+F	deci/aD/k	asQ	rpg7	L
+F	deci/aD/k	asR	rpg18	L
+F	deci/aD/k	asS	itemFRAGGrenade	L
+F	deci/aD/k	asT	itemSmokeGrenade	L
+F	deci/aD/k	asU	itemTearGasGrenade	L
+F	deci/aD/k	asV	itemStunGrenade	L
+F	deci/aD/k	asW	itemSignalGrenadeGreen	L
+F	deci/aD/k	asX	itemSignalGrenadeRed	L
+F	deci/aD/k	asY	itemMolotov	L
+F	deci/aD/k	asZ	ak74Mag	L
+F	deci/aD/k	asa	kp31	L
+F	deci/aD/k	asb	vector	L
+F	deci/aD/k	asc	stenmk2	L
+F	deci/aD/k	asd	p90	L
+F	deci/aD/k	ase	mp7	L
+F	deci/aD/k	asf	mp40	L
+F	deci/aD/k	asg	mpi40	L
+F	deci/aD/k	ash	thompson	L
+F	deci/aD/k	asi	thompsoni	L
+F	deci/aD/k	asj	svd	L
+F	deci/aD/k	ask	l115a3	L
+F	deci/aD/k	asl	sv98	L
+F	deci/aD/k	asm	jng90	L
+F	deci/aD/k	asn	barrett	L
+F	deci/aD/k	aso	pkm	L
+F	deci/aD/k	asp	m1919a6	L
+F	deci/aD/k	asq	m60	L
+F	deci/aD/k	asr	m240	L
+F	deci/aD/k	ass	rpd	L
+F	deci/aD/k	ast	mk48	L
+F	deci/aD/k	asu	pkp	L
+F	deci/aD/k	asv	minigun	L
+F	deci/aD/k	asw	mg3	L
+F	deci/aD/k	asx	colt	L
+F	deci/aD/k	asy	aps	L
+F	deci/aD/k	asz	makarov	L
+F	deci/aD/k	atA	l85a1Mag	L
+F	deci/aD/k	atB	galilMag	L
+F	deci/aD/k	atC	ak12Mag	L
+F	deci/aD/k	atD	mpt76Mag	L
+F	deci/aD/k	atE	kar98kMag	L
+F	deci/aD/k	atF	svt40Mag	L
+F	deci/aD/k	atG	fnscarMag	L
+F	deci/aD/k	atH	fnscarhamrMag	L
+F	deci/aD/k	atI	fnscarlMag	L
+F	deci/aD/k	atJ	fnscarscMag	L
+F	deci/aD/k	atK	fnscarssrMag	L
+F	deci/aD/k	atL	ar15Mag	L
+F	deci/aD/k	atM	ar15beowulfMag	L
+F	deci/aD/k	atN	asvalMag	L
+F	deci/aD/k	atO	m110Mag	L
+F	deci/aD/k	atP	augMag	L
+F	deci/aD/k	atQ	augparaMag	L
+F	deci/aD/k	atR	ump45Mag	L
+F	deci/aD/k	atS	mp5a3Mag	L
+F	deci/aD/k	atT	uziMag	L
+F	deci/aD/k	atU	vz24Mag	L
+F	deci/aD/k	atV	kp31Mag	L
+F	deci/aD/k	atW	vectorMag	L
+F	deci/aD/k	atX	stenmk2Mag	L
+F	deci/aD/k	atY	p90Mag	L
+F	deci/aD/k	atZ	mp7Mag	L
+F	deci/aD/k	ata	aks74uMag	L
+F	deci/aD/k	atb	m4a4Mag	L
+F	deci/aD/k	atc	famasMag	L
+F	deci/aD/k	atd	famasiMag	L
+F	deci/aD/k	ate	g36cMag	L
+F	deci/aD/k	atf	mosinnagantMag	L
+F	deci/aD/k	atg	insasMag	L
+F	deci/aD/k	ath	m14Mag	L
+F	deci/aD/k	ati	sksMag	L
+F	deci/aD/k	atj	parafalMag	L
+F	deci/aD/k	atk	falMag	L
+F	deci/aD/k	atl	g3a3Mag	L
+F	deci/aD/k	atm	g3a4Mag	L
+F	deci/aD/k	atn	m16a1Mag	L
+F	deci/aD/k	ato	m16a2Mag	L
+F	deci/aD/k	atp	m231Mag	L
+F	deci/aD/k	atq	rpkMag	L
+F	deci/aD/k	atr	rpk74Mag	L
+F	deci/aD/k	ats	vz58Mag	L
+F	deci/aD/k	att	xm177Mag	L
+F	deci/aD/k	atu	kms72Mag	L
+F	deci/aD/k	atv	acrMag	L
+F	deci/aD/k	atw	aa12Mag	L
+F	deci/aD/k	atx	honeyBadgerMag	L
+F	deci/aD/k	aty	m1garandMag	L
+F	deci/aD/k	atz	vz52Mag	L
+F	deci/aD/k	auA	browninghpMag	L
+F	deci/aD/k	auV	sp6	L
+F	deci/aD/k	auY	fn57x28mm	L
+F	deci/aD/k	aua	mp40Mag	L
+F	deci/aD/k	aub	mpi40Mag	L
+F	deci/aD/k	auc	thompsonMag	L
+F	deci/aD/k	aud	thompsoniMag	L
+F	deci/aD/k	aue	svdMag	L
+F	deci/aD/k	auf	l115a3Mag	L
+F	deci/aD/k	aug	sv98Mag	L
+F	deci/aD/k	auh	jng90Mag	L
+F	deci/aD/k	aui	barrettMag	L
+F	deci/aD/k	auj	pkmMag	L
+F	deci/aD/k	auk	m1919a6Mag	L
+F	deci/aD/k	aul	m60Mag	L
+F	deci/aD/k	aum	m240Mag	L
+F	deci/aD/k	aun	rpdMag	L
+F	deci/aD/k	auo	mk48Mag	L
+F	deci/aD/k	aup	pkpMag	L
+F	deci/aD/k	auq	minigunMag	L
+F	deci/aD/k	aur	mg3Mag	L
+F	deci/aD/k	aus	coltMag	L
+F	deci/aD/k	aut	apsMag	L
+F	deci/aD/k	auu	makarovMag	L
+F	deci/aD/k	auv	deagleMag	L
+F	deci/aD/k	auw	cz52Mag	L
+F	deci/aD/k	aux	glock17Mag	L
+F	deci/aD/k	auy	barettam9Mag	L
+F	deci/aD/k	auz	m1934Mag	L
+F	deci/aD/k	avA	308winchesterBox	L
+F	deci/aD/k	avB	300winchesterBox	L
+F	deci/aD/k	avC	357Box	L
+F	deci/aD/k	avD	380Box	L
+F	deci/aD/k	avE	sp6Box	L
+F	deci/aD/k	avF	38specialBox	L
+F	deci/aD/k	avG	50bmgBox	L
+F	deci/aD/k	avH	fn57x28mmBox	L
+F	deci/aD/k	avI	50beowulfBox	L
+F	deci/aD/k	avJ	hk_4_6x30Box	L
+F	deci/aD/k	avK	14_5x114mmBox	L
+F	deci/aD/k	avL	itricBoltBox	L
+F	deci/aD/k	avM	itemHikingPackGreen	L
+F	deci/aD/k	avN	itemHikingPackTan	L
+F	deci/aD/k	avO	itemHikingPackGray	L
+F	deci/aD/k	avP	itemChestRigGreen	L
+F	deci/aD/k	avQ	itemChestRigBeige	L
+F	deci/aD/k	avR	itemChestRigGray	L
+F	deci/aD/k	avS	itemChestRigSnow	L
+F	deci/aD/k	avT	itemFannyPackRed	L
+F	deci/aD/k	avU	itemFannyPackYellow	L
+F	deci/aD/k	avV	itemFannyPackGreen	L
+F	deci/aD/k	avW	itemFannyPackBlue	L
+F	deci/aD/k	avX	itemPlateCarrierBeige	L
+F	deci/aD/k	avY	itemPlateCarrierGreen	L
+F	deci/aD/k	avZ	itemPlateCarrierGray	L
+F	deci/aD/k	ava	hk_4_6x30	L
+F	deci/aD/k	avc	itricBolt	L
+F	deci/aD/k	avd	bolt	L
+F	deci/aD/k	ave	rpg7Rocket	L
+F	deci/aD/k	avf	rpg18Rocket	L
+F	deci/aD/k	avg	rpg18RocketHS	L
+F	deci/aD/k	avh	rpg18RocketNWH	L
+F	deci/aD/k	avj	item120mmMortarRound	L
+F	deci/aD/k	avl	5_45x39mmBox	L
+F	deci/aD/k	avm	5_56mmBox	L
+F	deci/aD/k	avn	7_62x25mmBox	L
+F	deci/aD/k	avo	7_62x39mmBox	L
+F	deci/aD/k	avp	7_62x54mmBox	L
+F	deci/aD/k	avq	7_62x51mmBox	L
+F	deci/aD/k	avr	7_62x45mmBox	L
+F	deci/aD/k	avs	7_92x57mmBox	L
+F	deci/aD/k	avt	9mmBox	L
+F	deci/aD/k	avu	12gaugeBox	L
+F	deci/aD/k	avv	22Box	L
+F	deci/aD/k	avw	45acpBox	L
+F	deci/aD/k	avx	9x19mmBox	L
+F	deci/aD/k	avy	9x39mmBox	L
+F	deci/aD/k	avz	9x18mmBox	L
+F	deci/aD/k	awa	itemDuffleBag	L
+F	deci/aD/k	awb	itemHugeMilitaryPackGreen	L
+F	deci/aD/k	awc	itemHugeMilitaryPackBlack	L
+F	deci/aD/k	awd	itemHugeMilitaryPackTan	L
+F	deci/aD/k	awe	itemHugeMilitaryPackSnow	L
+F	deci/aD/k	awf	foregrip	L
+F	deci/aD/k	awg	laser	L
+F	deci/aD/k	awh	flashlight	L
+F	deci/aD/k	awi	reddot	L
+F	deci/aD/k	awj	pistolSuppressor	L
+F	deci/aD/k	awk	smgSuppressor	L
+F	deci/aD/k	awl	arSuppressor	L
+F	deci/aD/k	awm	shotgunSuppressor	L
+F	deci/aD/k	awn	mgSuppressor	L
+F	deci/aD/k	awr	dragunovScope	L
+F	deci/aD/k	aws	bayonet	L
+F	deci/aD/k	awt	itemPyroPowderWhite	L
+F	deci/aD/k	awu	itemPyroPowderRed	L
+F	deci/aD/k	awv	itemPyroPowderBlue	L
+F	deci/aD/k	aww	itemPyroPowderGreen	L
+F	deci/aD/k	awx	itemPyroPowderOrange	L
+F	deci/aD/k	awy	itemPyroPowderPink	L
+F	deci/aD/k	awz	itemPyroPowderYellow	L
+F	deci/aD/q	awG	silver	L
+F	deci/aD/q	awH	black	L
+F	deci/aD/q	awI	pinkpower	L
+F	deci/aD/q	awJ	black	L
+F	deci/aD/q	awK	virtual	L
+F	deci/aD/q	awL	marble	L
+F	deci/aD/q	awM	redcog	L
+F	deci/aD/q	awN	future	L
+F	deci/aD/q	awO	hunter	L
+F	deci/aD/q	awP	winter	L
+F	deci/aD/q	awQ	red	L
+F	deci/aD/q	awR	blue	L
+F	deci/aD/q	awS	forest	L
+F	deci/aD/q	awT	forest	L
+F	deci/aD/q	awU	fury	L
+F	deci/aD/q	awV	fury	L
+F	deci/aD/q	awW	fury	L
+F	deci/aD/q	awX	silver	L
+F	deci/aD/q	awY	black	L
+F	deci/aD/q	awZ	gold	L
+F	deci/aD/q	axa	cherryapple	L
+F	deci/aD/q	axb	forest	L
+F	deci/aE/a	ayw	loot	L
+F	deci/ac/e	XX	customName	L
+F	deci/ac/e	XY	defaultName	L
+F	deci/ac/h	XC	signContents	L
+F	deci/ac/i	XX	customName	L
+F	deci/ad/a	Yj	particleName	L
+F	deci/ad/b	Yv	xOff	L
+F	deci/ad/b	Yw	yOff	L
+F	deci/ad/b	Yx	zOff	L
+F	deci/ad/c	YB	isDriver	L
+F	deci/ad/c	YD	hidePlayer	L
+F	deci/ad/c	YE	protectPlayer	L
+F	deci/ad/c	YF	forcePerspective	L
+F	deci/ad/c	YG	perspectiveType	L
+F	deci/ad/c	YH	showOverlay	L
+F	deci/ad/e	YT	rotationRoll	L
+F	deci/ad/e	YY	maxDamageTaken	L
+F	deci/ad/e	Zf	lightsOn	L
+F	deci/ae/a	ZA	ownerUUID	L
+F	deci/ae/a	ZB	deathTime	L
+F	deci/ae/a	Zy	bottleCaps	L
+F	deci/ae/a	Zz	vac	L
+F	deci/af/d	VU	gesture	L
+F	deci/af/d	Wu	stance	L
+F	deci/af/d	ZY	characteristicSkintone	L
+F	deci/af/d	ZZ	characteristicHair	L
+F	deci/af/d	aaa	characteristicEyes	L
+F	deci/af/d	aab	characteristicMouth	L
+F	deci/af/d	aac	characteristicBeard	L
+F	deci/af/d	aad	characteristicShirt	L
+F	deci/af/d	aae	characteristicPants	L
+F	deci/af/d	aaf	characteristicShoes	L
+F	deci/af/d	aag	firstName	L
+F	deci/af/d	aah	secondName	L
+F	deci/ag/a	aas	isAlert	L
+F	deci/ag/a	aat	alertTimer	L
+F	deci/ag/d	aaG	horde	L
+F	deci/ag/e	aaJ	fuse	L
+F	deci/ah/c	aaZ	dogName	L
+F	deci/ah/d	abb	hasNoFear	L
+F	deci/aj/a	abA	livingTime	L
+F	deci/ak/b	abP	xTile	L
+F	deci/ak/b	abQ	yTile	L
+F	deci/ak/b	abR	zTile	L
+F	deci/ak/b	abT	inData	L
+F	deci/ak/b	abU	inGround	L
+F	deci/ak/b	abV	life	L
+F	deci/ak/b	abX	damage	L
+F	deci/ak/e	abP	xTile	L
+F	deci/ak/e	abQ	yTile	L
+F	deci/ak/e	abR	zTile	L
+F	deci/ak/e	abT	inData	L
+F	deci/ak/e	abU	inGround	L
+F	deci/ak/e	abV	life	L
+F	deci/ak/f	abP	xTile	L
+F	deci/ak/f	abQ	yTile	L
+F	deci/ak/f	abR	zTile	L
+F	deci/ak/f	abT	inData	L
+F	deci/ak/f	abU	inGround	L
+F	deci/ak/f	abV	life	L
+F	deci/ak/g	abP	xTile	L
+F	deci/ak/g	abQ	yTile	L
+F	deci/ak/g	abR	zTile	L
+F	deci/ak/g	abT	inData	L
+F	deci/ak/g	abU	inGround	L
+F	deci/ak/g	abV	life	L
+F	deci/ak/h	abP	xTile	L
+F	deci/ak/h	abQ	yTile	L
+F	deci/ak/h	abR	zTile	L
+F	deci/ak/h	abT	inData	L
+F	deci/ak/h	abU	inGround	L
+F	deci/ak/h	abV	life	L
+F	deci/ak/i	abP	xTile	L
+F	deci/ak/i	abQ	yTile	L
+F	deci/ak/i	abR	zTile	L
+F	deci/ak/i	abT	inData	L
+F	deci/ak/i	abU	inGround	L
+F	deci/ak/i	abV	life	L
+F	deci/ak/i	acv	targetX	L
+F	deci/ak/i	acw	targetY	L
+F	deci/ak/i	acx	targetZ	L
+F	deci/ak/j	abP	xTile	L
+F	deci/ak/j	abQ	yTile	L
+F	deci/ak/j	abR	zTile	L
+F	deci/ak/j	abT	inData	L
+F	deci/ak/j	abU	inGround	L
+F	deci/ak/j	abV	life	L
+F	deci/al/b	aas	isAlert	L
+F	deci/al/b	aat	alertTimer	L
+F	deci/al/b	acJ	newYawCopy	L
+F	deci/ao/b	acN	amount	L
+F	deci/ay/f	adF	ammo	L
+F	deci/b/c	aY	httpsBoehmodBuycraftNet	L
+F	deci/b/c	aZ	httpsWwwDiscordGgBoehmod	L
+F	deci/b/c	ba	httpsWwwBoehmodhostingCom	L
+F	deci/b/c	bb	httpsWwwTwitterComBoehMod	L
+F	deci/b/c	bc	httpsWwwBoehmodCom	L
+F	deci/b/c	bd	httpsWwwBoehmodComForumEwrCartaDeciAgreement	L
+F	deci/b/d	bk	deci	L
+F	deci/c/a	dj	keyDecimationGuiCancelgui	L
+F	deci/c/a	dk	keyDecimationWhistleDesc	L
+F	deci/c/a	dl	keyDecimationGuiCrouch	L
+F	deci/c/a	dm	keyDecimationGuiProne	L
+F	deci/c/a	dn	keyDecimationGuiFiremode	L
+F	deci/c/a	do	keyDecimationGuiReload	L
+F	deci/c/a	dp	keyDecimationGuiGestureSurrender	L
+F	deci/c/a	dq	keyDecimationGuiGestureWave	L
+F	deci/c/a	dr	keyDecimationGuiGestureClap	L
+F	deci/c/a	ds	keyDecimationGuiGestureDab	L
+F	deci/c/a	dt	keyDecimationGuiAttach	L
+F	deci/c/a	du	keyDecimationGuiCraft	L
+F	deci/c/a	dv	keyDecimationGunHolster	L
+F	deci/c/a	dw	keyDecimationUnharness	L
+F	deci/c/a	dx	keyDecimationTipClose	L
+F	deci/d/p	fP	servers	L
+F	deci/g/b	gY	renameBackpack	L
+F	deci/g/b	gZ	cancel	L
+F	deci/g/e	gY	place	L
+F	deci/g/e	gZ	cancel	L
+F	deci/g/h	gY	editImage	L
+F	deci/g/h	gZ	cancel	L
+F	deci/g/l	gY	editNote	L
+F	deci/g/l	gZ	cancel	L
+F	deci/g/m	gZ	close	L
+F	deci/g/o	gY	editRoadSign	L
+F	deci/g/o	gZ	cancel	L
+F	deci/h/a	fP	deci	L
+F	net/decimation/mod/client/cape/a	db	capesJson	L
+M	deci/C/a	bp	()	isEnabled	L
+M	deci/J/e	a	(RenderPlayerEvent.Pre)	onPre	L
+M	deci/J/e	b	(RenderWorldLastEvent)	onRenderWorldLast	L
+M	deci/Q/b	A	(String)	setSavedRegenRule	L
+M	deci/Q/b	C	(String)	setTypingStatus	L
+M	deci/Q/b	Q	(int)	setPendingRecoilShots	L
+M	deci/Q/b	S	(int)	setCountdownN	L
+M	deci/Q/b	T	(int)	setSafezoneGraceTicks	L
+M	deci/Q/b	a	(Item)	setLastHeldItem	L
+M	deci/Q/b	a	(ItemStack[])	setBankerItems	L
+M	deci/Q/b	b	(UUID)	setInspectedPlayerUUID	L
+M	deci/Q/b	bA	()	getTargetTimer	L
+M	deci/Q/b	bB	()	getTargetScore	L
+M	deci/Q/b	bC	()	getTargetLastEntity	L
+M	deci/Q/b	bJ	()	isParachuting	L
+M	deci/Q/b	bK	()	isGliding	L
+M	deci/Q/b	bL	()	getActionDelay	L
+M	deci/Q/b	bM	()	getStance	L
+M	deci/Q/b	bN	()	getWater	L
+M	deci/Q/b	bO	()	getBlood	L
+M	deci/Q/b	bR	()	getPos1X	L
+M	deci/Q/b	bS	()	getPos1Y	L
+M	deci/Q/b	bT	()	getPos1Z	L
+M	deci/Q/b	bU	()	getPos2X	L
+M	deci/Q/b	bV	()	getPos2Y	L
+M	deci/Q/b	bW	()	getPos2Z	L
+M	deci/Q/b	bX	()	getGesture	L
+M	deci/Q/b	bZ	()	getPickupTimer	L
+M	deci/Q/b	bz	()	getTargetBestScore	L
+M	deci/Q/b	cA	()	getPendingRecoilShots	L
+M	deci/Q/b	cB	()	getShotCounter	L
+M	deci/Q/b	cF	()	isFlagN	L
+M	deci/Q/b	cG	()	getFloatA	L
+M	deci/Q/b	cH	()	getFloatC	L
+M	deci/Q/b	cI	()	getFloatB	L
+M	deci/Q/b	cJ	()	getClientCooldown	L
+M	deci/Q/b	cL	()	getBankerItems	L
+M	deci/Q/b	cM	()	getSavedRegenRule	L
+M	deci/Q/b	cN	()	getLootInventory	L
+M	deci/Q/b	cO	()	getInspectedPlayerUUID	L
+M	deci/Q/b	cP	()	isCreativeFlag	L
+M	deci/Q/b	cQ	()	isInScaryZone	L
+M	deci/Q/b	cV	()	isTyping	L
+M	deci/Q/b	cW	()	isHasTouchedGround	L
+M	deci/Q/b	cZ	()	getEmblemId	L
+M	deci/Q/b	ca	()	getGoldBottlecaps	L
+M	deci/Q/b	cb	()	getBottlecaps	L
+M	deci/Q/b	cc	()	getBounty	L
+M	deci/Q/b	cd	()	getHumanity	L
+M	deci/Q/b	ce	()	getHumanityResetValue	L
+M	deci/Q/b	cf	()	getCombatTimer	L
+M	deci/Q/b	cg	()	isHolstered	L
+M	deci/Q/b	ch	()	isSpectating	L
+M	deci/Q/b	ci	()	getAimMode	L
+M	deci/Q/b	cl	()	isBrokenLeg	L
+M	deci/Q/b	cm	()	isInfected	L
+M	deci/Q/b	cn	()	isBleeding	L
+M	deci/Q/b	co	()	isIrradiated	L
+M	deci/Q/b	cs	()	getRecoilPitch	L
+M	deci/Q/b	ct	()	getRecoilYaw	L
+M	deci/Q/b	cu	()	getPreviousStance	L
+M	deci/Q/b	cv	()	getBackpack	L
+M	deci/Q/b	cw	()	getVest	L
+M	deci/Q/b	cx	()	getMask	L
+M	deci/Q/b	cy	()	getLastHeldItem	L
+M	deci/Q/b	cz	()	isIsFiring	L
+M	deci/Q/b	da	()	getCountdownN	L
+M	deci/Q/b	db	()	getClanJoinTime	L
+M	deci/Q/b	di	()	getStanceChangeCooldown	L
+M	deci/Q/b	dj	()	getDaysSurvived	L
+M	deci/Q/b	dn	()	getSafezoneGraceTicks	L
+M	deci/Q/b	do	()	getTypingStatus	L
+M	deci/Q/b	k	(boolean)	setIsFiring	L
+M	deci/Q/b	l	(boolean)	setFlagN	L
+M	deci/Q/b	n	(float)	setFloatC	L
+M	deci/Q/b	q	(int)	setTargetBestScore	L
+M	deci/S/d	dr	()	getDecalName	L
+M	deci/S/d	ds	()	getDecalSize	L
+M	deci/a/b	e	()	getBackendClient	L
+M	deci/a/b	f	()	getLootTable	L
+M	deci/a/b	g	()	getExtraBlockRegistry	L
+M	deci/a/b	h	()	getItemRegistry	L
+M	deci/a/b	i	()	getArmorMaterials	L
+M	deci/a/b	j	()	getRecipeRegistry	L
+M	deci/a/b	k	()	getTileEntityRegistry	L
+M	deci/a/b	l	()	getWeaponSkinRegistry	L
+M	deci/a/b	m	()	getNetworkRegistry	L
+M	deci/a/b	n	()	getEntityRegistry	L
+M	deci/a/b	o	()	getEntitySpawnRegistry	L
+M	deci/a/b	p	()	getSoundRegistry	L
+M	deci/a/c	r	()	getAntiCheat	L
+M	deci/a/c	s	()	getShutdownHook	L
+M	deci/a/c	t	()	getDiscordPresence	L
+M	deci/a/c	u	()	getClientConfig	L
+M	deci/a/e	v	()	getClanStore	L
+M	deci/a/e	w	()	getClanManager	L
+M	deci/a/e	x	()	getTurfManager	L
+M	deci/a/e	y	()	getServerConfig	L
+M	deci/aB/c	ga	()	getSound	L
+M	deci/aK/a	a	(BlockEvent.BreakEvent)	onBreak	L
+M	deci/aK/b	a	(BlockEvent.PlaceEvent)	onPlace	L
+M	deci/aK/c	b	(EntityInteractEvent)	onEntityInteract	L
+M	deci/aK/e	a	(EntityItemPickupEvent)	onEntityItemPickup	L
+M	deci/aK/f	b	(ItemTossEvent)	onItemToss	L
+M	deci/aK/g	b	(LivingAttackEvent)	onLivingAttack	L
+M	deci/aK/h	b	(LivingDeathEvent)	onLivingDeath	L
+M	deci/aK/i	d	(LivingHurtEvent)	onLivingHurt	L
+M	deci/aK/j	a	(LivingDropsEvent)	onLivingDrops	L
+M	deci/aK/k	a	(PlayerInteractEvent)	onPlayerInteract	L
+M	deci/aK/l	b	(PlayerEvent.PlayerLoggedInEvent)	onPlayerLoggedIn	L
+M	deci/aK/m	a	(TickEvent.PlayerTickEvent)	onPlayerTick	L
+M	deci/aK/n	a	(ServerChatEvent)	onServerChat	L
+M	deci/aK/q	a	(TickEvent.ServerTickEvent)	onServerTick	L
+M	deci/aL/a	a	(BlockEvent.BreakEvent)	onBreak	L
+M	deci/aL/a	a	(BlockEvent.PlaceEvent)	onPlace	L
+M	deci/aL/a	a	(EntityItemPickupEvent)	onEntityItemPickup	L
+M	deci/aL/a	a	(LivingDropsEvent)	onLivingDrops	L
+M	deci/aL/a	a	(PlayerInteractEvent)	onPlayerInteract	L
+M	deci/aL/a	a	(ServerChatEvent)	onServerChat	L
+M	deci/aL/a	a	(TickEvent.PlayerTickEvent)	onPlayerTick	L
+M	deci/aL/a	a	(TickEvent.ServerTickEvent)	onServerTick	L
+M	deci/aL/a	b	(EntityInteractEvent)	onEntityInteract	L
+M	deci/aL/a	b	(ItemTossEvent)	onItemToss	L
+M	deci/aL/a	b	(LivingAttackEvent)	onLivingAttack	L
+M	deci/aL/a	b	(LivingDeathEvent)	onLivingDeath	L
+M	deci/aL/a	b	(PlayerEvent.PlayerLoggedInEvent)	onPlayerLoggedIn	L
+M	deci/aL/a	d	(LivingHurtEvent)	onLivingHurt	L
+M	deci/ac/e	D	(String)	setCustomName	L
+M	deci/ac/g	dx	()	getRotation	L
+M	deci/ac/g	dy	()	getSpinSpeed	L
+M	deci/ac/g	q	(float)	setRotation	L
+M	deci/ac/g	r	(float)	setSpinSpeed	L
+M	deci/ad/c	dF	()	isFlagC	L
+M	deci/ad/c	dG	()	isIsDriver	L
+M	deci/ad/c	dH	()	isHidePlayer	L
+M	deci/ad/c	dI	()	isProtectPlayer	L
+M	deci/ad/e	c	(Item)	setDropItem	L
+M	deci/ad/e	dS	()	getMaxSpeed	L
+M	deci/ad/e	dV	()	getSeats	L
+M	deci/ad/e	dW	()	getMaxHealth	L
+M	deci/ad/e	dX	()	getMaxSpeed	L
+M	deci/ad/e	eb	()	isLightsOn	L
+M	deci/ad/e	q	(boolean)	setCanDrive	L
+M	deci/ad/e	s	(boolean)	setLightsOn	L
+M	deci/ad/e	u	(float)	setMaxHealth	L
+M	deci/ad/e	v	(float)	setMaxSpeed	L
+M	deci/ad/g	ee	()	getTurretSeat	L
+M	deci/ad/g	j	(EntityPlayer)	setGunner	L
+M	deci/ae/a	E	(String)	setOwnerUUID	L
+M	deci/ae/a	ef	()	getOwnerUUID	L
+M	deci/ae/a	g	(long)	setBottleCaps	L
+M	deci/ae/a	r	(long)	setDeathTime	L
+M	deci/af/d	G	(int)	setGesture	L
+M	deci/af/d	P	(int)	setPrevStance	L
+M	deci/af/d	a	(Item)	setLastHeldItem	L
+M	deci/af/d	bM	()	getStance	L
+M	deci/af/d	bX	()	getGesture	L
+M	deci/af/d	cG	()	getStanceAnim	L
+M	deci/af/d	cH	()	getWeaponAnim	L
+M	deci/af/d	cI	()	getSecondaryAnim	L
+M	deci/af/d	cu	()	getPrevStance	L
+M	deci/af/d	cv	()	getBackpack	L
+M	deci/af/d	cw	()	getVest	L
+M	deci/af/d	cx	()	getMask	L
+M	deci/af/d	cy	()	getLastHeldItem	L
+M	deci/af/d	ej	()	getFirstName	L
+M	deci/af/d	ek	()	getLastName	L
+M	deci/af/d	el	()	getSkinTone	L
+M	deci/af/d	em	()	getHair	L
+M	deci/af/d	en	()	getEyes	L
+M	deci/af/d	eo	()	getMouth	L
+M	deci/af/d	ep	()	getBeard	L
+M	deci/af/d	eq	()	getShirt	L
+M	deci/af/d	er	()	getPants	L
+M	deci/af/d	es	()	getShoes	L
+M	deci/af/d	h	(ItemStack)	setBackpack	L
+M	deci/af/d	i	(ItemStack)	setVest	L
+M	deci/af/d	j	(ItemStack)	setMask	L
+M	deci/af/d	n	(float)	setWeaponAnim	L
+M	deci/af/d	o	(float)	setStanceAnim	L
+M	deci/af/d	p	(float)	setSecondaryAnim	L
+M	deci/ag/a	eB	()	isAlert	L
+M	deci/ag/a	eD	()	getGun	L
+M	deci/ag/a	k	(ItemStack)	setGun	L
+M	deci/ag/g	ag	(int)	setSkin	L
+M	deci/ag/g	eL	()	getSkin	L
+M	deci/ag/k	eP	()	getVariant	L
+M	deci/ah/c	eS	()	getDogName	L
+M	deci/ah/d	eU	()	isHasNoFear	L
+M	deci/ah/d	u	(boolean)	setHasNoFear	L
+M	deci/ai/a	a	(d)	setClientele	L
+M	deci/ai/a	eX	()	getClientele	L
+M	deci/ai/a	m	(EntityPlayer)	setCustomer	L
+M	deci/ai/v	eB	()	isIsShooting	L
+M	deci/ai/v	eD	()	getHeldGun	L
+M	deci/ai/v	k	(ItemStack)	setHeldGun	L
+M	deci/ak/c	fm	()	isExplodeOnImpact	L
+M	deci/al/b	eB	()	isIsShooting	L
+M	deci/al/b	fs	()	getYaw	L
+M	deci/al/b	fu	()	getShotCounter	L
+M	deci/al/b	fv	()	getTarget	L
+M	deci/al/b	x	(float)	setYaw	L
+M	deci/an/a	a	(LivingAttackEvent)	onLivingAttack	L
+M	deci/an/b	a	(EntityEvent.EntityConstructing)	onEntityConstructing	L
+M	deci/an/c	b	(LivingHurtEvent)	onLivingHurt	L
+M	deci/an/d	a	(EntityInteractEvent)	onEntityInteract	L
+M	deci/an/f	a	(LivingDeathEvent)	onLivingDeath	L
+M	deci/an/g	a	(ItemTossEvent)	onItemToss	L
+M	deci/an/h	c	(LivingHurtEvent)	onLivingHurt	L
+M	deci/an/i	a	(CommandEvent)	onCommand	L
+M	deci/an/j	a	(PlayerEvent.Clone)	onClone	L
+M	deci/an/l	a	(PlayerEvent.PlayerRespawnEvent)	onPlayerRespawn	L
+M	deci/an/m	a	(TickEvent.PlayerTickEvent)	onPlayerTick	L
+M	deci/an/o	a	(PlayerEvent.StartTracking)	onStartTracking	L
+M	deci/an/p	a	(TickEvent.WorldTickEvent)	onWorldTick	L
+M	deci/ar/a	fA	()	getWaterAmount	L
+M	deci/av/k	fB	()	getKeycardLevel	L
+M	deci/ay/g	fG	()	getBulletItem	L
+M	deci/ay/h	w	(boolean)	setFlagT	L
+M	deci/ay/i	fL	()	isIntegralSuppressor	L
+M	deci/ay/i	fM	()	isHasIntegratedScope	L
+M	deci/ay/i	fN	()	getModel	L
+M	deci/ay/i	fQ	()	getIntegratedScopeName	L
+M	deci/ay/j	fR	()	getGunName	L
+M	deci/ay/j	fS	()	getSkinId	L
+M	deci/ay/j	fT	()	getSkinName	L
+M	deci/ay/j	fU	()	getPrimaryColor	L
+M	deci/ay/j	fV	()	getSecondaryColor	L
+M	deci/ay/k	fY	()	getColor	L
+M	deci/az/b	fZ	()	getDamage	L
+M	deci/c/a	a	(TickEvent.ClientTickEvent)	onClientTick	L
+M	deci/c/b	a	(RenderLivingEvent.Specials.Pre)	onPre	L
+M	deci/c/b	a	(TickEvent.RenderTickEvent)	onRenderTick	L
+M	deci/c/b	b	(TickEvent.RenderTickEvent)	onRenderTick	L
+M	deci/c/c	a	(DrawBlockHighlightEvent)	onDrawBlockHighlight	L
+M	deci/c/c	a	(EntityViewRenderEvent.FogDensity)	onFogDensity	L
+M	deci/c/c	a	(ExplosionEvent)	onExplosion	L
+M	deci/c/c	a	(FMLNetworkEvent.ClientDisconnectionFromServerEvent)	onClientDisconnectionFromServer	L
+M	deci/c/c	a	(GuiOpenEvent)	onGuiOpen	L
+M	deci/c/c	a	(ItemTooltipEvent)	onItemTooltip	L
+M	deci/c/c	a	(LivingEvent.LivingUpdateEvent)	onLivingUpdate	L
+M	deci/c/c	a	(LivingHurtEvent)	onLivingHurt	L
+M	deci/c/c	a	(MouseEvent)	onMouse	L
+M	deci/c/c	a	(PlaySoundEvent17)	onPlaySoundEvent17	L
+M	deci/c/c	a	(PlayerEvent.ItemPickupEvent)	onItemPickup	L
+M	deci/c/c	a	(PlayerEvent.PlayerLoggedInEvent)	onPlayerLoggedIn	L
+M	deci/c/c	a	(RenderBlockOverlayEvent)	onRenderBlockOverlay	L
+M	deci/c/c	a	(RenderGameOverlayEvent)	onRenderGameOverlay	L
+M	deci/c/c	a	(RenderGameOverlayEvent.Post)	onPost	L
+M	deci/c/c	a	(RenderGameOverlayEvent.Pre)	onPre	L
+M	deci/c/c	a	(RenderHandEvent)	onRenderHand	L
+M	deci/c/c	a	(RenderLivingEvent.Pre)	onPre	L
+M	deci/c/c	a	(TickEvent.PlayerTickEvent)	onPlayerTick	L
+M	deci/c/c	b	(TickEvent.ClientTickEvent)	onClientTick	L
+M	deci/c/d	a	(RenderWorldEvent.Pre)	onPre	L
+M	deci/c/d	a	(RenderWorldLastEvent)	onRenderWorldLast	L
+M	net/decimation/mod/client/cape/b	a	(RenderPlayerEvent.Specials.Post)	onPost	L
+M	net/decimation/mod/server/screenshot/a	hd	()	getState	L

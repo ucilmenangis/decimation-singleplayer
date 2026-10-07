@@ -1,0 +1,9 @@
+C	deci/aj/a	BarbedWireEntity	entity	H	Barbed wire trap entity: damages and slows entities inside, removable with the right tool, despawns after a long timer
+F	deci/aj/a	abA	lifetimeTicks	M
+C	deci/aj/b	CampFireEntity	entity	H	Campfire entity: cooks raw meat/fish on right click, burns out after 12000 ticks
+F	deci/aj/b	abB	burnTicksLeft	M
+C	deci/aj/c	LandmineEntity	entity	H	Landmine entity: explodes when an entity steps on it, right click disarms
+M	deci/aj/c	fe	()	detonate	H
+C	deci/aj/d	MortarGunEntity	entity	H	Placeable mortar the player can ride and aim (sneak right click to pack up)
+F	deci/aj/d	abC	packing	L
+C	deci/aj/e	PunjiSticksEntity	entity	H	Punji sticks trap entity: damages entities walking over it, right click disarms

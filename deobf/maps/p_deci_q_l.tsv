@@ -1,0 +1,12 @@
+C	deci/q/a	ModelBoar	model	H	ModelPig subclass for the boar
+C	deci/q/b	ModelInfectedLegacy	model	L	ModelZombie subclass not referenced anywhere (old infected model)
+C	deci/q/c	ModelDeciPlayer	model	H	Full player model used by PlayerModelSwapper: stances, gestures, hang glider bmodel, armor textures
+C	deci/q/d	ModelBuck	model	H	Quadruped deer model
+C	deci/q/e	ModelDemon	model	H	Demon (flying creature) model
+C	deci/q/f	ModelDoggo	model	H	Wolf model with backpack/harness bmodel overlay for the dog
+C	deci/q/g	ModelFullArmorBModel	model	L	Biped that renders a full armor bmodel; not instantiated anywhere
+C	deci/q/h	ModelHuman	model	H	Biped model for human NPCs with per mob detail textures (body, eyes)
+C	deci/q/i	ModelInfectedCrawler	model	H	Crawler infected model
+C	deci/q/j	ModelInfectedDog	model	H	Infected dog model
+C	deci/q/k	ModelMech	model	H	Mech model
+C	deci/q/l	ModelCorpse	model	H	Biped model for player corpses (static pose)

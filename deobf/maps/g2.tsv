@@ -1,0 +1,706 @@
+C	deci/S/a	BlockDecal	block	H	Flat wall decal block (blood splats, hazard signs) with a TESR tile entity, facing set from placer yaw
+F	deci/S/a	Xy	decalName	H
+F	deci/S/a	Xz	decalSize	H
+M	deci/S/a	V	(int)	setDecalSize	H
+C	deci/S/b	BlockDecalImage	block	H	Decal block that shows a web image from a URL; creative right click opens the image edit GUI
+C	deci/S/c	BlockDecalNote	block	H	Decal block holding a text note; creative opens edit GUI, others open read GUI
+C	deci/S/d	TileEntityDecal	tileentity	H	Tile entity storing decal texture name and size in NBT
+F	deci/S/d	Xy	decalName	H
+F	deci/S/d	Xz	decalSize	H
+M	deci/S/d	dr	()	getDecalName	H
+M	deci/S/d	ds	()	getDecalSize	H
+C	deci/S/e	TileEntityDecalImage	tileentity	H	Decal tile entity with an image URL and scale, synced via a packet to all players
+F	deci/S/e	XA	imageUrl	H
+F	deci/S/e	XB	imageScale	H
+C	deci/S/f	TileEntityDecalNote	tileentity	H	Decal tile entity with note text, synced via a packet to all players
+F	deci/S/f	XC	noteContents	H
+C	deci/Y/a	BlockSoundEmitter	block	H	Ambient sound block (car alarm, morse code etc) that randomly plays a deci: sound client side
+F	deci/Y/a	Ui	soundName	H
+F	deci/Y/a	XM	playThreshold	H
+M	deci/Y/a	b	(double)	setPlayThreshold	H
+C	deci/aC/a	LootConfigJson	loot	M	Unused JSON loot table loader (block[@meta] -> item pool), can download decimation_loot.properties from the BoehMod server
+F	deci/aC/a	afp	AT_SPLITTER	H
+F	deci/aC/a	afq	poolsByBlock	H
+M	deci/aC/a	gb	()	downloadLootConfig	H
+M	deci/aC/a	a	(Path)	load	H
+M	deci/aC/a	a	(Block,int)	getPool	H
+M	deci/aC/a	K	(String)	parseBlock	H
+C	deci/aC/a$b	LootEntryJson	loot	H	Gson DTO for one JSON loot entry (block, roll count, item strings)
+F	deci/aC/a$b	aft	block	H
+F	deci/aC/a$b	afu	maxRolls	M
+F	deci/aC/a$b	afv	items	H
+F	deci/aC/a$b	afb	comment	L
+C	deci/aC/a$a	BlockMetaKey	loot	H	HashMap key of block plus metadata (-1 = any meta)
+F	deci/aC/a$a	afs	meta	H
+C	deci/aC/b	LootPool	loot	H	Rolls a random number of item entries into random distinct slots of an inventory, clearing the rest
+F	deci/aC/b	aeZ	rollRange	H
+F	deci/aC/b	afa	entries	H
+M	deci/aC/b	a	(Random,IInventory)	fillInventory	H
+C	deci/ac/a	EntityFallingSupplyDrop	entity	H	Falling block entity for a supply drop crate, slowed to a parachute fall speed
+F	deci/ac/a	XO	BLOCK_SETTER	H
+C	deci/ac/b	TileEntityMapBarrier	tileentity	H	Map barrier tile entity; client side re-renders the block when the local player toggles creative mode
+F	deci/ac/b	XP	isCreative	H
+F	deci/ac/b	XQ	lastCreative	H
+C	deci/ac/c	TileEntityElevator	tileentity	H	Elevator: after a countdown teleports living entities in a 3x3 area to the next open elevator in the same column
+F	deci/ac/c	XR	cooldownTicks	H
+M	deci/ac/c	dt	()	teleportToNextElevator	H
+M	deci/ac/c	du	()	findTargetElevator	H
+M	deci/ac/c	dv	()	startCountdown	H
+C	deci/ac/d	TileEntityLockable	tileentity	H	Base tile entity for lockpickable blocks; holds a random pin order, creative or lockpick use opens it
+F	deci/ac/d	XS	rand	H
+F	deci/ac/d	XT	pinOrder	M
+M	deci/ac/d	a	(World,int,int,int,EntityPlayer,int)	onActivated	H
+M	deci/ac/d	b	(World)	shufflePins	M
+M	deci/ac/d	f	(EntityPlayer)	unlock	M
+M	deci/ac/d	a	(EntityPlayer,IInventory)	onUnlocked	M
+M	deci/ac/d	dw	()	getPinCount	H
+M	deci/ac/d	X	(int)	getPin	H
+M	deci/ac/d	g	(EntityPlayer)	isUsableByPlayer	H
+C	deci/ac/e	TileEntityLockedChest	tileentity	H	Lockable chest inventory; on unlock opens a vanilla chest GUI, lid animation like vanilla chest
+F	deci/ac/e	XU	lidAngle	H
+F	deci/ac/e	XV	prevLidAngle	H
+F	deci/ac/e	XW	inventory	H
+F	deci/ac/e	XX	customName	H
+F	deci/ac/e	XY	defaultName	H
+F	deci/ac/e	XZ	numPlayersUsing	H
+F	deci/ac/e	Ya	ticksSinceSync	H
+M	deci/ac/e	D	(String)	setCustomName	H
+C	deci/ac/f	TileEntityLockedDoor	tileentity	M	Lockable tile entity whose unlock calls the door block (deci.U.g) to open it
+C	deci/ac/g	TileEntityPropellerTrap	tileentity	H	Spinning propeller trap that speeds up and damages living entities nearby each revolution
+F	deci/ac/g	Yb	spinSpeed	H
+F	deci/ac/g	eg	rotation	H
+F	deci/ac/g	Yc	engineSoundTimer	H
+M	deci/ac/g	dx	()	getRotation	H
+M	deci/ac/g	q	(float)	setRotation	H
+M	deci/ac/g	dy	()	getSpinSpeed	H
+M	deci/ac/g	r	(float)	setSpinSpeed	H
+C	deci/ac/h	TileEntityPropRoadSign	tileentity	H	Road sign prop tile entity with editable text, synced via a packet
+F	deci/ac/h	XC	signContents	H
+C	deci/ac/i	TileEntityStorageCrate	tileentity	H	Vanilla chest clone for storage crates (27 slots, double-crate adjacency, lid animation)
+F	deci/ac/i	Yd	adjacentChestZNeg	H
+F	deci/ac/i	Ye	adjacentChestXPos	H
+F	deci/ac/i	Yf	adjacentChestXNeg	H
+F	deci/ac/i	Yg	adjacentChestZPos	H
+F	deci/ac/i	Yh	inventory	H
+F	deci/ac/i	Ya	ticksSinceSync	H
+F	deci/ac/i	Yi	cachedCrateType	H
+F	deci/ac/i	XX	customName	H
+M	deci/ac/i	a	(deci.ac.i,int)	checkAdjacent	M
+M	deci/ac/i	h	(int,int,int)	isSameCrateAt	H
+C	deci/ac/j	TileEntitySupplyDrop	tileentity	H	Non ticking supply drop tile entity with an enlarged render bounding box for its TESR
+C	deci/ae/a	EntityCorpse	entity	H	Rotting Corpse entity left on player death: 54 slot inventory plus overflow deque, bottlecap payout, despawns after 18000 ticks
+F	deci/ae/a	Zn	DEFAULT_VAC	L
+F	deci/ae/a	Zo	UNUSED_CONST_3	L
+F	deci/ae/a	Zp	DW_OWNER_ID	M
+F	deci/ae/a	Zq	MAX_SLOTS	M
+F	deci/ae/a	Zr	CORPSE_KILL_DAMAGE	H
+F	deci/ae/a	Zs	PICKUP_DURABILITY_LOSS	M
+F	deci/ae/a	Zt	MAX_HEALTH	H
+F	deci/ae/a	Zu	MAX_OVERFLOW	H
+F	deci/ae/a	Zv	LIFETIME_TICKS	H
+F	deci/ae/a	Zw	equipment	H
+F	deci/ae/a	Zx	overflowItems	H
+F	deci/ae/a	Zy	bottleCaps	H
+F	deci/ae/a	Zz	vac	L
+F	deci/ae/a	ZA	ownerUUID	H
+F	deci/ae/a	ZB	deathTime	H
+F	deci/ae/a	ZC	pendingRemoval	H
+M	deci/ae/a	f	(ItemStack)	applyWear	M
+M	deci/ae/a	dx	()	getYaw	H
+M	deci/ae/a	q	(float)	setYaw	H
+M	deci/ae/a	ef	()	getOwnerUUID	H
+M	deci/ae/a	E	(String)	setOwnerUUID	H
+M	deci/ae/a	eg	()	pushOutOfWall	H
+M	deci/ae/a	ad	(int)	getArmorInSlot	M
+M	deci/ae/a	ae	(int)	getArmorInSlotAlias	L
+M	deci/ae/a	eh	()	hasFreeSpace	H
+M	deci/ae/a	g	(ItemStack)	addItem	H
+M	deci/ae/a	a	(ItemStack,ItemStack)	mergeStacks	H
+M	deci/ae/a	b	(ItemStack,ItemStack)	canMerge	H
+M	deci/ae/a	r	(long)	setDeathTime	H
+M	deci/ae/a	h	(String)	playInventorySound	H
+M	deci/ae/a	g	(long)	setBottleCaps	H
+C	deci/ae/b	NpcFaction	entity	H	NPC faction enum (Bandit, Military, Civilian, Soviet) with plain and chat colored names
+C	deci/av/a	ItemBackpack	item	H	Backpack item (hiking pack, chest rig, duffle bag...) with a capacity, stores contents as stack_N NBT; sneak use opens rename GUI
+M	deci/av/a	b	(ItemStack,int)	getStoredStack	H
+M	deci/av/a	a	(ItemStack,ItemStack,int)	setStoredStack	H
+C	deci/av/b	ItemBarbedWire	item	H	Places a barbed wire entity on the targeted floor; blocked within 6 blocks of an elevator in survival
+C	deci/av/c	ItemBottlecap	item	H	Bottlecap currency item
+C	deci/av/d	ItemBottlecapGold	item	H	Rare gold bottlecap currency item
+C	deci/av/e	ItemCampfire	item	H	Places a campfire entity on the targeted floor
+C	deci/av/f	ItemConstructionHammer	item	H	Construction hammer that instantly breaks fortification blocks (logic lives elsewhere)
+C	deci/av/g	ItemDustedCocaLeaves	item	H	Drug crafting intermediate (dusted coca leaves), damageable tool style item
+F	deci/av/g	desc	description	H
+C	deci/av/h	ItemGlider	item	H	Glider: deploy while falling more than 2 blocks, conceal on second use; toggles player glider state
+C	deci/av/i	ItemGuitar	item	H	Guitar that plays pling or strum sounds pitched by look angle, strum uses the player's sound cooldown
+C	deci/av/j	ItemJerryCan	item	H	Fuel jerry can (fluid container); floor spill action is a stub that does nothing
+C	deci/av/k	ItemKeycard	item	H	Keycard item with a clearance level (0 security, 1 military, 2 laboratory)
+F	deci/av/k	adi	keycardLevel	H
+M	deci/av/k	fB	()	getKeycardLevel	H
+C	deci/av/l	ItemLandmine	item	H	Places a landmine entity on the targeted floor with a 20 tick player cooldown
+C	deci/av/m	ItemLockpick	item	H	Lockpick item used on lockable doors and chests
+F	deci/av/m	XS	rand	H
+C	deci/av/n	ItemDescribed	item	H	Generic simple item that just shows a tooltip description (scraps, drugs, wire, etc)
+C	deci/av/o	ItemParachute	item	H	Parachute: deploy while airborne, conceal on second use; toggles player parachute state
+C	deci/av/p	ItemPartyHorn	item	H	Party horn (2019 birthday item) that plays a honk using the player's sound cooldown
+C	deci/av/q	ItemPastyDustedCocaLeaves	item	H	Drug crafting intermediate, copy of ItemDustedCocaLeaves with the same tooltip
+F	deci/av/q	desc	description	H
+C	deci/av/r	ItemPunjiSticks	item	H	Places a punji sticks trap entity on the targeted floor
+C	deci/av/s	ItemRadio	item	H	Handheld radio with an NBT frequency 0..120 changed by right click
+M	deci/av/s	n	(ItemStack)	initNbt	H
+M	deci/av/s	q	(ItemStack)	getFrequency	H
+C	deci/av/t	ItemRangeFinder	item	H	Range finder item (distance display handled elsewhere)
+C	deci/av/u	ItemSupplyDropRadio	item	H	Calls a supply drop: places the supply drop block at world top above the clicked ground and notifies all clients
+C	deci/av/v	ItemTrimmingScissors	item	H	Trims a specific plant block with 25 percent chance, yielding an item
+F	deci/av/v	desc	description	H
+F	deci/av/v	acZ	useSound	H
+C	deci/av/w	ItemTurret	item	H	Places a turret entity; creative mode only
+C	deci/av/x	ItemVestDetonator	item	H	Detonator remote: starts a 20 tick NBT countdown then explodes the equipped suicide vest
+F	deci/av/x	adj	originalName	M
+M	deci/av/x	n	(ItemStack)	initNbt	H
+C	deci/i/a	GuiMenuBase	gui	H	Base class of every custom main/pause menu screen: background, banner, profile card, casualty stats, shared button ids and handlers
+F	deci/i/a	ii	menuTitle	H
+F	deci/i/a	ij	profileRenderFailed	H
+F	deci/i/a	ik	homeIcon	H
+F	deci/i/a	il	lanIcon	H
+F	deci/i/a	im	achievementsIcon	H
+F	deci/i/a	in	currentYear	H
+M	deci/i/a	d	(GuiButton)	handleMenuButton	H
+M	deci/i/a	c	(int,int,float)	drawMenuBackground	M
+M	deci/i/a	aK	()	addMenuButtons	H
+C	deci/i/b	GuiEulaAgreement	gui	H	EULA agreement screen; accept writes the EULA acceptance file and returns to the main menu
+C	deci/i/c	GuiIntroBoehModLogo	gui	H	Boot intro: BoehMod studio logo with mortar sound effects, shake and fades
+F	deci/i/c	io	finished	H
+F	deci/i/c	iq	logoTexture	H
+F	deci/i/c	ir	fadeInAlpha	H
+F	deci/i/c	is	outroFadeAlpha	M
+F	deci/i/c	it	finalFadeAlpha	M
+F	deci/i/c	iu	startDelayTicks	H
+F	deci/i/c	iv	impactTicks	M
+F	deci/i/c	iw	holdTicks	M
+F	deci/i/c	ix	outroHoldTicks	M
+F	deci/i/c	iy	logoAlpha	M
+F	deci/i/c	iz	shakeIntensity	H
+F	deci/i/c	iA	fireSoundPlayed	H
+F	deci/i/c	iB	fallSoundPlayed	H
+F	deci/i/c	iC	explodeSoundPlayed	H
+F	deci/i/c	iD	introSoundPlayed	H
+F	deci/i/c	iE	outroSoundPlayed	H
+M	deci/i/c	h	(String)	playUiSound	H
+C	deci/i/d	GuiIntroJumpscare	gui	H	Boot intro: 390 frame animation played at 30 fps by a background busy wait thread
+F	deci/i/d	iF	FRAME_COUNT	H
+F	deci/i/d	iG	frames	H
+F	deci/i/d	iH	finished	H
+F	deci/i/d	bl	started	H
+F	deci/i/d	iI	currentFrame	H
+F	deci/i/d	iJ	endDelayTicks	H
+M	deci/i/d	aR	()	finish	H
+C	deci/i/e	GuiMenuHome	gui	H	Main menu home page: requests news articles from the BoehMod backend, shows combat timer, welcome popup and loading fade
+F	deci/i/e	iK	previewWorld	M
+F	deci/i/e	iL	welcomeCountdown	H
+F	deci/i/e	iM	viewedProfile	H
+M	deci/i/e	aT	()	drawWelcomeNotification	H
+M	deci/i/e	aU	()	drawLoadingFade	H
+C	deci/i/f	GuiMenuOptions	gui	H	Custom options screen (FOV, difficulty, vanilla sub menus) plus updates, reload config and resource pack download buttons
+F	deci/i/f	az	BUTTON_UPDATES	H
+F	deci/i/f	iN	BUTTON_RELOAD_CONFIG	H
+F	deci/i/f	iO	BUTTON_DOWNLOAD_RESOURCEPACK	H
+F	deci/i/f	iP	SHOWN_OPTIONS	H
+F	deci/i/f	iQ	parentScreen	H
+F	deci/i/f	iR	gameSettings	H
+C	deci/i/g	GuiMenuProfile	gui	H	Manage My Profile page showing the selected emblem design
+C	deci/i/h	GuiMenuServerStatus	gui	H	Server/Network status page pinging the EU, US, network and website hosts
+F	deci/i/h	iS	euServers	H
+F	deci/i/h	iT	usServers	H
+F	deci/i/h	iU	networkServer	H
+F	deci/i/h	iV	website	H
+C	deci/i/i	GuiMenuOfficialServers	gui	H	Official server list page fed by the backend server list
+F	deci/i/i	iW	serverListPanel	H
+F	deci/i/i	iX	reopened	L
+M	deci/i/i	aV	()	populateServerList	H
+C	deci/i/j	GuiMenuCommunityServers	gui	H	Community server list page fed by the backend server list
+F	deci/i/j	iW	serverListPanel	H
+F	deci/i/j	iX	reopened	L
+C	deci/i/k	GuiMenuSupporterLounge	gui	H	Supporters lounge page to pick and toggle the supporter cape, sends the cosmetic choice to the server
+C	deci/i/l	GuiMenuUpdates	gui	H	Release list page loaded from a GitHub updates.json on a background thread
+F	deci/i/l	iY	UPDATES_URL	H
+F	deci/i/l	iZ	releaseListPanel	H
+F	deci/i/l	ja	loading	H
+M	deci/i/l	aW	()	fetchUpdatesJson	H
+M	deci/i/l	aX	()	refreshReleases	H
+C	deci/i/l$a	ReleaseEntry	gui	H	One release row in the updates list; click starts the update download
+F	deci/i/l$a	jc	version	H
+F	deci/i/l$a	jd	downloadUrl	M
+F	deci/i/l$a	je	description	M
+C	deci/i/m	GuiUpdateProgress	gui	H	Update download progress screen with a progress bar
+F	deci/i/m	jf	BANNER_WIDTH	H
+F	deci/i/m	jg	BANNER_HEIGHT	H
+C	deci/l/a	ServerPinger	gui	H	Host entry that pings address:port with a plain socket on its own thread and reports Online or Offline
+F	deci/l/a	jv	status	H
+M	deci/l/a	e	(String,int)	isReachable	H
+C	deci/l/a$a	PingStatus	gui	H	Ping status enum (Pinging, Offline, Online, Unknown)
+C	deci/m/a	SessionValidator	management	H	Validates the Minecraft session against Mojang (joinServer + hasJoinedServer) at client start; result gates online menu features
+F	deci/m/a	jy	AUTH_SERVICE	H
+F	deci/m/a	jz	USER_AUTH	H
+F	deci/m/a	jA	SESSION_SERVICE	H
+M	deci/m/a	bh	()	validateSession	H
+C	deci/m/a$a	SessionAccessor	management	H	Reflection helper to get or replace Minecraft.session
+F	deci/m/a$a	jB	SESSION_FIELD	H
+M	deci/m/a$a	bi	()	getSession	H
+M	deci/m/a$a	a	(Session)	setSession	H
+C	deci/m/b	WindowSetup	core	H	Client startup: sets the window title and (non macOS) the window icons
+M	deci/m/b	a	(InputStream)	imageToByteBuffer	H
+C	deci/m/c	ClientRenderRegistry	render	H	Client init that binds every TESR and entity renderer (137 registrations)
+C	deci/o/a	ModelSupplyDrop	model	H	Techne model of the landed supply drop crate (rendered by deci.G.a for TileEntitySupplyDrop)
+F	deci/o/a	li	part1	L
+F	deci/o/a	lj	part2	L
+F	deci/o/a	lk	part3	L
+F	deci/o/a	ll	part4	L
+F	deci/o/a	lm	part5	L
+F	deci/o/a	ln	part6	L
+F	deci/o/a	lo	part7	L
+F	deci/o/a	lp	part8	L
+F	deci/o/a	lq	part9	L
+F	deci/o/a	lr	part10	L
+F	deci/o/a	ls	part11	L
+F	deci/o/a	lt	part12	L
+F	deci/o/a	lu	part13	L
+F	deci/o/a	lv	part14	L
+F	deci/o/a	lw	part15	L
+F	deci/o/a	lx	part16	L
+F	deci/o/a	ly	part17	L
+F	deci/o/a	lz	part18	L
+F	deci/o/a	lA	part19	L
+F	deci/o/a	lB	part20	L
+F	deci/o/a	lC	part21	L
+F	deci/o/a	lD	part22	L
+F	deci/o/a	lE	part23	L
+F	deci/o/a	lF	part24	L
+F	deci/o/a	lG	part25	L
+F	deci/o/a	lH	part26	L
+F	deci/o/a	lI	part27	L
+F	deci/o/a	lJ	part28	L
+F	deci/o/a	lK	part29	L
+F	deci/o/a	lL	part30	L
+F	deci/o/a	lM	part31	L
+F	deci/o/a	lN	part32	L
+F	deci/o/a	lO	part33	L
+F	deci/o/a	lP	part34	L
+F	deci/o/a	lQ	part35	L
+F	deci/o/a	lR	part36	L
+F	deci/o/a	lS	part37	L
+F	deci/o/a	lT	part38	L
+F	deci/o/a	lU	part39	L
+F	deci/o/a	lV	part40	L
+F	deci/o/a	lW	part41	L
+F	deci/o/a	lX	part42	L
+F	deci/o/a	lY	part43	L
+F	deci/o/a	lZ	part44	L
+F	deci/o/a	ma	part45	L
+F	deci/o/a	mb	part46	L
+F	deci/o/a	md	part47	L
+F	deci/o/a	me	part48	L
+F	deci/o/a	mf	part49	L
+F	deci/o/a	mh	part50	L
+F	deci/o/a	mi	part51	L
+F	deci/o/a	mj	part52	L
+F	deci/o/a	mk	part53	L
+F	deci/o/a	ml	part54	L
+F	deci/o/a	mm	part55	L
+F	deci/o/a	mn	part56	L
+F	deci/o/a	mo	part57	L
+F	deci/o/a	mp	part58	L
+F	deci/o/a	mq	part59	L
+F	deci/o/a	mr	part60	L
+F	deci/o/a	ms	part61	L
+F	deci/o/a	mt	part62	L
+F	deci/o/a	mu	part63	L
+F	deci/o/a	mv	part64	L
+F	deci/o/a	mw	part65	L
+F	deci/o/a	mx	part66	L
+F	deci/o/a	my	part67	L
+F	deci/o/a	mz	part68	L
+F	deci/o/a	mA	part69	L
+F	deci/o/a	mB	part70	L
+F	deci/o/a	mC	part71	L
+F	deci/o/a	mD	part72	L
+F	deci/o/a	mE	part73	L
+F	deci/o/a	mF	part74	L
+F	deci/o/a	mG	part75	L
+F	deci/o/a	mH	part76	L
+F	deci/o/a	mI	part77	L
+F	deci/o/a	mJ	part78	L
+F	deci/o/a	mK	part79	L
+F	deci/o/a	mL	part80	L
+F	deci/o/a	mM	part81	L
+F	deci/o/a	mN	part82	L
+F	deci/o/a	mO	part83	L
+F	deci/o/a	mP	part84	L
+F	deci/o/a	mQ	part85	L
+F	deci/o/a	mR	part86	L
+F	deci/o/a	mS	part87	L
+F	deci/o/a	mT	part88	L
+F	deci/o/a	mU	part89	L
+F	deci/o/a	mV	part90	L
+F	deci/o/a	mW	part91	L
+F	deci/o/a	mX	part92	L
+F	deci/o/a	mY	part93	L
+F	deci/o/a	mZ	part94	L
+F	deci/o/a	na	part95	L
+F	deci/o/a	nb	part96	L
+F	deci/o/a	nc	part97	L
+F	deci/o/a	nd	part98	L
+F	deci/o/a	ne	part99	L
+F	deci/o/a	nf	part100	L
+F	deci/o/a	ng	part101	L
+F	deci/o/a	nh	part102	L
+F	deci/o/a	ni	part103	L
+F	deci/o/a	nj	part104	L
+F	deci/o/a	nk	part105	L
+F	deci/o/a	nl	part106	L
+F	deci/o/a	nm	part107	L
+F	deci/o/a	nn	part108	L
+F	deci/o/a	no	part109	L
+F	deci/o/a	np	part110	L
+F	deci/o/a	nq	part111	L
+F	deci/o/a	nr	part112	L
+F	deci/o/a	ns	part113	L
+F	deci/o/a	nt	part114	L
+F	deci/o/a	nu	part115	L
+F	deci/o/a	nv	part116	L
+F	deci/o/a	nw	part117	L
+M	deci/o/a	h	(float)	renderAll	M
+M	deci/o/a	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/o/a	a	(Entity,float,float,float,float,float,float)	setAngles	L
+C	deci/o/b	ModelSupplyDropParachute	model	H	Techne model of the falling supply drop with parachute and cords (rendered by deci.G.b for EntityFallingSupplyDrop)
+F	deci/o/b	nx	part1	L
+F	deci/o/b	ny	part2	L
+F	deci/o/b	nz	part3	L
+F	deci/o/b	nA	part4	L
+F	deci/o/b	nB	part5	L
+F	deci/o/b	nC	part6	L
+F	deci/o/b	nD	part7	L
+F	deci/o/b	nE	part8	L
+F	deci/o/b	nF	part9	L
+F	deci/o/b	nG	part10	L
+F	deci/o/b	nH	part11	L
+F	deci/o/b	nI	part12	L
+F	deci/o/b	nJ	part13	L
+F	deci/o/b	nK	part14	L
+F	deci/o/b	nL	part15	L
+F	deci/o/b	nM	part16	L
+F	deci/o/b	nN	part17	L
+F	deci/o/b	nO	part18	L
+F	deci/o/b	nP	part19	L
+F	deci/o/b	nQ	part20	L
+F	deci/o/b	nR	part21	L
+F	deci/o/b	nS	part22	L
+F	deci/o/b	nT	part23	L
+F	deci/o/b	nU	part24	L
+F	deci/o/b	nV	part25	L
+F	deci/o/b	nW	part26	L
+F	deci/o/b	nX	part27	L
+F	deci/o/b	nY	part28	L
+F	deci/o/b	nZ	part29	L
+F	deci/o/b	oa	part30	L
+F	deci/o/b	ob	part31	L
+F	deci/o/b	oc	part32	L
+F	deci/o/b	od	part33	L
+F	deci/o/b	oe	part34	L
+F	deci/o/b	of	part35	L
+F	deci/o/b	og	part36	L
+F	deci/o/b	oh	part37	L
+F	deci/o/b	oi	part38	L
+F	deci/o/b	oj	part39	L
+F	deci/o/b	ok	part40	L
+F	deci/o/b	ol	part41	L
+F	deci/o/b	om	part42	L
+F	deci/o/b	on	part43	L
+F	deci/o/b	oo	part44	L
+F	deci/o/b	op	part45	L
+F	deci/o/b	oq	part46	L
+F	deci/o/b	or	part47	L
+F	deci/o/b	os	part48	L
+F	deci/o/b	ot	part49	L
+F	deci/o/b	ou	part50	L
+F	deci/o/b	ov	part51	L
+F	deci/o/b	ow	part52	L
+F	deci/o/b	ox	part53	L
+F	deci/o/b	oy	part54	L
+F	deci/o/b	oz	part55	L
+F	deci/o/b	oA	part56	L
+F	deci/o/b	oB	part57	L
+F	deci/o/b	oC	part58	L
+F	deci/o/b	oD	part59	L
+F	deci/o/b	oE	part60	L
+F	deci/o/b	oF	part61	L
+F	deci/o/b	oG	part62	L
+F	deci/o/b	oH	part63	L
+F	deci/o/b	oI	part64	L
+F	deci/o/b	oJ	part65	L
+F	deci/o/b	oK	part66	L
+F	deci/o/b	oL	part67	L
+F	deci/o/b	oM	part68	L
+F	deci/o/b	oN	part69	L
+F	deci/o/b	oO	part70	L
+F	deci/o/b	oP	part71	L
+F	deci/o/b	oQ	part72	L
+F	deci/o/b	oR	part73	L
+F	deci/o/b	oS	part74	L
+F	deci/o/b	oT	part75	L
+F	deci/o/b	oU	part76	L
+F	deci/o/b	oV	part77	L
+F	deci/o/b	oW	part78	L
+F	deci/o/b	oX	part79	L
+F	deci/o/b	oY	part80	L
+F	deci/o/b	oZ	part81	L
+F	deci/o/b	pa	part82	L
+F	deci/o/b	pb	part83	L
+F	deci/o/b	pc	part84	L
+F	deci/o/b	pd	part85	L
+F	deci/o/b	pe	part86	L
+F	deci/o/b	pf	part87	L
+F	deci/o/b	pg	part88	L
+F	deci/o/b	ph	part89	L
+F	deci/o/b	pi	part90	L
+F	deci/o/b	pj	part91	L
+F	deci/o/b	pk	part92	L
+F	deci/o/b	pl	part93	L
+F	deci/o/b	pm	part94	L
+F	deci/o/b	pn	part95	L
+F	deci/o/b	po	part96	L
+F	deci/o/b	pp	part97	L
+F	deci/o/b	pq	part98	L
+F	deci/o/b	pr	part99	L
+F	deci/o/b	ps	part100	L
+F	deci/o/b	pt	part101	L
+F	deci/o/b	pu	part102	L
+F	deci/o/b	pv	part103	L
+F	deci/o/b	pw	part104	L
+F	deci/o/b	px	part105	L
+F	deci/o/b	py	part106	L
+F	deci/o/b	pz	part107	L
+F	deci/o/b	pA	part108	L
+F	deci/o/b	pB	part109	L
+F	deci/o/b	pC	part110	L
+F	deci/o/b	pD	part111	L
+F	deci/o/b	pE	part112	L
+F	deci/o/b	pF	part113	L
+F	deci/o/b	pG	part114	L
+F	deci/o/b	pH	part115	L
+F	deci/o/b	pI	part116	L
+F	deci/o/b	pJ	part117	L
+F	deci/o/b	pK	part118	L
+F	deci/o/b	pL	part119	L
+F	deci/o/b	pM	part120	L
+F	deci/o/b	pN	part121	L
+F	deci/o/b	pO	part122	L
+F	deci/o/b	pP	part123	L
+F	deci/o/b	pQ	part124	L
+F	deci/o/b	pR	part125	L
+F	deci/o/b	pS	part126	L
+F	deci/o/b	pT	part127	L
+F	deci/o/b	pU	part128	L
+F	deci/o/b	pV	part129	L
+F	deci/o/b	pW	part130	L
+M	deci/o/b	h	(float)	renderAll	M
+M	deci/o/b	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/o/b	a	(Entity,float,float,float,float,float,float)	setAngles	L
+C	deci/p/A	ModelFlagPole	model	H	Techne model of a tall flag pole with a flag (UAHD and USSR flag pole TESRs)
+F	deci/p/A	nx	part1	L
+F	deci/p/A	ny	part2	L
+F	deci/p/A	nz	part3	L
+F	deci/p/A	nA	part4	L
+M	deci/p/A	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/A	a	(Entity,float,float,float,float,float,float)	setAngles	L
+C	deci/p/E	ModelHazardLamp	model	H	Techne model of the rotating hazard lamp; base and light head rendered separately
+F	deci/p/E	li	part1	L
+F	deci/p/E	lj	part2	L
+F	deci/p/E	lk	part3	L
+F	deci/p/E	ll	part4	L
+F	deci/p/E	lm	part5	L
+F	deci/p/E	qp	part6	L
+M	deci/p/E	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/E	b	(float,float,float,float,float,float)	setAngles	L
+C	deci/p/K	ModelKeycardScreen	model	H	Techne model of the wall keycard reader screen
+F	deci/p/K	nx	part1	L
+F	deci/p/K	ny	part2	L
+F	deci/p/K	nz	part3	L
+F	deci/p/K	nA	part4	L
+M	deci/p/K	a	(ModelRenderer,float,float,float)	setRotation	H
+C	deci/p/aB	ModelTicketGate	model	H	Techne model of the metro ticket gate prop
+F	deci/p/aB	li	part1	L
+F	deci/p/aB	lj	part2	L
+F	deci/p/aB	lk	part3	L
+F	deci/p/aB	ll	part4	L
+F	deci/p/aB	lm	part5	L
+F	deci/p/aB	qp	part6	L
+F	deci/p/aB	qq	part7	L
+F	deci/p/aB	ln	part8	L
+F	deci/p/aB	qr	part9	L
+F	deci/p/aB	lo	part10	L
+F	deci/p/aB	lp	part11	L
+F	deci/p/aB	lq	part12	L
+M	deci/p/aB	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/aB	b	(float,float,float,float,float,float)	setAngles	L
+C	deci/p/aR	ModelWoodCrateOpen	model	H	Techne model of the open wooden crate prop
+F	deci/p/aR	nx	part1	L
+F	deci/p/aR	ny	part2	L
+F	deci/p/aR	nz	part3	L
+F	deci/p/aR	nA	part4	L
+F	deci/p/aR	nB	part5	L
+F	deci/p/aR	nC	part6	L
+F	deci/p/aR	nD	part7	L
+F	deci/p/aR	nE	part8	L
+F	deci/p/aR	nF	part9	L
+F	deci/p/aR	nG	part10	L
+F	deci/p/aR	nH	part11	L
+F	deci/p/aR	nI	part12	L
+F	deci/p/aR	nJ	part13	L
+F	deci/p/aR	nK	part14	L
+F	deci/p/aR	nL	part15	L
+F	deci/p/aR	nM	part16	L
+F	deci/p/aR	nN	part17	L
+F	deci/p/aR	nO	part18	L
+F	deci/p/aR	nP	part19	L
+F	deci/p/aR	nQ	part20	L
+F	deci/p/aR	nR	part21	L
+F	deci/p/aR	nS	part22	L
+F	deci/p/aR	nT	part23	L
+F	deci/p/aR	nU	part24	L
+F	deci/p/aR	nV	part25	L
+F	deci/p/aR	nW	part26	L
+F	deci/p/aR	nX	part27	L
+F	deci/p/aR	nY	part28	L
+F	deci/p/aR	nZ	part29	L
+F	deci/p/aR	oa	part30	L
+F	deci/p/aR	ob	part31	L
+F	deci/p/aR	oc	part32	L
+F	deci/p/aR	od	part33	L
+F	deci/p/aR	oe	part34	L
+F	deci/p/aR	of	part35	L
+F	deci/p/aR	og	part36	L
+F	deci/p/aR	oh	part37	L
+F	deci/p/aR	oi	part38	L
+F	deci/p/aR	oj	part39	L
+F	deci/p/aR	ok	part40	L
+F	deci/p/aR	ol	part41	L
+F	deci/p/aR	om	part42	L
+M	deci/p/aR	a	(ModelRenderer,float,float,float)	setRotation	H
+C	deci/p/ae	ModelOfficeChair	model	H	Techne model of the office chair prop
+F	deci/p/ae	nx	part1	L
+F	deci/p/ae	ny	part2	L
+F	deci/p/ae	nz	part3	L
+F	deci/p/ae	nA	part4	L
+F	deci/p/ae	nB	part5	L
+F	deci/p/ae	nC	part6	L
+F	deci/p/ae	nD	part7	L
+F	deci/p/ae	nE	part8	L
+F	deci/p/ae	nF	part9	L
+F	deci/p/ae	nG	part10	L
+M	deci/p/ae	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/ae	b	(float,float,float,float,float,float)	setAngles	L
+C	deci/p/b	ModelAlarmBell	model	H	Techne model of the alarm bell prop on a tripod stand
+F	deci/p/b	nx	part1	L
+F	deci/p/b	ny	part2	L
+F	deci/p/b	nz	part3	L
+F	deci/p/b	nA	part4	L
+F	deci/p/b	nB	part5	L
+F	deci/p/b	nC	part6	L
+M	deci/p/b	a	(ModelRenderer,float,float,float)	setRotation	H
+C	deci/p/f	ModelBarrier	model	H	Techne model of the street barrier prop
+F	deci/p/f	qf	part1	L
+F	deci/p/f	qg	part2	L
+F	deci/p/f	qh	part3	L
+F	deci/p/f	qi	part4	L
+F	deci/p/f	qj	part5	L
+F	deci/p/f	qk	part6	L
+F	deci/p/f	ql	part7	L
+F	deci/p/f	qm	part8	L
+F	deci/p/f	qn	part9	L
+F	deci/p/f	qo	part10	L
+M	deci/p/f	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/f	a	(Entity,float,float,float,float,float,float)	setAngles	L
+C	deci/p/j	ModelUnusedProp	model	L	Techne prop model with no known user (no references found)
+F	deci/p/j	nx	part1	L
+F	deci/p/j	ny	part2	L
+F	deci/p/j	nz	part3	L
+F	deci/p/j	nA	part4	L
+F	deci/p/j	nB	part5	L
+F	deci/p/j	nC	part6	L
+F	deci/p/j	nD	part7	L
+F	deci/p/j	nE	part8	L
+F	deci/p/j	nF	part9	L
+F	deci/p/j	nG	part10	L
+F	deci/p/j	nH	part11	L
+F	deci/p/j	nI	part12	L
+F	deci/p/j	nJ	part13	L
+F	deci/p/j	nK	part14	L
+F	deci/p/j	nL	part15	L
+F	deci/p/j	nM	part16	L
+F	deci/p/j	nN	part17	L
+F	deci/p/j	nO	part18	L
+F	deci/p/j	nP	part19	L
+F	deci/p/j	nQ	part20	L
+F	deci/p/j	nR	part21	L
+F	deci/p/j	nS	part22	L
+F	deci/p/j	nT	part23	L
+F	deci/p/j	nU	part24	L
+F	deci/p/j	nV	part25	L
+F	deci/p/j	nW	part26	L
+F	deci/p/j	nX	part27	L
+F	deci/p/j	nY	part28	L
+F	deci/p/j	nZ	part29	L
+F	deci/p/j	oa	part30	L
+F	deci/p/j	ob	part31	L
+M	deci/p/j	a	(ModelRenderer,float,float,float)	setRotation	H
+C	deci/p/m	ModelCanTrap	model	H	Techne model of the hanging can trap prop that sways with the client tick counter
+F	deci/p/m	nx	part1	L
+F	deci/p/m	ny	part2	L
+M	deci/p/m	a	(ModelRenderer,float,float,float)	setRotation	H
+C	deci/p/r	ModelChessTable	model	H	Techne model of the chess table prop
+F	deci/p/r	li	part1	L
+F	deci/p/r	lj	part2	L
+F	deci/p/r	lk	part3	L
+F	deci/p/r	ll	part4	L
+F	deci/p/r	lm	part5	L
+F	deci/p/r	qp	part6	L
+F	deci/p/r	qq	part7	L
+F	deci/p/r	ln	part8	L
+F	deci/p/r	qr	part9	L
+F	deci/p/r	lo	part10	L
+F	deci/p/r	lp	part11	L
+F	deci/p/r	lq	part12	L
+F	deci/p/r	lr	part13	L
+F	deci/p/r	ls	part14	L
+F	deci/p/r	lt	part15	L
+M	deci/p/r	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/r	b	(float,float,float,float,float,float)	setAngles	L
+C	deci/p/y	ModelElectricBoxBin	model	H	Techne model of the electric box bin prop
+F	deci/p/y	nx	part1	L
+F	deci/p/y	ny	part2	L
+F	deci/p/y	nz	part3	L
+F	deci/p/y	nA	part4	L
+F	deci/p/y	nB	part5	L
+F	deci/p/y	nC	part6	L
+F	deci/p/y	nD	part7	L
+F	deci/p/y	nE	part8	L
+F	deci/p/y	nF	part9	L
+F	deci/p/y	nG	part10	L
+F	deci/p/y	nH	part11	L
+F	deci/p/y	nI	part12	L
+F	deci/p/y	nJ	part13	L
+F	deci/p/y	nK	part14	L
+F	deci/p/y	nL	part15	L
+F	deci/p/y	nM	part16	L
+F	deci/p/y	nN	part17	L
+F	deci/p/y	nO	part18	L
+F	deci/p/y	nP	part19	L
+F	deci/p/y	nQ	part20	L
+F	deci/p/y	nR	part21	L
+F	deci/p/y	nS	part22	L
+F	deci/p/y	nT	part23	L
+F	deci/p/y	nU	part24	L
+F	deci/p/y	nV	part25	L
+M	deci/p/y	a	(ModelRenderer,float,float,float)	setRotation	H
+M	deci/p/E	b	(Entity,float,float,float,float,float,float)	renderLightHead	H

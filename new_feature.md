@@ -1,0 +1,264 @@
+# Feature Tracker - Decimation Mod
+
+Status values: `Done` / `Decided` (direction agreed, not built yet) /
+`Documented` (how-to written, not executed) / `Not started`.
+
+---
+
+## Done
+
+### Zones on generated structures (auto zone tagging)
+- **Requested**: 27 Juli 2026
+- Zones (safezone/military/police/radiation/scary/border,
+  `net.decimation.mod.server.zones`) normally need manual wand placement.
+- **Root cause found on the way**: zones never worked in singleplayer at all.
+  The zone list (`deci.aJ.b.aAc`) is only loaded by ServerProxy, and every
+  zone effect handler (`deci.aK.d/g/i/m`) is `@SideOnly(Side.SERVER)`.
+- **Implementation (v0.7.0)**: `ZoneStore` keeps zones per world in
+  `<world>/deciworldgen_zones.json` (Decimation's own JSON format) and merges
+  them into Decimation's live list, re-adding them if Decimation reloads its
+  global file. The generator tags `mil_*` structures MILITARY and `city_*`
+  POLICE, footprint plus 8 blocks. `ZoneSpawnHandler` replicates
+  `deci.aK.d` in singleplayer: 25% of infected spawning in a MILITARY/POLICE
+  zone become that uniformed variant, infected spawns in a SAFEZONE are
+  cancelled.
+- **Verified 7 Oktober 2026** without the user: dedicated server run (zones
+  created, saved, reloaded after restart without duplicates) and an
+  unattended singleplayer run (`gradlew runClient -Pautotest`): inside a
+  POLICE zone 10 of 33 infected became police, outside 0 of 34.
+- Not covered: radiation/scary/safezone player effects (`deci.aK.m`, `g`,
+  `i`) in singleplayer; our generator does not create those zone types.
+
+### Skip intro screens (jumpscare + BoehMod studio logo)
+- **Requested**: 25 Juli 2026
+- Every launch replaced the vanilla main menu with a chained animated intro
+  (390-frame "jumpscare" clip, then BoehMod logo zoom/mortar-explosion
+  sequence) before reaching the mod's own main menu.
+- **Implementation**: flipped the default value of two static gate flags
+  (`deci.i.d.iH`, `deci.i.c.io`) to `true` in their class initializers - both
+  screens' own logic already treats "flag true" as "already played." Assets
+  and classes untouched, just never instantiated.
+- **Done**: 25 Juli 2026, 14.30. User-confirmed working 14.41.
+
+### Nerf ranged weapon damage (50%, all weapons including crossbow)
+- **Requested**: 27 Juli 2026
+- **Implementation**: single chokepoint patch on `deci.ay.i.am(int)` - the
+  damage-per-hit setter every one of the ~90 registered guns/rockets funnels
+  through via its `.am(N)` builder call. Now stores `Math.round(n * 0.5f)`
+  instead of `n` directly. Applies uniformly, no per-weapon exceptions.
+- Side effect (welcome one): NPC bandit/soldier gunfire uses the same `.aew`
+  field for their own damage, so this also halved NPC-inflicted bullet damage.
+- **Done**: 27 Juli 2026. User-confirmed via mob testing (2->3 bullets to kill
+  unarmored zombie/skeleton, consistent with the cut).
+
+### Buff armor damage reduction (35%)
+- **Requested**: 27 Juli 2026
+- **Implementation**: scaled `ItemArmorDeci.damageMultiplier` by `x0.65` at
+  construction (both constructors), proportional to each armor piece's
+  original value.
+- **Known gap**: only affects damage from a *player's own gun* - does nothing
+  against NPC (bandit/soldier) gunfire. See `bug.md` -> "Armor damage-reduction
+  buff doesn't affect NPC gunfire" for the root cause and proposed fix
+  (pending user go-ahead, not yet implemented).
+- **Done (partially)**: 27 Juli 2026, 00.08.
+
+---
+
+## In progress
+
+### Decimation world generation (own code inside the jar)
+- **Requested**: 26 Juli 2026 (original "Decimation world type" idea);
+  direction changed 13-15 Agustus 2026.
+- **History of direction**: first decision was "don't build it, use companion
+  mods" - tried Ruins, then ezWastelands + GeneratorMods (CARuins/GreatWall/
+  WalledCity). All dropped: CARuins generated wrong-aesthetic rubble blobs,
+  GreatWall/WalledCity ship zero usable templates + Windows-backslash path bug,
+  ezWastelands terrain made stepped-pyramid artifacts. New decision: build
+  world-gen ourselves as ordinary Java compiled into `Decimation.jar`.
+- **Architecture** (settled 15 Agustus 2026):
+  - **Terrain is not our job**: user wants realistic real-life-looking
+    terrain, handled by companion mod **RTG (Realistic Terrain Generation)
+    1.7.10-1.1.1.7** (CurseForge, confirmed exists; not yet installed).
+  - **Structures are our job**: an FML `IWorldGenerator` (runs per chunk on
+    top of ANY terrain generator, no custom WorldType needed) placing
+    buildings/cities read from standard **`.schematic` files** (MCEdit/
+    WorldEdit format - user picked this over a custom save command).
+  - **Second `@Mod` in the same jar**: new code lives under
+    `net.decimation.worldgen` as mod id `deciworldgen`
+    (`required-after:deci`). Forge scans all classes in a jar for `@Mod`, so
+    this loads alongside the original mod with zero edits to obfuscated
+    bytecode - fully removable by deleting its entries from the jar.
+- **Milestone 2 DONE, user-confirmed in-game 15 Agustus 2026, 11.52**:
+  proof-of-life generator (`MarkerGenerator`) places a 4-tall glowstone
+  pillar at the centre of every overworld chunk. Screenshot confirmed pillars
+  + FML log confirmed full mod lifecycle. Crash-hardened: catch-all around
+  generation (logs + self-disables after 3 errors, never crashes the game),
+  null-guards on block lookup and world provider, +8 chunk offset so no
+  cascading chunk generation. (Marker later removed again - replaced by the
+  milestone-3 structure generator.)
+- **Milestone 3 DONE, user-confirmed in-game 15 Agustus 2026, 12.08**:
+  real structure placement. `Schematic.java` loads standard MCEdit/WorldEdit
+  `.schematic` files (gzip NBT, AddBlocks nibbles for mod-block ids > 255,
+  TileEntities ignored - Decimation loot is position-based) from
+  `config/decimation_worldgen/`. `StructureGenerator.java` places them:
+  deterministic 4x4-chunk cells (world seed + cell coords -> same layout
+  every time, no overlap possible), 50% chance per cell, site rejected if
+  ground-height spread > 6 or on water, dirt foundation auto-filled up to 8
+  deep, footprint capped 24x24 to stay inside the safe population window
+  (zero cascading chunk generation). Placement coords logged. Same
+  crash-hardening pattern as milestone 2. Two generated test schematics
+  (`tools/make_test_schematics.py` -> `structures/`): `ruined_house` 11x6x9,
+  `watchtower` 7x9x7, vanilla blocks + vanilla chest only (chest is in
+  Decimation's loot table -> loot GUI works, and vanilla ids are immune to
+  FML's per-save mod-id assignment). Screenshots confirmed: placement +
+  foundation + ruin decay + Decimation loot GUI on the chest all working.
+- **Milestone 4 DONE, user-confirmed in-game 15 Agustus 2026, 12.27**:
+  rotation. `Rotation.java` = clockwise metadata rotation table per 1.7.10
+  block family (6-direction facing, stairs, log axes, torch/button/lever,
+  doors incl. untouched hinge half, trapdoors, beds, fence gates, pumpkins,
+  repeaters/comparators, 16-step signs, rails incl. slopes/curves, vines,
+  anvils; unknown ids - including Decimation's own blocks - pass through
+  unchanged). Structure direction (0/90/180/270) picked deterministically
+  per cell from the world seed; coordinates transformed, footprint extents
+  swapped on 90/270. Unit-tested before deploy: 4x90 = identity for all
+  256 ids x 16 metas + 15 spot checks. Old chunks keep their baked north-
+  facing builds; new chunks rotate.
+- ezWastelands + GeneratorMods renamed to `.jar.disabled` in the instance's
+  `mods/` folder (15 Agustus 2026) - restore by renaming back if ever needed.
+- **RTG installed 15 Agustus 2026** (`RTG-1.7.10-1.1.1.7.jar` in mods/,
+  archive copy in `WorldGenerator/`), user-confirmed loading; world type
+  "Realistic" at world creation.
+- **Prop substitution DONE, crates user-confirmed in-game 15 Agustus 2026,
+  12.46**: schematics use vanilla placeholder blocks, swapped for real
+  Decimation props at placement, resolved BY REGISTRY NAME (immune to FML
+  per-save numeric ids). Registry names are the CamelCase class names
+  (`deci:BlockWoodCrate`) - found via FML registry snapshot in a world's
+  `level.dat`; the lowercase `prop_*` strings in the jar are texture paths
+  (first attempt used those, failed cleanly thanks to the null-guard).
+  Mapping: sponge->WoodCrate, gold->MilitaryCrate, lapis->AmmoCrate,
+  diamond->MedicalCrate, emerald->PoliceCrate, iron->Wreckage1-5 (random per
+  position), coal block->BlockRoad, wool colour meta = 16 street-prop slots
+  (sandbag/cone/vending/streetlight/barrier/bin/bench/dumpster/tire/barrel/
+  cardboard/trashbag/electricbox/shelf/canfire/roadsign).
+- **Full prop catalog discovered** in level.dat: Decimation ships road blocks
+  with lane markings (`BlockRoad_*`, `BlockRoadSlab_*`), street lights,
+  traffic lights, road signs, sandbags, barriers, dumpsters, vending
+  machines, office wall sets, graffiti, metro props - everything needed for
+  proper city generation later.
+- **8 schematics** now (`tools/make_test_schematics.py`): ruined_house,
+  watchtower, gas_station, house_2story, military_outpost,
+  police_checkpoint, street_scene, survivor_camp - the last six use real
+  Decimation props (asphalt roads, sandbag barricades, street lights, fire
+  barrels, wrecked cars).
+- **Underwater placement fixed, 7 Oktober 2026 (v0.7.0)**: the water check
+  never worked. `getTopSolidOrLiquidBlock` skips water in 1.7.10, so the check
+  looked at the lake/sea bed and structures were built on the ocean floor
+  (found in a dedicated-server test: a shed at y=31 under 27 blocks of
+  water, read straight from the region file with `tools/worldcheck.py`).
+  Now the block above every sampled ground point is checked; the same seed
+  rejects all 4 underwater sites. Terrain grading had the same blind spot,
+  also fixed. Worlds generated before 0.7.0 keep their underwater ruins.
+- **Ships as its own jar since 7 Oktober 2026**: `dist/deciworldgen-0.7.0.jar`
+  next to `dist/Decimation.jar` (= patched Decimation without our classes).
+  Built in the `dev/` workspace (`./gradlew build`). Prism confirmed loading
+  it (7 mods, all our handlers registered).
+- **City street grid, 7 Oktober 2026 (v0.8.0, in `dist/`, NOT yet in
+  Prism; Prism runs 0.7.0)**: CITY sectors get a 5 block wide street
+  (`deci:BlockRoad`) along every cell's west and north edge, i.e. a grid
+  with 64 block spacing. Each chunk paints only its own columns (no
+  cascading generation), the surface follows the terrain, skips water (streets
+  stop at lakes, no bridges yet) and clears plants/tree parts above.
+  Structure anchors are now limited to the first 3 chunks of a cell so a
+  footprint never reaches the next cell's street. Side effect: in worlds
+  started before 0.8.0, newly generated chunks use the new anchor rule, so a
+  structure can rarely be duplicated or missing right at the old/new border.
+  Verified on seed 1 from the region files: continuous streets at x=128 and
+  z=192 (y 62 to 72), gap of at least 3 blocks to every structure; the
+  singleplayer autotest still passes. Needs the user's eyes on how it looks.
+- **Procedural city blocks, 7 Oktober 2026 (v0.10.0)**: user found the
+  structures too basic and chose procedural buildings plus community
+  schematics. City sector cells are now filled by `CityDistrict`: 4 lots per
+  street block with ruined apartments, offices and shops (1 to 6 floors,
+  rooms, ladder shafts, broken windows, decay, collapsed corners, Decimation
+  crates and furniture), POLICE zone per building. Verified from the world
+  files on seed 1 (34 buildings near spawn; a 6 floor office checked column
+  by column) and in the singleplayer autotest (40 buildings).
+- **Large schematics, 7 Oktober 2026 (v0.11.0)**: any size up to 120x120 from
+  `config/decimation_worldgen/large/`, one per 128 block site, written slice
+  by slice like the city buildings. Test content: `mil_compound` (48x48
+  walled base, 4 towers, 2 barracks, helipad, gate). Verified whole with the
+  new pregen tool: all 16 chunks, towers, roads, 6 military / 2 ammo / 2
+  medical crates, cabinets, wreckage. See `docs/worldgen.md`.
+- **City v2, 7 Oktober 2026 (v0.12.0)**: user review of 0.11.0 ("good for a
+  oneshot, needs polish"): more size variety (1 to 20 floors), less brick,
+  heavier decay matched to the biome, realistic interiors (asked for
+  research), sidewalks, parked cars facing along the road (an old session
+  had all cars facing north). Done: researched floor plans
+  (`docs/building_design.md`): apartments with a double-loaded corridor and
+  units (kitchen, dining, bedroom or studio bed), offices with reception,
+  meeting room, storage and desk rows, shops with checkout front left,
+  aisles and a stockroom; switchback stair cores to a roof hatch; 11
+  palettes; collapse cones over 1 to 3 storeys; biome overgrowth (vines,
+  leaves, snow, sand, dead bushes). Verified on seed 1: 33 buildings, 0
+  missing walls, 8 stairs per storey in every cored building, beds in all 14
+  apartments, 72/72 cars aligned with their street, 3000 sidewalk columns.
+  User checked in game: cars sat across the road (model long axis is x, not
+  z), swapped in v0.12.2 (north-south 5/3, east-west 4/2), fewer cars.
+- **Next steps**: user look in game; lane markings, street furniture
+  (lamps, benches), driveways, bridges; procedural police station, hospital,
+  gas station; community schematics when the user finds some.
+
+---
+
+## Not started
+
+### 3 new mobs
+- **Requested**: 27 Juli 2026
+- **Civilian**: new peaceful/passive NPC mob. Scope (combat behavior, spawn
+  conditions, etc.) not yet defined - flesh out when picked up.
+- **Trader fix**: trader NPCs already exist in the codebase. Since the
+  7 Oktober 2026 naming pass the family is known: `deci.ai.a` TraderEntity
+  (base), `deci.ai.v` ArmedTraderEntity, and about 20 types in `deci.ai.*`
+  (ammo, armor, guns, food, medical, black market, car dealer, banker =
+  `deci.ai.e`, ...); see `deobf/names.tsv`. Which one(s) the user means still
+  needs confirming. They currently can
+  only be spawned via a server command and is static - can't move. Goal: make
+  it spawn normally (not command-only) and able to walk around like other
+  mobs.
+- **Spec-ops military**: new elite mob variant. Full Juggernaut armor
+  (`ItemArmorJuggernaut` items already exist -
+  `juggernautHelm/Vest/Pants/Boots`, see `deci.aD.k` around the `.setLootChance`
+  calls) *or* a full black armor set + night vision goggles - two possible
+  looks, decide which (or both as variants) when implementing. Heavy loadout,
+  all weapons already exist in `deci.aD.k`, no new guns needed:
+  - Rifles: SCAR-H (`fnscarhamr`/`arI` or `fnscar`/`arH` - confirm exact
+    variant), SCAR SSR (`fnscarssr`/`arL`), M110 (`m110`/`arf`), FAL (`fal`/
+    `ark`).
+  - Snipers: SV98 (`sv98`/`asl`), JNG-90 (`jng90`/`asm`), Barrett (`barrett`/
+    `asn` - user said "M82," confirm this existing entry is that model), AWM
+    (not seen in the registered weapon list yet - confirm it exists or needs
+    adding), SVD (`svd`/`asj`).
+
+### More clothing variety on military/bandit NPCs
+- **Requested**: 27 Juli 2026
+- Bandits already have *some* randomization - `deci.ag.a` picks from small
+  item pools (`aam`/`aan`/`aao`/`aap`, 2 options each) per armor slot on
+  spawn. User wants more variety (bigger pools, more distinct looks) so NPCs
+  don't all read as "one type" - and the same treatment extended to
+  soldier-type mobs, which currently use fixed (non-randomized) gear.
+
+---
+
+## Documented, not started
+
+### Custom weapon creation
+- **Requested**: 27 Juli 2026
+- Full how-to written: `create_weapons.md` - covers the `.bmodel` model format
+  (turns out to be plain text Techne-style code, not a proprietary binary
+  format), the `deci.aD.k` item-registration pattern, and two recipes: reskin
+  an existing weapon (fast, no new 3D model needed) vs. a genuinely new model
+  (needs Techne - Claude can't usefully author the 3D shape itself, no visual
+  feedback loop and texture painting is out of scope).
+- **Next step** (not started, user said "later if I have long time"): pick a
+  base weapon to clone for a first reskin test, or start modeling in Techne
+  for a new shape.

@@ -1,0 +1,4 @@
+C	deci/H/a	DecalRenderer	render	M	TileEntitySpecialRenderer bound to TileEntityDecal (deci.S.d); downloads/caches decal textures by name, shows a loading placeholder
+F	deci/H/a	Rz	textureCache	H
+F	deci/H/a	RA	pendingDownloads	M
+F	deci/H/a	fP	placeholderTexture	L

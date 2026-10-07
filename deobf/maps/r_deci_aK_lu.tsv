@@ -1,0 +1,33 @@
+M	deci/aK/a	a	(BlockEvent.BreakEvent)	onBlockBreak	H
+C	deci/aK/b	BlockPlaceProtectionHandler	event	H	Server: cancels block placing unless allowed by config, turf ownership, sandbag rules; forbids placing near elevators
+M	deci/aK/b	a	(BlockEvent.PlaceEvent)	onBlockPlace	H
+C	deci/aK/c	HorseInteractBlocker	event	H	Server: cancels player right clicks on horses
+M	deci/aK/c	b	(EntityInteractEvent)	onEntityInteract	H
+C	deci/aK/d	EntitySpawnZoneHandler	event	H	Server: on entity join, gives infected military/police variants inside zones, blocks hostiles in safezones, caps demon count
+C	deci/aK/e	ItemPickupHandler	event	H	Server: blocks item pickup (unless enableItemPickup), converts bottlecap item pickups into currency, deletes picked supply drop blocks
+M	deci/aK/e	a	(EntityItemPickupEvent)	onItemPickup	H
+C	deci/aK/f	SpectatorItemTossHandler	event	H	Server: cancels item dropping while the player is a spectator
+M	deci/aK/f	b	(ItemTossEvent)	onItemToss	H
+C	deci/aK/g	SafezoneAttackHandler	event	H	Server: cancels attacks in safezones and during the safezone leave grace timer
+M	deci/aK/g	b	(LivingAttackEvent)	onLivingAttack	H
+C	deci/aK/h	DeathStatsHandler	event	H	Server: on death reports kills/deaths/zombie kills to the BoehMod network, drops corpse caps, pays player and clan bounties
+M	deci/aK/h	b	(LivingDeathEvent)	onLivingDeath	H
+C	deci/aK/i	FriendlyFireHandler	event	H	Server: cancels damage in safezones and between clanmates or allied clans, protects owned pets in safezones
+M	deci/aK/i	d	(LivingHurtEvent)	onLivingHurt	H
+C	deci/aK/j	NoDropsHandler	event	H	Server: cancels drops for one entity type (deci.ad.e)
+M	deci/aK/j	a	(LivingDropsEvent)	onLivingDrops	H
+C	deci/aK/k	LootInteractHandler	loot	H	Right click on a lootable block: checks cooldown registry, rolls the loot pool into an 18 slot inventory, sends it to the client and opens the loot GUI; also clan turf chest protection and vanilla workstation blocking
+M	deci/aK/k	a	(PlayerInteractEvent)	onPlayerInteract	H
+C	deci/aK/l	PlayerLoginHandler	event	H	Server: on login sends supporter check to backend, refreshes clans/zones/turfs, kills combat loggers, syncs weather
+M	deci/aK/l	b	(PlayerEvent.PlayerLoggedInEvent)	onPlayerLogin	H
+C	deci/aK/m	PlayerZoneTickHandler	zone	H	Server player tick: safezone grace timer, world border damage, creative and scary zone flags, radiation zone flag and sounds, screenshot tick
+M	deci/aK/m	a	(TickEvent.PlayerTickEvent)	onPlayerTick	H
+C	deci/aK/n	ChatHandler	chat	H	Server chat: radio frequency chat between radio holders and # prefixed clan chat
+M	deci/aK/n	a	(ServerChatEvent)	onServerChat	H
+C	deci/aK/o	ServerCommandRegistrar	command	H	On server started registers Handler_Commands on the command manager (server side only)
+M	deci/aK/o	b	(FMLServerStartedEvent)	onServerStarted	H
+C	deci/aK/p	ServerStopHandler	event	H	On server stopping flags every online player as cleanly disconnected (not combat logging)
+M	deci/aK/p	b	(FMLServerStoppingEvent)	onServerStopping	H
+C	deci/aK/q	ServerTickHandler	event	H	Server tick: scheduler queue, dynamic weather, anti dupe uniqueID sweep, network reconnect, clan tick, trader refresh, supply drop countdown, server icon download
+F	deci/aK/q	aBe	weatherController	M
+M	deci/aK/q	a	(TickEvent.ServerTickEvent)	onServerTick	H

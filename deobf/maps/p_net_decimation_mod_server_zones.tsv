@@ -1,0 +1,16 @@
+C	net/decimation/mod/server/zones/a	EnumZoneType	zone	H	Zone type enum (SAFEZONE, MILITARY, POLICE, RADIATION, SCARY, BORDER) with a text name
+C	net/decimation/mod/server/zones/b	ZoneManager	zone	H	Loads/saves decimation_zones.json into ServerConfig.zoneList and answers "is X inside a zone of type T" (exact or with a 10 block margin); pushes zone boxes to clients
+M	net/decimation/mod/server/zones/b	hj	()	readZonesFile	H
+M	net/decimation/mod/server/zones/b	a	(int,int,int,int,int,int,net.decimation.mod.server.zones.a)	addZone	H
+M	net/decimation/mod/server/zones/b	hk	()	reloadZones	H
+M	net/decimation/mod/server/zones/b	a	(EntityPlayer,net.decimation.mod.server.zones.a)	isPlayerInZone	H
+M	net/decimation/mod/server/zones/b	a	(deci.ag.d,net.decimation.mod.server.zones.a)	isInfectedInZone	H
+M	net/decimation/mod/server/zones/b	a	(Entity,net.decimation.mod.server.zones.a)	isEntityInZone	H
+M	net/decimation/mod/server/zones/b	b	(Entity,net.decimation.mod.server.zones.a)	isEntityNearZone	H
+M	net/decimation/mod/server/zones/b	b	(EntityPlayer,net.decimation.mod.server.zones.a)	isPlayerNearZone	H
+M	net/decimation/mod/server/zones/b	a	(EntityPlayer,net.decimation.mod.server.zones.a,int)	isPlayerNearZone	H
+M	net/decimation/mod/server/zones/b	b	(deci.ag.d,net.decimation.mod.server.zones.a)	isInfectedNearZone	H
+M	net/decimation/mod/server/zones/b	e	(int,int,int)	isBetween	H
+M	net/decimation/mod/server/zones/b	q	(int,int,int)	isBetweenWithMargin	H
+M	net/decimation/mod/server/zones/b	e	(int,int,int,int)	isBetweenWithMargin	H
+M	net/decimation/mod/server/zones/b	B	(EntityPlayer)	removeZonesAtPlayer	H

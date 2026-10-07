@@ -1,0 +1,20 @@
+C	deci/B/a	BloodType	render	H	Blood particle type: human or infected
+C	deci/B/b	BloodParticle	render	H	Blood droplet particle (red or infected green)
+C	deci/B/c	DirtHitParticle	render	H	Dirt chunk particle for bullet hits on dirt
+C	deci/B/d	DeciParticleSpawner	render	H	Spawns Decimation particles by name (Blood, Embers, GroundBlood, Jet, MuzzleSmoke, GunSmoke, RocketSmoke, Explosion...) through the effect renderer
+M	deci/B/d	a	(String,double,double,double,double,double,double)	spawn	H
+M	deci/B/d	a	(String,double,double,double,double,double,double,double)	spawn	H
+C	deci/B/e	EmberParticle	render	H	Glowing ember particle
+C	deci/B/f	ExhaustSmokeParticle	render	H	Vehicle exhaust smoke particle
+C	deci/B/g	ExplosionParticle	render	H	Explosion smoke/bullet smoke particle
+C	deci/B/h	ExplosionFlashParticle	render	H	Explosion flame flash particle
+C	deci/B/i	ExplosionSmokeParticle	render	H	Explosion smoke particle
+C	deci/B/j	FireSmokeParticle	render	H	Fire smoke particle
+C	deci/B/k	GroundBloodParticle	render	H	Blood splat on the ground particle
+C	deci/B/l	GunSmokeParticle	render	H	Gun smoke particle
+C	deci/B/m	JetParticle	render	M	Jet model particle (fighter jet flyover, uses jet.bmodel)
+C	deci/B/n	MuzzleSmokeParticle	render	H	Muzzle smoke particle
+C	deci/B/o	NukeSmokeParticle	render	H	Nuclear explosion smoke particle
+C	deci/B/p	RocketFlashParticle	render	H	Rocket launch flash particle
+C	deci/B/q	RocketSmokeParticle	render	H	Rocket trail smoke particle
+C	deci/B/r	SignalSmokeParticle	render	M	Coloured signal grenade smoke particle

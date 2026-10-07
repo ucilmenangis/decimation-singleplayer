@@ -1,0 +1,5 @@
+C	deci/aG/a	ReflectionUtils	util	H	Reflection helpers: get/set private fields and call Entity.setSize on any entity
+F	deci/aG/a	azr	setSizeMethod	H
+M	deci/aG/a	a	(Class,Object,String,String)	getPrivateValue	H
+M	deci/aG/a	a	(Class,Object,String,String,Object)	setPrivateValue	H
+M	deci/aG/a	a	(Entity,float,float)	setEntitySize	H

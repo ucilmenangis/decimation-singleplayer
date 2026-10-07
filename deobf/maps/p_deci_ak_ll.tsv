@@ -1,0 +1,198 @@
+C	deci/ak/a	DeciExplosion	entity	H	Custom explosion copy of vanilla Explosion with 16 ray sampling and pass through blocks (grass, plants, ladders)
+F	deci/ak/a	abD	RAYS	M
+F	deci/ak/a	abE	random	M
+F	deci/ak/a	ZD	world	M
+F	deci/ak/a	abF	knockbackByPlayer	M
+F	deci/ak/a	abG	isFlaming	M
+F	deci/ak/a	abH	isSmoking	M
+F	deci/ak/a	abI	x	M
+F	deci/ak/a	abJ	y	M
+F	deci/ak/a	abK	z	M
+F	deci/ak/a	abL	exploder	M
+F	deci/ak/a	abM	size	M
+F	deci/ak/a	abN	affectedBlocks	M
+F	deci/ak/a	abO	passThroughBlocks	M
+M	deci/ak/a	ff	()	doExplosionA	H
+M	deci/ak/a	fg	()	doExplosionB	H
+M	deci/ak/a	fh	()	getExplosivePlacedBy	H
+M	deci/ak/a	a	(Vec3,AxisAlignedBB)	getBlockDensity	H
+M	deci/ak/a	b	(Vec3,Vec3)	rayTraceBlocks	H
+C	deci/ak/b	CrossbowBoltEntity	entity	M	Crossbow bolt (EntityArrow copy) with 30 damage
+F	deci/ak/b	abP	xTile	M
+F	deci/ak/b	abQ	yTile	M
+F	deci/ak/b	abR	zTile	M
+F	deci/ak/b	abS	inTile	M
+F	deci/ak/b	abT	inData	M
+F	deci/ak/b	abU	inGround	M
+F	deci/ak/b	abV	ticksInGround	M
+F	deci/ak/b	abW	ticksInAir	M
+C	deci/ak/e	MortarRoundEntity	entity	M	Mortar round, explodes on impact
+F	deci/ak/e	abP	xTile	M
+F	deci/ak/e	abQ	yTile	M
+F	deci/ak/e	abR	zTile	M
+F	deci/ak/e	abS	inTile	M
+F	deci/ak/e	abT	inData	M
+F	deci/ak/e	abU	inGround	M
+F	deci/ak/e	abV	ticksInGround	M
+F	deci/ak/e	abW	ticksInAir	M
+F	deci/ak/e	acr	shooter	H
+M	deci/ak/e	v	(boolean)	setCritical	M
+F	deci/ak/e	acf	exploded	H
+M	deci/ak/e	eK	()	explode	H
+C	deci/ak/f	RocketEntity	entity	M	RPG rocket (base for the variants)
+F	deci/ak/f	abP	xTile	M
+F	deci/ak/f	abQ	yTile	M
+F	deci/ak/f	abR	zTile	M
+F	deci/ak/f	abS	inTile	M
+F	deci/ak/f	abT	inData	M
+F	deci/ak/f	abU	inGround	M
+F	deci/ak/f	abV	ticksInGround	M
+F	deci/ak/f	abW	ticksInAir	M
+F	deci/ak/f	acr	shooter	H
+M	deci/ak/f	v	(boolean)	setCritical	M
+F	deci/ak/f	acf	exploded	H
+M	deci/ak/f	eK	()	explode	H
+C	deci/ak/g	HeatSeekingRocketEntity	entity	M	Rocket that steers to the nearest entity within 80 blocks
+F	deci/ak/g	abP	xTile	M
+F	deci/ak/g	abQ	yTile	M
+F	deci/ak/g	abR	zTile	M
+F	deci/ak/g	abS	inTile	M
+F	deci/ak/g	abT	inData	M
+F	deci/ak/g	abU	inGround	M
+F	deci/ak/g	abV	ticksInGround	M
+F	deci/ak/g	abW	ticksInAir	M
+F	deci/ak/g	acr	shooter	H
+M	deci/ak/g	v	(boolean)	setCritical	M
+F	deci/ak/g	acf	exploded	H
+M	deci/ak/g	eK	()	explode	H
+C	deci/ak/h	NuclearRocketEntity	entity	M	RPG18 nuclear warhead rocket, big explosion and nuke flash
+F	deci/ak/h	abP	xTile	M
+F	deci/ak/h	abQ	yTile	M
+F	deci/ak/h	abR	zTile	M
+F	deci/ak/h	abS	inTile	M
+F	deci/ak/h	abT	inData	M
+F	deci/ak/h	abU	inGround	M
+F	deci/ak/h	abV	ticksInGround	M
+F	deci/ak/h	abW	ticksInAir	M
+F	deci/ak/h	acr	shooter	H
+M	deci/ak/h	v	(boolean)	setCritical	M
+F	deci/ak/h	acf	exploded	H
+M	deci/ak/h	eK	()	explode	H
+C	deci/ak/i	TargetRocketEntity	entity	M	Rocket that flies to a fixed target position
+F	deci/ak/i	abP	xTile	M
+F	deci/ak/i	abQ	yTile	M
+F	deci/ak/i	abR	zTile	M
+F	deci/ak/i	abS	inTile	M
+F	deci/ak/i	abT	inData	M
+F	deci/ak/i	abU	inGround	M
+F	deci/ak/i	abV	ticksInGround	M
+F	deci/ak/i	abW	ticksInAir	M
+F	deci/ak/i	acr	shooter	H
+M	deci/ak/i	v	(boolean)	setCritical	M
+C	deci/ak/j	TankShellEntity	entity	M	Tank or heavy gun shell projectile using an ammo type for damage
+F	deci/ak/j	abP	xTile	M
+F	deci/ak/j	abQ	yTile	M
+F	deci/ak/j	abR	zTile	M
+F	deci/ak/j	abS	inTile	M
+F	deci/ak/j	abT	inData	M
+F	deci/ak/j	abU	inGround	M
+F	deci/ak/j	abV	ticksInGround	M
+F	deci/ak/j	abW	ticksInAir	M
+F	deci/ak/j	acr	shooter	H
+M	deci/ak/j	v	(boolean)	setCritical	M
+F	deci/ak/j	acf	exploded	H
+F	deci/ak/b	abX	damage	H
+F	deci/ak/b	abY	knockback	H
+F	deci/ak/e	acs	flagS	L
+M	deci/ak/e	fp	()	getHeightAboveGround	L
+M	deci/ak/f	f	(Entity)	setShooter	H
+M	deci/ak/f	fq	()	getMaxLifetime	L
+F	deci/ak/g	act	target	H
+M	deci/ak/g	c	(double)	findNearestTarget	H
+F	deci/ak/h	act	target	H
+M	deci/ak/h	c	(double)	findNearestTarget	H
+M	deci/ak/h	d	(double,double,double)	destroyBlocksAround	M
+F	deci/ak/i	acu	speed	L
+F	deci/ak/i	acv	targetX	H
+F	deci/ak/i	acw	targetY	H
+F	deci/ak/i	acx	targetZ	H
+M	deci/ak/i	i	(int,int,int)	setTarget	H
+M	deci/ak/i	fq	()	getMaxLifetime	L
+F	deci/ak/j	acy	ammoType	H
+M	deci/ak/j	g	(Entity)	setShooter	H
+M	deci/ak/j	b	(deci.ay.f)	setAmmoType	H
+M	deci/ak/j	fq	()	getMaxLifetime	L
+C	deci/ak/c	GrenadeEntity	entity	H	Thrown grenade base: bouncing physics, fuse ticks, optional explode on impact (launcher grenades), explosion with sound packet
+F	deci/ak/c	abZ	power	L
+F	deci/ak/c	aca	ticksAlive	H
+F	deci/ak/c	acb	fuseTicks	H
+F	deci/ak/c	abO	passThroughBlocks	H
+F	deci/ak/c	acc	prevSpin	M
+F	deci/ak/c	acd	spin	M
+F	deci/ak/c	ace	bounceFactor	H
+F	deci/ak/c	acf	exploded	H
+F	deci/ak/c	acg	firstBounce	H
+F	deci/ak/c	ach	settled	H
+F	deci/ak/c	aci	freezeWhenSettled	M
+F	deci/ak/c	acj	intJ	L
+F	deci/ak/c	ack	flagK	L
+F	deci/ak/c	acl	explodeOnImpact	H
+M	deci/ak/c	fi	()	setExplodeOnImpact	H
+M	deci/ak/c	b	(Vec3,Vec3)	rayTraceBlocks	H
+M	deci/ak/c	a	(World,double,double,double,float,float,double,double)	setThrowVelocity	H
+M	deci/ak/c	eK	()	explode	H
+M	deci/ak/c	fj	()	onFirstBounce	H
+M	deci/ak/c	fk	()	onSettled	H
+M	deci/ak/c	fl	()	onBounce	H
+M	deci/ak/c	fm	()	isExplodeOnImpact	H
+C	deci/ak/d	MolotovEntity	entity	H	Molotov: on landing sets an area on fire and damages entities around it
+F	deci/ak/d	acm	burning	M
+F	deci/ak/d	acn	burnDuration	M
+F	deci/ak/d	aco	burnTicks	M
+F	deci/ak/d	acp	flagP	M
+F	deci/ak/d	acq	spreadRadius	M
+M	deci/ak/d	fn	()	noop	L
+M	deci/ak/d	fo	()	spawnBurstParticles	H
+C	deci/ak/k	SignalGrenadeEntity	entity	H	Signal smoke grenade (base green), emits coloured smoke for acC ticks
+F	deci/ak/k	acz	active	M
+F	deci/ak/k	acA	flagA	L
+F	deci/ak/k	acB	finished	L
+F	deci/ak/k	acC	duration	M
+F	deci/ak/k	acD	spreadA	L
+F	deci/ak/k	acE	spreadB	L
+C	deci/ak/n	SmokeGrenadeEntity	entity	H	Smoke grenade, emits smoke particles once settled
+F	deci/ak/n	acz	active	M
+F	deci/ak/n	acA	flagA	L
+F	deci/ak/n	acB	finished	L
+F	deci/ak/n	acC	duration	M
+F	deci/ak/n	acD	spreadA	L
+F	deci/ak/n	acE	spreadB	L
+M	deci/ak/n	fr	()	noop	L
+C	deci/ak/p	TearGasGrenadeEntity	entity	H	Tear gas grenade, damages and affects players without gas masks nearby
+F	deci/ak/p	acz	active	M
+F	deci/ak/p	acA	flagA	L
+F	deci/ak/p	acB	finished	L
+F	deci/ak/p	acC	duration	M
+F	deci/ak/p	acD	spreadA	L
+F	deci/ak/p	acE	spreadB	L
+M	deci/ak/p	fr	()	noop	L
+C	deci/ak/l	SignalGrenadeGreenEntity	entity	H	Green signal grenade
+C	deci/ak/m	SignalGrenadeRedEntity	entity	H	Red signal grenade
+C	deci/ak/o	StunGrenadeEntity	entity	H	Stun grenade (flashbang); on detonation sends PacketFlashbangDetonate so the server flashes players looking at it
+F	deci/ak/o	abZ	power	L
+F	deci/ak/o	aca	ticksAlive	H
+F	deci/ak/o	acb	fuseTicks	H
+F	deci/ak/o	acc	prevSpin	M
+F	deci/ak/o	acd	spin	M
+F	deci/ak/o	ace	bounceFactor	H
+F	deci/ak/o	acf	exploded	H
+F	deci/ak/o	acg	firstBounce	H
+F	deci/ak/o	ach	settled	H
+F	deci/ak/o	aci	freezeWhenSettled	M
+F	deci/ak/o	acB	finished	M
+M	deci/ak/o	a	(World,double,double,double,float,float,double,double)	setThrowVelocity	H
+M	deci/ak/o	eK	()	explode	H
+M	deci/ak/o	fj	()	onFirstBounce	H
+M	deci/ak/o	fk	()	onSettled	H
+M	deci/ak/o	fl	()	onBounce	H
+C	deci/ak/q	SignalColor	entity	M	Signal grenade colour enum with id and colour name

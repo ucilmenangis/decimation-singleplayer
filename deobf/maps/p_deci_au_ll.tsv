@@ -1,0 +1,8 @@
+C	deci/au/a	BandageItem	item	H	Medical item that may stop bleeding
+C	deci/au/b	BloodBagItem	item	H	Medical item for blood transfusion (restores blood)
+C	deci/au/c	SplintItem	item	H	Medical item that may fix a broken leg
+C	deci/au/d	EmptySyringeItem	item	H	Empty syringe: right click a player to collect blood
+C	deci/au/e	HealingSyringeItem	item	H	Medical injector that heals a fixed amount of HP
+C	deci/au/f	AntibioticSyringeItem	item	H	Medical item that may cure infection
+C	deci/au/g	InfectedSyringeItem	item	H	Syringe of infected blood that infects the user
+C	deci/au/h	DrugSyringeItem	item	M	Injectable that applies a configured potion style effect

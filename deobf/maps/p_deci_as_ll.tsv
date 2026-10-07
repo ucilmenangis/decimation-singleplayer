@@ -1,0 +1,13 @@
+C	deci/as/a	MapRenderHelper	hud	H	Draws the map/GPS overlay with zone and turf markers relative to the player
+M	deci/as/a	c	(int,int,int,int)	drawMap	H
+M	deci/as/a	d	(int,int,int,int)	drawMiniMap	M
+M	deci/as/a	a	(String,String,int,int,double,double)	drawZoneMarker	M
+M	deci/as/a	b	(String,String,int,int,double,double)	drawTurfMarker	M
+M	deci/as/a	a	(double,double,ResourceLocation,double,double,int,int,int,int)	drawClampedIcon	H
+M	deci/as/a	b	(double,double,ResourceLocation,double,double,int,int,int,int)	drawClampedIconSmall	M
+M	deci/as/a	a	(double,EntityLivingBase)	offsetX	H
+M	deci/as/a	b	(double,EntityLivingBase)	offsetZ	H
+C	deci/as/b	MapPoint	hud	L	Three long coordinates of a map point
+F	deci/as/b	acW	x	H
+F	deci/as/b	acX	y	H
+F	deci/as/b	acY	z	H

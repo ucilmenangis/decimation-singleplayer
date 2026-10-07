@@ -1,0 +1,18 @@
+C	deci/an/a	TraderAndSafezoneAttackGuard	event	M	LivingAttack: traders (deci.ai.a) and players in protected state cannot be attacked
+C	deci/an/b	PlayerDataAttacher	player	H	EntityConstructing: attaches PlayerData (deci.Q.b) to players
+C	deci/an/c	VehicleSeatDamageGuard	vehicle	M	LivingHurt: cancels damage to entities riding a vehicle seat
+C	deci/an/d	ItemEntityClickPickup	event	M	EntityInteract: right clicking a dropped item puts it in the inventory
+C	deci/an/e	PlayerJoinSync	event	M	EntityJoinWorld: syncs player data to clients on join, mob spawn handling
+C	deci/an/f	DeathHandler	event	H	LivingDeath: humanity and clan score (dedicated only), corpses, keepInventory
+M	deci/an/f	q	(EntityPlayer)	handleKeepInventory	L
+C	deci/an/g	BottlecapTossGuard	event	H	ItemToss: forbids dropping gold bottlecaps in some places
+C	deci/an/h	DamageModifierHandler	event	M	LivingHurt: fire, ricochet sounds, leg breaks, damage overrides
+C	deci/an/i	ClearCommandHandler	command	H	CommandEvent: /clear also clears backpack, vest and mask
+C	deci/an/j	PlayerCloneHandler	player	H	PlayerEvent.Clone: copies PlayerData to the respawned player
+C	deci/an/k	PlayerLoginHandler	player	H	PlayerLoggedIn: resets per login state and sends the login packet
+C	deci/an/l	RespawnPointHandler	player	H	PlayerRespawn: picks a spawn from decimation_spawnpoints.properties
+C	deci/an/m	PlayerTickHandler	player	H	PlayerTick: ticks PlayerData, natural regeneration gamerule per player, vehicle riding
+F	deci/an/m	acL	naturalRegenerationRule	H
+C	deci/an/n	ServerAboutToStartHandler	event	M	FMLServerAboutToStart: clears a static registry
+C	deci/an/o	PlayerTrackingSync	network	H	StartTracking: sends a tracked player's data to the watcher
+C	deci/an/p	DayLengthHandler	world	M	WorldTick: wraps world time back to 0 after 24000

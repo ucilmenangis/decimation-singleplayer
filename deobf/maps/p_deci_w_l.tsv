@@ -1,0 +1,7 @@
+C	deci/w/a	ModelGps	model	H	GPS item model
+C	deci/w/b	ModelMap	model	H	Map item model
+C	deci/w/c	ModelHangGlider	model	M	Hang glider model
+C	deci/w/d	ModelPartyHorn	model	H	Party horn item model
+C	deci/w/e	ModelRangefinder	model	H	Rangefinder item model
+C	deci/w/f	ModelRadio	model	H	Handheld radio item model (radio and supply drop radio)
+C	deci/w/g	ModelUnusedItem	model	L	Item model not referenced anywhere

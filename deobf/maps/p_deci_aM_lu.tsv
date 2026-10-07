@@ -1,0 +1,17 @@
+C	deci/aM/a	OfficialServerListRegistrar	management	H	On first server tick sends Request_FromClient_AddServer (ip, port, motd, version) to the BoehMod backend when enableCommunityServerList
+M	deci/aM/a	gZ	()	registerServer	H
+C	deci/aM/b	PlayerSpawnPoints	world	H	Adds/removes random player spawn points in decimation_spawnpoints.properties
+M	deci/aM/b	a	(int,int,int,EntityPlayer)	addSpawnPoint	H
+M	deci/aM/b	x	(EntityPlayer)	removeLastSpawnPoint	H
+C	deci/aM/c	SupplyDropSpawner	loot	H	Supply drop spawns from decimation_supplydrop.properties: picks a random spawn and places the falling supply drop block at the world top (dedicated server only)
+M	deci/aM/c	ha	()	spawnRandomSupplyDrop	H
+M	deci/aM/c	c	(String[])	spawnFromEntry	M
+M	deci/aM/c	p	(int,int,int)	spawnSupplyDropAt	H
+M	deci/aM/c	v	(int,int)	clearSupplyDropsInColumn	H
+M	deci/aM/c	a	(int,int,EntityPlayer)	addSupplyDropSpawn	H
+M	deci/aM/c	y	(EntityPlayer)	removeLastSupplyDropSpawn	H
+C	deci/aM/d	WeatherController	world	H	Picks a new random weather every 18000 ticks and broadcasts PacketSetWeather
+F	deci/aM/d	aBh	countdown	H
+M	deci/aM/d	aw	(int)	setWeather	H
+M	deci/aM/d	hb	()	randomizeWeather	H
+M	deci/aM/d	hc	()	broadcastWeather	H
