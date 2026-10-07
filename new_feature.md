@@ -251,8 +251,8 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   categories to come). Build the polish as reusable parts (see
   docs/interior_spec.md section 9) so new types are cheap.
   4d.1 DONE v0.17.0: doors + low debris. 4d.2 DONE v0.17.0: surfaces
-  (room grid, floors, wall panels, ceiling lights / vents). Next 4d.3:
-  apartment rooms (living, kitchen, bedroom, bathroom, lobby).
+  (room grid, floors, wall panels, ceiling lights / vents). 4d.3 DONE
+  v0.18.0: apartment rooms. Next 4d.4: office storey programs + lobby.
 
 ---
 

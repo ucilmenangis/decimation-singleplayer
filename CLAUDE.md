@@ -58,7 +58,11 @@ finding (not only at the end of a task), before moving on:
    `dev_src_main_java_net_decimation_<pkg>_<file>_<class>` at finish, use
    those", then
    `python3 tools/graph_update.py finish`. Batch doc edits so one agent pass
-   covers them (a pass over CLAUDE.md costs about 85k tokens).
+   covers them (a pass over CLAUDE.md costs about 85k tokens). For SMALL
+   doc edits (a version line, a DONE marker) skip the agent: write the few
+   new nodes / edges to a JSON and run `tools/graph_carry.py EXTRA.json
+   DOC...` between prepare and finish (carries over what graph.json has
+   from those docs; see its docstring). Agent only for new docs or rewrites.
 3. Mark anything not verified in game or in code `[not verified]` /
    `[inferred]` in the doc itself.
 4. Visual evidence (user rule 2026-10-07: never re-shoot or re-analyse
@@ -423,6 +427,8 @@ of the last session:
   lobby, office, meeting, storage, shop, stock), floors per room, wall
   panels per building, ceiling lights / vents (docs/interior_spec.md
   section 8). A floor block is also the ceiling below: keep floors light.
+  v0.18.0: step 4d.3 apartment rooms (spec section 8 item 3); propFacing
+  fixed: a BlockProp's FRONT points 2 E, 3 S, 4 W, 5 N.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

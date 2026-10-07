@@ -197,6 +197,25 @@ facade side, rubble in collapsed buildings only on landings.
    vents in offices and shops. The light model hangs a little below the
    ceiling: reads as a fixture.
 3. Apartment rooms (living, kitchen, bedroom, bathroom), lobby.
+   DONE v0.18.0 (`Building.apartmentUnit`, rows counted k = 0 from the
+   corridor): kitchen run on the far side wall (k 0 fridge =
+   ElectricBoxBin, k 1 furnace oven, k 2 cauldron sink, then counters,
+   washing machine last), on R_KITCHEN tiles (ground storey checker,
+   upper storeys light stone: tiles would show as a checker ceiling below);
+   dining table + chairs facing it; FlatscreenTV (random channel) against
+   the corridor wall with a Stereo / Radio1, a stairs sofa facing it,
+   vanilla carpet rug between; bedroom: vanilla bed head against the side
+   wall, chest nightstand, 2 high spruce plank wardrobe (new within 2
+   furniture layer `put2`), sometimes a crate; bathroom (flats >= 6 wide,
+   bedroom >= 3 deep): wall + door 2 columns from the side wall, quartz
+   stairs toilet, cauldron sink and bath, R_BATH tiles. The line from the
+   entry door to the bedroom door is kept free. Ground storey: lobby
+   (plants, bicycles, bin) on ONE side of the entrance only, a furnished
+   flat opposite (before, small buildings had both sides as an empty
+   lobby). Also fixed: `propFacing` was inverted (props faced away from
+   what they should face); the front of a BlockProp points 2 E, 3 S, 4 W,
+   5 N. Vanilla helpers: vanillaFacing (chest / furnace), seatStairs
+   (sofa / toilet), bedDir.
 4. Office storey programs + lobby.
 5. Shop floor polish + upper storey use.
 6. Story / decay layer.

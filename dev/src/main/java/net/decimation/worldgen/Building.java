@@ -34,7 +34,7 @@ public class Building implements Graded
     private static final byte OPEN = 0, WALL = 1, DOOR = 2, GLASS = 3, FURN = 4, CORE = 5;
     // room codes (room grid beside each plan): decide floors, lights, later room programs
     static final byte R_NONE = 0, R_CORRIDOR = 1, R_LIVING = 2, R_BEDROOM = 3, R_LOBBY = 4, R_OFFICE = 5,
-        R_MEETING = 6, R_STORAGE = 7, R_SHOP = 8, R_STOCK = 9;
+        R_MEETING = 6, R_STORAGE = 7, R_SHOP = 8, R_STOCK = 9, R_KITCHEN = 10, R_BATH = 11;
 
     public final String id;
     public final int minX, minZ, width, length, floors, kind, front, style;
@@ -58,10 +58,14 @@ public class Building implements Graded
     // floor plans [fx][fz] for the ground storey and the upper storeys
     private final byte[][] groundPlan, upperPlan;
     private final Block[][] groundFurn, upperFurn;
+    /** Furniture layer at within 2 (2 high pieces: wardrobes, bookcases), same cells as FURN. */
+    private final Block[][] groundFurn2, upperFurn2;
+    private final byte[][] groundFurn2Meta, upperFurn2Meta;
     private final byte[][] groundFurnMeta, upperFurnMeta;
     private final byte[][] groundRoom, upperRoom;
     // surfaces chosen per building (Decimation blocks, null = fall back to vanilla)
-    private Block wallBottom, wallTop, corridorFloor, bedroomCarpet, meetingCarpet, lobbyFloor, shopFloor, stockFloor;
+    private Block wallBottom, wallTop, corridorFloor, bedroomCarpet, meetingCarpet, lobbyFloor, shopFloor, stockFloor,
+        kitchenFloor, bathFloor;
     /** Stair core origin (fx, fz) or -1 for a ladder shaft. */
     private final int coreFx, coreFz;
 
@@ -169,6 +173,10 @@ public class Building implements Graded
         upperPlan = new byte[width][length];
         groundFurn = new Block[width][length];
         upperFurn = new Block[width][length];
+        groundFurn2 = new Block[width][length];
+        upperFurn2 = new Block[width][length];
+        groundFurn2Meta = new byte[width][length];
+        upperFurn2Meta = new byte[width][length];
         groundFurnMeta = new byte[width][length];
         upperFurnMeta = new byte[width][length];
         groundRoom = new byte[width][length];
@@ -340,12 +348,15 @@ public class Building implements Graded
     int[] viewCell(int storey)
     {
         byte[][] plan = storey == 0 ? groundPlan : upperPlan;
+        byte[][] rooms = storey == 0 ? groundRoom : upperRoom;
+        byte want = kind == APARTMENT ? R_LIVING : kind == OFFICE ? R_OFFICE : R_SHOP;
         int best = Integer.MAX_VALUE, bx = -1, bz = -1;
         for (int fx = 1; fx < width - 1; fx++)
         {
             for (int z = 1; z < length - 1; z++)
             {
-                int d = Math.abs(fx - width / 4) * 2 + Math.abs(z - length / 2);
+                // inside a room of the building's main kind, as central as possible
+                int d = Math.abs(fx - width / 4) * 2 + Math.abs(z - length / 2) + (rooms[fx][z] == want ? 0 : 1000);
                 if (plan[fx][z] == OPEN && d < best)
                 {
                     best = d;
@@ -469,6 +480,10 @@ public class Building implements Graded
                 }
                 return door(plan, fx, z, storey, within, meta);
             case FURN:
+                if (within == 2)
+                {
+                    return furniture2(fx, z, storey, meta);
+                }
                 if (within != 1)
                 {
                     return null;
@@ -503,6 +518,10 @@ public class Building implements Graded
             case R_STORAGE:
             case R_STOCK: b = stockFloor; break;
             case R_SHOP: b = shopFloor; break;
+            // checker tiles would show as a checkerboard ceiling in the flat
+            // below (audit 0.18): tiles on the ground storey, light stone above
+            case R_KITCHEN: b = storey == 0 ? kitchenFloor : lobbyFloor; break;
+            case R_BATH: b = bathFloor; break;
             default: break; // living rooms keep planks
         }
         if (b != null)
@@ -907,7 +926,8 @@ public class Building implements Graded
             return null;
         }
         // looted / thrown around: some furniture missing, loot varies per storey
-        if (unit(fx, storey * 31, z) < 0.12 + decay * 0.25)
+        // (never half a bed or the base of a 2 high piece)
+        if (b != Blocks.bed && f2(storey)[fx][z] == null && removed(fx, z, storey))
         {
             return unit(fx, storey * 33, z) < 0.5 ? lowDebris(fx, storey * FLOOR + 1, z, meta) : null;
         }
@@ -917,6 +937,69 @@ public class Building implements Graded
         }
         meta[0] = m[fx][z];
         return b;
+    }
+
+    private boolean removed(int fx, int z, int storey)
+    {
+        return unit(fx, storey * 31, z) < 0.12 + decay * 0.25;
+    }
+
+    private Block[][] f2(int storey)
+    {
+        return storey == 0 ? groundFurn2 : upperFurn2;
+    }
+
+    private Block furniture2(int fx, int z, int storey, int[] meta)
+    {
+        Block b = f2(storey)[fx][z];
+        if (b != null)
+        {
+            meta[0] = (storey == 0 ? groundFurn2Meta : upperFurn2Meta)[fx][z];
+        }
+        return b;
+    }
+
+    /** A 2 high piece: base in the FURN layer, top in the within 2 layer. */
+    private void put2(byte[][] plan, Block[][] furn, byte[][] fm, int fx, int z, Block b, int meta)
+    {
+        if (b == null || fx <= 0 || z <= 0 || fx >= width - 1 || z >= length - 1 || plan[fx][z] != OPEN)
+        {
+            return;
+        }
+        put(plan, furn, fm, fx, z, b, meta);
+        if (plan[fx][z] == FURN && furn[fx][z] == b)
+        {
+            boolean ground = plan == groundPlan;
+            (ground ? groundFurn2 : upperFurn2)[fx][z] = b;
+            (ground ? groundFurn2Meta : upperFurn2Meta)[fx][z] = (byte) meta;
+        }
+    }
+
+    /** Vanilla facing metadata (chest, furnace): front toward (dfx, dz); 2 N, 3 S, 4 W, 5 E. */
+    private int vanillaFacing(int dfx, int dz)
+    {
+        int dx = front == FRONT_WEST ? dfx : -dfx;
+        if (dx < 0) return 4;
+        if (dx > 0) return 5;
+        return dz < 0 ? 2 : 3;
+    }
+
+    /** Stairs used as a seat (sofa, toilet): the sitter faces (dfx, dz), the high side is behind. */
+    private int seatStairs(int dfx, int dz)
+    {
+        int dx = front == FRONT_WEST ? dfx : -dfx;
+        if (dx < 0) return 0; // high side east, faces west
+        if (dx > 0) return 1;
+        return dz < 0 ? 2 : 3;
+    }
+
+    /** Vanilla bed direction foot -> head: 0 south, 1 west, 2 north, 3 east. */
+    private int bedDir(int dfx, int dz)
+    {
+        int dx = front == FRONT_WEST ? dfx : -dfx;
+        if (dx < 0) return 1;
+        if (dx > 0) return 3;
+        return dz < 0 ? 2 : 0;
     }
 
     private boolean isCrate(Block b)
@@ -948,11 +1031,13 @@ public class Building implements Graded
     private int propFacing(int dfx, int dz)
     {
         // normalise to world: mirrored buildings flip x
+        // the FRONT of a BlockProp model points east at 2, south 3, west 4,
+        // north 5 (prop gallery: chairs, TVs, vending machines face south at
+        // 3). Before 0.18 this table was inverted: chairs faced away from tables.
         int dx = front == FRONT_WEST ? dfx : -dfx;
-        if (dx < 0) return 2;
-        if (dz < 0) return 3;
-        if (dx > 0) return 4;
-        return 5;
+        if (dx < 0) return 4;
+        if (dx > 0) return 2;
+        return dz < 0 ? 5 : 3;
     }
 
     private void wallLine(byte[][] plan, int fx0, int z0, int fx1, int z1, byte type)
@@ -1021,6 +1106,8 @@ public class Building implements Graded
         lobbyFloor = deci("BlockStone_6");
         shopFloor = deci(unit(21, 21, 21) < 0.6 ? "BlockStone_6" : "BlockFloorTiles_2");
         stockFloor = deci("BlockStone_1");
+        kitchenFloor = deci(unit(23, 23, 23) < 0.5 ? "BlockFloorTiles_1" : "BlockFloorTiles_2");
+        bathFloor = deci(unit(24, 24, 24) < 0.5 ? "BlockFloorTiles_2" : "BlockFloorTiles_1");
     }
 
     /**
@@ -1109,17 +1196,21 @@ public class Building implements Graded
                 apartmentUnit(plan, furn, fm, ux0, ux1, 1, c0 - 2, false, ground && fx <= 2);
             }
             plan[door][c1 + 1] = DOOR;
-            apartmentUnit(plan, furn, fm, ux0, ux1, c1 + 2, length - 2, true, ground && fx <= 2);
+            // lobby on one side of the entrance only, a furnished flat opposite
+            apartmentUnit(plan, furn, fm, ux0, ux1, c1 + 2, length - 2, true, ground && fx <= 2 && !doubleLoaded);
             fx = ux1 + 2;
             unitNo++;
         }
-        if (ground)
-        {
-            put(plan, furn, fm, 1, c0 - (doubleLoaded ? 0 : 0), props.mailbox, propFacing(0, 1));
-        }
     }
 
-    /** One flat: living part on the corridor side, bedroom on the window side. */
+    /**
+     * One flat (docs/interior_spec.md section 4): living part on the corridor
+     * side (kitchen run on the far side wall, dining table, sofa facing a TV),
+     * bedroom on the window side (bed head against the wall, nightstand,
+     * wardrobe), a tiled bathroom in wider flats. Rows are counted from the
+     * corridor (k = 0 next to the entry door). The line from the entry door
+     * to the bedroom door stays free.
+     */
     private void apartmentUnit(byte[][] plan, Block[][] furn, byte[][] fm, int fx0, int fx1,
                                int z0, int z1, boolean corridorAtLowZ, boolean lobby)
     {
@@ -1130,61 +1221,212 @@ public class Building implements Graded
         if (lobby)
         {
             markRoom(plan, fx0, z0, fx1, z1, R_LOBBY);
-            return; // ground floor front unit stays an open lobby
+            lobby(plan, furn, fm, fx0, fx1, z0, z1, corridorAtLowZ);
+            return;
         }
-        int depth = z1 - z0 + 1;
-        int split = depth >= 5 ? (corridorAtLowZ ? z0 + depth / 2 : z1 - depth / 2) : -1;
+        final int depth = z1 - z0 + 1, w = fx1 - fx0 + 1;
+        final int in = corridorAtLowZ ? 1 : -1; // +z direction into the flat
+        int ks = depth >= 5 ? depth / 2 : -1;    // split wall row (k), -1 = studio
+        int entry = (fx0 + fx1) / 2;
+        // a bathroom takes the 2 far columns of the bedroom in wider flats; the
+        // bedroom door must then open left of the bathroom wall (fx1 - 2)
+        boolean bath = ks >= 0 && w >= 6 && depth - ks - 1 >= 3;
+        int bedDoor = bath ? Math.min(entry, fx1 - 3) : entry + (w > 3 ? 1 : 0);
         markRoom(plan, fx0, z0, fx1, z1, R_LIVING);
-        if (split >= 0)
+        int livingRows = ks >= 0 ? ks : depth;
+        if (ks >= 0)
         {
-            // bedroom on the window side of the split wall
-            markRoom(plan, fx0, corridorAtLowZ ? split : z0, fx1, corridorAtLowZ ? z1 : split, R_BEDROOM);
-        }
-        if (split >= 0)
-        {
-            wallLine(plan, fx0, split, fx1, split, WALL);
-            plan[(fx0 + fx1) / 2 + ((fx1 - fx0) > 3 ? 1 : 0)][split] = DOOR;
-        }
-        int livingNear = corridorAtLowZ ? z0 : z1;
-        int bedFar = corridorAtLowZ ? z1 : z0;
-        int dirIn = corridorAtLowZ ? 1 : -1;
-        // kitchen corner on the unit's far fx wall: counter, stove, sink
-        put(plan, furn, fm, fx1, livingNear + dirIn, props.cooking != null ? props.cooking : Blocks.furnace,
-            props.cooking != null ? propFacing(-1, 0) : 4);
-        put(plan, furn, fm, fx1, livingNear + 2 * dirIn, Blocks.cauldron, 0);
-        put(plan, furn, fm, fx1 - 1, livingNear + dirIn, Blocks.double_stone_slab, 0);
-        // dining: table with chairs
-        int tx = (fx0 + fx1) / 2 - 1, tz = livingNear + (split >= 0 ? dirIn : 0);
-        put(plan, furn, fm, tx, tz, props.table, 2);
-        put(plan, furn, fm, tx - 1, tz, props.chair, propFacing(1, 0));
-        put(plan, furn, fm, tx + 1, tz, props.chair, propFacing(-1, 0));
-        // bedroom: bed along the exterior wall, wardrobe, maybe a crate
-        if (split >= 0)
-        {
-            int bz = bedFar;
-            int bx = fx0 + 1;
-            if (plan[bx][bz] == OPEN && plan[bx + 1][bz] == OPEN)
+            int zs = row(z0, z1, corridorAtLowZ, ks);
+            wallLine(plan, fx0, zs, fx1, zs, WALL);
+            plan[bedDoor][zs] = DOOR;
+            for (int k = ks + 1; k < depth; k++)
             {
-                // bed: foot at bx, head at bx + 1 (meta: direction + 8 for head)
-                int dir = front == FRONT_WEST ? 3 : 1; // head toward +fx in world terms
-                plan[bx][bz] = FURN; furn[bx][bz] = Blocks.bed; fm[bx][bz] = (byte) dir;
-                plan[bx + 1][bz] = FURN; furn[bx + 1][bz] = Blocks.bed; fm[bx + 1][bz] = (byte) (dir | 8);
+                markRoom(plan, fx0, row(z0, z1, corridorAtLowZ, k), fx1, row(z0, z1, corridorAtLowZ, k), R_BEDROOM);
             }
-            put(plan, furn, fm, fx1, bz, unit(fx0, z0, 51) < 0.5 ? Blocks.bookshelf : props.shelf, propFacing(-1, 0));
-            put(plan, furn, fm, fx1, bz - dirIn, unit(fx0, z0, 52) < 0.5 ? props.woodCrate : props.medicalCrate, 2);
         }
-        else
+        // keep the walking line free: entry column and bedroom door column
+        boolean[][] keep = new boolean[width][length];
+        for (int k = 0; k < livingRows; k++)
         {
-            // studio: the bed stands against the window wall in the one room
-            int bx = fx0;
-            if (bx + 1 <= fx1 && plan[bx][bedFar] == OPEN && plan[bx + 1][bedFar] == OPEN)
-            {
-                int dir = front == FRONT_WEST ? 3 : 1;
-                plan[bx][bedFar] = FURN; furn[bx][bedFar] = Blocks.bed; fm[bx][bedFar] = (byte) dir;
-                plan[bx + 1][bedFar] = FURN; furn[bx + 1][bedFar] = Blocks.bed; fm[bx + 1][bedFar] = (byte) (dir | 8);
-            }
-            put(plan, furn, fm, fx1, bedFar, props.woodCrate, 2);
+            keep[entry][row(z0, z1, corridorAtLowZ, k)] = true;
+            keep[bedDoor][row(z0, z1, corridorAtLowZ, k)] = true;
         }
+        if (ks >= 0 && ks + 1 < depth)
+        {
+            keep[bedDoor][row(z0, z1, corridorAtLowZ, ks + 1)] = true;
+        }
+
+        // ---- kitchen run along the far side wall (fx1)
+        for (int k = 0; k < livingRows; k++)
+        {
+            int z = row(z0, z1, corridorAtLowZ, k);
+            markRoom(plan, fx1 - 1, z, fx1, z, R_KITCHEN);
+            if (keep[fx1][z])
+            {
+                continue;
+            }
+            Block b;
+            int m;
+            switch (k)
+            {
+                case 0: b = deci("BlockElectricBoxBin"); m = propFacing(-1, 0); break; // fridge
+                case 1: b = Blocks.furnace; m = vanillaFacing(-1, 0); break;          // oven
+                case 2: b = Blocks.cauldron; m = 0; break;                              // sink
+                default:
+                    b = k == livingRows - 1 && deci("BlockWashingMachine") != null ? deci("BlockWashingMachine")
+                        : Blocks.double_stone_slab;                                     // counter
+                    m = b == Blocks.double_stone_slab ? 0 : propFacing(-1, 0);
+            }
+            if (b == null)
+            {
+                b = Blocks.double_stone_slab;
+                m = 0;
+            }
+            put(plan, furn, fm, fx1, z, b, m);
+        }
+        // ---- dining table with chairs facing it, in front of the kitchen
+        int tx = fx1 - 2;
+        if (livingRows >= 3 && tx > fx0 + 1 && !keep[tx][row(z0, z1, corridorAtLowZ, 1)])
+        {
+            int tz = row(z0, z1, corridorAtLowZ, 1);
+            put(plan, furn, fm, tx, tz, unit(fx0, z0, 53) < 0.5 ? props.table : deci("BlockWoodTable2"), 2);
+            if (!keep[tx][tz - in])
+            {
+                put(plan, furn, fm, tx, tz - in, props.chair, propFacing(0, in));
+            }
+            if (!keep[tx][tz + in])
+            {
+                put(plan, furn, fm, tx, tz + in, props.chair, propFacing(0, -in));
+            }
+        }
+        else if (livingRows >= 2 && tx > fx0)
+        {
+            int tz = row(z0, z1, corridorAtLowZ, livingRows - 1);
+            if (!keep[tx][tz])
+            {
+                put(plan, furn, fm, tx, tz, props.table, 2);
+                put(plan, furn, fm, tx - 1, tz, props.chair, propFacing(1, 0));
+            }
+        }
+        // ---- TV against the corridor wall, sofa facing it, rug between
+        if (livingRows >= 2 && !keep[fx0][row(z0, z1, corridorAtLowZ, 0)])
+        {
+            String[] tvs = {"BlockFlatscreenTV", "BlockFlatscreenTV_News", "BlockFlatscreenTV_Emergency",
+                            "BlockFlatscreenTV_Youtube"};
+            int zTv = row(z0, z1, corridorAtLowZ, 0);
+            put(plan, furn, fm, fx0, zTv, deci(tvs[(int) (unit(fx0, z0, 54) * tvs.length)]), propFacing(0, in));
+            if (!keep[fx0 + 1][zTv])
+            {
+                put(plan, furn, fm, fx0 + 1, zTv, unit(fx0, z0, 55) < 0.5 ? deci("BlockStereo") : deci("BlockRadio1"),
+                    propFacing(0, in));
+            }
+            int zSofa = row(z0, z1, corridorAtLowZ, livingRows - 1);
+            Block sofa = unit(fx0, z0, 56) < 0.5 ? Blocks.oak_stairs : Blocks.spruce_stairs;
+            for (int fx = fx0; fx <= fx0 + 1; fx++)
+            {
+                if (!keep[fx][zSofa])
+                {
+                    put(plan, furn, fm, fx, zSofa, sofa, seatStairs(0, -in));
+                }
+            }
+            int carpet = (int) (unit(fx0, z0, 57) * 16);
+            for (int k = 1; k < livingRows - 1; k++)
+            {
+                int z = row(z0, z1, corridorAtLowZ, k);
+                for (int fx = fx0; fx <= fx0 + 1; fx++)
+                {
+                    if (!keep[fx][z])
+                    {
+                        put(plan, furn, fm, fx, z, Blocks.carpet, carpet);
+                    }
+                }
+            }
+        }
+        if (ks < 0)
+        {
+            // studio: the bed against the window wall at fx0, head on the side wall
+            int zb = row(z0, z1, corridorAtLowZ, depth - 1);
+            if (livingRows <= 2 || depth >= 3)
+            {
+                bed(plan, furn, fm, fx0, zb);
+            }
+            return;
+        }
+        // ---- bedroom
+        int nb = depth - ks - 1;
+        int bedroomEnd = fx1;
+        if (bath)
+        {
+            int wx = fx1 - 2;
+            int zA = row(z0, z1, corridorAtLowZ, ks + 1), zB = row(z0, z1, corridorAtLowZ, depth - 1);
+            wallLine(plan, wx, Math.min(zA, zB), wx, Math.max(zA, zB), WALL);
+            plan[wx][row(z0, z1, corridorAtLowZ, ks + 1)] = DOOR;
+            for (int k = ks + 1; k < depth; k++)
+            {
+                int z = row(z0, z1, corridorAtLowZ, k);
+                markRoom(plan, fx1 - 1, z, fx1, z, R_BATH);
+            }
+            int zFar = row(z0, z1, corridorAtLowZ, depth - 1);
+            put(plan, furn, fm, fx1, zFar, Blocks.quartz_stairs, seatStairs(-1, 0));   // toilet
+            put(plan, furn, fm, fx1 - 1, zFar, Blocks.cauldron, 0);                   // sink
+            if (nb >= 3)
+            {
+                int zMid = row(z0, z1, corridorAtLowZ, depth - 2);
+                put(plan, furn, fm, fx1, zMid, Blocks.cauldron, 0);                   // bath / shower
+            }
+            bedroomEnd = wx - 1;
+        }
+        int kb = ks + 1 + (nb - 1) / 2;
+        int zBed = row(z0, z1, corridorAtLowZ, kb);
+        bed(plan, furn, fm, fx0, zBed);
+        int zNight = row(z0, z1, corridorAtLowZ, kb + 1 < depth ? kb + 1 : kb - 1);
+        if (zNight != row(z0, z1, corridorAtLowZ, ks))
+        {
+            put(plan, furn, fm, fx0, zNight, Blocks.chest, vanillaFacing(1, 0));       // nightstand
+        }
+        // wardrobe: 2 high in the far corner of the bedroom
+        int zW = row(z0, z1, corridorAtLowZ, depth - 1);
+        if (bedroomEnd > fx0 + 2 && !keep[bedroomEnd][zW])
+        {
+            put2(plan, furn, fm, bedroomEnd, zW, Blocks.planks, 1);
+        }
+        if (unit(fx0, z0, 58) < 0.4)
+        {
+            put(plan, furn, fm, bedroomEnd, row(z0, z1, corridorAtLowZ, ks + 1),
+                unit(fx0, z0, 52) < 0.5 ? props.woodCrate : props.medicalCrate, 2);
+        }
+    }
+
+    /** z of row k of a flat, counted from the corridor side. */
+    private static int row(int z0, int z1, boolean corridorAtLowZ, int k)
+    {
+        return corridorAtLowZ ? z0 + k : z1 - k;
+    }
+
+    /** Vanilla bed: head against the side wall at fx, foot at fx + 1. */
+    private void bed(byte[][] plan, Block[][] furn, byte[][] fm, int fx, int z)
+    {
+        if (fx + 1 >= width - 1 || plan[fx][z] != OPEN || plan[fx + 1][z] != OPEN)
+        {
+            return;
+        }
+        int dir = bedDir(-1, 0); // foot -> head points to -fx
+        plan[fx + 1][z] = FURN; furn[fx + 1][z] = Blocks.bed; fm[fx + 1][z] = (byte) dir;
+        plan[fx][z] = FURN; furn[fx][z] = Blocks.bed; fm[fx][z] = (byte) (dir | 8);
+    }
+
+    /** Ground storey lobby: plants, bicycles, a bin; the middle stays open. */
+    private void lobby(byte[][] plan, Block[][] furn, byte[][] fm, int fx0, int fx1, int z0, int z1,
+                       boolean corridorAtLowZ)
+    {
+        int far = row(z0, z1, corridorAtLowZ, z1 - z0);
+        put(plan, furn, fm, fx0, far, deci("BlockCocaPlant"), 2);
+        put(plan, furn, fm, fx1, far, deci("BlockCocaPlant"), 2);
+        for (int k = 1; k < Math.min(3, z1 - z0); k++)
+        {
+            put(plan, furn, fm, fx1, row(z0, z1, corridorAtLowZ, k), deci("BlockBicycle"), propFacing(0, 1));
+        }
+        put(plan, furn, fm, fx0, row(z0, z1, corridorAtLowZ, 1), props.trashcan, 2);
     }
 
     private void planOffice(byte[][] plan, Block[][] furn, byte[][] fm, boolean ground)

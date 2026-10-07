@@ -88,3 +88,18 @@ Same 3 buildings and camera spots as audit_v0.16.
   grid, pink plaster walls. Shop = shelving aisles under hanging lights,
   stone stockroom floor, white plaster walls upstairs.
 
+## audit_v0.18/ and plans_v0.18/ (after step 4d.3 apartment rooms)
+- audit_rooms.png: audit_1/2 = inside an apartment living room: kitchen
+  run along the side wall (tall grey fridge, furnace oven, washing
+  machine, cauldron sink) on black / white checker tiles beside an oak
+  plank living floor, plaster walls, office door; the flat above showed
+  its checker kitchen floor as a checker CEILING (fixed: upper kitchens use
+  light stone). audit_5/6 = office open plan, chairs at desks, carpet,
+  hanging fixtures. audit_9 = shop aisles.
+- audit_apartment.png: facade unchanged; corridor with light stone floor
+  and plaster walls.
+- plans_v0.18 b-4_0_1 (24x25): every flat has F fridge, u sink, M washer,
+  T + c dining, V TV + h sofa + rug, B bed + C chest, o toilet + u sink in
+  bathrooms, D doors. b-4_0_2 (18x16): small flats (bed, fridge, sofa),
+  ground storey = lobby (plants p, bicycles y) + a furnished flat.
+

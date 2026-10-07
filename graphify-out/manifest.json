@@ -50,9 +50,9 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791379566.16952,
-    "ast_hash": "846e168f347fd504e5111b5befac24d3",
-    "semantic_hash": "846e168f347fd504e5111b5befac24d3"
+    "mtime": 1791380971.7426484,
+    "ast_hash": "8dd82786294f612383cc75fbbfe9c4a3",
+    "semantic_hash": "8dd82786294f612383cc75fbbfe9c4a3"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791377696.66105,
@@ -110,9 +110,9 @@
     "semantic_hash": "5114d4ba85a750ffc503f5ccf9967094"
   },
   "CLAUDE.md": {
-    "mtime": 1791379939.0445364,
-    "ast_hash": "2acbe08868ac04285f051b96fb200903",
-    "semantic_hash": "2acbe08868ac04285f051b96fb200903"
+    "mtime": 1791381030.2124982,
+    "ast_hash": "b2dbad270c97017bee66fdf6262557a3",
+    "semantic_hash": "b2dbad270c97017bee66fdf6262557a3"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "ccc2c423f1c2a63b0e471675528f56a7"
   },
   "new_feature.md": {
-    "mtime": 1791379939.0449355,
-    "ast_hash": "29713aaee9113669e034393dc16f6ba1",
-    "semantic_hash": "29713aaee9113669e034393dc16f6ba1"
+    "mtime": 1791381030.2129579,
+    "ast_hash": "5b710031481cedc2a923a101433ad80a",
+    "semantic_hash": "5b710031481cedc2a923a101433ad80a"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -175,9 +175,9 @@
     "semantic_hash": "eecbfdd3f9f9d419fbce9147d814df46"
   },
   "dev/src/main/java/net/decimation/worldgen/Building.java": {
-    "mtime": 1791379939.0443668,
-    "ast_hash": "4714d435b5c324bc071182de6af1587e",
-    "semantic_hash": "4714d435b5c324bc071182de6af1587e"
+    "mtime": 1791380969.2597497,
+    "ast_hash": "dc46fda7981f8a6841710357dc5055e0",
+    "semantic_hash": "dc46fda7981f8a6841710357dc5055e0"
   },
   "dev/src/main/java/net/decimation/worldgen/CityDistrict.java": {
     "mtime": 1791369986.9502473,
@@ -315,9 +315,9 @@
     "semantic_hash": "40676f19f9256f8129e237f8ce8f295b"
   },
   "tools/floorplan.py": {
-    "mtime": 1791378995.7371147,
-    "ast_hash": "9f21c2a3270ce5ea6da85b0e6b95e379",
-    "semantic_hash": "9f21c2a3270ce5ea6da85b0e6b95e379"
+    "mtime": 1791380512.877096,
+    "ast_hash": "1db54b7db05e8a76edf2c98bba98bfd4",
+    "semantic_hash": "1db54b7db05e8a76edf2c98bba98bfd4"
   },
   "docs/building_audit.md": {
     "mtime": 1791378342.2070649,
@@ -330,13 +330,13 @@
     "semantic_hash": "44617037eeac4c4f3e53f42e6306550b"
   },
   "docs/shots_index.md": {
-    "mtime": 1791379943.086092,
-    "ast_hash": "48ebf606ea67bffd76b94144b8b52c2e",
-    "semantic_hash": "48ebf606ea67bffd76b94144b8b52c2e"
+    "mtime": 1791381030.213171,
+    "ast_hash": "bb05eb01c7deeb5a9a1bb6de916b48ea",
+    "semantic_hash": "bb05eb01c7deeb5a9a1bb6de916b48ea"
   },
   "docs/interior_spec.md": {
-    "mtime": 1791379939.044646,
-    "ast_hash": "dae44786a9b8e7bea20bedcc2411dbec",
-    "semantic_hash": "dae44786a9b8e7bea20bedcc2411dbec"
+    "mtime": 1791381030.2118924,
+    "ast_hash": "bfa2a681faf9d9cff3f41a5359183114",
+    "semantic_hash": "bfa2a681faf9d9cff3f41a5359183114"
   }
 }
