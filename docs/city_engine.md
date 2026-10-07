@@ -74,11 +74,21 @@ building fronts, several stairs designs joining levels.
 
 ## Open
 
-- City edge: since v0.24.1 a 10 block band outside the city is ramped
-  (smoothstep) from street level to the natural height (`EdgePlan`, a
-  Graded plan that writes no blocks of its own); on higher land it reads
-  as 1 block grass terraces: smoother / wider ramp or raising edge cells
-  later.
+- City edge (v0.24.4, replaces the v0.24.1 band of 10): every city cell
+  with open land among its 8 neighbours has an `EdgePlan` that ramps the
+  land up to EDGE = 24 blocks out (smoothstep, Euclidean distance so outer
+  corners are rounded, width 2 blocks per block of height difference,
+  6..24, contours wobbled +-4 blocks by value noise so the 1 block steps
+  do not run parallel to the street). A column belongs to the nearest city
+  cell only (ties to the lower cell): no column is graded twice.
+  `populate` now looks at cells within EDGE of the window (before, the
+  outermost 2 band columns were never written). Small sites and large
+  sites within EDGE of a city are dropped (the ramp would cut under them).
+  `tools/edgescan.py WORLD [R]` measures it (sector map recomputed in
+  Python): seed 1, 9024 band columns, neighbour steps over 1 block 1.2%
+  (v0.24.3) -> 0.3% (v0.24.4); the 3 block steps left are natural hills
+  and tree tops. It still reads as 1 block grass terraces from the street
+  (shots lc_edge_v0.24.4b), which is plain Minecraft terrain.
 - Bridges, building fronts, parks, highways of the packs are not used.
 - Superblocks (v0.24.2): 30% of aligned 2 x 2 city cell groups (all 4
   city) become one block: streets only on its first chunk row / column,

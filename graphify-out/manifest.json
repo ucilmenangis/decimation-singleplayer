@@ -50,9 +50,9 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791410236.669798,
-    "ast_hash": "809741527eeeca2ca97e502c1d54ef5e",
-    "semantic_hash": "809741527eeeca2ca97e502c1d54ef5e"
+    "mtime": 1791410632.189899,
+    "ast_hash": "62ad5acfc742755071b784dc3a08c3a7",
+    "semantic_hash": "62ad5acfc742755071b784dc3a08c3a7"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791406276.5238726,
@@ -70,9 +70,9 @@
     "semantic_hash": "d4b685f732c9680f7e1309982fa104e7"
   },
   "dev/src/main/java/net/decimation/worldgen/StructureGenerator.java": {
-    "mtime": 1791407558.2147202,
-    "ast_hash": "b419dce2eeac95f4b7baeb5d8333a22f",
-    "semantic_hash": "b419dce2eeac95f4b7baeb5d8333a22f"
+    "mtime": 1791410632.190544,
+    "ast_hash": "307c4b2dabf0435b7d39c128f417c4fa",
+    "semantic_hash": "307c4b2dabf0435b7d39c128f417c4fa"
   },
   "dev/src/main/java/net/decimation/worldgen/ZoneStore.java": {
     "mtime": 1791318417.960504,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791410279.647384,
-    "ast_hash": "e8513169a015de9e4bc7368fa52ca760",
-    "semantic_hash": "e8513169a015de9e4bc7368fa52ca760"
+    "mtime": 1791411758.0829334,
+    "ast_hash": "3c19e6336fbb77247b3ca7fcde0313b3",
+    "semantic_hash": "3c19e6336fbb77247b3ca7fcde0313b3"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -120,9 +120,9 @@
     "semantic_hash": "aa4550575e47e7c1d0b020a51afbb501"
   },
   "bug.md": {
-    "mtime": 1791397531.4111834,
-    "ast_hash": "7b04f8e238db973c50499097f587b15e",
-    "semantic_hash": "7b04f8e238db973c50499097f587b15e"
+    "mtime": 1791411758.083385,
+    "ast_hash": "48c6afbc81f4af66863c17beeaead31f",
+    "semantic_hash": "48c6afbc81f4af66863c17beeaead31f"
   },
   "create_weapons.md": {
     "mtime": 1791348916.8339295,
@@ -185,9 +185,9 @@
     "semantic_hash": "49478918e4a3e4646b58819df297d2f9"
   },
   "dev/src/main/java/net/decimation/worldgen/LargeSites.java": {
-    "mtime": 1791352842.5613372,
-    "ast_hash": "7af9b5f352480d8e3356f06da644877b",
-    "semantic_hash": "7af9b5f352480d8e3356f06da644877b"
+    "mtime": 1791410632.190221,
+    "ast_hash": "743f1577062183dd193af9504f9af3b1",
+    "semantic_hash": "743f1577062183dd193af9504f9af3b1"
   },
   "dev/src/main/java/net/decimation/worldgen/Plan.java": {
     "mtime": 1791356897.315913,
@@ -325,9 +325,9 @@
     "semantic_hash": "32134db33ff2599b79a45d05e9fdfdc1"
   },
   "docs/shots_index.md": {
-    "mtime": 1791410049.2616374,
-    "ast_hash": "9135b7a3ef5e1d0da630e9126c39756c",
-    "semantic_hash": "9135b7a3ef5e1d0da630e9126c39756c"
+    "mtime": 1791411758.0825016,
+    "ast_hash": "6f7d36edf7744e6598dd553c1a32f7e7",
+    "semantic_hash": "6f7d36edf7744e6598dd553c1a32f7e7"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -665,9 +665,9 @@
     "semantic_hash": "4754c787c15ae49542d1bf2159b29b75"
   },
   "dev/src/main/java/net/decimation/worldgen/city/LcCity.java": {
-    "mtime": 1791410201.4858887,
-    "ast_hash": "9dd20c5115b1a5a0e6e8c3bc2d6d0a8d",
-    "semantic_hash": "9dd20c5115b1a5a0e6e8c3bc2d6d0a8d"
+    "mtime": 1791411470.3910422,
+    "ast_hash": "886591dc86e8c5243a5af39e0aed1042",
+    "semantic_hash": "886591dc86e8c5243a5af39e0aed1042"
   },
   "dev/src/main/java/net/decimation/worldgen/city/LcContent.java": {
     "mtime": 1791407446.1881537,
@@ -690,8 +690,13 @@
     "semantic_hash": "87d7c5deb01bdf730025e901597a1efa"
   },
   "docs/city_engine.md": {
-    "mtime": 1791410236.665472,
-    "ast_hash": "dbc8a68a7d13f87c62d774c493771c7f",
-    "semantic_hash": "dbc8a68a7d13f87c62d774c493771c7f"
+    "mtime": 1791411758.0816836,
+    "ast_hash": "ea0e9cb74d18949945978271553088a5",
+    "semantic_hash": "ea0e9cb74d18949945978271553088a5"
+  },
+  "tools/edgescan.py": {
+    "mtime": 1791410593.4654717,
+    "ast_hash": "c2eead60103d8b8c9af59ae2b83dc9ab",
+    "semantic_hash": "c2eead60103d8b8c9af59ae2b83dc9ab"
   }
 }

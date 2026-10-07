@@ -318,3 +318,14 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
   DeceasedCraft screenshots the user sent.
 - 2 street level between the tower's columns and a pink glass fronted
   block; 3 a rooftop terrace of a neighbouring tower.
+
+## lc_edge_v0.24.4/ and lc_edge_v0.24.4b/ (city edge ramp, seed 1, 7 views each, all valid)
+Same spots both: 0..2 from the north sidewalk (z 6) looking north at
+x -150, -60, 20; 3 aerial over the city's north west corner; 4 and 5 from
+the ramp looking south at the city; 6 aerial over the north band.
+- v0.24.4: 0, 1 grass terraces 1 block high in long straight rows parallel
+  to the street, up to the natural ground; 2 a natural hill with trees east;
+  3 the corner ramp rounded, no cliff, dirt shows on cut faces; 4, 5 the
+  city seen from the ramp, land meets the sidewalk; 6 smooth contours.
+- v0.24.4b (contour wobble): 0 the first terrace now steps in and out;
+  rows wander instead of running straight; rest as v0.24.4.

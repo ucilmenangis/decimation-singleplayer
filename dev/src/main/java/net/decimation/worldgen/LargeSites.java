@@ -70,6 +70,11 @@ public class LargeSites
         int span = SITE * 16;
         int x = siteX * span + 4 + r.nextInt(Math.max(1, span - 8 - w));
         int z = siteZ * span + 4 + r.nextInt(Math.max(1, span - 8 - l));
+        if (net.decimation.worldgen.city.LcCity.enabled()
+            && net.decimation.worldgen.city.LcCity.nearCity(world.getSeed(), x, z, x + w - 1, z + l - 1))
+        {
+            return null; // the city's edge ramp would cut the ground under it
+        }
         net.decimation.mod.server.zones.a zone = s.name.startsWith("mil_")
             ? net.decimation.mod.server.zones.a.MILITARY
             : s.name.startsWith("city_") ? net.decimation.mod.server.zones.a.POLICE : null;

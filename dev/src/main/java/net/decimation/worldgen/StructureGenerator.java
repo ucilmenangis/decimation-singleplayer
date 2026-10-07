@@ -297,8 +297,12 @@ public class StructureGenerator implements IWorldGenerator
             return; // this cell's structure belongs to another chunk
         }
 
-        place(world, schematic, (chunkX << 4) + 8, (chunkZ << 4) + 8, turns,
-              SECTOR_NAME[sector], chunkX << 4, chunkZ << 4);
+        int ox = (chunkX << 4) + 8, oz = (chunkZ << 4) + 8;
+        if (lc && net.decimation.worldgen.city.LcCity.nearCity(world.getSeed(), ox, oz, ox + 23, oz + 23))
+        {
+            return; // the city's edge ramp would cut the ground under it
+        }
+        place(world, schematic, ox, oz, turns, SECTOR_NAME[sector], chunkX << 4, chunkZ << 4);
     }
 
     private void place(World world, Schematic s, int originX, int originZ,

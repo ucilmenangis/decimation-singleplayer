@@ -504,6 +504,9 @@ of the last session:
   translator fixes (windows, stone bricks, basalt); v0.24.3: wasteland
   district next to military sectors. dist/ holds the 0.24.3 jar and the
   pack (dist/config/decimation_worldgen/lc, local only).
+  v0.24.4: city edge ramp up to 24 wide, rounded corners, no site inside
+  it; `tools/edgescan.py WORLD` checks it. Study mode needs BOTH
+  `-Pautotest -Pstudy=...` (study alone sits at the menu).
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

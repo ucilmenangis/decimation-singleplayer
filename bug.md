@@ -360,3 +360,11 @@ not something we introduced or need to fix) see `documentation.md`.
   plain items. Needs confirming the exact class and applying the same
   registration fix already used for the loot handler (`deci.aK.k`) and the
   tick-queue drain.
+
+## City edge ramp missed its outer columns (fixed v0.24.4, 8 Oktober 2026)
+`LcCity.populate` only planned the cells under the population window, so a
+window lying wholly outside the city never wrote the outer 1..2 columns of
+the 10 wide edge band (a small step at the band's end). Also small and
+large sites next to a city could sit inside the band and get cut under.
+Fix: populate scans cells within EDGE of the window; sites within EDGE of a
+city are dropped. Checked with tools/edgescan.py (seed 1).

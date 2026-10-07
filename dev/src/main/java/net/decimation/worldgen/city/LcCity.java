@@ -39,7 +39,8 @@ public final class LcCity
     /** City cells this close (in cells) to a military sector form the wasteland district. */
     static final int DEADZONE_RANGE = 2;
     /** Width of the ramp graded into the land around the city. */
-    static final int EDGE = 10;
+    /** Widest ramp between a city cell and the land outside (blocks). */
+    static final int EDGE = 24;
     /** Sidewalk width on each side of a street chunk (flush with the road). */
     static final int SIDEWALK = 3;
     private static final int TOP = 250;
@@ -84,8 +85,9 @@ public final class LcCity
     public void populate(World world, int chunkX, int chunkZ, StructureGenerator gen)
     {
         int[] w = Slices.window(chunkX, chunkZ);
-        int c0x = Math.floorDiv(w[0] >> 4, CELL), c1x = Math.floorDiv(w[2] >> 4, CELL);
-        int c0z = Math.floorDiv(w[1] >> 4, CELL), c1z = Math.floorDiv(w[3] >> 4, CELL);
+        // cells within EDGE of the window: their edge ramp may reach into it
+        int c0x = Math.floorDiv((w[0] - EDGE) >> 4, CELL), c1x = Math.floorDiv((w[2] + EDGE) >> 4, CELL);
+        int c0z = Math.floorDiv((w[1] - EDGE) >> 4, CELL), c1z = Math.floorDiv((w[3] + EDGE) >> 4, CELL);
         java.util.Set<Long> done = new java.util.HashSet<Long>();
         long seed = world.getSeed();
         for (int cx = c0x; cx <= c1x; cx++)
@@ -110,6 +112,22 @@ public final class LcCity
                 }
             }
         }
+    }
+
+    /** True when the box comes within EDGE of a city cell (the city's ramp may cut it). */
+    public static boolean nearCity(long seed, int x0, int z0, int x1, int z1)
+    {
+        for (int cx = Math.floorDiv(x0 - EDGE, CELL * 16); cx <= Math.floorDiv(x1 + EDGE, CELL * 16); cx++)
+        {
+            for (int cz = Math.floorDiv(z0 - EDGE, CELL * 16); cz <= Math.floorDiv(z1 + EDGE, CELL * 16); cz++)
+            {
+                if (isCity(seed, cx, cz))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     static boolean isCity(long seed, int cellX, int cellZ)
@@ -290,25 +308,24 @@ public final class LcCity
             out.add(street(seed, cellX, cellZ, lx, lz, cellX * CELL + lx, cellZ * CELL + lz, g, style));
         }
         // land next to the city: a band ramping from street level to the natural height
-        int[][] sides = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         for (int mx = 0; mx < blk[2]; mx++)
         {
             for (int mz = 0; mz < blk[2]; mz++)
             {
                 int ccx = cellX + mx, ccz = cellZ + mz;
-                int cbx = ccx * CELL * 16, cbz = ccz * CELL * 16;
-                for (int[] d : sides)
+                boolean[][] city = new boolean[3][3];
+                boolean open = false;
+                for (int i = 0; i < 3; i++)
                 {
-                    if (isCity(seed, ccx + d[0], ccz + d[1]))
+                    for (int j = 0; j < 3; j++)
                     {
-                        continue;
+                        city[i][j] = isCity(seed, ccx + i - 1, ccz + j - 1);
+                        open |= !city[i][j];
                     }
-                    int x0 = d[0] < 0 ? cbx - EDGE : d[0] > 0 ? cbx + CELL * 16 : cbx;
-                    int x1 = d[0] < 0 ? cbx - 1 : d[0] > 0 ? cbx + CELL * 16 + EDGE - 1 : cbx + CELL * 16 - 1;
-                    int z0 = d[1] < 0 ? cbz - EDGE : d[1] > 0 ? cbz + CELL * 16 : cbz;
-                    int z1 = d[1] < 0 ? cbz - 1 : d[1] > 0 ? cbz + CELL * 16 + EDGE - 1 : cbz + CELL * 16 - 1;
-                    out.add(new EdgePlan("lce_" + ccx + "_" + ccz + "_" + d[0] + "_" + d[1], x0, z0, x1, z1, g,
-                                         cbx, cbz, cbx + CELL * 16 - 1, cbz + CELL * 16 - 1));
+                }
+                if (open)
+                {
+                    out.add(new EdgePlan("lce_" + ccx + "_" + ccz, ccx, ccz, g, city));
                 }
             }
         }
@@ -677,40 +694,40 @@ public final class LcCity
     }
 
     /**
-     * The land just outside a city cell (EDGE wide band): ramps from the
-     * city ground at the cell edge to the natural height (smoothstep),
-     * cutting or filling, keeping the column's own surface block. Writes no
+     * The land just outside a city cell: ramps from the city ground at the
+     * cell edge to the natural height (smoothstep over a band 2 blocks per
+     * block of height difference, 6 .. EDGE wide), cutting or filling,
+     * keeping the column's own surface block. Distance is Euclidean, so
+     * outer corners are rounded. A column belongs to the nearest city cell
+     * only (ties: lowest cell), so no column is graded twice. Writes no
      * blocks of its own (blockAt is SKIP everywhere).
      */
     static final class EdgePlan implements net.decimation.worldgen.FixedBase, net.decimation.worldgen.Graded
     {
         private final String id;
-        private final int x0, z0, x1, z1, ground, cx0, cz0, cx1, cz1;
+        private final int cellX, cellZ, ground;
+        /** City cells around this one, [dx + 1][dz + 1]. */
+        private final boolean[][] city;
 
-        EdgePlan(String id, int x0, int z0, int x1, int z1, int ground, int cx0, int cz0, int cx1, int cz1)
+        EdgePlan(String id, int cellX, int cellZ, int ground, boolean[][] city)
         {
             this.id = id;
-            this.x0 = x0;
-            this.z0 = z0;
-            this.x1 = x1;
-            this.z1 = z1;
+            this.cellX = cellX;
+            this.cellZ = cellZ;
             this.ground = ground;
-            this.cx0 = cx0;
-            this.cz0 = cz0;
-            this.cx1 = cx1;
-            this.cz1 = cz1;
+            this.city = city;
         }
 
         public int fixedBaseY() { return ground; }
         public String id() { return id; }
-        public int minX() { return x0; }
-        public int minZ() { return z0; }
-        public int maxX() { return x1; }
-        public int maxZ() { return z1; }
-        public int lotMinX() { return x0; }
-        public int lotMinZ() { return z0; }
-        public int lotMaxX() { return x1; }
-        public int lotMaxZ() { return z1; }
+        public int minX() { return cellX * CELL * 16 - EDGE; }
+        public int minZ() { return cellZ * CELL * 16 - EDGE; }
+        public int maxX() { return (cellX + 1) * CELL * 16 - 1 + EDGE; }
+        public int maxZ() { return (cellZ + 1) * CELL * 16 - 1 + EDGE; }
+        public int lotMinX() { return minX(); }
+        public int lotMinZ() { return minZ(); }
+        public int lotMaxX() { return maxX(); }
+        public int lotMaxZ() { return maxZ(); }
         public int height() { return 0; }
         public int clearAbove() { return 0; }
         public int maxSpread() { return 255; }
@@ -724,15 +741,87 @@ public final class LcCity
             return null;
         }
 
+        /** Squared distance from (x, z) to city cell (cx, cz); 0 inside. */
+        private static long dist2(int cx, int cz, int x, int z)
+        {
+            int x0 = cx * CELL * 16, z0 = cz * CELL * 16;
+            long dx = Math.max(0, Math.max(x0 - x, x - (x0 + CELL * 16 - 1)));
+            long dz = Math.max(0, Math.max(z0 - z, z - (z0 + CELL * 16 - 1)));
+            return dx * dx + dz * dz;
+        }
+
+        /** Distance to this cell when it is the column's nearest city cell, else -1. */
+        double owner(int x, int z)
+        {
+            int ox = Math.floorDiv(x, CELL * 16) - cellX + 1, oz = Math.floorDiv(z, CELL * 16) - cellZ + 1;
+            if (ox < 0 || ox > 2 || oz < 0 || oz > 2 || city[ox][oz])
+            {
+                return -1; // inside the city, or out of reach
+            }
+            long own = dist2(cellX, cellZ, x, z);
+            if (own > (long) EDGE * EDGE)
+            {
+                return -1;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (!city[i][j] || (i == 1 && j == 1))
+                    {
+                        continue;
+                    }
+                    long d = dist2(cellX + i - 1, cellZ + j - 1, x, z);
+                    // ties go to the lower cell (x first), the same order every plan uses
+                    if (d < own || (d == own && (i < 1 || (i == 1 && j < 1))))
+                    {
+                        return -1;
+                    }
+                }
+            }
+            return Math.sqrt(own);
+        }
+
+        /** Smooth value noise in -1 .. 1, 12 block lattice. */
+        static double wobble(int x, int z)
+        {
+            double gx = x / 12.0, gz = z / 12.0;
+            int ix = (int) Math.floor(gx), iz = (int) Math.floor(gz);
+            double fx = gx - ix, fz = gz - iz;
+            fx = fx * fx * (3 - 2 * fx);
+            fz = fz * fz * (3 - 2 * fz);
+            double a = lattice(ix, iz), b = lattice(ix + 1, iz), c = lattice(ix, iz + 1), e = lattice(ix + 1, iz + 1);
+            return (a + (b - a) * fx) * (1 - fz) + (c + (e - c) * fx) * fz;
+        }
+
+        private static double lattice(int x, int z)
+        {
+            long h = x * 0x9E3779B97F4A7C15L ^ z * 0xC2B2AE3D27D4EB4FL;
+            h ^= h >>> 31;
+            h *= 0xBF58476D1CE4E5B9L;
+            h ^= h >>> 29;
+            return ((h >>> 11) / (double) (1L << 53)) * 2 - 1;
+        }
+
         public void grade(World world, int x, int z, int baseY)
         {
+            double d = owner(x, z);
+            if (d <= 0)
+            {
+                return;
+            }
             int natural = StructureGenerator.soilTop(world, x, z);
             if (natural < 5 || StructureGenerator.waterAbove(world, x, natural, z))
             {
                 return;
             }
-            int d = Math.max(Math.max(cx0 - x, x - cx1), Math.max(cz0 - z, z - cz1)); // 1 .. EDGE
-            double t = Math.min(1, d / (double) (EDGE + 1));
+            int width = Math.max(6, Math.min(EDGE, 2 * Math.abs(natural - ground) + 4));
+            // contours wander +-4 blocks so the 1 block steps do not run parallel to the street
+            double t = Math.max(0, d + 4 * wobble(x, z)) / (width + 1);
+            if (t >= 1)
+            {
+                return;
+            }
             t = t * t * (3 - 2 * t);
             int target = ground + (int) Math.round((natural - ground) * t);
             if (target == natural)
