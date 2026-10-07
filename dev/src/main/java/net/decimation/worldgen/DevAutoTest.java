@@ -329,6 +329,9 @@ public class DevAutoTest
         }
         world.setWorldTime(6000);
         net.minecraft.entity.player.EntityPlayerMP p = player();
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = 180;
@@ -401,6 +404,9 @@ public class DevAutoTest
         double x = GX + col * GALLERY_SPACING + (GALLERY_PER_VIEW - 1) * GALLERY_SPACING / 2.0 + 0.5;
         double z = GZ + row * GALLERY_ROW_GAP + 9.5;
         net.minecraft.entity.player.EntityPlayerMP p = player();
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = 180;
@@ -465,6 +471,9 @@ public class DevAutoTest
         world.getChunkProvider().loadChunk(c[2] >> 4, c[4] >> 4);
         world.setWorldTime(6000);
         net.minecraft.entity.player.EntityPlayerMP p = player();
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = c[5];
@@ -552,6 +561,9 @@ public class DevAutoTest
         }
         world.setWorldTime(6000);
         net.minecraft.entity.player.EntityPlayerMP p = player();
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = c[2];
@@ -625,6 +637,9 @@ public class DevAutoTest
         net.decimation.worldgen.sets.FurnitureSet set = sets.get(v);
         double x = SX + v * BAY + BAY / 2.0;
         net.minecraft.entity.player.EntityPlayerMP p = player();
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = 180;
@@ -738,6 +753,9 @@ public class DevAutoTest
             pitch = 8;
         }
         net.minecraft.entity.player.EntityPlayerMP p = player();
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = yaw;
@@ -905,6 +923,9 @@ public class DevAutoTest
                 }
             }
         }
+        // creative: invulnerable, a camera spot inside a block must not
+        // suffocate the player (1.7.10 has no spectator mode)
+        p.setGameType(WorldSettings.GameType.CREATIVE);
         p.capabilities.isFlying = true;
         p.sendPlayerAbilities();
         viewYaw = yaw;

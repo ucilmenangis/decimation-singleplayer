@@ -246,3 +246,17 @@ set_<n>.png, sets_sheet_*.png (8 per sheet, names on top).
 - 13 laboratory complex: big walled block with the glass dome ring,
   corridors (22), a room with rows of chairs (23).
 - Interior cameras (11) from tools/mapbuildings.py: some face walls.
+
+## wasteland_cellars_v0.23/ (cellars of the legacy wasteland buildings, ground floors at y 200)
+- Converter now generates floors like Lost Cities (cellars included);
+  camera in creative (no suffocation inside blocks).
+- 0 lab1 cellar: sandstone lined room, computer desks, bookshelf, crates.
+  1 bunker1 cellar: brick room, computers, gun rack, desks, chairs.
+- 2..5 military base, 4 levels (y 176 / 182 / 188 / 194): brick and
+  stone brick corridors, rows of seats, cell bars, ladders between
+  levels, crates, desks with chairs.
+- 6..16 laboratory complex (15 cellars, y 110..200): bottom (-15) a big
+  hall with sandstone blocks and machinery, glass partitions; -12, -9,
+  -6, -3 show the same office / lab layout (one part used for a floor
+  range in the data): rows of chairs and desks, glass walls. Several
+  manual spots (x 28, z 60) face a wall.

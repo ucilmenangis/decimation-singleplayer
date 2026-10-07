@@ -97,9 +97,9 @@ public class WorldGenCommand extends CommandBase
 
     /**
      * Writes config/decimation_worldgen/paste/NAME.schematic as it is (no
-     * placeholder swaps, no rotation) with its lower north west corner at
-     * x y z; air in the schematic clears the world. For converted reference
-     * buildings (tools/lc2schem.py).
+     * placeholder swaps, no rotation) with its north west corner at x z and
+     * its ground floor at y (NAME.json "groundY" from tools/lc2schem.py; no
+     * sidecar: the lowest layer at y); air in the schematic clears the world.
      */
     private void paste(ICommandSender sender, String name, int x0, int y0, int z0)
     {
@@ -108,6 +108,18 @@ public class WorldGenCommand extends CommandBase
         try
         {
             Schematic s = Schematic.load(f);
+            // tools/lc2schem.py writes NAME.json {"groundY": n}: the ground floor
+            // goes to the given y, cellars below it
+            java.io.File side = new java.io.File(f.getParentFile(), name + ".json");
+            if (side.exists())
+            {
+                com.google.gson.JsonObject o = new com.google.gson.JsonParser()
+                    .parse(new java.io.InputStreamReader(new java.io.FileInputStream(side), "UTF-8")).getAsJsonObject();
+                if (o.has("groundY"))
+                {
+                    y0 -= o.get("groundY").getAsInt();
+                }
+            }
             net.minecraft.world.World world = sender.getEntityWorld();
             java.util.List<int[]> tiles = new java.util.ArrayList<int[]>();
             for (int y = 0; y < s.height; y++)

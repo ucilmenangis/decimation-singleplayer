@@ -260,3 +260,17 @@ hold different buildings, keep the two apart). Catalogue tables in
   docs/shots_index.md "wasteland_legacy_v0.23". Schematics are local only
   (dev/run/client/config/decimation_worldgen/paste/, git ignored):
   `/deciworldgen paste multi_militarybase X Y Z` in the dev client.
+- CELLARS (user reminder: "most building has really deep bunker"): 86
+  legacy building files have cellars: laboratory complex 15, condo 5,
+  military base and mega tower 4, hospital and clubhouse 2, many 1.
+  tools/lc2schem.py now picks floors exactly like Lost Cities
+  (BuildingInfo / LostCityTerrainFeature.generateBuilding, read from
+  source): floors -cellars .. F, the part with "top" at floor >= F (the
+  roof), F clamped to the building's min / max (exact when
+  overrideFloors) and the profile's 1..5 (+1 for the top); cellars =
+  maxcellars, at least the deepest explicit "floor". First matching part
+  per floor (LC picks among matches at random `[not verified]` for
+  buildings with several candidates). The schematic's y 0 is the bottom
+  of the deepest cellar; NAME.json {"groundY": n} tells /deciworldgen
+  paste where the ground floor goes. Military base: 24 blocks of cellars,
+  laboratory: 90. A city engine must dig these below street level.
