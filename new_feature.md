@@ -204,9 +204,19 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
   apartments, 72/72 cars aligned with their street, 3000 sidewalk columns.
   User checked in game: cars sat across the road (model long axis is x, not
   z), swapped in v0.12.2 (north-south 5/3, east-west 4/2), fewer cars.
-- **Next steps**: user look in game; lane markings, street furniture
-  (lamps, benches), driveways, bridges; procedural police station, hospital,
-  gas station; community schematics when the user finds some.
+- **Worldgen round 2 (user chose option A, 7 Oktober 2026), plan in order**:
+  1. terrain blending: Building plan covers its whole 26x26 lot; yard
+     columns graded from the building floor (at the walls) to the natural
+     height (at the sidewalk), so no plinth cliffs; front yard as gravel /
+     asphalt parking with a few parked wrecks;
+  2. street life: street lamps on sidewalks facing the road, benches,
+     bins, dashed centre lines (road marking orientation must be checked
+     in game like the cars were);
+  3. full multiblocks: place the second block of 2 block props (shelves);
+  4. new procedural building types: police station, hospital, gas station,
+     warehouse, with themed loot;
+  5. loot balance per building.
+  Status: started with step 1.
 
 ---
 
