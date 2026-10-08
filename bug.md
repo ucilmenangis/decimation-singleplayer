@@ -291,6 +291,9 @@ not something we introduced or need to fix) see `documentation.md`.
 ---
 
 ## Not investigated yet
+(Some entries below were fixed later and say so in their heading; the open
+ones on 9 Oktober 2026: base height order, prop dense FPS, LED lamp floor
+at the end of this file.)
 
 ### Building base height depends on chunk generation order (ours)
 - **Found**: 8 Oktober 2026 (fresh seed 1 worlds, `tools/worlddiff.py`):
@@ -307,7 +310,7 @@ not something we introduced or need to fix) see `documentation.md`.
   would sample terrain height from the chunk generator (noise) instead of
   the world `[not verified]` how costly that is.
 
-### FPS drop while aiming through scopes (red dot/2x/4x/6x)
+### FPS drop while aiming through scopes (red dot/2x/4x/6x) (FIXED v0.28.0..0.28.4)
 - **Reported**: 26 Juli 2026; user 8 Oktober 2026: about 150 -> 110 fps
   with a scope, asked for the old cheap method (view zoom) instead of the
   two camera method, keeping the old code switchable.
@@ -388,10 +391,11 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ### FPS drop in prop-dense areas (cars/crates/shelves etc.)
 - **Reported**: 26 Juli 2026
-- Same as above - e.g. ~100fps baseline down to 20-30fps around 15+ props,
-  worse with 50+. Needs profiling to find the actual render bottleneck.
+- E.g. ~100fps baseline down to 20-30fps around 15+ props, worse with 50+.
+  Needs measuring (an autotest fps mode like `-Pscope`) to find the actual
+  render bottleneck. Still open (9 Oktober 2026).
 
-### Military jeep/tank/helicopter destroyed in one hit (survival mode)
+### Military jeep/tank/helicopter destroyed in one hit (survival mode) (FIXED v0.8.1)
 - **Reported**: 26 Juli 2026, clarified 27 Juli 2026
 - **Symptom** (clarified): a single click/hit destroys the vehicle outright,
   like breaking a normal block - it should instead be tough/unbreakable this

@@ -200,8 +200,9 @@ building fronts, several stairs designs joining levels.
   (v0.24.3) -> 0.3% (v0.24.4); the 3 block steps left are natural hills
   and tree tops. It still reads as 1 block grass terraces from the street
   (shots lc_edge_v0.24.4b), which is plain Minecraft terrain.
-- Building fronts, parks of the packs are not used (highways since
-  v0.25.0).
+- Fronts, parks and street scenes since v0.26.0, district street parts
+  since v0.27.0, highways since v0.25.0. Not used yet: Lost Cities
+  bridges (our cities have no gaps for them), rail parts.
 - Superblocks (v0.24.2): 30% of aligned 2 x 2 city cell groups (all 4
   city) become one block: streets only on its first chunk row / column,
   7 x 7 building chunks, one level (the lowest of the 4), a landmark
