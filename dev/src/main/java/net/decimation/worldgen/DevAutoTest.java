@@ -78,6 +78,10 @@ public class DevAutoTest
         {
             requested = true; // the server tick picks this up
         }
+        if (finished && SCOPE && !scopeDone && scopeTest(mc))
+        {
+            return;
+        }
         if (finished)
         {
             if (takeViews(mc))
@@ -87,6 +91,115 @@ public class DevAutoTest
             FMLLog.info("[%s] AUTOTEST done, shutting down", DecimationWorldGen.MODID);
             mc.shutdown();
         }
+    }
+
+    // ---- scope test (-Pscope): fps with an empty hand, a gun with a 4x
+    // scope held, and aiming through it, plus the FOV zoom and a screenshot
+    // (scope_<pip|zoom>.png). Run once per config/deciworldgen_scope.cfg
+    // setting to compare Decimation's picture in picture scope with the zoom.
+    private static final boolean SCOPE = "true".equals(System.getProperty(PROPERTY + ".scope"));
+    private static final int SCOPE_PHASE = 400;
+    private int scopeTicks;
+    private final float[] scopeFps = new float[4];
+    private final int[] scopeSamples = new int[4];
+    private boolean scopeDone;
+    private float scopeFovMul;
+
+    /** Client side: true while the scope test runs. */
+    private boolean scopeTest(Minecraft mc)
+    {
+        int phase = scopeTicks / SCOPE_PHASE, t = scopeTicks % SCOPE_PHASE;
+        scopeTicks++;
+        net.minecraft.entity.player.EntityPlayerMP sp = MinecraftServer.getServer() == null ? null
+            : (net.minecraft.entity.player.EntityPlayerMP) MinecraftServer.getServer().getConfigurationManager()
+                .playerEntityList.get(0);
+        if (mc.thePlayer == null || sp == null)
+        {
+            return false;
+        }
+        if (scopeTicks == 1)
+        {
+            mc.gameSettings.limitFramerate = 260; // unlimited
+            mc.gameSettings.enableVsync = false;
+            org.lwjgl.opengl.Display.setVSyncEnabled(false);
+            mc.gameSettings.hideGUI = false; // hideGUI also hides the hand (gun and scope)
+            sp.capabilities.isFlying = true;
+            sp.setPositionAndUpdate(8.5, 72, 40.5);
+        }
+        mc.thePlayer.capabilities.isFlying = true;
+        mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = 180;
+        mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = 2;
+        // phases: empty hand, 4x gun held, aiming, empty hand again (drift check)
+        if (phase < 4 && t == 0)
+        {
+            net.minecraft.item.ItemStack gun = phase == 0 || phase == 3 ? null : scopedGun();
+            for (net.minecraft.entity.player.EntityPlayer p : new net.minecraft.entity.player.EntityPlayer[] {mc.thePlayer, sp})
+            {
+                p.inventory.currentItem = 0;
+                p.inventory.setInventorySlotContents(0, gun == null ? null : gun.copy());
+                net.decimation.fixes.Deci.setAimMode(p, phase == 2 ? 1 : 0);
+            }
+        }
+        if (phase < 4)
+        {
+            // keep it: the server may sync its own value back
+            net.decimation.fixes.Deci.setAimMode(mc.thePlayer, phase == 2 ? 1 : 0);
+            if (t >= 120 && t % 20 == 0)
+            {
+                String dbg = mc.debug; // "N fps, M chunk updates"
+                scopeFps[phase] += Integer.parseInt(dbg.substring(0, dbg.indexOf(' ')));
+                scopeSamples[phase]++;
+            }
+            if (phase == 2 && t == 300)
+            {
+                scopeFovMul = (Float) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(
+                    net.minecraft.client.renderer.EntityRenderer.class, mc.entityRenderer, "fovModifierHand",
+                    "field_78507_R");
+                String mode = Boolean.getBoolean(net.decimation.fixes.ScopeZoom.PROPERTY) ? "pip" : "zoom";
+                net.minecraft.util.ScreenShotHelper.saveScreenshot(mc.mcDataDir, "scope_" + mode + ".png",
+                    mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+            }
+            return true;
+        }
+        scopeDone = true;
+        FMLLog.info("[%s] AUTOTEST scope %s: fps empty hand %.0f, gun with 4x held %.0f, aiming %.0f, empty hand "
+                    + "again %.0f; fov multiplier aiming %.3f", DecimationWorldGen.MODID,
+                    Boolean.getBoolean(net.decimation.fixes.ScopeZoom.PROPERTY) ? "picture in picture" : "view zoom",
+                    scopeFps[0] / Math.max(1, scopeSamples[0]), scopeFps[1] / Math.max(1, scopeSamples[1]),
+                    scopeFps[2] / Math.max(1, scopeSamples[2]), scopeFps[3] / Math.max(1, scopeSamples[3]),
+                    scopeFovMul);
+        for (net.minecraft.entity.player.EntityPlayer p : new net.minecraft.entity.player.EntityPlayer[] {mc.thePlayer, sp})
+        {
+            p.inventory.setInventorySlotContents(0, null);
+            net.decimation.fixes.Deci.setAimMode(p, 0);
+        }
+        mc.gameSettings.hideGUI = false;
+        return false;
+    }
+
+    /** A rifle without an integrated scope, carrying the 4x sight attachment. */
+    private static net.minecraft.item.ItemStack scopedGun()
+    {
+        net.minecraft.item.Item gun = null, sight = null;
+        for (Object o : net.minecraft.item.Item.itemRegistry)
+        {
+            net.minecraft.item.Item item = (net.minecraft.item.Item) o;
+            if (gun == null && net.decimation.fixes.Deci.isGun(item) && !net.decimation.fixes.Deci.hasIntegratedScope(item))
+            {
+                gun = item;
+            }
+            if (net.decimation.fixes.Deci.isAttachment(item) && "4x".equals(net.decimation.fixes.Deci.attachmentName(item)))
+            {
+                sight = item;
+            }
+        }
+        net.minecraft.item.ItemStack st = new net.minecraft.item.ItemStack(gun);
+        st.stackTagCompound = new net.minecraft.nbt.NBTTagCompound();
+        String name = net.minecraft.item.Item.itemRegistry.getNameForObject(sight);
+        st.stackTagCompound.setString("sightAttach", name.substring(name.indexOf(':') + 1));
+        FMLLog.info("[%s] AUTOTEST scope: gun %s, sight %s", DecimationWorldGen.MODID,
+                    net.minecraft.item.Item.itemRegistry.getNameForObject(gun), name);
+        return st;
     }
 
     // ---- screenshots of a city street, so street furniture facing can be

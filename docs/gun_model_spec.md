@@ -83,7 +83,7 @@ parent.addChild(child);                          // child is removed from the to
 | Name contains | Effect |
 |---|---|
 | `ammoModel` | every part whose name contains `ammoModel` follows any animation pose whose name contains `ammoModel`, so one pose moves the whole magazine |
-| `scopeGlass` | rendered as the live scope view (render-to-texture zoom) for integrated scopes / scope attachments |
+| `scopeGlass` | rendered with the scope texture: originally a second world render (render-to-texture zoom); since v0.28.0 the centre of the zoomed frame (fixes/ScopeZoom), old way behind `pictureInPicture` |
 | `scopeOverlay` | drawn semi transparent over the scope, texture `textures/model/guns/scopes/<scope>.png` |
 | `leftArm` / `rightArm` | used in arm models, not gun models |
 

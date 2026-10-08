@@ -399,3 +399,15 @@ the ramp looking south at the city; 6 aerial over the north band.
   blue water like area with mirrored buildings.
 - 9 (72,67,200) north: legacy street (our own lamps, centre line), stairs
   railing in the foreground.
+
+## scope_v0.28.0/ (scope test, ak74 with 4x, aiming, dev client)
+- scope_pip.png: original picture in picture scope: normal FOV, the glass
+  shows the second camera view.
+- scope_zoom.png: view zoom (FOV x 0.284 = 4x): world magnified, gun and
+  scope the same size as in scope_pip, glass shows the centre of the
+  zoomed frame with the reticle. An F3 debug overlay is open in this one
+  (key pressed during the run, not the test).
+- scope_mag1.png: control, zoom off (4x set to 1.0): gun the same size
+  again, so the zoom does not scale the gun.
+- sheet.png: the three side by side. (An earlier zoom shot with the glass
+  not drawn showed a solid black eyepiece: replaced.)

@@ -308,9 +308,28 @@ not something we introduced or need to fix) see `documentation.md`.
   the world `[not verified]` how costly that is.
 
 ### FPS drop while aiming through scopes (red dot/2x/4x/6x)
-- **Reported**: 26 Juli 2026
-- Needs live profiling, not static code reading - flagged as its own
-  investigation, not started.
+- **Reported**: 26 Juli 2026; user 8 Oktober 2026: about 150 -> 110 fps
+  with a scope, asked for the old cheap method (view zoom) instead of the
+  two camera method, keeping the old code switchable.
+- **Root cause (code, deobf ClientRenderHandler.renderScopeView)**: the
+  world is rendered a second time (narrow FOV, up to 1024 x 1024) into a
+  texture every frame a scoped gun is HELD, aiming or not; BModel
+  renderScopeGlass draws it on the glass.
+- **FIXED v0.28.0**: `tools/patches/PatchScope.java` gates renderScopeView
+  behind system property `decimation.scope.pip` (method otherwise
+  untouched: the old scope returns with `pictureInPicture=true` in
+  `config/deciworldgen_scope.cfg`). `net.decimation.fixes.ScopeZoom`
+  zooms the world FOV while aiming (FOVUpdateEvent; reddot 1.25, 2x, 4x,
+  8x, dragunov 4x, configurable) and copies the centre of each finished
+  frame into the scope texture (RenderWorldLastEvent, before the hand) so
+  the glass shows the zoomed world. The gun keeps its size (renderHand
+  uses a fixed FOV 70; checked with a 1x control shot).
+- **Measured** (`./gradlew runClient -Pautotest -Pscope`, dev client,
+  unlimited fps, 4x on an ak74): picture in picture empty hand 85..103,
+  held 45..51, aiming 37..44; view zoom empty hand 70..92, held 64..76
+  (the gun model only), aiming 105..132. Shots docs/shots/scope_v0.28.0.
+- First try also gated renderScopeGlass: the glass vanished and the scope
+  showed its solid black body (looked like a bigger gun); reverted.
 
 ### FPS drop in prop-dense areas (cars/crates/shelves etc.)
 - **Reported**: 26 Juli 2026
@@ -368,3 +387,11 @@ the 10 wide edge band (a small step at the band's end). Also small and
 large sites next to a city could sit inside the band and get cut under.
 Fix: populate scans cells within EDGE of the window; sites within EDGE of a
 city are dropped. Checked with tools/edgescan.py (seed 1).
+
+## Converted buildings: LED lamp blocks as floor (reported 8 Oktober 2026, open)
+User saw some converted (DeceasedCraft) buildings with LED lamp blocks
+used as floor. Likely cause `[not verified]`: tools/lctranslate.py maps
+simplylight illuminant_block / illuminant_panel / illuminant_slab to
+deci:BlockLightOff; DeceasedCraft builds glowing floor tiles from them.
+Fix later: map illuminant blocks used as full floor blocks to a plain
+light floor (or check which buildings, by name, use them).

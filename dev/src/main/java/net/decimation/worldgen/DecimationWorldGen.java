@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.27.0",
+     version = "0.28.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -59,6 +59,18 @@ public class DecimationWorldGen
             new net.decimation.worldgen.terrain.DecimationWorldType();
         net.minecraftforge.common.MinecraftForge.TERRAIN_GEN_BUS.register(
             new net.decimation.worldgen.terrain.TerrainEvents());
+
+        // cheap scope: view zoom instead of Decimation's picture in picture
+        // scope (tools/patches/PatchScope.java gates the old one); client only
+        if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
+        {
+            net.decimation.fixes.ScopeZoom zoom =
+                new net.decimation.fixes.ScopeZoom(event.getModConfigurationDirectory());
+            if (zoom.enabled())
+            {
+                net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(zoom);
+            }
+        }
 
         File dir = new File(event.getModConfigurationDirectory(), "decimation_worldgen");
         if (!dir.isDirectory() && !dir.mkdirs())

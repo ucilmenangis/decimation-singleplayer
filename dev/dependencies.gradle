@@ -87,6 +87,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("study")) {
         jvmArgs("-Ddeciworldgen.autotest.study=" + project.property("study"))
     }
+    // -Pscope: fps with a 4x scoped gun held / aimed, fov zoom, scope_<mode>.png
+    if (project.hasProperty("scope")) {
+        jvmArgs("-Ddeciworldgen.autotest.scope=true")
+    }
     // -Pflats: interiors of 3 apartment blocks (flat_<n>.png)
     if (project.hasProperty("flats")) {
         jvmArgs("-Ddeciworldgen.autotest.flats=true")

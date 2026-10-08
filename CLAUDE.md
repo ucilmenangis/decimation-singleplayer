@@ -238,7 +238,8 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   `Decimation.jar.patched`, `dist/Decimation.jar`, `dev/libs/Decimation-base.jar`
   (then Prism's copy). Patch sources live in `tools/patches/` (so far:
   `PatchSwing.java`, SmoothSwingThread busy loop; `PatchPropCulling.java`,
-  props not rendering, both 2026-10-07). Patch from the ORIGINAL classes
+  props not rendering, both 2026-10-07; `PatchScope.java`, picture in
+  picture scope gated behind `decimation.scope.pip`, 2026-10-08). Patch from the ORIGINAL classes
   only after checking the target class is identical in the patched jar. Earlier
   patches (loot handler, proxy cast, weapon nerf, armor buff, intro skip,
   ammo crate) were one-off and have no saved source.
@@ -513,6 +514,14 @@ of the last session:
   (docs/city_engine.md "Parks, street scenes, fronts").
   v0.27.0: DC districts use their own Lost Cities street parts (road
   paint converted to painted road blocks); legacy districts keep ours.
+  v0.28.0: cheap scope (bug.md "FPS drop while aiming through scopes"):
+  view zoom + frame copy on the glass, old picture in picture scope kept
+  behind config `pictureInPicture`; `-Pscope` autotest measures fps.
+- Obfuscated Decimation names in OUR code go through
+  `net.decimation.fixes.Deci` (readable accessors, user question
+  2026-10-08). The game loads Decimation's obfuscated classes, so the
+  names cannot be renamed in our code itself; older fix classes still
+  call them directly (78 places in 10 files) until migrated.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in
