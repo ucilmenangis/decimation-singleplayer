@@ -459,3 +459,17 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
 - sheet_stairs_after.png: the same stair spots after the stairs / slab
   fix: cobblestone stairs and slabs, no beige left. Doorway header of
   oak planks over red brick comes from the source building.
+
+## lc_highway_v0.29.0/ (L link, seed 1, pregen 1100,1460)
+- sheet_l_link.png: 0 aerial from the north west: the highway runs east
+  then turns south at a corner, graded land and a pond beside it. 1 on
+  the x run looking east and 2 on the z run looking north: hedge median,
+  adboard tower ahead, lamp arms with redstone lamp heads. 3 side view of
+  the z run's bridge chunk: iron bar rails over a small gully. 4 the z run
+  entering city B: road continues into the city street, buildings ahead.
+  5 blocked (camera against a median tower).
+- sheet_l_link_b.png: 0 the x run entering city A (1066,67,1411 west):
+  road narrows into the city street between graded grass terraces. 1 top
+  down on the corner (1160,100,1416, top of image = south): the two runs
+  meet in the crossing square, outer sides face open land, side cuts
+  graded. 2 the bridge chunk from the east: rails, graded slopes.

@@ -170,11 +170,34 @@ between cities do the job instead.
   tunnels); side profile at z -128 climbs 4,5,5,6,6,7,7 above 60 from the
   road; edge band still 0.3% steps over 1 block; autotest all pass. Shots
   lc_highway_v0.25.0(b), lc_tunnel_v0.25.0.
-- Open: a tunnel right at a city's edge ends in the graded edge band
-  (reads as a short underpass); bridge chunks get no side ramp (a hill
-  next to the deck stays a wall); highways only join cities in the same
-  region row / column (no diagonal links); lamp heads translate to coal
-  blocks (faithful to the data `[not verified]` against 1.20 look).
+- v0.29.0 polish (user choice 9 Oktober 2026):
+  - L links: a city region with no city within MAX_GAP + 1 regions
+    straight east, west, north or south (so no street and no straight
+    highway reaches it) gets one L highway to its nearest city at most 2
+    regions away on both axes (`Highways.link`, cached per region): along
+    its region row's x line to the target's z line, or the column's z line
+    to the target's x line, whichever passes only non city regions (x
+    first tried first). The corner chunk is a crossing part. Seed 1, 25 x
+    25 regions: 10 links, groups of connected cities 29 -> 19;
+    `tools/hwmap.py` prints them as ('L', A, B, ...).
+  - Crossing parts have no rails: sides facing open land (no highway, no
+    city) get a leaf hedge on the deck (index 1 / 14, like the hedge rows
+    of the straight parts).
+  - No tunnel within a city's edge band (LcCity.nearCity): the band graded
+    the hill away and left a short free standing underpass; such chunks
+    are cut open instead.
+  - Bridge chunks get side ramps too, but only land above the deck is cut
+    (the gap under the bridge stays). Seed 1 spawn area vs 0.28.10: 467
+    blocks in 3 chunks, all beside the ravine bridge at z -112..-97.
+  - Checked: L link (3,5) -> (4,6) generated with pregen at 1100,1460
+    (8 open x chunks, crossing at 1152,64,1408, 7 z chunks with one
+    bridge); shots lc_highway_v0.29.0. edgescan of the spawn area: 0.4%
+    of band pairs step over 1 block, same before and after this change
+    (it was 0.3% at v0.24.4; the extra 6 block steps at z -1, x -169..
+    -233, 64 vs 70, come from an earlier version `[not investigated]`).
+  - Still open: lamp heads now translate to redstone lamps (translator
+    fix of 9 Oktober); a corner hedge is thin from above `[not verified]`
+    in game by the user.
 
 ## Verified (seed 1, Decimation world type, fresh server world)
 

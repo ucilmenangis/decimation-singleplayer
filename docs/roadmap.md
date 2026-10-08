@@ -26,14 +26,11 @@ or `[not decided]`.
 1. **Giant buildings that are skipped**: casino (276 high), oasis condo
    (top above 250 with its cellars), laboratory (90 deep cellars); fit them
    by trimming cellars or capping height. docs/city_engine.md "Open".
-2. **Highway polish**: slopes beside bridge chunks, tunnels that start
-   right at a city edge, links between cities that are only diagonal.
-   docs/city_engine.md "Highways".
-3. Lost Cities parts not used yet: bridges (no gaps in our cities), rail.
+2. Lost Cities parts not used yet: bridges (no gaps in our cities), rail.
    Building rotation only uses the variants the data lists.
-4. apocalypsenow structures (.nbt) converter for military and other sites
+3. apocalypsenow structures (.nbt) converter for military and other sites
    outside cities `[not decided]`. docs/references/deceasedcraft_buildings.md.
-5. Reserve the real footprint of wide props (bicycles, cars) in placers so
+4. Reserve the real footprint of wide props (bicycles, cars) in placers so
    they do not overlap. docs/prop_footprints.tsv, docs/prop_catalogue.md.
 
 ## NPCs and combat (user plan, "later")
@@ -77,3 +74,6 @@ or `[not decided]`.
   rebuilt): tools/lcaudit.py, LED lamp floor fixed, black sandstone as
   asphalt, about 30000 dropped blocks mapped (bug.md, docs/references/
   deceasedcraft_buildings.md "Translation audit"); worlddiff `--top`.
+- v0.29.0 highway polish: L links for cities only reachable diagonally,
+  hedges on crossing parts, no tunnels in city edge bands, side ramps
+  beside bridges (docs/city_engine.md "Highways").

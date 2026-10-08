@@ -17,7 +17,9 @@ import net.minecraft.world.World;
  * leaves a city region and the next city region east of it lies at most
  * MAX_GAP regions away, every chunk between carries an east west highway.
  * Region columns get north south highways the same way; where both cross,
- * a crossing part. Pure function of the seed, like the sector map.
+ * a crossing part. A city region left without any (no city next to it, no
+ * straight highway) is joined to its nearest diagonal city by an L of the
+ * same lines (link()). Pure function of the seed, like the sector map.
  *
  * The deck is at the city's level 0 street surface (DECK), so a highway
  * runs on flush from the city's street. Per chunk the first slice samples
@@ -74,18 +76,161 @@ public final class Highways
         return a && b && hi - lo - 1 <= MAX_GAP;
     }
 
+    static final long SALT_X = 0x48575958L, SALT_Z = 0x4857595AL;
+
     /** Chunk carries an east west highway. */
     public static boolean xHighway(long seed, int cx, int cz)
     {
         int rz = Math.floorDiv(cz, Sectors.REGION), rx = Math.floorDiv(cx, Sectors.REGION);
-        return cz == line(seed, rz, 0x48575958L) && !cityRegion(seed, rx, rz) && spans(seed, rx, rz, true);
+        return cz == line(seed, rz, SALT_X) && !cityRegion(seed, rx, rz) && spans(seed, rx, rz, true)
+            || onLink(seed, cx, cz, true);
     }
 
     /** Chunk carries a north south highway. */
     public static boolean zHighway(long seed, int cx, int cz)
     {
         int rz = Math.floorDiv(cz, Sectors.REGION), rx = Math.floorDiv(cx, Sectors.REGION);
-        return cx == line(seed, rx, 0x4857595AL) && !cityRegion(seed, rx, rz) && spans(seed, rz, rx, false);
+        return cx == line(seed, rx, SALT_Z) && !cityRegion(seed, rx, rz) && spans(seed, rz, rx, false)
+            || onLink(seed, cx, cz, false);
+    }
+
+    /** Links per city region ({bx, bz, x first 1 / 0}, or NONE), cached: asked for every column. */
+    private static final int[] NONE = new int[0];
+    private static final java.util.Map<Long, int[]> LINKS = new java.util.HashMap<Long, int[]>();
+    private static long linkSeed;
+
+    /**
+     * The L highway leaving city region (rx, rz), or NONE. Only an isolated
+     * city gets one (no city region within MAX_GAP + 1 straight east, west,
+     * north or south, so neither streets nor a straight highway reach it):
+     * to the nearest city at most 2 regions away on both axes, along the
+     * region row's x line to the target's z line (x first) or the column's
+     * z line to the target's x line, whichever passes only non city regions
+     * (x first tried first). Nearest = smallest |dx| + |dz|, first found in
+     * the order dx, dz = -2, -1, 1, 2 (tools/hwmap.py does the same).
+     */
+    static int[] link(long seed, int rx, int rz)
+    {
+        synchronized (LINKS)
+        {
+            if (linkSeed != seed || LINKS.size() > 65536)
+            {
+                LINKS.clear();
+                linkSeed = seed;
+            }
+            Long key = ((long) rx << 32) ^ (rz & 0xFFFFFFFFL);
+            int[] l = LINKS.get(key);
+            if (l == null)
+            {
+                l = findLink(seed, rx, rz);
+                LINKS.put(key, l);
+            }
+            return l;
+        }
+    }
+
+    private static int[] findLink(long seed, int ax, int az)
+    {
+        if (!cityRegion(seed, ax, az))
+        {
+            return NONE;
+        }
+        for (int d = 1; d <= MAX_GAP + 1; d++)
+        {
+            if (cityRegion(seed, ax + d, az) || cityRegion(seed, ax - d, az)
+                || cityRegion(seed, ax, az + d) || cityRegion(seed, ax, az - d))
+            {
+                return NONE;
+            }
+        }
+        int[] best = NONE;
+        int bestD = Integer.MAX_VALUE;
+        int[] steps = {-2, -1, 1, 2};
+        for (int dx : steps)
+        {
+            for (int dz : steps)
+            {
+                int bx = ax + dx, bz = az + dz;
+                if (Math.abs(dx) + Math.abs(dz) >= bestD || !cityRegion(seed, bx, bz))
+                {
+                    continue;
+                }
+                int first = clear(seed, ax, az, bx, bz, true) ? 1 : clear(seed, ax, az, bx, bz, false) ? 0 : -1;
+                if (first >= 0)
+                {
+                    best = new int[] {bx, bz, first};
+                    bestD = Math.abs(dx) + Math.abs(dz);
+                }
+            }
+        }
+        return best;
+    }
+
+    /** True when every region the L from a to b passes (ends excluded) holds no city. */
+    private static boolean clear(long seed, int ax, int az, int bx, int bz, boolean xFirst)
+    {
+        int sx = bx > ax ? 1 : -1, sz = bz > az ? 1 : -1;
+        int kx = xFirst ? bx : ax, kz = xFirst ? az : bz; // the corner region
+        for (int x = ax; x != bx + sx; x += sx)
+        {
+            int z = xFirst ? az : bz;
+            if (!(x == ax && z == az) && !(x == bx && z == bz) && cityRegion(seed, x, z))
+            {
+                return false;
+            }
+        }
+        for (int z = az; z != bz + sz; z += sz)
+        {
+            int x = xFirst ? bx : ax;
+            if (!(x == ax && z == az) && !(x == bx && z == bz) && cityRegion(seed, x, z))
+            {
+                return false;
+            }
+        }
+        return !cityRegion(seed, kx, kz);
+    }
+
+    /** True when an L link runs through the chunk along x (alongX) or along z. */
+    private static boolean onLink(long seed, int cx, int cz, boolean alongX)
+    {
+        int rx = Math.floorDiv(cx, Sectors.REGION), rz = Math.floorDiv(cz, Sectors.REGION);
+        for (int ax = rx - 2; ax <= rx + 2; ax++)
+        {
+            for (int az = rz - 2; az <= rz + 2; az++)
+            {
+                int[] l = link(seed, ax, az);
+                if (l.length > 0 && onL(seed, ax, az, l[0], l[1], l[2] == 1, cx, cz, alongX))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** The chunks of one L: from a's edge along its first line to the corner, then to b's edge. */
+    static boolean onL(long seed, int ax, int az, int bx, int bz, boolean xFirst, int cx, int cz, boolean alongX)
+    {
+        int R = Sectors.REGION;
+        int row = line(seed, xFirst ? az : bz, SALT_X), col = line(seed, xFirst ? bx : ax, SALT_Z);
+        if (alongX)
+        {
+            if (cz != row)
+            {
+                return false;
+            }
+            // x first: a's edge to the corner; z first: the corner to b's edge
+            int lo = xFirst ? (bx > ax ? (ax + 1) * R : col) : (bx > ax ? col : (bx + 1) * R);
+            int hi = xFirst ? (bx > ax ? col : ax * R - 1) : (bx > ax ? bx * R - 1 : col);
+            return cx >= lo && cx <= hi;
+        }
+        if (cx != col)
+        {
+            return false;
+        }
+        int lo = xFirst ? (bz > az ? row : (bz + 1) * R) : (bz > az ? (az + 1) * R : row);
+        int hi = xFirst ? (bz > az ? bz * R - 1 : row) : (bz > az ? row : az * R - 1);
+        return cz >= lo && cz <= hi;
     }
 
     public static boolean at(long seed, int cx, int cz)
@@ -135,7 +280,9 @@ public final class Highways
      * Land beside open highway chunks: ramps from the deck at the road's
      * edge to the natural height over SIDE blocks (2 per block of height
      * difference), so the road neither sits on a dirt wall nor in a
-     * trench. Columns inside a city or its edge band are the city's.
+     * trench. Beside a bridge only land above the deck is cut down (the
+     * gap under it stays). Columns inside a city or its edge band are the
+     * city's.
      */
     private void sides(World world, long seed, int[] w)
     {
@@ -165,12 +312,14 @@ public final class Highways
                 {
                     continue;
                 }
-                if (kind(world, seed, hx, hz) != OPEN)
+                int k = kind(world, seed, hx, hz);
+                if (k == TUNNEL)
                 {
                     continue;
                 }
                 int natural = StructureGenerator.soilTop(world, x, z);
-                if (natural < 5 || StructureGenerator.waterAbove(world, x, natural, z))
+                if (natural < 5 || StructureGenerator.waterAbove(world, x, natural, z)
+                    || k == BRIDGE && natural <= DECK)
                 {
                     continue;
                 }
@@ -194,7 +343,7 @@ public final class Highways
         Integer k = data.baseY(id);
         if (k == null)
         {
-            k = decide(world, cx, cz);
+            k = decide(world, seed, cx, cz);
             data.setBaseY(id, k);
             log(k, xHighway(seed, cx, cz), zHighway(seed, cx, cz), cx, cz);
         }
@@ -262,6 +411,37 @@ public final class Highways
                 below(world, x, z, base - 1, kind, px, pz);
             }
         }
+        if (bi && kind != TUNNEL)
+        {
+            hedges(world, seed, cx, cz, x0, z0, x1, z1);
+        }
+    }
+
+    /**
+     * A crossing part has no rails; where it is an L's corner (or a line's
+     * end) some sides face open land: a leaf hedge on the deck there, like
+     * the hedge rows of the straight parts.
+     */
+    private static void hedges(World world, long seed, int cx, int cz, int x0, int z0, int x1, int z1)
+    {
+        int[][] sides = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int[] d : sides)
+        {
+            int nx = cx + d[0], nz = cz + d[1];
+            if (at(seed, nx, nz) || cityRegion(seed, Math.floorDiv(nx, Sectors.REGION), Math.floorDiv(nz, Sectors.REGION)))
+            {
+                continue;
+            }
+            for (int i = 2; i <= 13; i++)
+            {
+                int lx = d[0] == 0 ? i : d[0] < 0 ? 1 : 14, lz = d[1] == 0 ? i : d[1] < 0 ? 1 : 14;
+                int x = (cx << 4) + lx, z = (cz << 4) + lz;
+                if (x >= x0 && x <= x1 && z >= z0 && z <= z1 && world.isAirBlock(x, DECK + 1, z))
+                {
+                    world.setBlock(x, DECK + 1, z, Blocks.leaves, 4, 2);
+                }
+            }
+        }
     }
 
     /** Under the deck: open ground filled to it, bridge pillars down to the ground. */
@@ -307,8 +487,12 @@ public final class Highways
         return cars[(int) ((r >>> 8) % cars.length)];
     }
 
-    /** Terrain under one chunk, from what is loaded: TUNNEL, BRIDGE or OPEN. */
-    private static int decide(World world, int cx, int cz)
+    /**
+     * Terrain under one chunk, from what is loaded: TUNNEL, BRIDGE or OPEN.
+     * Never a tunnel within a city's edge band: the band grades the hill
+     * away, which left a short free standing underpass.
+     */
+    private static int decide(World world, long seed, int cx, int cz)
     {
         int[] ys = new int[25];
         int n = 0;
@@ -332,7 +516,7 @@ public final class Highways
             return OPEN;
         }
         java.util.Arrays.sort(ys, 0, n);
-        if (ys[n / 2] >= DECK + TUNNEL_DEPTH)
+        if (ys[n / 2] >= DECK + TUNNEL_DEPTH && !LcCity.nearCity(seed, cx << 4, cz << 4, (cx << 4) + 15, (cz << 4) + 15))
         {
             return TUNNEL;
         }

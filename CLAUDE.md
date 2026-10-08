@@ -571,6 +571,10 @@ of the last session:
   with `git stash -u`: new untracked files otherwise stay and break the
   old build.
   `-Pcityfps`: fps looking down a seed 1 city street (cityfps.png).
+  v0.29.0: highway polish (L links for diagonal only cities, hedges on
+  crossings, no tunnels in city edge bands, side ramps beside bridges);
+  docs/city_engine.md "Highways". `servertest.py ... pregen=x,z,r` makes
+  a far away spot (an L link from `tools/hwmap.py`) checkable.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,
