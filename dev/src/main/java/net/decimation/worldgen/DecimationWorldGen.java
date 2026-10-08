@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.28.6",
+     version = "0.28.7",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -71,6 +71,19 @@ public class DecimationWorldGen
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(zoom);
                 cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(zoom);
             }
+            // prop render distance by size (tools/patches/PatchPropCulling.java step 4)
+            net.minecraftforge.common.config.Configuration props = new net.minecraftforge.common.config.Configuration(
+                new File(event.getModConfigurationDirectory(), "deciworldgen_props.cfg"));
+            // 64 = vanilla for all: in a city street 32 / 48 measured no fps gain (2026-10-09)
+            String[][] dist = {{"small", "64", "props smaller than 0.8 block (cans, bags, cones); e.g. 32"},
+                               {"medium", "64", "props up to 1.6 blocks (crates, bins, benches); e.g. 48"},
+                               {"large", "64", "bigger props (cars, shelves, lamps); 64 = vanilla"}};
+            for (String[] d : dist)
+            {
+                System.setProperty("decimation.props." + d[0], String.valueOf(props.getInt(d[0], "distance",
+                    Integer.parseInt(d[1]), 8, 128, "render distance in blocks for " + d[2])));
+            }
+            props.save();
         }
 
         File dir = new File(event.getModConfigurationDirectory(), "decimation_worldgen");

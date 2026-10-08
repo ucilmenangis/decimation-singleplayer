@@ -442,4 +442,5 @@ the ramp looking south at the city; 6 aerial over the north band.
 - props_0..3.png, sheet.png: empty stone platform; the 15 x 15 grid in
   view (car wrecks and street lights dominate the skyline); the grid boxed
   in stone; the box alone. sheet_cached.png: empty / in view after the line
-  of sight cache: props and a few NPCs still render.
+  of sight cache: props and a few NPCs still render. cityfps.png: the
+  -Pcityfps view (city street looking north from z 120).

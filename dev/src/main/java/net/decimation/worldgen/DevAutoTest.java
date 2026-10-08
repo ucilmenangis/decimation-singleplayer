@@ -57,7 +57,7 @@ public class DevAutoTest
         if (!launched && mc.theWorld == null && mc.currentScreen != null && clientTicks > 100)
         {
             launched = true;
-            if ((SCOPE_ONLY || TRACER || PROPS) && new File(mc.mcDataDir, "saves/" + SAVE).isDirectory())
+            if ((SCOPE_ONLY || TRACER || PROPS || CITYFPS) && new File(mc.mcDataDir, "saves/" + SAVE).isDirectory())
             {
                 // -Pscopeonly: reuse the last autotest world, no server checks (about 1 min instead of 4)
                 FMLLog.info("[%s] AUTOTEST scope only: opening %s", DecimationWorldGen.MODID, SAVE);
@@ -84,7 +84,7 @@ public class DevAutoTest
         if (launched && mc.theWorld != null && !requested && ++worldTicks > 100)
         {
             requested = true; // the server tick picks this up
-            if (SCOPE_ONLY || TRACER || PROPS)
+            if (SCOPE_ONLY || TRACER || PROPS || CITYFPS)
             {
                 finished = true; // straight to the scope / tracer test
             }
@@ -103,6 +103,11 @@ public class DevAutoTest
             propsClient(mc);
             return;
         }
+        if (finished && CITYFPS && !cityDone)
+        {
+            cityClient(mc);
+            return;
+        }
         if (finished)
         {
             if (takeViews(mc))
@@ -111,6 +116,51 @@ public class DevAutoTest
             }
             FMLLog.info("[%s] AUTOTEST done, shutting down", DecimationWorldGen.MODID);
             mc.shutdown();
+        }
+    }
+
+    // ---- city fps (-Pcityfps): standing in a street at x 8, looking north
+    // along it from z 120 (seed 1 city), fps averaged over 15 s after 5 s.
+    private volatile boolean cityDone;
+    private int cityTicks;
+    private float cityFps;
+    private int citySamples;
+
+    private void cityClient(Minecraft mc)
+    {
+        if (mc.thePlayer == null)
+        {
+            return;
+        }
+        cityTicks++;
+        if (cityTicks == 1)
+        {
+            net.minecraft.entity.player.EntityPlayerMP sp = (net.minecraft.entity.player.EntityPlayerMP)
+                MinecraftServer.getServer().getConfigurationManager().playerEntityList.get(0);
+            sp.worldObj.setWorldTime(6000);
+            sp.capabilities.isFlying = true;
+            sp.setPositionAndUpdate(8.5, 68, 120.5);
+            mc.gameSettings.limitFramerate = 260;
+            mc.gameSettings.enableVsync = false;
+        }
+        mc.thePlayer.capabilities.isFlying = true;
+        mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = 180;
+        mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = 3;
+        if (cityTicks > 100 && cityTicks % 20 == 0 && cityTicks <= 400)
+        {
+            String dbg = mc.debug;
+            cityFps += Integer.parseInt(dbg.substring(0, dbg.indexOf(' ')));
+            citySamples++;
+        }
+        if (cityTicks == 400)
+        {
+            net.minecraft.util.ScreenShotHelper.saveScreenshot(mc.mcDataDir, "cityfps.png", mc.displayWidth,
+                                                               mc.displayHeight, mc.getFramebuffer());
+            FMLLog.info("[%s] AUTOTEST city fps %.0f (prop distances small %s, medium %s, large %s)",
+                        DecimationWorldGen.MODID, cityFps / Math.max(1, citySamples),
+                        System.getProperty("decimation.props.small"), System.getProperty("decimation.props.medium"),
+                        System.getProperty("decimation.props.large"));
+            cityDone = true;
         }
     }
 
@@ -334,6 +384,8 @@ public class DevAutoTest
     // (scope_<pip|zoom>.png). Run once per config/deciworldgen_scope.cfg
     // setting to compare Decimation's picture in picture scope with the zoom.
     private static final boolean SCOPE_ONLY = "true".equals(System.getProperty(PROPERTY + ".scopeonly"));
+    /** -Pcityfps: fps looking down a city street (last autotest world): cityfps.png + log. */
+    private static final boolean CITYFPS = "true".equals(System.getProperty(PROPERTY + ".cityfps"));
     /** -Pprops: fps with many props in view / hidden behind walls, in the last autotest world. */
     private static final boolean PROPS = "true".equals(System.getProperty(PROPERTY + ".props"));
     /** -Ptracer: NPC tracer direction test alone in the last autotest world (tools/patches/PatchTracer.java). */

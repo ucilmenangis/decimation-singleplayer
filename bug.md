@@ -411,9 +411,24 @@ at the end of this file.)
   renderer share of the client thread 21% -> 9%. All autotest checks pass;
   props and NPCs still render (docs/shots/props_fps).
 - **Left**: what remains is drawing the models (100% in glCallList, driver
-  / GPU work): 225 visible props still about halve the fps. Only drawing
-  fewer would help (e.g. a shorter render distance for small props) `[not
-  done, a look change: ask the user]`.
+  / GPU work): 225 visible props still about halve the fps on the test
+  platform.
+- **City street, after the cache** (`-Pcityfps`: x 8.5, y 68, z 120.5
+  looking north, seed 1 autotest world, + `-Pjfr`): props 5.5% of the
+  client thread, chunk drawing 15%, chunk rebuild 12.7%, entities and tile
+  entities 11.8%. Props are no longer the bottleneck there.
+- **Render distance by size** (PatchPropCulling step 4, config
+  `deciworldgen_props.cfg`: small < 0.8 block, medium < 1.6, large): 32 / 48
+  / 64 measured 35..40 fps vs 41 at 64 / 64 / 64 in that street (noise, no
+  gain) and can pop in, so the default is 64 for all (vanilla); lower it
+  for open prop heavy places.
+- **Baking static props into chunk meshes** (the full fix for open views
+  with hundreds of visible props): not started; worth it only if the user
+  finds places that still drop (atlas for every prop texture, both model
+  formats to quads).
+- Side finding: Decimation's postInit blocks about 5 s at launch connecting
+  to its dead server (kryonet `deci.aP.a.e`), on the main thread; startup
+  only, not in game.
 
 ### Military jeep/tank/helicopter destroyed in one hit (survival mode) (FIXED v0.8.1)
 - **Reported**: 26 Juli 2026, clarified 27 Juli 2026

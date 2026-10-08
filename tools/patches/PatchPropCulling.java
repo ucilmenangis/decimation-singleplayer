@@ -19,6 +19,8 @@ import javassist.*;
  *    at least 2x2 blocks, half a block taller; null render size = 0..1.
  * 2. canSeeTileEntity: always visible within 4 blocks, and one extra ray to
  *    the box centre before the original 8 corner rays.
+ * 4. (2026-10-09) render distance by prop size (getMaxRenderDistanceSquared),
+ *    configurable, default 64 for all (vanilla), see step 4.
  * 3. (2026-10-09) the answers of canSeeTileEntity and canSeeEntity are cached
  *    until the player (or the entity) moves 0.3 blocks, at most 1.0..1.3 s for
  *    props and 0.15..0.18 s for entities: see the comment at step 3.
@@ -57,6 +59,37 @@ public class PatchPropCulling {
           + "  }"
           + "  return this.renderBoundBox;"
           + "}");
+        // 4. (2026-10-09) render distance by size: vanilla draws every tile entity
+        //    up to 64 blocks; a city holds ~21 props per chunk (up to 522 in a
+        //    tower chunk). Largest render extent < 0.8 block (cans, bags, cones):
+        //    decimation.props.small; < 1.6 (crates, bins, benches, props without a
+        //    declared size): decimation.props.medium; else decimation.props.large.
+        //    All default to 64 (vanilla): in a city street 32 / 48 measured no fps
+        //    gain (props were 5.5% of the frame after step 3) and can pop in, so it
+        //    stays a config option (deciworldgen_props.cfg) for open prop heavy areas.
+        te.addField(CtField.make("public static double distSmall;", te), CtField.Initializer.constant(-1.0));
+        te.addField(CtField.make("public static double distMedium;", te), CtField.Initializer.constant(-1.0));
+        te.addField(CtField.make("public static double distLarge;", te), CtField.Initializer.constant(-1.0));
+        te.addField(CtField.make("private double maxDistSq;", te), CtField.Initializer.constant(-1.0));
+        te.addMethod(CtNewMethod.make(
+            "public double func_145833_n() {"
+          + "  if (this.maxDistSq < 0.0) {"
+          + "    if (distSmall < 0.0) {"
+          + "      distSmall = Double.parseDouble(System.getProperty(\"decimation.props.small\", \"64\"));"
+          + "      distMedium = Double.parseDouble(System.getProperty(\"decimation.props.medium\", \"64\"));"
+          + "      distLarge = Double.parseDouble(System.getProperty(\"decimation.props.large\", \"64\"));"
+          + "    }"
+          + "    float ext = 1f;"
+          + "    if (this.renderPositions != null) {"
+          + "      ext = Math.max(Math.abs(this.renderPositions.xpos2 - this.renderPositions.xpos1),"
+          + "            Math.max(Math.abs(this.renderPositions.ypos2 - this.renderPositions.ypos1),"
+          + "                     Math.abs(this.renderPositions.zpos2 - this.renderPositions.zpos1)));"
+          + "    }"
+          + "    double d = ext < 0.8f ? distSmall : ext < 1.6f ? distMedium : distLarge;"
+          + "    this.maxDistSq = d * d;"
+          + "  }"
+          + "  return this.maxDistSq;"
+          + "}", te));
         te.writeFile(a[1]);
 
         CtClass los = pool.get("deci.a.c$a");

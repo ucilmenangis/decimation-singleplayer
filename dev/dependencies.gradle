@@ -96,6 +96,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
         jvmArgs("-XX:+UnlockCommercialFeatures", "-XX:+FlightRecorder",
                 "-XX:StartFlightRecording=filename=profile.jfr,settings=profile,dumponexit=true")
     }
+    // -Pcityfps: fps looking down a city street (last autotest world)
+    if (project.hasProperty("cityfps")) {
+        jvmArgs("-Ddeciworldgen.autotest.cityfps=true")
+    }
     // -Pprops: fps with many props in view / hidden (last autotest world)
     if (project.hasProperty("props")) {
         jvmArgs("-Ddeciworldgen.autotest.props=true")
