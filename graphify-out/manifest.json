@@ -50,9 +50,9 @@
     "semantic_hash": "294baaacdfcb96e87dd785d9693ac012"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791460879.3203466,
-    "ast_hash": "ce173bdd6ee3027330d5fccc99aa3711",
-    "semantic_hash": "ce173bdd6ee3027330d5fccc99aa3711"
+    "mtime": 1791462273.3218718,
+    "ast_hash": "ff6d4b95b6877f5f99a565fdcae03a26",
+    "semantic_hash": "ff6d4b95b6877f5f99a565fdcae03a26"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791462023.9838948,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791462271.8130476,
-    "ast_hash": "714a12d3aeaefe7855146f5e0a461e5a",
-    "semantic_hash": "714a12d3aeaefe7855146f5e0a461e5a"
+    "mtime": 1791478460.3722665,
+    "ast_hash": "c351a97d1bca5e13caf6556d11a0c0ef",
+    "semantic_hash": "c351a97d1bca5e13caf6556d11a0c0ef"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -120,9 +120,9 @@
     "semantic_hash": "aa4550575e47e7c1d0b020a51afbb501"
   },
   "bug.md": {
-    "mtime": 1791462271.8124528,
-    "ast_hash": "feb3d071dc641c54ab01c25c00534bd1",
-    "semantic_hash": "feb3d071dc641c54ab01c25c00534bd1"
+    "mtime": 1791478460.3713067,
+    "ast_hash": "6074f3c413e96b45610a597198ce218b",
+    "semantic_hash": "6074f3c413e96b45610a597198ce218b"
   },
   "create_weapons.md": {
     "mtime": 1791348916.8339295,
@@ -325,9 +325,9 @@
     "semantic_hash": "32134db33ff2599b79a45d05e9fdfdc1"
   },
   "docs/shots_index.md": {
-    "mtime": 1791462271.8135934,
-    "ast_hash": "c4d1f3987b9b9d3f27fc8c47025a517b",
-    "semantic_hash": "c4d1f3987b9b9d3f27fc8c47025a517b"
+    "mtime": 1791478460.3728898,
+    "ast_hash": "d69f922a18da80589919600b12129720",
+    "semantic_hash": "d69f922a18da80589919600b12129720"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -715,9 +715,9 @@
     "semantic_hash": "37532dab853ecc80ed9030e1a99571f2"
   },
   "dev/src/main/java/net/decimation/fixes/ScopeZoom.java": {
-    "mtime": 1791461789.7850063,
-    "ast_hash": "a08f385d235b9b4e770df2a29856c443",
-    "semantic_hash": "a08f385d235b9b4e770df2a29856c443"
+    "mtime": 1791478003.8243053,
+    "ast_hash": "feef98fba9f63a108b2e4f669124fc33",
+    "semantic_hash": "feef98fba9f63a108b2e4f669124fc33"
   },
   "tools/patches/PatchScope.java": {
     "mtime": 1791461751.5304065,

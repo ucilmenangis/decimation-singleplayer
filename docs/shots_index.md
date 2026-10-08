@@ -429,3 +429,11 @@ the ramp looking south at the city; 6 aerial over the north band.
   no longer visible inside 2x / 4x / 8x glasses. (A depth only glass try
   showed the front sight post inside the glass and a grey integrated scope:
   not kept.)
+
+## scope_v0.28.4/ (sniper overlay from 4x, v0.28.4)
+- sheet.png (top 854x480, bottom 900x895, red cross = screen centre):
+  reddot and 2x as in v0.28.3 (gun, see-through glass); 4x, 8x and the
+  integrated aug scope: black screen with a round view, a soft dark edge,
+  the scope's reticle (4x / 8x posts and bars, aug circle) on the centre,
+  no gun, HUD still on top. One earlier run's integrated 900x895 shot
+  showed the player off position (test glitch, rerun fine).

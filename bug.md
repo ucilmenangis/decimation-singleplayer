@@ -362,6 +362,21 @@ not something we introduced or need to fix) see `documentation.md`.
     glasses are drawn AFTER the gun body, so its front sight showed in the
     glass, and the integrated scope stayed grey. Checked all 10 (5 sights x
     2 windows) centred and see-through, docs/shots/scope_v0.28.3.
+  - v0.28.4 (user: "for 8x better use the fake it method with a black
+    layout", then "include 4x"): scopes from `overlayFrom` (config,
+    default 4) hide the gun once the zoom is 70% in and draw a classic
+    sniper overlay on the HUD (RenderGameOverlayEvent HELMET): black
+    outside a round view (radius 0.47 x the smaller screen side), a
+    darkening edge of 12 thin rings, the scope's own reticle texture
+    (textures/model/guns/scopes/<name>.png, black lines on transparent)
+    full size, vanilla crosshair hidden. No gun, no glass copy, no sight
+    learning for those scopes. GL traps met: the circle strips wind
+    backwards in GUI coordinates (cull face off), the HUD shades flat
+    (per vertex colour fades became spikes: solid rings instead). A
+    "white haze" at the edge was the sky fading to black, checked by
+    pixel values (190,213,250 -> 149 -> 97 -> 56 -> 0). Checked 10 shots
+    (docs/shots/scope_v0.28.4): reddot / 2x gun with see-through glass,
+    4x / 8x / integrated overlay, reticle on the centre.
 - **Measured** (`./gradlew runClient -Pautotest -Pscope`, dev client,
   unlimited fps, 4x on an ak74): picture in picture empty hand 85..103,
   held 45..51, aiming 37..44; view zoom empty hand 70..92, held 64..76

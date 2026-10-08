@@ -13,6 +13,9 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.config.Configuration;
@@ -56,6 +59,14 @@ import net.minecraftforge.common.config.Configuration;
  * centre (centreSight). The world is drawn without that offset, so the
  * see-through glass shows exactly the point shots go to.
  *
+ * Scopes from overlayFrom (default 4x: 4x, dragunov, 8x, the integrated aug
+ * scope; user choice 2026-10-08, first 8x only, then 4x too: "4x is a bit
+ * long in zoom mode") use the classic sniper overlay ("fake it" with a
+ * black layout): once the zoom is most of the way in, the
+ * gun is not drawn and the screen is black but for a round view with the
+ * scope's own reticle texture (textures/model/guns/scopes/<name>.png) and a
+ * soft dark edge. No gun, no glass copy: the cheapest mode.
+ *
  * Mouse: while zoomed the sensitivity is scaled so the view turns about 1 /
  * zoom as fast (config "sensitivity": 1 = fully, 0 = off); set at render
  * tick start (before EntityRenderer turns the player) and restored at the
@@ -67,6 +78,11 @@ public class ScopeZoom
 
     private final Configuration cfg;
     private final boolean pictureInPicture;
+    /** Magnification from which the sniper overlay replaces the gun model. */
+    private final float overlayFrom;
+    /** The reticle texture of the overlay scope being aimed, or null when no overlay is shown. */
+    private ResourceLocation overlay;
+
     /** How much of the zoom the mouse follows: 1 = turning slows to 1 / zoom, 0 = unchanged. */
     private final float sensitivity;
     private float savedSensitivity = Float.NaN;
@@ -79,6 +95,9 @@ public class ScopeZoom
             + "half the fps while a scoped gun is held). false = the view zooms while aiming through a scope.");
         sensitivity = cfg.getFloat("sensitivity", "scope", 1f, 0f, 1f,
             "zoom mode: mouse slowdown while zoomed (1 = turning slows to 1 / zoom, 0 = unchanged)");
+        overlayFrom = cfg.getFloat("overlayFrom", "scope", 4f, 1f, 100f,
+            "zoom mode: scopes with at least this magnification hide the gun and show a black sniper "
+            + "overlay with the reticle while aiming (100 = never)");
         for (String k : new String[] {"reddot", "2x", "4x", "8x", "dragunovScope"})
         {
             magnification(k, 0f);
@@ -164,8 +183,9 @@ public class ScopeZoom
             return 1f;
         }
         // first aim with this gun + scope: stay low (the glass fits the screen)
-        // until its sight position is learned, at most 1.5 s
-        if (!learned(sightKey(held)) && System.nanoTime() - aimStart < 1_500_000_000L)
+        // until its sight position is learned, at most 1.5 s (not for the
+        // sniper overlay: no gun is drawn there)
+        if (mag < overlayFrom && !learned(sightKey(held)) && System.nanoTime() - aimStart < 1_500_000_000L)
         {
             return Math.min(mag, 1.5f);
         }
@@ -223,6 +243,7 @@ public class ScopeZoom
         double lz = Math.log(zoom), lt = Math.log(target);
         lz += (lt - lz) * (1 - Math.exp(-dt * 18));
         zoom = Math.abs(lz - lt) < 0.002 ? target : Math.exp(lz);
+        overlay = overlayFor(mc, target);
         if (zoom > 1.001 && sensitivity > 0 && mc.currentScreen == null)
         {
             // EntityRenderer turns by (s * 0.6 + 0.2)^3: scale that by zoom^-sensitivity
@@ -254,6 +275,11 @@ public class ScopeZoom
     public void onRenderHand(RenderHandEvent e)
     {
         Minecraft mc = Minecraft.getMinecraft();
+        if (overlay != null)
+        {
+            e.setCanceled(true); // sniper overlay: no gun
+            return;
+        }
         if (zoom == 1.0 || mc.entityRenderer == null)
         {
             return;
@@ -368,7 +394,8 @@ public class ScopeZoom
     public void onRenderWorldLast(RenderWorldLastEvent e)
     {
         Minecraft mc = Minecraft.getMinecraft();
-        if (mc.thePlayer == null || mc.gameSettings.thirdPersonView != 0 || !Deci.isScopedGun(mc.thePlayer.getHeldItem()))
+        if (overlay != null || mc.thePlayer == null || mc.gameSettings.thirdPersonView != 0
+            || !Deci.isScopedGun(mc.thePlayer.getHeldItem()))
         {
             return;
         }
@@ -397,5 +424,86 @@ public class ScopeZoom
         {
             GL11.glCopyTexSubImage2D(GL11.GL_TEXTURE_2D, 0, x0, y0, x0, y0, x1 - x0, y1 - y0);
         }
+    }
+
+    /**
+     * The reticle texture when the sniper overlay should show: a scope of at
+     * least overlayFrom, aimed, and the zoom at least 70% of the way in (the
+     * gun raises normally first).
+     */
+    private ResourceLocation overlayFor(Minecraft mc, float target)
+    {
+        ItemStack held = mc.thePlayer != null ? mc.thePlayer.getHeldItem() : null;
+        if (target < overlayFrom || held == null || zoom < 1 + (target - 1) * 0.7)
+        {
+            return null;
+        }
+        Item sight = Deci.sightAttachment(held);
+        String name = sight != null ? Deci.attachmentName(sight) : Deci.integratedScopeName(held.getItem());
+        return new ResourceLocation("deci", "textures/model/guns/scopes/" + name + ".png");
+    }
+
+    /** Sniper overlay: black screen but for a round view, the reticle, a soft edge (before the HUD). */
+    @SubscribeEvent
+    public void onOverlay(RenderGameOverlayEvent.Pre e)
+    {
+        if (overlay == null || e.type != RenderGameOverlayEvent.ElementType.HELMET)
+        {
+            if (overlay != null && e.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+            {
+                e.setCanceled(true); // the reticle is the crosshair
+            }
+            return;
+        }
+        double w = e.resolution.getScaledWidth_double(), h = e.resolution.getScaledHeight_double();
+        double cx = w / 2, cy = h / 2, r = Math.min(w, h) * 0.47, far = Math.hypot(w, h);
+        Tessellator t = Tessellator.instance;
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT);
+        GL11.glDisable(GL11.GL_CULL_FACE); // GUI y points down: the strips wind backwards
+        GL11.glDisable(GL11.GL_FOG);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        int n = 96;
+        // solid black outside the circle
+        t.startDrawing(GL11.GL_TRIANGLE_STRIP);
+        t.setColorRGBA_F(0f, 0f, 0f, 1f);
+        for (int i = 0; i <= n; i++)
+        {
+            double a = 2 * Math.PI * i / n;
+            t.addVertex(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 0);
+            t.addVertex(cx + Math.cos(a) * far, cy + Math.sin(a) * far, 0);
+        }
+        t.draw();
+        // soft dark edge inside the circle (lens vignette): thin solid rings
+        // darkening outward (per vertex colours came out white in the HUD state)
+        int rings = 12;
+        for (int k = 0; k < rings; k++)
+        {
+            double r0 = r * (0.88 + 0.12 * k / rings), r1 = r * (0.88 + 0.12 * (k + 1) / rings);
+            t.startDrawing(GL11.GL_TRIANGLE_STRIP);
+            t.setColorRGBA_F(0f, 0f, 0f, (float) Math.pow((k + 1) / (double) rings, 0.8) * 0.95f);
+            for (int i = 0; i <= n; i++)
+            {
+                double a = 2 * Math.PI * i / n;
+                t.addVertex(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0, 0);
+                t.addVertex(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1, 0);
+            }
+            t.draw();
+        }
+        // the scope's reticle, centred, as big as the view
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(overlay);
+        t.startDrawingQuads();
+        t.addVertexWithUV(cx - r, cy + r, 0, 0, 1);
+        t.addVertexWithUV(cx + r, cy + r, 0, 1, 1);
+        t.addVertexWithUV(cx + r, cy - r, 0, 1, 0);
+        t.addVertexWithUV(cx - r, cy - r, 0, 0, 0);
+        t.draw();
+        GL11.glPopAttrib();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 }

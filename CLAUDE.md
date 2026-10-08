@@ -527,6 +527,8 @@ of the last session:
   `./gradlew runClient -Pautotest -Pscopeonly` (in dev/): the scope test
   alone in the last autotest world (no new world, no server checks, noon
   forced), about 3.5 min; `-Pscope` = full autotest + scope test.
+  v0.28.4: 4x and up use a black sniper overlay with the reticle (no gun);
+  reddot / 2x keep the gun with see-through glass (config `overlayFrom`).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors, user question
   2026-10-08). The game loads Decimation's obfuscated classes, so the
