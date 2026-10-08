@@ -129,6 +129,8 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   Player shots unchanged. v0.30.3: vanilla's hit cooldown is kept again
   (`npcHitsSkipCooldown` false), NPC shots are traced bullets (spread per
   tier, stopped by walls, impact particles, tracer = the real shot).
+  v0.30.4: hit cooldown 0.25 s (`npcHitCooldownTicks` 5); RPG bandits
+  (RPG-7) and RPG military (RPG-18) fire real rockets.
 
 ## Bug and feature tracking
 

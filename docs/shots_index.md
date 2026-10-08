@@ -492,3 +492,9 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   the side, white "explode" puffs and dark stone crack bits where the
   bandit's shots stop on it; the pig behind it in the distance (camera
   angle off, but the impacts show).
+- sheet_shots_rocket_far_v0.30.4.png: rocket phase from 14 blocks: an
+  RPG-7 bandit and the pig on stone blocks in the air over the city,
+  rockets only small dark specks between them.
+- sheet_shots_rocket_v0.30.4.png: the same from 5 blocks, 3 ticks after
+  each launch: the bandit holds the RPG-7 (clear in rocket_3), the rocket
+  is a small dark body flying west with white smoke puffs behind it.

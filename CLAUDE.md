@@ -592,6 +592,10 @@ of the last session:
   "Soviets kill each other", "NPC shots were not bullets"); dev test
   modes `shots`, `tracer` (now tracer vs server shot line). Test NPCs
   must stand on a block (the client copy of a mob held in the air falls).
+  v0.30.4: NPC hit cooldown 5 ticks (config npcHitCooldownTicks), rocket
+  tiers bandit_rpg / military_rpg fire RocketEntity (Deci.fireRocket);
+  deciworldgen_npc.cfg has config version "2" (weights reset once). New
+  tiers go LAST in NpcLoadouts (egg metadata = index).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

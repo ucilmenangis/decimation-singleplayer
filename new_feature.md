@@ -437,6 +437,20 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.30.4 (user request): rocket launchers. Tiers bandit_rpg (RPG-7,
+weight 3, 8 in military sectors, 30 hp, takes 75%) and military_rpg
+(RPG-18 standard rockets, about 1 in 10 Soviets: military weight 9 vs 1,
+40 hp, takes 60%); a config written before (version != "2") gets the new
+weights once. NpcShots fires a real RocketEntity (the player's rocket:
+speed 1.5, gravity 0.002 per tick, smoke trail, explosion 6 without block
+damage), aimed at the chest plus the gravity drop over the flight, spread
+1.5 x the tier's; 60..100 ticks between rockets; no rocket when the target
+is closer than 8 blocks or an ally stands within 1.5 of the line or 5 of
+the target (a rocket explodes on anything). Fire sound deci:<gun>Fire.
+Checked (shots mode): 7 to 8 rockets in 15 s at 24 blocks, 3 to 5 hurt the
+pig; close shots show the launcher in hand and the rocket with its smoke.
+New tiers sit at the end of the list (egg metadata = index), 10 eggs now.
+
 v0.30.1 (user request): one spawn egg per tier, `deciworldgen:npc_egg`
 (`fixes/NpcEgg`), metadata = index in NpcLoadouts' tier list, so new
 tiers (juggernaut) get an egg on their own. Creative tab Misc, names

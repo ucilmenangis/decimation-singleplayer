@@ -12,6 +12,7 @@ import net.decimation.worldgen.Sectors;
 import net.decimation.worldgen.StructureGenerator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -88,6 +89,8 @@ public class NpcLoadouts
     }
 
     private static final String[] MG = {"pkm", "pkp", "m240", "m60", "rpd", "mk48", "mg3", "m1919a6"};
+    /** Rocket launchers NPCs fire as real rockets (NpcShots); grenade launchers are not used. */
+    static final String[] ROCKET = {"rpg7", "rpg18"};
     private static final String[] SNIPER = {"sv98", "svd", "mosinnagant", "kar98k", "l115a3", "jng90", "barrett",
                                             "m110", "m1garand", "svt40"};
 
@@ -103,7 +106,8 @@ public class NpcLoadouts
     final List<Tier> tiers = new ArrayList<Tier>();
     /** NPC gun hits ("human") on a player: damage factor; every hit counts (no vanilla hit cooldown). */
     private float npcDamageToPlayer = 5;
-    private boolean everyHitCounts = false;
+    /** NPC gun hits on a player are ignored this many ticks after a hit (vanilla 10). */
+    private int hitCooldown = 5;
     /** Spread factor for machine guns; sniper rifles use SNIPER_SPREAD degrees. */
     static final float MG_SPREAD = 1.4f, SNIPER_SPREAD = 0.25f, UNTIERED_SPREAD = 1.2f;
     private final Random random = new Random();
@@ -140,15 +144,34 @@ public class NpcLoadouts
         tiers.add(new Tier("military", NpcKind.SOVIET, 1, 1, 40, 0.6f,
             new String[][] {{"spetsnazHelm"}, {"spetsnazVest"}, {"spetsnazPants"}, {"spetsnazBoots"}},
             "ak74", "ak74", "ak12", "aks74u", "rpk74", "asval", "pkp", "svd").delay(3, 9).spread(0.9f));
+        tiers.get(tiers.size() - 1).weight = 9;
+        tiers.get(tiers.size() - 1).militaryWeight = 9;
+        tiers.add(new Tier("military_rpg", NpcKind.SOVIET, 1, 1, 40, 0.6f,
+            new String[][] {{"spetsnazHelm"}, {"spetsnazVest"}, {"spetsnazPants"}, {"spetsnazBoots"}},
+            "rpg18").spread(1.2f));
+        // new tiers go last: a spawn egg's metadata is its index in this list
+        tiers.add(new Tier("bandit_rpg", NpcKind.BANDIT, 3, 8, 30, 0.75f,
+            new String[][] {{"militiaHelm", "banditHelm"}, {"militiaVest", "banditVest"}, {"militiaPants"},
+                            {"militiaBoots"}},
+            "rpg7").spread(1.6f));
+
         load(new File(configDir, "deciworldgen_npc.cfg"));
     }
 
     private void load(File file)
     {
-        Configuration cfg = new Configuration(file);
+        Configuration cfg = new Configuration(file, "2");
+        // v0.30.4 added rocket tiers and re-balanced the military weight (1 -> 9 against military_rpg 1):
+        // an older file keeps its weights otherwise, so take the new defaults once
+        boolean oldFile = !"2".equals(cfg.getLoadedConfigVersion());
         for (Tier t : tiers)
         {
             String cat = "tier_" + t.name;
+            if (oldFile && cfg.hasCategory(cat))
+            {
+                cfg.getCategory(cat).remove("weight");
+                cfg.getCategory(cat).remove("militaryWeight");
+            }
             t.health = cfg.getFloat("health", cat, t.health, 1, 1000, "max health (vanilla player 20)");
             t.taken = cfg.getFloat("damageTaken", cat, t.taken, 0.01f, 1, "share of a player's gun damage it takes");
             t.weight = cfg.getInt("weight", cat, t.weight, 0, 1000, "chance against the other tiers of its kind");
@@ -159,10 +182,12 @@ public class NpcLoadouts
         }
         npcDamageToPlayer = cfg.getFloat("npcDamageToPlayer", "player", npcDamageToPlayer, 0, 100,
             "NPC gun hits on a player: damage x this, after armor (user 2026-10-09: 5, hardcore; 1 = Decimation)");
-        // v0.30.2 wrote "everyNpcHitCounts = true"; the user asked for the cooldown back (v0.30.3)
+        // v0.30.2 / 0.30.3 keys; user 2026-10-09: 0.25 s (v0.30.4)
         cfg.getCategory("player").remove("everyNpcHitCounts");
-        everyHitCounts = cfg.getBoolean("npcHitsSkipCooldown", "player", everyHitCounts,
-            "NPC gun hits ignore vanilla's 0.5 s hit cooldown, so every shot of a group lands (hard)");
+        cfg.getCategory("player").remove("npcHitsSkipCooldown");
+        hitCooldown = cfg.getInt("npcHitCooldownTicks", "player", hitCooldown, 0, 10,
+            "after a hit, NPC gun hits are ignored for this many ticks (20 = 1 s): 10 = vanilla's 0.5 s, "
+            + "5 = 0.25 s, 0 = every hit of a group lands");
         cfg.save();
     }
 
@@ -171,9 +196,9 @@ public class NpcLoadouts
         return npcDamageToPlayer;
     }
 
-    public boolean npcHitsSkipCooldown()
+    public int npcHitCooldownTicks()
     {
-        return everyHitCounts;
+        return hitCooldown;
     }
 
     /** Aim spread in degrees of an NPC with this gun (its tier's, adjusted for machine guns / sniper rifles). */
@@ -190,19 +215,20 @@ public class NpcLoadouts
     }
 
     /**
-     * Vanilla drops a hit while the victim's hit cooldown (hurtResistantTime)
-     * is above half and the hit is not bigger than the last one; NPC shots
-     * never reset it (Decimation's player gun handler does for player shots),
-     * so ten NPCs landed about as much as one. Cleared before the check.
+     * Vanilla drops a hit while the victim's hit cooldown (hurtResistantTime,
+     * 20 right after a hit, counting down) is above half (10 ticks = 0.5 s)
+     * and the hit is not bigger than the last one; NPC shots never reset it,
+     * so a group lands at most 2 hits a second. Here an NPC hit counts again
+     * once hitCooldown ticks have passed: the timer is cleared before the check.
      */
     @SubscribeEvent
     public void onAttack(net.minecraftforge.event.entity.living.LivingAttackEvent event)
     {
-        if (everyHitCounts && !event.entityLiving.worldObj.isRemote
-            && event.entityLiving instanceof net.minecraft.entity.player.EntityPlayer
-            && "human".equals(event.source.getDamageType()))
+        EntityLivingBase v = event.entityLiving;
+        if (hitCooldown < 10 && !v.worldObj.isRemote && v instanceof net.minecraft.entity.player.EntityPlayer
+            && "human".equals(event.source.getDamageType()) && v.hurtResistantTime <= v.maxHurtResistantTime - hitCooldown)
         {
-            event.entityLiving.hurtResistantTime = 0;
+            v.hurtResistantTime = 0;
         }
     }
 
@@ -392,6 +418,10 @@ public class NpcLoadouts
         {
             Deci.setNpcShotDelay(npc, 3, 8);
         }
+        else if (contains(ROCKET, name))
+        {
+            Deci.setNpcShotDelay(npc, 60, 100); // one rocket, then a reload
+        }
         else if (contains(SNIPER, name))
         {
             Deci.setNpcShotDelay(npc, 25, 45);
@@ -402,7 +432,7 @@ public class NpcLoadouts
         }
     }
 
-    private static boolean contains(String[] list, String s)
+    static boolean contains(String[] list, String s)
     {
         for (String x : list)
         {

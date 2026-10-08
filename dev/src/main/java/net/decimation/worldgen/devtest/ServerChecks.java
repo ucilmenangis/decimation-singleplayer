@@ -292,10 +292,27 @@ public class ServerChecks extends DevTestMode
         p.setHealth(p.getMaxHealth());
         p.setGameType(WorldSettings.GameType.CREATIVE);
         DevTestResults.value("checks", "full marine body set, one NPC hit", String.format("%.2f", one));
-        boolean skip = net.decimation.fixes.NpcLoadouts.instance().npcHitsSkipCooldown();
+        int cd = net.decimation.fixes.NpcLoadouts.instance().npcHitCooldownTicks();
         DevTestResults.check("checks", "5 NPC hits in one tick", String.format("%.2f", five),
-                             Math.abs(five - (skip ? 5 : 1) * one) < 0.05, String.format("%.2f (%s)", (skip ? 5 : 1) * one,
-                             skip ? "all land" : "vanilla hit cooldown: the first lands"));
+                             Math.abs(five - (cd == 0 ? 5 : 1) * one) < 0.05, String.format("%.2f (%s)", (cd == 0 ? 5 : 1) * one,
+                             cd == 0 ? "all land" : "hit cooldown: the first lands"));
+        // the hit cooldown (npcHitCooldownTicks): a hit cd ticks after the last lands, one tick sooner does not
+        p.setGameType(WorldSettings.GameType.SURVIVAL);
+        p.setHealth(p.getMaxHealth());
+        p.hurtResistantTime = 0;
+        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 2.0f);
+        p.hurtResistantTime = p.maxHurtResistantTime - cd + 1; // cd - 1 ticks later
+        float h0 = p.getHealth();
+        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 2.0f);
+        boolean early = p.getHealth() < h0;
+        p.hurtResistantTime = p.maxHurtResistantTime - cd; // cd ticks later
+        float h1 = p.getHealth();
+        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 2.0f);
+        boolean onTime = p.getHealth() < h1;
+        p.setHealth(p.getMaxHealth());
+        p.setGameType(WorldSettings.GameType.CREATIVE);
+        DevTestResults.check("checks", "NPC hit cooldown " + cd + " ticks", "early lands " + early + ", on time lands " + onTime,
+                             cd == 0 || !early && onTime, "early false, on time true");
     }
 
     private void checkHelmet()

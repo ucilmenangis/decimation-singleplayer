@@ -24,8 +24,10 @@ public class ShotTest extends DevTestMode
 {
     public String name() { return "shots"; }
 
-    private static final int[] DIST = {10, 20, 10};
-    private static final boolean[] WALL = {false, false, true};
+    private static final int[] DIST = {10, 20, 10, 24};
+    private static final boolean[] WALL = {false, false, true, false};
+    /** Phase with an RPG-7 bandit (real rockets, NpcShots.rocket). */
+    private static final int ROCKET_PHASE = 3;
     private static final int LEN = 300, START = 20;
     private static final int Y = 140;
 
@@ -36,7 +38,9 @@ public class ShotTest extends DevTestMode
     private java.util.function.BiFunction<net.minecraft.entity.Entity, net.minecraft.entity.EntityLivingBase, Object> restore;
     private EntityPig pig;
     private final int[] hitCount = new int[DIST.length], shotCount = new int[DIST.length];
-    private int shotTaken = -1;
+    private int shotTaken = -1, rocketShots, rocketShotFor;
+    private volatile int rocketFiredAt;
+    private float pigLast = -1;
     private double x0, z0;
 
     public boolean client(Minecraft mc)
@@ -53,6 +57,18 @@ public class ShotTest extends DevTestMode
             mc.gameSettings.hideGUI = true;
             mc.thePlayer.setPositionAndRotation(x0 + 4, Y + 1, z0 - 5, 90, 10); // beside the wall, looking west at it
         }
+        if (phase == ROCKET_PHASE && mc.thePlayer != null)
+        {
+            // side view of the line: rockets and their smoke in flight
+            mc.gameSettings.hideGUI = true;
+            mc.thePlayer.setPositionAndRotation(x0 - 6, Y + 1, z0 - 5, 0, 5);
+            int fired = rocketFiredAt;
+            if (fired > 0 && fired != rocketShotFor && t - fired >= 3 && rocketShots < 4)
+            {
+                rocketShotFor = fired; // 3 ticks after a launch: about 5 blocks out, in front of the camera
+                DevTestUtil.screenshot(mc, name(), "shots_rocket_" + rocketShots++);
+            }
+        }
         if (t > START + DIST.length * LEN + 10 && !done)
         {
             mc.gameSettings.hideGUI = false;
@@ -61,6 +77,9 @@ public class ShotTest extends DevTestMode
                 DevTestResults.value(name(), "hits at " + DIST[i] + (WALL[i] ? " behind a wall" : ""),
                                      hitCount[i] + " / " + shotCount[i]);
             }
+            DevTestResults.check(name(), "rockets fired and hits", shotCount[ROCKET_PHASE] + " fired, "
+                                 + hitCount[ROCKET_PHASE] + " hurt the pig", shotCount[ROCKET_PHASE] >= 2
+                                 && hitCount[ROCKET_PHASE] >= 1, ">= 2 rockets, >= 1 hit at 24 blocks");
             double r10 = rate(0), r20 = rate(1);
             DevTestResults.check(name(), "hit rate at 10 blocks", String.format("%.0f%%", 100 * r10),
                                  shotCount[0] > 20 && r10 > 0.6, "> 60% (spread 1.3 deg)");
@@ -103,8 +122,12 @@ public class ShotTest extends DevTestMode
                 Object r = real.apply(s, target);
                 if (r != null && ours)
                 {
+                    if (ph == ROCKET_PHASE && pig.getDistanceToEntity(bandit) >= 8)
+                    {
+                        rocketFiredAt = ticks;
+                    }
                     shotCount[ph]++;
-                    if (pig.getHealth() < h)
+                    if (ph != ROCKET_PHASE && pig.getHealth() < h)
                     {
                         hitCount[ph]++;
                         pig.setHealth(pig.getMaxHealth());
@@ -140,20 +163,36 @@ public class ShotTest extends DevTestMode
         pig.motionX = pig.motionY = pig.motionZ = 0;
         pig.fallDistance = 0;
         bandit.setRevengeTarget(pig);
+        if (phase == ROCKET_PHASE)
+        {
+            if (pigLast >= 0 && pig.getHealth() < pigLast)
+            {
+                hitCount[phase]++;
+                pig.setHealth(pig.getMaxHealth());
+            }
+            pig.hurtResistantTime = 0;
+            pigLast = pig.getHealth();
+        }
         Deci.banditShootAt(bandit, pig);
     }
 
     private void setup(World world, EntityPlayerMP p, int phase)
     {
         cleanup(world);
-        NpcLoadouts.Tier tier = NpcLoadouts.instance().byName("bandit_medium");
+        boolean rocket = phase == ROCKET_PHASE;
+        NpcLoadouts.Tier tier = NpcLoadouts.instance().byName(rocket ? "bandit_rpg" : "bandit_medium");
         bandit = Deci.newBandit(world);
         NpcLoadouts.instance().equip(bandit, tier, bandit.getEntityData());
-        bandit.getEntityData().setString(NpcLoadouts.GUN_TAG, "akm");
+        String gun = rocket ? "rpg7" : "akm";
+        bandit.getEntityData().setString(NpcLoadouts.GUN_TAG, gun);
         bandit.setPosition(x0, Y, z0);
         world.spawnEntityInWorld(bandit);
-        Deci.setNpcGun(bandit, new ItemStack(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", "akm")));
-        Deci.setNpcShotDelay(bandit, 1, 1);
+        Deci.setNpcGun(bandit, new ItemStack(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", gun)));
+        if (!rocket)
+        {
+            Deci.setNpcShotDelay(bandit, 1, 1);
+        }
+        pigLast = -1;
         pig = new EntityPig(world);
         pig.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1000);
         pig.setHealth(1000);

@@ -616,3 +616,7 @@ bullet impacts on blocks (until now only player shots made them).
   then start lower): test NPCs stand on a block now; the tracer test only
   counts its own bandit's shots (nearby NPCs fight each other since the
   faction fix).
+- **v0.30.4 (user: shorter, 0.25 s)**: `npcHitCooldownTicks` (default 5;
+  10 = vanilla, 0 = every hit lands) replaces `npcHitsSkipCooldown`. An
+  NPC hit 4 ticks after the last is dropped, 5 ticks after lands
+  (checks mode); a group lands at most about 4 hits a second.

@@ -80,3 +80,5 @@ or `[not decided]`.
   player, hit cooldown kept; NPC shots are traced bullets with spread,
   impact particles on blocks, tracers always shown along the real line;
   Soviets no longer kill each other (bug.md).
+- v0.30.4 NPC hit cooldown 0.25 s; RPG-7 bandits and RPG-18 military fire
+  real rockets (new_feature.md).

@@ -472,6 +472,23 @@ public final class Deci
         return ((deci.ag.a) npc).c(other);
     }
 
+    /**
+     * A RocketEntity (deci.ak.f, the player's RPG rocket: flies at the given
+     * speed with a little gravity, smoke trail, explodes on impact) from the
+     * shooter toward a direction. Its target constructor places it at the
+     * shooter's eyes, a block toward the target; setShooter (f), then the
+     * heading (setThrowableHeading) is ours.
+     */
+    public static void fireRocket(net.minecraft.entity.Entity shooter, net.minecraft.entity.EntityLivingBase target,
+                                  double dx, double dy, double dz, float speed)
+    {
+        deci.ak.f rocket = new deci.ak.f(shooter.worldObj, (net.minecraft.entity.EntityLivingBase) shooter, target,
+                                         speed, 0f);
+        rocket.f(shooter);
+        rocket.setThrowableHeading(dx, dy, dz, speed, 0f);
+        shooter.worldObj.spawnEntityInWorld(rocket);
+    }
+
     /** BanditEntity.shootAt (e): fires when its cooldown has run out. */
     public static void banditShootAt(net.minecraft.entity.Entity bandit, net.minecraft.entity.EntityLivingBase target)
     {

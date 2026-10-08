@@ -54,6 +54,11 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         World world = shooter.worldObj;
         double sx = shooter.posX, sy = shooter.posY + shooter.getEyeHeight(), sz = shooter.posZ;
         double dx = target.posX - sx, dy = target.boundingBox.minY + target.height * 0.6 - sy, dz = target.posZ - sz;
+        String gunName = cpw.mods.fml.common.registry.GameRegistry.findUniqueIdentifierFor(gun.getItem()).name;
+        if (NpcLoadouts.contains(NpcLoadouts.ROCKET, gunName))
+        {
+            return rocket(shooter, target, gun, gunName, dx, dy, dz);
+        }
         double yaw = Math.atan2(dz, dx), pitch = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz));
         double sigma = Math.toRadians(loadouts.spread(shooter, gun));
         yaw += random.nextGaussian() * sigma;
@@ -113,6 +118,63 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
             r.add(new double[] {cx, cy, cz, shooter.getEntityId()});
         }
         return Boolean.TRUE;
+    }
+
+    /** Rocket speed (blocks per tick, as the player's RPG) and its gravity (RocketEntity). */
+    static final float ROCKET_SPEED = 1.5f;
+    static final double ROCKET_GRAVITY = 0.002, ROCKET_MIN = 8, ROCKET_BLAST = 5;
+
+    /**
+     * A launcher: a real RocketEntity (flies, drops a little, smoke trail,
+     * explodes on what it touches) aimed at the target's chest with the
+     * gravity drop added and a spread 1.5 x the tier's. Held (no shot, the
+     * long reload starts again) when the target is closer than ROCKET_MIN or
+     * an ally stands near the line or within ROCKET_BLAST of the target: a
+     * rocket explodes on anything, allies included.
+     */
+    private Object rocket(Entity shooter, EntityLivingBase target, ItemStack gun, String gunName,
+                          double dx, double dy, double dz)
+    {
+        double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (dist < ROCKET_MIN || allyInWay(shooter, target))
+        {
+            return Boolean.TRUE;
+        }
+        double t = dist / ROCKET_SPEED;
+        dy += 0.5 * ROCKET_GRAVITY * t * t; // aim above by the drop over the flight
+        double yaw = Math.atan2(dz, dx), pitch = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz));
+        double sigma = Math.toRadians(loadouts.spread(shooter, gun) * 1.5);
+        yaw += random.nextGaussian() * sigma;
+        pitch += random.nextGaussian() * sigma;
+        Deci.gunFlash(gun);
+        Deci.fireRocket(shooter, target, Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch),
+                        Math.cos(pitch) * Math.sin(yaw), ROCKET_SPEED);
+        shooter.worldObj.playSoundAtEntity(shooter, "deci:" + gunName + "Fire", 4.0f, 1.0f);
+        return Boolean.TRUE;
+    }
+
+    /** An ally of the shooter within 1.5 blocks of the line to the target, or within ROCKET_BLAST of it. */
+    static boolean allyInWay(Entity shooter, EntityLivingBase target)
+    {
+        Vec3 a = Vec3.createVectorHelper(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ);
+        Vec3 b = Vec3.createVectorHelper(target.posX, target.boundingBox.minY + target.height * 0.6, target.posZ);
+        AxisAlignedBB span = AxisAlignedBB.getBoundingBox(Math.min(a.xCoord, b.xCoord), Math.min(a.yCoord, b.yCoord),
+            Math.min(a.zCoord, b.zCoord), Math.max(a.xCoord, b.xCoord), Math.max(a.yCoord, b.yCoord),
+            Math.max(a.zCoord, b.zCoord)).expand(ROCKET_BLAST, ROCKET_BLAST, ROCKET_BLAST);
+        for (Object o : shooter.worldObj.getEntitiesWithinAABBExcludingEntity(shooter, span))
+        {
+            Entity e = (Entity) o;
+            if (e == target || e.isDead || !sameSide(shooter, e))
+            {
+                continue;
+            }
+            if (e.getDistanceToEntity(target) < ROCKET_BLAST
+                || e.boundingBox.expand(1.5, 1.5, 1.5).calculateIntercept(a, b) != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Both armed humans of one side: Soviets, bandits, or soldiers (hazmat soldiers included). */
