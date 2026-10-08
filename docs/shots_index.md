@@ -378,3 +378,24 @@ the ramp looking south at the city; 6 aerial over the north band.
   superblock).
 - 10 (-60,67,8) west: plain street, a wreck in the lane.
 - 11 (-248,67,100) south: plain street with lamps, bin, bench.
+
+## lc_streets_v0.27.0/ (district street parts, seed 1, 10 views, 9 valid)
+- 0 (-200,67,8) west, office district: asphalt with white edge lines and a
+  double dashed centre line, raised sidewalks with curbs and a paving strip,
+  lamp posts; the blue tarp scene ahead.
+- 1 (170,67,8) west, suburb: hedge rows along the sidewalks, a roadblock
+  scene ahead.
+- 2 (-248,67,60) north: north south street (turned part): centre dashes run
+  along the street (line meta flip works), wooden benches, a white zebra
+  patch in the foreground.
+- 3 (8,67,60) north: hotel fronts' glass walkway over the part street.
+- 4 (-60,67,8) west: residential hedges, plain road.
+- 5 (-248,67,100) south: like 2.
+- 6 aerial over a crossing near (-30,-20): white crossing marks (X pattern
+  of quartz), wrecks, houses with brown roofs.
+- 7 aerial at (8,90,240) north: a wide stairs part between levels, the
+  deadzone district (sand bags, crates) on the left.
+- 8 INVALID / unclear: (-136,67,136) west shows a railed platform and a
+  blue water like area with mirrored buildings.
+- 9 (72,67,200) north: legacy street (our own lamps, centre line), stairs
+  railing in the foreground.

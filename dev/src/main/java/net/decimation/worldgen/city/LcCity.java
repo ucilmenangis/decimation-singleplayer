@@ -214,7 +214,23 @@ public final class LcCity
             return null;
         }
         meta[0] = net.decimation.worldgen.Rotation.rotateMeta(Block.getIdFromBlock(b), s.meta[i] & 15, turns);
+        if ((turns & 1) == 1 && b == roadLine())
+        {
+            meta[0] ^= 2; // painted line: meta % 4 0 / 1 runs north south, 2 / 3 east west
+        }
         return b;
+    }
+
+    private static Block roadLine;
+
+    private static Block roadLine()
+    {
+        if (roadLine == null)
+        {
+            Block b = Block.getBlockFromName("deci:BlockRoad_CenterLine");
+            roadLine = b != null ? b : Blocks.bedrock;
+        }
+        return roadLine;
     }
 
     /** True when the box comes within EDGE of a city cell (the city's ramp may cut it). */
@@ -586,6 +602,57 @@ public final class LcCity
         }
         // 0 = north-south street (cell column 0), 1 = east-west (row 0), 2 = crossing
         int kind = lx == 0 && lz == 0 ? 2 : lx == 0 ? 0 : 1;
+        // the district's own street part (Lost Cities street parts), chosen by connections
+        LcContent.Shape piece = null;
+        int pieceTurns = 0;
+        if (stairs == null && !LcContent.streets(style, "straight").isEmpty())
+        {
+            boolean[] c = new boolean[4]; // west, north, east, south
+            int n = 0;
+            for (int d = 0; d < 4; d++)
+            {
+                int nx = chx + dirs[d][0], nz = chz + dirs[d][1];
+                int ncx = Math.floorDiv(nx, CELL), ncz = Math.floorDiv(nz, CELL);
+                c[d] = Highways.at(seed, nx, nz) ? g == Highways.DECK
+                    : isCity(seed, ncx, ncz) && isStreetChunk(seed, nx, nz) && ground(seed, ncx, ncz) == g;
+                n += c[d] ? 1 : 0;
+            }
+            // turns as Lost Cities' generateNormalStreetSection (its ROTATE_90 = one clockwise turn)
+            String pk;
+            if (n == 0)
+            {
+                pk = "none";
+            }
+            else if (n == 1)
+            {
+                pk = "end";
+                pieceTurns = c[0] ? 0 : c[2] ? 2 : c[1] ? 1 : 3;
+            }
+            else if (n == 2 && (c[0] == c[2]))
+            {
+                pk = "straight";
+                pieceTurns = c[0] ? 0 : 1;
+            }
+            else if (n == 2)
+            {
+                pk = "bend";
+                pieceTurns = c[0] && c[1] ? 0 : c[0] ? 3 : c[1] ? 1 : 2;
+            }
+            else if (n == 3)
+            {
+                pk = "t";
+                pieceTurns = !c[0] ? 1 : !c[2] ? 3 : !c[1] ? 2 : 0;
+            }
+            else
+            {
+                pk = "all";
+            }
+            List<String> files = LcContent.streets(style, pk);
+            if (!files.isEmpty())
+            {
+                piece = LcContent.shape(files.get((int) (hl(seed ^ 0x53545250L, chx, chz) % files.size())));
+            }
+        }
         LcContent.Shape scene = kind != 2 && stairs == null && h(seed ^ 0x5343454EL, chx, chz) < SCENE_CHANCE
             ? decor(seed, style, "fountains", chx, chz, 0x464F554EL) : null;
         if (scene != null)
@@ -594,7 +661,7 @@ public final class LcCity
                                             chz << 4);
         }
         return new StreetPlan("lcs_" + chx + "_" + chz, chx << 4, chz << 4, g, road, stairs, Math.max(0, turns),
-                              kind, props, seed, this, style, scene);
+                              kind, props, seed, this, style, scene, piece, pieceTurns);
     }
 
     // ------------------------------------------------------------ plans
@@ -679,10 +746,16 @@ public final class LcCity
         private final LcContent.Shape scene;
         /** Front parts per side (west, north, east, south: turns 0..3), resolved on first use. */
         private LcContent.Shape[] fronts;
+        /** The district's street part (slice 0 = street surface) and its turns, or null for our own street. */
+        private final LcContent.Shape piece;
+        private final int pieceTurns;
 
         StreetPlan(String id, int minX, int minZ, int ground, Block road, LcContent.Shape stairs, int turns,
-                   int kind, StreetProps props, long seed, LcCity city, String style, LcContent.Shape scene)
+                   int kind, StreetProps props, long seed, LcCity city, String style, LcContent.Shape scene,
+                   LcContent.Shape piece, int pieceTurns)
         {
+            this.piece = piece;
+            this.pieceTurns = pieceTurns;
             this.city = city;
             this.style = style;
             this.scene = scene;
@@ -704,7 +777,7 @@ public final class LcCity
         public int minZ() { return minZ; }
         public int maxX() { return minX + 15; }
         public int maxZ() { return minZ + 15; }
-        public int height() { return stairs != null ? stairs.height + 1 : 13; }
+        public int height() { return stairs != null ? stairs.height + 1 : Math.max(13, piece != null ? piece.height : 0); }
         public int clearAbove() { return 14; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.stone; }
@@ -768,6 +841,10 @@ public final class LcCity
             int across = kind == 1 ? lz : lx, along = kind == 1 ? lx : lz;
             boolean sidewalk = kind == 2 ? (lx < SIDEWALK || lx > 15 - SIDEWALK) && (lz < SIDEWALK || lz > 15 - SIDEWALK)
                 : across < SIDEWALK || across > 15 - SIDEWALK;
+            if (piece != null)
+            {
+                return pieceAt(lx, ly, lz, across, along, meta);
+            }
             if (ly == 0)
             {
                 if (sidewalk)
@@ -858,6 +935,63 @@ public final class LcCity
                 return props.cars[(int) ((hv >>> 8) % props.cars.length)];
             }
             return null;
+        }
+
+        /**
+         * A street of the district's own parts: the part (its lamps, benches,
+         * sidewalks, paint) with scenes and fronts on top, and a wreck now
+         * and then in its 6 wide road (lanes 6 / 9, 7% each).
+         */
+        private Block pieceAt(int lx, int ly, int lz, int across, int along, int[] meta)
+        {
+            if (ly == 0)
+            {
+                Block b = partAt(piece, pieceTurns, lx, 0, lz, meta);
+                if (b == null)
+                {
+                    meta[0] = 0;
+                    return road;
+                }
+                return b;
+            }
+            if (scene != null)
+            {
+                Block b = partAt(scene, kind == 1 ? 1 : 0, lx, ly - 1, lz, meta);
+                if (b != null)
+                {
+                    return b;
+                }
+            }
+            LcContent.Shape[] f = fronts();
+            for (int d = 0; d < 4; d++)
+            {
+                if (f[d] != null)
+                {
+                    Block b = partAt(f[d], d, lx, ly - 1, lz, meta);
+                    if (b != null)
+                    {
+                        return b;
+                    }
+                }
+            }
+            Block b = partAt(piece, pieceTurns, lx, ly, lz, meta);
+            if (b != null)
+            {
+                return b;
+            }
+            meta[0] = 0;
+            if (ly != 1 || kind == 2 || scene != null || props.cars.length == 0
+                || (across != 6 && across != 9) || along != 7)
+            {
+                return null;
+            }
+            long hv = hl(seed ^ 0x5354524545L, minX + lx, minZ + lz);
+            if ((hv & 0xFF) >= 18)
+            {
+                return null;
+            }
+            meta[0] = kind == 0 ? (across == 6 ? 5 : 3) : (across == 6 ? 4 : 2);
+            return props.cars[(int) ((hv >>> 8) % props.cars.length)];
         }
 
         private static boolean contains(Block[] l, Block b)

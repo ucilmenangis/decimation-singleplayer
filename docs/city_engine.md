@@ -65,6 +65,35 @@ Cellar padding under multi building chunks with fewer cellars is bedrock
   generateStreetDecorations); floors -cellars..F with the top part at
   floor >= F (BuildingInfo).
 
+## District street parts (v0.27.0)
+
+User choice 8 Oktober 2026 ("really big gain own street pieces"). Each DC
+city style lists street parts (citystyle "streetblocks" / "parts": all,
+t, straight, bend, end, none, full; 61 parts, e.g. bus stop, newspaper
+stand, adboard, police roadblock variants). Legacy styles have none: the
+deadzone and the legacy towns keep our own dressed streets (v0.24.1).
+- Placement as Lost Cities' generateNormalStreetSection: count the
+  connections (neighbour street chunk at the same street level, or a
+  highway chunk at the deck level); 0 none, 1 end, 2 straight or bend, 3
+  t, 4 all. Unturned: straight runs along x, end opens west, bend west +
+  north, t all but south. Its Transform ROTATE_90 maps part (x, z) to
+  (15 - z, x), which is exactly one of our clockwise turns, so LC
+  rotations map 1:1 to turns. Slice 0 at the street surface G. Stairs
+  chunks keep our road + stairs part.
+- Parts: 16 x 16, 5 wide sidewalks raised by half slabs, a 6 wide road
+  (part z 5..10), lamps and benches of their own. Our furniture is not
+  added; scenes and fronts still are; wrecks in lanes 6 / 9 (7%).
+- Road paint: the refueled mod's decals (side, corner, side_corner, zebra,
+  about 1800 blocks over the 61 parts) are converted by lcpack.py
+  `paint()` into the layer below: lines -> deci:BlockRoad_CenterLine
+  (meta 2 along x for paint facing east / west, 4 along z), zebra ->
+  white quartz. Turning a part by an odd number of turns flips the line
+  meta (XOR 2) in `LcCity.partAt` (Rotation leaves Decimation blocks
+  unchanged). Translator additions: oxeye daisy, lily pads, ochrum,
+  construction barricade (hazard barrier), command block / observer skip.
+- Shots lc_streets_v0.27.0 (shots_index); autotest all pass, 0 generator
+  errors.
+
 ## Parks, street scenes, fronts (v0.26.0)
 
 User said "try next" on 8 Oktober 2026 after testing 0.25.0; this is the

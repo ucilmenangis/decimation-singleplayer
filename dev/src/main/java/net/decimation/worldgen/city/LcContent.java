@@ -77,6 +77,7 @@ public final class LcContent
     private static final Map<String, List<String>> stairs = new HashMap<String, List<String>>();
     private static final Map<String, List<String>> highways = new HashMap<String, List<String>>();
     private static final Map<String, List<String>> decor = new HashMap<String, List<String>>();
+    private static final Map<String, List<String>> streets = new HashMap<String, List<String>>();
     private static final Map<Integer, Block> remap = new HashMap<Integer, Block>();
     private static final Map<String, Shape> shapes = new HashMap<String, Shape>();
 
@@ -112,6 +113,13 @@ public final class LcContent
     public static List<String> decor(String style, String kind)
     {
         List<String> l = decor.get(style + "/" + kind);
+        return l != null ? l : new ArrayList<String>();
+    }
+
+    /** Street part files of "<pack>:<style>" for a connection kind: straight, end, bend, t, all, none. */
+    public static List<String> streets(String style, String kind)
+    {
+        List<String> l = streets.get(style + "/" + kind);
         return l != null ? l : new ArrayList<String>();
     }
 
@@ -157,21 +165,8 @@ public final class LcContent
                 }
                 stairs.put(e.getKey(), files);
             }
-            if (o.has("decor"))
-            {
-                for (Map.Entry<String, JsonElement> st : o.getAsJsonObject("decor").entrySet())
-                {
-                    for (Map.Entry<String, JsonElement> e : st.getValue().getAsJsonObject().entrySet())
-                    {
-                        List<String> files = new ArrayList<String>();
-                        for (JsonElement f : (JsonArray) e.getValue())
-                        {
-                            files.add(f.getAsString());
-                        }
-                        decor.put(st.getKey() + "/" + e.getKey(), files);
-                    }
-                }
-            }
+            byStyle(o, "decor", decor);
+            byStyle(o, "streets", streets);
             if (o.has("highways"))
             {
                 for (Map.Entry<String, JsonElement> e : o.getAsJsonObject("highways").entrySet())
@@ -191,6 +186,27 @@ public final class LcContent
         {
             buildings.clear();
             FMLLog.warning("[deciworldgen] Lost Cities content not loaded: %s", e);
+        }
+    }
+
+    /** {"<pack>:<style>": {kind: [file, ...]}} into map "<pack>:<style>/<kind>" -> files. */
+    private static void byStyle(JsonObject o, String key, Map<String, List<String>> into)
+    {
+        if (!o.has(key))
+        {
+            return;
+        }
+        for (Map.Entry<String, JsonElement> st : o.getAsJsonObject(key).entrySet())
+        {
+            for (Map.Entry<String, JsonElement> e : st.getValue().getAsJsonObject().entrySet())
+            {
+                List<String> files = new ArrayList<String>();
+                for (JsonElement f : (JsonArray) e.getValue())
+                {
+                    files.add(f.getAsString());
+                }
+                into.put(st.getKey() + "/" + e.getKey(), files);
+            }
         }
     }
 

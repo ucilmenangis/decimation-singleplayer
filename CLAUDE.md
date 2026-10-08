@@ -511,6 +511,8 @@ of the last session:
   `city/Highways.java`, `tools/hwmap.py SEED R` prints the network).
   v0.26.0: parks on open lots (10%), street scenes, building fronts
   (docs/city_engine.md "Parks, street scenes, fronts").
+  v0.27.0: DC districts use their own Lost Cities street parts (road
+  paint converted to painted road blocks); legacy districts keep ours.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

@@ -20,6 +20,11 @@ schematic and OUT_DIR/index.json:
             (16 x 16 parts on a chunk's ground; fountains are street scenes,
             fronts building entrances on the street side, x 0 toward the
             building; repeats = weight),
+   "streets": {"<pack>:<style>": {"straight" | "end" | "bend" | "t" | "all" |
+              "none" | "full": [file, ...]}} (Lost Cities street parts,
+              slice 0 = street surface; unturned straight runs along x, end
+              opens west, bend west + north, t all but south; road paint
+              (refueled) becomes painted road blocks in the layer below),
    "names": {"<id>": "<block name>"}}
 Bedrock (id 7) marks "keep the world" (cellar padding of multi building
 chunks with fewer cellars). Schematic ids are the ids of REGISTRY_WORLD below, "names" maps them back
@@ -59,11 +64,37 @@ def convert(pack, ns, ref, ids):
 
 
 def road_override(state):
-    """Highway decks: black sandstone is the asphalt (plain translation gives beige sandstone)."""
+    """Highway decks: black sandstone is the asphalt (plain translation gives beige sandstone).
+    "=name@meta" is an already translated 1.7.10 block (street paint)."""
+    if state.startswith("="):
+        name, _, meta = state[1:].partition("@")
+        return (name, int(meta or 0))
     name = state.split("[")[0]
     if name == "biomesoplenty:black_sandstone":
         return ("deci:BlockRoad", 0)
     return lt.translate(state)
+
+
+def paint(sl):
+    """Road paint decals (refueled mod) sit on top of the road; 1.7.10 has
+    painted road blocks instead. Lines become deci:BlockRoad_CenterLine in
+    the layer below (meta 2 = line along x for paint facing east / west, 4 =
+    along z), zebra stripes white quartz; the decal itself becomes air."""
+    for y in range(1, len(sl)):
+        for z, row in enumerate(sl[y]):
+            for x, st in enumerate(row):
+                if not st or not st.startswith("refueled:"):
+                    continue
+                kind = st.split(":")[1].split("[")[0]
+                face = "north"
+                if "facing=" in st:
+                    face = st.split("facing=")[1].split(",")[0].rstrip("]")
+                if kind == "zebra":
+                    sl[y - 1][z][x] = "=minecraft:quartz_block@0"
+                else:
+                    sl[y - 1][z][x] = "=deci:BlockRoad_CenterLine@%d" % (2 if face in ("east", "west") else 4)
+                row[x] = None
+    return sl
 
 
 def rasterise(cols, cx, cz, ids, translate=None):
@@ -97,7 +128,8 @@ def main():
     reg = ms.registry(REGISTRY_WORLD)
     ids = {n: i for i, n in reg.items()}
     ids["minecraft:air"] = 0
-    index = {"buildings": [], "stairs": {}, "decor": {}, "names": {str(i): n for i, n in reg.items()}}
+    index = {"buildings": [], "stairs": {}, "decor": {}, "streets": {},
+             "names": {str(i): n for i, n in reg.items()}}
     for spec in sys.argv[2:]:
         key, _, rest = spec.partition("=")
         parts = rest.split(":")
@@ -149,6 +181,23 @@ def main():
                     decor[kind] = files
             if decor:
                 index["decor"]["%s:%s" % (key, style)] = decor
+            streets = {}
+            for kind, refs in cs.get("streetblocks", {}).get("parts", {}).items():
+                files = []
+                for ref in refs:
+                    fname = ref.split(":")[-1].replace("/", "__")
+                    path = os.path.join(out, key, fname + ".schematic")
+                    if not os.path.exists(path):
+                        sl = lc.part_slices(pack, ref, {}, {}, pack.palette(ns + ":common"))
+                        if not sl:
+                            continue
+                        W, H, L, b, a, m = rasterise({(0, 0): paint(sl)}, 1, 1, ids, road_override)
+                        lc.write_schematic(path, W, H, L, b, a, m)
+                    files.append(key + "/" + fname + ".schematic")
+                if files:
+                    streets[kind] = files
+            if streets:
+                index["streets"]["%s:%s" % (key, style)] = streets
         # highway parts of the pack's world style (Lost Cities partselector "highways")
         wsdir = os.path.join(data, ns, "lostcities", "worldstyles")
         for f in sorted(os.listdir(wsdir)) if os.path.isdir(wsdir) and "highways" not in index else []:

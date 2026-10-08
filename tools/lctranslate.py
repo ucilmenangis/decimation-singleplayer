@@ -224,6 +224,16 @@ def translate(state):
         return ("deci:BlockStone_5" if "moist" in path else "deci:BlockStone_6"), 0
     if "scoria" in path or "coral" in path:
         return "deci:BlockStone_4", 0
+    if path == "oxeye_daisy":
+        return "minecraft:red_flower", 8
+    if path in ("lily_pad", "huge_lily_pad"):
+        return "minecraft:waterlily", 0
+    if "ochrum" in path:
+        return "minecraft:sandstone", 2
+    if path == "construction_barricade":
+        return "deci:BlockHazardbarrier", 2
+    if path in ("command_block", "observer"):
+        return "skip", 0
     if path == "dead_grass" or path == "dead_bush":
         return "minecraft:deadbush", 0
     if "razor_wire" in path or "barbed" in path:
