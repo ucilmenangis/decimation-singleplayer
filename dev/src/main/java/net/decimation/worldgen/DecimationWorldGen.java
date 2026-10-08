@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.28.0",
+     version = "0.28.1",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -69,6 +69,7 @@ public class DecimationWorldGen
             if (zoom.enabled())
             {
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(zoom);
+                cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(zoom);
             }
         }
 

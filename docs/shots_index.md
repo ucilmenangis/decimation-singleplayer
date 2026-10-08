@@ -411,3 +411,7 @@ the ramp looking south at the city; 6 aerial over the north band.
   again, so the zoom does not scale the gun.
 - sheet.png: the three side by side. (An earlier zoom shot with the glass
   not drawn showed a solid black eyepiece: replaced.)
+- scope_normal.png (v0.28.1, camera zoom 4.00): world and gun zoom
+  together, the scope ring fills the middle of the screen, the glass shows
+  the zoomed road with the reticle (see-through look); eyepiece slightly
+  above the screen centre.

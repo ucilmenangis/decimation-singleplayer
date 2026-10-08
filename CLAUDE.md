@@ -517,6 +517,8 @@ of the last session:
   v0.28.0: cheap scope (bug.md "FPS drop while aiming through scopes"):
   view zoom + frame copy on the glass, old picture in picture scope kept
   behind config `pictureInPicture`; `-Pscope` autotest measures fps.
+  v0.28.1: world and gun zoom together (EntityRenderer.cameraZoom; the
+  hand is drawn by ScopeZoom because vanilla skips it while zoomed).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors, user question
   2026-10-08). The game loads Decimation's obfuscated classes, so the

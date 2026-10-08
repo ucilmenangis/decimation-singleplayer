@@ -152,9 +152,9 @@ public class DevAutoTest
             }
             if (phase == 2 && t == 300)
             {
-                scopeFovMul = (Float) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(
-                    net.minecraft.client.renderer.EntityRenderer.class, mc.entityRenderer, "fovModifierHand",
-                    "field_78507_R");
+                scopeFovMul = ((Double) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(
+                    net.minecraft.client.renderer.EntityRenderer.class, mc.entityRenderer, "cameraZoom",
+                    "field_78503_V")).floatValue();
                 String mode = Boolean.getBoolean(net.decimation.fixes.ScopeZoom.PROPERTY) ? "pip" : "zoom";
                 net.minecraft.util.ScreenShotHelper.saveScreenshot(mc.mcDataDir, "scope_" + mode + ".png",
                     mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
@@ -163,7 +163,7 @@ public class DevAutoTest
         }
         scopeDone = true;
         FMLLog.info("[%s] AUTOTEST scope %s: fps empty hand %.0f, gun with 4x held %.0f, aiming %.0f, empty hand "
-                    + "again %.0f; fov multiplier aiming %.3f", DecimationWorldGen.MODID,
+                    + "again %.0f; camera zoom aiming %.2f", DecimationWorldGen.MODID,
                     Boolean.getBoolean(net.decimation.fixes.ScopeZoom.PROPERTY) ? "picture in picture" : "view zoom",
                     scopeFps[0] / Math.max(1, scopeSamples[0]), scopeFps[1] / Math.max(1, scopeSamples[1]),
                     scopeFps[2] / Math.max(1, scopeSamples[2]), scopeFps[3] / Math.max(1, scopeSamples[3]),

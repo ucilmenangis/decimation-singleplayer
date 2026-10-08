@@ -319,15 +319,26 @@ not something we introduced or need to fix) see `documentation.md`.
   behind system property `decimation.scope.pip` (method otherwise
   untouched: the old scope returns with `pictureInPicture=true` in
   `config/deciworldgen_scope.cfg`). `net.decimation.fixes.ScopeZoom`
-  zooms the world FOV while aiming (FOVUpdateEvent; reddot 1.25, 2x, 4x,
-  8x, dragunov 4x, configurable) and copies the centre of each finished
-  frame into the scope texture (RenderWorldLastEvent, before the hand) so
-  the glass shows the zoomed world. The gun keeps its size (renderHand
-  uses a fixed FOV 70; checked with a 1x control shot).
+  zooms the whole picture while aiming (reddot 1.25, 2x, 4x, 8x, dragunov
+  4x, configurable) and copies the centre of each finished frame into the
+  scope texture (RenderWorldLastEvent, before the hand) so the glass looks
+  see-through.
+  - v0.28.0 zoomed only the world (FOV; the hand renders at a fixed FOV
+    70, so the gun stayed 1x). User then chose the "NORMAL" look of a
+    NORMAL / PIP comparison picture: world AND gun zoom together.
+  - v0.28.1: EntityRenderer.cameraZoom = magnification (eased, log
+    space). Vanilla renderWorld skips renderHand while cameraZoom != 1,
+    so ScopeZoom calls renderHand itself on RenderHandEvent (fired right
+    before that check); renderHand applies the same cameraZoom scale, so
+    the gun zooms with the world. Glass copy sized glassView x zoom. The
+    eyepiece sits a little above the screen centre at 4x, but the glass
+    shows the screen centre (the aim point), so the reticle aims true.
 - **Measured** (`./gradlew runClient -Pautotest -Pscope`, dev client,
   unlimited fps, 4x on an ak74): picture in picture empty hand 85..103,
   held 45..51, aiming 37..44; view zoom empty hand 70..92, held 64..76
   (the gun model only), aiming 105..132. Shots docs/shots/scope_v0.28.0.
+  v0.28.1 on a busy machine: picture in picture empty 26, held 10,
+  aiming 10; camera zoom empty 28, held 32, aiming 42.
 - First try also gated renderScopeGlass: the glass vanished and the scope
   showed its solid black body (looked like a bigger gun); reverted.
 
