@@ -531,3 +531,39 @@ used as floor.
   patched 42 tracers, mean 1.0, max 2.0. (The test also showed the original
   shootAt crashes on a miss when the bandit has no AI target: it plays the
   miss sound at getAITarget(); never happens in play, the AI sets it.)
+
+## Full military armor makes NPC gunfire almost harmless (reported 9 Oktober 2026, FIXED v0.30.2)
+User: a full set of normal military armor takes about 1 hp per NPC shot,
+even with a group of NPCs shooting at once.
+- **NPC shots are not bullets** (BanditEntity.shootAt, read in deobf
+  source): when the NPC can see its target, 75% of shots call
+  `attackEntityFrom("human", gun damage / 8)` on the target directly, 25%
+  only play a sound. The tracer (PacketGunFireEffects) is a visual only.
+  Player shots are client ray traces sent as PacketGunHit; the server
+  applies body armor and hits with "gunDeci".
+- **Cause 1, armor multiplies piece by piece**: ArmorGunfireHandler
+  (v0.9.0) uses Decimation's PvP formula, damage x every worn body piece's
+  multiplier, and the multipliers are the originals x 0.65 (our armor
+  buff). Marine set: vest 0.85, pants 0.8, boots 0.8 -> 0.5525 x 0.52 x
+  0.52 = x 0.149 (checks mode: chest alone 5.52 of 10). An M4A4 NPC hit
+  (16 / 8 = 2) does 0.30 hp; the helmet (0.195) on the 20% headshots
+  makes that 0.06.
+- **Cause 2, vanilla hit cooldown**: EntityLivingBase.attackEntityFrom
+  (lines 854..870 of the MCP source) ignores a hit while hurtResistantTime
+  is above half of maxHurtResistantTime (20 ticks for players) unless it
+  is bigger than the last one. NPC shots never reset it (Decimation's
+  player gun handler sets it to half after every hit, so player shots all
+  count). So for 0.5 s after a hit every other NPC hit of the same size is
+  dropped: ten NPCs do about as much as one, at most ~2 hits per second.
+- **Fix (v0.30.2, user decision)**: player shots unchanged; NPC gun hits
+  ("human") on a player x `npcDamageToPlayer` (default 5, user: "hardcore
+  singleplayer"), after armor; and NPC hits clear the victim's hit
+  cooldown first (LivingAttackEvent), so every hit of a group lands
+  (`everyNpcHitCounts`). Both in config/deciworldgen_npc.cfg, category
+  "player"; code NpcLoadouts.onAttack / onHurt.
+- **Numbers (checks mode)**: an NPC M4A4 hit (2) on a bare player 10.00 hp
+  (half the bar), full marine body set 1.49 (was 0.30), 5 hits in one
+  tick 7.47 (all land; before only the first). Helmet headshots (20%)
+  cut a hit further. Armed traders also use "human" at full gun damage
+  but only ever target infected and bandits, never players.
+- Not seen in game by the user yet `[not verified]`.

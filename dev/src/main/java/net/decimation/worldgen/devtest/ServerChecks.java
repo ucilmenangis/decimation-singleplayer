@@ -255,12 +255,47 @@ public class ServerChecks extends DevTestMode
                     DecimationWorldGen.MODID, bare, chest.getUnlocalizedName(), chest.getDamageMultiplier(), armored);
         DevTestResults.check("checks", "armor vs NPC gunfire", String.format("%.2f of %.2f", armored, bare),
                              armored < bare, "less damage with chest armor (ArmorGunfireHandler)");
+        float mult = net.decimation.fixes.NpcLoadouts.instance().npcDamageToPlayer();
+        DevTestResults.check("checks", "NPC hit 2 on a bare player", String.format("%.2f", bare),
+                             Math.abs(bare - Math.min(20, 2 * mult)) < 0.01, String.format("%.2f (x%.1f)", 2 * mult, mult));
+        checkGroupFire(p, mult);
     }
 
     /**
      * Helmet fix: NPC hits use the helmet on ~20% (random headshots); a
      * player's gun uses it only when its aim line crosses the head.
      */
+    /** Full marine body set, 5 NPC hits in the same tick: all 5 land (no vanilla hit cooldown). */
+    private void checkGroupFire(net.minecraft.entity.player.EntityPlayerMP p, float mult)
+    {
+        String[] set = {"marineBoots", "marinePants", "marineVest"}; // slots 1..3
+        p.setGameType(WorldSettings.GameType.SURVIVAL);
+        for (int i = 0; i < 3; i++)
+        {
+            p.setCurrentItemOrArmor(i + 1, new net.minecraft.item.ItemStack(
+                cpw.mods.fml.common.registry.GameRegistry.findItem("deci", set[i])));
+        }
+        p.setHealth(p.getMaxHealth());
+        p.hurtResistantTime = 0;
+        float before = p.getHealth();
+        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 2.0f);
+        float one = before - p.getHealth();
+        for (int i = 0; i < 4; i++)
+        {
+            p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 2.0f);
+        }
+        float five = before - p.getHealth();
+        for (int i = 1; i <= 3; i++)
+        {
+            p.setCurrentItemOrArmor(i, null);
+        }
+        p.setHealth(p.getMaxHealth());
+        p.setGameType(WorldSettings.GameType.CREATIVE);
+        DevTestResults.value("checks", "full marine body set, one NPC hit", String.format("%.2f", one));
+        DevTestResults.check("checks", "5 NPC hits in one tick", String.format("%.2f", five),
+                             Math.abs(five - 5 * one) < 0.05, String.format("%.2f (all land)", 5 * one));
+    }
+
     private void checkHelmet()
     {
         net.minecraft.entity.player.EntityPlayerMP p = player();
@@ -286,10 +321,13 @@ public class ServerChecks extends DevTestMode
         }
         p.setGameType(WorldSettings.GameType.SURVIVAL);
         p.setCurrentItemOrArmor(4, new net.minecraft.item.ItemStack(helm)); // slot 4 = helmet
+        p.setCurrentItemOrArmor(4, null);
+        float bareHit = hit(p);
+        p.setCurrentItemOrArmor(4, new net.minecraft.item.ItemStack(helm));
         int reduced = 0, total = 400;
         for (int i = 0; i < total; i++)
         {
-            if (hit(p) < 9.99f)
+            if (hit(p) < bareHit - 0.01f)
             {
                 reduced++;
             }
@@ -332,7 +370,7 @@ public class ServerChecks extends DevTestMode
         p.setHealth(p.getMaxHealth());
         p.hurtResistantTime = 0;
         float before = p.getHealth();
-        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 10.0f);
+        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 2.0f); // an NPC M4A4 hit (16 / 8)
         return before - p.getHealth();
     }
 

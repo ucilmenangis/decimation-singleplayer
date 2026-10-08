@@ -233,20 +233,20 @@ public class NpcTest extends DevTestMode
     private Map<String, Integer> spawnBatch(World world, NpcKind kind, int n, int x, int z)
     {
         Map<String, Integer> tiers = new java.util.TreeMap<String, Integer>();
-        int bad = 0;
+        int bad = 0, refused = 0;
         String firstBad = "";
         for (int i = 0; i < n; i++)
         {
             EntityLiving npc = kind == NpcKind.SOVIET ? Deci.newSoviet(world)
                 : kind == NpcKind.SOLDIER ? newSoldier(world) : Deci.newBandit(world);
             npc.setPosition(x + 0.5 + i % 8, ground(world, x, z), z + 0.5 + i / 8);
-            boolean added = world.spawnEntityInWorld(npc);
-            String tier = npc.getEntityData().getString(NpcLoadouts.TAG);
-            if (tier.isEmpty())
+            if (!world.spawnEntityInWorld(npc))
             {
-                DevTestResults.value(name(), "untiered " + kind, npc.getClass().getName() + " added " + added
-                    + " dead " + npc.isDead + " at " + (int) npc.posX + "," + (int) npc.posY + "," + (int) npc.posZ);
+                // Decimation turns 5% of soldier spawns into a mech (PlayerJoinSync): not ours to check
+                refused++;
+                continue;
             }
+            String tier = npc.getEntityData().getString(NpcLoadouts.TAG);
             tiers.put(tier, count(tiers, tier) + 1);
             NpcLoadouts.Tier t = NpcLoadouts.instance().byName(tier);
             String problem = t == null ? "no tier" : t.kind != kind ? "kind " + t.kind : null;
@@ -272,7 +272,8 @@ public class NpcTest extends DevTestMode
             }
             npc.setDead();
         }
-        DevTestResults.check(name(), kind + " gear checks", (n - bad) + " / " + n + (bad > 0 ? " " + firstBad : ""),
+        DevTestResults.check(name(), kind + " gear checks", (n - refused - bad) + " / " + (n - refused)
+                             + (refused > 0 ? " (" + refused + " refused, mech)" : "") + (bad > 0 ? " " + firstBad : ""),
                              bad == 0, "tier, 4 armor pieces, tier gun, tier health");
         return tiers;
     }

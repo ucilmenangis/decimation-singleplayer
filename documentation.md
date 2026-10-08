@@ -122,6 +122,11 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   spawn in groups in military sectors. Values and how to change them:
   `config/deciworldgen_npc.cfg`, details in new_feature.md "Step 1 design:
   NPC tiers". NPC guns now look the same on the client as on the server.
+- **NPC gunfire on the player (v0.30.2, hardcore)**: x5 after armor
+  (`npcDamageToPlayer` in deciworldgen_npc.cfg, 1 = Decimation), and every
+  NPC hit lands (vanilla's 0.5 s hit cooldown skipped for NPC shots). An
+  NPC rifle hit: 10 hp bare, about 1.5 hp in a full marine body set.
+  Player shots unchanged.
 
 ## Bug and feature tracking
 

@@ -580,6 +580,10 @@ of the last session:
   Decimation rolls NPC guns per side and never syncs them, so our gun goes
   to the client via data watcher slot 26. Dev test mode `npc`.
   v0.30.1: spawn egg per tier (`deciworldgen:npc_egg`, `fixes/NpcEgg`).
+  v0.30.2: NPC gun hits on players x5 after armor and no vanilla hit
+  cooldown for them (bug.md "Full military armor makes NPC gunfire almost
+  harmless"); NPC shots are direct damage, not bullets. Decimation turns
+  5% of soldier spawns into mechs (PlayerJoinSync).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

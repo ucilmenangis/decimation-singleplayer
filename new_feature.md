@@ -424,8 +424,10 @@ setNpcGun / setNpcShotDelay / newSoviet; dev test mode `npc`
 - Client shows the server's gun for all 14 lineup NPCs (before: each side
   rolled its own). Military spawner places 2 to 3 tier military NPCs.
 - checks + tracer modes still PASS (tracer 3.6 deg mean).
-- One soldier came out untiered in the first run only (not reproduced in
-  3 runs); the test now logs the reason if it happens `[not explained]`.
+- Untiered soldiers in some runs: explained 9 Oktober 2026, Decimation's
+  PlayerJoinSync cancels 5% of soldier spawns and spawns a Mech instead
+  (also why mechs gather in the reused test world); the test now skips
+  refused spawns.
 Defaults (config/deciworldgen_npc.cfg): bandit light 20 hp, takes 100%,
 weight 55 (military 25), Decimation's 5..20 tick delay; bandit medium 26
 hp, 80%, weight 35 (45); bandit heavy 32 hp, 70%, weight 10 (30);

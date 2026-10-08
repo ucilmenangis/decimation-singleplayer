@@ -93,6 +93,9 @@ public class NpcLoadouts
                                                   "casual3Boots"};
 
     final List<Tier> tiers = new ArrayList<Tier>();
+    /** NPC gun hits ("human") on a player: damage factor; every hit counts (no vanilla hit cooldown). */
+    private float npcDamageToPlayer = 5;
+    private boolean everyHitCounts = true;
     private final Random random = new Random();
     private static NpcLoadouts instance;
 
@@ -142,7 +145,33 @@ public class NpcLoadouts
             t.militaryWeight = cfg.getInt("militaryWeight", cat, t.militaryWeight, 0, 1000,
                                           "the same inside military areas");
         }
+        npcDamageToPlayer = cfg.getFloat("npcDamageToPlayer", "player", npcDamageToPlayer, 0, 100,
+            "NPC gun hits on a player: damage x this, after armor (user 2026-10-09: 5, hardcore; 1 = Decimation)");
+        everyHitCounts = cfg.getBoolean("everyNpcHitCounts", "player", everyHitCounts,
+            "NPC gun hits ignore vanilla's 0.5 s hit cooldown, so a group's shots all land");
         cfg.save();
+    }
+
+    public float npcDamageToPlayer()
+    {
+        return npcDamageToPlayer;
+    }
+
+    /**
+     * Vanilla drops a hit while the victim's hit cooldown (hurtResistantTime)
+     * is above half and the hit is not bigger than the last one; NPC shots
+     * never reset it (Decimation's player gun handler does for player shots),
+     * so ten NPCs landed about as much as one. Cleared before the check.
+     */
+    @SubscribeEvent
+    public void onAttack(net.minecraftforge.event.entity.living.LivingAttackEvent event)
+    {
+        if (everyHitCounts && !event.entityLiving.worldObj.isRemote
+            && event.entityLiving instanceof net.minecraft.entity.player.EntityPlayer
+            && "human".equals(event.source.getDamageType()))
+        {
+            event.entityLiving.hurtResistantTime = 0;
+        }
     }
 
     static boolean military(net.minecraft.world.World world, double x, double z)
@@ -230,11 +259,25 @@ public class NpcLoadouts
         }
     }
 
-    /** A player's gun ("gunDeci") hitting a tiered NPC: the tier's share of the damage. */
+    /**
+     * A player's gun ("gunDeci") hitting a tiered NPC: the tier's share of the
+     * damage. An NPC's gun ("human") hitting a player: x npcDamageToPlayer
+     * (armor is applied by ArmorGunfireHandler; the factors multiply).
+     */
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event)
     {
-        if (event.entityLiving.worldObj.isRemote || !"gunDeci".equals(event.source.getDamageType()))
+        if (event.entityLiving.worldObj.isRemote)
+        {
+            return;
+        }
+        if ("human".equals(event.source.getDamageType())
+            && event.entityLiving instanceof net.minecraft.entity.player.EntityPlayer)
+        {
+            event.ammount *= npcDamageToPlayer;
+            return;
+        }
+        if (!"gunDeci".equals(event.source.getDamageType()))
         {
             return;
         }
