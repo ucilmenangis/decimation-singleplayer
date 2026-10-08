@@ -392,8 +392,28 @@ at the end of this file.)
 ### FPS drop in prop-dense areas (cars/crates/shelves etc.)
 - **Reported**: 26 Juli 2026
 - E.g. ~100fps baseline down to 20-30fps around 15+ props, worse with 50+.
-  Needs measuring (an autotest fps mode like `-Pscope`) to find the actual
-  render bottleneck. Still open (9 Oktober 2026).
+- **Measured 9 Oktober 2026** (`./gradlew runClient -Pautotest -Pprops`,
+  last autotest world: stone platform high up, 15 x 15 mixed props;
+  `-Pjfr` adds a Java Flight Recorder CPU profile, run/client/profile.jfr,
+  read with JDK 25 `jfr print --json`; the client thread is `main` in dev).
+  Before: empty 28..29 fps, 225 props in view 12..14, hidden in a stone box
+  23 (box alone 24..27). Profile: 76% of PropRenderer (`deci.I.l`) time in
+  ClientProxy.LineOfSight.canSeeTileEntity (`deci.a.c$a.a`): up to 9 ray
+  casts per prop per frame, a chunk lookup (LongHashMap) per block per ray;
+  hidden props pay all 9 and are not drawn anyway. canSeeEntity does the
+  same for every living entity and vehicle.
+- **IMPROVED (v0.28.6, PatchPropCulling step 3)**: both answers cached until
+  the player (or the entity) moves 0.3 blocks, at most 1.0..1.3 s for props
+  and 0.15..0.18 s for entities, staggered per object. (A first try with a
+  plain 80..111 ms lifetime rechecked nearly every frame at low fps; a null
+  player on the main menu preview crashed the cache until guarded.) After:
+  line of sight 25 of 251 prop renderer samples (was 804 of 1053); prop
+  renderer share of the client thread 21% -> 9%. All autotest checks pass;
+  props and NPCs still render (docs/shots/props_fps).
+- **Left**: what remains is drawing the models (100% in glCallList, driver
+  / GPU work): 225 visible props still about halve the fps. Only drawing
+  fewer would help (e.g. a shorter render distance for small props) `[not
+  done, a look change: ask the user]`.
 
 ### Military jeep/tank/helicopter destroyed in one hit (survival mode) (FIXED v0.8.1)
 - **Reported**: 26 Juli 2026, clarified 27 Juli 2026

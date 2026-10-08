@@ -362,6 +362,13 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
 - `[not verified]` which registry names PKM / M240 / militia guns have;
   check `deci.aD.k` / deobf ItemRegistry when starting.
 
+### More zombie variants, 60 round magazines, NPC bullet impacts (9 Oktober 2026, "later")
+- More infected / zombie variants.
+- New magazines: 60 round STANAG and 60 round 5.45 AK.
+- Bullet impact particles on blocks hit by NPC shots (today only player
+  shots make them; NPC shots damage the target directly, see bug.md
+  "NPC tracers", the tracer patch now knows the target).
+
 ### More clothing variety on military/bandit NPCs
 - **Requested**: 27 Juli 2026
 - Bandits already have *some* randomization - `deci.ag.a` picks from small

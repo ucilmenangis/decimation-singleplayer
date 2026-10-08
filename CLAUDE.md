@@ -241,7 +241,8 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   props not rendering, both 2026-10-07; `PatchScope.java`, picture in
   picture scope gated behind `decimation.scope.pip`, 2026-10-08;
   `PatchTracer.java`, NPC tracers aimed at the target, 2026-10-09, needs
-  netty-all 4.0.10 from Prism's libraries on the Javassist classpath). Patch from the ORIGINAL classes
+  netty-all 4.0.10 from Prism's libraries on the Javassist classpath;
+  `PatchPropCulling.java` step 3 (2026-10-09) caches line of sight answers). Patch from the ORIGINAL classes
   only after checking the target class is identical in the patched jar. Earlier
   patches (loot handler, proxy cast, weapon nerf, armor buff, intro skip,
   ammo crate) were one-off and have no saved source.
@@ -533,6 +534,10 @@ of the last session:
   reddot / 2x keep the gun with see-through glass (config `overlayFrom`).
   `-Ptracer` (with -Pautotest, last autotest world): NPC tracer direction
   test, logs the mean / max angle between tracers and the target.
+  `-Pprops`: prop fps test (platform, 225 props in view / hidden);
+  `-Pjfr`: Java Flight Recorder profile to run/client/profile.jfr (read with
+  ~/.jdks/zulu-25.jdk/Contents/Home/bin/jfr print --json; client thread is
+  `main` in dev). Profile before optimising: guesses were wrong twice.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors, user question
   2026-10-08). The game loads Decimation's obfuscated classes, so the

@@ -91,6 +91,15 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("scope")) {
         jvmArgs("-Ddeciworldgen.autotest.scope=true")
     }
+    // -Pjfr: Java Flight Recorder CPU samples of the whole run (run/client/profile.jfr)
+    if (project.hasProperty("jfr")) {
+        jvmArgs("-XX:+UnlockCommercialFeatures", "-XX:+FlightRecorder",
+                "-XX:StartFlightRecording=filename=profile.jfr,settings=profile,dumponexit=true")
+    }
+    // -Pprops: fps with many props in view / hidden (last autotest world)
+    if (project.hasProperty("props")) {
+        jvmArgs("-Ddeciworldgen.autotest.props=true")
+    }
     // -Ptracer: NPC tracer direction test alone in the last autotest world
     if (project.hasProperty("tracer")) {
         jvmArgs("-Ddeciworldgen.autotest.tracer=true")

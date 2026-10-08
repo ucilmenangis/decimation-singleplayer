@@ -437,3 +437,9 @@ the ramp looking south at the city; 6 aerial over the north band.
   the scope's reticle (4x / 8x posts and bars, aug circle) on the centre,
   no gun, HUD still on top. One earlier run's integrated 900x895 shot
   showed the player off position (test glitch, rerun fine).
+
+## props_fps/ (prop fps test, 9 Oktober 2026)
+- props_0..3.png, sheet.png: empty stone platform; the 15 x 15 grid in
+  view (car wrecks and street lights dominate the skyline); the grid boxed
+  in stone; the box alone. sheet_cached.png: empty / in view after the line
+  of sight cache: props and a few NPCs still render.

@@ -19,6 +19,9 @@ import javassist.*;
  *    at least 2x2 blocks, half a block taller; null render size = 0..1.
  * 2. canSeeTileEntity: always visible within 4 blocks, and one extra ray to
  *    the box centre before the original 8 corner rays.
+ * 3. (2026-10-09) the answers of canSeeTileEntity and canSeeEntity are cached
+ *    until the player (or the entity) moves 0.3 blocks, at most 1.0..1.3 s for
+ *    props and 0.15..0.18 s for entities: see the comment at step 3.
  *
  *   javac -cp tools/lib/javassist.jar --release 8 -d build/patch_props tools/patches/PatchPropCulling.java
  *   java -cp tools/lib/javassist.jar:build/patch_props PatchPropCulling <Decimation jar ending .jar> build/patch_props/out
@@ -73,7 +76,49 @@ public class PatchPropCulling {
           + "        net.minecraft.util.Vec3.func_72443_a($1.field_70165_t, ey, $1.field_70161_v),"
           + "        net.minecraft.util.Vec3.func_72443_a(cx, cy, cz), false, false, false) == null) return true;"
           + "}");
+
+        // 3. (2026-10-09, user: fps drop near many props) cache the answers. A
+        //    Flight Recorder profile of 225 props in view showed 76% of the prop
+        //    renderer's time in these ray casts (a chunk lookup per block per
+        //    ray, every frame, 9 rays for every hidden prop). Answers are reused
+        //    (below); canSeeEntity is used for every living entity and vehicle.
+        //    Lifetimes are staggered by identity hash so not all recheck on one
+        //    frame. The original methods stay as *Raw copies.
+        los.addField(CtField.make("public static java.util.WeakHashMap seeCache;", los),
+                     CtField.Initializer.byNew(pool.get("java.util.WeakHashMap")));
+        CtMethod seeEntity = null;
+        for (CtMethod m : los.getDeclaredMethods("a")) {
+            if (m.getSignature().equals("(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/entity/Entity;)Z")) {
+                seeEntity = m;
+            }
+        }
+        los.addMethod(CtNewMethod.copy(see, "seeTileEntityRaw", los, null));
+        los.addMethod(CtNewMethod.copy(seeEntity, "seeEntityRaw", los, null));
+        // entry: {expiry nanos, result, player x, y, z, target x, y, z}; reused while
+        // neither the player nor (for entities) the target moved 0.3 blocks and it
+        // is younger than the lifetime (a frame time based lifetime alone rechecked
+        // nearly every frame at low fps, 2026-10-09 profile)
+        String cached =
+            "{ if ($1 == null || $2 == null) return %4$s($1, $2);"   // menu preview player: no world, no player
+          + "  long now = System.nanoTime();"
+          + "  double px = $1.field_70165_t, py = $1.field_70163_u, pz = $1.field_70161_v;"
+          + "  double tx = %1$s, ty = %2$s, tz = %3$s;"
+          + "  double[] c = (double[]) seeCache.get($2);"
+          + "  if (c != null && now < c[0]"
+          + "      && (px - c[2]) * (px - c[2]) + (py - c[3]) * (py - c[3]) + (pz - c[4]) * (pz - c[4]) < 0.09"
+          + "      && (tx - c[5]) * (tx - c[5]) + (ty - c[6]) * (ty - c[6]) + (tz - c[7]) * (tz - c[7]) < 0.09)"
+          + "    return c[1] != 0.0;"
+          + "  boolean r = %4$s($1, $2);"
+          + "  if (c == null) { c = new double[8]; seeCache.put($2, c); }"
+          + "  c[0] = (double) (now + %5$dL + (long) (System.identityHashCode($2) & 31) * %6$dL);"
+          + "  c[1] = r ? 1.0 : 0.0; c[2] = px; c[3] = py; c[4] = pz; c[5] = tx; c[6] = ty; c[7] = tz;"
+          + "  return r; }";
+        // props: 1.0..1.3 s while the player stands still; entities: 0.15..0.18 s
+        see.setBody(String.format(cached, "0.0", "0.0", "0.0", "seeTileEntityRaw", 1000000000L, 10000000L));
+        seeEntity.setBody(String.format(cached, "$2.field_70165_t", "$2.field_70163_u", "$2.field_70161_v",
+                                        "seeEntityRaw", 150000000L, 1000000L));
         los.writeFile(a[1]);
-        System.out.println("patched TileEntityProp.getRenderBoundingBox and deci.a.c$a.a(EntityPlayer,TileEntity)");
+        System.out.println("patched TileEntityProp.getRenderBoundingBox and deci.a.c$a.a(EntityPlayer,TileEntity) "
+                           + "+ a(EntityPlayer,Entity): wider check, cached results");
     }
 }
