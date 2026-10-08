@@ -333,6 +333,24 @@ not something we introduced or need to fix) see `documentation.md`.
     the gun zooms with the world. Glass copy sized glassView x zoom. The
     eyepiece sits a little above the screen centre at 4x, but the glass
     shows the screen centre (the aim point), so the reticle aims true.
+  - v0.28.2 (user: glass misaligned fullscreen / windowed; gun swinging
+    wildly above 1x in a first centring try): the WHOLE world frame is
+    copied and the patched glass maps it by screen position (projective
+    texturing), so it is see-through at any window size and zoom. The
+    glass reports its screen box (GL feedback, every 4th frame); the gun
+    is moved (cameraYaw / cameraPitch, hand only) so the sight sits on the
+    screen centre where shots go. The sight position is learned per gun +
+    scope + window aspect, only from unclipped samples and after 3 samples
+    in a row agree (the first try corrected every frame from old samples
+    and chased the weapon sway; a sample taken while the gun swung in from
+    the hip pushed the glass off screen for good); the first aim with a
+    new combination holds 1.5x up to 0.8 s while it learns. Mouse turning
+    slows to 1 / zoom while zoomed (config "sensitivity"). Checked: reddot,
+    2x, 4x, 8x, integrated (aug1) in 854x480 and 900x895, reticle on the
+    centre in all 10 (docs/shots/scope_v0.28.2); a +-4 degree sweep moves
+    the sight 6..25 px (normal weapon lag). Java 8 trap: Javassist on a
+    newer JDK compiled FloatBuffer.flip() with the Java 9 return type
+    (NoSuchMethodError in game): call it through java.nio.Buffer.
 - **Measured** (`./gradlew runClient -Pautotest -Pscope`, dev client,
   unlimited fps, 4x on an ak74): picture in picture empty hand 85..103,
   held 45..51, aiming 37..44; view zoom empty hand 70..92, held 64..76

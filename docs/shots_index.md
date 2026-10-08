@@ -415,3 +415,10 @@ the ramp looking south at the city; 6 aerial over the north band.
   together, the scope ring fills the middle of the screen, the glass shows
   the zoomed road with the reticle (see-through look); eyepiece slightly
   above the screen centre.
+
+## scope_v0.28.2/ (every sight, two windows, v0.28.2)
+- scope_<854x480|900x895>_<reddot|2x|4x|8x|integrated>.png, sheet.png
+  (top row 854x480, bottom 900x895, red cross = screen centre): the
+  reticle sits on the screen centre in all 10; the glass is see-through
+  (road and trees continue across its edge); 8x and the integrated aug
+  scope fill the screen with the glass, ring edges at the sides.

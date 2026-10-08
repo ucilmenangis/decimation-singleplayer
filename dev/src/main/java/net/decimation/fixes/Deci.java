@@ -97,6 +97,32 @@ public final class Deci
 
     // ---- rendering: ClientRenderHandler = deci.c.b
 
+    /**
+     * Where the scope glass was last drawn on screen, window pixels (origin
+     * bottom left), or null when not within the last 0.25 s. Fields added to
+     * BModel (deci.n.f) by tools/patches/PatchScope.java.
+     */
+    public static float[] scopeGlassOnScreen()
+    {
+        if (System.nanoTime() - deci.n.f.glassTime > 250_000_000L)
+        {
+            return null;
+        }
+        return new float[] {deci.n.f.glassX, deci.n.f.glassY};
+    }
+
+    /** The last scope glass box on screen: min x, min y, max x, max y (window pixels, clipped to the screen). */
+    public static float[] scopeGlassBox()
+    {
+        return new float[] {deci.n.f.glassMinX, deci.n.f.glassMinY, deci.n.f.glassMaxX, deci.n.f.glassMaxY};
+    }
+
+    /** System.nanoTime() of the last scope glass sample (changes with every new sample). */
+    public static long scopeGlassTime()
+    {
+        return deci.n.f.glassTime;
+    }
+
     /** ClientRenderHandler.scopeTextureId (dC): the texture BModel draws on scope glass. */
     public static int scopeTexture()
     {

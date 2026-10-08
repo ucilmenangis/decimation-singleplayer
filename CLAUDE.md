@@ -519,6 +519,10 @@ of the last session:
   behind config `pictureInPicture`; `-Pscope` autotest measures fps.
   v0.28.1: world and gun zoom together (EntityRenderer.cameraZoom; the
   hand is drawn by ScopeZoom because vanilla skips it while zoomed).
+  v0.28.2: projective see-through glass, sight centred on the screen
+  centre (learned per gun + scope), mouse slowdown; `-Pscope` also shoots
+  every sight in two window sizes. Javassist snippets: compile against
+  Java 8 signatures (cast to java.nio.Buffer before flip()).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors, user question
   2026-10-08). The game loads Decimation's obfuscated classes, so the

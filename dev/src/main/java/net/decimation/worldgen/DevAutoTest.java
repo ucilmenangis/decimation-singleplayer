@@ -140,6 +140,10 @@ public class DevAutoTest
                 net.decimation.fixes.Deci.setAimMode(p, phase == 2 ? 1 : 0);
             }
         }
+        if (phase >= 4 && scopeShots(mc, sp, scopeTicks - 4 * SCOPE_PHASE - 1))
+        {
+            return true;
+        }
         if (phase < 4)
         {
             // keep it: the server may sync its own value back
@@ -177,26 +181,114 @@ public class DevAutoTest
         return false;
     }
 
-    /** A rifle without an integrated scope, carrying the 4x sight attachment. */
+    /** Sights shot after the fps phases, each aimed for SHOT_TICKS, in two window sizes ("" = integrated, aug1). */
+    private static final String[] SCOPE_SIGHTS = {"reddot", "2x", "4x", "8x", ""};
+    private static final int SHOT_TICKS = 120;
+    private static final int[][] SCOPE_WINDOWS = {{0, 0}, {900, 900}}; // 0 = the window as it is
+    private float[] wander;
+
+    /** Aiming screenshots per sight and window size: scope_<w>x<h>_<sight>.png. */
+    private boolean scopeShots(Minecraft mc, net.minecraft.entity.player.EntityPlayerMP sp, int t)
+    {
+        int shot = t / SHOT_TICKS, tt = t % SHOT_TICKS;
+        int window = shot / SCOPE_SIGHTS.length, sight = shot % SCOPE_SIGHTS.length;
+        if (window >= SCOPE_WINDOWS.length)
+        {
+            return false;
+        }
+        if (tt == 0)
+        {
+            if (sight == 0 && SCOPE_WINDOWS[window][0] > 0)
+            {
+                try
+                {
+                    org.lwjgl.opengl.Display.setDisplayMode(new org.lwjgl.opengl.DisplayMode(SCOPE_WINDOWS[window][0],
+                                                                                          SCOPE_WINDOWS[window][1]));
+                    java.lang.reflect.Method resize = cpw.mods.fml.relauncher.ReflectionHelper.findMethod(
+                        Minecraft.class, mc, new String[] {"resize", "func_71370_a"}, int.class, int.class);
+                    resize.invoke(mc, SCOPE_WINDOWS[window][0], SCOPE_WINDOWS[window][1]);
+                }
+                catch (Exception e)
+                {
+                    FMLLog.info("[%s] AUTOTEST scope: resize failed: %s", DecimationWorldGen.MODID, e);
+                }
+            }
+            net.minecraft.item.ItemStack gun = scopedGun(SCOPE_SIGHTS[sight]);
+            for (net.minecraft.entity.player.EntityPlayer p : new net.minecraft.entity.player.EntityPlayer[] {mc.thePlayer, sp})
+            {
+                p.inventory.setInventorySlotContents(0, gun.copy());
+            }
+        }
+        // from the hip first (as in play: the zoom starts at 1x), then aim
+        net.decimation.fixes.Deci.setAimMode(mc.thePlayer, tt < 20 ? 0 : 1);
+        net.decimation.fixes.Deci.setAimMode(sp, tt < 20 ? 0 : 1);
+        // second half: turn the view like a mouse sweep (+-4 degrees) to see the gun lag under zoom
+        if (tt > SHOT_TICKS / 2 && tt < SHOT_TICKS - 8)
+        {
+            float yaw = 180 + 4f * (float) Math.sin((tt - SHOT_TICKS / 2) / 6.0);
+            mc.thePlayer.rotationYaw = yaw;
+        }
+        // sight wander over the second half of the aim (zoom settled): glass position spread
+        float[] g = net.decimation.fixes.Deci.scopeGlassOnScreen();
+        if (tt == SHOT_TICKS / 2)
+        {
+            wander = new float[] {1e9f, 1e9f, -1e9f, -1e9f};
+        }
+        if (tt > SHOT_TICKS / 2 && g != null && wander != null)
+        {
+            wander[0] = Math.min(wander[0], g[0]);
+            wander[1] = Math.min(wander[1], g[1]);
+            wander[2] = Math.max(wander[2], g[0]);
+            wander[3] = Math.max(wander[3], g[1]);
+        }
+        if (tt == SHOT_TICKS - 1)
+        {
+            if (wander != null && wander[2] >= wander[0])
+            {
+                FMLLog.info("[%s] AUTOTEST scope sight %s: centre %.0f,%.0f of %dx%d, wander %.0f x %.0f px",
+                            DecimationWorldGen.MODID, SCOPE_SIGHTS[sight].isEmpty() ? "integrated" : SCOPE_SIGHTS[sight],
+                            (wander[0] + wander[2]) / 2, (wander[1] + wander[3]) / 2, mc.displayWidth,
+                            mc.displayHeight, wander[2] - wander[0], wander[3] - wander[1]);
+            }
+            String name = "scope_" + mc.displayWidth + "x" + mc.displayHeight + "_"
+                + (SCOPE_SIGHTS[sight].isEmpty() ? "integrated" : SCOPE_SIGHTS[sight]) + ".png";
+            net.minecraft.util.ScreenShotHelper.saveScreenshot(mc.mcDataDir, name, mc.displayWidth, mc.displayHeight,
+                                                               mc.getFramebuffer());
+            FMLLog.info("[%s] AUTOTEST scope shot %s", DecimationWorldGen.MODID, name);
+        }
+        return true;
+    }
+
+    /** A rifle without an integrated scope carrying the 4x sight attachment. */
     private static net.minecraft.item.ItemStack scopedGun()
+    {
+        return scopedGun("4x");
+    }
+
+    /** A rifle carrying this sight attachment, or for "" a gun with an integrated scope. */
+    private static net.minecraft.item.ItemStack scopedGun(String sightName)
     {
         net.minecraft.item.Item gun = null, sight = null;
         for (Object o : net.minecraft.item.Item.itemRegistry)
         {
             net.minecraft.item.Item item = (net.minecraft.item.Item) o;
-            if (gun == null && net.decimation.fixes.Deci.isGun(item) && !net.decimation.fixes.Deci.hasIntegratedScope(item))
+            if (gun == null && net.decimation.fixes.Deci.isGun(item)
+                && net.decimation.fixes.Deci.hasIntegratedScope(item) == sightName.isEmpty())
             {
                 gun = item;
             }
-            if (net.decimation.fixes.Deci.isAttachment(item) && "4x".equals(net.decimation.fixes.Deci.attachmentName(item)))
+            if (net.decimation.fixes.Deci.isAttachment(item) && sightName.equals(net.decimation.fixes.Deci.attachmentName(item)))
             {
                 sight = item;
             }
         }
         net.minecraft.item.ItemStack st = new net.minecraft.item.ItemStack(gun);
         st.stackTagCompound = new net.minecraft.nbt.NBTTagCompound();
-        String name = net.minecraft.item.Item.itemRegistry.getNameForObject(sight);
-        st.stackTagCompound.setString("sightAttach", name.substring(name.indexOf(':') + 1));
+        String name = sight == null ? "none" : net.minecraft.item.Item.itemRegistry.getNameForObject(sight);
+        if (sight != null)
+        {
+            st.stackTagCompound.setString("sightAttach", name.substring(name.indexOf(':') + 1));
+        }
         FMLLog.info("[%s] AUTOTEST scope: gun %s, sight %s", DecimationWorldGen.MODID,
                     net.minecraft.item.Item.itemRegistry.getNameForObject(gun), name);
         return st;
