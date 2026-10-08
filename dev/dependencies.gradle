@@ -91,6 +91,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("scope")) {
         jvmArgs("-Ddeciworldgen.autotest.scope=true")
     }
+    // -Pscopeonly: the scope test alone in the last autotest world (no new world, no server checks)
+    if (project.hasProperty("scopeonly")) {
+        jvmArgs("-Ddeciworldgen.autotest.scopeonly=true")
+    }
     // -Pflats: interiors of 3 apartment blocks (flat_<n>.png)
     if (project.hasProperty("flats")) {
         jvmArgs("-Ddeciworldgen.autotest.flats=true")

@@ -351,6 +351,17 @@ not something we introduced or need to fix) see `documentation.md`.
     the sight 6..25 px (normal weapon lag). Java 8 trap: Javassist on a
     newer JDK compiled FloatBuffer.flip() with the Java 9 return type
     (NoSuchMethodError in game): call it through java.nio.Buffer.
+  - v0.28.3 (user asked for a faster, more efficient way): the copy now
+    covers only the glass's last measured box plus a margin (whole frame
+    while the zoom changes), into a texture allocated once per window size
+    (glCopyTexSubImage2D); GL buffers allocated once; the glass is measured
+    every 8th frame (every 2nd while a new sight is learned: 10 settled
+    samples averaged, zoom held at 1.5x up to 1.5 s, which also fixed the
+    integrated aug scope learning a still moving pose). Tried and dropped:
+    a depth only glass drawn before the body (no copy at all): attachment
+    glasses are drawn AFTER the gun body, so its front sight showed in the
+    glass, and the integrated scope stayed grey. Checked all 10 (5 sights x
+    2 windows) centred and see-through, docs/shots/scope_v0.28.3.
 - **Measured** (`./gradlew runClient -Pautotest -Pscope`, dev client,
   unlimited fps, 4x on an ak74): picture in picture empty hand 85..103,
   held 45..51, aiming 37..44; view zoom empty hand 70..92, held 64..76

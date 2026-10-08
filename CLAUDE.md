@@ -523,6 +523,10 @@ of the last session:
   centre (learned per gun + scope), mouse slowdown; `-Pscope` also shoots
   every sight in two window sizes. Javassist snippets: compile against
   Java 8 signatures (cast to java.nio.Buffer before flip()).
+  v0.28.3: glass copy limited to the glass box, buffers once.
+  `./gradlew runClient -Pautotest -Pscopeonly` (in dev/): the scope test
+  alone in the last autotest world (no new world, no server checks, noon
+  forced), about 3.5 min; `-Pscope` = full autotest + scope test.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors, user question
   2026-10-08). The game loads Decimation's obfuscated classes, so the

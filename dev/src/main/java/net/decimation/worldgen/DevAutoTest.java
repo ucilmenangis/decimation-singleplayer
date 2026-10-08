@@ -57,6 +57,13 @@ public class DevAutoTest
         if (!launched && mc.theWorld == null && mc.currentScreen != null && clientTicks > 100)
         {
             launched = true;
+            if (SCOPE_ONLY && new File(mc.mcDataDir, "saves/" + SAVE).isDirectory())
+            {
+                // -Pscopeonly: reuse the last autotest world, no server checks (about 1 min instead of 4)
+                FMLLog.info("[%s] AUTOTEST scope only: opening %s", DecimationWorldGen.MODID, SAVE);
+                mc.launchIntegratedServer(SAVE, SAVE, null);
+                return;
+            }
             if (STUDY != null)
             {
                 // open a copied reference map as it is (no tests, no new world)
@@ -77,6 +84,10 @@ public class DevAutoTest
         if (launched && mc.theWorld != null && !requested && ++worldTicks > 100)
         {
             requested = true; // the server tick picks this up
+            if (SCOPE_ONLY)
+            {
+                finished = true; // straight to the scope test
+            }
         }
         if (finished && SCOPE && !scopeDone && scopeTest(mc))
         {
@@ -97,7 +108,8 @@ public class DevAutoTest
     // scope held, and aiming through it, plus the FOV zoom and a screenshot
     // (scope_<pip|zoom>.png). Run once per config/deciworldgen_scope.cfg
     // setting to compare Decimation's picture in picture scope with the zoom.
-    private static final boolean SCOPE = "true".equals(System.getProperty(PROPERTY + ".scope"));
+    private static final boolean SCOPE_ONLY = "true".equals(System.getProperty(PROPERTY + ".scopeonly"));
+    private static final boolean SCOPE = SCOPE_ONLY || "true".equals(System.getProperty(PROPERTY + ".scope"));
     private static final int SCOPE_PHASE = 400;
     private int scopeTicks;
     private final float[] scopeFps = new float[4];
@@ -125,6 +137,7 @@ public class DevAutoTest
             mc.gameSettings.hideGUI = false; // hideGUI also hides the hand (gun and scope)
             sp.capabilities.isFlying = true;
             sp.setPositionAndUpdate(8.5, 72, 40.5);
+            sp.worldObj.setWorldTime(6000); // noon: a reused world (-Pscopeonly) may be at night
         }
         mc.thePlayer.capabilities.isFlying = true;
         mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = 180;

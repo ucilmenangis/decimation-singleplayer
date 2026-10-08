@@ -38,13 +38,14 @@ import net.minecraftforge.common.config.Configuration;
  * renderHand itself; renderHand applies the same cameraZoom scale, so the gun
  * zooms with the world.
  *
- * Scope glass: Decimation draws the scope texture on the glass part; behind
- * the glass the scope body is solid. Instead of a second world render, the
- * whole finished world frame is copied into that texture after the world and
- * before the hand (RenderWorldLastEvent), and PatchScope makes the glass map
- * it by its own screen position (projective texturing), so the glass is
- * see-through at any window size, aspect and zoom. (v0.28.1 copied a centre
- * square sized by a guess and was misaligned in a large window.)
+ * Scope glass: behind the glass the scope body is solid. After the world
+ * and before the hand (RenderWorldLastEvent) the part of the frame under the
+ * glass (its last measured box plus a margin; the whole frame while the zoom
+ * changes) is copied into the scope texture, allocated once per window size;
+ * the patched glass maps it by its own screen position, so it is
+ * see-through at any window size and zoom and hides the gun's own front
+ * sight behind it. (A depth only glass without any copy failed: attachment
+ * glasses are drawn after the gun body.)
  *
  * Sight on the screen centre: shots go to the screen centre, but Decimation's
  * aiming pose leaves the eyepiece a little off it, and zooming about the
@@ -132,9 +133,10 @@ public class ScopeZoom
     private double shiftX, shiftY;
     /**
      * Sight position per gun + scope + window aspect ("item|sight|aspect"): the glass centre without
-     * zoom and offset (normalised device coordinates), learned once the aim
-     * pose has settled and then averaged (Decimation's weapon sway averages
-     * out). Kept for the session, so later aims are centred at once.
+     * zoom and offset (normalised device coordinates) and the number of
+     * samples behind it, learned once the aim pose has settled and averaged
+     * (Decimation's weapon sway averages out). Kept for the session, so later
+     * aims are centred at once.
      */
     private final java.util.Map<String, double[]> sights = new java.util.HashMap<String, double[]>();
     private long lastGlass;
@@ -162,12 +164,21 @@ public class ScopeZoom
             return 1f;
         }
         // first aim with this gun + scope: stay low (the glass fits the screen)
-        // until its sight position is learned, at most 0.8 s
-        if (!sights.containsKey(sightKey(held)) && System.nanoTime() - aimStart < 800_000_000L)
+        // until its sight position is learned, at most 1.5 s
+        if (!learned(sightKey(held)) && System.nanoTime() - aimStart < 1_500_000_000L)
         {
             return Math.min(mag, 1.5f);
         }
         return mag;
+    }
+
+    /** Settled samples needed before a sight position is trusted for zooming in. */
+    private static final int LEARN = 10;
+
+    private boolean learned(String key)
+    {
+        double[] s = sights.get(key);
+        return s != null && s[2] >= LEARN;
     }
 
     private String sightKey(ItemStack held)
@@ -204,6 +215,10 @@ public class ScopeZoom
         }
         wasAiming = aiming;
         float target = mc.theWorld != null ? targetZoom(mc) : 1f;
+        if (target <= 1f)
+        {
+            Deci.setScopeGlassEvery(7); // not aiming: measure rarely
+        }
         // ease about 0.15 s, in log space so 1x -> 8x feels as quick as 1x -> 2x
         double lz = Math.log(zoom), lt = Math.log(target);
         lz += (lt - lz) * (1 - Math.exp(-dt * 18));
@@ -282,6 +297,9 @@ public class ScopeZoom
     {
         ItemStack held = mc.thePlayer != null ? mc.thePlayer.getHeldItem() : null;
         double[] sight = held != null && Deci.isGun(held.getItem()) ? sights.get(sightKey(held)) : null;
+        // measure often while a sight is being learned, rarely once it is known
+        Deci.setScopeGlassEvery(held != null && Deci.isGun(held.getItem()) && targetZoom(mc) > 1f
+                                && (sight == null || sight[2] < LEARN) ? 1 : 7);
         if (sight == null || zoom <= 1.0)
         {
             shiftX = shiftY = 0;
@@ -294,13 +312,13 @@ public class ScopeZoom
 
     /**
      * After the hand was drawn: a new glass sample (the patched glass
-     * measures every 4th frame, during this very draw) was taken with this
+     * measures every 8th frame, during this very draw) was taken with this
      * frame's zoom and shift, so its unshifted position is exact. Samples
      * whose box touches the screen edge are skipped (clipped, e.g. an 8x
-     * glass), and a position is only trusted after 3 samples in a row agree
-     * (the gun swings in from the hip first: an early sample once pushed the
-     * glass off screen for good). Then averaged slowly into the per gun +
-     * scope entry.
+     * glass), and only samples after 3 in a row agree count (the gun swings
+     * in from the hip first: an early sample once pushed the glass off screen
+     * for good). The first LEARN settled samples are averaged (measured every
+     * 2nd frame, zoom held at 1.5x meanwhile), later ones slowly.
      */
     private void learnSight(Minecraft mc)
     {
@@ -332,14 +350,19 @@ public class ScopeZoom
         double[] sight = sights.get(key);
         if (sight == null)
         {
-            sights.put(key, new double[] {sx, sy});
+            sights.put(key, new double[] {sx, sy, 1});
+            return;
         }
-        else
-        {
-            sight[0] += (sx - sight[0]) * 0.05;
-            sight[1] += (sy - sight[1]) * 0.05;
-        }
+        // running mean over the first LEARN settled samples, then a slow average
+        double a = sight[2] < LEARN ? 1.0 / (sight[2] + 1) : 0.05;
+        sight[0] += (sx - sight[0]) * a;
+        sight[1] += (sy - sight[1]) * a;
+        sight[2]++;
     }
+
+
+    /** Size the scope texture was allocated at (reallocated when the window changes). */
+    private int texW, texH;
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent e)
@@ -349,8 +372,30 @@ public class ScopeZoom
         {
             return;
         }
-        // whole frame: the patched glass maps it by screen position (projective texturing)
+        int w = mc.displayWidth, h = mc.displayHeight;
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, Deci.scopeTexture());
-        GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, 0, 0, mc.displayWidth, mc.displayHeight, 0);
+        if (w != texW || h != texH)
+        {
+            GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, 0, 0, w, h, 0);
+            texW = w;
+            texH = h;
+            return;
+        }
+        int x0 = 0, y0 = 0, x1 = w, y1 = h;
+        float[] g = Deci.scopeGlassOnScreen();
+        if (g != null && Math.abs(zoom - targetZoom(mc)) < 0.01)
+        {
+            // the box is up to 8 frames old: a margin for sway and turning
+            float[] box = Deci.scopeGlassBox();
+            int m = 16 + h / 20;
+            x0 = Math.max(0, (int) box[0] - m);
+            y0 = Math.max(0, (int) box[1] - m);
+            x1 = Math.min(w, (int) box[2] + m);
+            y1 = Math.min(h, (int) box[3] + m);
+        }
+        if (x1 > x0 && y1 > y0)
+        {
+            GL11.glCopyTexSubImage2D(GL11.GL_TEXTURE_2D, 0, x0, y0, x0, y0, x1 - x0, y1 - y0);
+        }
     }
 }

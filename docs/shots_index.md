@@ -422,3 +422,10 @@ the ramp looking south at the city; 6 aerial over the north band.
   reticle sits on the screen centre in all 10; the glass is see-through
   (road and trees continue across its edge); 8x and the integrated aug
   scope fill the screen with the glass, ring edges at the sides.
+
+## scope_v0.28.3/ (every sight, two windows, region copy, v0.28.3)
+- same layout as scope_v0.28.2 (sheet.png, red cross = screen centre):
+  reticle on the centre in all 10, glass see-through, the gun's front sight
+  no longer visible inside 2x / 4x / 8x glasses. (A depth only glass try
+  showed the front sight post inside the glass and a grey integrated scope:
+  not kept.)
