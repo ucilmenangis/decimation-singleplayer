@@ -13,6 +13,9 @@ schematic and OUT_DIR/index.json:
   {"buildings": [{"file", "pack", "name", "styles": {style: factor},
                   "cx", "cz" (chunks), "groundY", "height"}],
    "stairs": {"<pack>:<style>": [file, ...]},
+   "highways": {"open" | "open_bi" | "bridge" | "bridge_bi" | "tunnel" |
+                "tunnel_bi": [file, ...]} (from the first pack whose world
+                style lists highway parts; repeats = weight),
    "names": {"<id>": "<block name>"}}
 Bedrock (id 7) marks "keep the world" (cellar padding of multi building
 chunks with fewer cellars). Schematic ids are the ids of REGISTRY_WORLD below, "names" maps them back
@@ -51,7 +54,15 @@ def convert(pack, ns, ref, ids):
     return rasterise(cols, len(grid), max(len(r) for r in grid), ids) + (depth, len(grid), max(len(r) for r in grid))
 
 
-def rasterise(cols, cx, cz, ids):
+def road_override(state):
+    """Highway decks: black sandstone is the asphalt (plain translation gives beige sandstone)."""
+    name = state.split("[")[0]
+    if name == "biomesoplenty:black_sandstone":
+        return ("deci:BlockRoad", 0)
+    return lt.translate(state)
+
+
+def rasterise(cols, cx, cz, ids, translate=None):
     W, L = cx * 16, cz * 16
     H = max(len(c) for c in cols.values())
     blocks = bytearray(W * H * L)
@@ -63,7 +74,7 @@ def rasterise(cols, cx, cz, ids):
                 for x, state in enumerate(row):
                     if state is None:
                         continue
-                    res = ("minecraft:bedrock", 0) if state == "SKIP" else lt.translate(state)
+                    res = ("minecraft:bedrock", 0) if state == "SKIP" else (translate or lt.translate)(state)
                     if res is None or res[0] == "skip":
                         continue
                     bid = ids.get(res[0])
@@ -116,6 +127,28 @@ def main():
                 stairs.extend([key + "/" + fname + ".schematic"] * max(1, int(e.get("factor", 1))))
             if stairs:
                 index["stairs"]["%s:%s" % (key, style)] = stairs
+        # highway parts of the pack's world style (Lost Cities partselector "highways")
+        wsdir = os.path.join(data, ns, "lostcities", "worldstyles")
+        for f in sorted(os.listdir(wsdir)) if os.path.isdir(wsdir) and "highways" not in index else []:
+            hw = json.load(open(os.path.join(wsdir, f))).get("parts", {}).get("highways")
+            if not hw:
+                continue
+            index["highways"] = {}
+            for kind, refs in hw.items():
+                files = []
+                for ref in refs:
+                    fname = ref.split(":")[-1].replace("/", "__")
+                    path = os.path.join(out, key, fname + ".schematic")
+                    if not os.path.exists(path):
+                        sl = lc.part_slices(pack, ref, {}, {}, pack.palette(ns + ":common"))
+                        if not sl:
+                            continue
+                        W, H, L, b, a, m = rasterise({(0, 0): sl}, 1, 1, ids, road_override)
+                        lc.write_schematic(path, W, H, L, b, a, m)
+                    files.append(key + "/" + fname + ".schematic")
+                index["highways"][kind] = files
+            print("%s: highway parts %s" % (key, {k: len(v) for k, v in index["highways"].items()}))
+            break
         done = 0
         for ref, styles in sorted(wanted.items()):
             fname = ref.split(":")[-1].replace("/", "__")

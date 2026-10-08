@@ -9,6 +9,7 @@ java.util.Random reimplemented). Every column outside the city within EDGE
 each neighbouring pair (both in the band, or one on the city's border
 column) the surface step is counted. Reports the step histogram, the share
 of steps over 1 block, and the worst spots (cliffs). The street level is 64.
+Highway chunks (tools/hwmap.py) are left out.
 """
 import os
 import sys
@@ -80,16 +81,26 @@ def main():
             final[k] = populated(world_dir, *k)
         return final[k]
 
+    roads = {}
+
+    def road(x, z):
+        """Highway chunks level themselves (lamp posts would read as steps)."""
+        import hwmap
+        k = (x >> 4, z >> 4)
+        if k not in roads:
+            roads[k] = hwmap.at(seed, *k)
+        return roads[k]
+
     hist, worst, cols = {}, [], 0
     for x in range((sx - radius) * 16, (sx + radius) * 16):
         for z in range((sz - radius) * 16, (sz + radius) * 16):
-            if band(x, z) != 1 or not done(x, z):
+            if band(x, z) != 1 or not done(x, z) or road(x, z):
                 continue
             cols += 1
             a = top(x, z)
             for nx, nz in ((x + 1, z), (x, z + 1), (x - 1, z), (x, z - 1)):
                 kind = band(nx, nz)
-                if kind == 2 or not done(nx, nz) or (kind == 1 and (nx, nz) < (x, z)):
+                if kind == 2 or not done(nx, nz) or road(nx, nz) or (kind == 1 and (nx, nz) < (x, z)):
                     continue
                 b = top(nx, nz)
                 if a is None or b is None:

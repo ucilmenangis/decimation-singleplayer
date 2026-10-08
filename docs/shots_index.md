@@ -329,3 +329,28 @@ the ramp looking south at the city; 6 aerial over the north band.
   city seen from the ramp, land meets the sidewalk; 6 smooth contours.
 - v0.24.4b (contour wobble): 0 the first terrace now steps in and out;
   rows wander instead of running straight; rest as v0.24.4.
+
+## lc_highway_v0.25.0/ and lc_highway_v0.25.0b/ (highways, seed 1, 8 views, all valid; b = with side ramps, same spots)
+- 0 from the city street (8,67,24) north: the street runs on straight into
+  the highway, hedge median in the distance.
+- 1, 2 on the deck at z -150 north / south: dark asphalt (BlockRoad), leaf
+  hedge median and side hedges, stone wall lamp posts with coal block heads
+  and slab arms; 2 an adboard tower with ladder in the median, low grass
+  slopes beside the road.
+- 3 aerial side view of the 2 bridge chunks (z -112..-97) over a ravine:
+  rails, a crash variant with white blocks.
+- 4 under the bridge looking north west: stone brick pillar, natural stone
+  slope (bridge chunks get no side ramp).
+- 5 deck at z -300 north: bridge over a lake with iron bar rails, a wreck
+  in the lane.
+- 6 the east west highway east of the city (250,68,8) looking east.
+- 7 v0.25.0: aerial, straight highway across the land; v0.25.0b: aerial
+  from the east (36,80,-170): road with lamp arms, graded grass beside it.
+
+## lc_tunnel_v0.25.0/ (highway tunnels, seed 1, 4 views, all valid)
+- 0 x highway at 400,67,8 looking east: road in a cut between graded grass
+  slopes, a lit tunnel portal ahead.
+- 1 aerial over that tunnel: the road disappears under the hill.
+- 2 z highway at z -440 looking north: adboard tower, a short tunnel just
+  before the northern city, towers behind.
+- 3 aerial near the northern city: the highway reaching the city edge.

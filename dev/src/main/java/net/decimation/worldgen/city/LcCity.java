@@ -53,7 +53,8 @@ public final class LcCity
         public Block[] trashBags = new Block[0], cars = new Block[0];
     }
 
-    private StreetProps props = new StreetProps();
+    StreetProps props = new StreetProps();
+    final Highways highways = new Highways(this);
 
     public void setStreetProps(StreetProps p)
     {
@@ -112,6 +113,54 @@ public final class LcCity
                 }
             }
         }
+        highways.populate(world, w);
+    }
+
+    /**
+     * Cuts or fills one column from its natural soil height to target,
+     * keeping the column's own surface block (shared by the city edge and
+     * the highway sides).
+     */
+    static void reshape(World world, int x, int z, int natural, int target)
+    {
+        if (target == natural)
+        {
+            return;
+        }
+        Block surface = world.getBlock(x, natural, z);
+        int surfaceMeta = world.getBlockMetadata(x, natural, z);
+        if (surface == Blocks.air || surface.getMaterial().isLiquid())
+        {
+            return;
+        }
+        Block filler = surface == Blocks.grass || surface == Blocks.mycelium ? Blocks.dirt
+            : surface instanceof net.minecraft.block.BlockFalling ? Blocks.stone : surface;
+        for (int y = natural; y < target; y++)
+        {
+            world.setBlock(x, y, z, filler, 0, 2);
+        }
+        for (int y = target + 1; y <= natural + 12; y++)
+        {
+            Block b = world.getBlock(x, y, z);
+            if (y <= natural || StructureGenerator.clearable(b))
+            {
+                if (b != Blocks.air)
+                {
+                    world.setBlock(x, y, z, Blocks.air, 0, 2);
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+        if (surface instanceof net.minecraft.block.BlockFalling
+            && !world.getBlock(x, target - 1, z).getMaterial().isSolid())
+        {
+            surface = filler;
+            surfaceMeta = 0;
+        }
+        world.setBlock(x, target, z, surface, surfaceMeta, 2);
     }
 
     /** True when the box comes within EDGE of a city cell (the city's ramp may cut it). */
@@ -167,7 +216,7 @@ public final class LcCity
     }
 
     /** Integer hash of a position (every bit usable). */
-    private static long hl(long seed, int x, int z)
+    static long hl(long seed, int x, int z)
     {
         long v = seed ^ (x * 0x9E3779B97F4A7C15L) ^ (z * 0xC2B2AE3D27D4EB4FL);
         v ^= v >>> 31;
@@ -810,6 +859,10 @@ public final class LcCity
             {
                 return;
             }
+            if (Highways.at(world.getSeed(), x >> 4, z >> 4))
+            {
+                return; // the highway levels its own chunk
+            }
             int natural = StructureGenerator.soilTop(world, x, z);
             if (natural < 5 || StructureGenerator.waterAbove(world, x, natural, z))
             {
@@ -823,45 +876,7 @@ public final class LcCity
                 return;
             }
             t = t * t * (3 - 2 * t);
-            int target = ground + (int) Math.round((natural - ground) * t);
-            if (target == natural)
-            {
-                return;
-            }
-            Block surface = world.getBlock(x, natural, z);
-            int surfaceMeta = world.getBlockMetadata(x, natural, z);
-            if (surface == Blocks.air || surface.getMaterial().isLiquid())
-            {
-                return;
-            }
-            Block filler = surface == Blocks.grass || surface == Blocks.mycelium ? Blocks.dirt
-                : surface instanceof net.minecraft.block.BlockFalling ? Blocks.stone : surface;
-            for (int y = natural; y < target; y++)
-            {
-                world.setBlock(x, y, z, filler, 0, 2);
-            }
-            for (int y = target + 1; y <= natural + 12; y++)
-            {
-                Block b = world.getBlock(x, y, z);
-                if (y <= natural || StructureGenerator.clearable(b))
-                {
-                    if (b != Blocks.air)
-                    {
-                        world.setBlock(x, y, z, Blocks.air, 0, 2);
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-            if (surface instanceof net.minecraft.block.BlockFalling
-                && !world.getBlock(x, target - 1, z).getMaterial().isSolid())
-            {
-                surface = filler;
-                surfaceMeta = 0;
-            }
-            world.setBlock(x, target, z, surface, surfaceMeta, 2);
+            reshape(world, x, z, natural, ground + (int) Math.round((natural - ground) * t));
         }
     }
 

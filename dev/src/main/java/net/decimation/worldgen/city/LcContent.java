@@ -75,6 +75,7 @@ public final class LcContent
     private static File dir;
     private static final List<Building> buildings = new ArrayList<Building>();
     private static final Map<String, List<String>> stairs = new HashMap<String, List<String>>();
+    private static final Map<String, List<String>> highways = new HashMap<String, List<String>>();
     private static final Map<Integer, Block> remap = new HashMap<Integer, Block>();
     private static final Map<String, Shape> shapes = new HashMap<String, Shape>();
 
@@ -96,6 +97,13 @@ public final class LcContent
     public static List<String> stairs(String style)
     {
         List<String> l = stairs.get(style);
+        return l != null ? l : new ArrayList<String>();
+    }
+
+    /** Highway part files of a kind: open, open_bi, bridge, bridge_bi, tunnel, tunnel_bi. */
+    public static List<String> highways(String kind)
+    {
+        List<String> l = highways.get(kind);
         return l != null ? l : new ArrayList<String>();
     }
 
@@ -141,8 +149,20 @@ public final class LcContent
                 }
                 stairs.put(e.getKey(), files);
             }
-            FMLLog.info("[deciworldgen] Lost Cities content: %d buildings, %d stairs styles", buildings.size(),
-                        stairs.size());
+            if (o.has("highways"))
+            {
+                for (Map.Entry<String, JsonElement> e : o.getAsJsonObject("highways").entrySet())
+                {
+                    List<String> files = new ArrayList<String>();
+                    for (JsonElement f : (JsonArray) e.getValue())
+                    {
+                        files.add(f.getAsString());
+                    }
+                    highways.put(e.getKey(), files);
+                }
+            }
+            FMLLog.info("[deciworldgen] Lost Cities content: %d buildings, %d stairs styles, %d highway kinds",
+                        buildings.size(), stairs.size(), highways.size());
         }
         catch (Exception e)
         {

@@ -298,9 +298,10 @@ public class StructureGenerator implements IWorldGenerator
         }
 
         int ox = (chunkX << 4) + 8, oz = (chunkZ << 4) + 8;
-        if (lc && net.decimation.worldgen.city.LcCity.nearCity(world.getSeed(), ox, oz, ox + 23, oz + 23))
+        if (lc && (net.decimation.worldgen.city.LcCity.nearCity(world.getSeed(), ox, oz, ox + 23, oz + 23)
+                   || net.decimation.worldgen.city.Highways.near(world.getSeed(), ox, oz, ox + 23, oz + 23)))
         {
-            return; // the city's edge ramp would cut the ground under it
+            return; // the city's edge ramp or a highway would cut the ground under it
         }
         place(world, schematic, ox, oz, turns, SECTOR_NAME[sector], chunkX << 4, chunkZ << 4);
     }

@@ -65,12 +65,64 @@ Cellar padding under multi building chunks with fewer cellars is bedrock
   generateStreetDecorations); floors -cellars..F with the top part at
   floor >= F (BuildingInfo).
 
+## Highways (v0.25.0, `city/Highways.java`)
+
+User choice 8 Oktober 2026 (over fronts / parks, giant buildings,
+interiors). Lost Cities' own bridges are road decks across non city
+chunks between level 0 city streets (BuildingInfo.calculateXBridge); our
+cities fill whole 256 block sectors, so those gaps barely exist. Highways
+between cities do the job instead.
+- Network (pure function of the seed, `tools/hwmap.py` is the Python
+  copy): each region row has one highway chunk row (region start + 0 or 8
+  chunks, by hash). That is always a city street row, superblocks
+  included (they sit on even cells). Where the row leaves a city region and
+  the next city region lies at most MAX_GAP = 3 non city regions away,
+  every chunk between is an east west highway. Region columns the same
+  way (north south). Both on one chunk: a crossing part. Seed 1: x row
+  chunk 0 from x 256 to 511, z column chunk 0 from z -512 to -1.
+- Deck at DECK = 64 (city level 0 street surface): parts are placed with
+  slice 0 (deck underside) at 63, so the road (slice 1) is flush with the
+  city street it continues.
+- Kind per chunk, decided by the first slice from the terrain it can see
+  (5 x 5 soil samples) and stored in StructureData as "hw_X_Z": TUNNEL when
+  the median is 6+ above the deck, BRIDGE over water or ground more than 2
+  below, else OPEN. Parts from the pack's world style "highways" selector
+  (dc modern: 13 open, 13 bridge with adboard / sideblock / crash
+  variants, tunnel, the 3 _bi crossings). Open and bridge chunks clear 20
+  blocks above the deck; open chunks fill dirt down to the ground; bridges
+  get 2 x 2 stone brick pillars at both rails of every chunk down to solid
+  ground (through water). Wrecks in lanes 4 / 11, 8% each per chunk.
+- Side ramps: land beside OPEN chunks ramps from the deck to the natural
+  height over 3..8 blocks (2 per block of difference, smoothstep, shared
+  `LcCity.reshape`); columns within the city edge band are the city's.
+  The city edge ramp skips highway chunks.
+- Small and large sites within 4 blocks of a highway chunk are dropped.
+- Pack: `tools/lcpack.py` exports the highway parts into index.json
+  "highways"; the deck asphalt (Biomes O' Plenty black sandstone) becomes
+  deci:BlockRoad there (plain translation gave beige sandstone).
+- Checked (seed 1): 13 highway chunks in the server spawn area (11 open,
+  2 bridges over a ravine), more in the client run (7 bridges, 5
+  tunnels); side profile at z -128 climbs 4,5,5,6,6,7,7 above 60 from the
+  road; edge band still 0.3% steps over 1 block; autotest all pass. Shots
+  lc_highway_v0.25.0(b), lc_tunnel_v0.25.0.
+- Open: a tunnel right at a city's edge ends in the graded edge band
+  (reads as a short underpass); bridge chunks get no side ramp (a hill
+  next to the deck stays a wall); highways only join cities in the same
+  region row / column (no diagonal links); lamp heads translate to coal
+  blocks (faithful to the data `[not verified]` against 1.20 look).
+
 ## Verified (seed 1, Decimation world type, fresh server world)
 
 119 converted buildings placed in the spawn area (102 current, 17
 legacy), levels 64 and 70, no generator errors. Shots
 `docs/shots/lc_city_v0.24/` (docs/shots_index.md): streets level with
 building fronts, several stairs designs joining levels.
+
+## User review
+
+- 8 Oktober 2026, 0.24.4 tested in Prism: "i love it for oneshot
+  progress". Next chosen: highways between cities (over the bridge,
+  fronts / parks, giant buildings and interior options).
 
 ## Open
 
@@ -89,7 +141,8 @@ building fronts, several stairs designs joining levels.
   (v0.24.3) -> 0.3% (v0.24.4); the 3 block steps left are natural hills
   and tree tops. It still reads as 1 block grass terraces from the street
   (shots lc_edge_v0.24.4b), which is plain Minecraft terrain.
-- Bridges, building fronts, parks, highways of the packs are not used.
+- Building fronts, parks of the packs are not used (highways since
+  v0.25.0).
 - Superblocks (v0.24.2): 30% of aligned 2 x 2 city cell groups (all 4
   city) become one block: streets only on its first chunk row / column,
   7 x 7 building chunks, one level (the lowest of the 4), a landmark

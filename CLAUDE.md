@@ -507,6 +507,8 @@ of the last session:
   v0.24.4: city edge ramp up to 24 wide, rounded corners, no site inside
   it; `tools/edgescan.py WORLD` checks it. Study mode needs BOTH
   `-Pautotest -Pstudy=...` (study alone sits at the menu).
+  v0.25.0: highways between cities (docs/city_engine.md "Highways",
+  `city/Highways.java`, `tools/hwmap.py SEED R` prints the network).
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in
