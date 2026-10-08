@@ -359,8 +359,82 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
 - Relates to "3 new mobs" (spec-ops military, weapon list there) and
   "More clothing variety" below; NPC shots now draw correct tracers
   (bug.md, fixed 9 Oktober 2026), and NPC gunfire respects armor (v0.9.0).
-- `[not verified]` which registry names PKM / M240 / militia guns have;
-  check `deci.aD.k` / deobf ItemRegistry when starting.
+- Registry names checked 9 Oktober 2026 (level.dat ItemData): every gun
+  and armor piece registers under its plain name (`deci:pkm`, `deci:sv98`,
+  `deci:m240`, `deci:rpk74`, `deci:akm`, `deci:marineHelm`,
+  `deci:spetsnazVest`, `deci:juggernautVest`...), so our code finds them
+  with `GameRegistry.findItem("deci", name)`, no obfuscated names.
+
+#### Step 1 design: NPC tiers (started 9 Oktober 2026, user: "Bandits +
+military first, hard but fair")
+How Decimation's armed NPCs work today (read from deobf source):
+- BanditEntity (deci.ag.a, base of Soldier deci.ag.l, Hazmat deci.ag.c,
+  Soviet deci.ag.m) rolls its gun and armor in the CONSTRUCTOR, on server
+  and client separately. The gun is a plain field, put in the held slot
+  every tick on both sides and never saved: the client shows its own
+  random gun, and a reloaded NPC rolls a new one. Armor goes through
+  vanilla equipment (saved, sent to the client on tracking start).
+  Backpack / mask / vest are plain unsynced fields (client random).
+- Health 20 for all of them. Shots: 75% hit, gun damage / 8 against
+  non infected, delay 5..20 ticks (soldier 2..5), "human" source without
+  the shooter.
+- Player shots hit NPCs for the full gun damage: Decimation applies armor
+  multipliers only when the victim is a player, so NPC armor is
+  cosmetic. Runtime multipliers are the originals x 0.65 (our armor buff),
+  a full bandit set would be x 0.17: far too strong to reuse for NPCs.
+- Soldiers attack players with humanity under 50 only. Soviets (spetsnaz
+  set, AK74 / AKS74U / AK12) are hostile to every player and every non
+  Soviet human: Decimation's own enemy military. Bandit, Soldier, Soviet,
+  Hazmat each spawn naturally at weight 1 in every biome (EmptyRegistryJ).
+
+Design (our code, `net.decimation.fixes.NpcLoadouts` + `MilitarySpawner`):
+- Every armed NPC gets a tier when it first joins a world (server), stored
+  in its entity data (ForgeData "deciworldgen_tier", saved with it): gear
+  (all 4 armor slots, so the client's own roll never shows), gun, max
+  health, shot delay, and the share of a player's gun damage it takes
+  (LivingHurtEvent, source "gunDeci"). Reloaded NPCs get gun and delay
+  back from the stored data.
+- The chosen gun goes to the client through data watcher slot 26 (gun
+  registry name, added in EntityConstructing), applied on the client each
+  tick, so the gun seen, its flash and sound match what shoots.
+- Tiers (defaults, config `deciworldgen_npc.cfg`):
+  bandit light (more clothing mixes, pistols / SMGs / old rifles), bandit
+  medium (militia set, AKM / SKS / RPK / FAL / G3 class), bandit heavy
+  (militia + steel helmet, PKM / RPK74 / RPD / SV98 / SVD); soldiers keep
+  their side but get camo sets and NATO rifles; Soviets are the enemy
+  military tier (spetsnaz set, AK74 family, PKP / RPK74 / SVD, more
+  health, takes less damage). Machine guns fire faster, sniper rifles
+  slower. Military areas (our MIL sectors and MILITARY zones) shift
+  bandits to the heavier tiers.
+- MilitarySpawner: near a player standing in a military area, groups of
+  2 to 3 enemy military spawn 24 to 48 blocks away now and then, up to a
+  cap nearby (not in peaceful).
+- Juggernaut: step 2, same tier system (juggernaut set, PKM / M240 /
+  Barrett, much more health).
+
+Step 1 DONE in v0.30.0 (9 Oktober 2026), `fixes/NpcLoadouts`,
+`fixes/MilitarySpawner`, `fixes/NpcKind`, Deci npcKind / npcGun /
+setNpcGun / setNpcShotDelay / newSoviet; dev test mode `npc`
+(`python3 tools/devtest.py npc`, about 70 s), all PASS:
+- 60 bandits outside / inside a military sector: every one tiered with 4
+  armor pieces, the tier's gun and health; medium + heavy 22..29 of 60
+  outside, 38..47 inside. 12 soldiers, 12 Soviets: same checks.
+- A player's 10 damage gun hit takes 10.0 (bandit light), 7.0 (bandit
+  heavy), 6.0 (military).
+- Client shows the server's gun for all 14 lineup NPCs (before: each side
+  rolled its own). Military spawner places 2 to 3 tier military NPCs.
+- checks + tracer modes still PASS (tracer 3.6 deg mean).
+- One soldier came out untiered in the first run only (not reproduced in
+  3 runs); the test now logs the reason if it happens `[not explained]`.
+Defaults (config/deciworldgen_npc.cfg): bandit light 20 hp, takes 100%,
+weight 55 (military 25), Decimation's 5..20 tick delay; bandit medium 26
+hp, 80%, weight 35 (45); bandit heavy 32 hp, 70%, weight 10 (30);
+soldiers 24 hp, 80%, delay 2..6, camo marine / forest / urban / black;
+military (Soviets) 40 hp, 60%, delay 3..9. Machine guns 3..8 ticks,
+sniper rifles 25..45. Spawner: every 400 ticks per player in a military
+sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
+Not seen by the user in game yet `[not verified]`; balance numbers are
+first guesses for "hard but fair".
 
 ### More zombie variants, 60 round magazines, NPC bullet impacts (9 Oktober 2026, "later")
 - More infected / zombie variants.

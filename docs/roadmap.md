@@ -35,16 +35,11 @@ or `[not decided]`.
 
 ## NPCs and combat (user plan, "later")
 
-1. **Enemy military**: medium to high armor, rifles or heavy weapons,
-   spawning in military buildings and areas.
-2. **Enemy juggernaut**: full juggernaut armor, machine guns (PKM, M240, any
+1. **Enemy juggernaut**: full juggernaut armor, machine guns (PKM, M240, any
    in the registry) or a Barrett with very high (.50 BMG) damage.
-3. **Stronger bandits**: PKM, SV98, militia guns of the medium to heavy
-   class, medium to heavy armor.
-4. **NPC bullet impacts** on blocks (today only player shots make them).
-5. **More zombie variants.**
-6. Civilian NPC; traders that spawn on their own and walk; more clothing
-   variety on bandits and soldiers.
+2. **NPC bullet impacts** on blocks (today only player shots make them).
+3. **More zombie variants.**
+4. Civilian NPC; traders that spawn on their own and walk.
    All in new_feature.md ("New hostile NPCs and stronger bandits", "More
    zombie variants...", "3 new mobs", "More clothing variety").
 
@@ -77,3 +72,8 @@ or `[not decided]`.
 - v0.29.0 highway polish: L links for cities only reachable diagonally,
   hedges on crossing parts, no tunnels in city edge bands, side ramps
   beside bridges (docs/city_engine.md "Highways").
+- v0.30.0 NPC tiers: stronger bandits (3 tiers, heavier in military
+  sectors, more clothing mixes), soldier camo sets, Soviets as the enemy
+  military with their own group spawner in military sectors, NPC armor
+  now counts against player shots (tier share), client shows the
+  server's NPC gun (new_feature.md "Step 1 design: NPC tiers").

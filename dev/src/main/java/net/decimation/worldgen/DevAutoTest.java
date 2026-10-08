@@ -98,6 +98,7 @@ public class DevAutoTest
         if (name.equals("tracer")) return new TracerTest();
         if (name.equals("props")) return new PropsTest();
         if (name.equals("cityfps")) return new CityFpsTest();
+        if (name.equals("npc")) return new net.decimation.worldgen.devtest.NpcTest();
         return null;
     }
 

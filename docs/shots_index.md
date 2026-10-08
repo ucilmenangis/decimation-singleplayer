@@ -473,3 +473,12 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   down on the corner (1160,100,1416, top of image = south): the two runs
   meet in the crossing square, outer sides face open land, side cuts
   graded. 2 the bridge chunk from the east: rails, graded slopes.
+
+## npc_tiers_v0.30.0/ (dev test mode npc, reused autotest world, lineups facing the camera)
+- sheet_npc.png: 0 six bandits (light, light, medium, medium, heavy,
+  heavy): red cap, hoodies, militia coats and helmets, rifles and an MG in
+  hand, all different looks. 1 four soldiers: marine, forest, urban and
+  black camo, helmets or hat, rifles. 2 the Soviet enemy military in
+  spetsnaz gear with AK family rifles, one prone and firing (muzzle
+  flash). An earlier run (not kept) was blocked by Decimation mechs that
+  had gathered in the reused world; the test now clears other mobs.

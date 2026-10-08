@@ -353,6 +353,44 @@ public final class Deci
         return new deci.ag.a(world);
     }
 
+    /**
+     * Which armed human an entity is (most specific class first): BanditEntity
+     * deci.ag.a, its subclasses SoldierEntity deci.ag.l, HazmatSoldierEntity
+     * deci.ag.c, SovietEntity deci.ag.m. Null for anything else.
+     */
+    public static NpcKind npcKind(net.minecraft.entity.Entity e)
+    {
+        if (e instanceof deci.ag.c) return NpcKind.HAZMAT;
+        if (e instanceof deci.ag.l) return NpcKind.SOLDIER;
+        if (e instanceof deci.ag.m) return NpcKind.SOVIET;
+        if (e instanceof deci.ag.a) return NpcKind.BANDIT;
+        return null;
+    }
+
+    /** A new SovietEntity (deci.ag.m). */
+    public static net.minecraft.entity.EntityLiving newSoviet(net.minecraft.world.World world)
+    {
+        return new deci.ag.m(world);
+    }
+
+    /** BanditEntity.getGun (eD): the gun it holds and shoots with. */
+    public static net.minecraft.item.ItemStack npcGun(net.minecraft.entity.Entity npc)
+    {
+        return ((deci.ag.a) npc).eD();
+    }
+
+    /** BanditEntity.setGun (k); its onUpdate puts it in the held slot every tick. */
+    public static void setNpcGun(net.minecraft.entity.Entity npc, net.minecraft.item.ItemStack gun)
+    {
+        ((deci.ag.a) npc).k(gun);
+    }
+
+    /** BanditEntity.setShotDelayRange (s): ticks between shots, min .. max. */
+    public static void setNpcShotDelay(net.minecraft.entity.Entity npc, int min, int max)
+    {
+        ((deci.ag.a) npc).s(min, max);
+    }
+
     /** BanditEntity.shootAt (e): fires when its cooldown has run out. */
     public static void banditShootAt(net.minecraft.entity.Entity bandit, net.minecraft.entity.EntityLivingBase target)
     {

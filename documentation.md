@@ -116,6 +116,13 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
     not just a number tweak - left alone for now per user's call to keep this
     scoped.
 
+- **NPC tiers (v0.30.0, our deciworldgen jar)**: bandits, soldiers and
+  Soviets get a tier when they spawn (gear, gun, health, fire rate, share
+  of player gun damage they take); Soviets are the enemy military and also
+  spawn in groups in military sectors. Values and how to change them:
+  `config/deciworldgen_npc.cfg`, details in new_feature.md "Step 1 design:
+  NPC tiers". NPC guns now look the same on the client as on the server.
+
 ## Bug and feature tracking
 
 Dated history moved out of this file - see `bug.md` (fixed/open/pending bugs)

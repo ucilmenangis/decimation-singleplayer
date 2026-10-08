@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.29.0",
+     version = "0.30.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -54,6 +54,9 @@ public class DecimationWorldGen
 
     private final List<Schematic> schematics = new ArrayList<Schematic>();
     private final List<Schematic> largeSchematics = new ArrayList<Schematic>();
+
+    private net.decimation.fixes.NpcLoadouts npcLoadouts;
+    private net.decimation.fixes.MilitarySpawner militarySpawner;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -91,6 +94,10 @@ public class DecimationWorldGen
             }
             props.save();
         }
+
+        // bandit / soldier / Soviet tiers (both sides: the client applies the synced gun)
+        npcLoadouts = new net.decimation.fixes.NpcLoadouts(event.getModConfigurationDirectory());
+        militarySpawner = new net.decimation.fixes.MilitarySpawner(event.getModConfigurationDirectory());
 
         File dir = new File(event.getModConfigurationDirectory(), "decimation_worldgen");
         if (!dir.isDirectory() && !dir.mkdirs())
@@ -235,6 +242,13 @@ public class DecimationWorldGen
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new net.decimation.fixes.ArmorGunfireHandler());
         FMLLog.info("[%s] armor vs NPC gunfire fix registered", MODID);
+
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(npcLoadouts);
+        if (militarySpawner.enabled())
+        {
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(militarySpawner);
+        }
+        FMLLog.info("[%s] NPC tiers and military spawner registered", MODID);
 
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new net.decimation.fixes.HumanityKillHandler());

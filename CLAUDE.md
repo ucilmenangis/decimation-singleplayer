@@ -575,6 +575,10 @@ of the last session:
   crossings, no tunnels in city edge bands, side ramps beside bridges);
   docs/city_engine.md "Highways". `servertest.py ... pregen=x,z,r` makes
   a far away spot (an L link from `tools/hwmap.py`) checkable.
+  v0.30.0: NPC tiers (`fixes/NpcLoadouts`, `MilitarySpawner`, config
+  deciworldgen_npc.cfg; new_feature.md "Step 1 design: NPC tiers"):
+  Decimation rolls NPC guns per side and never syncs them, so our gun goes
+  to the client via data watcher slot 26. Dev test mode `npc`.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,
