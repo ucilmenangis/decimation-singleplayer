@@ -187,6 +187,15 @@ public class NpcTest extends DevTestMode
             npc.setDead();
         }
 
+        // factions (PatchFactions): Soviets leave Soviets alone, everyone else fights them
+        EntityLiving s1 = Deci.newSoviet(world), s2 = Deci.newSoviet(world), b1 = Deci.newBandit(world),
+            so1 = Deci.newSoldier(world);
+        boolean[] got = {Deci.npcHostileTo(s1, s2), Deci.npcHostileTo(s1, b1), Deci.npcHostileTo(s1, so1),
+                         Deci.npcHostileTo(b1, s1), Deci.npcHostileTo(so1, s1)};
+        boolean[] want = {false, true, true, true, true};
+        DevTestResults.check(name(), "factions soviet>soviet, soviet>bandit, soviet>soldier, bandit>soviet, soldier>soviet",
+                             java.util.Arrays.toString(got), java.util.Arrays.equals(got, want), java.util.Arrays.toString(want));
+
         // every tier's spawn egg spawns that tier
         net.minecraft.item.Item egg = cpw.mods.fml.common.registry.GameRegistry.findItem("deciworldgen", "npc_egg");
         int eggs = 0, eggOk = 0;
@@ -356,13 +365,21 @@ public class NpcTest extends DevTestMode
         for (int i = 0; i < names.length; i++)
         {
             NpcLoadouts.Tier tier = loadouts.byName(names[i]);
-            EntityLiving npc = tier.kind == NpcKind.SOVIET ? Deci.newSoviet(world)
-                : tier.kind == NpcKind.SOLDIER ? newSoldier(world) : Deci.newBandit(world);
-            loadouts.equip(npc, tier, npc.getEntityData());
-            double x = x0 + 0.5 + (i - names.length / 2.0) * 1.2;
-            npc.setPosition(x, ground(world, (int) Math.floor(x), z), z + 0.5);
-            npc.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0);
-            world.spawnEntityInWorld(npc);
+            EntityLiving npc = null;
+            // Decimation swaps 5% of soldier spawns for a mech (PlayerJoinSync): try again
+            for (int attempt = 0; attempt < 10; attempt++)
+            {
+                npc = tier.kind == NpcKind.SOVIET ? Deci.newSoviet(world)
+                    : tier.kind == NpcKind.SOLDIER ? newSoldier(world) : Deci.newBandit(world);
+                loadouts.equip(npc, tier, npc.getEntityData());
+                double x = x0 + 0.5 + (i - names.length / 2.0) * 1.2;
+                npc.setPosition(x, ground(world, (int) Math.floor(x), z), z + 0.5);
+                npc.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0);
+                if (world.spawnEntityInWorld(npc))
+                {
+                    break;
+                }
+            }
             shown.add(npc);
             guns.put(npc.getEntityId(), npc.getEntityData().getString(NpcLoadouts.GUN_TAG));
         }

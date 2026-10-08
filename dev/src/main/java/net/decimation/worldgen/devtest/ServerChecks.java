@@ -265,7 +265,7 @@ public class ServerChecks extends DevTestMode
      * Helmet fix: NPC hits use the helmet on ~20% (random headshots); a
      * player's gun uses it only when its aim line crosses the head.
      */
-    /** Full marine body set, 5 NPC hits in the same tick: all 5 land (no vanilla hit cooldown). */
+    /** Full marine body set, 5 NPC hits in the same tick: 1 lands (vanilla hit cooldown), all 5 when skipped. */
     private void checkGroupFire(net.minecraft.entity.player.EntityPlayerMP p, float mult)
     {
         String[] set = {"marineBoots", "marinePants", "marineVest"}; // slots 1..3
@@ -292,8 +292,10 @@ public class ServerChecks extends DevTestMode
         p.setHealth(p.getMaxHealth());
         p.setGameType(WorldSettings.GameType.CREATIVE);
         DevTestResults.value("checks", "full marine body set, one NPC hit", String.format("%.2f", one));
+        boolean skip = net.decimation.fixes.NpcLoadouts.instance().npcHitsSkipCooldown();
         DevTestResults.check("checks", "5 NPC hits in one tick", String.format("%.2f", five),
-                             Math.abs(five - 5 * one) < 0.05, String.format("%.2f (all land)", 5 * one));
+                             Math.abs(five - (skip ? 5 : 1) * one) < 0.05, String.format("%.2f (%s)", (skip ? 5 : 1) * one,
+                             skip ? "all land" : "vanilla hit cooldown: the first lands"));
     }
 
     private void checkHelmet()

@@ -567,3 +567,52 @@ even with a group of NPCs shooting at once.
   cut a hit further. Armed traders also use "human" at full gun damage
   but only ever target infected and bandits, never players.
 - Not seen in game by the user yet `[not verified]`.
+- **v0.30.3 (user: "too hard")**: the hit cooldown is back (config
+  `npcHitsSkipCooldown`, default false; the v0.30.2 key
+  `everyNpcHitCounts` is removed from the file on load); x5 stays. Full
+  marine body set: 5 hits in one tick now 1.49 (the first lands).
+
+## Soviets kill each other (reported 9 Oktober 2026, FIXED v0.30.3)
+- **Cause** (bytecode of deci.ag.m.c, original Decimation):
+  SovietEntity.isHostileTo returns, for another armed human, faction ==
+  SOVIET: Soviets were hostile ONLY to Soviets (and ignored bandits and
+  soldiers). Shown once MilitarySpawner put them in groups. (The deobf
+  naming note "hostile to everything except Soviets" described the
+  intent, not the code.)
+- **Fix** `tools/patches/PatchFactions.java` (built on PatchTracer's
+  deci/ag/a): Soviets hostile to every other armed human except Soviets
+  and traders; bandits and soldiers (and hazmat soldiers) hostile to
+  Soviets. Our traced NPC shots (NpcShots) pass through allies of the
+  shooter's side, so no friendly fire. Checked: npc mode "factions"
+  [soviet>soviet false, soviet>bandit / soldier, bandit / soldier>soviet
+  true].
+
+## NPC shots were not bullets (user request 9 Oktober 2026, DONE v0.30.3)
+User: a player should only take damage when the tracer hits; plus NPC
+bullet impacts on blocks (until now only player shots made them).
+- **Before**: shootAt hit its target on 75% of shots through anything once
+  it could see it; the tracer was a picture only, and Decimation's client
+  makes 60% of tracers invisible (INVIS colour) unless the gun has a
+  tracer attachment.
+- **Now** (`tools/patches/PatchTracer.java` v2 + `fixes/NpcShots`):
+  BanditEntity.shootAt asks our hook (`shotHook`), which traces a shot
+  from the shooter's eyes toward the target's chest with a gaussian
+  spread per tier (degrees: bandit light 1.6, medium 1.3, heavy 1.1,
+  soldier 1.0, military 0.9; machine guns x1.4, sniper rifles 0.25;
+  config `spread`), stops at the first solid block (glass, plants, vines,
+  iron bars, ladders pass, as for player guns) or the first living thing
+  that is not an ally, and only that takes Decimation's damage (gun / 8,
+  full on infected). A block hit sends Decimation's own impact particles
+  ("explode" + "blockcrack", as the player block hit handler does). The
+  packet carries a point far along the shot line, the client draws the
+  tracer along it and always visible.
+- **Checked** (dev test modes, fresh world, all PASS): shots: AKM medium
+  bandit at a pig, 97% hits at 10 blocks, 57..66% at 20, 0 / 143 through
+  a stone wall, impact particles on the wall (shots_wall); tracer: 163
+  shots, 163 visible tracers, 0.2 deg mean from the server's shot line,
+  2.1 deg mean from the target (the spread). Not seen in game by the user
+  yet `[not verified]`.
+- Test traps found: an NPC held in mid air falls on the client (tracers
+  then start lower): test NPCs stand on a block now; the tracer test only
+  counts its own bandit's shots (nearby NPCs fight each other since the
+  faction fix).

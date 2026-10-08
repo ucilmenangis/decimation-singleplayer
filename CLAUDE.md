@@ -246,7 +246,10 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   `PatchTracer.java`, NPC tracers aimed at the target, 2026-10-09, needs
   netty-all 4.0.10 from Prism's libraries on the Javassist classpath;
   `PatchBackend.java` (2026-10-09) launch no longer waits 5 s for the
-  dead Decimation server;
+  dead Decimation server; `PatchTracer.java` v2 (2026-10-09, aim point in
+  the packet, `shotHook` in BanditEntity.shootAt, NPC tracers always
+  visible) then `PatchFactions.java` on top of its deci/ag/a output
+  (Soviets vs everyone else);
   `PatchPropCulling.java` step 3 (2026-10-09) caches line of sight answers,
   step 4 render distance by prop size, config deciworldgen_props.cfg,
   default 64 = vanilla). Patch from the ORIGINAL classes
@@ -584,6 +587,11 @@ of the last session:
   cooldown for them (bug.md "Full military armor makes NPC gunfire almost
   harmless"); NPC shots are direct damage, not bullets. Decimation turns
   5% of soldier spawns into mechs (PlayerJoinSync).
+  v0.30.3: NPC shots traced (`fixes/NpcShots`, spread per tier, walls
+  stop them, impact particles), hit cooldown back, Soviets fixed (bug.md
+  "Soviets kill each other", "NPC shots were not bullets"); dev test
+  modes `shots`, `tracer` (now tracer vs server shot line). Test NPCs
+  must stand on a block (the client copy of a mob held in the air falls).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

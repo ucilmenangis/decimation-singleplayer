@@ -126,7 +126,9 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   (`npcDamageToPlayer` in deciworldgen_npc.cfg, 1 = Decimation), and every
   NPC hit lands (vanilla's 0.5 s hit cooldown skipped for NPC shots). An
   NPC rifle hit: 10 hp bare, about 1.5 hp in a full marine body set.
-  Player shots unchanged.
+  Player shots unchanged. v0.30.3: vanilla's hit cooldown is kept again
+  (`npcHitsSkipCooldown` false), NPC shots are traced bullets (spread per
+  tier, stopped by walls, impact particles, tracer = the real shot).
 
 ## Bug and feature tracking
 

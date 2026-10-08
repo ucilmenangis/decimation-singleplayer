@@ -55,6 +55,8 @@ public class NpcLoadouts
         public float health, taken;
         /** Ticks between shots for rifles, pistols, SMGs (machine guns and sniper rifles have their own). */
         int delayMin = 4, delayMax = 12;
+        /** Aim spread, degrees (sigma of a gaussian per axis; NpcShots); machine guns x MG_SPREAD. */
+        public float spread = 1.2f;
         final String[][] armor; // helmet, chest, legs, boots: registry names to pick from
         final String[] guns;
 
@@ -77,6 +79,12 @@ public class NpcLoadouts
             delayMax = max;
             return this;
         }
+
+        Tier spread(float degrees)
+        {
+            spread = degrees;
+            return this;
+        }
     }
 
     private static final String[] MG = {"pkm", "pkp", "m240", "m60", "rpd", "mk48", "mg3", "m1919a6"};
@@ -95,7 +103,9 @@ public class NpcLoadouts
     final List<Tier> tiers = new ArrayList<Tier>();
     /** NPC gun hits ("human") on a player: damage factor; every hit counts (no vanilla hit cooldown). */
     private float npcDamageToPlayer = 5;
-    private boolean everyHitCounts = true;
+    private boolean everyHitCounts = false;
+    /** Spread factor for machine guns; sniper rifles use SNIPER_SPREAD degrees. */
+    static final float MG_SPREAD = 1.4f, SNIPER_SPREAD = 0.25f, UNTIERED_SPREAD = 1.2f;
     private final Random random = new Random();
     private static NpcLoadouts instance;
 
@@ -111,25 +121,25 @@ public class NpcLoadouts
         tiers.add(new Tier("bandit_light", NpcKind.BANDIT, 55, 25, 20, 1.0f,
             new String[][] {CAPS, CASUAL_CHEST, CASUAL_LEGS, CASUAL_BOOTS},
             "makarov", "colt", "glock17", "browninghp", "uzi", "mp5a3", "r870", "dbarrel", "sks", "insas",
-            "ak12", "m14", "mosinnagant").delay(5, 20)); // Decimation's own bandit rate
+            "ak12", "m14", "mosinnagant").delay(5, 20).spread(1.6f)); // Decimation's own bandit rate
         tiers.add(new Tier("bandit_medium", NpcKind.BANDIT, 35, 45, 26, 0.8f,
             new String[][] {{"militiaHelm", "banditHelm"}, {"militiaVest", "banditVest"},
                             {"militiaPants", "banditPants"}, {"militiaBoots", "banditBoots"}},
-            "akm", "akms", "sks", "vz58", "rpk", "fal", "g3a3", "m14", "ak74", "svt40", "mpi40"));
+            "akm", "akms", "sks", "vz58", "rpk", "fal", "g3a3", "m14", "ak74", "svt40", "mpi40").spread(1.3f));
         tiers.add(new Tier("bandit_heavy", NpcKind.BANDIT, 10, 30, 32, 0.7f,
             new String[][] {{"militiaHelm", "marineHelm", "uahdHelmet"}, {"militiaVest"}, {"militiaPants"},
                             {"militiaBoots", "marineBoots"}},
-            "pkm", "pkm", "rpk74", "rpd", "sv98", "svd", "fal", "g3a4"));
+            "pkm", "pkm", "rpk74", "rpd", "sv98", "svd", "fal", "g3a4").spread(1.1f));
         String[] camo = {"marine", "marineforest", "marineurban", "marineblack"};
         for (String c : camo)
         {
             tiers.add(new Tier("soldier_" + c, NpcKind.SOLDIER, 1, 1, 24, 0.8f,
                 new String[][] {{c + "Helm", c + "Helm", c + "Hat"}, {c + "Vest"}, {c + "Pants"}, {c + "Boots"}},
-                "m4a4", "m4a4", "m16a2", "g36c", "fnscarl", "famas", "l85a1", "acr", "m240", "m110").delay(2, 6));
+                "m4a4", "m4a4", "m16a2", "g36c", "fnscarl", "famas", "l85a1", "acr", "m240", "m110").delay(2, 6).spread(1.0f));
         }
         tiers.add(new Tier("military", NpcKind.SOVIET, 1, 1, 40, 0.6f,
             new String[][] {{"spetsnazHelm"}, {"spetsnazVest"}, {"spetsnazPants"}, {"spetsnazBoots"}},
-            "ak74", "ak74", "ak12", "aks74u", "rpk74", "asval", "pkp", "svd").delay(3, 9));
+            "ak74", "ak74", "ak12", "aks74u", "rpk74", "asval", "pkp", "svd").delay(3, 9).spread(0.9f));
         load(new File(configDir, "deciworldgen_npc.cfg"));
     }
 
@@ -144,17 +154,39 @@ public class NpcLoadouts
             t.weight = cfg.getInt("weight", cat, t.weight, 0, 1000, "chance against the other tiers of its kind");
             t.militaryWeight = cfg.getInt("militaryWeight", cat, t.militaryWeight, 0, 1000,
                                           "the same inside military areas");
+            t.spread = cfg.getFloat("spread", cat, t.spread, 0, 45,
+                "aim spread in degrees: about 85% hits at 10 blocks with 1.2, 50% at 20 (machine guns x1.4)");
         }
         npcDamageToPlayer = cfg.getFloat("npcDamageToPlayer", "player", npcDamageToPlayer, 0, 100,
             "NPC gun hits on a player: damage x this, after armor (user 2026-10-09: 5, hardcore; 1 = Decimation)");
-        everyHitCounts = cfg.getBoolean("everyNpcHitCounts", "player", everyHitCounts,
-            "NPC gun hits ignore vanilla's 0.5 s hit cooldown, so a group's shots all land");
+        // v0.30.2 wrote "everyNpcHitCounts = true"; the user asked for the cooldown back (v0.30.3)
+        cfg.getCategory("player").remove("everyNpcHitCounts");
+        everyHitCounts = cfg.getBoolean("npcHitsSkipCooldown", "player", everyHitCounts,
+            "NPC gun hits ignore vanilla's 0.5 s hit cooldown, so every shot of a group lands (hard)");
         cfg.save();
     }
 
     public float npcDamageToPlayer()
     {
         return npcDamageToPlayer;
+    }
+
+    public boolean npcHitsSkipCooldown()
+    {
+        return everyHitCounts;
+    }
+
+    /** Aim spread in degrees of an NPC with this gun (its tier's, adjusted for machine guns / sniper rifles). */
+    public float spread(Entity npc, ItemStack gun)
+    {
+        String name = gun == null ? "" : GameRegistry.findUniqueIdentifierFor(gun.getItem()).name;
+        if (contains(SNIPER, name))
+        {
+            return SNIPER_SPREAD;
+        }
+        Tier t = byName(npc.getEntityData().getString(TAG));
+        float s = t == null ? UNTIERED_SPREAD : t.spread;
+        return contains(MG, name) ? s * MG_SPREAD : s;
     }
 
     /**

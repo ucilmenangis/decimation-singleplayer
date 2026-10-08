@@ -486,3 +486,9 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   tier eggs in the hotbar: 3 tan bandit eggs (brown, green, black spots),
   4 blue soldier eggs (tan, dark green, grey, black spots), 1 yellow
   military egg with red spots.
+
+## npc_shots_v0.30.3/ (dev test mode shots)
+- sheet_shots.png: shots_wall, a stone wall 140 high in the air seen from
+  the side, white "explode" puffs and dark stone crack bits where the
+  bandit's shots stop on it; the pig behind it in the distance (camera
+  angle off, but the impacts show).

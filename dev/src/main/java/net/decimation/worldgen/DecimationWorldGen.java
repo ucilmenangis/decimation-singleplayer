@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.30.2",
+     version = "0.30.3",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -246,6 +246,8 @@ public class DecimationWorldGen
         FMLLog.info("[%s] armor vs NPC gunfire fix registered", MODID);
 
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(npcLoadouts);
+        // NPC shots fly as traced shots (tools/patches/PatchTracer.java v2 asks this hook)
+        net.decimation.fixes.Deci.setNpcShotHook(new net.decimation.fixes.NpcShots(npcLoadouts));
         if (militarySpawner.enabled())
         {
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(militarySpawner);

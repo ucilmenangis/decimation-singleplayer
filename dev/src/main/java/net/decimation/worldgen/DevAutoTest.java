@@ -99,6 +99,7 @@ public class DevAutoTest
         if (name.equals("props")) return new PropsTest();
         if (name.equals("cityfps")) return new CityFpsTest();
         if (name.equals("npc")) return new net.decimation.worldgen.devtest.NpcTest();
+        if (name.equals("shots")) return new net.decimation.worldgen.devtest.ShotTest();
         return null;
     }
 

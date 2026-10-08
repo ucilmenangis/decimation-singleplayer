@@ -37,9 +37,8 @@ or `[not decided]`.
 
 1. **Enemy juggernaut**: full juggernaut armor, machine guns (PKM, M240, any
    in the registry) or a Barrett with very high (.50 BMG) damage.
-2. **NPC bullet impacts** on blocks (today only player shots make them).
-3. **More zombie variants.**
-4. Civilian NPC; traders that spawn on their own and walk.
+2. **More zombie variants.**
+3. Civilian NPC; traders that spawn on their own and walk.
    All in new_feature.md ("New hostile NPCs and stronger bandits", "More
    zombie variants...", "3 new mobs", "More clothing variety").
 
@@ -77,3 +76,7 @@ or `[not decided]`.
   military with their own group spawner in military sectors, NPC armor
   now counts against player shots (tier share), client shows the
   server's NPC gun (new_feature.md "Step 1 design: NPC tiers").
+- v0.30.1 spawn egg per NPC tier; v0.30.2 / 0.30.3 NPC gunfire x5 on the
+  player, hit cooldown kept; NPC shots are traced bullets with spread,
+  impact particles on blocks, tracers always shown along the real line;
+  Soviets no longer kill each other (bug.md).

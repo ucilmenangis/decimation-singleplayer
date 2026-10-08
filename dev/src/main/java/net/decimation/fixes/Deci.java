@@ -397,6 +397,81 @@ public final class Deci
         ((deci.ag.a) npc).s(min, max);
     }
 
+    /**
+     * BanditEntity.shotHook (added by tools/patches/PatchTracer.java v2): asked
+     * by shootAt when its cooldown has run out; a non null answer means the
+     * hook fired the shot itself. Null = Decimation's own random hit.
+     */
+    public static void setNpcShotHook(java.util.function.BiFunction<net.minecraft.entity.Entity,
+                                      net.minecraft.entity.EntityLivingBase, Object> hook)
+    {
+        deci.ag.a.shotHook = hook;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static java.util.function.BiFunction<net.minecraft.entity.Entity, net.minecraft.entity.EntityLivingBase, Object> npcShotHook()
+    {
+        return (java.util.function.BiFunction<net.minecraft.entity.Entity, net.minecraft.entity.EntityLivingBase, Object>)
+            deci.ag.a.shotHook;
+    }
+
+    /** GunItem.damage (aew) of a gun stack, 0 when it is not a gun. */
+    public static int gunDamageOf(net.minecraft.item.ItemStack gun)
+    {
+        return gun != null && gun.getItem() instanceof deci.ay.i ? ((deci.ay.i) gun.getItem()).aew : 0;
+    }
+
+    /** GunItem.setFlashTime (i): muzzle flash for one tick, as shootAt does. */
+    public static void gunFlash(net.minecraft.item.ItemStack gun)
+    {
+        if (gun != null && gun.getItem() instanceof deci.ay.i)
+        {
+            ((deci.ay.i) gun.getItem()).i(gun, 1);
+        }
+    }
+
+    /**
+     * PacketGunFireEffects (deci.aE.a$B) to everyone: shot effects of an NPC,
+     * tracer along the line from its eyes to the aim point (PatchTracer v2).
+     */
+    public static void sendNpcShot(net.minecraft.entity.Entity shooter, net.minecraft.entity.Entity target,
+                                   double x, double y, double z)
+    {
+        deci.aE.a.B.nextTarget = target == null ? -1 : target.getEntityId();
+        deci.aE.a.B.nextHasAim = true;
+        deci.aE.a.B.nextAimX = (float) x;
+        deci.aE.a.B.nextAimY = (float) y;
+        deci.aE.a.B.nextAimZ = (float) z;
+        try
+        {
+            deci.aF.a.a.a.gB().sendToAll(new deci.aE.a.B(shooter.getEntityId()));
+        }
+        finally
+        {
+            deci.aE.a.B.nextHasAim = false;
+            deci.aE.a.B.nextTarget = -1;
+        }
+    }
+
+    /**
+     * Bullet impact on a block, as Decimation's PacketBlockHitParticles handler
+     * does for player shots: PacketSpawnVanillaParticle (deci.aE.a$V)
+     * "explode" and "blockcrack_ID_META" at the hit point, to everyone.
+     */
+    public static void sendBlockImpact(double x, double y, double z, net.minecraft.block.Block block, int meta)
+    {
+        cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper ch = deci.aF.a.a.a.gB();
+        ch.sendToAll(new deci.aE.a.V("explode", x, y, z));
+        ch.sendToAll(new deci.aE.a.V("blockcrack_" + net.minecraft.block.Block.getIdFromBlock(block) + "_" + meta,
+                                      x, y, z));
+    }
+
+    /** BanditEntity.isHostileTo (c) and its overrides (tools/patches/PatchFactions.java). */
+    public static boolean npcHostileTo(net.minecraft.entity.Entity npc, net.minecraft.entity.EntityLivingBase other)
+    {
+        return ((deci.ag.a) npc).c(other);
+    }
+
     /** BanditEntity.shootAt (e): fires when its cooldown has run out. */
     public static void banditShootAt(net.minecraft.entity.Entity bandit, net.minecraft.entity.EntityLivingBase target)
     {
@@ -412,6 +487,13 @@ public final class Deci
     }
 
     /** Start and end of a BulletTracer (deci.n.d$a, fields kf / kg). */
+    /** BulletTracer.color (kj): GENERIC, INVIS or an attachment colour. */
+    public static String tracerColor(Object tracer)
+    {
+        Object c = cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, (deci.n.d.a) tracer, "kj");
+        return String.valueOf(c);
+    }
+
     public static org.lwjgl.util.vector.Vector3f[] tracerLine(Object tracer)
     {
         deci.n.d.a t = (deci.n.d.a) tracer;
