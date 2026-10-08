@@ -41,29 +41,29 @@ public class MultiblockRepairHandler
     public static void complete(net.minecraft.world.World world, int x, int y, int z)
     {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (!repair(te) || !(te instanceof deci.W.d))
+        int[] size = Deci.multiblockSize(te);
+        if (!repair(te) || size == null)
         {
             return;
         }
-        deci.W.d part = (deci.W.d) te;
-        if (part.getSizeX() != 1 || part.getSizeZ() != 1 || part.getSizeY() < 2)
+        if (size[0] != 1 || size[2] != 1 || size[1] < 2)
         {
             return;
         }
-        for (int i = 1; i < part.getSizeY(); i++)
+        for (int i = 1; i < size[1]; i++)
         {
             if (!world.isAirBlock(x, y + i, z))
             {
                 return;
             }
         }
-        deci.W.e.a(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+        Deci.buildMultiblock(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
     }
 
     /** Make an orphaned multiblock part its own master; true if repaired. */
     public static boolean repair(TileEntity te)
     {
-        if (!(te instanceof deci.W.a) || ((deci.W.a) te).isMaster())
+        if (!Deci.isMultiblockPart(te) || Deci.isMultiblockMaster(te))
         {
             return false;
         }
@@ -75,7 +75,7 @@ public class MultiblockRepairHandler
         {
             return false; // a real part of a real multiblock: leave it
         }
-        ((deci.W.a) te).setSelfMaster();
+        Deci.setMultiblockSelfMaster(te);
         te.markDirty();
         return true;
     }

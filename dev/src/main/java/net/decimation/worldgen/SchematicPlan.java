@@ -19,11 +19,11 @@ public class SchematicPlan implements Plan
     private final Schematic s;
     private final int minX, minZ, turns;
     private final Map<Integer, StructureGenerator.Sub> subs;
-    private final net.decimation.mod.server.zones.a zone;
+    private final ZoneKind zone;
 
     public SchematicPlan(String id, Schematic s, int minX, int minZ, int turns,
                          Map<Integer, StructureGenerator.Sub> subs,
-                         net.decimation.mod.server.zones.a zone)
+                         ZoneKind zone)
     {
         this.id = id;
         this.s = s;
@@ -48,7 +48,7 @@ public class SchematicPlan implements Plan
     public int clearAbove() { return 0; }
     public int maxSpread() { return 7; }
     public Block foundation() { return net.minecraft.init.Blocks.dirt; } // reads as ground, not a wall
-    public net.decimation.mod.server.zones.a zone() { return zone; }
+    public ZoneKind zone() { return zone; }
 
     public String describe()
     {

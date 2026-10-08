@@ -193,9 +193,9 @@ public class Building implements Graded
         yard.grade(world, x, z, baseY);
     }
 
-    public net.decimation.mod.server.zones.a zone()
+    public net.decimation.worldgen.ZoneKind zone()
     {
-        return net.decimation.mod.server.zones.a.POLICE;
+        return net.decimation.worldgen.ZoneKind.POLICE;
     }
 
     public String describe()

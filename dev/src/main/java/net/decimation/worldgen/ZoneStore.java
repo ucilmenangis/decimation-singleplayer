@@ -46,7 +46,7 @@ public class ZoneStore
     private static int tick;
 
     /** Called by the structure generator after a structure is placed. */
-    public static synchronized void add(net.decimation.mod.server.zones.a type,
+    public static synchronized void add(ZoneKind type,
                                         int x1, int y1, int z1, int x2, int y2, int z2)
     {
         if (file == null)
@@ -54,7 +54,7 @@ public class ZoneStore
             return; // no overworld loaded (should not happen during generation)
         }
         ObjectZone zone = new ObjectZone();
-        zone.zoneType = type;
+        zone.zoneType = net.decimation.fixes.Deci.zoneType(type);
         zone.zoneX1 = x1;
         zone.zoneY1 = y1;
         zone.zoneZ1 = z1;
@@ -156,17 +156,18 @@ public class ZoneStore
     /** Decimation's live zone list, created if it never got loaded. */
     private static ObjectZoneList live()
     {
-        if (deci.aJ.b.aAc == null)
+        ObjectZoneList live = net.decimation.fixes.Deci.zoneList();
+        if (live == null)
         {
-            ObjectZoneList list = new ObjectZoneList();
-            list.zoneList = new ArrayList<ObjectZone>();
-            deci.aJ.b.aAc = list;
+            live = new ObjectZoneList();
+            live.zoneList = new ArrayList<ObjectZone>();
+            net.decimation.fixes.Deci.setZoneList(live);
         }
-        else if (deci.aJ.b.aAc.zoneList == null)
+        else if (live.zoneList == null)
         {
-            deci.aJ.b.aAc.zoneList = new ArrayList<ObjectZone>();
+            live.zoneList = new ArrayList<ObjectZone>();
         }
-        return deci.aJ.b.aAc;
+        return live;
     }
 
     private static synchronized void save()
@@ -194,9 +195,10 @@ public class ZoneStore
     /** Forget the current world's zones (and pull them out of the live list). */
     private static void detach()
     {
-        if (deci.aJ.b.aAc != null && deci.aJ.b.aAc.zoneList != null)
+        ObjectZoneList live = net.decimation.fixes.Deci.zoneList();
+        if (live != null && live.zoneList != null)
         {
-            deci.aJ.b.aAc.zoneList.removeAll(zones);
+            live.zoneList.removeAll(zones);
         }
         zones.clear();
         file = null;

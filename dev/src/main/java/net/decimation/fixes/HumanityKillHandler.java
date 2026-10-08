@@ -34,24 +34,24 @@ public class HumanityKillHandler
             return;
         }
         EntityPlayer killer = (EntityPlayer) event.source.getEntity();
-        deci.Q.b data = deci.Q.b.e(killer); // PlayerData.get
+        Deci.Player data = Deci.player(killer);
         if (data == null)
         {
             return;
         }
         if (!(event.entityLiving instanceof EntityPlayer))
         {
-            data.I(1); // addHumanity
+            data.addHumanity(1);
             return;
         }
-        deci.Q.b victim = deci.Q.b.e((EntityPlayer) event.entityLiving);
-        if (victim != null && victim.cc() <= 0L && victim.cd() >= 50) // getBounty, getHumanity
+        Deci.Player victim = Deci.player((EntityPlayer) event.entityLiving);
+        if (victim != null && victim.bounty() <= 0L && victim.humanity() >= 50)
         {
-            data.J(10); // removeHumanity
+            data.removeHumanity(10);
         }
         else
         {
-            data.I(1);
+            data.addHumanity(1);
         }
     }
 }

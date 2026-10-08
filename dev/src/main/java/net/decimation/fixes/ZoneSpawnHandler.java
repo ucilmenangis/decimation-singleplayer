@@ -2,8 +2,7 @@ package net.decimation.fixes;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.decimation.mod.server.zones.a;
-import net.decimation.mod.server.zones.b;
+import net.decimation.worldgen.ZoneKind;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 /**
@@ -29,27 +28,27 @@ public class ZoneSpawnHandler
         {
             return; // dedicated server: original deci.aK.d handles it
         }
-        if (event.world.isRemote || !(event.entity instanceof deci.ag.d))
+        if (event.world.isRemote || !Deci.isInfected(event.entity))
         {
             return;
         }
-        deci.ag.d infected = (deci.ag.d) event.entity;
+        net.minecraft.entity.Entity infected = event.entity;
         double roll = Math.random();
-        if (b.a(infected, a.MILITARY))
+        if (Deci.isInfectedInZone(infected, ZoneKind.MILITARY))
         {
             if (roll < 0.25)
             {
-                infected.af(deci.am.b.MILITARY.id); // setVariant
+                Deci.setInfectedVariant(infected, "MILITARY");
             }
         }
-        else if (b.a(infected, a.POLICE))
+        else if (Deci.isInfectedInZone(infected, ZoneKind.POLICE))
         {
             if (roll < 0.25)
             {
-                infected.af(deci.am.b.POLICE.id); // setVariant
+                Deci.setInfectedVariant(infected, "POLICE");
             }
         }
-        else if (b.a(infected, a.SAFEZONE))
+        else if (Deci.isInfectedInZone(infected, ZoneKind.SAFEZONE))
         {
             event.setCanceled(true);
         }

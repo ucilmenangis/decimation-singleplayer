@@ -33,7 +33,7 @@ public class BottlecapHandler
         {
             return; // dedicated server: original deci.aK.e handles it
         }
-        if (deci.aJ.b.aAG)
+        if (Deci.itemPickupFlag())
         {
             return; // same global kill-switch the original respects
         }
@@ -48,13 +48,13 @@ public class BottlecapHandler
             return;
         }
 
-        if (stack.getItem() == deci.aD.k.aln) // regular bottlecap
+        if (stack.getItem() == Deci.bottlecap())
         {
-            deci.Q.b data = deci.Q.b.e(player);
-            if (data != null && data.cb() < (long) data.Vo)
+            Deci.Player data = Deci.player(player);
+            if (data != null && data.bottlecaps() < data.maxBottlecaps())
             {
                 int n = stack.stackSize;
-                data.k(n);
+                data.addBottlecaps(n);
                 player.addChatComponentMessage(new ChatComponentText(
                     EnumChatFormatting.GREEN + "+" + n
                     + EnumChatFormatting.GRAY + " bottlecaps"));
@@ -63,13 +63,13 @@ public class BottlecapHandler
                     "deci:misc.bottlecap.pickup", 2.0F, 1.0F);
             }
         }
-        else if (stack.getItem() == deci.aD.k.alo) // gold bottlecap
+        else if (stack.getItem() == Deci.goldBottlecap())
         {
-            deci.Q.b data = deci.Q.b.e(player);
-            if (data != null && data.ca() < (long) data.Vo)
+            Deci.Player data = Deci.player(player);
+            if (data != null && data.goldBottlecaps() < data.maxBottlecaps())
             {
                 int n = stack.stackSize;
-                data.f(n);
+                data.addGoldBottlecaps(n);
                 player.addChatComponentMessage(new ChatComponentText(
                     EnumChatFormatting.GREEN + "+" + n
                     + EnumChatFormatting.GRAY + " gold bottlecaps"));

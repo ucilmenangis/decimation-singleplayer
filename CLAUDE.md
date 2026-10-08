@@ -242,6 +242,8 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   picture scope gated behind `decimation.scope.pip`, 2026-10-08;
   `PatchTracer.java`, NPC tracers aimed at the target, 2026-10-09, needs
   netty-all 4.0.10 from Prism's libraries on the Javassist classpath;
+  `PatchBackend.java` (2026-10-09) launch no longer waits 5 s for the
+  dead Decimation server;
   `PatchPropCulling.java` step 3 (2026-10-09) caches line of sight answers,
   step 4 render distance by prop size, config deciworldgen_props.cfg,
   default 64 = vanilla). Patch from the ORIGINAL classes
@@ -542,10 +544,16 @@ of the last session:
   `main` in dev). Profile before optimising: guesses were wrong twice.
   `-Pcityfps`: fps looking down a seed 1 city street (cityfps.png).
 - Obfuscated Decimation names in OUR code go through
-  `net.decimation.fixes.Deci` (readable accessors, user question
-  2026-10-08). The game loads Decimation's obfuscated classes, so the
-  names cannot be renamed in our code itself; older fix classes still
-  call them directly (78 places in 10 files) until migrated.
+  `net.decimation.fixes.Deci` (readable accessors: player data as
+  `Deci.player(p).bottlecaps()`, server config, registry items / blocks,
+  multiblocks, vehicles, NPCs, damage sources, zones, tracers). The game
+  loads Decimation's obfuscated classes, so the names cannot be renamed;
+  since 2026-10-09 NO obfuscated name is used outside Deci (migrated all
+  ~60; checked: seed 1 world 0 blocks differ, autotest all pass). Our own
+  worldgen uses `net.decimation.worldgen.ZoneKind` (MILITARY / POLICE /
+  SAFEZONE) instead of Decimation's obfuscated zone enum
+  (`net.decimation.mod.server.zones.a`); `Deci.zoneType(kind)` converts.
+  New code: add an accessor to Deci, never call deci.* directly.
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

@@ -426,9 +426,15 @@ at the end of this file.)
   with hundreds of visible props): not started; worth it only if the user
   finds places that still drop (atlas for every prop texture, both model
   formats to quads).
-- Side finding: Decimation's postInit blocks about 5 s at launch connecting
+- Side finding: Decimation's postInit blocked about 5 s at launch connecting
   to its dead server (kryonet `deci.aP.a.e`), on the main thread; startup
-  only, not in game.
+  only, not in game. FIXED 9 Oktober 2026 (`tools/patches/PatchBackend.java`):
+  connect timeout 300 ms, and kryonet's own Client.connect (bundled in
+  Decimation.jar) now passes it to the TCP connect, which it hardcoded to
+  5000 ms (shortening only the first timeout still waited 5 s: measured).
+  Launch: "Registering new client network" -> "Unable to connect" went from
+  5 s to under 1 s; later reconnect attempts still fail quietly in their
+  own threads as before.
 
 ### Military jeep/tank/helicopter destroyed in one hit (survival mode) (FIXED v0.8.1)
 - **Reported**: 26 Juli 2026, clarified 27 Juli 2026

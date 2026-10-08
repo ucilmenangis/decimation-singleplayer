@@ -134,4 +134,245 @@ public final class Deci
     {
         return deci.c.b.dC;
     }
+
+    // ---- player data, readable: Deci.player(p).bottlecaps() ...
+
+    /** PlayerData of a player (deci.Q.b), wrapped; null when it has none yet. */
+    public static Player player(EntityPlayer player)
+    {
+        deci.Q.b data = player == null ? null : deci.Q.b.e(player);
+        return data == null ? null : new Player(data);
+    }
+
+    /** Readable view of Decimation's PlayerData (deci.Q.b). */
+    public static final class Player
+    {
+        private final deci.Q.b data;
+
+        private Player(deci.Q.b data)
+        {
+            this.data = data;
+        }
+
+        /** getBottlecaps (cb). */
+        public long bottlecaps() { return data.cb(); }
+        /** addBottlecaps (k). */
+        public void addBottlecaps(long n) { data.k(n); }
+        /** getGoldBottlecaps (ca). */
+        public long goldBottlecaps() { return data.ca(); }
+        /** addGoldBottlecaps (f). */
+        public void addGoldBottlecaps(long n) { data.f(n); }
+        /** maxBottlecaps (field Vo): the wallet limit, both kinds. */
+        public long maxBottlecaps() { return (long) data.Vo; }
+        /** getHumanity (cd). */
+        public int humanity() { return data.cd(); }
+        /** addHumanity (I). */
+        public void addHumanity(int n) { data.I(n); }
+        /** removeHumanity (J). */
+        public void removeHumanity(int n) { data.J(n); }
+        /** getBounty (cc). */
+        public long bounty() { return data.cc(); }
+    }
+
+    // ---- server config: ServerConfig = deci.aJ.b (static fields)
+
+    /** ServerConfig.enableItemPickup (aAG): when true the original pickup handler does nothing, nor do we. */
+    public static boolean itemPickupFlag()
+    {
+        return deci.aJ.b.aAG;
+    }
+
+    /** ServerConfig.enableSupplyDrops (aAi). */
+    public static boolean supplyDropsEnabled()
+    {
+        return deci.aJ.b.aAi;
+    }
+
+    /** ServerConfig.supplyDropCountdown (aAg): ticks until the next drop. */
+    public static int supplyDropCountdown()
+    {
+        return deci.aJ.b.aAg;
+    }
+
+    public static void setSupplyDropCountdown(int ticks)
+    {
+        deci.aJ.b.aAg = ticks;
+    }
+
+    /** ServerConfig.supplyDropInterval (aAf). */
+    public static int supplyDropInterval()
+    {
+        return deci.aJ.b.aAf;
+    }
+
+    /** ServerConfig.zoneList (aAc): Decimation's live zone list, may be null. */
+    public static net.decimation.mod.server.zones.ObjectZoneList zoneList()
+    {
+        return deci.aJ.b.aAc;
+    }
+
+    public static void setZoneList(net.decimation.mod.server.zones.ObjectZoneList list)
+    {
+        deci.aJ.b.aAc = list;
+    }
+
+    // ---- zones: EnumZoneType = net.decimation.mod.server.zones.a, ZoneManager = zones.b
+
+    /** Decimation's zone type for one of ours. */
+    public static net.decimation.mod.server.zones.a zoneType(net.decimation.worldgen.ZoneKind kind)
+    {
+        return kind == null ? null : net.decimation.mod.server.zones.a.valueOf(kind.name());
+    }
+
+    /** True when the zone object is of this kind. */
+    public static boolean isZone(net.decimation.mod.server.zones.ObjectZone zone, net.decimation.worldgen.ZoneKind kind)
+    {
+        return zone != null && zone.zoneType == zoneType(kind);
+    }
+
+    /** ZoneManager.isInfectedInZone (b.a(InfectedEntity, EnumZoneType)). */
+    public static boolean isInfectedInZone(net.minecraft.entity.Entity infected, net.decimation.worldgen.ZoneKind kind)
+    {
+        return net.decimation.mod.server.zones.b.a((deci.ag.d) infected, zoneType(kind));
+    }
+
+    // ---- registry: ItemRegistry = deci.aD.k, BlockRegistry = deci.aD.c, DamageSources = deci.aD.h
+
+    /** ItemRegistry.itemBottlecap (aln). */
+    public static Item bottlecap()
+    {
+        return deci.aD.k.aln;
+    }
+
+    /** ItemRegistry.itemBottlecapGold (alo). */
+    public static Item goldBottlecap()
+    {
+        return deci.aD.k.alo;
+    }
+
+    /** BlockRegistry.supplyDrop (afA): the falling supply crate block. */
+    public static net.minecraft.block.Block supplyDropBlock()
+    {
+        return deci.aD.c.afA;
+    }
+
+    /** DamageSources.human (alh): NPC gunfire. */
+    public static net.minecraft.util.DamageSource humanDamage()
+    {
+        return deci.aD.h.alh;
+    }
+
+    /** GunDamageSource.forShooter (deci.ab.a.c): a player's gunshot. */
+    public static net.minecraft.util.DamageSource gunDamage(net.minecraft.entity.Entity shooter)
+    {
+        return deci.ab.a.c(shooter);
+    }
+
+    // ---- multiblocks: MultiblockPart = deci.W.a, IMultiblockD = deci.W.d, MultiblockHelper = deci.W.e
+
+    /** A tile entity that is part of a multiblock (deci.W.a). */
+    public static boolean isMultiblockPart(net.minecraft.tileentity.TileEntity te)
+    {
+        return te instanceof deci.W.a;
+    }
+
+    public static boolean isMultiblockMaster(net.minecraft.tileentity.TileEntity te)
+    {
+        return te instanceof deci.W.a && ((deci.W.a) te).isMaster();
+    }
+
+    public static void setMultiblockSelfMaster(net.minecraft.tileentity.TileEntity te)
+    {
+        ((deci.W.a) te).setSelfMaster();
+    }
+
+    /** Multiblock size {x, y, z} (IMultiblockD), or null for any other tile entity. */
+    public static int[] multiblockSize(net.minecraft.tileentity.TileEntity te)
+    {
+        if (!(te instanceof deci.W.d))
+        {
+            return null;
+        }
+        deci.W.d d = (deci.W.d) te;
+        return new int[] {d.getSizeX(), d.getSizeY(), d.getSizeZ()};
+    }
+
+    /** MultiblockHelper.a(World, x, y, z, Block, meta): builds every part around a master at x, y, z. */
+    public static void buildMultiblock(net.minecraft.world.World world, int x, int y, int z,
+                                       net.minecraft.block.Block block, int meta)
+    {
+        deci.W.e.a(world, x, y, z, block, meta);
+    }
+
+    // ---- entities
+
+    /** A vehicle body (VehicleEntity deci.ad.e) or one of its seat / hitbox parts (deci.ad.b). */
+    public static boolean isVehicle(net.minecraft.entity.Entity e)
+    {
+        return e instanceof deci.ad.e || e instanceof deci.ad.b;
+    }
+
+    /** A new HummerEntity (deci.ad.i). */
+    public static net.minecraft.entity.Entity newHummer(net.minecraft.world.World world, double x, double y, double z)
+    {
+        return new deci.ad.i(world, x, y, z);
+    }
+
+    /** InfectedEntity (deci.ag.d). */
+    public static boolean isInfected(net.minecraft.entity.Entity e)
+    {
+        return e instanceof deci.ag.d;
+    }
+
+    public static net.minecraft.entity.EntityLiving newInfected(net.minecraft.world.World world)
+    {
+        return new deci.ag.d(world);
+    }
+
+    /** InfectedEntity.setVariant (af) to InfectedVariant MILITARY / POLICE / ... (deci.am.b) by name. */
+    public static void setInfectedVariant(net.minecraft.entity.Entity infected, String variant)
+    {
+        ((deci.ag.d) infected).af(deci.am.b.valueOf(variant).id);
+    }
+
+    /** InfectedEntity.getVariant (eI): 0 common, 1 military, 2 police. */
+    public static int infectedVariant(net.minecraft.entity.Entity infected)
+    {
+        return ((deci.ag.d) infected).eI();
+    }
+
+    /** EntityFallingSupplyDrop (deci.ac.a): a supply crate still in the air. */
+    public static boolean isFallingSupplyDrop(Object e)
+    {
+        return e instanceof deci.ac.a;
+    }
+
+    /** A new BanditEntity (deci.ag.a). */
+    public static net.minecraft.entity.EntityLiving newBandit(net.minecraft.world.World world)
+    {
+        return new deci.ag.a(world);
+    }
+
+    /** BanditEntity.shootAt (e): fires when its cooldown has run out. */
+    public static void banditShootAt(net.minecraft.entity.Entity bandit, net.minecraft.entity.EntityLivingBase target)
+    {
+        ((deci.ag.a) bandit).e(target);
+    }
+
+    // ---- rendering (client)
+
+    /** BulletTracerRenderer.tracers (deci.n.d.kd): the live tracer list. */
+    public static java.util.List<?> tracers()
+    {
+        return (java.util.List<?>) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.class, null, "kd");
+    }
+
+    /** Start and end of a BulletTracer (deci.n.d$a, fields kf / kg). */
+    public static org.lwjgl.util.vector.Vector3f[] tracerLine(Object tracer)
+    {
+        deci.n.d.a t = (deci.n.d.a) tracer;
+        return new org.lwjgl.util.vector.Vector3f[] {
+            (org.lwjgl.util.vector.Vector3f) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, t, "kf"),
+            (org.lwjgl.util.vector.Vector3f) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, t, "kg")};
+    }
 }

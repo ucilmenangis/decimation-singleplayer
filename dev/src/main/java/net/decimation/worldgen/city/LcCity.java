@@ -465,8 +465,8 @@ public final class LcCity
                 }
             }
         }
-        net.decimation.mod.server.zones.a zone = style.endsWith(":deadzone")
-            ? net.decimation.mod.server.zones.a.MILITARY : net.decimation.mod.server.zones.a.POLICE;
+        net.decimation.worldgen.ZoneKind zone = style.endsWith(":deadzone")
+            ? net.decimation.worldgen.ZoneKind.MILITARY : net.decimation.worldgen.ZoneKind.POLICE;
         for (int i = 1; i < size; i++)
         {
             for (int j = 1; j < size; j++)
@@ -673,13 +673,13 @@ public final class LcCity
         private final LcContent.Building b;
         private final LcContent.Shape s;
         private final int minX, minZ, baseY;
-        private final net.decimation.mod.server.zones.a zone;
+        private final net.decimation.worldgen.ZoneKind zone;
         /** District style and street level of the block (fronts of the street beside it). */
         final String style;
         final int ground;
 
         BuildingPlan(String id, LcContent.Building b, LcContent.Shape s, int minX, int minZ, int baseY,
-                     net.decimation.mod.server.zones.a zone, String style, int ground)
+                     net.decimation.worldgen.ZoneKind zone, String style, int ground)
         {
             this.style = style;
             this.ground = ground;
@@ -702,7 +702,7 @@ public final class LcCity
         public int clearAbove() { return 12; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.stone; }
-        public net.decimation.mod.server.zones.a zone() { return zone; }
+        public net.decimation.worldgen.ZoneKind zone() { return zone; }
 
         public String describe()
         {
@@ -781,7 +781,7 @@ public final class LcCity
         public int clearAbove() { return 14; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.stone; }
-        public net.decimation.mod.server.zones.a zone() { return null; }
+        public net.decimation.worldgen.ZoneKind zone() { return null; }
         public String describe() { return null; }
 
         /**
@@ -1075,7 +1075,7 @@ public final class LcCity
         public int clearAbove() { return 0; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.dirt; }
-        public net.decimation.mod.server.zones.a zone() { return null; }
+        public net.decimation.worldgen.ZoneKind zone() { return null; }
         public String describe() { return null; }
 
         public Block blockAt(int lx, int ly, int lz, int[] meta)
@@ -1201,7 +1201,7 @@ public final class LcCity
         public int clearAbove() { return 14; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.dirt; }
-        public net.decimation.mod.server.zones.a zone() { return null; }
+        public net.decimation.worldgen.ZoneKind zone() { return null; }
         public String describe() { return park != null ? "lc park" : null; }
 
         public Block blockAt(int lx, int ly, int lz, int[] meta)

@@ -76,9 +76,9 @@ public class LargeSites
         {
             return null; // the city's edge ramp or a highway would cut the ground under it
         }
-        net.decimation.mod.server.zones.a zone = s.name.startsWith("mil_")
-            ? net.decimation.mod.server.zones.a.MILITARY
-            : s.name.startsWith("city_") ? net.decimation.mod.server.zones.a.POLICE : null;
+        ZoneKind zone = s.name.startsWith("mil_")
+            ? ZoneKind.MILITARY
+            : s.name.startsWith("city_") ? ZoneKind.POLICE : null;
         return new SchematicPlan("L" + siteX + "_" + siteZ, s, x, z, turns, subs, zone);
     }
 

@@ -275,7 +275,7 @@ public final class Capture
     private static boolean upperPart(World world, int x, int y, int z)
     {
         TileEntity te = world.getTileEntity(x, y, z);
-        return te instanceof deci.W.a && !((deci.W.a) te).isMaster();
+        return net.decimation.fixes.Deci.isMultiblockPart(te) && !net.decimation.fixes.Deci.isMultiblockMaster(te);
     }
 
     /** Palette entry with facing converted to a face relative to the wall (out, in, left, right). */

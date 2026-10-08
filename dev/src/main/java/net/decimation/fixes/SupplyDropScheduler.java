@@ -44,7 +44,7 @@ public class SupplyDropScheduler
     {
         if (event.phase != TickEvent.Phase.END
             || FMLCommonHandler.instance().getSide().isServer()
-            || !deci.aJ.b.aAi) // enableSupplyDrops
+            || !Deci.supplyDropsEnabled())
         {
             return;
         }
@@ -53,7 +53,7 @@ public class SupplyDropScheduler
         {
             return;
         }
-        int countdown = deci.aJ.b.aAg; // supplyDropCountdown
+        int countdown = Deci.supplyDropCountdown();
         if (countdown == 12000)
         {
             announce(EnumChatFormatting.GRAY + "A supply crate will drop in "
@@ -66,10 +66,10 @@ public class SupplyDropScheduler
         }
         if (countdown > 0)
         {
-            deci.aJ.b.aAg = countdown - 1;
+            Deci.setSupplyDropCountdown(countdown - 1);
             return;
         }
-        deci.aJ.b.aAg = deci.aJ.b.aAf; // reset to supplyDropInterval
+        Deci.setSupplyDropCountdown(Deci.supplyDropInterval());
         try
         {
             drop(server);
@@ -113,7 +113,7 @@ public class SupplyDropScheduler
                 continue;
             }
             clearLanding(world, x, z);
-            world.setBlock(x, world.getHeight() - 1, z, deci.aD.c.afA); // BlockRegistry.supplyDrop
+            world.setBlock(x, world.getHeight() - 1, z, Deci.supplyDropBlock());
             world.playSoundEffect(player.posX, player.posY, player.posZ,
                                   "deci:item.supplydropradio.radio", 3.0F, 1.0F);
             announce(EnumChatFormatting.GRAY + "A supply drop has been deployed at "

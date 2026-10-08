@@ -41,7 +41,7 @@ public interface Plan
     net.minecraft.block.Block foundation();
 
     /** Decimation zone to tag the site with, or null. */
-    net.decimation.mod.server.zones.a zone();
+    ZoneKind zone();
 
     /** Short description for the log. */
     String describe();

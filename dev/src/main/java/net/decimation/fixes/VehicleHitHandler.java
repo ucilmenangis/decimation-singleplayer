@@ -32,7 +32,7 @@ public class VehicleHitHandler
         {
             return;
         }
-        if (target instanceof deci.ad.e || target instanceof deci.ad.b)
+        if (Deci.isVehicle(target))
         {
             event.setCanceled(true);
         }

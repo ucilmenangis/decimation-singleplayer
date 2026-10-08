@@ -314,7 +314,7 @@ public class DevAutoTest
             sp.worldObj.setWorldTime(6000);
             sp.capabilities.isFlying = true;
             sp.setPositionAndUpdate(8.5, 80, 40.5);
-            tracerBandit = new deci.ag.a(sp.worldObj);
+            tracerBandit = net.decimation.fixes.Deci.newBandit(sp.worldObj);
             tracerBandit.setPosition(8.5, 80, 32.5);
             sp.worldObj.spawnEntityInWorld(tracerBandit);
         }
@@ -325,7 +325,7 @@ public class DevAutoTest
             tracerBandit.rotationYaw = tracerBandit.rotationYawHead = tracerBandit.renderYawOffset = 180; // away
             tracerBandit.rotationPitch = 0;
             tracerBandit.setRevengeTarget(sp); // a miss plays its sound at getAITarget() (null: crash)
-            ((deci.ag.a) tracerBandit).e(sp); // BanditEntity.shootAt (fires when its cooldown runs out)
+            net.decimation.fixes.Deci.banditShootAt(tracerBandit, sp); // fires when its cooldown runs out
         }
         if (tracerTicks == 400 && tracerBandit != null)
         {
@@ -349,18 +349,15 @@ public class DevAutoTest
         }
         try
         {
-            java.util.List<?> list = (java.util.List<?>) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(
-                deci.n.d.class, null, "kd");
+            java.util.List<?> list = net.decimation.fixes.Deci.tracers();
             for (Object t : list)
             {
                 if (!tracersSeen.add(t))
                 {
                     continue;
                 }
-                org.lwjgl.util.vector.Vector3f a = (org.lwjgl.util.vector.Vector3f)
-                    cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, (deci.n.d.a) t, "kf");
-                org.lwjgl.util.vector.Vector3f b = (org.lwjgl.util.vector.Vector3f)
-                    cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, (deci.n.d.a) t, "kg");
+                org.lwjgl.util.vector.Vector3f[] line = net.decimation.fixes.Deci.tracerLine(t);
+                org.lwjgl.util.vector.Vector3f a = line[0], b = line[1];
                 double dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
                 double px = mc.thePlayer.posX - a.x, pz = mc.thePlayer.posZ - a.z;
                 double py = mc.thePlayer.boundingBox.minY + mc.thePlayer.height * 0.6 - a.y;
@@ -1473,7 +1470,7 @@ public class DevAutoTest
                     checkHumanity();
                     checkPropBox();
                     dropBottlecaps();
-                    deci.aJ.b.aAg = 0; // supplyDropCountdown: drop on the next tick
+                    net.decimation.fixes.Deci.setSupplyDropCountdown(0); // drop on the next tick
                     waitTicks = 100;   // pickup, and spawn invulnerability runs out
                     return;
                 case 1:
@@ -1528,14 +1525,14 @@ public class DevAutoTest
         {
             return;
         }
-        deci.Q.b data = deci.Q.b.e(p);
-        int before = data.cd(); // getHumanity
-        deci.ag.d infected = new deci.ag.d(p.worldObj);
+        net.decimation.fixes.Deci.Player data = net.decimation.fixes.Deci.player(p);
+        int before = data.humanity();
+        net.minecraft.entity.EntityLiving infected = net.decimation.fixes.Deci.newInfected(p.worldObj);
         infected.setLocationAndAngles(p.posX + 2, p.posY, p.posZ, 0, 0);
         p.worldObj.spawnEntityInWorld(infected);
         infected.attackEntityFrom(net.minecraft.util.DamageSource.causePlayerDamage(p), 1000.0f);
         FMLLog.info("[%s] AUTOTEST humanity: killed infected, humanity %d -> %d, dead=%s",
-                    DecimationWorldGen.MODID, before, data.cd(), infected.isDead || infected.getHealth() <= 0);
+                    DecimationWorldGen.MODID, before, data.humanity(), infected.isDead || infected.getHealth() <= 0);
         infected.setDead();
     }
 
@@ -1554,7 +1551,7 @@ public class DevAutoTest
         int landedY = -1;
         for (int y = 255; y > 0; y--)
         {
-            if (world.getBlock(x, y, z) == deci.aD.c.afA)
+            if (world.getBlock(x, y, z) == net.decimation.fixes.Deci.supplyDropBlock())
             {
                 landedY = y;
                 break;
@@ -1563,7 +1560,7 @@ public class DevAutoTest
         int falling = 0;
         for (Object o : world.loadedEntityList)
         {
-            if (o instanceof deci.ac.a)
+            if (net.decimation.fixes.Deci.isFallingSupplyDrop(o))
             {
                 falling++;
             }
@@ -1590,10 +1587,10 @@ public class DevAutoTest
             FMLLog.info("[%s] AUTOTEST bottlecaps: no player", DecimationWorldGen.MODID);
             return;
         }
-        capsBefore = deci.Q.b.e(p).cb();
+        capsBefore = net.decimation.fixes.Deci.player(p).bottlecaps();
         net.minecraft.entity.item.EntityItem item = new net.minecraft.entity.item.EntityItem(
             p.worldObj, p.posX, p.posY, p.posZ,
-            new net.minecraft.item.ItemStack(deci.aD.k.aln, CAPS));
+            new net.minecraft.item.ItemStack(net.decimation.fixes.Deci.bottlecap(), CAPS));
         item.delayBeforeCanPickup = 0;
         p.worldObj.spawnEntityInWorld(item);
     }
@@ -1605,11 +1602,11 @@ public class DevAutoTest
         {
             return;
         }
-        long after = deci.Q.b.e(p).cb();
+        long after = net.decimation.fixes.Deci.player(p).bottlecaps();
         int inInventory = 0;
         for (net.minecraft.item.ItemStack st : p.inventory.mainInventory)
         {
-            if (st != null && st.getItem() == deci.aD.k.aln)
+            if (st != null && st.getItem() == net.decimation.fixes.Deci.bottlecap())
             {
                 inInventory += st.stackSize;
             }
@@ -1717,7 +1714,7 @@ public class DevAutoTest
         p.setHealth(p.getMaxHealth());
         p.hurtResistantTime = 0;
         float before = p.getHealth();
-        p.attackEntityFrom(deci.ab.a.c(shooter), 10.0f); // GunDamageSource.forShooter
+        p.attackEntityFrom(net.decimation.fixes.Deci.gunDamage(shooter), 10.0f);
         return before - p.getHealth();
     }
 
@@ -1727,7 +1724,7 @@ public class DevAutoTest
         p.setHealth(p.getMaxHealth());
         p.hurtResistantTime = 0;
         float before = p.getHealth();
-        p.attackEntityFrom(deci.aD.h.alh, 10.0f); // DamageSources.human
+        p.attackEntityFrom(net.decimation.fixes.Deci.humanDamage(), 10.0f);
         return before - p.getHealth();
     }
 
@@ -1743,7 +1740,7 @@ public class DevAutoTest
             return;
         }
         p.setGameType(WorldSettings.GameType.SURVIVAL);
-        deci.ad.e vehicle = new deci.ad.i(p.worldObj, p.posX + 3, p.posY, p.posZ); // hummer
+        net.minecraft.entity.Entity vehicle = net.decimation.fixes.Deci.newHummer(p.worldObj, p.posX + 3, p.posY, p.posZ);
         p.worldObj.spawnEntityInWorld(vehicle);
         p.setSneaking(false);
         p.attackTargetEntityWithCurrentItem(vehicle);
@@ -1777,12 +1774,12 @@ public class DevAutoTest
         FMLLog.info("[%s] AUTOTEST biome at spawn: %s (id %d), Decimation monster spawn entries %d",
                     DecimationWorldGen.MODID, biome.biomeName, biome.biomeID, deciMonsters);
         ObjectZone zone = null;
-        if (deci.aJ.b.aAc != null)
+        if (net.decimation.fixes.Deci.zoneList() != null)
         {
-            for (ObjectZone z : deci.aJ.b.aAc.zoneList)
+            for (ObjectZone z : net.decimation.fixes.Deci.zoneList().zoneList)
             {
-                if (z.zoneType == net.decimation.mod.server.zones.a.POLICE
-                    || z.zoneType == net.decimation.mod.server.zones.a.MILITARY)
+                if (net.decimation.fixes.Deci.isZone(z, ZoneKind.POLICE)
+                    || net.decimation.fixes.Deci.isZone(z, ZoneKind.MILITARY))
                 {
                     zone = z;
                     break;
@@ -1810,22 +1807,22 @@ public class DevAutoTest
     {
         int y = world.getTopSolidOrLiquidBlock(x, z) + 1;
         int[] counts = new int[3];
-        List<deci.ag.d> spawned = new ArrayList<deci.ag.d>();
+        List<net.minecraft.entity.EntityLiving> spawned = new ArrayList<net.minecraft.entity.EntityLiving>();
         for (int i = 0; i < SPAWNS; i++)
         {
-            deci.ag.d infected = new deci.ag.d(world);
+            net.minecraft.entity.EntityLiving infected = net.decimation.fixes.Deci.newInfected(world);
             infected.setLocationAndAngles(x + 0.5, y, z + 0.5, 0, 0);
             if (world.spawnEntityInWorld(infected))
             {
                 spawned.add(infected);
-                int v = infected.eI(); // getVariant
+                int v = net.decimation.fixes.Deci.infectedVariant(infected);
                 if (v >= 0 && v < 3)
                 {
                     counts[v]++;
                 }
             }
         }
-        for (deci.ag.d infected : spawned)
+        for (net.minecraft.entity.EntityLiving infected : spawned)
         {
             infected.setDead();
         }

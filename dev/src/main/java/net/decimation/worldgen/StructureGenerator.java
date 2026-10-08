@@ -428,7 +428,7 @@ public class StructureGenerator implements IWorldGenerator
                         + " - was it created with a different mod list?",
                         DecimationWorldGen.MODID, s.name, skippedIds);
         }
-        net.decimation.mod.server.zones.a zone = zoneFor(s);
+        ZoneKind zone = zoneFor(s);
         if (zone != null)
         {
             ZoneStore.add(zone,
@@ -445,15 +445,15 @@ public class StructureGenerator implements IWorldGenerator
      * zone, city blocks its POLICE zone (both bias infected spawns toward
      * their uniformed variants). Civilian and untagged ruins stay unzoned.
      */
-    private static net.decimation.mod.server.zones.a zoneFor(Schematic s)
+    private static ZoneKind zoneFor(Schematic s)
     {
         if (s.name.startsWith("mil_"))
         {
-            return net.decimation.mod.server.zones.a.MILITARY;
+            return ZoneKind.MILITARY;
         }
         if (s.name.startsWith("city_"))
         {
-            return net.decimation.mod.server.zones.a.POLICE;
+            return ZoneKind.POLICE;
         }
         return null;
     }
