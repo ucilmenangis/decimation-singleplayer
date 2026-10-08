@@ -26,6 +26,12 @@ Cellar padding under multi building chunks with fewer cellars is bedrock
 
 - `LcContent`: loads index.json at init, remaps schematic ids to this
   world's blocks by name, caches schematics (`shape`).
+- Files (split 2026-10-09): `LcCity` (layout: cells, levels, blocks,
+  districts, plan(), shared helpers hl / partAt / decor / reshape),
+  `StreetPlan` (street chunks: own dressing or district street parts,
+  scenes, fronts, stairs), `BuildingPlan`, `LotPlan` (parks), `EdgePlan`
+  (city edge ramp), `StreetProps`, `Highways`, `LcContent`. The plan
+  classes reach LcCity's helpers by `import static ...LcCity.*`.
 - `LcCity`: replaces CityDistrict + paintStreets in CITY sectors when
   content is installed (`LcCity.enabled()`; `-Ddeciworldgen.lccity=false`
   switches back to the procedural city).

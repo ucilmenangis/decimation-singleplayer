@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.28.9",
+     version = "0.28.10",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -201,7 +201,7 @@ public class DecimationWorldGen
                                                              "decimation_worldgen"));
         net.decimation.worldgen.city.LcCity lcCity = new net.decimation.worldgen.city.LcCity(
             Block.getBlockFromName("deci:BlockRoad"));
-        net.decimation.worldgen.city.LcCity.StreetProps sp = new net.decimation.worldgen.city.LcCity.StreetProps();
+        net.decimation.worldgen.city.StreetProps sp = new net.decimation.worldgen.city.StreetProps();
         sp.lamp = one("deci:BlockStreetLight");
         sp.bench = one("deci:BlockStreetBench");
         sp.bin = one("deci:BlockStreetBin");

@@ -563,6 +563,12 @@ of the last session:
   `-Pjfr`: Java Flight Recorder profile to run/client/profile.jfr (read with
   ~/.jdks/zulu-25.jdk/Contents/Home/bin/jfr print --json; client thread is
   `main` in dev). Profile before optimising: guesses were wrong twice.
+- Refactor check (2026-10-09, both city paths): `servertest.py 1
+  type=decimation` before / after, `worlddiff --within 10` must be 0; the
+  old procedural city path runs when `config/decimation_worldgen/lc` is
+  absent (move it aside on the server run dir, put it back after). Stash
+  with `git stash -u`: new untracked files otherwise stay and break the
+  old build.
   `-Pcityfps`: fps looking down a seed 1 city street (cityfps.png).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as

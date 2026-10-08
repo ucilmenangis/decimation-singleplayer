@@ -67,11 +67,7 @@ or `[not decided]`.
 
 ## Code and tools
 
-1. **Split LcCity and StructureGenerator** (1225 and 861 lines): the street,
-   building, lot and edge plans into their own files; the old procedural
-   city code apart from the new. Same proof as the DevAutoTest split
-   (worlddiff 0 blocks, devtest all PASS).
-2. **Live dev test mode** `[idea]`: keep the dev game open and start test
+1. **Live dev test mode** `[idea]`: keep the dev game open and start test
    modes over a localhost port, so most reruns need no restart.
 
 ## Recently done (details in bug.md / new_feature.md)
@@ -81,4 +77,7 @@ or `[not decided]`.
   and entity line of sight cache, prop render distance option; v0.28.8
   all obfuscated names behind Deci, ZoneKind, 5 s launch wait removed;
   v0.28.9 dev tests split into modes, one launch for many, results file,
-  tools/devtest.py.
+  tools/devtest.py; v0.28.10 LcCity split (1225 -> 662 lines, plan
+  classes in their own files) and the procedural street painter out of
+  StructureGenerator (861 -> 596, LegacyStreets); seed 1 identical on
+  both city paths (worlddiff 0 blocks), devtest checks all PASS.

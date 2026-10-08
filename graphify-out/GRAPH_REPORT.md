@@ -1,103 +1,118 @@
 # Graph Report - .  (2026-10-09)
 
 ## Corpus Check
-- 15 files · ~139,448 words
+- 12 files · ~139,823 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1657 nodes · 3564 edges · 125 communities (79 shown, 46 thin omitted)
-- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 490 edges (avg confidence: 0.84)
+- 1678 nodes · 3601 edges · 140 communities (89 shown, 51 thin omitted)
+- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 499 edges (avg confidence: 0.84)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
 - StructureGenerator: net.minecraft.world.World
-- roadmap: Feature tracker (new_feature.md)
-- worldcheck: worldcheck.py
-- ?: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole
-- LcCity: EdgePlan
-- Building: Building
-- Test Schematic Builder
-- building_design: v0.10.0 to v0.12.3 city blocks, large schematics, city v2 and fixes status
-- DevTestMode: net.minecraft.client.Minecraft
-- architecture: Obfuscation map (package to meaning)
-- Deci: Deci
-- lcstudy: dcinventory.py
-- StoreyPlan: StoreyPlan
-- CLAUDE: decimation-singleplayer README (public repo overview)
-- ?: DecimationWorldGen
-- Deci: Player
-- bug: Bug: props randomly not rendered (legacy Decimation bug, fixed by PatchPropCulling)
-- WorldGenCommand: WorldGenCommand
-- ScopeZoom: ScopeZoom
-- SchematicPlan: ZoneKind
 - worldgen: World generation doc (deciworldgen)
-- Surfaces: net.minecraft.block.Block
+- worldcheck: worldcheck.py
+- DevTestMode: net.minecraft.client.Minecraft
+- Test Schematic Builder
+- architecture: Obfuscation map (package to meaning)
+- Building: Building
+- bug: Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains)
+- Deci: Deci
+- CLAUDE: decimation-singleplayer README (public repo overview)
+- StreetPlan: StreetPlan
+- Deci: Player
+- create_weapons: Creating new weapons guide
+- ScopeZoom: ScopeZoom
+- bug: Bug tracker (bug.md)
+- worldgen: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole
+- EdgePlan: EdgePlan
 - architecture: ServerProxy (deci.a.e, dedicated only)
-- building_design: Procedural building design doc (city blocks, Building v2)
+- DecimationWorldGen: .init()
+- LcCity: LcCity
 - CameraViews: CameraViews
 - ServerChecks: ServerChecks
-- bug: Bug tracker (bug.md)
-- ?: cpw.mods.fml.common.eventhandler.SubscribeEvent
+- roadmap: Plan: enemy military, juggernaut with machine guns / Barrett, stronger bandits, in military areas
 - Capture: Capture
-- new_feature: deciworldgen second @Mod (net.decimation.worldgen)
-- city_engine: City engine: Lost Cities style cities from converted DeceasedCraft content
-- LcCity: LcCity
+- StoreyPlan: StoreyPlan
+- DevTestResults: tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09)
+- ?: DecimationWorldGen
 - ?: cpw.mods.fml.common.eventhandler.SubscribeEvent
-- bug: Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains)
+- WorldGenCommand: WorldGenCommand
+- Surfaces: net.minecraft.block.Block
+- BuildingPlan: BuildingPlan
 - shots_index: Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings)
-- prop_catalogue: Decimation prop catalogue (look, size and facing of every deci: block, from the prop gallery)
-- LcContent: LcContent
-- lctranslate: lctranslate.py
 - interior_spec: Building interior and exterior spec (round 2 step 4c, approved 7 Oktober 2026)
-- LcCity: BuildingPlan
+- LcContent: LcContent
+- LotPlan: LotPlan
+- SchematicPlan: ZoneKind
+- prop_catalogue: Decimation prop catalogue (look, size and facing of every deci: block, from the prop gallery)
+- city_engine: City engine: Lost Cities style cities from converted DeceasedCraft content
 - bug: Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4)
-- DecimationWorldGen: .init()
-- terrain: Current state and pending decisions
+- new_feature: Current state and pending decisions
+- hwmap: hwmap.py
 - DeciBiome: DeciBiome
 - Name Mapping Applier
-- LcCity: net.minecraft.block.Block
 - furniture_sets: Furniture sets doc: data driven JSON furniture groups, user editable
-- Deci: Entity
 - Ruins: .unit()
-- new_feature: Round 2 step 4: building quality pass before new types (a audit, b prop catalogue, c design spec, d interiors room by room, e exterior polish, f user review in game; 4d.1 doors + low debris DONE v0.17.0, next 4d.2 surfaces)
 - ?: DeciGenLayer
-- worldgen_architecture: Worldgen architecture v3 draft (layers, assets, size classes, capture tool)
 - SupplyDropScheduler: SupplyDropScheduler
 - CLAUDE: tools/build.py real javac pipeline
+- Deci: Entity
+- Graded: Graded
+- DecimationBiomes: DecimationBiomes
+- worldgen_architecture: Worldgen architecture v3 draft (layers, assets, size classes, capture tool)
+- anvil118: anvil118.py
 - lc2schem: lc2schem.py
-- Deci: .zoneType()
-- DevTestUtil: DevTestUtil
+- roadmap: Knowledge index (docs/, interior spec, deobf notes, names.tsv, trackers)
 - Condition: com.google.gson.JsonObject
 - AssetDir: AssetDir
 - Palettes: com.google.gson.JsonObject
 - Shell: .unit()
-- Plan: Plan
 - SealedCaves: SealedCaves
 - deceasedcraft_buildings: Study: DeceasedCraft city buildings (DCTweaks jar Lost Cities data)
+- lctranslate: lctranslate.py
+- bug: Bug: armor buff ignores NPC gunfire (fixed)
+- ZoneKind: ZoneKind
+- Plan: Plan
 - BiomeMap: BiomeMap
-- roadmap: Roadmap: worldgen and cities
 - mapsurvey: mapsurvey.py
+- gun_model_spec: Fix: SmoothSwingThread busy wait (PatchSwing 4 ms sleep)
 - DECIMATION_MOD_TASK: Goal: loot crates and cars in singleplayer
-- DevTestResults: tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09)
 - interior_spec: Surfaces table per space (planks + FloorCarpet rugs, FloorTiles in kitchens / baths / corridors, WallOffice colour sets, Ceiling_1..4, lights, CeilingVent; interiors no longer copy the facade)
+- new_feature: Feature tracker (new_feature.md)
 - Facing: .setMeta()
-- apartment: Critic pass 1 on v0.20 flats: overall 3/10, verified findings and fixes, critic wrong on chair facing and lintels
-- Heuristic Auto Namer
-- Furnisher: Furnisher
-- FurnitureSets: FurnitureSet
+- StructureData: StructureData
 - lcpack: lcpack.py
-- bug: Bug: supply drop crate vanished when it landed in a flower (fixed v0.13.0)
-- DecimationBiomes: DecimationBiomes
+- Deci: .zoneType()
+- ArmorGunfireHandler: ArmorGunfireHandler
+- apartment: Critic pass 1 on v0.20 flats: overall 3/10, verified findings and fixes, critic wrong on chair facing and lintels
+- ?: cpw.mods.fml.common.eventhandler.SubscribeEvent
+- Heuristic Auto Namer
+- Deci: .repair()
+- Furnisher: Furnisher
+- ?: LcCity.java
+- FurnitureSets: FurnitureSet
+- VehicleHitHandler: VehicleHitHandler.java
+- FixedBase: FixedBase
 - Interior: .cell()
-- TracerTest: TracerTest
+- DevTestUtil: DevTestUtil
+- Rotation: Rotation
 - DeadTree: DeadTree
 - graph_update: graph_update.py
 - interior_spec: Revised order after user 0.18 review: structure first, then furniture sets, then reference library + critic
-- DecimationWorldGen: .buildSubstitutions()
 - DecimationWorldType: DecimationWorldType
+- OfficePlanner: OfficePlanner
+- Schematic: Schematic
+- multiscan: multiscan.py
 - CLAUDE: Step 3 apartment rooms done v0.18.0: kitchen run, dining, TV + sofa, bedroom, bathroom, lobby on one side
+- ShopPlanner: ShopPlanner
+- building_audit: Exterior findings: flat facades (no balconies, canopy, shopfront glazing, shop signs) and bare roofs (no vents, water tank, antenna, stair hut, AC units)
 - asset_hashes: asset_hashes.py
 - footprint: footprint.py
+- PatchTracer: PatchTracer
+- EdgePlan: .zone()
+- ?: CityDistrict
 - Weather Type Id Bug
 - ?: JsonObject
 - ?: a
@@ -105,8 +120,6 @@
 - ?: Entry
 - ?: FurnitureSet
 - ?: a
-- ?: CityDistrict
-- ?: Schematic
 - ?: EntityLiving
 - ?: EntityPlayer
 - ?: Entry
@@ -123,18 +136,20 @@
 - interior_spec: propFacing was inverted; BlockProp front points 2 E, 3 S, 4 W, 5 N
 - shots_index: flats_v0.20 / v0.21 interiors and sets_v0.21 kitchens
 - ?: EntityPlayerMP
-- ?: LargeSites
 - ?: Load
-- ?: net.decimation.worldgen.Plan
 - ?: net.decimation.worldgen.StructureGenerator
+- ?: net.decimation.worldgen.StructureGenerator.Sub
 - ?: net.minecraftforge.client.event.FOVUpdateEvent
 - ?: ObjectZoneList
+- ?: Schematic
+- ?: Shape
+- ?: Sub
 
 ## God Nodes (most connected - your core abstractions)
-1. `Building` - 53 edges
-2. `Deci` - 52 edges
-3. `StructureGenerator` - 51 edges
-4. `LcCity` - 39 edges
+1. `Deci` - 52 edges
+2. `StructureGenerator` - 52 edges
+3. `Building` - 50 edges
+4. `LcCity` - 38 edges
 5. `Bug tracker (bug.md)` - 31 edges
 6. `Current state and pending decisions` - 29 edges
 7. `DecimationWorldGen` - 28 edges
@@ -147,26 +162,26 @@
   docs/interior_spec.md → tools/make_test_schematics.py
 - `Spawn trap: Decimation adds its spawns to biomes existing in its preInit and strips vanilla monsters in its init; our biomes are made in our preInit and copySpawns copies plains lists in postInit` --semantically_similar_to--> `Recurring root cause: integrated server reports side CLIENT`  [AMBIGUOUS] [semantically similar]
   docs/terrain.md → CLAUDE.md
+- `ArmorGunfireHandler` --implements--> `Proposed LivingHurtEvent gunshot damage unification`  [INFERRED]
+  dev/src/main/java/net/decimation/fixes/ArmorGunfireHandler.java → bug.md
+- `Dashed centre line (3 on 3 off, deci:BlockRoad_CenterLine, DeciTexturedBlock top texture by metadata % 4; meta 4 north south, 2 east west; never in or next to intersections)` --references--> `DevAutoTest`  [INFERRED]
+  docs/building_design.md → dev/src/main/java/net/decimation/worldgen/DevAutoTest.java
 - `v0.28.1: EntityRenderer.cameraZoom zooms world and gun together; ScopeZoom draws the hand itself on RenderHandEvent (vanilla skips it while zoomed)` --implements--> `ScopeZoom`  [INFERRED]
   bug.md → dev/src/main/java/net/decimation/fixes/ScopeZoom.java
-- `v0.28.4: scopes from overlayFrom (default 4x) hide the gun and draw a black sniper overlay with the scope's reticle texture on the HUD` --implements--> `ScopeZoom`  [INFERRED]
-  bug.md → dev/src/main/java/net/decimation/fixes/ScopeZoom.java
-- `config/deciworldgen_scope.cfg: zoom per sight (reddot 1.25, 2x, 4x, 8x, dragunov 4x), overlayFrom, sensitivity, pictureInPicture` --references--> `ScopeZoom`  [INFERRED]
-  new_feature.md → dev/src/main/java/net/decimation/fixes/ScopeZoom.java
 
 ## Import Cycles
 - None detected.
 
 ## Hyperedges (group relationships)
+- **v0.12.1 hillside foundation fix (whole footprint sampling, median floor, dirt foundation under schematics)** — claude_v0_12_1_footprint_floor_sampling, docs_worldgen_floor_height_sampling, docs_worldgen_stone_brick_foundation, dev_src_main_java_net_decimation_worldgen_slices_slices, dev_src_main_java_net_decimation_worldgen_plan_plan_foundation [INFERRED 0.85]
+- **Saved Javassist patch sources and the rules for applying them** — claude_three_jar_patch_rule, claude_patch_from_original_classes_rule, claude_javassist_patcher, tools_patches_patchswing, tools_patches_patchpropculling, tools_patches_patchscope, tools_patches_patchtracer, tools_patches_patchbackend [INFERRED 0.85]
+- **Visual evidence memory (autotest screenshot modes, docs/shots, written shots index, prop catalogue)** — claude_visual_evidence_rule, claude_autotest_screenshot_modes, docs_shots_index_shots_index, docs_prop_catalogue_prop_catalogue_doc [INFERRED 0.85]
+- **Dev test modes run in one launch by tools/devtest.py** — claude_devtest_workflow, tools_devtest, dev_src_main_java_net_decimation_worldgen_devautotest_devautotest, dev_src_main_java_net_decimation_worldgen_devtest_devtestmode_devtestmode, dev_src_main_java_net_decimation_worldgen_devtest_devtestresults_devtestresults, dev_src_main_java_net_decimation_worldgen_devtest_serverchecks_serverchecks, dev_src_main_java_net_decimation_worldgen_devtest_cameraviews_cameraviews, dev_src_main_java_net_decimation_worldgen_devtest_scopetest_scopetest, dev_src_main_java_net_decimation_worldgen_devtest_tracertest_tracertest, dev_src_main_java_net_decimation_worldgen_devtest_propstest_propstest, dev_src_main_java_net_decimation_worldgen_devtest_cityfpstest_cityfpstest [EXTRACTED 1.00]
 - **Singleplayer bugs from ServerProxy only registration or isServer gates** — claude_singleplayer_side_root_cause_pattern, bug_loot_singleplayer_crash, bug_loot_gui_never_opens, bug_no_supply_drops_singleplayer, bug_humanity_kill_singleplayer, bug_zones_inactive_singleplayer, bug_bottlecap_currency, deobf_notes_architecture_serverproxy [INFERRED 0.95]
 - **Prop culling failure and fix (PropRenderer, LineOfSight corner rays, 1x1 unrotated render box, PatchPropCulling)** — bug_props_not_rendered, deobf_notes_architecture_prop_tesr_renderers, bug_lineofsight_corner_rays, bug_prop_render_bounding_box_1x1, tools_patches_patchpropculling_patchpropculling [INFERRED 0.95]
 - **Multiblock master fix (v0.12.3): render gate, setSelfMaster in placers, repair on chunk load** — bug_generated_metal_shelves_invisible, bug_multiblock_master_render_gate, deobf_notes_architecture_multiblock_props, dev_src_main_java_net_decimation_worldgen_slices_slices, dev_src_main_java_net_decimation_fixes_multiblockrepairhandler_multiblockrepairhandler, claude_v0_12_3_multiblock_master_rule [EXTRACTED 1.00]
 - **Supply drop landing safety: falling crate dies on non replaceable cells (flowers, props), fixed by clearLanding and skipping prop topped columns** — bug_supply_drop_flower_vanish, bug_supply_drop_street_prop_vanish, bug_falling_block_replaceable_landing, dev_src_main_java_net_decimation_fixes_supplydropscheduler_supplydropscheduler_clearlanding, dev_src_main_java_net_decimation_fixes_supplydropscheduler_supplydropscheduler_drop [EXTRACTED 1.00]
 - **Upper storey reachability fix v0.16.1 (floorplan scan, unsupported ladder, collapse exemption, Building.ladder / collapsed)** — bug_upper_storeys_unreachable, bug_ladder_unsupported_wall_cell, bug_ladder_core_collapse_exemption, tools_floorplan [EXTRACTED 1.00]
-- **v0.12.1 hillside foundation fix (whole footprint sampling, median floor, dirt foundation under schematics)** — claude_v0_12_1_footprint_floor_sampling, docs_worldgen_floor_height_sampling, docs_worldgen_stone_brick_foundation, dev_src_main_java_net_decimation_worldgen_slices_slices, dev_src_main_java_net_decimation_worldgen_plan_plan_foundation [INFERRED 0.85]
-- **Saved Javassist patch sources and the rules for applying them** — claude_three_jar_patch_rule, claude_patch_from_original_classes_rule, claude_javassist_patcher, tools_patches_patchswing, tools_patches_patchpropculling, tools_patches_patchscope, tools_patches_patchtracer, tools_patches_patchbackend [INFERRED 0.85]
-- **Visual evidence memory (autotest screenshot modes, docs/shots, written shots index, prop catalogue)** — claude_visual_evidence_rule, claude_autotest_screenshot_modes, docs_shots_index_shots_index, docs_prop_catalogue_prop_catalogue_doc [INFERRED 0.85]
-- **Dev test modes run in one launch by tools/devtest.py** — claude_devtest_workflow, tools_devtest, dev_src_main_java_net_decimation_worldgen_devautotest_devautotest, dev_src_main_java_net_decimation_worldgen_devtest_devtestmode_devtestmode, dev_src_main_java_net_decimation_worldgen_devtest_devtestresults_devtestresults, dev_src_main_java_net_decimation_worldgen_devtest_serverchecks_serverchecks, dev_src_main_java_net_decimation_worldgen_devtest_cameraviews_cameraviews, dev_src_main_java_net_decimation_worldgen_devtest_scopetest_scopetest, dev_src_main_java_net_decimation_worldgen_devtest_tracertest_tracertest, dev_src_main_java_net_decimation_worldgen_devtest_propstest_propstest, dev_src_main_java_net_decimation_worldgen_devtest_cityfpstest_cityfpstest [EXTRACTED 1.00]
 - **Prop render performance: measure, cache line of sight, render distance, bake (open)** — bug_prop_fps_drop, bug_prop_fps_measurement, bug_los_cache, bug_prop_render_distance_by_size, bug_cityfps_measurement, bug_bake_props_chunk_mesh, tools_patches_patchpropculling_patchpropculling, claude_jfr_profiling, docs_roadmap_prop_drawing_cost [EXTRACTED 1.00]
 - **Cheap scope v0.28.0..0.28.4 (gate, view zoom, projective glass, sniper overlay)** — feature_cheap_scope, bug_scope_pip_gate, bug_scope_camera_zoom, bug_scope_projective_glass, bug_scope_sniper_overlay, dev_src_main_java_net_decimation_fixes_scopezoom_scopezoom, tools_patches_patchscope_patchscope, dev_src_main_java_net_decimation_worldgen_devtest_scopetest_scopetest [EXTRACTED 1.00]
 - **Gun model, animation and registration pipeline** — deobf_notes_architecture_gunitem, deobf_notes_architecture_itemregistry, docs_gun_model_spec_bmodelloader, docs_gun_model_spec_bmodel_format, docs_gun_model_spec_gunanimation, docs_gun_model_spec_anib_format, docs_gun_model_spec_gunitemrenderer, create_weapons_gun_registration_pattern [EXTRACTED 1.00]
@@ -178,305 +193,345 @@
 - **Worldgen test tooling without a player** — tools_servertest, tools_wallscan, tools_worldcheck, dev_src_main_java_net_decimation_worldgen_devpregen_devpregen, tools_make_test_schematics, docs_worldgen_seed1_test_world [EXTRACTED 1.00]
 - **Terrain blending v0.13.0 (lot grading, Graded plans, Building.grade, CityDistrict lot placement, gradescan check)** — docs_worldgen_lot_grading, dev_src_main_java_net_decimation_worldgen_graded_graded, dev_src_main_java_net_decimation_worldgen_slices_slices, dev_src_main_java_net_decimation_worldgen_citydistrict_citydistrict_plan, tools_gradescan, bug_graded_sand_cave_fall [EXTRACTED 1.00]
 - **Whole multiblock generation (v0.16.0): slice writer and small placer call complete after writing, Decimation helper forms the box, multiscan checks** — dev_src_main_java_net_decimation_worldgen_slices_slices_write, dev_src_main_java_net_decimation_worldgen_structuregenerator_structuregenerator_place, dev_src_main_java_net_decimation_fixes_multiblockrepairhandler_multiblockrepairhandler_complete, docs_worldgen_form_multiblock_helper, docs_worldgen_complete_after_slice_rule, tools_multiscan [EXTRACTED 1.00]
-- **Street aligned car wreck facing (placement rule, metadata facing, renderer, axis assumption)** — docs_building_design_street_car_placement, docs_building_design_prop_facing_metadata, docs_building_design_car_model_axis_assumption, docs_worldgen_street_car_wrecks, dev_src_main_java_net_decimation_worldgen_structuregenerator_structuregenerator_carmeta, deobf_notes_architecture_prop_tesr_renderers [INFERRED 0.85]
+- **Street aligned car wreck facing (placement rule, metadata facing, renderer, axis assumption)** — docs_building_design_street_car_placement, docs_building_design_prop_facing_metadata, docs_building_design_car_model_axis_assumption, docs_worldgen_street_car_wrecks, deobf_notes_architecture_prop_tesr_renderers [INFERRED 0.85]
 - **Decimation world type biome pipeline (TerrainEvents swaps GenLayers, DeciGenLayer reads BiomeMap, BiomeMap uses shared Sectors, DecimationBiomes defines the biomes)** — dev_src_main_java_net_decimation_worldgen_terrain_terrainevents_terrainevents, dev_src_main_java_net_decimation_worldgen_terrain_decigenlayer_decigenlayer, dev_src_main_java_net_decimation_worldgen_terrain_biomemap_biomemap, dev_src_main_java_net_decimation_worldgen_sectors_sectors, dev_src_main_java_net_decimation_worldgen_terrain_decimationbiomes_decimationbiomes, dev_src_main_java_net_decimation_worldgen_terrain_decimationworldtype_decimationworldtype [EXTRACTED 1.00]
 - **Gun registration builder chain** — create_weapons_gun_registration_pattern, deobf_notes_architecture_gunitem, deobf_notes_architecture_gunstats, create_weapons_weapon_category_enum, create_weapons_fire_mode_enum, deobf_notes_architecture_gunitem_setdamage [EXTRACTED 1.00]
 - **ServerProxy-only logic absent in singleplayer** — deobf_notes_architecture_serverproxy, deobf_notes_architecture_servertickhandler, deobf_notes_architecture_itempickuphandler, deobf_notes_architecture_entityspawnzonehandler, deobf_notes_architecture_playerzonetickhandler, deobf_notes_architecture_safezoneattackhandler, deobf_notes_architecture_servercommandregistrar, deobf_notes_architecture_zonemanager, deobf_notes_architecture_supplydropspawner, claude_singleplayer_side_root_cause_pattern [EXTRACTED 1.00]
 - **Right click loot flow (interact, cooldown, pool, packet, delayed GUI)** — deobf_notes_architecture_lootinteracthandler, deobf_notes_architecture_lootcooldownregistry, deobf_notes_architecture_loottable, deobf_notes_architecture_lootpool, deobf_notes_architecture_packetlootinventory, deobf_notes_architecture_tickscheduler, deobf_notes_architecture_deciconstants [EXTRACTED 1.00]
 
-## Communities (125 total, 46 thin omitted)
+## Communities (140 total, 51 thin omitted)
 
 ### Community 0 - "StructureGenerator: net.minecraft.world.World"
 Cohesion: 0.06
-Nodes (17): Yard, Highways, Graded, Schematic, LargeSites, Plan, Slices, CityDistrict (+9 more)
+Nodes (21): Refactor check on both city paths: worlddiff 0, legacy path by moving the lc pack aside, git stash -u, v0.12.1: whole footprint floor height sampling and dirt fill under schematics, cpw.mods.fml.common.IWorldGenerator, Yard, Highways, Schematic, LargeSites, LegacyStreets (+13 more)
 
-### Community 1 - "roadmap: Feature tracker (new_feature.md)"
+### Community 1 - "worldgen: World generation doc (deciworldgen)"
 Cohesion: 0.05
-Nodes (67): Bug: armor buff ignores NPC gunfire (fixed), DamageSource split: gunDeci (player) vs human/turret (NPC), Helmets give no gun protection (slot 3 excluded), Helmet counts on headshots only (v0.9.1: aim line for player guns, 20% random for NPC), Proposed LivingHurtEvent gunshot damage unification, NPC tracers flew along the body facing; fixed by sending the target id (PatchTracer), Cause: PacketGunFireEffects carried only the shooter id; the client drew the tracer along getLook() (a mob's body facing), Tracer test (-Ptracer): original 52 tracers mean 133 degrees off the target, patched 42 tracers mean 1.0, max 2.0 (+59 more)
+Nodes (73): Ladder at (W-2, L-2) hangs on a back wall cell that can be a window, a decay hole or not yet written (next population window); a block update pops it off, Bug: city buildings missing a whole wall at sector borders (fixed v0.11.1), v0.10.0 to v0.12.3 city blocks, large schematics, city v2 and fixes status, v0.12.2: car wreck long axis is x at 0 degrees (north south 5/3, east west 4/2), v0.15.0: street life (levelled street cross sections, dashed centre lines, street lights, benches, bins, trash bags, facing derived from PropRenderer transform), Prop TileEntitySpecialRenderers (deci.I.*), Props, CityDistrict (+65 more)
 
 ### Community 2 - "worldcheck: worldcheck.py"
-Cohesion: 0.06
-Nodes (45): Bug: city edge ramp missed its outer columns (fixed v0.24.4, populate scans cells within EDGE), Bug: structures built on ocean floor, Wall scan reproduction on seed 1 (2 of 33 buildings, one real: b4_4_2), Autotest screenshot modes (default 3 street views, -Paudit building audit, -Pgallery every Decimation block 3 per shot, -Ponly= re-shoots single views; peaceful, mobs removed, camera locked per tick, fov / gamma restored), Autotest ends with 3 city street screenshots (dev/run/client/screenshots/autotest_<n>.png: along the street, street light side on, across); read them to check visuals instead of asking the user; -Ddeciworldgen.autotest.views=false skips them, Autotest forces pauseOnLostFocus false, Damage checks must run after 60 server ticks (spawn invulnerability), Testing without the user (devtest.py first choice, servertest, worldcheck, worlddiff, autotest flags) (+37 more)
+Cohesion: 0.05
+Nodes (49): Bug: city edge ramp missed its outer columns (fixed v0.24.4, populate scans cells within EDGE), Bug: structures built on ocean floor, Wall scan reproduction on seed 1 (2 of 33 buildings, one real: b4_4_2), Autotest screenshot modes (default 3 street views, -Paudit building audit, -Pgallery every Decimation block 3 per shot, -Ponly= re-shoots single views; peaceful, mobs removed, camera locked per tick, fov / gamma restored), Autotest ends with 3 city street screenshots (dev/run/client/screenshots/autotest_<n>.png: along the street, street light side on, across); read them to check visuals instead of asking the user; -Ddeciworldgen.autotest.views=false skips them, Autotest forces pauseOnLostFocus false, Damage checks must run after 60 server ticks (spawn invulnerability), Testing without the user (devtest.py first choice, servertest, worldcheck, worlddiff, autotest flags) (+41 more)
 
-### Community 3 - "?: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole"
-Cohesion: 0.08
-Nodes (27): Bug: generated metal shelves invisible (multiblock master never set, fixed v0.12.3), MetalShelfRenderer draws only the master part (returns unless isMaster: stored master position equals own position), setSelfMaster() on every placed multiblock part plus repair on chunk load, v0.12.3 rule: multiblock props (deci.W.a, metal shelves) render only from a master part; anything placing them outside player placement must call setSelfMaster(), v0.16.0: multiblock props generated whole (shelves are 1x1x2 TALL), tools/multiscan.py checks them, supply drops skip columns topped by a prop, Multiblock props (deci.W.*), TileEntity, Load (+19 more)
+### Community 3 - "DevTestMode: net.minecraft.client.Minecraft"
+Cohesion: 0.10
+Nodes (10): City street after the cache (-Pcityfps): props 5.5% of the client thread, chunk drawing 15%, chunk rebuild 12.7%; props no longer the bottleneck, Dev test modes: checks (fresh seed 1 world: zones, vehicle, humanity, prop box, bottlecaps, armor, helmet, supply drop), views (-Paudit / -Pgallery / -Pfootprint / -Pstudy / -Pflats / -Psets), scope, tracer, props, cityfps, CityFpsTest, DevTestMode, PropsTest, EntityPlayerMP, ScopeTest, TracerTest (+2 more)
 
-### Community 4 - "LcCity: EdgePlan"
-Cohesion: 0.07
-Nodes (4): EdgePlan, LotPlan, FixedBase, Graded
-
-### Community 5 - "Building: Building"
-Cohesion: 0.08
-Nodes (11): Building, Props, CityDistrict, Furnisher, Interior, net.decimation.worldgen.Graded, Ruins, Shell (+3 more)
-
-### Community 6 - "Test Schematic Builder"
+### Community 4 - "Test Schematic Builder"
 Cohesion: 0.15
 Nodes (27): mil_compound large test schematic (48x14x48), city_office(), city_shop(), city_street(), civ_gas_station(), civ_house_ruin(), civ_shed(), decay() (+19 more)
 
-### Community 7 - "building_design: v0.10.0 to v0.12.3 city blocks, large schematics, city v2 and fixes status"
-Cohesion: 0.12
-Nodes (31): v0.10.0 to v0.12.3 city blocks, large schematics, city v2 and fixes status, v0.12.2: car wreck long axis is x at 0 degrees (north south 5/3, east west 4/2), v0.15.0: street life (levelled street cross sections, dashed centre lines, street lights, benches, bins, trash bags, facing derived from PropRenderer transform), Prop TileEntitySpecialRenderers (deci.I.*), BlockProp facing transform from deobf PropRenderer (rotate 180 about x, metadata % 4 * 90 about y, then extra rotation; toward the road: road west 4, east 2, north 5, south 3), Car wreck model axis: long axis along x at 0 degrees (confirmed in game 2026-10-07), Dashed centre line (3 on 3 off, deci:BlockRoad_CenterLine, DeciTexturedBlock top texture by metadata % 4; meta 4 north south, 2 east west; never in or next to intersections), Floor counts (shop 1 to 2, apartment 2 to 9, office 3 to 20, about 15% towers) (+23 more)
-
-### Community 8 - "DevTestMode: net.minecraft.client.Minecraft"
-Cohesion: 0.12
-Nodes (8): City street after the cache (-Pcityfps): props 5.5% of the client thread, chunk drawing 15%, chunk rebuild 12.7%; props no longer the bottleneck, New dev test: DevTestMode subclass, register its name in DevAutoTest.mode(), record with DevTestResults.value / check, screenshots with DevTestUtil.screenshot, CityFpsTest, DevTestMode, PropsTest, EntityPlayerMP, ScopeTest, net.minecraft.client.Minecraft
-
-### Community 9 - "architecture: Obfuscation map (package to meaning)"
+### Community 5 - "architecture: Obfuscation map (package to meaning)"
 Cohesion: 0.11
-Nodes (30): Obfuscation map (package to meaning), 8 agent deobfuscation naming pass, Subsystem taxonomy (core, proxy, network, loot, zone, ...), Decimation architecture notes, DeciConstants (deci.Q.c, GUI ids), DecimationMod (deci.a.b, @Mod entry), GunItem (deci.ay.i), GunItem.setDamage am(int) chokepoint (+22 more)
+Nodes (31): Obfuscation map (package to meaning), 8 agent deobfuscation naming pass, Subsystem taxonomy (core, proxy, network, loot, zone, ...), Decimation architecture notes, ClientProxy (deci.a.c), DeathHandler (deci.an.f, humanity isServer gate), DeciConstants (deci.Q.c, GUI ids), DecimationMod (deci.a.b, @Mod entry) (+23 more)
 
-### Community 10 - "Deci: Deci"
+### Community 6 - "Building: Building"
+Cohesion: 0.09
+Nodes (9): Building, Furnisher, Interior, net.decimation.worldgen.Graded, Ruins, Shell, StoreyPlan, Surfaces (+1 more)
+
+### Community 7 - "bug: Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains)"
+Cohesion: 0.10
+Nodes (25): Baking static props into chunk meshes (prop textures into the block atlas, both model formats to quads): full fix for open views, not started, Launch waited 5 s for the dead Decimation backend (kryonet hardcoded 5000 ms); PatchBackend, LineOfSight.canSeeTileEntity (deci.a.c$a.a): 8 rays from the eye to the render box corners, PatchPropCulling step 3 (v0.28.6): line of sight answers cached until the player or entity moves 0.3 blocks (props 1.0..1.3 s, entities 0.15..0.18 s); prop renderer share 21% -> 9%, Prop dense FPS drop: line of sight ray casts 76% of prop rendering, cached in v0.28.6; model drawing remains, Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains), Prop fps measured (-Pprops): 225 props in view 12..14 fps vs empty 28..29; 76% of PropRenderer time in canSeeTileEntity ray casts, TileEntityProp.getRenderBoundingBox: bare 1x1x1 cell for 36 of 72 props, never rotated (+17 more)
+
+### Community 8 - "Deci: Deci"
 Cohesion: 0.11
 Nodes (6): Deci, ObjectZoneList, net.minecraft.entity.player.EntityPlayer, net.minecraft.item.Item, net.minecraft.item.ItemStack, Vector3f
 
-### Community 11 - "lcstudy: dcinventory.py"
-Cohesion: 0.12
-Nodes (21): chunk_biomes(), chunk_blocks(), chunks(), main(), Palette, {section Y: biomes[4,4,4] (y, z, x) global ids}., Entries packed without spanning longs (1.16+)., Global name -> id for a whole survey. (+13 more)
-
-### Community 12 - "StoreyPlan: StoreyPlan"
-Cohesion: 0.14
-Nodes (4): ApartmentPlanner, OfficePlanner, ShopPlanner, StoreyPlan
-
-### Community 13 - "CLAUDE: decimation-singleplayer README (public repo overview)"
+### Community 9 - "CLAUDE: decimation-singleplayer README (public repo overview)"
 Cohesion: 0.10
 Nodes (26): Case sensitive volume extraction, CFR --caseinsensitivefs true silently drops colliding classes, CLAUDE.md project guide, dev/libs/Decimation-base.jar (patched jar minus our classes), Decimation.jar (obfuscated Forge 1.7.10 mod jar), Decimation.jar.original.bak (hash checked backup), Decimation.jar.patched (deliverable), deobf/ readable reference tree (decompiled with readable names, read only) (+18 more)
 
-### Community 14 - "?: DecimationWorldGen"
-Cohesion: 0.27
-Nodes (9): cpw.mods.fml.common.IWorldGenerator, cpw.mods.fml.common.Mod, DecimationWorldGen, DevAutoTest, net.decimation.worldgen.building.Building, net.minecraft.world.chunk.IChunkProvider, ObjectZone, Schematic (+1 more)
-
-### Community 15 - "Deci: Player"
-Cohesion: 0.13
-Nodes (8): b, BottlecapHandler (deciworldgen), BottlecapHandler, Player, HumanityKillHandler, EntityPlayer, net.minecraftforge.event.entity.living.LivingDeathEvent, net.minecraftforge.event.entity.player.EntityItemPickupEvent
-
-### Community 16 - "bug: Bug: props randomly not rendered (legacy Decimation bug, fixed by PatchPropCulling)"
+### Community 10 - "StreetPlan: StreetPlan"
 Cohesion: 0.11
-Nodes (19): LineOfSight.canSeeTileEntity (deci.a.c$a.a): 8 rays from the eye to the render box corners, PatchPropCulling step 3 (v0.28.6): line of sight answers cached until the player or entity moves 0.3 blocks (props 1.0..1.3 s, entities 0.15..0.18 s); prop renderer share 21% -> 9%, tools/patches/PatchSwing.java, TileEntityProp.getRenderBoundingBox: bare 1x1x1 cell for 36 of 72 props, never rotated, Bug: props randomly not rendered (legacy Decimation bug, fixed by PatchPropCulling), Fix: SmoothSwingThread busy wait (PatchSwing 4 ms sleep), Hand written Forge/Minecraft stub classes, Javassist bytecode patcher (+11 more)
+Nodes (5): Shape, ZoneKind, StreetPlan, StreetProps, City engine files after the 2026-10-09 split: LcCity layout + StreetPlan, BuildingPlan, LotPlan, EdgePlan, StreetProps
 
-### Community 17 - "WorldGenCommand: WorldGenCommand"
+### Community 11 - "Deci: Player"
 Cohesion: 0.13
-Nodes (15): Building, Live loop: hotswap code, reload sets, rebuild in place, no restart per change, Rule: new code adds an accessor to Deci, never calls deci.* directly (all ~60 obfuscated uses migrated 2026-10-09, seed 1 world 0 blocks differ), Override, WorldGenCommand, Live editing: /deciworldgen reload + rebuild, -Photswap + tools/hotswap.py (method bodies only), Roadmap: code and tools, Live dev test mode [idea]: keep the dev game open and start test modes over a localhost port (+7 more)
+Nodes (9): b, BottlecapHandler (deciworldgen), Bug: humanity never changed from ordinary kills in singleplayer (fixed v0.9.0), BottlecapHandler, Player, HumanityKillHandler, EntityPlayer, net.minecraftforge.event.entity.living.LivingDeathEvent (+1 more)
 
-### Community 18 - "ScopeZoom: ScopeZoom"
+### Community 12 - "create_weapons: Creating new weapons guide"
+Cohesion: 0.17
+Nodes (25): .bmodel is plain text Techne style code (earlier binary note was wrong), Gun specific .bmodel header fields (mOff, sPos, flamePos, lhPos, rhPos, ejectPos, Scale), Unmapped .f(n) builder call (likely spread or sway), Fire mode enum deci.ay.e.a (SINGLE, AUTO, BURST, PUMP, BOLT), Gun registration call new i(...).f().am(), Genuinely new model recipe (needs Techne), Reskin an existing weapon recipe (fast path), Techne cuboid model editor (+17 more)
+
+### Community 13 - "ScopeZoom: ScopeZoom"
 Cohesion: 0.15
 Nodes (11): Configuration, ScopeZoom, Field, Method, net.minecraft.client.renderer.EntityRenderer, net.minecraft.util.ResourceLocation, net.minecraftforge.client.event.RenderHandEvent, net.minecraftforge.client.event.RenderWorldLastEvent (+3 more)
 
-### Community 19 - "SchematicPlan: ZoneKind"
-Cohesion: 0.10
-Nodes (6): Schematic, SchematicPlan, ZoneKind, MILITARY, POLICE, SAFEZONE
+### Community 14 - "bug: Bug tracker (bug.md)"
+Cohesion: 0.13
+Nodes (24): Bug: large ammo crate NPE (dead field avk), Bug: bottlecaps not converted to currency (fixed), Bug tracker (bug.md), Bug: ClassCastException deci.a.c to deci.a.e, Bug: CustomSkinLoader coremod crash, EntityFallingSupplyDrop turns into a block only on a replaceable cell (flowers, saplings, tall flowers are not), Bug: graded yard sand fell into caves, hole next to a building (fixed v0.13.0), Bug: loot GUI never opens (+16 more)
 
-### Community 20 - "worldgen: World generation doc (deciworldgen)"
-Cohesion: 0.15
-Nodes (23): Ladder at (W-2, L-2) hangs on a back wall cell that can be a window, a decay hole or not yet written (next population window); a block update pops it off, Bug: city buildings missing a whole wall at sector borders (fixed v0.11.1), BiomeMap.biomeAt rules (seed only: city and military biomes exactly on sector squares, suburbs warped up to 56, dead wilderness within about 100 blocks, overgrown further out, no villages), Rivers as a noise contour (|simplex| < 0.022 at scale 520, domain warped, 32+ blocks from city and military sectors), Adding community schematics (prefix, folder, full restart, new chunks only), Cell grid (4x4 chunks, one small schematic or one city block), Large schematics (up to 120x120, per site chance, placed inside the site), CityDistrict.plan lot placement (2 block side yard, setback 6..9 on 75% of lots with 9 spare, 3 behind, random stream unchanged) (+15 more)
+### Community 15 - "worldgen: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole"
+Cohesion: 0.16
+Nodes (22): Bug: generated metal shelves invisible (multiblock master never set, fixed v0.12.3), MetalShelfRenderer draws only the master part (returns unless isMaster: stored master position equals own position), setSelfMaster() on every placed multiblock part plus repair on chunk load, v0.12.3 rule: multiblock props (deci.W.a, metal shelves) render only from a master part; anything placing them outside player placement must call setSelfMaster(), v0.16.0: multiblock props generated whole (shelves are 1x1x2 TALL), tools/multiscan.py checks them, supply drops skip columns topped by a prop, Multiblock props (deci.W.*), Load, World (+14 more)
 
-### Community 22 - "architecture: ServerProxy (deci.a.e, dedicated only)"
+### Community 17 - "architecture: ServerProxy (deci.a.e, dedicated only)"
 Cohesion: 0.14
 Nodes (22): Bug: zones never active in singleplayer (partial fix), AntiCheatScanner (deci.aN.a), BackendConnection (deci.aP.a, kryonet), Block break/place protection handlers (deci.aK.a, b), ChatHandler (deci.aK.n, radio chat), ClanManagerV1 (server.clans.a), DeathStatsHandler (deci.aK.h), EntitySpawnZoneHandler (deci.aK.d) (+14 more)
 
-### Community 23 - "building_design: Procedural building design doc (city blocks, Building v2)"
-Cohesion: 0.15
-Nodes (21): Finding: rooms have no function (sparse apartment units, empty ground storey units, identical office desk grid on every storey incl. ground, repeated plans on tall buildings, undefined upper shop storey), Apartment slab layout (double loaded corridor, stair core, living part and bedroom per unit), Biome overgrowth (temperate vines and moss, jungle heavy vines, snowy snow layers, dry sand drifts and dead bushes), Procedural building design doc (city blocks, Building v2), Decay model (level 0.15 to 0.55, wall holes, cracked and mossy blocks, broken windows, rubble, corner collapse over 1 to 3 storeys), 1 block margin ring outside walls for exterior vines (SKIP elsewhere), Minecraft scale (storey 4 blocks, corridor 2 wide, doors 1x2, units 5 to 8 deep), Office floor layout (core, open plan desk rows at windows, meeting rooms, reception, storage, break room) (+13 more)
+### Community 18 - "DecimationWorldGen: .init()"
+Cohesion: 0.14
+Nodes (10): cpw.mods.fml.common.event.FMLInitializationEvent, cpw.mods.fml.common.event.FMLPreInitializationEvent, cpw.mods.fml.common.Mod, DecimationWorldGen, CityDistrict, Schematic, FMLPostInitializationEvent, FMLServerStartingEvent (+2 more)
 
-### Community 24 - "CameraViews: CameraViews"
-Cohesion: 0.19
+### Community 19 - "LcCity: LcCity"
+Cohesion: 0.23
+Nodes (7): Building, LcCity, City decor: parks on open lots, street scenes (pack fountains), building fronts on the street side, Fronts: building chunk beside a straight street gets a district front part (FRONT_CHANCE 0.5), resolved lazily at write time, Parks: open lots LOT_CHANCE 10% of building chunks carry a district park part one layer up, Street scenes: DeceasedCraft 'fountains' (bus, ambulance, roadblock, trash) in 6% of straight street chunks, Highways
+
+### Community 20 - "CameraViews: CameraViews"
+Cohesion: 0.20
 Nodes (3): CameraViews, EntityPlayerMP, Entry
 
-### Community 25 - "ServerChecks: ServerChecks"
-Cohesion: 0.23
+### Community 21 - "ServerChecks: ServerChecks"
+Cohesion: 0.25
 Nodes (4): EntityPlayerMP, ServerChecks, ItemStack, net.minecraft.world.WorldServer
 
-### Community 26 - "bug: Bug tracker (bug.md)"
-Cohesion: 0.14
-Nodes (21): Bug: large ammo crate NPE (dead field avk), Bug: bottlecaps not converted to currency (fixed), Bug tracker (bug.md), Bug: ClassCastException deci.a.c to deci.a.e, Bug: CustomSkinLoader coremod crash, Bug: humanity never changed from ordinary kills in singleplayer (fixed v0.9.0), Bug: loot GUI never opens, Bug: loot never worked in singleplayer (+13 more)
+### Community 22 - "roadmap: Plan: enemy military, juggernaut with machine guns / Barrett, stronger bandits, in military areas"
+Cohesion: 0.19
+Nodes (19): NPC tracers flew along the body facing; fixed by sending the target id (PatchTracer), Tracer test (-Ptracer): original 52 tracers mean 133 degrees off the target, patched 42 tracers mean 1.0, max 2.0, BankerTrader (deci.ai.e), FactionHumanEntity (deci.ah.d), Hostile mob entities (deci.ag.*: Bandit, Soldier, Infected), TraderSpawnManager (server.traders.a), Civilian NPC, traders that spawn on their own and walk, more clothing variety on bandits and soldiers, Enemy juggernaut: full juggernaut armor, machine guns (PKM, M240) or a Barrett with .50 BMG damage (+11 more)
 
-### Community 27 - "?: cpw.mods.fml.common.eventhandler.SubscribeEvent"
-Cohesion: 0.12
-Nodes (13): Bug: building base height depends on chunk generation order (Slices.decideBase), Bug: vehicles destroyed in one hit (fixed v0.8.1), VehicleHitHandler (v0.8.1), cpw.mods.fml.common.eventhandler.SubscribeEvent, VehicleHitHandler, DevPregen, ServerTickEvent, Open bug 4: arrows still pick up empty vehicles (punching fixed v0.8.1) (+5 more)
-
-### Community 28 - "Capture: Capture"
+### Community 23 - "Capture: Capture"
 Cohesion: 0.21
 Nodes (3): Capture, JsonArray, JsonObject
 
-### Community 29 - "new_feature: deciworldgen second @Mod (net.decimation.worldgen)"
-Cohesion: 0.13
-Nodes (11): Rotation, Schematic, deciworldgen second @Mod (net.decimation.worldgen), dist/ separate jars (deciworldgen-0.7.0.jar + Decimation.jar), Dropped companion mods (Ruins, ezWastelands, GeneratorMods), Generator crash hardening (catch all, self disable after 3 errors), tools/make_test_schematics.py (8 schematics), MarkerGenerator (milestone 2 glowstone pillars) (+3 more)
+### Community 24 - "StoreyPlan: StoreyPlan"
+Cohesion: 0.22
+Nodes (3): ApartmentPlanner, StoreyPlan, Worldgen code map: building package parts (Shell, StoreyPlan, planners, Furnisher, Surfaces, Interior, Ruins, Yard)
 
-### Community 30 - "city_engine: City engine: Lost Cities style cities from converted DeceasedCraft content"
-Cohesion: 0.11
-Nodes (15): v0.25.0 highways, v0.26.0 parks / street scenes / fronts, v0.27.0 district Lost Cities street parts, FixedBase, City engine: Lost Cities style cities from converted DeceasedCraft content, City decor: parks on open lots, street scenes (pack fountains), building fronts on the street side, City districts: wasteland next to military sectors, current beta weighted, Fronts: building chunk beside a straight street gets a district front part (FRONT_CHANCE 0.5), resolved lazily at write time, City levels per cell (6 blocks apart), streets at G, stairs parts between levels, Parks: open lots LOT_CHANCE 10% of building chunks carry a district park part one layer up (+7 more)
+### Community 25 - "DevTestResults: tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09)"
+Cohesion: 0.15
+Nodes (8): run/client/devtest/results.txt: one line per value, PASS / FAIL with the expectation, exit code 1 on a FAIL, tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09), New dev test: DevTestMode subclass, register its name in DevAutoTest.mode(), record with DevTestResults.value / check, screenshots with DevTestUtil.screenshot, ClientTickEvent, DevTestResults, Roadmap: code and tools, Live dev test mode [idea]: keep the dev game open and start test modes over a localhost port, Split LcCity (1225 lines) and StructureGenerator (861 lines) into street, building, lot and edge plan files; old procedural city apart
 
-### Community 32 - "?: cpw.mods.fml.common.eventhandler.SubscribeEvent"
+### Community 26 - "?: DecimationWorldGen"
+Cohesion: 0.40
+Nodes (3): DevAutoTest, net.decimation.worldgen.building.Building, ObjectZone
+
+### Community 27 - "?: cpw.mods.fml.common.eventhandler.SubscribeEvent"
 Cohesion: 0.15
 Nodes (10): Load, ObjectZone, ObjectZoneList, ServerTickEvent, ZoneStore, net.decimation.mod.server.zones.ObjectZone, net.decimation.mod.server.zones.ObjectZoneList, ZoneStore (per world deciworldgen_zones.json) (+2 more)
 
-### Community 33 - "bug: Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains)"
-Cohesion: 0.15
-Nodes (15): Baking static props into chunk meshes (prop textures into the block atlas, both model formats to quads): full fix for open views, not started, Launch waited 5 s for the dead Decimation backend (kryonet hardcoded 5000 ms); PatchBackend, Prop dense FPS drop: line of sight ray casts 76% of prop rendering, cached in v0.28.6; model drawing remains, Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains), Prop fps measured (-Pprops): 225 props in view 12..14 fps vs empty 28..29; 76% of PropRenderer time in canSeeTileEntity ray casts, PatchPropCulling step 4: render distance by prop size (deciworldgen_props.cfg, small / medium / large; default 64 = vanilla), Obfuscated Decimation names in our code go through fixes/Deci, -Pjfr Java Flight Recorder CPU profile (run/client/profile.jfr, read with jfr print --json; client thread is main in dev) (+7 more)
+### Community 28 - "WorldGenCommand: WorldGenCommand"
+Cohesion: 0.21
+Nodes (9): Building, Live loop: hotswap code, reload sets, rebuild in place, no restart per change, Override, WorldGenCommand, Live editing: /deciworldgen reload + rebuild, -Photswap + tools/hotswap.py (method bodies only), net.minecraft.command.CommandBase, net.minecraft.command.ICommandSender, jdb() (+1 more)
 
-### Community 34 - "shots_index: Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings)"
-Cohesion: 0.19
-Nodes (17): Fix v0.16.1: solid wall cell behind the ladder, no furniture on the 4 cells around it, ladder shaft and stair core (plus 1 block ring) exempt from the collapse, Bug: upper storeys unreachable (ladder popped off, stair core collapsed; fixed v0.16.1), v0.16.1: every storey reachable (ladder support, collapse spares the stairs); building audit, prop gallery, catalogue and spec (round 2 step 4a..c), Audit method: tools/floorplan.py per storey plans with reachability flood fill, plus runClient -Pautotest -Paudit (facade, ground, storey 1, roof of a sample apartment, office, shop); seed 1, Decimation world type, Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings), Finding: rubble is full mossy cobblestone cubes in corridors, rooms and doorways (reads as noise, cuts reachability), Principle: circulation (free 1 block path door to door, no furniture on a doorway cell or the cell in front; reachability >= 95% per storey), Verification for every change: floorplan.py on 2+ buildings per kind (reachability >= 95%, required room items, no prop on doorway cells), -Paudit shots, wallscan / gradescan / multiscan / autotest green, findings into building_audit.md and shots_index.md (+9 more)
+### Community 29 - "Surfaces: net.minecraft.block.Block"
+Cohesion: 0.20
+Nodes (3): Surfaces, Shape, net.minecraft.block.Block
 
-### Community 35 - "prop_catalogue: Decimation prop catalogue (look, size and facing of every deci: block, from the prop gallery)"
+### Community 30 - "BuildingPlan: BuildingPlan"
+Cohesion: 0.14
+Nodes (4): BuildingPlan, Building, Shape, ZoneKind
+
+### Community 31 - "shots_index: Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings)"
+Cohesion: 0.21
+Nodes (16): Fix v0.16.1: solid wall cell behind the ladder, no furniture on the 4 cells around it, ladder shaft and stair core (plus 1 block ring) exempt from the collapse, Bug: upper storeys unreachable (ladder popped off, stair core collapsed; fixed v0.16.1), v0.16.1: every storey reachable (ladder support, collapse spares the stairs); building audit, prop gallery, catalogue and spec (round 2 step 4a..c), Audit method: tools/floorplan.py per storey plans with reachability flood fill, plus runClient -Pautotest -Paudit (facade, ground, storey 1, roof of a sample apartment, office, shop); seed 1, Decimation world type, Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings), Finding: rubble is full mossy cobblestone cubes in corridors, rooms and doorways (reads as noise, cuts reachability), Principle: circulation (free 1 block path door to door, no furniture on a doorway cell or the cell in front; reachability >= 95% per storey), Verification for every change: floorplan.py on 2+ buildings per kind (reachability >= 95%, required room items, no prop on doorway cells), -Paudit shots, wallscan / gradescan / multiscan / autotest green, findings into building_audit.md and shots_index.md (+8 more)
+
+### Community 32 - "interior_spec: Building interior and exterior spec (round 2 step 4c, approved 7 Oktober 2026)"
 Cohesion: 0.16
-Nodes (18): BlockRegistry (deci.aD.c / g), Finding: no doors anywhere, only gaps (14 Decimation door blocks unused), Finding: no story details (barricades, skeletons, body bags, blood decals, notes, graffiti, survivor camps, looted crates all exist and are unused), Door decay: 25 to 50% missing, a few left open (meta bit 4), one barricaded in the most decayed buildings, Door rules per space (unit entrance Door_Office_1 or coloured _3, bathrooms Door_Blue_1 / Green_1, stair core Door_Emergency_3 with EXIT light, server rooms Door_Metal_3 / security + keypad, shop stockroom metal door; both halves, vanilla meta), Story and decay layer per building decay level: looted state (open crates, empty shelves), bodies (skeletons, blood decals, body bags), nature under roof holes and windows, graffiti on ground storey and stairwells only, Decals (blood splats, hazard signs, notes, framed picture, flags, warning signs; flat upright pictures, wall face by meta [not verified]), Doors use vanilla door metadata (copy BlockDoor without extending it): lower half 0..3 = west / north / east / south edge, upper half 8; place both halves or the door removes itself (+10 more)
+Nodes (17): v0.17.0: step 4d.1, doors in every DOOR cell and low debris (docs/interior_spec.md section 8), Apartment ground storey (not empty): lobby, notice board by the stairs, mailbox outside by the path, furnished ground units, laundry or bike room, Extensibility: polish built as reusable parts (shell, room programs, surface sets, door rules, story / decay layer, exterior add-ons); a new type = footprint rule + room programs + facade + loot profile, Building interior and exterior spec (round 2 step 4c, approved 7 Oktober 2026), Low debris rule: no full rubble cubes on walkways; stone / cobble / brick slabs, cobwebs, CardboardBoxes, TrashBags; full cubes only under a collapsed ceiling, Order of work step 4d / 4e: 1 structure + circulation, 2 surfaces, 3 apartment rooms + lobby, 4 office programs + lobby, 5 shop polish + upper storey, 6 story / decay, 7 exterior; each step implement, verify, commit, user look, Principle: furniture against a wall or partner piece, never floating (except islands: desk clusters, aisles, tables), Principle: function first, one focal object per room placed first (bed, sofa + TV, desk cluster, checkout) (+9 more)
 
-### Community 36 - "LcContent: LcContent"
+### Community 33 - "LcContent: LcContent"
 Cohesion: 0.15
 Nodes (4): Building, LcContent, Shape, net.decimation.worldgen.Schematic
 
-### Community 37 - "lctranslate: lctranslate.py"
-Cohesion: 0.23
-Nodes (15): Converted buildings use LED lamp blocks as floor (open), lcpack content: 290 converted buildings, stairs per district style (local only), Converted building quality pass: camera tour through converted buildings, fix blocks the translator got wrong or dropped (recommended next, 9 Oktober 2026), Open bug 1: LED lamp blocks used as floor in converted buildings (translator maps simplylight illuminant blocks to BlockLightOff [not verified]), colour_of(), furniture(), material(), parse() (+7 more)
+### Community 34 - "LotPlan: LotPlan"
+Cohesion: 0.12
+Nodes (4): Shape, ZoneKind, LotPlan, FixedBase
 
-### Community 38 - "interior_spec: Building interior and exterior spec (round 2 step 4c, approved 7 Oktober 2026)"
+### Community 35 - "SchematicPlan: ZoneKind"
+Cohesion: 0.14
+Nodes (3): Schematic, SchematicPlan, SchematicPlan prop facing FIXED / RANDOM only
+
+### Community 36 - "prop_catalogue: Decimation prop catalogue (look, size and facing of every deci: block, from the prop gallery)"
+Cohesion: 0.18
+Nodes (17): Finding: no doors anywhere, only gaps (14 Decimation door blocks unused), Finding: no story details (barricades, skeletons, body bags, blood decals, notes, graffiti, survivor camps, looted crates all exist and are unused), Door decay: 25 to 50% missing, a few left open (meta bit 4), one barricaded in the most decayed buildings, Door rules per space (unit entrance Door_Office_1 or coloured _3, bathrooms Door_Blue_1 / Green_1, stair core Door_Emergency_3 with EXIT light, server rooms Door_Metal_3 / security + keypad, shop stockroom metal door; both halves, vanilla meta), Story and decay layer per building decay level: looted state (open crates, empty shelves), bodies (skeletons, blood decals, body bags), nature under roof holes and windows, graffiti on ground storey and stairwells only, Decals (blood splats, hazard signs, notes, framed picture, flags, warning signs; flat upright pictures, wall face by meta [not verified]), Doors use vanilla door metadata (copy BlockDoor without extending it): lower half 0..3 = west / north / east / south edge, upper half 8; place both halves or the door removes itself, Door blocks (Door_Blue / Emergency / Green / Orange 1..3, Door_Office_1, Door_Metal_3, security doors; 2 high, 1 wide) (+9 more)
+
+### Community 37 - "city_engine: City engine: Lost Cities style cities from converted DeceasedCraft content"
 Cohesion: 0.17
-Nodes (16): v0.17.0: step 4d.1, doors in every DOOR cell and low debris (docs/interior_spec.md section 8), Exterior findings: flat facades (no balconies, canopy, shopfront glazing, shop signs) and bare roofs (no vents, water tank, antenna, stair hut, AC units), Apartment ground storey (not empty): lobby, notice board by the stairs, mailbox outside by the path, furnished ground units, laundry or bike room, Exterior add-ons: entrance frame + slab canopy + steps, glass shopfronts with BlockSign_* logo sign, office lobby glazing, apartment balconies, fire escapes over 3 storeys, roof stair hut / water tank / vents / antenna / parapet, downpipes [not verified], Building interior and exterior spec (round 2 step 4c, approved 7 Oktober 2026), Low debris rule: no full rubble cubes on walkways; stone / cobble / brick slabs, cobwebs, CardboardBoxes, TrashBags; full cubes only under a collapsed ceiling, Order of work step 4d / 4e: 1 structure + circulation, 2 surfaces, 3 apartment rooms + lobby, 4 office programs + lobby, 5 shop polish + upper storey, 6 story / decay, 7 exterior; each step implement, verify, commit, user look, Principle: furniture against a wall or partner piece, never floating (except islands: desk clusters, aisles, tables) (+8 more)
+Nodes (15): Converted buildings use LED lamp blocks as floor (open), City engine: Lost Cities style cities from converted DeceasedCraft content, lcpack content: 290 converted buildings, stairs per district style (local only), Skipped giant buildings: casino 276 high, oasis condo top above 250, laboratory 90 deep cellars, City engine open items: Lost Cities bridges and rail unused, giant buildings too tall, rotation only data variants, chests became wood crates, City street dressing: sidewalks, centre lines, lamps, benches, wrecks, City superblocks: 2x2 cells, 7x7 building chunks, landmark towers, User review 0.24.4: love it for oneshot progress; highways chosen next (+7 more)
 
-### Community 40 - "bug: Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4)"
+### Community 38 - "bug: Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4)"
 Cohesion: 0.17
 Nodes (13): v0.28.1: EntityRenderer.cameraZoom zooms world and gun together; ScopeZoom draws the hand itself on RenderHandEvent (vanilla skips it while zoomed), Scope FPS drop: picture in picture second world render, fixed v0.28.0 with view zoom, Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4), Scope fps measured (4x on ak74): picture in picture aiming 37..44 vs view zoom aiming 105..132, PatchScope: renderScopeView gated behind system property decimation.scope.pip (old scope via pictureInPicture=true in config/deciworldgen_scope.cfg), v0.28.2 / 0.28.3: projective see-through glass (frame copied, mapped by screen position), sight learned per gun + scope + window aspect, copy limited to the glass box, v0.28.4: scopes from overlayFrom (default 4x) hide the gun and draw a black sniper overlay with the scope's reticle texture on the HUD, Javassist snippets must compile against Java 8 signatures (FloatBuffer.flip() through java.nio.Buffer, else NoSuchMethodError in game) (+5 more)
 
-### Community 41 - "DecimationWorldGen: .init()"
-Cohesion: 0.15
-Nodes (7): CityDistrict, cpw.mods.fml.common.event.FMLInitializationEvent, cpw.mods.fml.common.event.FMLPreInitializationEvent, FMLPostInitializationEvent, FMLServerStartingEvent, Mod.EventHandler, Props
+### Community 39 - "new_feature: Current state and pending decisions"
+Cohesion: 0.21
+Nodes (15): Current state and pending decisions, v0.14.0: Decimation world type (own biome map on vanilla terrain generator, flat cities on the exact city sectors, Sectors now shared, autotest runs on this type), Decimation world type (level-type=decimation: flat rolling land, rivers and lakes, no ocean, one temperate climate), Terrain stays vanilla ChunkProviderGenerate, only the biome map is replaced, Decimation world type feature (user chose A over reskinning vanilla / RTG, done v0.14.0, seen in game; open: fog colour, rubble and ash decoration), deciworldgen second @Mod (net.decimation.worldgen), dist/ separate jars (deciworldgen-0.7.0.jar + Decimation.jar), Dropped companion mods (Ruins, ezWastelands, GeneratorMods) (+7 more)
 
-### Community 42 - "terrain: Current state and pending decisions"
-Cohesion: 0.19
-Nodes (14): Knowledge index (docs/, interior spec, deobf notes, names.tsv, trackers), Current state and pending decisions, v0.12.1: whole footprint floor height sampling and dirt fill under schematics, v0.14.0: Decimation world type (own biome map on vanilla terrain generator, flat cities on the exact city sectors, Sectors now shared, autotest runs on this type), Decimation world type (level-type=decimation: flat rolling land, rivers and lakes, no ocean, one temperate climate), Lake rules (none in city / military, 1 in 4 in other dead biomes, vanilla rate in overgrown, no surface lava pools), Terrain not done yet: fog colour comes from the world provider [not verified whether needed], no snow by design (temperature 0.7), fixed ids may clash, Spawn search: suburb, wasteland, overgrown plains and forest added to WorldChunkManager.allowedBiomes (+6 more)
+### Community 40 - "hwmap: hwmap.py"
+Cohesion: 0.25
+Nodes (14): v0.25.0 highways, v0.26.0 parks / street scenes / fronts, v0.27.0 district Lost Cities street parts, Highway chunk kinds: TUNNEL (median 6+ above deck), BRIDGE (water or ground 2+ below, stone brick pillars), OPEN; stored as hw_X_Z, Highway side ramps beside OPEN chunks (deck to natural height over 3..8 blocks, shared LcCity.reshape), City highways: seed based network between city regions, open / bridge / tunnel chunks, deck at 64, side ramps, District street parts: LC street parts by connection count, road paint to painted road blocks, Highway polish: slopes beside bridge chunks, tunnels starting at a city edge, diagonal city links, at(), city() (+6 more)
 
-### Community 43 - "DeciBiome: DeciBiome"
+### Community 41 - "DeciBiome: DeciBiome"
 Cohesion: 0.20
 Nodes (4): cpw.mods.fml.relauncher.SideOnly, DeciBiome, Override, net.minecraft.world.gen.NoiseGeneratorSimplex
 
-### Community 44 - "Name Mapping Applier"
+### Community 42 - "Name Mapping Applier"
 Cohesion: 0.22
 Nodes (14): desc_params(), ident(), is_obf_member(), load_classes(), main(), norm_desc_type(), norm_src_type(), params_match() (+6 more)
 
-### Community 46 - "furniture_sets: Furniture sets doc: data driven JSON furniture groups, user editable"
+### Community 43 - "furniture_sets: Furniture sets doc: data driven JSON furniture groups, user editable"
 Cohesion: 0.14
 Nodes (14): v0.20.0 furniture sets, wall lining, corner doors, one sided corridors, live loop, Furniture sets doc: data driven JSON furniture groups, user editable, Set format: layers (floor, +1, under ceiling), row 0 against the wall, palette with face/type, rooms slot, weight, known.txt: unedited old built-in copies are updated (tools/asset_hashes.py), Named palettes and weighted styles for sets (base / style keys), Placement: seeded weighted order, every wall and offset, free cells off walkway, back against wall, no full height piece over a window, Set preview mode -Psets: each set in a plaster bay, photographed, Seed 1 placement: kitchen/bath/lobby/closet 100%, bed 84%, living 80%, dining 68% (+6 more)
 
-### Community 47 - "Deci: Entity"
-Cohesion: 0.18
-Nodes (5): DamageSource, ZoneSpawnHandler, Entity, EntityLivingBase, net.minecraftforge.event.entity.EntityJoinWorldEvent
-
-### Community 49 - "new_feature: Round 2 step 4: building quality pass before new types (a audit, b prop catalogue, c design spec, d interiors room by room, e exterior polish, f user review in game; 4d.1 doors + low debris DONE v0.17.0, next 4d.2 surfaces)"
-Cohesion: 0.18
-Nodes (12): Building categories: civilian (apartment, office, shops, houses, garage), police (police station), military (base, checkpoint), later medical / industrial; category decides sector and Decimation zone, Extensibility: polish built as reusable parts (shell, room programs, surface sets, door rules, story / decay layer, exterior add-ons); a new type = footprint rule + room programs + facade + loot profile, Survivor camp (about 1 in 12 buildings, one room: lantern, CanFire, bedroll, crates, radio, WaterPallet, barricaded door, note decal, graffiti outside), Spec user decisions: survivor camps (about 1 in 12 buildings), shop signs use BlockSign_* assets, reusable parts for later categories, start by fixing the audited apartment / office / shop, Foundation down to the ground (max 12, Plan.foundation): stone brick plinth for buildings, dirt for schematics, Zone tagging (mil_ MILITARY, city_ and buildings POLICE, deciworldgen_zones.json), Direction change (8 Oktober 2026): DeceasedCraft buildings as city content with Lost Cities layout; procedural buildings stay as fallback, Round 2 step 4: building quality pass before new types (a audit, b prop catalogue, c design spec, d interiors room by room, e exterior polish, f user review in game; 4d.1 doors + low debris DONE v0.17.0, next 4d.2 surfaces) (+4 more)
-
-### Community 50 - "?: DeciGenLayer"
+### Community 45 - "?: DeciGenLayer"
 Cohesion: 0.18
 Nodes (8): DeciGenLayer, Override, TerrainEvents, GenLayer swap on WorldTypeEvent.InitBiomeGens (TERRAIN_GEN_BUS): two DeciGenLayers (1:4 and 1:1) reading one BiomeMap, InitBiomeGens, net.minecraft.world.gen.layer.GenLayer, net.minecraftforge.event.terraingen.InitMapGenEvent, Populate
 
-### Community 51 - "worldgen_architecture: Worldgen architecture v3 draft (layers, assets, size classes, capture tool)"
-Cohesion: 0.15
-Nodes (14): Builders: separate ceiling tiles with light panel grid and vents, Study: hand-built Decimation maps (USA coast, Decicraft, Cloverfield, world-e161), Builders: decay as dirt/leaves/water/cracked glass on intact shells, Builders: furniture in rows and islands (waiting rows, cubicles, shelf aisles), Autotest -Pstudy camera mode for reference maps, Builders: two tone WallOffice walls (dado bottom + top), Audit shots v0.23: 6 high offices and shops, Worldgen code map: building package parts (Shell, StoreyPlan, planners, Furnisher, Surfaces, Interior, Ruins, Yard) (+6 more)
-
-### Community 52 - "SupplyDropScheduler: SupplyDropScheduler"
+### Community 46 - "SupplyDropScheduler: SupplyDropScheduler"
 Cohesion: 0.23
 Nodes (4): SupplyDropScheduler.drop skips a candidate column whose top block has a tile entity (prop, chest, car) and tries the next of its 12 random positions, ServerTickEvent, SupplyDropScheduler, net.minecraft.server.MinecraftServer
 
-### Community 53 - "CLAUDE: tools/build.py real javac pipeline"
+### Community 47 - "CLAUDE: tools/build.py real javac pipeline"
 Cohesion: 0.19
 Nodes (11): deobfuscation_data-1.7.10.lzma notch to SRG mapping, Compile only shim for Forge binpatch members (tools/shim_src), tools/build.py real javac pipeline, SpecialSource notch to SRG remapping, SRG member names (no reobfuscation step), classpath(), compile_sources(), inject() (+3 more)
 
-### Community 54 - "lc2schem: lc2schem.py"
+### Community 48 - "Deci: Entity"
+Cohesion: 0.18
+Nodes (5): DamageSource, ZoneSpawnHandler, Entity, EntityLivingBase, net.minecraftforge.event.entity.EntityJoinWorldEvent
+
+### Community 49 - "Graded: Graded"
+Cohesion: 0.15
+Nodes (4): Graded, Foundation down to the ground (max 12, Plan.foundation): stone brick plinth for buildings, dirt for schematics, Terrain blending (round 2 step 1, done v0.13.0, headless verified, not yet seen in game), Plan
+
+### Community 50 - "DecimationBiomes: DecimationBiomes"
+Cohesion: 0.19
+Nodes (8): DecimationBiomes, Biome names carry AmbientMusicPlayer keywords (forest, river, plains, hills, decimated, irrated), Fixed biome ids 110..118 (Decimated City, Suburbs, Irradiated Military Zone, Decimated Plains, Burnt Forest, Overgrown Plains / Forest / Hills, Murky River), Terrain not done yet: fog colour comes from the world provider [not verified whether needed], no snow by design (temperature 0.7), fixed ids may clash, Spawn trap: Decimation adds its spawns to biomes existing in its preInit and strips vanilla monsters in its init; our biomes are made in our preInit and copySpawns copies plains lists in postInit, Spawn search: suburb, wasteland, overgrown plains and forest added to WorldChunkManager.allowedBiomes, Decimation world type doc (terrain, 0.14.0), net.minecraft.world.biome.BiomeGenBase
+
+### Community 51 - "worldgen_architecture: Worldgen architecture v3 draft (layers, assets, size classes, capture tool)"
+Cohesion: 0.17
+Nodes (13): Builders: separate ceiling tiles with light panel grid and vents, Study: hand-built Decimation maps (USA coast, Decicraft, Cloverfield, world-e161), Builders: decay as dirt/leaves/water/cracked glass on intact shells, Builders: furniture in rows and islands (waiting rows, cubicles, shelf aisles), Autotest -Pstudy camera mode for reference maps, Builders: two tone WallOffice walls (dado bottom + top), Audit shots v0.23: 6 high offices and shops, Worldgen architecture v3 draft (layers, assets, size classes, capture tool) (+5 more)
+
+### Community 52 - "anvil118: anvil118.py"
+Cohesion: 0.24
+Nodes (10): chunk_biomes(), chunk_blocks(), chunks(), main(), Palette, {section Y: biomes[4,4,4] (y, z, x) global ids}., Entries packed without spanning longs (1.16+)., Global name -> id for a whole survey. (+2 more)
+
+### Community 53 - "lc2schem: lc2schem.py"
 Cohesion: 0.31
 Nodes (9): building_columns(), main(), matches(), Pack, part_slices(), (layers bottom up, ground layer index): every floor picked like Lost Cities…, Lost Cities part conditions for one floor (cellars are negative)., tag() (+1 more)
 
-### Community 55 - "Deci: .zoneType()"
+### Community 54 - "roadmap: Knowledge index (docs/, interior spec, deobf notes, names.tsv, trackers)"
 Cohesion: 0.18
-Nodes (5): a, Block, EntityLiving, ObjectZone, World
+Nodes (11): Bug: building base height depends on chunk generation order (Slices.decideBase), Knowledge index (docs/, interior spec, deobf notes, names.tsv, trackers), Rule: new code adds an accessor to Deci, never calls deci.* directly (all ~60 obfuscated uses migrated 2026-10-09, seed 1 world 0 blocks differ), Knowledge index entry: docs/roadmap.md holds EVERYTHING planned in one list, 60 round STANAG and 60 round 5.45 AK magazines, Open bug 3: building base height depends on chunk generation order (low impact), Roadmap: items and weapons, Roadmap: open bugs (+3 more)
 
-### Community 56 - "DevTestUtil: DevTestUtil"
-Cohesion: 0.18
-Nodes (3): ClientTickEvent, DevTestUtil, net.minecraft.entity.player.EntityPlayerMP
-
-### Community 57 - "Condition: com.google.gson.JsonObject"
+### Community 55 - "Condition: com.google.gson.JsonObject"
 Cohesion: 0.24
 Nodes (3): com.google.gson.JsonArray, com.google.gson.JsonObject, Condition
 
-### Community 59 - "Palettes: com.google.gson.JsonObject"
+### Community 57 - "Palettes: com.google.gson.JsonObject"
 Cohesion: 0.26
 Nodes (3): Palettes, Style, Entry
 
-### Community 62 - "SealedCaves: SealedCaves"
+### Community 59 - "SealedCaves: SealedCaves"
 Cohesion: 0.26
 Nodes (6): Caves, Override, Ravines, SealedCaves, net.minecraft.world.gen.MapGenCaves, net.minecraft.world.gen.MapGenRavine
 
-### Community 63 - "deceasedcraft_buildings: Study: DeceasedCraft city buildings (DCTweaks jar Lost Cities data)"
+### Community 60 - "deceasedcraft_buildings: Study: DeceasedCraft city buildings (DCTweaks jar Lost Cities data)"
 Cohesion: 0.18
-Nodes (12): Rules taken from Lost Cities source: street surface at G, ground floor at G, cellars below, stairs at G + 1 toward the higher neighbour, DeceasedCraft content catalogue: 79 Lost Cities buildings, city parts, apocalypsenow structures, disabled vanilla structures, DeceasedCraft interiors fully authored per storey, no procedural rooms, DeceasedCraft 79 building types and 5 district city styles, Study: DeceasedCraft city buildings (DCTweaks jar Lost Cities data), DeceasedCraft storey is 6 high (4 air) vs our 5, In-game capture: pos1/pos2, capture set/part, apocalypsenow .nbt structure converter for military and other sites outside cities [not decided] (+4 more)
+Nodes (12): DeceasedCraft content catalogue: 79 Lost Cities buildings, city parts, apocalypsenow structures, disabled vanilla structures, Lost Cities to 1.7.10 conversion (lc2schem, lctranslate, paste command), DeceasedCraft interiors fully authored per storey, no procedural rooms, DeceasedCraft 79 building types and 5 district city styles, Study: DeceasedCraft city buildings (DCTweaks jar Lost Cities data), DeceasedCraft storey is 6 high (4 air) vs our 5, In-game capture: pos1/pos2, capture set/part, Measured prop footprints (footprint mode, tools/footprint.py) (+4 more)
 
-### Community 64 - "BiomeMap: BiomeMap"
+### Community 61 - "lctranslate: lctranslate.py"
+Cohesion: 0.33
+Nodes (11): colour_of(), furniture(), material(), parse(), Rule based translation of 1.20 block states (vanilla + furniture mods) to…, Furniture of any mod -> one cell prop or vanilla stand-in; None if not…, 1.7.10 stone_slab / wooden_slab for a material., slab_meta() (+3 more)
+
+### Community 62 - "bug: Bug: armor buff ignores NPC gunfire (fixed)"
+Cohesion: 0.22
+Nodes (11): Bug: armor buff ignores NPC gunfire (fixed), DamageSource split: gunDeci (player) vs human/turret (NPC), Proposed LivingHurtEvent gunshot damage unification, Cause: PacketGunFireEffects carried only the shooter id; the client drew the tracer along getLook() (a mob's body facing), Two gunshot DamageSource identities (gunDeci player, human NPC), NPC ranged attacks call attackEntityFrom directly server side, DeciDamageSources (deci.aD.h), PacketGunHit handler (deci.aE.a$z$a) (+3 more)
+
+### Community 63 - "ZoneKind: ZoneKind"
+Cohesion: 0.22
+Nodes (6): ObjectZone, ZoneKind, MILITARY, POLICE, SAFEZONE, City districts: wasteland next to military sectors, current beta weighted
+
+### Community 65 - "BiomeMap: BiomeMap"
 Cohesion: 0.29
 Nodes (3): Sectors, BiomeMap, NoiseGeneratorSimplex
-
-### Community 65 - "roadmap: Roadmap: worldgen and cities"
-Cohesion: 0.24
-Nodes (11): Skipped giant buildings: casino 276 high, oasis condo top above 250, laboratory 90 deep cellars, City engine open items: Lost Cities bridges and rail unused, giant buildings too tall, rotation only data variants, chests became wood crates, City superblocks: 2x2 cells, 7x7 building chunks, landmark towers, Lost Cities to 1.7.10 conversion (lc2schem, lctranslate, paste command), Measured prop footprints (footprint mode, tools/footprint.py), Giant buildings that are skipped (casino 276 high, oasis condo above 250, laboratory 90 deep cellars): trim cellars or cap height, Highway polish: slopes beside bridge chunks, tunnels starting at a city edge, diagonal city links, Lost Cities parts not used yet (bridges, rail); building rotation only uses listed variants (+3 more)
 
 ### Community 66 - "mapsurvey: mapsurvey.py"
 Cohesion: 0.25
 Nodes (6): chunk_ids(), chunks(), colour(), main(), ids[y, z, x] for the chunk (256 high)., registry()
 
-### Community 67 - "DECIMATION_MOD_TASK: Goal: loot crates and cars in singleplayer"
+### Community 67 - "gun_model_spec: Fix: SmoothSwingThread busy wait (PatchSwing 4 ms sleep)"
+Cohesion: 0.24
+Nodes (8): tools/patches/PatchSwing.java, Fix: SmoothSwingThread busy wait (PatchSwing 4 ms sleep), ClientState (deci.b.i), SmoothSwingThread (deci.b.h), Attachment fixed offsets on rails, BModel / BModelPart (deci.n.f, deci.n.b), GunItemRenderer (deci.K.b), PatchSwing
+
+### Community 68 - "DECIMATION_MOD_TASK: Goal: loot crates and cars in singleplayer"
 Cohesion: 0.22
 Nodes (10): CFR decompiler, rtk hook drops grep/find flags (use Python os.walk), Toolchain set up each session (nothing preinstalled), Hypotheses: dedicated gate, YAML config path, dedicated lifecycle event, Personal use only, no redistribution, backup first, Prism Launcher instance mods folder, Goal: loot crates and cars in singleplayer, Singleplayer loot fix task brief (+2 more)
-
-### Community 68 - "DevTestResults: tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09)"
-Cohesion: 0.24
-Nodes (4): Dev test modes: checks (fresh seed 1 world: zones, vehicle, humanity, prop box, bottlecaps, armor, helmet, supply drop), views (-Paudit / -Pgallery / -Pfootprint / -Pstudy / -Pflats / -Psets), scope, tracer, props, cityfps, run/client/devtest/results.txt: one line per value, PASS / FAIL with the expectation, exit code 1 on a FAIL, tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09), DevTestResults
 
 ### Community 69 - "interior_spec: Surfaces table per space (planks + FloorCarpet rugs, FloorTiles in kitchens / baths / corridors, WallOffice colour sets, Ceiling_1..4, lights, CeilingVent; interiors no longer copy the facade)"
 Cohesion: 0.24
 Nodes (10): A floor block is also the ceiling below: keep floors light, Finding: one interior material everywhere (birch plank walls, oak plank floors and ceilings), no ceilings, lighting, carpets or tiles, Wall / trim / accent palettes from vanilla 1.7.10 blocks (brick, clays, sandstone, quartz, stone brick), Room grid per storey plan (R_CORRIDOR..R_STOCK) decides floors and lights, Step 2 surfaces done v0.17.0: floors per room, wall panel set per building, ceiling light panels and vents, Surfaces table per space (planks + FloorCarpet rugs, FloorTiles in kitchens / baths / corridors, WallOffice colour sets, Ceiling_1..4, lights, CeilingVent; interiors no longer copy the facade), Floor and ceiling blocks and fixtures (BlockCeiling_1..4, BlockFloorCarpet_1..6, BlockFloorTiles_1..3, ceiling vents, BlockLight / LightOff, BlockExitLight), Interior wall panel blocks (BlockWallOffice_* colour sets: _Bottom_N skirting course, _Top above) (+2 more)
 
-### Community 71 - "apartment: Critic pass 1 on v0.20 flats: overall 3/10, verified findings and fixes, critic wrong on chair facing and lintels"
+### Community 70 - "new_feature: Feature tracker (new_feature.md)"
+Cohesion: 0.24
+Nodes (10): BlockRegistry (deci.aD.c / g), Placeholder blocks to Decimation props (sponge, gold, lapis, diamond, emerald, iron, coal, wool and stained clay colours), Intro screen skip (deci.i.d.iH, deci.i.c.io flags), Loot fix documentation (documentation.md), 50% ranged weapon damage nerf, Feature tracker (new_feature.md), Full Decimation prop catalog from level.dat registry snapshot, Prop substitution by registry name (+2 more)
+
+### Community 72 - "StructureData: StructureData"
+Cohesion: 0.27
+Nodes (4): Override, StructureData, net.minecraft.nbt.NBTTagCompound, net.minecraft.world.WorldSavedData
+
+### Community 73 - "lcpack: lcpack.py"
+Cohesion: 0.31
+Nodes (9): Road paint: refueled mod decals converted by lcpack paint() into Road_CenterLine and quartz zebra; odd turns flip line meta, convert(), main(), paint(), rasterise(), Building / multi building ref -> (W, H, L, blocks, add, meta, groundY, cx, cz)., Highway decks: black sandstone is the asphalt (plain translation gives beige…, Road paint decals (refueled mod) sit on top of the road; 1.7.10 has painted… (+1 more)
+
+### Community 74 - "Deci: .zoneType()"
+Cohesion: 0.25
+Nodes (4): a, Block, EntityLiving, World
+
+### Community 75 - "ArmorGunfireHandler: ArmorGunfireHandler"
+Cohesion: 0.33
+Nodes (5): Helmets give no gun protection (slot 3 excluded), Helmet counts on headshots only (v0.9.1: aim line for player guns, 20% random for NPC), ArmorGunfireHandler, net.minecraft.entity.Entity, net.minecraftforge.event.entity.living.LivingHurtEvent
+
+### Community 76 - "apartment: Critic pass 1 on v0.20 flats: overall 3/10, verified findings and fixes, critic wrong on chair facing and lintels"
 Cohesion: 0.22
 Nodes (9): v0.21.0 critic pass 1, kitchen rework, wall breaches by column, narrow blocks ladder, -Pflats audit, Apartment references: real-world clearances, 1.7.10 furniture techniques, review checklist, Apartment review checklist: walkway, function readable, 40-60% free, palette, plausible decay, per room rules, Clearances: 1 block walkway, sofa-table 0-1 block, one free bed side, kitchen work triangle in a 4-6 block run, 1.7.10 techniques: stairs sofas with trapdoor arms, slab coffee tables, cauldron sink + tripwire tap, quartz stair toilet, paintings, wool curtains, Critic pass 1 on v0.20 flats: overall 3/10, verified findings and fixes, critic wrong on chair facing and lintels, Root cause found: narrow apartment blocks had no flats (core took the width); ladder under 16 wide, Open after pass 1: empty living fallback, wall detail layer, sofa arms, deeper living sets, bath sets, bedroom min width, camera (+1 more)
 
-### Community 72 - "Heuristic Auto Namer"
+### Community 77 - "?: cpw.mods.fml.common.eventhandler.SubscribeEvent"
+Cohesion: 0.25
+Nodes (5): cpw.mods.fml.common.eventhandler.SubscribeEvent, DevPregen, ServerTickEvent, Pre, ServerTickEvent
+
+### Community 78 - "Heuristic Auto Namer"
 Cohesion: 0.33
 Nodes (8): camel(), classes(), known_fields(), main(), (binary name, source text) for every top-level file., Field names already chosen by the AI tables: (owner, obf) -> name., Field names declared directly in the outer class (indent 4)., top_level_fields()
 
-### Community 75 - "lcpack: lcpack.py"
-Cohesion: 0.36
-Nodes (8): convert(), main(), paint(), rasterise(), Building / multi building ref -> (W, H, L, blocks, add, meta, groundY, cx, cz)., Highway decks: black sandstone is the asphalt (plain translation gives beige…, Road paint decals (refueled mod) sit on top of the road; 1.7.10 has painted…, road_override()
+### Community 79 - "Deci: .repair()"
+Cohesion: 0.28
+Nodes (3): TileEntity, NBTTagCompound, net.minecraft.tileentity.TileEntity
 
-### Community 76 - "bug: Bug: supply drop crate vanished when it landed in a flower (fixed v0.13.0)"
-Cohesion: 0.36
-Nodes (8): EntityFallingSupplyDrop turns into a block only on a replaceable cell (flowers, saplings, tall flowers are not), Bug: graded yard sand fell into caves, hole next to a building (fixed v0.13.0), setBlock calls onBlockAdded, so BlockFalling (sand, gravel) falls even during generation, Bug: supply drop crate vanished when it landed in a flower (fixed v0.13.0), Bug: supply drop crate vanished on a street prop (trash bag on a sidewalk, fixed v0.16.0), v0.13.0: terrain blending (graded city lots via Graded / Building.grade, front yard car parks, no falling block fill, supply drops clear flowers), Never fill with falling blocks (dirt under grass, sandstone under sand, stone under gravel), Unattended singleplayer autotest (runClient -Pautotest)
-
-### Community 77 - "DecimationBiomes: DecimationBiomes"
+### Community 83 - "VehicleHitHandler: VehicleHitHandler.java"
 Cohesion: 0.32
-Nodes (3): DecimationBiomes, Spawn trap: Decimation adds its spawns to biomes existing in its preInit and strips vanilla monsters in its init; our biomes are made in our preInit and copySpawns copies plains lists in postInit, net.minecraft.world.biome.BiomeGenBase
+Nodes (5): Bug: vehicles destroyed in one hit (fixed v0.8.1), VehicleHitHandler (v0.8.1), VehicleHitHandler, Open bug 4: arrows still pick up empty vehicles (punching fixed v0.8.1), net.minecraftforge.event.entity.player.AttackEntityEvent
 
-### Community 80 - "DeadTree: DeadTree"
+### Community 84 - "FixedBase: FixedBase"
+Cohesion: 0.25
+Nodes (6): FixedBase, Rules taken from Lost Cities source: street surface at G, ground floor at G, cellars below, stairs at G + 1 toward the higher neighbour, City levels per cell (6 blocks apart), streets at G, stairs parts between levels, Study: Lost Cities and Recurrent Complex organisation, Lost Cities: storey parts, buildings, palettes, city styles as data, Recurrent Complex: in-game capture, transformers (ruins), maze rooms
+
+### Community 88 - "DeadTree: DeadTree"
 Cohesion: 0.33
 Nodes (3): DeadTree, Override, net.minecraft.world.gen.feature.WorldGenAbstractTree
 
-### Community 81 - "graph_update: graph_update.py"
+### Community 89 - "graph_update: graph_update.py"
 Cohesion: 0.52
 Nodes (6): finish(), prepare(), Keep an old community name when its members mostly carried over., relabel(), rj(), wj()
 
-### Community 82 - "interior_spec: Revised order after user 0.18 review: structure first, then furniture sets, then reference library + critic"
+### Community 90 - "interior_spec: Revised order after user 0.18 review: structure first, then furniture sets, then reference library + critic"
 Cohesion: 0.33
 Nodes (6): v0.19.0 storey height 5 with own ceilings, Revised order after user 0.18 review: structure first, then furniture sets, then reference library + critic, Step 1a done v0.19.0: storeys 5 high, own white plaster ceiling layer, 5 step stair runs, Step 1b next: plaster lining inside outer walls, with furniture sets, audit_v0.19: dark tile ceilings first, then white plaster ceilings, Revised interior plan after user review: structure, data driven furniture sets, references + critic; Lost Cities idea not port
 
-### Community 83 - "DecimationWorldGen: .buildSubstitutions()"
-Cohesion: 0.40
-Nodes (4): Placeholder blocks to Decimation props (sponge, gold, lapis, diamond, emerald, iron, coal, wool and stained clay colours), net.decimation.worldgen.StructureGenerator.Sub, Prop substitution by registry name, Sub
-
-### Community 84 - "DecimationWorldType: DecimationWorldType"
+### Community 91 - "DecimationWorldType: DecimationWorldType"
 Cohesion: 0.40
 Nodes (3): DecimationWorldType, Override, net.minecraft.world.WorldType
 
-### Community 85 - "CLAUDE: Step 3 apartment rooms done v0.18.0: kitchen run, dining, TV + sofa, bedroom, bathroom, lobby on one side"
+### Community 94 - "multiscan: multiscan.py"
+Cohesion: 0.50
+Nodes (4): multiscan seed 1: 1499 of 1499 shelves whole, no orphans, no broken parts, Seed 1 test world (city blocks near spawn, mil_compound at -62,65,434), main(), tile_entities()
+
+### Community 95 - "CLAUDE: Step 3 apartment rooms done v0.18.0: kitchen run, dining, TV + sofa, bedroom, bathroom, lobby on one side"
 Cohesion: 0.50
 Nodes (4): v0.18.0 apartment rooms and propFacing fix, Step 3 apartment rooms done v0.18.0: kitchen run, dining, TV + sofa, bedroom, bathroom, lobby on one side, audit_v0.18 / plans_v0.18: kitchen run, checker ceiling issue, furnished flats, 4d.3 apartment rooms done v0.18.0, next 4d.4 office programs
+
+### Community 97 - "building_audit: Exterior findings: flat facades (no balconies, canopy, shopfront glazing, shop signs) and bare roofs (no vents, water tank, antenna, stair hut, AC units)"
+Cohesion: 1.00
+Nodes (3): Exterior findings: flat facades (no balconies, canopy, shopfront glazing, shop signs) and bare roofs (no vents, water tank, antenna, stair hut, AC units), Exterior add-ons: entrance frame + slab canopy + steps, glass shopfronts with BlockSign_* logo sign, office lobby glazing, apartment balconies, fire escapes over 3 storeys, roof stair hut / water tank / vents / antenna / parapet, downpipes [not verified], Shop facade signs (BlockSign_Decimunition / Gunsrus / Metro / Minebay / Minedonalds / Mineway)
 
 ## Ambiguous Edges - Review These
 - `Genuinely new model recipe (needs Techne)` → `addBox passes Y as Z origin (use addShape)`  [AMBIGUOUS]
@@ -491,9 +546,9 @@ Nodes (4): v0.18.0 apartment rooms and propFacing fix, Step 3 apartment rooms do
   bug.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **78 isolated node(s):** `Technic modpack Decimation 1.7.10 (linusrhone)`, `Prism Launcher instance mods folder`, `Subsystem taxonomy (core, proxy, network, loot, zone, ...)`, `ServerCommandRegistrar (deci.aK.o)`, `ChatHandler (deci.aK.n, radio chat)` (+73 more)
+- **79 isolated node(s):** `Technic modpack Decimation 1.7.10 (linusrhone)`, `Prism Launcher instance mods folder`, `Subsystem taxonomy (core, proxy, network, loot, zone, ...)`, `ServerCommandRegistrar (deci.aK.o)`, `ChatHandler (deci.aK.n, radio chat)` (+74 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **46 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **51 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -508,7 +563,7 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Fix: SmoothSwingThread busy wait (PatchSwing 4 ms sleep)` and `Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `StructureGenerator` connect `StructureGenerator: net.minecraft.world.World` to `BiomeMap: BiomeMap`, `?: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole`, `building_design: v0.10.0 to v0.12.3 city blocks, large schematics, city v2 and fixes status`, `?: DecimationWorldGen`, `WorldGenCommand: WorldGenCommand`, `worldgen: World generation doc (deciworldgen)`, `Surfaces: net.minecraft.block.Block`, `new_feature: deciworldgen second @Mod (net.decimation.worldgen)`, `LcCity: LcCity`?**
-  _High betweenness centrality (0.112) - this node is a cross-community bridge._
-- **Why does `Bug tracker (bug.md)` connect `bug: Bug tracker (bug.md)` to `roadmap: Feature tracker (new_feature.md)`, `worldcheck: worldcheck.py`, `?: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole`, `bug: Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains)`, `lctranslate: lctranslate.py`, `shots_index: Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings)`, `bug: Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4)`, `terrain: Current state and pending decisions`, `bug: Bug: supply drop crate vanished when it landed in a flower (fixed v0.13.0)`, `CLAUDE: decimation-singleplayer README (public repo overview)`, `bug: Bug: props randomly not rendered (legacy Decimation bug, fixed by PatchPropCulling)`, `worldgen: World generation doc (deciworldgen)`, `architecture: ServerProxy (deci.a.e, dedicated only)`, `?: cpw.mods.fml.common.eventhandler.SubscribeEvent`?**
-  _High betweenness centrality (0.100) - this node is a cross-community bridge._
+- **Why does `StructureGenerator` connect `StructureGenerator: net.minecraft.world.World` to `worldgen: World generation doc (deciworldgen)`, `BiomeMap: BiomeMap`, `new_feature: Current state and pending decisions`, `worldgen: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole`, `?: LcCity.java`, `DecimationWorldGen: .init()`, `LcCity: LcCity`, `DevTestResults: tools/devtest.py: dev test modes in ONE game launch, results file, contact sheet per mode (first choice since 2026-10-09)`, `?: DecimationWorldGen`, `Surfaces: net.minecraft.block.Block`?**
+  _High betweenness centrality (0.128) - this node is a cross-community bridge._
+- **Why does `Bug tracker (bug.md)` connect `bug: Bug tracker (bug.md)` to `worldgen: World generation doc (deciworldgen)`, `worldcheck: worldcheck.py`, `gun_model_spec: Fix: SmoothSwingThread busy wait (PatchSwing 4 ms sleep)`, `city_engine: City engine: Lost Cities style cities from converted DeceasedCraft content`, `bug: Report: FPS drop while aiming scopes (fixed v0.28.0..0.28.4)`, `bug: Report: FPS drop in prop dense areas (line of sight cached v0.28.6, model drawing remains)`, `CLAUDE: decimation-singleplayer README (public repo overview)`, `Deci: Player`, `create_weapons: Creating new weapons guide`, `worldgen: Multiblock props (0.16.0): generation completes Decimation multiblocks (tile entity extends deci.W.a MultiblockPart) whole`, `architecture: ServerProxy (deci.a.e, dedicated only)`, `VehicleHitHandler: VehicleHitHandler.java`, `roadmap: Knowledge index (docs/, interior spec, deobf notes, names.tsv, trackers)`, `roadmap: Plan: enemy military, juggernaut with machine guns / Barrett, stronger bandits, in military areas`, `bug: Bug: armor buff ignores NPC gunfire (fixed)`, `shots_index: Building quality audit (round 2 step 4a, baseline of v0.16.0 city buildings)`?**
+  _High betweenness centrality (0.107) - this node is a cross-community bridge._

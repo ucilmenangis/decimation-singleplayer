@@ -50,9 +50,9 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791486408.2980218,
-    "ast_hash": "564538ba104e88250c64d5127859bb1e",
-    "semantic_hash": "564538ba104e88250c64d5127859bb1e"
+    "mtime": 1791487239.472744,
+    "ast_hash": "09162a1b61efc8d2d4a19eaaa100096d",
+    "semantic_hash": "09162a1b61efc8d2d4a19eaaa100096d"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791485744.8150418,
@@ -70,9 +70,9 @@
     "semantic_hash": "d4b685f732c9680f7e1309982fa104e7"
   },
   "dev/src/main/java/net/decimation/worldgen/StructureGenerator.java": {
-    "mtime": 1791484694.03778,
-    "ast_hash": "8781f70c6daa2da4cb7f6d60ae2c4321",
-    "semantic_hash": "8781f70c6daa2da4cb7f6d60ae2c4321"
+    "mtime": 1791487239.4730022,
+    "ast_hash": "6a424953590f20a5655ba1f23169e922",
+    "semantic_hash": "6a424953590f20a5655ba1f23169e922"
   },
   "dev/src/main/java/net/decimation/worldgen/ZoneStore.java": {
     "mtime": 1791484694.0379648,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791486408.2937198,
-    "ast_hash": "bdc39f29916b29e498b99782e13c11ba",
-    "semantic_hash": "bdc39f29916b29e498b99782e13c11ba"
+    "mtime": 1791487350.4546852,
+    "ast_hash": "4b4e670a053896015780258185f95ec4",
+    "semantic_hash": "4b4e670a053896015780258185f95ec4"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -665,9 +665,9 @@
     "semantic_hash": "4754c787c15ae49542d1bf2159b29b75"
   },
   "dev/src/main/java/net/decimation/worldgen/city/LcCity.java": {
-    "mtime": 1791484694.0386968,
-    "ast_hash": "94fabc537c2f537ba4ec697aa9b15bea",
-    "semantic_hash": "94fabc537c2f537ba4ec697aa9b15bea"
+    "mtime": 1791487239.473233,
+    "ast_hash": "1a6ba5a1793a027fb4bd1ebe61d21da2",
+    "semantic_hash": "1a6ba5a1793a027fb4bd1ebe61d21da2"
   },
   "dev/src/main/java/net/decimation/worldgen/city/LcContent.java": {
     "mtime": 1791425081.4901729,
@@ -690,9 +690,9 @@
     "semantic_hash": "87d7c5deb01bdf730025e901597a1efa"
   },
   "docs/city_engine.md": {
-    "mtime": 1791481306.1204693,
-    "ast_hash": "6f76e535ff474b48e0a739e7188a583a",
-    "semantic_hash": "6f76e535ff474b48e0a739e7188a583a"
+    "mtime": 1791487350.4538877,
+    "ast_hash": "08da0e50d204570e8fb633baa3525d23",
+    "semantic_hash": "08da0e50d204570e8fb633baa3525d23"
   },
   "tools/edgescan.py": {
     "mtime": 1791419321.0102901,
@@ -790,8 +790,38 @@
     "semantic_hash": "237f95f08e85f8b81a2441ccf2ae1fdd"
   },
   "docs/roadmap.md": {
-    "mtime": 1791486408.008764,
-    "ast_hash": "55cbed7543ad575b3a63b59439951ed9",
-    "semantic_hash": "55cbed7543ad575b3a63b59439951ed9"
+    "mtime": 1791487350.4541981,
+    "ast_hash": "bcfe0b4fc102757f49b155f90984e742",
+    "semantic_hash": "bcfe0b4fc102757f49b155f90984e742"
+  },
+  "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
+    "mtime": 1791487239.5087948,
+    "ast_hash": "e31eef356f032479200cd888a90a0014",
+    "semantic_hash": "e31eef356f032479200cd888a90a0014"
+  },
+  "dev/src/main/java/net/decimation/worldgen/city/BuildingPlan.java": {
+    "mtime": 1791487239.5091627,
+    "ast_hash": "2821515ad82d1b69b3b6cffc487c15c5",
+    "semantic_hash": "2821515ad82d1b69b3b6cffc487c15c5"
+  },
+  "dev/src/main/java/net/decimation/worldgen/city/EdgePlan.java": {
+    "mtime": 1791487239.5094204,
+    "ast_hash": "c6e274a1d54634b56a8a3c4c7a7c8925",
+    "semantic_hash": "c6e274a1d54634b56a8a3c4c7a7c8925"
+  },
+  "dev/src/main/java/net/decimation/worldgen/city/LotPlan.java": {
+    "mtime": 1791487239.509607,
+    "ast_hash": "3068533f34e61c1cb3cb3d9b2f6e4e37",
+    "semantic_hash": "3068533f34e61c1cb3cb3d9b2f6e4e37"
+  },
+  "dev/src/main/java/net/decimation/worldgen/city/StreetPlan.java": {
+    "mtime": 1791487239.5098832,
+    "ast_hash": "f503c5578fe6a21ca713bbf24b0f0491",
+    "semantic_hash": "f503c5578fe6a21ca713bbf24b0f0491"
+  },
+  "dev/src/main/java/net/decimation/worldgen/city/StreetProps.java": {
+    "mtime": 1791487239.5103052,
+    "ast_hash": "95e8806706c7b0a829c40a68cab1bf7f",
+    "semantic_hash": "95e8806706c7b0a829c40a68cab1bf7f"
   }
 }
