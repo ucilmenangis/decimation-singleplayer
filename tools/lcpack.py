@@ -16,6 +16,10 @@ schematic and OUT_DIR/index.json:
    "highways": {"open" | "open_bi" | "bridge" | "bridge_bi" | "tunnel" |
                 "tunnel_bi": [file, ...]} (from the first pack whose world
                 style lists highway parts; repeats = weight),
+   "decor": {"<pack>:<style>": {"parks" | "fountains" | "fronts": [file, ...]}}
+            (16 x 16 parts on a chunk's ground; fountains are street scenes,
+            fronts building entrances on the street side, x 0 toward the
+            building; repeats = weight),
    "names": {"<id>": "<block name>"}}
 Bedrock (id 7) marks "keep the world" (cellar padding of multi building
 chunks with fewer cellars). Schematic ids are the ids of REGISTRY_WORLD below, "names" maps them back
@@ -93,7 +97,7 @@ def main():
     reg = ms.registry(REGISTRY_WORLD)
     ids = {n: i for i, n in reg.items()}
     ids["minecraft:air"] = 0
-    index = {"buildings": [], "stairs": {}, "names": {str(i): n for i, n in reg.items()}}
+    index = {"buildings": [], "stairs": {}, "decor": {}, "names": {str(i): n for i, n in reg.items()}}
     for spec in sys.argv[2:]:
         key, _, rest = spec.partition("=")
         parts = rest.split(":")
@@ -127,6 +131,24 @@ def main():
                 stairs.extend([key + "/" + fname + ".schematic"] * max(1, int(e.get("factor", 1))))
             if stairs:
                 index["stairs"]["%s:%s" % (key, style)] = stairs
+            decor = {}
+            for kind in ("parks", "fountains", "fronts"):
+                files = []
+                for e in sel.get(kind, []):
+                    ref = e["value"]
+                    fname = ref.split(":")[-1].replace("/", "__")
+                    path = os.path.join(out, key, fname + ".schematic")
+                    if not os.path.exists(path):
+                        sl = lc.part_slices(pack, ref, {}, {}, pack.palette(ns + ":common"))
+                        if not sl:
+                            continue
+                        W, H, L, b, a, m = rasterise({(0, 0): sl}, 1, 1, ids, road_override)
+                        lc.write_schematic(path, W, H, L, b, a, m)
+                    files.extend([key + "/" + fname + ".schematic"] * max(1, int(e.get("factor", 1))))
+                if files:
+                    decor[kind] = files
+            if decor:
+                index["decor"]["%s:%s" % (key, style)] = decor
         # highway parts of the pack's world style (Lost Cities partselector "highways")
         wsdir = os.path.join(data, ns, "lostcities", "worldstyles")
         for f in sorted(os.listdir(wsdir)) if os.path.isdir(wsdir) and "highways" not in index else []:

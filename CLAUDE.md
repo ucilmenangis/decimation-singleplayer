@@ -509,6 +509,8 @@ of the last session:
   `-Pautotest -Pstudy=...` (study alone sits at the menu).
   v0.25.0: highways between cities (docs/city_engine.md "Highways",
   `city/Highways.java`, `tools/hwmap.py SEED R` prints the network).
+  v0.26.0: parks on open lots (10%), street scenes, building fronts
+  (docs/city_engine.md "Parks, street scenes, fronts").
 - World generation: direction reversed after companion mods failed (Ruins /
   ezWastelands / GeneratorMods all dropped — see `new_feature.md`). Now built
   as our own code: second `@Mod` (`deciworldgen`, `required-after:deci`) in

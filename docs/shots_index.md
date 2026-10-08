@@ -354,3 +354,27 @@ the ramp looking south at the city; 6 aerial over the north band.
 - 2 z highway at z -440 looking north: adboard tower, a short tunnel just
   before the northern city, towers behind.
 - 3 aerial near the northern city: the highway reaching the city edge.
+
+## lc_decor_v0.26.0/ (parks, street scenes, fronts; seed 1, 12 views, 10 valid)
+- 0 (-200,66,8) west: a street scene with a blue tarp shape on the road
+  edge, bench, terraces of the city edge on the right.
+- 1 (170,66,8) west: concrete roadblock across the road ahead; leaf hedge
+  front on the left sidewalk.
+- 2 (-136,66,136) west, deadzone: debris scene on the road, wide stone
+  sidewalk in front.
+- 3 (-248,66,172) north: legacy roadblock (stone blocks) in the road,
+  hedges, the deadzone wall with razor wire on the right.
+- 4 INVALID for parks: looks down between towers (camera placement).
+- 5 aerial over the parks at 16..47,16: a plaza with seating groups and a
+  white fountain pool with water.
+- 6 aerial over the deadzone park at -176,144: stone plaza with leaf
+  planters, benches, scattered dead bushes.
+- 7 (-248,67,60) north: a cream awning with pillars on the right building,
+  roadblock ahead.
+- 8 (8,67,60) north: two hotel fronts facing each other form a glass
+  walkway over the road on stone pillars; leaf hedges cover both
+  sidewalks.
+- 9 INVALID: black, camera inside a building (z 64 is no street there:
+  superblock).
+- 10 (-60,67,8) west: plain street, a wreck in the lane.
+- 11 (-248,67,100) south: plain street with lamps, bin, bench.

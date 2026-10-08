@@ -76,6 +76,7 @@ public final class LcContent
     private static final List<Building> buildings = new ArrayList<Building>();
     private static final Map<String, List<String>> stairs = new HashMap<String, List<String>>();
     private static final Map<String, List<String>> highways = new HashMap<String, List<String>>();
+    private static final Map<String, List<String>> decor = new HashMap<String, List<String>>();
     private static final Map<Integer, Block> remap = new HashMap<Integer, Block>();
     private static final Map<String, Shape> shapes = new HashMap<String, Shape>();
 
@@ -104,6 +105,13 @@ public final class LcContent
     public static List<String> highways(String kind)
     {
         List<String> l = highways.get(kind);
+        return l != null ? l : new ArrayList<String>();
+    }
+
+    /** Decor part files of "<pack>:<style>": parks, fountains (street scenes) or fronts. */
+    public static List<String> decor(String style, String kind)
+    {
+        List<String> l = decor.get(style + "/" + kind);
         return l != null ? l : new ArrayList<String>();
     }
 
@@ -148,6 +156,21 @@ public final class LcContent
                     files.add(f.getAsString());
                 }
                 stairs.put(e.getKey(), files);
+            }
+            if (o.has("decor"))
+            {
+                for (Map.Entry<String, JsonElement> st : o.getAsJsonObject("decor").entrySet())
+                {
+                    for (Map.Entry<String, JsonElement> e : st.getValue().getAsJsonObject().entrySet())
+                    {
+                        List<String> files = new ArrayList<String>();
+                        for (JsonElement f : (JsonArray) e.getValue())
+                        {
+                            files.add(f.getAsString());
+                        }
+                        decor.put(st.getKey() + "/" + e.getKey(), files);
+                    }
+                }
             }
             if (o.has("highways"))
             {

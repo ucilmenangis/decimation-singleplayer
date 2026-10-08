@@ -41,6 +41,12 @@ public final class LcCity
     /** Width of the ramp graded into the land around the city. */
     /** Widest ramp between a city cell and the land outside (blocks). */
     static final int EDGE = 24;
+    /** Share of building chunks left as open lots (parks where the district has park parts). */
+    static final float LOT_CHANCE = 0.10f;
+    /** Street scene (the packs' "fountains": bus, ambulance, roadblock...) per straight street chunk. */
+    static final double SCENE_CHANCE = 0.06;
+    /** Front part per street side facing a building at the same level. */
+    static final double FRONT_CHANCE = 0.5;
     /** Sidewalk width on each side of a street chunk (flush with the road). */
     static final int SIDEWALK = 3;
     private static final int TOP = 250;
@@ -161,6 +167,54 @@ public final class LcCity
             surfaceMeta = 0;
         }
         world.setBlock(x, target, z, surface, surfaceMeta, 2);
+    }
+
+    /** A decor part of the district (falling back to the town styles), picked by chunk hash; null if none. */
+    static LcContent.Shape decor(long seed, String style, String kind, int chx, int chz, long salt)
+    {
+        List<String> files = LcContent.decor(style, kind);
+        if (files.isEmpty() && !style.endsWith(":deadzone"))
+        {
+            files = LcContent.decor("legacy:standardcity", kind);
+        }
+        if (files.isEmpty())
+        {
+            return null;
+        }
+        return LcContent.shape(files.get((int) (hl(seed ^ salt, chx, chz) % files.size())));
+    }
+
+    /**
+     * Block of a part turned clockwise by turns (0..3) at chunk local x / z
+     * and part layer y, metadata turned with it; null where the part is
+     * empty or out of its bounds (inverse of a clockwise turn, as SchematicPlan).
+     */
+    static Block partAt(LcContent.Shape s, int turns, int lx, int y, int lz, int[] meta)
+    {
+        if (y < 0 || y >= s.height)
+        {
+            return null;
+        }
+        int x, z;
+        switch (turns)
+        {
+            case 1:  x = lz; z = s.length - 1 - lx; break;
+            case 2:  x = s.width - 1 - lx; z = s.length - 1 - lz; break;
+            case 3:  x = s.width - 1 - lz; z = lx; break;
+            default: x = lx; z = lz; break;
+        }
+        if (x < 0 || z < 0 || x >= s.width || z >= s.length)
+        {
+            return null;
+        }
+        int i = s.index(x, y, z);
+        Block b = s.blocks[i];
+        if (b == null || s.skip[i])
+        {
+            return null;
+        }
+        meta[0] = net.decimation.worldgen.Rotation.rotateMeta(Block.getIdFromBlock(b), s.meta[i] & 15, turns);
+        return b;
     }
 
     /** True when the box comes within EDGE of a city cell (the city's ramp may cut it). */
@@ -407,13 +461,14 @@ public final class LcCity
                 }
                 // a superblock gets its landmark (a multi building over 3 x 3) first
                 List<LcContent.Building> from = i == 1 && j == 1 && !big.isEmpty() ? big : pool;
-                LcContent.Building pick = from == pool && r.nextFloat() < 0.06f ? null
+                LcContent.Building pick = from == pool && r.nextFloat() < LOT_CHANCE ? null
                     : pick(from, style, used, i, j, r);
                 int minX = bx + i * 16, minZ = bz + j * 16;
                 if (pick == null)
                 {
                     used[i][j] = true;
-                    out.add(new LotPlan("lcl_" + cellX + "_" + cellZ + "_" + i + "_" + j, minX, minZ, g));
+                    out.add(new LotPlan("lcl_" + cellX + "_" + cellZ + "_" + i + "_" + j, minX, minZ, g,
+                                        decor(seed, style, "parks", minX >> 4, minZ >> 4, 0x5041524BL)));
                     continue;
                 }
                 for (int a = 0; a < pick.cx; a++)
@@ -426,11 +481,11 @@ public final class LcCity
                 LcContent.Shape s = LcContent.shape(pick.file);
                 if (s == null)
                 {
-                    out.add(new LotPlan("lcl_" + cellX + "_" + cellZ + "_" + i + "_" + j, minX, minZ, g));
+                    out.add(new LotPlan("lcl_" + cellX + "_" + cellZ + "_" + i + "_" + j, minX, minZ, g, null));
                     continue;
                 }
                 out.add(new BuildingPlan("lcb_" + cellX + "_" + cellZ + "_" + i + "_" + j, pick, s, minX, minZ,
-                                         g - pick.groundY, zone));
+                                         g - pick.groundY, zone, style, g));
             }
         }
         cache.put(key, out);
@@ -531,8 +586,15 @@ public final class LcCity
         }
         // 0 = north-south street (cell column 0), 1 = east-west (row 0), 2 = crossing
         int kind = lx == 0 && lz == 0 ? 2 : lx == 0 ? 0 : 1;
+        LcContent.Shape scene = kind != 2 && stairs == null && h(seed ^ 0x5343454EL, chx, chz) < SCENE_CHANCE
+            ? decor(seed, style, "fountains", chx, chz, 0x464F554EL) : null;
+        if (scene != null)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] lc street scene (%s) at %d,%d,%d", style, chx << 4, g,
+                                            chz << 4);
+        }
         return new StreetPlan("lcs_" + chx + "_" + chz, chx << 4, chz << 4, g, road, stairs, Math.max(0, turns),
-                              kind, props, seed);
+                              kind, props, seed, this, style, scene);
     }
 
     // ------------------------------------------------------------ plans
@@ -545,10 +607,15 @@ public final class LcCity
         private final LcContent.Shape s;
         private final int minX, minZ, baseY;
         private final net.decimation.mod.server.zones.a zone;
+        /** District style and street level of the block (fronts of the street beside it). */
+        final String style;
+        final int ground;
 
         BuildingPlan(String id, LcContent.Building b, LcContent.Shape s, int minX, int minZ, int baseY,
-                     net.decimation.mod.server.zones.a zone)
+                     net.decimation.mod.server.zones.a zone, String style, int ground)
         {
+            this.style = style;
+            this.ground = ground;
             this.id = id;
             this.b = b;
             this.s = s;
@@ -606,10 +673,19 @@ public final class LcCity
         private final int kind;
         private final StreetProps props;
         private final long seed;
+        private final LcCity city;
+        private final String style;
+        /** Street scene in the road (turned along it), or null. */
+        private final LcContent.Shape scene;
+        /** Front parts per side (west, north, east, south: turns 0..3), resolved on first use. */
+        private LcContent.Shape[] fronts;
 
         StreetPlan(String id, int minX, int minZ, int ground, Block road, LcContent.Shape stairs, int turns,
-                   int kind, StreetProps props, long seed)
+                   int kind, StreetProps props, long seed, LcCity city, String style, LcContent.Shape scene)
         {
+            this.city = city;
+            this.style = style;
+            this.scene = scene;
             this.kind = kind;
             this.props = props;
             this.seed = seed;
@@ -628,12 +704,62 @@ public final class LcCity
         public int minZ() { return minZ; }
         public int maxX() { return minX + 15; }
         public int maxZ() { return minZ + 15; }
-        public int height() { return stairs != null ? stairs.height + 1 : 3; }
+        public int height() { return stairs != null ? stairs.height + 1 : 13; }
         public int clearAbove() { return 14; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.stone; }
         public net.decimation.mod.server.zones.a zone() { return null; }
         public String describe() { return null; }
+
+        /**
+         * Fronts toward the buildings beside a straight street: the
+         * neighbour chunk's building (looked up in its block's plans, so
+         * the other side of the street works too) at this street's level
+         * gets one of its district's fronts half the time. Resolved at
+         * write time, when no block plan is being built (no recursion).
+         */
+        private LcContent.Shape[] fronts()
+        {
+            if (fronts != null)
+            {
+                return fronts;
+            }
+            fronts = new LcContent.Shape[4];
+            if (kind == 2 || stairs != null)
+            {
+                return fronts;
+            }
+            int chx = minX >> 4, chz = minZ >> 4;
+            int[][] dirs = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}}; // west, north, east, south
+            for (int d = 0; d < 4; d++)
+            {
+                if ((kind == 0) != (dirs[d][0] != 0))
+                {
+                    continue; // only the sides along the street
+                }
+                int nx = chx + dirs[d][0], nz = chz + dirs[d][1];
+                int ncx = Math.floorDiv(nx, CELL), ncz = Math.floorDiv(nz, CELL);
+                if (!isCity(seed, ncx, ncz) || hl(seed ^ 0x46524F4EL, nx * 4 + d, nz) % 1000 >= FRONT_CHANCE * 1000)
+                {
+                    continue;
+                }
+                int[] nb = block(seed, ncx, ncz);
+                for (Plan p : city.plan(seed, nb[0], nb[1]))
+                {
+                    if (p instanceof BuildingPlan && p.minX() <= nx * 16 && p.maxX() >= nx * 16 + 15
+                        && p.minZ() <= nz * 16 && p.maxZ() >= nz * 16 + 15)
+                    {
+                        BuildingPlan b = (BuildingPlan) p;
+                        if (b.ground == ground)
+                        {
+                            fronts[d] = decor(seed, b.style, "fronts", nx, nz, 0x46524EL + d);
+                        }
+                        break;
+                    }
+                }
+            }
+            return fronts;
+        }
 
         public Block blockAt(int lx, int ly, int lz, int[] meta)
         {
@@ -660,11 +786,33 @@ public final class LcCity
             {
                 return stairsAt(lx, ly, lz, meta);
             }
+            if (scene != null)
+            {
+                Block b = partAt(scene, kind == 1 ? 1 : 0, lx, ly - 1, lz, meta);
+                if (b != null)
+                {
+                    return b;
+                }
+            }
+            LcContent.Shape[] f = fronts();
+            for (int d = 0; d < 4; d++)
+            {
+                if (f[d] != null)
+                {
+                    Block b = partAt(f[d], d, lx, ly - 1, lz, meta);
+                    if (b != null)
+                    {
+                        return b;
+                    }
+                }
+            }
+            meta[0] = 0;
             if (ly != 1 || kind == 2)
             {
                 return null;
             }
-            return furniture(across, along, sidewalk, meta);
+            Block b = furniture(across, along, sidewalk, meta);
+            return scene != null && b != null && contains(props.cars, b) ? null : b;
         }
 
         /** Lamps on the road edge of each sidewalk, benches / bins / bags inside, a wreck now and then. */
@@ -710,6 +858,18 @@ public final class LcCity
                 return props.cars[(int) ((hv >>> 8) % props.cars.length)];
             }
             return null;
+        }
+
+        private static boolean contains(Block[] l, Block b)
+        {
+            for (Block x : l)
+            {
+                if (x == b)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private Block stairsAt(int lx, int ly, int lz, int[] meta)
@@ -885,9 +1045,12 @@ public final class LcCity
     {
         private final String id;
         private final int minX, minZ, ground;
+        /** Park part on the grass (layer 1 up), or null for a plain lot. */
+        private final LcContent.Shape park;
 
-        LotPlan(String id, int minX, int minZ, int ground)
+        LotPlan(String id, int minX, int minZ, int ground, LcContent.Shape park)
         {
+            this.park = park;
             this.id = id;
             this.minX = minX;
             this.minZ = minZ;
@@ -900,12 +1063,12 @@ public final class LcCity
         public int minZ() { return minZ; }
         public int maxX() { return minX + 15; }
         public int maxZ() { return minZ + 15; }
-        public int height() { return 2; }
+        public int height() { return park != null ? park.height + 1 : 2; }
         public int clearAbove() { return 14; }
         public int maxSpread() { return 255; }
         public Block foundation() { return Blocks.dirt; }
         public net.decimation.mod.server.zones.a zone() { return null; }
-        public String describe() { return null; }
+        public String describe() { return park != null ? "lc park" : null; }
 
         public Block blockAt(int lx, int ly, int lz, int[] meta)
         {
@@ -913,6 +1076,10 @@ public final class LcCity
             if (ly == 0)
             {
                 return Blocks.grass;
+            }
+            if (park != null)
+            {
+                return partAt(park, 0, lx, ly - 1, lz, meta);
             }
             if (ly == 1 && ((lx * 7 + lz * 13 + minX + minZ) & 15) == 0)
             {

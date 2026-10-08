@@ -65,6 +65,36 @@ Cellar padding under multi building chunks with fewer cellars is bedrock
   generateStreetDecorations); floors -cellars..F with the top part at
   floor >= F (BuildingInfo).
 
+## Parks, street scenes, fronts (v0.26.0)
+
+User said "try next" on 8 Oktober 2026 after testing 0.25.0; this is the
+next listed option. Rules read from Lost Cities (BuildingInfo,
+LostCityTerrainFeature.generateStreet / generateFrontPart).
+- Pack: `tools/lcpack.py` exports each city style's selectors "parks",
+  "fountains", "fronts" into index.json "decor" (repeats = weight; road
+  override as highways). 8 styles: dc 11 parks each, 1..2 fountains, 1..5
+  fronts; legacy 12..14 parks, 9..10 fountains, 4 fronts.
+- Parks: open lots now LOT_CHANCE = 10% of building chunks (was 6%) and
+  carry a park part of the district (fallback legacy:standardcity, never
+  for the deadzone) on their grass, layer 1 up (as Lost Cities: park part
+  at street level + 1). Logged as "lc park". Seed 1 spawn: 16 parks,
+  plazas with benches and a fountain pool, deadzone plazas with planters.
+- Street scenes: DeceasedCraft's "fountains" are scenes in the road (bus,
+  ambulance, roadblock, trash; legacy has real fountains too). 6% of
+  straight street chunks without stairs get one, turned along the road;
+  no extra wreck in that chunk. Logged as "lc street scene".
+- Fronts: a straight street chunk looks up the chunk beside it on each
+  side along the street, in that chunk's block plans (resolved lazily at
+  write time, so block plans never recurse; the far side of the street
+  belongs to another block and works too). A building chunk at the same
+  street level gets one of its district's fronts with FRONT_CHANCE = 0.5,
+  turned so the part's x 0 side faces the building (west 0, north 1, east
+  2, south 3). Street chunks are now 13 high (fronts up to 12). Fronts are
+  0..7 deep, so they cover the sidewalk and part of the outer lane; two
+  hotel fronts facing each other read as a glass walkway over the road.
+- Shots lc_decor_v0.26.0 (shots_index). Autotest all pass, 0 generator
+  errors.
+
 ## Highways (v0.25.0, `city/Highways.java`)
 
 User choice 8 Oktober 2026 (over fronts / parks, giant buildings,
