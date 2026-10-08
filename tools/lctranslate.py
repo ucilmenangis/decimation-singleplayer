@@ -47,6 +47,9 @@ def wood_of(path):
     return None
 
 
+# dark stones, matched before plain sandstone (also by slab_meta / stair_block)
+DARK_STONES = ("deepslate", "blackstone", "basalt", "tuff", "obsidian", "gneiss", "slate", "black_sandstone", "scorchia")
+
 # full block material by words in the name; first match wins
 MATERIAL = [
     (("quartz", "calcite", "marble", "white_concrete", "snow"), ("minecraft:quartz_block", 0)),
@@ -56,9 +59,10 @@ MATERIAL = [
     (("brick",), ("minecraft:brick_block", 0)),
     (("mossy",), ("minecraft:mossy_cobblestone", 0)),
     (("cobble",), ("minecraft:cobblestone", 0)),
+    # dark stones before plain sandstone: "black_sandstone" (DeceasedCraft's asphalt) once
+    # matched "sandstone" and came out beige (audit 2026-10-09)
+    (DARK_STONES, ("deci:BlockStone_4", 0)),
     (("sandstone",), ("minecraft:sandstone", 2)),
-    (("deepslate", "blackstone", "basalt", "tuff", "obsidian", "gneiss", "slate", "black_sandstone"),
-     ("deci:BlockStone_4", 0)),
     (("limestone", "diorite", "smooth_stone", "concrete", "hempcrete", "cement", "plaster"),
      ("deci:BlockStone_7", 0)),
     (("andesite", "granite", "stone", "rock", "asphalt"), ("minecraft:stone", 0)),
@@ -95,6 +99,8 @@ def slab_meta(path):
         return "minecraft:stone_slab", 5
     if "cobble" in path:
         return "minecraft:stone_slab", 3
+    if any(d in path for d in DARK_STONES):
+        return "minecraft:stone_slab", 3  # cobblestone: the darkest grey slab
     if "sandstone" in path:
         return "minecraft:stone_slab", 1
     return "minecraft:stone_slab", 0
@@ -113,6 +119,8 @@ def stair_block(path):
         return "minecraft:nether_brick_stairs"
     if "brick" in path and "stone" not in path:
         return "minecraft:brick_stairs"
+    if any(d in path for d in DARK_STONES):
+        return "minecraft:stone_stairs"
     if "sandstone" in path:
         return "minecraft:sandstone_stairs"
     if "cobble" in path or "mossy" in path:
@@ -168,10 +176,14 @@ def furniture(ns, path, p):
         return "deci:BlockTrashcan", 2
     if "vending" in path:
         return "deci:BlockVendingMachine_1", PROP_FACE.get(face, 3)
-    if any(k in path for k in ("illuminant", "ceiling_light", "ceiling_fan", "lightbulb", "edge_light",
-                               "fluorescent")):
+    lp = unlit(path)
+    # full light blocks: an unlit lamp block (a hanging lamp prop sat in walls and floors)
+    if "illuminant" in lp and (lp.endswith("_block") or lp.endswith("_block_on") or lp == "illuminant"):
+        return "minecraft:redstone_lamp", 0
+    if any(k in lp for k in ("illuminant", "ceiling_light", "ceiling_fan", "lightbulb", "edge_light",
+                             "fluorescent")):
         return "deci:BlockLightOff", 2
-    if any(k in path for k in ("lamp", "lantern")):
+    if any(k in lp for k in ("lamp", "lantern")) and "rodlamp" not in lp:
         return "deci:BlockLantern", 2
     if "potted" in path or "flower_pot" in path or "plant_pot" in path:
         return "minecraft:flower_pot", 0
@@ -188,6 +200,15 @@ def furniture(ns, path, p):
             and "metal_plate" not in path:
         return "skip", 0
     return None
+
+
+def unlit(path):
+    """The name without words that only look like "light": light_gray / light_blue
+    (colours), lightning (rods), daylight (detector). The lamp rules once turned
+    5429 light_gray corrugated metal plates into lamps, many of them floors."""
+    for w in ("light_gray", "light_grey", "light_blue", "lightning", "daylight"):
+        path = path.replace(w, "")
+    return path
 
 
 def translate(state):
@@ -210,6 +231,37 @@ def translate(state):
     path = re.sub(r"_\d+$", "", path)  # buildersdelight variants: oak_stairs_1, jungle_planks_6
     if "window" in path:
         return "minecraft:glass_pane", 0
+    # audit 2026-10-09: blocks 1.7.10 has, and the most common dropped ones
+    if path in ("redstone_lamp", "daylight_detector"):
+        return "minecraft:" + path, 0
+    if path in ("black_sandstone", "smooth_black_sandstone"):
+        return "deci:BlockRoad", 0  # DeceasedCraft's asphalt
+    if "laboratory" in path:
+        return "deci:BlockStone_7", 0  # buildersdelight lab panels, white [not verified look]
+    if path == "charcoal_block":
+        return "minecraft:coal_block", 0
+    if path == "magma_block":
+        return "minecraft:netherrack", 0
+    if "wallpaper" in path:
+        return ("minecraft:sandstone", 2) if "beige" in path else ("minecraft:stained_hardened_clay", c if c is not None else 0)
+    if "corundum" in path:
+        if "cluster" in path or path.endswith("_bud"):
+            return "skip", 0  # crystal growths: decoration only
+        return "minecraft:stained_glass", c if c is not None else 0
+    if (ns == "create" and path.endswith("_seat")) or (ns == "redeco" and path.endswith("_cushion")):
+        return "minecraft:carpet", c if c is not None else 0  # low seat pad
+    if path in ("end_rod", "lightning_rod") or path.endswith("_rod"):
+        return "minecraft:iron_bars", 0
+    if path == "bamboo_mat":
+        return "minecraft:carpet", 4
+    if "barricade" in path and "construction" not in path:
+        return "minecraft:fence", 0  # boarded up opening: blocks the way, stays see-through
+    if path.endswith("_post") and ns == "quark":
+        return "minecraft:fence", 0
+    if ns == "refueled" and path == "post":
+        return "minecraft:cobblestone_wall", 0
+    if "shelves" in path:
+        return "deci:BlockCardboardBoxes3", PROP_FACE.get(face, 3)
     if "air_duct" in path or "vent" in path:
         return "minecraft:iron_block" if "vent" not in path else "deci:BlockCeilingVent", 0 if "vent" not in path else 2
     if path in ("spawner", "gold_block") or "plushie" in ns or "decal" in path \
@@ -344,7 +396,8 @@ def translate(state):
     if any(k in path for k in ("flower", "rose", "tulip", "poppy", "dandelion", "bush", "sapling", "dead_bush",
                                "mushroom", "roots", "sprouts", "weed", "crop", "wheat")):
         return "minecraft:tallgrass", 1
-    if "lamp" in path or "light" in path or "lantern" in path or "illuminant" in path:
+    lp = unlit(path)
+    if "lamp" in lp or "light" in lp or "lantern" in lp or "illuminant" in lp:
         return "deci:BlockLightOff", 2
     m = material(path)
     if m:

@@ -444,3 +444,18 @@ the ramp looking south at the city; 6 aerial over the north band.
   in stone; the box alone. sheet_cached.png: empty / in view after the line
   of sight cache: props and a few NPCs still render. cityfps.png: the
   -Pcityfps view (city street looking north from z 120).
+
+## lc_quality_v0.28.10 (converted building quality pass, 9 Oktober 2026)
+
+Seed 1, Decimation world type, pack rebuilt with the fixed translator;
+camera spots from tools/mapbuildings.py (2 per building, mid storeys).
+- sheet_interiors_before_stairs.png: 30 views. Many land inside walls or
+  look out of a facade (mapbuildings spots fit hand-built maps better
+  than Lost Cities floors); the rest show offices (desks, computers,
+  chairs, bookshelves), lobbies with light stone brick floors. No lamp
+  blocks on floors. Ceilings have recessed redstone lamps (dark brown
+  with orange) in a grid. Views 4 / 11 / 15: stairs of beige sandstone
+  next to black asphalt blocks (black sandstone stairs still beige).
+- sheet_stairs_after.png: the same stair spots after the stairs / slab
+  fix: cobblestone stairs and slabs, no beige left. Doorway header of
+  oak planks over red brick comes from the source building.

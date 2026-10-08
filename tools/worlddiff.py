@@ -13,8 +13,10 @@ server generates the spawn area (12 chunks around spawn) in a fixed
 order; chunks loaded later (supply drop scheduler, timers) vary from run
 to run, and population order changes edge content (ore veins spilling
 over, building base height sampled from whatever chunks exist). Prints counts and the first
-differing positions. Needs numpy.
+differing positions. --top N: also the N most common changes by block
+name (old -> new), e.g. to see what a translator change did. Needs numpy.
 """
+import collections
 import os
 import sys
 
@@ -55,6 +57,8 @@ def main():
     common = sorted(k for k in set(a) & set(b) if done(a, k) and done(b, k)
                     and max(abs(k[0] - scx), abs(k[1] - scz)) <= within)
     diff_chunks, diff_blocks, shown = 0, 0, 0
+    top = int(sys.argv[sys.argv.index("--top") + 1]) if "--top" in sys.argv else 0
+    pairs = collections.Counter()
     for key in common:
         ia, ma = arrays(a[key])
         ib, mb = arrays(b[key])
@@ -66,6 +70,9 @@ def main():
         if n:
             diff_chunks += 1
             diff_blocks += n
+            if top:
+                for p, q in zip(ia[d].tolist(), ib[d].tolist()):
+                    pairs[(p, q)] += 1
             for y, z, x in zip(*np.nonzero(d)):
                 if shown < 15:
                     print("  %d %d %d: %d:%d -> %d:%d" % (key[0] * 16 + x, y, key[1] * 16 + z,
@@ -73,6 +80,11 @@ def main():
                     shown += 1
     print("%d chunks in A, %d in B, %d final in both; %d chunks differ, %d blocks differ"
           % (len(a), len(b), len(common), diff_chunks, diff_blocks))
+    if top:
+        na, nb = ms.registry(sys.argv[1]), ms.registry(sys.argv[2])
+        na[0] = nb[0] = "air"
+        for (p, q), n in pairs.most_common(top):
+            print("%7d  %s -> %s" % (n, na.get(p, p), nb.get(q, q)))
 
 
 if __name__ == "__main__":

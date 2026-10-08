@@ -56,11 +56,13 @@ def convert(pack, ns, ref, ids):
     for gx, row in enumerate(grid):
         for gz, bref in enumerate(row):
             cols[(gx, gz)], grounds[(gx, gz)] = lc.building_columns(pack, bref)
+            paint(cols[(gx, gz)], asphalt_only=True)  # parking lot lines (audit 2026-10-09)
     depth = max(grounds.values())
     # chunks with fewer cellars than the deepest one: padding below them
     # keeps the world (bedrock = skip marker, as in SchematicPlan)
     cols = {k: [[["SKIP"] * 16 for _ in range(16)]] * (depth - grounds[k]) + v for k, v in cols.items()}
-    return rasterise(cols, len(grid), max(len(r) for r in grid), ids) + (depth, len(grid), max(len(r) for r in grid))
+    return rasterise(cols, len(grid), max(len(r) for r in grid), ids, road_override) + (
+        depth, len(grid), max(len(r) for r in grid))
 
 
 def road_override(state):
@@ -75,7 +77,11 @@ def road_override(state):
     return lt.translate(state)
 
 
-def paint(sl):
+ASPHALT = ("black_sandstone", "smooth_black_sandstone", "basalt", "smooth_basalt", "polished_basalt",
+           "blackstone", "black_concrete")
+
+
+def paint(sl, asphalt_only=False):
     """Road paint decals (refueled mod) sit on top of the road; 1.7.10 has
     painted road blocks instead. Lines become deci:BlockRoad_CenterLine in
     the layer below (meta 2 = line along x for paint facing east / west, 4 =
@@ -83,9 +89,14 @@ def paint(sl):
     for y in range(1, len(sl)):
         for z, row in enumerate(sl[y]):
             for x, st in enumerate(row):
-                if not st or not st.startswith("refueled:"):
+                if not st or not (st.startswith("refueled:") or st.startswith("car:line")):
                     continue
+                below = sl[y - 1][z][x] or ""
+                if asphalt_only and below.split("[")[0].split(":")[-1] not in ASPHALT:
+                    continue  # buildings: paint only on asphalt (parking lots), else leave the decal out
                 kind = st.split(":")[1].split("[")[0]
+                if kind == "post":
+                    continue  # refueled:post is a bollard, not paint
                 face = "north"
                 if "facing=" in st:
                     face = st.split("facing=")[1].split(",")[0].rstrip("]")

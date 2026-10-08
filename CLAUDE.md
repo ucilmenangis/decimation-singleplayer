@@ -106,7 +106,8 @@ Knowledge index:
   (tools mapsurvey / mapbuildings / contactsheet, autotest `-Pstudy`).
 - `docs/references/deceasedcraft_buildings.md`: DeceasedCraft's 79 Lost
   Cities building types (data in DCTweaks jar, tool `tools/lcstudy.py`),
-  room sizes, densities, storey 6 high.
+  room sizes, densities, storey 6 high; translation audit
+  `tools/lcaudit.py` (dropped blocks, props by placement).
 - `docs/references/apartment.md`: real-world clearances, 1.7.10 furniture
   techniques, the apartment review checklist; critic reports in
   `docs/references/critic_*.md`.

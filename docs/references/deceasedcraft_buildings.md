@@ -295,3 +295,33 @@ hold different buildings, keep the two apart). Catalogue tables in
   razor wire, salt flats to pale grey stone. Still skipped on purpose:
   structure void, papers / books / towels / paintings / light switches /
   fluid pipes / small food items (decor without a 1.7 block).
+
+## Translation audit (9 Oktober 2026)
+
+`python3 tools/lcaudit.py OUT.tsv pack=DATA:NS ...` walks every building
+both packs convert and lists (a) source blocks the translator DROPS or
+SKIPS, with counts and an example state, (b) every source block that
+becomes a deci prop, counted by placement (floor, ceiling, wall, free).
+Compare two translator versions over the same buildings with a small
+script that imports both (old one via `git show HEAD:tools/lctranslate.py`);
+compare two generated worlds with `tools/worlddiff.py A B --top 40`.
+
+Found and fixed (290 buildings, both packs):
+- "light" inside colour names made lamps (LED floor bug, see bug.md).
+- `biomesoplenty:black_sandstone` (36451 uses, plus 804 smooth) is
+  DeceasedCraft's asphalt; it matched "sandstone" and came out beige.
+  Now deci:BlockRoad; its stairs / slabs -> cobblestone stairs / slabs,
+  other dark stones (deepslate, basalt, scorchia...) -> deci:BlockStone_4.
+- Dropped before, mapped now: buildersdelight `laboratory_*` (19491) ->
+  deci:BlockStone_7; quark charcoal_block -> coal_block; magma_block ->
+  netherrack; embellishcraft wallpaper -> sandstone (beige) or stained
+  clay by colour; quark corundum -> stained glass by colour (clusters
+  skipped); bamboo_mat -> carpet; zombie_extreme barricades and quark
+  posts -> fence; refueled post -> cobblestone_wall; apocalypsenow
+  shelves -> deci:BlockCardboardBoxes3 (prop facing); create seats and
+  redeco cushions -> carpet by colour.
+- Road paint (refueled lines, car:line) inside building parts is now
+  painted on asphalt the same way as street parts (lcpack.py,
+  `paint(cols, asphalt_only=True)`).
+Look of laboratory panels as BlockStone_7 and of cobblestone stairs for
+black sandstone: seen in photos only (shots_index "lc_quality").

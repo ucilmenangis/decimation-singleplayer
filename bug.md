@@ -292,7 +292,7 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Not investigated yet
 (Some entries below were fixed later and say so in their heading; the open
-ones on 9 Oktober 2026: base height order, prop dense FPS, LED lamp floor
+ones on 9 Oktober 2026: base height order, prop dense FPS, LED lamp floor (fixed)
 at the end of this file.)
 
 ### Building base height depends on chunk generation order (ours)
@@ -488,13 +488,28 @@ large sites next to a city could sit inside the band and get cut under.
 Fix: populate scans cells within EDGE of the window; sites within EDGE of a
 city are dropped. Checked with tools/edgescan.py (seed 1).
 
-## Converted buildings: LED lamp blocks as floor (reported 8 Oktober 2026, open)
+## Converted buildings: LED lamp blocks as floor (reported 8 Oktober 2026, FIXED 9 Oktober 2026)
 User saw some converted (DeceasedCraft) buildings with LED lamp blocks
-used as floor. Likely cause `[not verified]`: tools/lctranslate.py maps
-simplylight illuminant_block / illuminant_panel / illuminant_slab to
-deci:BlockLightOff; DeceasedCraft builds glowing floor tiles from them.
-Fix later: map illuminant blocks used as full floor blocks to a plain
-light floor (or check which buildings, by name, use them).
+used as floor.
+- **Found with** `tools/lcaudit.py` (counts every source block of every
+  converted building by placement: floor / ceiling / wall / free).
+- **Cause**: not the simplylight lamps. tools/lctranslate.py's lamp rule
+  matched the word "light" inside COLOUR names:
+  `embellishcraft:light_gray_corrugated_metal_plate` (5429 uses, 1350 of
+  them as floor), light_gray / light_blue sheet metal, tiles, seats and
+  cushions all became deci:BlockLightOff. `minecraft:daylight_detector`
+  (935, mostly floor trim) and `lightning_rod` matched too. Full
+  simplylight illuminant blocks (about 5000) also became the small lamp
+  prop, sitting in walls and ceilings as a floating fixture.
+- **Fix** (lctranslate.py, pack rebuilt): `unlit()` removes light_gray /
+  light_grey / light_blue / lightning / daylight before the lamp rules;
+  full illuminant blocks -> minecraft:redstone_lamp (a solid lamp block);
+  daylight_detector, redstone_lamp kept as themselves; rods -> iron_bars.
+- **Verified**: worlddiff of seed 1 old pack vs new pack (`--top`):
+  2115 BlockLightOff -> BlockMetal_2, 542 -> redstone_lamp, 111 ->
+  daylight_detector. 30 interior photos (shots_index "lc_quality") show
+  no lamp floors; ceilings show redstone lamps where the source had them.
+  Not yet seen by the user in game `[not verified]`.
 
 ## NPC tracers fly sideways or backwards (old bug, also in the original; FIXED 9 Oktober 2026)
 - **Reported**: 9 Oktober 2026: an NPC shooting forward draws its tracer to
