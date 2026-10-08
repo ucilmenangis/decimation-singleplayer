@@ -20,9 +20,9 @@
     "semantic_hash": "f6d0ec3d1c5bb5c1802a7544eafa4896"
   },
   "dev/dependencies.gradle": {
-    "mtime": 1791483207.9333096,
-    "ast_hash": "0cff82dc8ec2955b5e3414a648428aa4",
-    "semantic_hash": "0cff82dc8ec2955b5e3414a648428aa4"
+    "mtime": 1791485855.2566335,
+    "ast_hash": "fbc5082e3b0474c022dfbf89e04366e7",
+    "semantic_hash": "fbc5082e3b0474c022dfbf89e04366e7"
   },
   "dev/repositories.gradle": {
     "mtime": 1791314872.0,
@@ -50,14 +50,14 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791483983.1571681,
-    "ast_hash": "a8c3310b9f750a77160bfceaa559b377",
-    "semantic_hash": "a8c3310b9f750a77160bfceaa559b377"
+    "mtime": 1791486408.2980218,
+    "ast_hash": "564538ba104e88250c64d5127859bb1e",
+    "semantic_hash": "564538ba104e88250c64d5127859bb1e"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791484694.0362673,
-    "ast_hash": "195b0d0494bf6b9346aa18c33a5d6f12",
-    "semantic_hash": "195b0d0494bf6b9346aa18c33a5d6f12"
+    "mtime": 1791485744.8150418,
+    "ast_hash": "7ed918cb07aa82623a6c6e91da644422",
+    "semantic_hash": "7ed918cb07aa82623a6c6e91da644422"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791485239.0300224,
-    "ast_hash": "b9883bef99bf8bd02fe9a1beaa079391",
-    "semantic_hash": "b9883bef99bf8bd02fe9a1beaa079391"
+    "mtime": 1791486408.2937198,
+    "ast_hash": "bdc39f29916b29e498b99782e13c11ba",
+    "semantic_hash": "bdc39f29916b29e498b99782e13c11ba"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -738,5 +738,60 @@
     "mtime": 1791485121.6671073,
     "ast_hash": "415e31eff18ba34db6df9faed3e47ae5",
     "semantic_hash": "415e31eff18ba34db6df9faed3e47ae5"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/CameraViews.java": {
+    "mtime": 1791485829.5336251,
+    "ast_hash": "dd54872229786cc06d922bb32629e412",
+    "semantic_hash": "dd54872229786cc06d922bb32629e412"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/CityFpsTest.java": {
+    "mtime": 1791485818.0864892,
+    "ast_hash": "dc7d2015c4b4f0c8a310cb6ac57112f4",
+    "semantic_hash": "dc7d2015c4b4f0c8a310cb6ac57112f4"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/DevTestMode.java": {
+    "mtime": 1791485708.4129345,
+    "ast_hash": "38ec5a84e95fd14de25a61b81bd2ff72",
+    "semantic_hash": "38ec5a84e95fd14de25a61b81bd2ff72"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/DevTestResults.java": {
+    "mtime": 1791485708.4164689,
+    "ast_hash": "1098a05e7f5845fe8f8d3d6a565796e3",
+    "semantic_hash": "1098a05e7f5845fe8f8d3d6a565796e3"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/DevTestUtil.java": {
+    "mtime": 1791485708.4147468,
+    "ast_hash": "4c225a34bb0304f619f46f54ef3d8603",
+    "semantic_hash": "4c225a34bb0304f619f46f54ef3d8603"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/PropsTest.java": {
+    "mtime": 1791485818.0864143,
+    "ast_hash": "e990192b11426a400f21293540f84fb1",
+    "semantic_hash": "e990192b11426a400f21293540f84fb1"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/ScopeTest.java": {
+    "mtime": 1791485818.08624,
+    "ast_hash": "5a57ddd6059ac0651c1ae759f7fcfd29",
+    "semantic_hash": "5a57ddd6059ac0651c1ae759f7fcfd29"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/ServerChecks.java": {
+    "mtime": 1791485799.0478747,
+    "ast_hash": "cb996c4f1c837554e4a3c9cf699db756",
+    "semantic_hash": "cb996c4f1c837554e4a3c9cf699db756"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/TracerTest.java": {
+    "mtime": 1791486019.4051323,
+    "ast_hash": "a95c75386d7daf33316fbad7385a1084",
+    "semantic_hash": "a95c75386d7daf33316fbad7385a1084"
+  },
+  "tools/devtest.py": {
+    "mtime": 1791486019.4054046,
+    "ast_hash": "237f95f08e85f8b81a2441ccf2ae1fdd",
+    "semantic_hash": "237f95f08e85f8b81a2441ccf2ae1fdd"
+  },
+  "docs/roadmap.md": {
+    "mtime": 1791486408.008764,
+    "ast_hash": "55cbed7543ad575b3a63b59439951ed9",
+    "semantic_hash": "55cbed7543ad575b3a63b59439951ed9"
   }
 }

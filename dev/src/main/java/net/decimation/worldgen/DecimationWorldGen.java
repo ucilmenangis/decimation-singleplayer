@@ -38,13 +38,19 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.28.8",
+     version = "0.28.9",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
     public static final String MODID = "deciworldgen";
     /** The city planner, for the dev autotest's audit views. */
     static CityDistrict city;
+
+    /** The procedural city planner (dev tests), or null. */
+    public static CityDistrict city()
+    {
+        return city;
+    }
 
     private final List<Schematic> schematics = new ArrayList<Schematic>();
     private final List<Schematic> largeSchematics = new ArrayList<Schematic>();

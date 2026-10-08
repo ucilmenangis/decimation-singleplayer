@@ -65,6 +65,15 @@ tasks.matching { it.name == "runClient" }.configureEach {
     }
 }
 
+// `gradlew runClient -Pdevtest=checks,scope,tracer` runs those dev test modes
+// in one game session (package worldgen.devtest; tools/devtest.py wraps it):
+// checks, views, scope, tracer, props, cityfps. Results: run/client/devtest/results.txt
+tasks.matching { it.name == "runClient" }.configureEach {
+    if (project.hasProperty("devtest")) {
+        jvmArgs("-Ddeciworldgen.autotest=true", "-Ddeciworldgen.autotest.test=" + project.property("devtest"))
+    }
+}
+
 // `gradlew runClient -Pautotest` runs the unattended singleplayer smoke test
 // (net.decimation.worldgen.DevAutoTest) and quits the game when done.
 tasks.matching { it.name == "runClient" }.configureEach {

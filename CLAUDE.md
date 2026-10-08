@@ -79,6 +79,8 @@ Before starting work in an area, query the graph first
 the matching `docs/` file, instead of re-deriving from source.
 
 Knowledge index:
+- `docs/roadmap.md`: EVERYTHING planned (open bugs, worldgen, NPCs, items,
+  tools) in one list with links; add new requests there, move done items.
 - `docs/gun_model_spec.md`: gun `.bmodel` / `.anib` formats, paths, renderer,
   new gun checklist.
 - `docs/building_design.md`: researched floor plans (apartment / office /
@@ -258,6 +260,25 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   Crash Report" saying "THIS IS NOT A ERROR" is only a spec printout.
 
 ## Testing without the user (no screen capture permission here)
+
+- FIRST CHOICE (2026-10-09): `python3 tools/devtest.py MODE [MODE ...]
+  [-P<flag>]` (venv python for the contact sheets) runs dev test modes in
+  ONE game launch (no boot per test) and prints run/client/devtest/
+  results.txt: one line per value, PASS / FAIL with the expectation, exit
+  code 1 on a FAIL; one contact sheet per mode (dev/run/client/devtest/
+  sheet_<mode>.png): read that, not every screenshot. Modes (package
+  `worldgen/devtest`, one class each, core `DevAutoTest`): checks (fresh
+  seed 1 world: zones, vehicle, humanity, prop box, bottlecaps, armor,
+  helmet, supply drop), views (camera; -Paudit / -Pgallery / -Pfootprint /
+  -Pstudy / -Pflats / -Psets pick the variant), scope, tracer, props,
+  cityfps (reuse the last autotest world). Measured: checks + views +
+  tracer 126 s; views + tracer + scope + props + cityfps 332 s in one go.
+  Gradle form: `./gradlew runClient -Pdevtest=checks,scope`. Each mode sets
+  up its own state (the camera views switch to peaceful, so the tracer
+  test sets normal difficulty itself). New test: a DevTestMode subclass,
+  register its name in DevAutoTest.mode(), record values with
+  DevTestResults.value / check, screenshots with DevTestUtil.screenshot.
+  The old flags below still work (-Pautotest = checks + views).
 
 - `python3 tools/servertest.py SEED [keep]`: dev dedicated server, fresh
   world, waits for spawn generation, stops via console `stop`, prints our
