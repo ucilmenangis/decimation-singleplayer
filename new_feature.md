@@ -435,6 +435,12 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.30.1 (user request): one spawn egg per tier, `deciworldgen:npc_egg`
+(`fixes/NpcEgg`), metadata = index in NpcLoadouts' tier list, so new
+tiers (juggernaut) get an egg on their own. Creative tab Misc, names
+"Spawn Bandit (heavy)", "Spawn Soldier (marineforest)", "Spawn Military";
+vanilla egg look, base colour per faction (Decimation's own egg colours),
+spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
 ### More zombie variants, 60 round magazines, NPC bullet impacts (9 Oktober 2026, "later")
 - More infected / zombie variants.

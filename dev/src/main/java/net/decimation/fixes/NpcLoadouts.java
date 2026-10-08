@@ -245,6 +245,12 @@ public class NpcLoadouts
         }
     }
 
+    /** Tier by position in the list (spawn egg metadata), or null. */
+    public Tier byIndex(int i)
+    {
+        return i >= 0 && i < tiers.size() ? tiers.get(i) : null;
+    }
+
     public Tier byName(String name)
     {
         for (Tier t : tiers)

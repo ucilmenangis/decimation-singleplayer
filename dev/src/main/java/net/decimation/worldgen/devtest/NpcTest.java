@@ -45,7 +45,7 @@ public class NpcTest extends DevTestMode
     private final List<EntityLiving> shown = new ArrayList<EntityLiving>();
     private volatile Map<Integer, String> shownGuns = new HashMap<Integer, String>();
     private volatile double camX, camY, camZ;
-    private int clientMatch, clientTotal, checked = -1, shot = -1;
+    private int clientMatch, clientTotal, checked = -1, shot = -1, eggTicks;
 
     public boolean client(Minecraft mc)
     {
@@ -82,6 +82,26 @@ public class NpcTest extends DevTestMode
                 shot = l;
                 DevTestUtil.screenshot(mc, name(), "npc_" + l);
             }
+        }
+        if (t > 300 + LINEUPS.length * 200 + 20 && eggTicks < 40)
+        {
+            // the eggs in the hotbar, GUI on
+            mc.gameSettings.hideGUI = false;
+            net.minecraft.item.Item egg = cpw.mods.fml.common.registry.GameRegistry.findItem("deciworldgen", "npc_egg");
+            if (eggTicks++ == 0 && egg != null)
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    mc.thePlayer.inventory.mainInventory[i] = NpcLoadouts.instance().byIndex(i) == null ? null
+                        : new ItemStack(egg, 1, i);
+                }
+                mc.thePlayer.inventory.currentItem = 4;
+            }
+            if (eggTicks == 39)
+            {
+                DevTestUtil.screenshot(mc, name(), "npc_eggs");
+            }
+            return true;
         }
         if (t > 300 + LINEUPS.length * 200 + 20)
         {
@@ -167,6 +187,30 @@ public class NpcTest extends DevTestMode
             npc.setDead();
         }
 
+        // every tier's spawn egg spawns that tier
+        net.minecraft.item.Item egg = cpw.mods.fml.common.registry.GameRegistry.findItem("deciworldgen", "npc_egg");
+        int eggs = 0, eggOk = 0;
+        String eggBad = "";
+        for (int i = 0; egg != null && loadouts.byIndex(i) != null; i++)
+        {
+            eggs++;
+            int y = ground(world, bx, bz) - 1;
+            List<EntityLiving> before0 = humans(world, bx, y, bz);
+            egg.onItemUse(new ItemStack(egg, 1, i), p, world, bx, y, bz, 1, 0.5f, 1, 0.5f);
+            for (EntityLiving e : humans(world, bx, y, bz))
+            {
+                if (!before0.contains(e))
+                {
+                    boolean ok = loadouts.byIndex(i).name.equals(e.getEntityData().getString(NpcLoadouts.TAG));
+                    eggOk += ok ? 1 : 0;
+                    eggBad += ok ? "" : " " + i;
+                    e.setDead();
+                }
+            }
+        }
+        DevTestResults.check(name(), "spawn eggs", eggOk + " / " + eggs + eggBad, eggs > 0 && eggOk == eggs,
+                             "one egg per tier spawns that tier");
+
         // the spawner places a tiered group near the player
         MilitarySpawner spawner = new MilitarySpawner(new File(Minecraft.getMinecraft().mcDataDir, "config"));
         List<EntityLiving> before = soviets(world, p, 64);
@@ -235,8 +279,7 @@ public class NpcTest extends DevTestMode
 
     private static EntityLiving newSoldier(World world)
     {
-        // Deci has no soldier constructor accessor: the entity list knows it by name
-        return (EntityLiving) net.minecraft.entity.EntityList.createEntityByName("Soldier", world);
+        return Deci.newSoldier(world);
     }
 
     private static int count(Map<String, Integer> m, String k)
@@ -251,6 +294,20 @@ public class NpcTest extends DevTestMode
         for (Object o : world.getEntitiesWithinAABB(EntityLiving.class, p.boundingBox.expand(r, 128, r)))
         {
             if (Deci.npcKind((Entity) o) == NpcKind.SOVIET)
+            {
+                out.add((EntityLiving) o);
+            }
+        }
+        return out;
+    }
+
+    private static List<EntityLiving> humans(World world, int x, int y, int z)
+    {
+        List<EntityLiving> out = new ArrayList<EntityLiving>();
+        for (Object o : world.getEntitiesWithinAABB(EntityLiving.class,
+            net.minecraft.util.AxisAlignedBB.getBoundingBox(x - 2, y - 2, z - 2, x + 3, y + 4, z + 3)))
+        {
+            if (Deci.npcKind((Entity) o) != null)
             {
                 out.add((EntityLiving) o);
             }

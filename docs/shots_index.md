@@ -482,3 +482,7 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   spetsnaz gear with AK family rifles, one prone and firing (muzzle
   flash). An earlier run (not kept) was blocked by Decimation mechs that
   had gathered in the reused world; the test now clears other mobs.
+- sheet_npc_eggs_v0.30.1.png: the 3 lineups again plus npc_eggs: the 8
+  tier eggs in the hotbar: 3 tan bandit eggs (brown, green, black spots),
+  4 blue soldier eggs (tan, dark green, grey, black spots), 1 yellow
+  military egg with red spots.

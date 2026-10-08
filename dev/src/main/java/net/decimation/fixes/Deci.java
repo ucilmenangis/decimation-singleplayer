@@ -367,6 +367,12 @@ public final class Deci
         return null;
     }
 
+    /** A new SoldierEntity (deci.ag.l). */
+    public static net.minecraft.entity.EntityLiving newSoldier(net.minecraft.world.World world)
+    {
+        return new deci.ag.l(world);
+    }
+
     /** A new SovietEntity (deci.ag.m). */
     public static net.minecraft.entity.EntityLiving newSoviet(net.minecraft.world.World world)
     {

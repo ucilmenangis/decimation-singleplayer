@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.30.0",
+     version = "0.30.1",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -98,6 +98,8 @@ public class DecimationWorldGen
         // bandit / soldier / Soviet tiers (both sides: the client applies the synced gun)
         npcLoadouts = new net.decimation.fixes.NpcLoadouts(event.getModConfigurationDirectory());
         militarySpawner = new net.decimation.fixes.MilitarySpawner(event.getModConfigurationDirectory());
+        cpw.mods.fml.common.registry.GameRegistry.registerItem(
+            new net.decimation.fixes.NpcEgg(npcLoadouts), "npc_egg");
 
         File dir = new File(event.getModConfigurationDirectory(), "decimation_worldgen");
         if (!dir.isDirectory() && !dir.mkdirs())

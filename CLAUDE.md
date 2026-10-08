@@ -579,6 +579,7 @@ of the last session:
   deciworldgen_npc.cfg; new_feature.md "Step 1 design: NPC tiers"):
   Decimation rolls NPC guns per side and never syncs them, so our gun goes
   to the client via data watcher slot 26. Dev test mode `npc`.
+  v0.30.1: spawn egg per tier (`deciworldgen:npc_egg`, `fixes/NpcEgg`).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,
