@@ -91,6 +91,10 @@ tasks.matching { it.name == "runClient" }.configureEach {
     if (project.hasProperty("scope")) {
         jvmArgs("-Ddeciworldgen.autotest.scope=true")
     }
+    // -Ptracer: NPC tracer direction test alone in the last autotest world
+    if (project.hasProperty("tracer")) {
+        jvmArgs("-Ddeciworldgen.autotest.tracer=true")
+    }
     // -Pscopeonly: the scope test alone in the last autotest world (no new world, no server checks)
     if (project.hasProperty("scopeonly")) {
         jvmArgs("-Ddeciworldgen.autotest.scopeonly=true")

@@ -64,6 +64,20 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
 
 ---
 
+### Cheap scope (view zoom instead of picture in picture), DONE v0.28.0..0.28.4
+- **Requested**: 8 Oktober 2026 (scope cost about 150 -> 110 fps); user
+  approved the result 9 Oktober 2026 ("the scope do really well").
+- reddot / 2x: world and gun zoom together (EntityRenderer.cameraZoom),
+  see-through glass (frame under the glass copied before the hand, mapped
+  by screen position), sight centred on the aim point.
+- 4x and up (4x, dragunov, 8x, integrated aug): black sniper overlay with
+  the scope's reticle, no gun (config `overlayFrom`).
+- Mouse slows to 1 / zoom while zoomed; old picture in picture scope kept
+  behind `pictureInPicture=true` (config/deciworldgen_scope.cfg).
+- Code: `net.decimation.fixes.ScopeZoom`, `tools/patches/PatchScope.java`;
+  history and measurements in bug.md "FPS drop while aiming through
+  scopes"; test `./gradlew runClient -Pautotest -Pscopeonly`.
+
 ## In progress
 
 ### Decimation world generation (own code inside the jar)
@@ -332,6 +346,21 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
     `asn` - user said "M82," confirm this existing entry is that model), AWM
     (not seen in the registered weapon list yet - confirm it exists or needs
     adding), SVD (`svd`/`asj`).
+
+### New hostile NPCs and stronger bandits (plan, 9 Oktober 2026, "later")
+- **Enemy military**: medium to high armor, rifles or heavy weapons.
+- **Enemy juggernaut**: full juggernaut armor (`juggernautHelm/Vest/Pants/
+  Boots` exist), heavy machine guns (PKM, M240, any machine gun in the
+  registry) or a Barrett sniper with ridiculous damage (.50 BMG).
+- Both spawn in military buildings / military areas (our MIL sectors,
+  military zones, the wasteland district next to them).
+- **Bandits**: heavier arsenal (PKM, SV98, militia guns of the medium to
+  heavy class) and medium to heavy armor.
+- Relates to "3 new mobs" (spec-ops military, weapon list there) and
+  "More clothing variety" below; NPC shots now draw correct tracers
+  (bug.md, fixed 9 Oktober 2026), and NPC gunfire respects armor (v0.9.0).
+- `[not verified]` which registry names PKM / M240 / militia guns have;
+  check `deci.aD.k` / deobf ItemRegistry when starting.
 
 ### More clothing variety on military/bandit NPCs
 - **Requested**: 27 Juli 2026

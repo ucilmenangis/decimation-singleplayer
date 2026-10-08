@@ -239,7 +239,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   (then Prism's copy). Patch sources live in `tools/patches/` (so far:
   `PatchSwing.java`, SmoothSwingThread busy loop; `PatchPropCulling.java`,
   props not rendering, both 2026-10-07; `PatchScope.java`, picture in
-  picture scope gated behind `decimation.scope.pip`, 2026-10-08). Patch from the ORIGINAL classes
+  picture scope gated behind `decimation.scope.pip`, 2026-10-08;
+  `PatchTracer.java`, NPC tracers aimed at the target, 2026-10-09, needs
+  netty-all 4.0.10 from Prism's libraries on the Javassist classpath). Patch from the ORIGINAL classes
   only after checking the target class is identical in the patched jar. Earlier
   patches (loot handler, proxy cast, weapon nerf, armor buff, intro skip,
   ammo crate) were one-off and have no saved source.
@@ -529,6 +531,8 @@ of the last session:
   forced), about 3.5 min; `-Pscope` = full autotest + scope test.
   v0.28.4: 4x and up use a black sniper overlay with the reticle (no gun);
   reddot / 2x keep the gun with see-through glass (config `overlayFrom`).
+  `-Ptracer` (with -Pautotest, last autotest world): NPC tracer direction
+  test, logs the mean / max angle between tracers and the target.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors, user question
   2026-10-08). The game loads Decimation's obfuscated classes, so the

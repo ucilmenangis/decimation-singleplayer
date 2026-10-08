@@ -450,3 +450,24 @@ simplylight illuminant_block / illuminant_panel / illuminant_slab to
 deci:BlockLightOff; DeceasedCraft builds glowing floor tiles from them.
 Fix later: map illuminant blocks used as full floor blocks to a plain
 light floor (or check which buildings, by name, use them).
+
+## NPC tracers fly sideways or backwards (old bug, also in the original; FIXED 9 Oktober 2026)
+- **Reported**: 9 Oktober 2026: an NPC shooting forward draws its tracer to
+  the left, right or behind.
+- **Cause (code)**: BanditEntity.shootAt (`deci.ag.a.e`, also soldiers and
+  hazmat soldiers) and ArmedTraderEntity.shootAt (`deci.ai.v.e`) damage the
+  target directly on the server and send PacketGunFireEffects
+  (`deci.aE.a$B`) with only the shooter's id; the client handler
+  (`deci.aE.a$B$a`) draws the tracer along the shooter's getLook(), which
+  for a mob is its BODY facing, not its aim.
+- **Fix** (`tools/patches/PatchTracer.java`, in Decimation.jar.patched,
+  dist/Decimation.jar, dev/libs/Decimation-base.jar): the packet also carries
+  the target's id (read only when present; -1 = none), shootAt records its
+  target, and the handler aims the tracer from the shooter's eyes at the
+  target's chest (bounding box bottom + 0.6 x height). Players unchanged.
+- **Measured** (`./gradlew runClient -Pautotest -Ptracer`: a bandit 8
+  blocks from the player, held facing away, shoots the player): original
+  classes 52 tracers, mean 133 degrees off the line to the target, max 179;
+  patched 42 tracers, mean 1.0, max 2.0. (The test also showed the original
+  shootAt crashes on a miss when the bandit has no AI target: it plays the
+  miss sound at getAITarget(); never happens in play, the AI sets it.)

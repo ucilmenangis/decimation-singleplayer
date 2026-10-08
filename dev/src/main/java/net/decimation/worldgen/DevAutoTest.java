@@ -57,7 +57,7 @@ public class DevAutoTest
         if (!launched && mc.theWorld == null && mc.currentScreen != null && clientTicks > 100)
         {
             launched = true;
-            if (SCOPE_ONLY && new File(mc.mcDataDir, "saves/" + SAVE).isDirectory())
+            if ((SCOPE_ONLY || TRACER) && new File(mc.mcDataDir, "saves/" + SAVE).isDirectory())
             {
                 // -Pscopeonly: reuse the last autotest world, no server checks (about 1 min instead of 4)
                 FMLLog.info("[%s] AUTOTEST scope only: opening %s", DecimationWorldGen.MODID, SAVE);
@@ -84,13 +84,18 @@ public class DevAutoTest
         if (launched && mc.theWorld != null && !requested && ++worldTicks > 100)
         {
             requested = true; // the server tick picks this up
-            if (SCOPE_ONLY)
+            if (SCOPE_ONLY || TRACER)
             {
-                finished = true; // straight to the scope test
+                finished = true; // straight to the scope / tracer test
             }
         }
         if (finished && SCOPE && !scopeDone && scopeTest(mc))
         {
+            return;
+        }
+        if (finished && TRACER && !tracerDone)
+        {
+            tracerClient(mc);
             return;
         }
         if (finished)
@@ -104,11 +109,100 @@ public class DevAutoTest
         }
     }
 
+    // ---- NPC tracer test (-Ptracer): a bandit 8 blocks north of the player,
+    // held facing AWAY (north), shoots the player; every tracer the client
+    // draws is compared with the line from its start to the player's eyes.
+    // Before PatchTracer the tracer followed the body facing (about 180 deg off).
+    private volatile boolean tracerDone;
+    private int tracerTicks;
+    private net.minecraft.entity.EntityLiving tracerBandit;
+    private final java.util.Set<Object> tracersSeen =
+        java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<Object, Boolean>());
+    private int tracerCount;
+    private double tracerMax, tracerSum;
+
+    private void tracerServer()
+    {
+        net.minecraft.entity.player.EntityPlayerMP sp = (net.minecraft.entity.player.EntityPlayerMP)
+            MinecraftServer.getServer().getConfigurationManager().playerEntityList.get(0);
+        tracerTicks++;
+        if (tracerTicks == 20)
+        {
+            sp.worldObj.setWorldTime(6000);
+            sp.capabilities.isFlying = true;
+            sp.setPositionAndUpdate(8.5, 80, 40.5);
+            tracerBandit = new deci.ag.a(sp.worldObj);
+            tracerBandit.setPosition(8.5, 80, 32.5);
+            sp.worldObj.spawnEntityInWorld(tracerBandit);
+        }
+        if (tracerBandit != null && tracerTicks > 40 && tracerTicks < 400)
+        {
+            tracerBandit.setPosition(8.5, 80, 32.5);
+            tracerBandit.motionX = tracerBandit.motionY = tracerBandit.motionZ = 0;
+            tracerBandit.rotationYaw = tracerBandit.rotationYawHead = tracerBandit.renderYawOffset = 180; // away
+            tracerBandit.rotationPitch = 0;
+            tracerBandit.setRevengeTarget(sp); // a miss plays its sound at getAITarget() (null: crash)
+            ((deci.ag.a) tracerBandit).e(sp); // BanditEntity.shootAt (fires when its cooldown runs out)
+        }
+        if (tracerTicks == 400 && tracerBandit != null)
+        {
+            tracerBandit.setDead();
+        }
+    }
+
+    private void tracerClient(Minecraft mc)
+    {
+        if (tracerTicks >= 420)
+        {
+            FMLLog.info("[%s] AUTOTEST tracer: %d NPC tracers, angle to the target mean %.1f, max %.1f degrees "
+                        + "(bandit facing away; before the fix about 180)", DecimationWorldGen.MODID, tracerCount,
+                        tracerCount > 0 ? tracerSum / tracerCount : 0, tracerMax);
+            tracerDone = true;
+            return;
+        }
+        if (mc.thePlayer == null)
+        {
+            return;
+        }
+        try
+        {
+            java.util.List<?> list = (java.util.List<?>) cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(
+                deci.n.d.class, null, "kd");
+            for (Object t : list)
+            {
+                if (!tracersSeen.add(t))
+                {
+                    continue;
+                }
+                org.lwjgl.util.vector.Vector3f a = (org.lwjgl.util.vector.Vector3f)
+                    cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, (deci.n.d.a) t, "kf");
+                org.lwjgl.util.vector.Vector3f b = (org.lwjgl.util.vector.Vector3f)
+                    cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(deci.n.d.a.class, (deci.n.d.a) t, "kg");
+                double dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
+                double px = mc.thePlayer.posX - a.x, pz = mc.thePlayer.posZ - a.z;
+                double py = mc.thePlayer.boundingBox.minY + mc.thePlayer.height * 0.6 - a.y;
+                double cos = (dx * px + dy * py + dz * pz)
+                    / Math.sqrt((dx * dx + dy * dy + dz * dz) * (px * px + py * py + pz * pz));
+                double ang = Math.toDegrees(Math.acos(Math.max(-1, Math.min(1, cos))));
+                tracerCount++;
+                tracerSum += ang;
+                tracerMax = Math.max(tracerMax, ang);
+            }
+        }
+        catch (Exception e)
+        {
+            FMLLog.info("[%s] AUTOTEST tracer: cannot read tracers: %s", DecimationWorldGen.MODID, e);
+            tracerDone = true;
+        }
+    }
+
     // ---- scope test (-Pscope): fps with an empty hand, a gun with a 4x
     // scope held, and aiming through it, plus the FOV zoom and a screenshot
     // (scope_<pip|zoom>.png). Run once per config/deciworldgen_scope.cfg
     // setting to compare Decimation's picture in picture scope with the zoom.
     private static final boolean SCOPE_ONLY = "true".equals(System.getProperty(PROPERTY + ".scopeonly"));
+    /** -Ptracer: NPC tracer direction test alone in the last autotest world (tools/patches/PatchTracer.java). */
+    private static final boolean TRACER = "true".equals(System.getProperty(PROPERTY + ".tracer"));
     private static final boolean SCOPE = SCOPE_ONLY || "true".equals(System.getProperty(PROPERTY + ".scope"));
     private static final int SCOPE_PHASE = 400;
     private int scopeTicks;
@@ -1156,6 +1250,10 @@ public class DevAutoTest
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event)
     {
+        if (event.phase == TickEvent.Phase.END && finished && TRACER && !tracerDone)
+        {
+            tracerServer();
+        }
         if (event.phase == TickEvent.Phase.END && finished)
         {
             serveView();
