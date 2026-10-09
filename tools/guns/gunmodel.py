@@ -155,16 +155,34 @@ def bmodel(spec, parts):
 
 
 def paint(parts, seed=7):
-    """RGBA rows: each part's 1x1x1 island (4 x 2 units) one tone with faint per texel noise."""
+    """RGBA rows: each part's 1x1x1 island (4 x 2 units), toned like Decimation's guns
+    (docs/gun_style_guide.md section 4, measured on Uzi / AK74 / MP5A3: 15 to 31 distinct part
+    tones a gun, faces of one part about 5 apart, texel noise about 2.5, top of the gun a bit
+    lighter than the bottom):
+    - every part its own shade of its material (+-6 %, seeded per part),
+    - a gentle gradient over the gun's height (+5 at the top, -5 at the bottom),
+    - per face: top +2, bottom -2, the four sides -1.5..+1.5,
+    - per texel noise -4..+4."""
     rnd = random.Random(seed)
     W, H = TEX_W * PX, tex_height(len(parts)) * PX
     px = [[(0, 0, 0, 0)] * W for _ in range(H)]
+    ys = [q[1] for p in parts for q in p.points()]
+    y0, y1 = min(ys), max(ys)
     for i, p in enumerate(parts):
         u, v = uv(i)
-        for yy in range(v * PX, (v + 2) * PX):
-            for xx in range(u * PX, (u + 4) * PX):
-                n = rnd.randint(-3, 3)
-                px[yy][xx] = tuple(max(0, min(255, c + n)) for c in p.colour) + (255,)
+        f = 1 + rnd.uniform(-0.06, 0.06)
+        cy = sum(q[1] for q in p.points()) / 8
+        grad = 5 - 10 * (cy - y0) / max(1e-6, y1 - y0)
+        base = [c * f + grad for c in p.colour]
+        # box UV of a 1x1x1 island: row v: top (u+1), bottom (u+2); row v+1: sides u .. u+3
+        faces = {(u + 1, v): 2, (u + 2, v): -2}
+        for k in range(4):
+            faces[(u + k, v + 1)] = rnd.uniform(-1.5, 1.5)
+        for (fu, fv), shift in faces.items():
+            for yy in range(fv * PX, (fv + 1) * PX):
+                for xx in range(fu * PX, (fu + 1) * PX):
+                    n = rnd.randint(-4, 4)
+                    px[yy][xx] = tuple(max(0, min(255, int(round(c + shift + n)))) for c in base) + (255,)
     return px
 
 

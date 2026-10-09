@@ -546,6 +546,23 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### MAC-10 v2 revision (DONE v0.37.1, 10 Oktober 2026)
+User review of 0.37.0 ("huge upgrade"): 1. aim not centred on the
+crosshair, 2. suppressor flying, 3. no gradation like Decimation's guns.
+- 2: the barrel attachment formula meets the muzzle only on guns with
+  flamePos x 12 to 15; the MAC-10 gap was 1.12 units (also in the user's
+  shot). New `Deci.offsetAttachment` (our copy of the attachment model in
+  AttachmentItem.ST with an offset), NewGuns moves smgSuppressor by
+  (-1.02, +0.14, 0). Checked in game: flush on the muzzle (bandit side
+  view, first person).
+- 3: gunmodel.paint gradation from measured Decimation textures (style
+  guide section 4): 37 part tones, face spread 5.2, noise 2.1.
+- 1: steady aim (gunview, camera held) puts the sight tops on the screen
+  centre exactly like the Uzi, and the rear sight matches the Uzi's
+  build; the user's shot shows them 0.2 units high, which matches
+  Decimation's aim sway after a mouse move `[inferred]`. Not changed;
+  asked the user to compare with the Uzi in the same moment.
+
 ### MAC-10 v2 in Decimation's style (DONE v0.37.0, 10 Oktober 2026)
 After the user's "not good, needs polish" and the gun study
 (docs/gun_style_guide.md, skill .claude/skills/decimation-gun).

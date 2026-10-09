@@ -118,6 +118,14 @@ block.
   lighter, AK74 mag brown polymer).
 - Light comes from the renderer, not the texture: neighbouring panels
   read through their slightly different tones and the face shading.
+- Gradation (measured 10 Oktober 2026 after the user saw it "if you look
+  closely"; Uzi / AK74 / MP5A3 1x1x1 islands): 15 to 31 distinct part
+  tones per gun (every part its own shade, Uzi parts 33 to 47), faces of
+  one part 4.7 to 5.7 apart, texel noise 2.0 to 2.7 inside a face, on
+  some guns the top lighter than the bottom (Glock tone vs height -0.55).
+  gunmodel.paint does: part shade +-6 %, +5 top to -5 bottom, faces top
+  +2 / bottom -2 / sides +-1.5, texel noise +-4 (MAC-10: 37 tones, faces
+  5.2, noise 2.1).
 - Layout: textureWidth 512, UV offsets stepping by 8 on a row (a 1x1x1
   island is 4 x 2 texels), new row every 8; the PNG is 2x (1024 wide).
 
@@ -290,6 +298,11 @@ and checked in game (`gunview`, shot gunview_<gun>_aim.png):
   (40 px at 854 x 480, so about 53 px a unit) above it and its 2.2 x 2.2
   rear plate fills the lower half: in aim a short gun is only its rear
   section.
+- Aim sway: ClientEventHandler tilts the gun while the mouse moves
+  (headYawSway from yaw, dP from pitch changes; applied in aim too), so
+  a screenshot right after looking up or down shows the sights off the
+  centre for a moment (the user's 0.37.0 shot: about 0.2 units) for any
+  gun [inferred]; judge the aim only steady (gunview holds the camera).
 - Rules: the highest point of the iron sights (rear notch edges, front
   post) at y -4.85 to -5.0 on z -0.15; receiver top in the sight zone (x
   1.5 to 5) at y -4.8 to -5.05; the rear section below the sights at most
@@ -322,8 +335,17 @@ Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
   (-1.6, -0.8, -0.06); grip (-3.2, 0.8, 0); barrel (-24.8, 4.32, -0.05) +
   flamePos x 16 / 21 (mp7 and bayonet have extra offsets). The attachment
   models are built around these spots, so the only per gun input is
-  flamePos: the suppressor follows the muzzle (checked in game on M4A4,
-  Uzi, MAC-10). Sights land at x 0.8 to 5.5 (scope) or 2.4 to 2.8 (red
+  flamePos, but only at 16 / 21 of it: barrel attachment x = constant +
+  0.762 flamePos x, so it meets the muzzle only around x 12 to 15
+  (study.py gaps: Uzi 0.12, UMP45 0, MP5A3 / Vector 0.44, MP7 -0.56 with
+  its hardcoded fix, our MAC-10 v2 1.12: "flying" in the user's
+  screenshot). Fix for a short gun: `Deci.offsetAttachment(gun,
+  "smgSuppressor", dx, dy, dz)` puts our own copy of the attachment model
+  in AttachmentItem.ST for that gun with a BModel offset (MAC-10: -1.02,
+  +0.14, 0; checked in game, flush on the muzzle). Mirror it in
+  study.py ATTACH_FIX. study.py draws barrel attachments about 0.85 too
+  low for every gun (its y conversion is off): compare heights against a
+  Decimation gun, not the bore. Sights land at x 0.8 to 5.5 (scope) or 2.4 to 2.8 (red
   dot) over y -5.9 to -3.1: a new gun needs its receiver top there (section
   13). The foregrip renders behind and below even Decimation's M4A4
   (study render and the NPC shot) [inferred: misplaced in the game too].

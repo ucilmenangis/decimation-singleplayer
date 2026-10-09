@@ -615,3 +615,10 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   magazine down and back), fire frames, Uzi control, bandit side / front /
   firing. sheet_gunview_attach.png: MAC-10 with reddot, smgSuppressor,
   flashlight: hip, aim (red dot ring at the centre), bandit side view.
+- attach_ours_mac10_smgSuppressor_side / three.png (study.py with
+  ATTACH_FIX): suppressor 0.1 from the muzzle (drawn low: study.py y
+  offset for barrel attachments is off for every gun).
+- suppressor_fix.png (lower half): v0.37.1 bandit holding the MAC-10, the
+  suppressor flush on the muzzle and in line; gunview_mac10_supp.png:
+  first person hip with the suppressor attached at the front;
+  gunview_<gun>_supp_npc.png: the full NPC shots.

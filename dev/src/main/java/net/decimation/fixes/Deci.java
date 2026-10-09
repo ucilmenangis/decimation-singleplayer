@@ -618,6 +618,48 @@ public final class Deci
         return n;
     }
 
+    /**
+     * Draws attachment `attachment` (deci:<name>) on `gun` moved by (dx, dy, dz) model units.
+     * GunItemRenderer places a barrel attachment at a constant plus flamePos x 16 / 21, so on a
+     * short gun it floats ahead of the muzzle (Decimation's own MP7 has a hardcoded fix). An
+     * AttachmentItem (deci.ay.h) caches one model per gun in ST (getModelFor b): we put our own
+     * copy there (BModelLoader deci.n.g.a), its offset (BModel lc / ld / le, package private,
+     * applied by renderParts) set to the correction. Client only. docs/gun_style_guide.md section 14.
+     */
+    public static boolean offsetAttachment(Item gun, String attachment, float dx, float dy, float dz)
+    {
+        Item a = cpw.mods.fml.common.registry.GameRegistry.findItem("deci", attachment);
+        if (!(a instanceof deci.ay.h) || !(gun instanceof deci.ay.i))
+        {
+            return false;
+        }
+        deci.ay.h att = (deci.ay.h) a;
+        try
+        {
+            deci.n.f model = deci.n.g.a(new net.minecraft.util.ResourceLocation(
+                "deci:models/attachments/" + att.adQ.toString() + "/" + att.adK + ".bmodel"));
+            if (model == null)
+            {
+                return false;
+            }
+            String[] names = {"lc", "ld", "le"};
+            float[] d = {dx, dy, dz};
+            for (int i = 0; i < 3; i++)
+            {
+                java.lang.reflect.Field f = deci.n.f.class.getDeclaredField(names[i]);
+                f.setAccessible(true);
+                f.setFloat(model, f.getFloat(model) + d[i]);
+            }
+            att.ST.put((deci.ay.i) gun, model);
+            return true;
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] attachment offset %s failed: %s", attachment, e);
+            return false;
+        }
+    }
+
     /** True when the gun (GunItem deci.ay.i) loads this magazine (its ammoTypes aep). */
     public static boolean gunTakes(Item gun, Item mag)
     {

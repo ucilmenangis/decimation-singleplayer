@@ -212,8 +212,12 @@ def attach_offset(gun, name):
     return tuple(c / 0.0625 for c in o)
 
 
+# our per gun attachment corrections (fixes/NewGuns: Deci.offsetAttachment), model units
+ATTACH_FIX = {"mac10": {"smgSuppressor": (-1.02, 0.14, 0)}}
+
+
 def with_attachments(gun, names):
-    """The gun plus attachment models placed like the game does."""
+    """The gun plus attachment models placed like the game does (plus ATTACH_FIX for ours)."""
     z = zipfile.ZipFile(JAR)
     for n in names:
         slot = ATTACH_SLOT[n]
@@ -222,6 +226,8 @@ def with_attachments(gun, names):
         img = Image.open(BytesIO(z.read(tp))).convert("RGBA") if tp in z.namelist() else None
         a = Gun(n, slot, text, img, False)
         ox, oy, oz = attach_offset(gun, n)
+        fix = ATTACH_FIX.get(gun.name, {}).get(n, (0, 0, 0)) if gun.ours else (0, 0, 0)
+        ox, oy, oz = ox + fix[0], oy + fix[1], oz + fix[2]
         for p in a.parts:
             p.name = n + "_" + p.name
             p.tex = (img, a.tw, a.th)
