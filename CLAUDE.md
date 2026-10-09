@@ -244,7 +244,11 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   (reobfuscated to SRG, version from the git tag). Deliverables in `dist/`:
   that jar + `Decimation.jar` (= patched jar minus our classes). Both are in
   Prism's `mods/` since 2026-10-07 (original in
-  `minecraft/mods_backup_20261007/`). Spotless is disabled to keep our style.
+  `minecraft/mods_backup_20261007/`); updated 2026-10-10 to 0.38.1 with the
+  dev `config/decimation_worldgen` (lc city pack, large schematics), the
+  0.7.0 jars and old config in `minecraft/backup_20261010/`. The Prism
+  instance also has OptiFine HD U E7 and RTG; the dev client has neither
+  (the user tests in the dev client: its fps are without OptiFine). Spotless is disabled to keep our style.
 - A Javassist patch to Decimation's own classes must go into THREE jars:
   `Decimation.jar.patched`, `dist/Decimation.jar`, `dev/libs/Decimation-base.jar`
   (then Prism's copy). Patch sources live in `tools/patches/` (so far:
