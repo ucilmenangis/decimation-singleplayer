@@ -132,6 +132,9 @@ block.
 | texture | light grey, painted port / grip / rings | dark flat tones per part |
 | receiver | one box with a painted port | layered panels, chamfered top, raised strips |
 | grip, magazine | straight boxes, mag as wide as the grip | skewed segments, slimmer mag inside the grip |
+| first person | a big light grey square (the 2.2 x 2.2 stock plate) fills the view | Uzi: slim dark rear, stock hinge bars, sights |
+| animations | Fire kicks the whole Model; no SlideBack | Fire moves only slideModel*; SlideBack in 92 of 98 |
+| icon | light grey block filling the frame | dark slim side silhouette, 1 px black outline |
 
 ## 6. Workflow for a new gun
 
@@ -147,4 +150,95 @@ block.
 4. Render ours next to the Decimation reference with `study.py sheet`
    (same scale) and `--split`; compare silhouette, width, part density,
    tone. Iterate before any in game test.
-5. Then the in game test (`devtest.py --live gun`).
+5. First person next to the reference: `python3 tools/devtest.py --live
+   gunview guns=uzi,<ours>` (section 11). Then the full test
+   (`devtest.py --live gun`).
+
+## 7. Shape vocabulary (second pass, all 16757 parts classified)
+
+| Kind | Share | What it is | Used for |
+|---|---|---|---|
+| taper | 60 % | one end face smaller than the other | almost everything: receiver ends, sight bases, barrel octagon halves, stock panels, grips |
+| cuboid | 31 % | a 1x1x1 shrunk to a plain smaller box by offsets | plates, strips, pins, rails |
+| skew | 5 % | opposite faces same size but shifted | leaning grips, magazine segments, trigger guard bars |
+| wedge | 4 % | two corners merged (a triangle side) | points, ramps, stock toes, sight blades |
+
+So the default part is a TAPER, not a box. Rerun:
+`python3 tools/guns/study.py vocab [guns]`; `parts NAME` prints each
+part's kind.
+
+## 8. Where the detail goes
+
+Share of parts by position (median over the category):
+- along the length (stock to muzzle, tenths): SMG 4 4 7 14 15 20 13 8 9 6;
+  rifle 5 3 10 17 15 16 12 10 6 6; pistol 10 21 18 15 9 8 4 3 4 8 %.
+  The receiver (30 to 70 % of the length) holds about half of all parts.
+- along the height (top to bottom, fifths): SMG 39 35 15 8 2; rifle 35 38
+  17 7 2; pistol 46 29 14 5 6 %. About 3 of 4 parts sit in the top two
+  fifths (receiver, sights, rails); grips and magazines are few, simple
+  parts.
+- first person shows the TOP, the RIGHT side and the REAR (section 11):
+  spend parts there, the left side and the underside are rarely seen.
+
+## 9. Placement conventions (header and model space)
+
+Every gun has flamePos, ejectPos, rhPos, rhRot, lhPos, lhRot (no sPos, no
+mOff, no Scale in any shipped gun). Medians:
+
+| | pistol | smg | rifle |
+|---|---|---|---|
+| model x range (rear, muzzle) | 1.2, 9.0 | -5.4, 14.7 | -7.5, 19.4 |
+| model y range (top, bottom) | -4.8, 0.6 | -5.0, 2.4 | -4.9, 2.5 |
+| model z centre | -0.15 | -0.12 | -0.25 |
+| rhPos | -6.35, 1.07, -2.0 | -6.55, 1.92, -2.0 | -7.2, 2.07, -2.0 |
+| lhPos | -1.55, 9.12, 5.32 | 4.2, 8.02, 4.52 | 3.7, 8.22, 4.52 |
+
+- The top of the gun is at y -5 (y grows downward), the gun is centred on
+  z -0.15; flamePos x = the muzzle tip minus 0.1, flamePos y about 10 % of
+  the height below the top, flamePos z -0.15. rhRot / lhRot are always 0.
+- The grip sits at roughly x 3 to 6 on SMGs and pistols [inferred from
+  the renders]; start rhPos / lhPos from the closest Decimation gun of the
+  same layout (our MAC-10 took the Uzi's; in first person it sits where the
+  Uzi sits, hands on it [only the hip view checked]), then tune in game.
+- ejectPos is 0,0,0 on many guns (no casing spot set).
+
+## 10. Animations
+
+All 98 guns have Fire, Rack and Reload1; 92 also SlideBack. Timings are
+shared templates (the Uzi and MP5 Rack are identical):
+
+| Animation | Frames | Keyframes | Hand | Content |
+|---|---|---|---|---|
+| Fire | 2 (shotgun 11) | 2 | 0 | frame 1 RAND: only slideModel* back about 2.4; the whole Model does NOT kick (recoil is the game's) |
+| Reload1 | 57 (pistol 46) | about 12, every 5 frames | 0 | mag out with MagOut sound and shake 1.2 at frame 5, SWITCH at 20 (mag far down, y +17), new mag up, LOAD with MagIn at 40, TRYBOLT at 50, rest at 55; Model tilts up to about 25 to 30 degrees, OffHand follows the mag |
+| Rack | 19 (pistol 11) | 7, every 3 frames | 1 (rifles, SMGs), 0 (pistols) | starts with the slide back, sound Rack at frame 6 with the slide home, OffHand pulls and returns |
+| SlideBack | 1, STATIC | 1 | 0 | the slide held back (empty gun) |
+
+Our guns: use the same timing and structure with our own values; add
+SlideBack; no Model kick in Fire.
+
+## 11. First person (in game, dev test mode `gunview`)
+
+`python3 tools/devtest.py --live gunview [guns=uzi,mac10,...]`
+(devtest/GunViewTest, test arena, noon, same camera; one screenshot per
+gun, gunview_<gun>.png). Shots of uzi, mp5a3, ump45, vector, mp7,
+glock17, deagle, ak74, m4a4, r870 and our mac10: docs/shots/
+guns_study_v0.36/fp/ (shots_index.md). What it shows:
+- The gun comes in from the lower right toward the screen centre; the
+  player sees the REAR face, the TOP and the RIGHT side, at a steep angle.
+  The sights sit just below the crosshair.
+- Long guns show a long diagonal of the right side; short guns (Uzi,
+  pistols) are seen almost straight from behind: their rear cross section
+  IS the gun. The Uzi's rear is slim (1.2 wide), dark, broken up by the
+  folded stock bars, hinge and rear sight.
+- Our MAC-10's rear is a 2.2 x 2.2 light grey plate: one flat square
+  filling the view. Rule: a short gun's rear must be slim, dark and
+  broken into parts (chamfers, stock rods, rear sight, cocking handle).
+
+## 12. Icons (items/gun/<cat>/<gun>.png, all 32 x 32)
+
+Side view, muzzle right, horizontal, the gun's own dark tones, a 1 px
+black outline, slim (rifles are a thin line with a few pixels of
+receiver). Ours was a light grey block filling the frame. Make icons from
+the model: study.py side render scaled to 30 px wide plus a black outline
+[to build into gunmodel.py].

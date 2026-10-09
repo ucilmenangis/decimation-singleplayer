@@ -573,3 +573,14 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   receiver; the Uzi is near black, slim, 105 shaped parts.
 - tex_crops.png: Uzi, AK74, MP5 texture strips at 5x: one flat tone per
   part island with faint noise, no painted detail.
+- icons_all.png: all 98 Decimation gun icons at 3x plus our MAC-10: side
+  silhouettes, muzzle right, dark tones, 1 px black outline, slim; ours a
+  light grey block filling the frame.
+- fp/gunview_<gun>.png (dev test mode gunview, 854 x 480, GUI on): first
+  person hip view of uzi, mp5a3, ump45, vector, mp7, glock17, deagle,
+  ak74, m4a4, r870 and our mac10 on the test arena. Guns come from the
+  lower right to the centre, seen from the rear, top and right side;
+  long guns show their right side as a diagonal, short ones mostly their
+  rear. Uzi rear: slim, dark, stock bars and hinge. MAC-10: a big light
+  grey square (the stock plate) fills the view.
+- fp_uzi_mac10_mp5.png: contact sheet of those three first person shots.

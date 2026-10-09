@@ -8,6 +8,7 @@ is copied into the repo (renders go to docs/shots/, git ignored).
     python3 tools/guns/study.py sheet NAME [NAME ...] --out FILE.png [--cols N]  # side views
     python3 tools/guns/study.py stats [--tsv FILE]                       # every gun, one line each
     python3 tools/guns/study.py parts NAME                               # part list of one gun
+    python3 tools/guns/study.py vocab [NAME ...]                         # taper / cuboid / skew / wedge shares
 
 NAME is a gun file name (uzi, m4a1, mac10); "ours:NAME" forces our own copy.
 Views: side (muzzle right, the side facing +z), other (the other side), top,
@@ -303,6 +304,33 @@ def label(img, text):
     return out
 
 
+BASE = {7: (0, 0, 0), 6: (1, 0, 0), 4: (1, 1, 0), 5: (0, 1, 0), 3: (0, 0, 1), 2: (1, 0, 1), 0: (1, 1, 1), 1: (0, 1, 1)}
+
+
+def shape_kind(p):
+    """wedge (two corners merged), cuboid (a plain smaller box), taper (one end face smaller), skew (sheared)."""
+    pts = {k: tuple(b[i] * p.size[i] + p.corners[k][i] for i in range(3)) for k, b in BASE.items()}
+    pl = list(pts.values())
+    for i in range(8):
+        for j in range(i + 1, 8):
+            if sum(abs(pl[i][a] - pl[j][a]) for a in range(3)) < 0.02:
+                return "wedge"
+    lo = [min(q[a] for q in pl) for a in range(3)]
+    hi = [max(q[a] for q in pl) for a in range(3)]
+    if all(abs(q[a] - lo[a]) < 1e-3 or abs(q[a] - hi[a]) < 1e-3 for q in pl for a in range(3)):
+        return "cuboid"
+    for ax in range(3):
+        f0 = [pts[k] for k, b in BASE.items() if b[ax] == 0]
+        f1 = [pts[k] for k, b in BASE.items() if b[ax] == 1]
+        for o in range(3):
+            if o != ax:
+                e0 = max(q[o] for q in f0) - min(q[o] for q in f0)
+                e1 = max(q[o] for q in f1) - min(q[o] for q in f1)
+                if abs(e0 - e1) > 0.02:
+                    return "taper"
+    return "skew"
+
+
 def stats(gun):
     n = len(gun.parts)
     groups = {}
@@ -361,12 +389,21 @@ def main():
         if tsv:
             open(tsv, "w").write("\n".join(lines) + "\n")
         print("\n".join(lines))
+    elif cmd == "vocab":
+        counts = {}
+        for n in (rest or all_names()):
+            for p in load(n).parts:
+                k = shape_kind(p)
+                counts[k] = counts.get(k, 0) + 1
+        total = sum(counts.values())
+        for k, c in sorted(counts.items(), key=lambda kv: -kv[1]):
+            print("%-7s %6d %3d %%" % (k, c, round(100 * c / total)))
     elif cmd == "parts":
         g = load(rest[0])
         for p in g.parts:
             print("%-22s size %-14s pivot %-28s rot %-22s %s" % (
                 p.name, p.size, tuple(round(c, 2) for c in p.pivot), tuple(round(c, 2) for c in p.rot),
-                "shaped" if p.shaped() else ""))
+                shape_kind(p)))
     elif cmd == "render":
         out = out or os.path.join(ROOT, "docs", "shots", "guns_study")
         os.makedirs(out, exist_ok=True)

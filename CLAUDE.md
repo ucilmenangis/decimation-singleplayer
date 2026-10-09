@@ -635,6 +635,9 @@ of the last session:
   attribute modifiers (operation 2 to multiply on top of others).
   v0.35.0: 60 round mags (`fixes/Magazines`); our own item names live in
   dev/src/main/resources/assets/deciworldgen/lang/en_US.lang.
+  Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
+  (renders / measures Decimation's guns from the jar), dev test mode
+  `gunview` (first person shot per gun, -Pguns=uzi,mac10).
   v0.36.0: MAC-10, first gun of our own: pipeline tools/guns (spec ->
   .bmodel / texture / icon / .anib), tools/bbmcp.py drives the headless
   Blockbench MCP (renders without the game), fixes/NewGuns, dev test mode
