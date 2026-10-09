@@ -136,7 +136,8 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   military (`eliteChance` 0.2, 150 hp, takes 16%, x2 damage); NPCs fire
   bursts with recoil, empty their real magazine, reload 4 s (category
   `npc_fire`). v0.32.1: sniper versions (juggernaut_sniper Barrett,
-  elite_sniper), `sniperShare` 0.5.
+  elite_sniper), `sniperShare` 0.5. v0.32.2: snipers spot enemies up to
+  `sniperRange` 96 blocks (others 32).
 
 ## Bug and feature tracking
 

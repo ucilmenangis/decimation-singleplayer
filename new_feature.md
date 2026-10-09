@@ -437,6 +437,16 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.32.2 (user: snipers should spot players further than infantry):
+Decimation's findTarget looks 32 blocks around (15 up / down) for every
+armed NPC. NpcLoadouts.sniperSearch: once a second, an NPC holding a sniper
+rifle without a target looks sniperRange (96, config npc_fire) around (40
+up / down) for the nearest enemy it can see (isHostileTo) and takes it as
+its target (setRevengeTarget; vanilla drops it after 100 ticks, the search
+finds it again while in sight). Sniper shots fly 160 blocks (others 96).
+Checked (shots mode, range phase): enemy bandit 70 blocks away, elite
+sniper spots it, elite machine gunner does not.
+
 v0.32.1 (user: Barrett for the elite, split sniper eggs, "don't make it
 rare"): juggernaut and elite_military are machine gun only now; new tiers
 juggernaut_sniper (juggernaut set, Barrett with 8x, always) and

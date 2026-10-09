@@ -24,8 +24,12 @@ public class ShotTest extends DevTestMode
 {
     public String name() { return "shots"; }
 
-    private static final int[] DIST = {10, 20, 10, 24, 20};
-    private static final boolean[] WALL = {false, false, true, false, false};
+    private static final int[] DIST = {10, 20, 10, 24, 20, 70};
+    private static final boolean[] WALL = {false, false, true, false, false, false};
+    /** An elite sniper and an elite machine gunner, an enemy bandit 70 blocks away: only the sniper spots it. */
+    private static final int RANGE_PHASE = 5;
+    private EntityLiving sniperNpc, mgNpc, enemy;
+    private boolean sniperSpotted, mgSpotted;
     /** Phase with an AKM firing bursts (accuracy by place in the burst). */
     private static final int BURST_PHASE = 4;
     private final int[][] byIndex = new int[2][13]; // shots, hits by place in burst
@@ -113,6 +117,8 @@ public class ShotTest extends DevTestMode
                 cpw.mods.fml.common.registry.GameRegistry.findItem("deci", "akm")));
             DevTestResults.check(name(), "AKM magazine then reload", firstMag + " rounds, then " + gap + " ticks",
                                  firstMag == cap && gap >= 60, cap + " rounds, then >= 60 ticks (reload 80)");
+            DevTestResults.check(name(), "spotting at 70 blocks: sniper / machine gunner", sniperSpotted + " / " + mgSpotted,
+                                 sniperSpotted && !mgSpotted, "true / false (sniperRange 96, others 32)");
             double r10 = rate(0), r20 = rate(1);
             DevTestResults.check(name(), "hit rate at 10 blocks", String.format("%.0f%%", 100 * r10),
                                  shotCount[0] > 20 && r10 > 0.6, "> 60% (spread 1.3 deg)");
@@ -195,6 +201,11 @@ public class ShotTest extends DevTestMode
             return;
         }
         int phase = (t - START) / LEN, in = (t - START) % LEN;
+        if (phase == RANGE_PHASE)
+        {
+            rangePhase(world, p, in);
+            return;
+        }
         if (in == 0)
         {
             setup(world, p, phase);
@@ -219,6 +230,53 @@ public class ShotTest extends DevTestMode
         if (phase != BURST_PHASE)
         {
             Deci.banditShootAt(bandit, pig); // the AI shoots too: cooldowns run twice as fast here
+        }
+    }
+
+    private void rangePhase(World world, EntityPlayerMP p, int in)
+    {
+        int bx = (int) Math.floor(x0), bz = (int) Math.floor(z0);
+        if (in == 0)
+        {
+            cleanup(world);
+            NpcLoadouts l = NpcLoadouts.instance();
+            sniperNpc = Deci.newSoviet(world);
+            l.equip(sniperNpc, l.byName("elite_sniper"), sniperNpc.getEntityData());
+            mgNpc = Deci.newSoviet(world);
+            l.equip(mgNpc, l.byName("elite_military"), mgNpc.getEntityData());
+            enemy = Deci.newBandit(world);
+            l.equip(enemy, l.byName("bandit_light"), enemy.getEntityData());
+            enemy.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1000);
+            enemy.setHealth(1000);
+            world.setBlock(bx, Y - 1, bz - 3, Blocks.stone);
+            world.setBlock(bx, Y - 1, bz + 3, Blocks.stone);
+            world.setBlock(bx - DIST[RANGE_PHASE], Y - 1, bz, Blocks.stone);
+            for (EntityLiving e : new EntityLiving[] {sniperNpc, mgNpc, enemy})
+            {
+                world.spawnEntityInWorld(e);
+            }
+            p.setPositionAndUpdate(x0 - 35, Y + 6, z0 - 12);
+        }
+        sniperNpc.setPosition(x0, Y, z0 - 3);
+        mgNpc.setPosition(x0, Y, z0 + 3);
+        enemy.setPosition(x0 - DIST[RANGE_PHASE], Y, z0);
+        enemy.setRevengeTarget(null); // stays put, shoots nobody
+        enemy.setHealth(enemy.getMaxHealth());
+        for (EntityLiving e : new EntityLiving[] {sniperNpc, mgNpc, enemy})
+        {
+            e.motionX = e.motionY = e.motionZ = 0;
+        }
+        sniperSpotted |= sniperNpc.getAITarget() == enemy;
+        mgSpotted |= mgNpc.getAITarget() == enemy;
+        if (in == LEN - 1)
+        {
+            for (EntityLiving e : new EntityLiving[] {sniperNpc, mgNpc, enemy})
+            {
+                e.setDead();
+            }
+            world.setBlockToAir(bx, Y - 1, bz - 3);
+            world.setBlockToAir(bx, Y - 1, bz + 3);
+            world.setBlockToAir(bx - DIST[RANGE_PHASE], Y - 1, bz);
         }
     }
 

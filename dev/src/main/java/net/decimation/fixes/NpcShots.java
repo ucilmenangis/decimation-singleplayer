@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
 {
     /** How far a shot flies (Decimation's NPC follow range is 64). */
-    static final double RANGE = 96;
+    static final double RANGE = 96, SNIPER_RANGE = 160;
     private final NpcLoadouts loadouts;
     private final Random random = new Random();
     /**
@@ -99,7 +99,8 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         pitch += random.nextGaussian() * sigma;
         double cx = Math.cos(pitch) * Math.cos(yaw), cy = Math.sin(pitch), cz = Math.cos(pitch) * Math.sin(yaw);
         Vec3 start = Vec3.createVectorHelper(sx, sy, sz);
-        Vec3 stop = Vec3.createVectorHelper(sx + cx * RANGE, sy + cy * RANGE, sz + cz * RANGE);
+        double range = NpcLoadouts.contains(NpcLoadouts.SNIPER, gunName) ? SNIPER_RANGE : RANGE;
+        Vec3 stop = Vec3.createVectorHelper(sx + cx * range, sy + cy * range, sz + cz * range);
 
         MovingObjectPosition block = traceBlocks(world, start, stop, cx, cy, cz);
         if (block != null)
@@ -301,7 +302,7 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
             from = Vec3.createVectorHelper(m.hitVec.xCoord + cx * 0.05, m.hitVec.yCoord + cy * 0.05,
                                            m.hitVec.zCoord + cz * 0.05);
             while (world.getBlock((int) Math.floor(from.xCoord), (int) Math.floor(from.yCoord),
-                                  (int) Math.floor(from.zCoord)) == b && from.distanceTo(start) < RANGE)
+                                  (int) Math.floor(from.zCoord)) == b && from.distanceTo(start) < SNIPER_RANGE)
             {
                 from = Vec3.createVectorHelper(from.xCoord + cx * 0.1, from.yCoord + cy * 0.1, from.zCoord + cz * 0.1);
             }

@@ -139,6 +139,8 @@ public class NpcLoadouts
     private float recoilSpread = 0.35f;
     /** Ticks a reload takes once the magazine is empty (user 2026-10-09: about 4 s). */
     private int reloadTicks = 80;
+    /** How far an NPC with a sniper rifle looks for enemies (Decimation's findTarget: 32 for all). */
+    private int sniperRange = 96;
     /** Spread factor for machine guns; sniper rifles use SNIPER_SPREAD degrees. */
     static final float MG_SPREAD = 1.4f, SNIPER_SPREAD = 0.25f, UNTIERED_SPREAD = 1.2f;
     private final Random random = new Random();
@@ -247,6 +249,8 @@ public class NpcLoadouts
             "automatic guns fire bursts (3..6 rounds, machine guns 6..12) at the gun's own rate of fire");
         recoilSpread = cfg.getFloat("recoilSpread", "npc_fire", recoilSpread, 0, 5,
             "each shot of a burst spreads this much more than the first (0.35: the 6th shot 2.75x)");
+        sniperRange = cfg.getInt("sniperRange", "npc_fire", sniperRange, 32, 256,
+            "an NPC holding a sniper rifle spots enemies this far (blocks); others 32 (Decimation)");
         reloadTicks = cfg.getInt("reloadTicks", "npc_fire", reloadTicks, 0, 1200,
             "an NPC fires its gun's magazine (M16 30, PKM 250), then reloads this many ticks (20 = 1 s)");
         hitCooldown = cfg.getInt("npcHitCooldownTicks", "player", hitCooldown, 0, 10,
@@ -390,6 +394,47 @@ public class NpcLoadouts
         }
     }
 
+    /**
+     * Decimation's findTarget only looks 32 blocks around (15 up / down). An
+     * NPC holding a sniper rifle with no target looks sniperRange around (40
+     * up / down) for the nearest enemy it can see (isHostileTo, as findTarget)
+     * and takes it as its target; BanditEntity.onUpdate then aims and fires
+     * whenever it can see it. A target is dropped after 100 ticks (vanilla
+     * revenge timer) and found again here while still in sight.
+     */
+    void sniperSearch(EntityLiving npc)
+    {
+        if (npc.getAITarget() != null && !npc.getAITarget().isDead)
+        {
+            return;
+        }
+        ItemStack gun = Deci.npcGun(npc);
+        String name = gun == null ? "" : GameRegistry.findUniqueIdentifierFor(gun.getItem()).name;
+        if (!contains(SNIPER, name))
+        {
+            return;
+        }
+        double r = sniperRange;
+        EntityLivingBase best = null;
+        double bestD = r * r;
+        for (Object o : npc.worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
+            net.minecraft.util.AxisAlignedBB.getBoundingBox(npc.posX - r, npc.posY - 40, npc.posZ - r,
+                                                           npc.posX + r, npc.posY + 40, npc.posZ + r)))
+        {
+            EntityLivingBase t = (EntityLivingBase) o;
+            double d = npc.getDistanceSqToEntity(t);
+            if (t != npc && !t.isDead && d < bestD && Deci.npcHostileTo(npc, t) && npc.canEntityBeSeen(t))
+            {
+                best = t;
+                bestD = d;
+            }
+        }
+        if (best != null)
+        {
+            npc.setRevengeTarget(best);
+        }
+    }
+
     /** The gun's registry name in a spec ("pkm;sight=4x;..."). */
     public static String gunName(String spec)
     {
@@ -438,13 +483,24 @@ public class NpcLoadouts
         }
     }
 
-    /** Client: the gun the server chose (data watcher), in hand and in BanditEntity's own field. */
+    /**
+     * Client: the gun the server chose (data watcher), in hand and in
+     * BanditEntity's own field. Server: snipers look further for enemies.
+     */
     @SubscribeEvent
     public void onUpdate(LivingEvent.LivingUpdateEvent event)
     {
         Entity e = event.entity;
-        if (!e.worldObj.isRemote || Deci.npcKind(e) == null)
+        if (Deci.npcKind(e) == null)
         {
+            return;
+        }
+        if (!e.worldObj.isRemote)
+        {
+            if ((e.ticksExisted + e.getEntityId()) % 20 == 0)
+            {
+                sniperSearch((EntityLiving) e);
+            }
             return;
         }
         String name;

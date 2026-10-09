@@ -88,3 +88,4 @@ or `[not decided]`.
   bursts with recoil spread, real magazines and 4 s reloads.
 - v0.32.1 sniper versions of the juggernaut (Barrett) and elite, half of
   the spawner's juggernauts / elites, own eggs.
+- v0.32.2 snipers spot enemies up to 96 blocks (others 32).
