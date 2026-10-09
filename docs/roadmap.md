@@ -54,18 +54,26 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
-1. More guns of our own with the tools/guns pipeline (docs/gun_model_spec.md
-   section 6); the MAC-10 pilot is done (v0.36.0). Which next
-   `[not decided]`. MCP tools noted 9 Oktober 2026: Blockbench MCP
-   headless (in use), Blender MCP (Sketchfab / Poly Haven / Rodin, needs
-   Blender), ElevenLabs or Freesound MCP for sounds (API keys).
-2. Custom weapon creation: how-to written, a new model needs Techne.
+1. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
 
 ## Code and tools
 
 1. **Live dev test mode** `[idea]`: keep the dev game open and start test
    modes over a localhost port, so most reruns need no restart.
+
+## Last: only when nothing else is left (user 9 Oktober 2026)
+
+1. **MAC-10 model polish** (user: "not good, needs polish, okay for a
+   first shot"): the pilot model is too boxy and chunky (first person it
+   reads as a grey block seen from behind, bigger than Decimation's Uzi).
+   Slimmer receiver, smaller stock plate, more shape detail (shapebox
+   corners, rounded edges), better texture; check aiming and the fire /
+   rack animations in first person.
+2. **More guns of our own** with the same pipeline (docs/gun_model_spec.md
+   section 6). MCP tools noted 9 Oktober 2026: Blockbench MCP headless (in
+   use), Blender MCP (Sketchfab / Poly Haven / Rodin, needs Blender),
+   ElevenLabs or Freesound MCP for sounds (API keys).
 
 ## Recently done (details in bug.md / new_feature.md)
 
