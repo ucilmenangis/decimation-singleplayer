@@ -63,8 +63,9 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Last: only when nothing else is left (user 9 Oktober 2026)
 
-1. **MAC-10 model polish** (v2 DONE v0.37.0, 10 Oktober 2026, waiting
-   for the user's verdict in game; details new_feature.md) (user: "not good, needs polish, okay for a
+1. **MAC-10 model polish** (DONE v0.37.2, 10 Oktober 2026, accepted by
+   the user: aim, firing style and icon good; details new_feature.md,
+   skill casebook) (user: "not good, needs polish, okay for a
    first shot"): the pilot model is too boxy and chunky (first person it
    reads as a grey block seen from behind, bigger than Decimation's Uzi).
    Slimmer receiver, smaller stock plate, more shape detail (shapebox

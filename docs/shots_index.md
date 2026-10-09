@@ -628,3 +628,6 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   below the hole. v0372_<gun>_aim(_iron).png, v0372_<gun>_hip.png full
   shots; v0372_hip_crop.png: first person, the suppressor over the
   threads at the receiver front.
+- user_v0372_final.png: the user's own screenshot of v0.37.2 (dev client,
+  hip view looking down): MAC-10 with suppressor and red dot, suppressor
+  on the bore over the threads; their verdict: aim, firing and icon good.

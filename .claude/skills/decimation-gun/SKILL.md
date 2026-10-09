@@ -194,6 +194,12 @@ source of truth about the real gun and about how it must look in game.
 10. Show the user side by side renders (ours next to the reference and
    their photo) before asking for an in game test; ask what still looks
    off rather than assuming it is done.
+11. Keep what the user liked (MAC-10 v0.37.2 verdict, 10 Oktober 2026:
+   "i like the style of the gun firing", icon "good art"): the Fire
+   animation as Decimation does it (2 frames, RAND, only the
+   slideModel parts kick back about 1.6, no whole gun kick), Rack and
+   Reload1 on Decimation's timings, SlideBack held when empty, and the
+   icon rendered from the model (transparent background, dark outline).
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -301,6 +307,15 @@ revision (same commit), never remove old ones.
 - Fix: gunmodel.icon renders with bg (0, 0, 0, 0), keeps pixels with
   alpha >= 140, un-premultiplies, dark outline. Check: enlarge next to
   Decimation's icon (docs/shots/mac10_v0.37/icon_vs_uzi.png).
+
+### Case 0: verdict, MAC-10 accepted (v0.37.2, 10 Oktober 2026)
+- User: aim "done, its fixed", firing "its good actually, i like the
+  style of the gun firing", icon "its fixed and good art". Their final
+  screenshot (docs/shots/mac10_v0.37/user_v0372_final.png): hip view
+  with suppressor and red dot, suppressor on the bore over the threads.
+- Path to acceptance: v1 rejected (case 1), v2 from photos, three
+  revisions (cases 2 to 7). Reuse this path: photos, study, anchors,
+  side by side checks, user screenshots.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

@@ -546,6 +546,12 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### MAC-10 accepted (v0.37.2, 10 Oktober 2026)
+User verdict in game: aim fixed, "i like the style of the gun firing",
+icon "good art". Screenshot docs/shots/mac10_v0.37/user_v0372_final.png.
+Player firing, fire / rack animations in first person and the icon are
+now verified by the user.
+
 ### MAC-10 v2 revision 2 (DONE v0.37.2, 10 Oktober 2026)
 User review of 0.37.1 with screenshots (MAC-10 and Uzi aiming, MAC-10
 hip view with the suppressor): suppressor not matching the muzzle and
