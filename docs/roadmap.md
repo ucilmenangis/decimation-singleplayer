@@ -54,7 +54,17 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
-1. Custom weapon creation: how-to written, a new model needs Techne.
+1. **Pilot: a new gun made by Claude with tools** (user 9 Oktober 2026,
+   "later"; use internet tools, not hand written boxes only): Blockbench
+   (.bbmodel is JSON: cuboids, sizes, UVs) plus a converter script
+   .bbmodel -> Decimation .bmodel (Techne style text, docs/gun_model_spec.md);
+   free models only with a licence that allows it (CC0 / CC-BY with credit,
+   repo is public; cuboid Minecraft style models convert, Sketchfab style
+   meshes do not); sounds CC0 (e.g. freesound.org) or Decimation's by name;
+   check in game with a dev test that films the gun on the test arena (in
+   hand, firing, reload, icon). Start small (a pistol or SMG Decimation
+   lacks) `[not decided]` which gun.
+2. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
 
 ## Code and tools
