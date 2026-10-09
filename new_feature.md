@@ -546,6 +546,31 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### Zones, factions and world (user list 9 Oktober 2026, "later")
+Only the list and starting points; scope of each is `[not decided]`, ask
+the user before building.
+1. Advanced safezone. Exists: Decimation zone type SAFEZONE (ZoneManager,
+   infected spawns cancelled inside; explosions skip it, RocketEntity
+   checks it); our ZoneStore tags generated structures, no safezones yet.
+2. Player claimable zone areas. Exists: Decimation's TURF system
+   (net.decimation.mod.server.turf: TurfManager add / remove / owner /
+   isCapturable, turfs json, TurfCommands), server proxy only, so likely
+   dead in singleplayer like the other ServerProxy handlers
+   `[not verified]`; check before writing a new one.
+3. Advanced claims: a claimed zone can be taken back now and then by NPCs
+   (raids by bandits / enemy military). Builds on 2 and the NPC tiers.
+4. Police NPC. Exists: police infected look (NYPD set), NYPD armor items;
+   no living police NPC. Would be a new tier on an existing human class
+   (as the elites) or a faction `[not decided]`.
+5. Survivor civilians with a minimal weapon. Exists: civilian humans
+   (HumanEntity2, faction CIVILIAN, entity "Human", unarmed); bandits hunt
+   them, Soviets too since the faction fix.
+6. Radiated areas. Exists: our "Irradiated Military Zone" biome (no
+   effect yet), hazmat suits and gas masks as items.
+7. Advanced military base. Exists: military sectors with mil_ schematics,
+   MILITARY zones, MilitarySpawner groups (juggernaut / elite / snipers).
+8. Advanced bandits. Exists: bandit tiers (light / medium / heavy / rpg).
+
 ### More zombie variants, 60 round magazines, NPC bullet impacts (9 Oktober 2026, "later")
 #### Zombie variants design (started 9 Oktober 2026, user choice)
 Read from deobf source: InfectedEntity (deci.ag.d) is a HumanEntity with

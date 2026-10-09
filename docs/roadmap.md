@@ -35,9 +35,22 @@ or `[not decided]`.
 
 ## NPCs and combat (user plan, "later")
 
-1. Civilian NPC; traders that spawn on their own and walk.
+1. Traders that spawn on their own and walk.
    All in new_feature.md ("New hostile NPCs and stronger bandits", "More
    zombie variants...", "3 new mobs", "More clothing variety").
+
+## Zones, factions and world (user list 9 Oktober 2026, "later", no order yet)
+
+Details and starting points: new_feature.md "Zones, factions and world".
+1. **Advanced safezone.**
+2. **Zone areas claimable by the player.**
+3. **Advanced zone claims**: a claimed zone can be lost now and then when
+   NPCs claim it.
+4. **Police NPC.**
+5. **Survivor civilians** carrying a minimal weapon.
+6. **Radiated areas.**
+7. **Advanced military base.**
+8. **Advanced bandits.**
 
 ## Items and weapons
 
