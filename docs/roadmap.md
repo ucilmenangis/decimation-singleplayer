@@ -9,7 +9,10 @@ or `[not decided]`.
 
 ## Open bugs
 
-1. **Drawing cost of props in open prop-heavy views**: 225 props in plain
+1. **Drawing cost of props in open prop-heavy views** (measured again
+   10 Oktober 2026, docs/performance.md section 5: the models' geometry
+   through display lists is the cost; batching per type was slower;
+   waiting for the user's lag spots): 225 props in plain
    view still about halve the fps (driver / GPU work in glCallList). Fix if
    the user finds places that still drop: bake static props into chunk
    meshes (prop textures into the block atlas, both model formats to
@@ -18,10 +21,6 @@ or `[not decided]`.
    impact; height can differ between two new worlds of one seed near the
    edge of the generated area). bug.md "Building base height depends on
    chunk generation order".
-3. **Prop tile entities tick for nothing** (10 694 PropTile in the dev
-   world sit in the ticking list, canUpdate() default true): small steady
-   cost in cities `[inferred]`; patch canUpdate() false after measuring.
-   docs/performance.md section 3.
 4. **Arrows still pick up empty vehicles** (punching was fixed in v0.8.1).
    bug.md "Military jeep/tank/helicopter destroyed in one hit".
 

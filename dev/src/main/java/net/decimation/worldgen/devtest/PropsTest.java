@@ -76,6 +76,9 @@ public class PropsTest extends DevTestMode
         if (phase == 0)
         {
             w.setWorldTime(6000);
+            w.getWorldInfo().setRaining(false); // rain particles cost frame time: same weather every run
+            w.getWorldInfo().setRainTime(0);
+            w.getWorldInfo().setThundering(false);
             for (int x = -12; x <= 28; x++)
             {
                 for (int z = 0; z <= 34; z++)

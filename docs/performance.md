@@ -51,10 +51,9 @@ guessed; every number below comes from the tools in section 1.
 
 ## 3. Other things that cost frame time (checked, not changed)
 
-- 10 694 PropTile tile entities in the dev world (our generated props): Decimation's prop tile
-  entity keeps Forge's default canUpdate() true, so every one sits in the ticking list with an
-  empty update; a small steady cost in cities `[inferred]` (not measured alone). Possible later
-  patch: canUpdate() false.
+- 10 694 PropTile tile entities in the dev world: they do NOT tick (TileEntityProp extends
+  StaticTileEntity deci.Z.a, canUpdate() false; an earlier note here guessed otherwise, checked
+  10 Oktober 2026). Their cost is drawing only (section 5).
 - 784 loaded chunks in the dev world (spawn chunks + view distance): vanilla random block ticks
   (WorldServer.func_147456_g) are now the top server item.
 - Prop drawing in prop heavy views: bug.md "FPS drop in prop-dense areas" (open, item 1 of the
@@ -69,3 +68,28 @@ guessed; every number below comes from the tools in section 1.
 4. JFR 30 s on the live game: top frames and callers per thread.
 5. `gunperf` (or a mode for the suspected item) against Decimation's own as the control.
 6. Fix, then measure the same way again; write the numbers here.
+
+## 5. Props (user, 10 Oktober 2026: "the performance really fuck up when props so many")
+
+Measured with dev test props (225 props packed in front of the camera; now with clear weather
+every run: rain particles cost frame time and made runs differ) and JFR:
+- Java side is small: PropRenderer (deci.I.l) 1.4 % of client samples. The client thread
+  waits in the driver: native samples 70 % in glCallLists (terrain lists, where the driver
+  stalls on a busy GPU) and 12 % in the props' own part display lists (BModelPart deci.n.b).
+- Isolation in one session (fps empty platform -> 225 props in view): Decimation's renderer
+  48 -> 29 and 31 -> 24; transforms and texture bind without the model 33 -> 33. The cost is
+  drawing the models (geometry through the props' display lists), not the per prop setup,
+  not the line of sight checks, not ticking.
+- Tried and dropped: one flat display list per prop type (BModel parts recorded in immediate
+  mode): slower, 26 / 23 -> 16 / 17 fps in A/B runs (two each). Per draw call overhead is not
+  the bottleneck on this Mac; removed again (not shipped).
+- Earlier (10-09): prop render distance 32 / 48 in a seed 1 city street gave no gain, props were
+  5.5 % of that frame. So props hurt in dense spots (packed props, tower chunks with 500+),
+  not in an ordinary street.
+- The fps of the empty platform falls from run to run in one live session (48 -> about 33)
+  with steady entity counts: probably the machine heating up after GPU heavy runs
+  `[inferred]`; compare only within one run.
+Open: which places the user sees lag in (screenshot plus F3 fps), then measure there.
+Options: render distance by size there (deciworldgen_props.cfg, already in place), a
+lower detail model for far props, or baking props into chunk meshes (big).
+
