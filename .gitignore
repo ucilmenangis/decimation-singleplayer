@@ -34,7 +34,9 @@ __pycache__/
 # ---- Personal / OS ----
 .remember/
 .DS_Store
-.claude/
+.claude/*
+# project skills are shared knowledge (docs/gun_style_guide.md etc.), keep them
+!.claude/skills/
 
 # Gradle wrapper is meant to be committed
 !dev/gradle/wrapper/gradle-wrapper.jar

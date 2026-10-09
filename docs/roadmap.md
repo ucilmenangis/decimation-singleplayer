@@ -71,8 +71,11 @@ Details and starting points: new_feature.md "Zones, factions and world".
    rack animations in first person. Study done 10 Oktober 2026
    (docs/gun_style_guide.md, tools/guns/study.py): next step is
    gunmodel.py support for shape boxes (corner offsets, 1x1x1 declared
-   sizes, addChild, flat tones, UV step 8), then rebuild the MAC-10 to
-   about 90 parts, 8.7 x 1.4 units, compared with study.py sheets.
+   sizes, addChild, flat tones, UV step 8, icon from the render,
+   Decimation's animation timings with SlideBack), then rebuild the
+   MAC-10 to about 90 parts, 8.7 x 1.4 units, sight top at y -4.85 to
+   -5.0 (style guide section 13), compared with study.py sheets and
+   `gunview`. Workflow: project skill .claude/skills/decimation-gun.
 2. **More guns of our own** with the same pipeline (docs/gun_model_spec.md
    section 6). MCP tools noted 9 Oktober 2026: Blockbench MCP headless (in
    use), Blender MCP (Sketchfab / Poly Haven / Rodin, needs Blender),

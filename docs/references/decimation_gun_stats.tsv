@@ -1,0 +1,99 @@
+gun	cat	damage	rpm	pitch	yaw	recovery	slowdown	modes	params	aim	mags	other
+ak74	rifle	15	600.0	6.0	0.4	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+aks74	rifle	15	650.0	9.0	0.8	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+aks74u	rifle	15	625.0	9.0	0.8	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+akms	rifle	15	600.0	9.0	0.8	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+akm	rifle	15	600.0	6.0	0.4	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+m4a4	rifle	16	750.0	7.0	0.2	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{m4a4Mag}	
+famas	rifle	16	1100.0	5.0	0.6	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{famasMag}	
+famasi	rifle	15	1100.0	6.0	0.4	3.0	0.16	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{famasiMag}	.setIntegralSuppressor()
+g36c	rifle	16	750.0	6.0	0.4	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{g36cMag}	
+mosinnagant	rifle	27	70.0	12.0	0.8	0.0	0.13	SINGLE	18,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{50.0f,39.0f,200.0f}}	{mosinnagantMag}	
+insas	rifle	16	650.0	6.0	0.4	4.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{insasMag}	
+m14	rifle	20	750.0	6.0	0.4	2.0	0.13	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{m14Mag}	
+sks	rifle	16	300.0	6.0	0.4	2.0	0.13	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{sksMag}	
+parafal	rifle	16	550.0	8.0	0.4	5.0	0.1	AUTO	3,3	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray2	
+fal	rifle	18	350.0	6.0	0.4	3.0	0.12	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray2	
+g3a3	rifle	19	550.0	6.0	0.4	4.0	0.15	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray3	
+g3a4	rifle	19	550.0	6.0	0.4	4.0	0.15	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray3	
+m16a1	rifle	16	725.0	6.0	0.4	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray4	
+m16a2	rifle	16	725.0	8.0	0.4	3.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray4	
+ak12	rifle	15	700.0	6.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+asval	rifle	14	900.0	4.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{asvalMag}	.setIntegralSuppressor()
+m110	rifle	22	350.0	12.0	0.8	3.0	0.2	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{m110Mag}	
+m231	rifle	16	700.0	6.0	0.4	4.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray4	
+ar15	rifle	17	600.0	6.0	0.4	3.0	0.12	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray4	
+rpk	rifle	16	600.0	6.0	0.4	2.0	0.16	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{rpkMag}	
+rpk74	rifle	16	600.0	6.0	0.4	2.0	0.16	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray	
+vz58	rifle	16	800.0	6.0	0.4	3.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{vz58Mag}	
+xm177	rifle	16	650.0	6.0	0.4	3.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray4	
+kms72	rifle	10	625.0	11.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{kms72Mag}	
+acr	rifle	16	750.0	6.0	0.4	3.0	0.11	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{acrMag}	
+honeybadger	rifle	16	800.0	6.0	0.4	3.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray4	.setIntegralSuppressor()
+m1garand	rifle	28	100.0	12.0	0.8	2.0	0.13	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{m1garandMag}	
+vz52	rifle	16	900.0	6.0	0.4	1.0	0.13	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{vz52Mag}	
+l85a1	rifle	16	650.0	6.0	0.4	1.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{l85a1Mag}	
+galil	rifle	16	650.0	6.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{galilMag}	
+galilsar	rifle	16	650.0	6.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{galilMag}	
+mpt76	rifle	17	650.0	6.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{mpt76Mag}	
+kar98k	rifle	28	60.0	6.0	0.4	0.0	0.14	SINGLE	18,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{30.0f,19.0f,100.0f}}	{kar98kMag}	
+svt40	rifle	25	80.0	6.0	0.4	0.0	0.14	SINGLE	2,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{30.0f,19.0f,100.0f}}	{svt40Mag}	
+fnscar	rifle	20	625.0	6.0	0.4	3.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray6	
+fnscarhamr	rifle	16	625.0	10.0	0.4	4.0	0.18	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{fnscarhamrMag}	
+fnscarl	rifle	16	625.0	6.0	0.4	3.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{fnscarlMag}	
+fnscarsc	rifle	16	625.0	8.0	0.4	3.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{fnscarscMag}	
+fnscarssr	rifle	20	625.0	10.0	0.4	1.0	0.12	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray6	
+ar15beowulf	rifle	18	450.0	6.0	0.4	3.0	0.14	SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{ar15beowulfMag}	
+aug1	rifle	16	680.0	6.0	0.3	1.0	0.14	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{augMag}	.setIntegratedScope("aug")
+aug3	rifle	16	680.0	6.0	0.3	1.0	0.13	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{augMag}	
+aug3para	rifle	10	680.0	4.0	0.2	1.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{augparaMag}	
+ump45	smg	13	600.0	6.0	0.4	5.0	0.14	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{ump45Mag}	
+mp5a3	smg	12	700.0	6.0	0.4	5.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{mp5a3Mag}	
+uzi	smg	11	600.0	5.0	0.35	7.0	0.08	AUTO/SINGLE	1,1	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{uziMag}	
+vz24	smg	9	60.0	6.0	0.4	8.0	0.1	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{vz24Mag}	
+kp31	smg	10	850.0	6.0	0.4	8.0	0.14	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{kp31Mag}	
+vector	smg	10	1200.0	6.0	0.4	8.0	0.12	AUTO/SINGLE	1,1	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{vectorMag}	
+stenmk2	smg	11	550.0	6.0	0.4	8.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{stenmk2Mag}	
+p90	smg	12	975.0	6.0	0.4	8.0	0.11	AUTO/SINGLE	1,1	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{p90Mag}	
+mp7	smg	10	1000.0	6.0	0.4	8.0	0.08	AUTO/SINGLE	1,1	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{mp7Mag}	
+mpi40	smg	15	525.0	6.0	0.4	8.0	0.14	AUTO/SINGLE	4,4	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{mpi40Mag}	
+mp40	smg	10	525.0	6.0	0.4	8.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{mp40Mag}	
+thompson	smg	10	750.0	6.0	0.4	5.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{thompsonMag}	
+thompsoni	smg	15	750.0	6.0	0.4	5.0	0.12	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{thompsoniMag}	
+svd	rifle	23	160.0	10.0	0.4	1.0	0.2	SINGLE	2,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{15.0f,10.0f,100.0f}}	{svdMag}	
+l115a3	rifle	35	45.0	10.0	0.4	0.0	0.22	SINGLE	18,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{50.0f,39.0f,200.0f}}	{l115a3Mag}	
+sv98	rifle	30	30.0	10.0	0.4	0.0	0.16	SINGLE	18,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{30.0f,19.0f,100.0f}}	{sv98Mag}	
+jng90	rifle	31	90.0	10.0	0.4	0.0	0.2	SINGLE	18,2	{25.0f,1.5f},{19.0f,2.0f,50.0f},{30.0f,19.0f,100.0f}}	{jng90Mag}	
+barrett	rifle	50	80.0	25.0	0.8	0.0	0.3	SINGLE	18,2	{35.0f,1.5f},{19.0f,2.0f,50.0f},{30.0f,19.0f,100.0f}}	{barrettMag}	
+pkm	mg	20	650.0	16.0	0.8	5.0	0.28	AUTO/SINGLE	2,2	{18.0f,1.5f},{15.0f,2.0f,50.0f},{10.0f,4.0f,100.0f}}	{pkmMag}	
+m1919a6	mg	19	450.0	23.0	0.8	5.0	0.35	AUTO/SINGLE	2,2	{18.0f,1.5f},{15.0f,2.0f,50.0f},{10.0f,4.0f,100.0f}}	itemArray5	
+m60	mg	19	650.0	22.0	0.8	5.0	0.29	AUTO/SINGLE	2,2	{18.0f,1.5f},{15.0f,2.0f,50.0f},{10.0f,4.0f,100.0f}}	itemArray5	
+m240	mg	19	650.0	20.0	0.4	5.0	0.28	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	itemArray5	
+rpd	mg	17	650.0	21.0	0.4	5.0	0.27	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{rpdMag}	
+mk48	mg	19	710.0	22.0	0.4	5.0	0.27	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{mk48Mag}	
+pkp	mg	21	600.0	22.0	0.4	5.0	0.3	AUTO/SINGLE	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{pkpMag}	
+minigun	mg	10	2000.0	5.0	0.6	8.0	0.4	AUTO	1	{16.0f,1.5f},{14.0f,4.0f,50.0f},{8.0f,6.0f,100.0f}}	{minigunMag}	.setLootChance(0.01)
+mg3	mg	19	1000.0	12.0	0.8	10.0	0.29	AUTO/SINGLE	1,1	{16.0f,1.5f},{14.0f,4.0f,50.0f},{20.0f,12.0f,135.0f}}	{mg3Mag}	
+r870	shotgun	10	100.0	13.0	1.0	15.0	0.15	PUMP	2	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{auL}	
+benellim4	shotgun	11	500.0	13.0	1.0	15.0	0.16	SINGLE	2	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{auL}	
+spas12	shotgun	11	250.0	13.0	1.0	11.0	0.14	PUMP	2	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{auL}	
+ks23	shotgun	9	100.0	13.0	1.0	15.0	0.13	PUMP	2	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{auL}	
+aa12	shotgun	6	300.0	15.0	1.0	16.0	0.15	AUTO	4	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{aa12Mag}	
+dbarrel	shotgun	10	1000.0	13.0	1.0	5.0	0.12	SINGLE	12	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{auL}	
+dbarrels	shotgun	10	1000.0	13.0	1.0	8.0	0.1	SINGLE	8	{8.0f,1.5f},{6.0f,2.0f,50.0f},{2.0f,4.0f,100.0f}}	{auL}	
+colt	pistol	10	480.0	13.0	1.0	5.0	0.03	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{coltMag}	
+aps	pistol	8	750.0	13.0	1.0	5.0	0.02	SINGLE/AUTO	2,2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{apsMag}	
+makarov	pistol	8	480.0	13.0	1.0	5.0	0.03	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{makarovMag}	
+browninghp	pistol	10	500.0	13.0	1.0	4.0	0.02	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{browninghpMag}	
+deagle	pistol	14	200.0	20.0	1.0	6.0	0.05	SINGLE	6	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{deagleMag}	
+cz52	pistol	9	840.0	13.0	1.0	8.0	0.03	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{cz52Mag}	
+glock17	pistol	8	600.0	13.0	1.0	5.0	0.02	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{glock17Mag}	
+m1934	pistol	8	480.0	13.0	1.0	5.0	0.03	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{m1934Mag}	
+ragingbull	revolver	12	300.0	10.0	1.5	8.0	0.06	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{auN}	
+model642	revolver	11	350.0	8.0	1.5	8.0	0.03	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{auW}	
+barettam9	pistol	10	666.0	13.0	1.0	4.0	0.04	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{9.0f,4.0f,100.0f}}	{barettam9Mag}	
+crotchbow	crossbow	15	20.0	15.0	0.2	8.0	0.08	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{bolt}	.setNoFireSounds().setCapacity(0)
+rpg7	rocket	100	100.0	60.0	0.2	8.0	0.18	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{rpg7Rocket}	.setCapacity(0)
+m79	rocket	75	20.0	20.0	0.2	8.0	0.14	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{avi}	.setLauncherAmmoKind(LauncherAmmoKind.grenade).withReducedBass().setCapacity(0)
+mglml1l	rocket	75	120.0	20.0	0.2	8.0	0.16	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{avi}	.setLauncherAmmoKind(LauncherAmmoKind.grenade).withReducedBass().setCapacity(5)
+rpg18	rocket	100	10.0	60.0	0.2	8.0	0.18	SINGLE	2	{16.0f,1.5f},{14.0f,2.0f,50.0f},{12.0f,7.0f,100.0f}}	{rpg18Rocket, rpg18RocketHS, rpg18RocketNWH}	.setCapacity(0)

@@ -8,6 +8,7 @@ is copied into the repo (renders go to docs/shots/, git ignored).
     python3 tools/guns/study.py sheet NAME [NAME ...] --out FILE.png [--cols N]  # side views
     python3 tools/guns/study.py stats [--tsv FILE]                       # every gun, one line each
     python3 tools/guns/study.py parts NAME                               # part list of one gun
+    python3 tools/guns/study.py attach GUN ATTACHMENT [...]               # gun + attachments as placed in game
     python3 tools/guns/study.py vocab [NAME ...]                         # taper / cuboid / skew / wedge shares
 
 NAME is a gun file name (uzi, m4a1, mac10); "ours:NAME" forces our own copy.
@@ -47,6 +48,7 @@ class Part:
         self.pivot = (0.0, 0.0, 0.0)
         self.rot = (0.0, 0.0, 0.0)
         self.parent = None
+        self.tex = None  # (image, textureWidth, textureHeight) when not the gun's own
 
     @property
     def group(self):
@@ -182,6 +184,53 @@ def load(name):
     raise SystemExit("no gun " + name)
 
 
+ATTACH_SLOT = {"reddot": "sight", "2x": "sight", "4x": "sight", "8x": "sight", "dragunovScope": "sight",
+               "foregrip": "grip", "flashlight": "grip", "laser": "grip", "bayonet": "barrel",
+               "pistolSuppressor": "barrel", "smgSuppressor": "barrel", "arSuppressor": "barrel",
+               "shotgunSuppressor": "barrel", "mgSuppressor": "barrel"}
+
+
+def attach_offset(gun, name):
+    """Where GunItemRenderer.renderAttachments draws an attachment, in model units (GL / 0.0625),
+    in the gun's own model space (same matrix as the gun's parts)."""
+    slot = ATTACH_SLOT[name]
+    if slot == "sight":
+        o = [0.05, 0.07, -0.008]
+        if name == "dragunovScope":
+            o = [o[0] - 0.1, o[1] - 0.05, o[2] - 0.004]
+        elif name == "reddot":
+            o = [o[0] - 0.362, o[1] + 0.0065, o[2] - 0.002]
+    elif slot == "grip":
+        o = [-0.2, 0.05, 0.0]
+    else:
+        f = gun.header.get("flamePos", (20, -4, 0))
+        o = [-1.55 + f[0] / 21, 0.27 + f[1] / 21, -0.003 + f[2] / 21]
+        if gun.name == "mp7":
+            o = [o[0] - 0.1, o[1] + 0.03, o[2]]
+        if name == "bayonet":
+            o = [o[0] + 1.8, o[1] - 0.23, o[2] - 0.06]
+    return tuple(c / 0.0625 for c in o)
+
+
+def with_attachments(gun, names):
+    """The gun plus attachment models placed like the game does."""
+    z = zipfile.ZipFile(JAR)
+    for n in names:
+        slot = ATTACH_SLOT[n]
+        text = z.read("assets/deci/models/attachments/%s/%s.bmodel" % (slot, n)).decode("latin1")
+        tp = "assets/deci/textures/model/attachments/%s/%s.png" % (slot, n)
+        img = Image.open(BytesIO(z.read(tp))).convert("RGBA") if tp in z.namelist() else None
+        a = Gun(n, slot, text, img, False)
+        ox, oy, oz = attach_offset(gun, n)
+        for p in a.parts:
+            p.name = n + "_" + p.name
+            p.tex = (img, a.tw, a.th)
+            if p.parent is None:
+                p.pivot = (p.pivot[0] + ox, p.pivot[1] + oy, p.pivot[2] + oz)
+        gun.parts += a.parts
+    return gun
+
+
 def all_names():
     z = zipfile.ZipFile(JAR)
     out = []
@@ -243,7 +292,6 @@ def render(gun, view, scale=24, ss=2, pad=12, bg=(236, 233, 224, 255), only=None
     tex = gun.texture
     if tex is None:
         tex = Image.new("RGBA", (gun.tw, gun.th), (120, 120, 120, 255))
-    fx, fy = tex.width / gun.tw, tex.height / gun.th
     light = (0.35, -0.75, 0.55)
     ln = math.sqrt(sum(c * c for c in light))
     light = tuple(c / ln for c in light)
@@ -251,6 +299,10 @@ def render(gun, view, scale=24, ss=2, pad=12, bg=(236, 233, 224, 255), only=None
         if only and part.group not in only:
             continue
         colour = ((k * 97) % 200 + 40, (k * 57 + 80) % 200 + 40, (k * 151 + 30) % 200 + 40)
+        ptex, fx, fy = tex, tex.width / gun.tw, tex.height / gun.th
+        if part.tex:
+            ptex = part.tex[0] or Image.new("RGBA", (part.tex[1], part.tex[2]), (150, 120, 60, 255))
+            fx, fy = ptex.width / part.tex[1], ptex.height / part.tex[2]
         for verts, (u1, v1, u2, v2) in part.quads():
             q = [view_point(p, yaw, pitch) for p in verts]
             depth = sum(p[2] for p in q) / 4
@@ -260,7 +312,7 @@ def render(gun, view, scale=24, ss=2, pad=12, bg=(236, 233, 224, 255), only=None
             nl = math.sqrt(sum(c * c for c in n)) or 1
             shade = 0.62 + 0.38 * abs(sum(n[i] * light[i] for i in range(3)) / nl)
             uv = [(u2 * fx, v1 * fy), (u1 * fx, v1 * fy), (u1 * fx, v2 * fy), (u2 * fx, v2 * fy)]
-            faces.append((depth, q, uv, shade, colour))
+            faces.append((depth, q, uv, shade, colour, ptex))
     if not faces:
         return Image.new("RGBA", (8, 8), bg)
     xs = [p[0] for f in faces for p in f[1]]
@@ -270,7 +322,7 @@ def render(gun, view, scale=24, ss=2, pad=12, bg=(236, 233, 224, 255), only=None
     H = int((max(ys) - y0) * k) + 2 * pad * ss
     img = Image.new("RGBA", (W, H), bg)
     faces.sort(key=lambda f: f[0])
-    for depth, q, uv, shade, colour in faces:
+    for depth, q, uv, shade, colour, ptex in faces:
         scr = [((p[0] - x0) * k + pad * ss, (p[1] - y0) * k + pad * ss) for p in q]
         bx0, by0 = int(min(s[0] for s in scr)), int(min(s[1] for s in scr))
         bx1, by1 = int(math.ceil(max(s[0] for s in scr))) + 1, int(math.ceil(max(s[1] for s in scr))) + 1
@@ -287,7 +339,7 @@ def render(gun, view, scale=24, ss=2, pad=12, bg=(236, 233, 224, 255), only=None
         coeffs = perspective(local, uv)
         if coeffs is None:
             continue
-        patch = tex.transform((bx1 - bx0, by1 - by0), Image.PERSPECTIVE, coeffs, Image.NEAREST)
+        patch = ptex.transform((bx1 - bx0, by1 - by0), Image.PERSPECTIVE, coeffs, Image.NEAREST)
         r, g, b, a = patch.split()
         r, g, b = (ch.point(lambda c, f=shade: int(c * f)) for ch in (r, g, b))
         mask = Image.new("L", patch.size, 0)
@@ -389,6 +441,14 @@ def main():
         if tsv:
             open(tsv, "w").write("\n".join(lines) + "\n")
         print("\n".join(lines))
+    elif cmd == "attach":
+        out = out or os.path.join(ROOT, "docs", "shots", "guns_study")
+        os.makedirs(out, exist_ok=True)
+        g = with_attachments(load(rest[0]), rest[1:])
+        for v in ("side", "three"):
+            path = os.path.join(out, "attach_%s%s_%s_%s.png" % ("ours_" if g.ours else "", g.name, "_".join(rest[1:]), v))
+            render(g, v, scale).save(path)
+            print(path)
     elif cmd == "vocab":
         counts = {}
         for n in (rest or all_names()):

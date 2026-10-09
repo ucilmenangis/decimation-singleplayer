@@ -151,8 +151,10 @@ block.
    (same scale) and `--split`; compare silhouette, width, part density,
    tone. Iterate before any in game test.
 5. First person next to the reference: `python3 tools/devtest.py --live
-   gunview guns=uzi,<ours>` (section 11). Then the full test
-   (`devtest.py --live gun`).
+   gunview guns=uzi,<ours> [attach=reddot,smgSuppressor]` (sections 11,
+   13, 14: hip, aim, NPC). Then the full test (`devtest.py --live gun`).
+6. Stats from section 16; sounds, loot, magazines, registration:
+   docs/gun_model_spec.md section 6.
 
 ## 7. Shape vocabulary (second pass, all 16757 parts classified)
 
@@ -193,7 +195,8 @@ mOff, no Scale in any shipped gun). Medians:
 | rhPos | -6.35, 1.07, -2.0 | -6.55, 1.92, -2.0 | -7.2, 2.07, -2.0 |
 | lhPos | -1.55, 9.12, 5.32 | 4.2, 8.02, 4.52 | 3.7, 8.22, 4.52 |
 
-- The top of the gun is at y -5 (y grows downward), the gun is centred on
+- The top of the gun is at y -5 (y grows downward; sight line rules in
+  section 13), the gun is centred on
   z -0.15; flamePos x = the muzzle tip minus 0.1, flamePos y about 10 % of
   the height below the top, flamePos z -0.15. rhRot / lhRot are always 0.
 - The grip sits at roughly x 3 to 6 on SMGs and pistols [inferred from
@@ -219,6 +222,10 @@ SlideBack; no Model kick in Fire.
 
 ## 11. First person (in game, dev test mode `gunview`)
 
+Live mode trap: a `key=value` given to `devtest.py --live` stays set for
+later runs in the same game (System properties); clear it with `key=`
+(for example `attach=`).
+
 `python3 tools/devtest.py --live gunview [guns=uzi,mac10,...]`
 (devtest/GunViewTest, test arena, noon, same camera; one screenshot per
 gun, gunview_<gun>.png). Shots of uzi, mp5a3, ump45, vector, mp7,
@@ -242,3 +249,116 @@ black outline, slim (rifles are a thin line with a few pixels of
 receiver). Ours was a light grey block filling the frame. Make icons from
 the model: study.py side render scaled to 30 px wide plus a black outline
 [to build into gunmodel.py].
+
+## 13. Aiming (first person, aim mode)
+
+Read from GunItemRenderer (deobf/src/decimation/render/GunItemRenderer.java)
+and checked in game (`gunview`, shot gunview_<gun>_aim.png):
+- Aim mode (PlayerData aimMode 1, toggled by the right mouse button in
+  GunItem's client update; `Deci.setAimMode` sets it) draws EVERY gun at
+  one fixed place: x scaled 0.5, translate (-1, -0.35, 0.923); scopes
+  (not the red dot) add 0.03 up, dragunov scope (0.2, 0.05), guns with an
+  integrated scope -1.3 in x. No per gun value: `sPos` is used only for
+  the third person (EQUIPPED) offset, and no shipped gun sets it.
+- So the sight line is a fixed MODEL height: the screen centre in aim is
+  about y -4.85 (red dot glass centre, y -5.1 to -4.55) to -5.2 (2x / 4x
+  glass), z -0.15. Decimation's guns keep the receiver top at y -4.92
+  (median over rifles / SMGs / MGs / shotguns, range -5.05 to -4.8) over
+  x 1.5 to 5, and iron sights peak at about y -5.0.
+- Seen in game: M4A4 and Uzi with a red dot have the ring at the screen
+  centre. Iron sights alone (fp_aim_iron.png, red lines = screen
+  centre): the centre sits exactly at the TOP of the sights: Uzi (top
+  -5.0), MP5A3 (-4.95), AK74 (-4.85) touch the line, Glock (-4.75) a hair
+  below. Our MAC-10's sight ears (top -5.75) stick out about 0.75 units
+  (40 px at 854 x 480, so about 53 px a unit) above it and its 2.2 x 2.2
+  rear plate fills the lower half: in aim a short gun is only its rear
+  section.
+- Rules: the highest point of the iron sights (rear notch edges, front
+  post) at y -4.85 to -5.0 on z -0.15; receiver top in the sight zone (x
+  1.5 to 5) at y -4.8 to -5.05; the rear section below the sights at most
+  about 1.2 wide and dark.
+
+## 14. Attachments
+
+Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
+.renderAttachments; stored in the gun's NBT as `sightAttach`,
+`barrelAttach`, `gripAttach` (also `stockAttach`, `skin`,
+`tracerColorID`), looked up as deci:<name>.
+
+| Attachment | Slot | Category | Notes |
+|---|---|---|---|
+| reddot | sight | all | zoom 42.5, sway 0.4 |
+| 2x, 4x, 8x | sight | all | zoom 42.5 / 45 / 46.5 |
+| dragunovScope | sight | all | zoom 45, own offset |
+| foregrip | grip | rifle | first person kick rotation x0.5 instead of x2, shift /10 instead of /8 |
+| flashlight, laser | grip | all | |
+| bayonet | barrel | rifle | own offset |
+| pistolSuppressor, smgSuppressor, arSuppressor, shotgunSuppressor, mgSuppressor | barrel | pistol / smg / rifle / shotgun / mg | |
+
+- A gun accepts an attachment when the categories match or the
+  attachment is `all`; no suppressor on an integrally suppressed gun, no
+  scope on one with an integrated scope; a skin only for its own gun.
+  A new SMG therefore takes smgSuppressor, reddot, 2x, 4x, 8x, dragunov
+  scope, flashlight and laser with no extra code.
+- Placement (model units = GL / 0.0625, in the gun's own model space):
+  sight (0.8, 1.12, -0.13) plus red dot (-5.79, 0.10, -0.03) or dragunov
+  (-1.6, -0.8, -0.06); grip (-3.2, 0.8, 0); barrel (-24.8, 4.32, -0.05) +
+  flamePos x 16 / 21 (mp7 and bayonet have extra offsets). The attachment
+  models are built around these spots, so the only per gun input is
+  flamePos: the suppressor follows the muzzle (checked in game on M4A4,
+  Uzi, MAC-10). Sights land at x 0.8 to 5.5 (scope) or 2.4 to 2.8 (red
+  dot) over y -5.9 to -3.1: a new gun needs its receiver top there (section
+  13). The foregrip renders behind and below even Decimation's M4A4
+  (study render and the NPC shot) [inferred: misplaced in the game too].
+- Render: `python3 tools/guns/study.py attach GUN reddot smgSuppressor ...`
+  draws a gun with attachments as the game places them; in game:
+  `devtest.py --live gunview guns=m4a4,mac10 attach=reddot,smgSuppressor`
+  (hip, aim and an NPC holding it).
+
+## 15. Walkthrough: the Uzi, 105 parts by area
+
+Positions are part centres in model units (x forward, y down); `study.py
+parts uzi` prints the full list with kinds.
+
+| Area | x | Parts | How |
+|---|---|---|---|
+| folded stock | 1.3 to 2.4 | 12 | a butt bar 0.4 x 2.55 x 0.6, tapered end caps, thin side struts 0.1 thick |
+| rear sight | 2.5 to 2.7 | about 25 | an aperture ring from 0.1 bits, two protective ears 1.0 x 0.35 x 0.1 as a mirrored pair, a base plate 1.15 x 0.15 x 0.8 |
+| receiver | 2 to 10 | about 20 | core 7.8 x 1.0 x 0.8; top cover 2.65 x 0.2 x 1.0 in two pieces; side lips 0.25 thick (tapers) left and right; lower side plates 3.3 x 0.65 x 0.2 |
+| grip | 5.4 to 6.3 | 9 | 3 rows (y -2.4, -1.6, -0.5) of a front and a back taper 0.9 wide, an inner core |
+| trigger group | 6.8 to 8.3 | 8 | guard bars 0.1 thick, trigger 0.2 x 0.6 tapers |
+| front sight | 9.5 to 9.9 | 8 | post 0.3 x 1.05 x 0.3, two hood ears (mirrored tapers) |
+| barrel nut, front end | 9.9 to 11.8 | 10 | stepped blocks 1.1 wide tapering forward |
+| barrel | 12.7 to 14.7 | 1 | 2.0 x 0.4 x 0.4 bar |
+| magazine | 6.2 | 2 | ammoModel0 1.0 x 5.1 x 0.5 inside the grip, base plate 1.1 x 0.1 x 0.6 |
+
+Lessons: side details come in mirrored pairs about z -0.15 (z +0.2 and
+-0.5); the most parts go where the eye goes in first person (rear sight
+25, receiver 20); the barrel can be a single bar; the magazine is simple.
+
+## 16. Stats and balance
+
+All 98 registrations (deobf ItemRegistry) in
+`docs/references/decimation_gun_stats.tsv`: damage, rpm, recoil pitch /
+yaw, recoil recovery, movement slowdown, fire modes, mode parameters,
+aim table, magazines, other builder calls. GunStats(recoil {pitch, yaw},
+fire modes, mode params, aim table, recovery, rpm); secondsPerShot =
+60 / (rpm x 1.3). Medians per category:
+
+| Category | Damage (min / median / max) | rpm | Recoil pitch / yaw | Recovery | Slowdown |
+|---|---|---|---|---|---|
+| pistol | 8 / 9 / 14 | 500 | 13 / 1.0 | 5 | 0.03 |
+| revolver | 11 / 11.5 / 12 | 325 | 9 / 1.5 | 8 | 0.045 |
+| smg | 9 / 11 / 15 | 700 | 6 / 0.4 | 8 | 0.12 |
+| rifle | 10 / 16 / 50 | 625 | 6 / 0.4 | 3 | 0.13 |
+| shotgun | 6 / 10 / 11 | 300 | 13 / 1.0 | 15 | 0.14 |
+| mg | 10 / 19 / 21 | 650 | 21 / 0.6 | 5 | 0.29 |
+| rocket | 75 / 87.5 / 100 | 60 | 40 / 0.2 | 8 | 0.17 |
+
+Fire modes: AUTO/SINGLE 54, SINGLE 37, PUMP 3, AUTO 3. The aim table is
+the same {{16, 1.5}, {14, 2, 50}, {9, 4, 100}} on most guns (fast guns
+like vector / mp7 use {12, 7, 100} last) [meaning not decoded].
+Examples: Uzi 11 dmg 600 rpm 5 / 0.35; MP5A3 12 / 700; UMP45 13 / 600;
+Vector 10 / 1200; MP7 10 / 1000; our MAC-10 12 / 1100 / 5.5 / 0.45:
+inside the SMG band. A new gun: copy the closest real equivalent's
+numbers, then move one or two values with a reason.

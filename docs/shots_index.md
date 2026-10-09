@@ -584,3 +584,17 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   rear. Uzi rear: slim, dark, stock bars and hinge. MAC-10: a big light
   grey square (the stock plate) fills the view.
 - fp_uzi_mac10_mp5.png: contact sheet of those three first person shots.
+- attach/attach_<gun>_<attachments>_side / _three.png, attach_sides.png
+  (study.py attach): M4A4 with reddot, arSuppressor, foregrip; Uzi with
+  4x, smgSuppressor, laser; our MAC-10 with reddot, smgSuppressor,
+  flashlight. Suppressors sit on the muzzle; the foregrip lands behind
+  and below the M4A4 (under the stock), the red dot small on the rear top.
+- fp/gunview_<gun>_att(_aim / _npc).png, fp_attach_sheet.png: M4A4, Uzi,
+  MAC-10 with reddot + smgSuppressor + foregrip in game: hip, aim (red
+  dot ring at the screen centre on M4A4 and Uzi), a bandit holding it
+  seen from its right side (suppressor at the muzzle on all three, no
+  foregrip visible).
+- fp/gunview_<gun>_aim.png (uzi, mp5a3, ak74, glock17, mac10, no
+  attachments) and fp_aim_iron.png (crops with red lines at the screen
+  centre): the centre is at the top of the iron sights for Decimation's
+  guns; the MAC-10 sight ears stick out about 40 px above it.

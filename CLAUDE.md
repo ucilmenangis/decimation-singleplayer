@@ -276,7 +276,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   costs only its own time (gun 18 to 20 s, zombies 15 to 17 s, checks +
   npc + shots + tracer + zombies 305 s). `--swap` first pushes changed
   method bodies (tools/hotswap.py; the live game has the debug port);
-  new classes / fields / methods need `--stop` and a new start. Runs happen
+  new classes / fields / methods need `--stop` and a new start. A
+  `key=value` stays set for later live runs (clear it with `key=`); right
+  after `--stop` wait a few seconds before the next `--live` run. Runs happen
   in the open world (no fresh world per run); -Pkey=value become system
   properties for the run. `--stop` closes it. Flaky test spawns: always
   retry Decimation-refused spawns (see the arena note).
@@ -636,8 +638,12 @@ of the last session:
   v0.35.0: 60 round mags (`fixes/Magazines`); our own item names live in
   dev/src/main/resources/assets/deciworldgen/lang/en_US.lang.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
-  (renders / measures Decimation's guns from the jar), dev test mode
-  `gunview` (first person shot per gun, -Pguns=uzi,mac10).
+  (renders / measures Decimation's guns from the jar, `attach` adds
+  attachments as the game places them), dev test mode `gunview` (hip, aim
+  and NPC shot per gun, -Pguns=uzi,mac10 -Pattach=reddot,smgSuppressor),
+  stats dataset docs/references/decimation_gun_stats.tsv. Project skill
+  `.claude/skills/decimation-gun` (committed; .gitignore keeps only
+  .claude/skills) runs the whole gun workflow.
   v0.36.0: MAC-10, first gun of our own: pipeline tools/guns (spec ->
   .bmodel / texture / icon / .anib), tools/bbmcp.py drives the headless
   Blockbench MCP (renders without the game), fixes/NewGuns, dev test mode

@@ -30,7 +30,7 @@ partName.addBox(x, y, z, width, height, depth);   // BROKEN in the loader: Y is 
 partName.addShape(x, y, z, {{...8 float[3] corner offsets...}}, sx, sy, sz);  // alt to addBox, custom-shaped box
 partName.setRotationPoint(x, y, z);
 partName.setRotation(x, y, z);                  // radians; also accepts "... / rotFix" suffix, stripped before parsing
-childName.addChild(parentName);                 // note: reversed from vanilla - "child.addChild(parent)" builds the hierarchy
+parentName.addChild(childName);                 // vanilla direction (BModelLoader: the name before the dot is the parent; checked 2026-10-10, an older note here said reversed)
 textureWidth = N;
 textureHeight = N;
 ```
