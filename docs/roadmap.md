@@ -70,6 +70,24 @@ Details and starting points: new_feature.md "Zones, factions and world".
    - to install first: `pip install trimesh` (venv), `brew install ffmpeg`;
      Blender headless optional (about 1 GB, ask the user first).
    Which gun `[not decided]` (start small: a pistol or SMG Decimation lacks).
+   MCP tools found 9 Oktober 2026 (third party, check before installing,
+   they run code locally; adding one changes the user's Claude config, so
+   ask first):
+   - Blockbench MCP, jasonjgardner/blockbench-mcp-plugin (GPL-3.0, a tool
+     only, nothing of it ships): HEADLESS stdio mode via `npx -y
+     github:jasonjgardner/blockbench-mcp-plugin --root <models dir>`, no
+     Blockbench app; tools to create / edit cubes, UVs, textures,
+     animations, validate geometry and animations, import / export Java
+     item JSON, and RENDER PNG views / contact sheets (needs Node >= 23.6,
+     here 24.12, and a GPU). First choice.
+   - Blender MCP, ahujasid/blender-mcp: needs Blender (about 1 GB) and its
+     add-on; Sketchfab search / download, Poly Haven assets, Hyper3D Rodin
+     text-to-3D (daily free limit), runs Python in Blender (mesh to boxes).
+   - Sounds: the official ElevenLabs MCP (text to sound effects, free tier
+     about 10k credits a month, API key) or a Freesound MCP (API key);
+     Bfxr MCP only makes retro sounds.
+   - Text to 3D (Meshy / Tripo / Rodin MCPs, Trident): paid API keys, mesh
+     output only (would need voxelizing); last resort.
 2. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
 
