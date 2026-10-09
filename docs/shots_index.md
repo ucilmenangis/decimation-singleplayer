@@ -631,3 +631,9 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
 - user_v0372_final.png: the user's own screenshot of v0.37.2 (dev client,
   hip view looking down): MAC-10 with suppressor and red dot, suppressor
   on the bore over the threads; their verdict: aim, firing and icon good.
+- v0373_cmp_side.png: Uzi next to MAC-10 v0.37.3 (110 parts): mottled
+  gradation along long panels, rivet, housing plate, SAFE / FIRE lever
+  visible. v0373/ours_mac10_*.png renders; v0373_aim_cmp.png: aim crops
+  with the Uzi, both holes on the centre line; v0373_hip_crop.png,
+  v0373_hip_supp_crop.png: first person, side details now 0.08 proud,
+  suppressor over the threads; v0373_mac10_att(_npc).png full shots.

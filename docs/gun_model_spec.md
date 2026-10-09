@@ -205,15 +205,17 @@ Every asset is our own work (public repo: never copy Decimation art).
    slideModel part). Example: tools/guns/mac10.py.
 2. Build: `python3 tools/guns/<gun>.py` writes into
    dev/src/main/resources/assets/deci/: `models/guns/<cat>/<gun>.bmodel`
-   (each part declared 1x1x1 with its real shape in the 8 corner offsets,
-   pivot at its lowest corner, a comment line with the readable name,
-   textureWidth 512, UV islands stepping by 8), the texture (one tone per
-   island with faint noise, 2 px a unit), the 32x32 icon (the model's
+   (each part declared at its rounded size, at least 1, with the rest of
+   its shape in the 8 corner offsets, pivot at its lowest corner, a
+   comment line with the readable name, textureWidth 512, box UV islands
+   shelf packed in steps of 8), the texture (tone per part with
+   gradation: shade, height gradient, face shifts, drift along long
+   faces, texel noise; 2 px a unit), the 32x32 icon (the model's
    side render from study.py on a transparent background, dark outline),
    `animations/<gun>/*.anib`.
 3. Preview without the game: tools/guns/study.py (`sheet REF ours:<gun>`,
-   `render ours:<gun> [--split]`, `attach ours:<gun> reddot ...`, `vocab`,
-   `stats`); docs/gun_style_guide.md section 6. The headless Blockbench
+   `render ours:<gun> [--split]`, `attach ours:<gun> reddot ...`, `gaps
+   ours:<gun>`, `vocab`, `stats`); docs/gun_style_guide.md section 6. The headless Blockbench
    MCP (tools/bbmcp.py) still works but is no longer part of the loop.
 4. Register in Java (fixes/NewGuns): `Deci.newMagazine` (bullet of an
    existing mag, an existing mag's icon), `Deci.newGun` (GunStats, category,

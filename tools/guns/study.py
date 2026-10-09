@@ -9,6 +9,7 @@ is copied into the repo (renders go to docs/shots/, git ignored).
     python3 tools/guns/study.py stats [--tsv FILE]                       # every gun, one line each
     python3 tools/guns/study.py parts NAME                               # part list of one gun
     python3 tools/guns/study.py attach GUN ATTACHMENT [...]               # gun + attachments as placed in game
+    python3 tools/guns/study.py gaps ours:NAME                           # ours vs its category, metric by metric
     python3 tools/guns/study.py vocab [NAME ...]                         # taper / cuboid / skew / wedge shares
 
 NAME is a gun file name (uzi, m4a1, mac10); "ours:NAME" forces our own copy.
@@ -389,6 +390,37 @@ def shape_kind(p):
     return "skew"
 
 
+def metrics(gun):
+    """The numbers a gun is compared on (docs/gun_style_guide.md, `gaps` command)."""
+    import statistics as st
+    (xa, xb), (ya, yb), (za, zb) = gun.bounds()
+    eff, xs, ys, offs, kinds = [], [0] * 10, [0] * 5, [], {}
+    for p in gun.parts:
+        v = p.verts()
+        eff.append(sorted(max(q[i] for q in v) - min(q[i] for q in v) for i in range(3)))
+        cx, cy = sum(q[0] for q in v) / 8, sum(q[1] for q in v) / 8
+        xs[min(9, int((cx - xa) / (xb - xa) * 10))] += 1
+        ys[min(4, int((cy - ya) / (yb - ya) * 5))] += 1
+        offs += [abs(c) for cc in p.corners for c in cc if abs(c) > 1e-6]
+        k = shape_kind(p)
+        kinds[k] = kinds.get(k, 0) + 1
+    n = len(gun.parts)
+    m = {"parts": n, "length": xb - xa, "height": yb - ya, "width": zb - za,
+         "minDim": st.median(e[0] for e in eff), "midDim": st.median(e[1] for e in eff),
+         "maxDim": st.median(e[2] for e in eff), "offset": st.median(offs) if offs else 0,
+         "top2fifths%": 100.0 * (ys[0] + ys[1]) / n, "middle%": 100.0 * sum(xs[3:7]) / n}
+    # part sizes relative to the gun's length: a short gun has smaller parts, compare these
+    for k in ("minDim", "midDim", "maxDim"):
+        m[k + "/L%"] = 100.0 * m[k] / m["length"]
+    for k in ("taper", "cuboid", "skew", "wedge"):
+        m[k + "%"] = 100.0 * kinds.get(k, 0) / n
+    if gun.texture:
+        px = [c for c in gun.texture.get_flattened_data() if c[3] > 0]
+        lum = [0.3 * r + 0.59 * g + 0.11 * b for r, g, b, a in px]
+        m["tone"], m["toneSd"] = st.mean(lum), st.pstdev(lum)
+    return m
+
+
 def stats(gun):
     n = len(gun.parts)
     groups = {}
@@ -455,6 +487,20 @@ def main():
             path = os.path.join(out, "attach_%s%s_%s_%s.png" % ("ours_" if g.ours else "", g.name, "_".join(rest[1:]), v))
             render(g, v, scale).save(path)
             print(path)
+    elif cmd == "gaps":
+        # ours vs Decimation's guns of its category: median, q10, q90 per metric
+        import statistics as st
+        g = load(rest[0])
+        cat = g.cat
+        refs = [metrics(load(n)) for n in all_names() if load(n).cat == cat]
+        mine = metrics(g)
+        print("%s vs %d Decimation %s guns" % (g.name, len(refs), cat))
+        print("%-12s %8s %8s %16s" % ("metric", "ours", "median", "q10 .. q90"))
+        for k, v in mine.items():
+            vals = sorted(r[k] for r in refs if k in r)
+            lo, hi = vals[len(vals) // 10], vals[min(len(vals) - 1, len(vals) * 9 // 10)]
+            flag = "" if lo <= v <= hi else "  <- outside"
+            print("%-12s %8.2f %8.2f %7.2f .. %-7.2f%s" % (k, v, st.median(vals), lo, hi, flag))
     elif cmd == "vocab":
         counts = {}
         for n in (rest or all_names()):

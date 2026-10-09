@@ -643,7 +643,8 @@ of the last session:
   flush on short guns (Deci.offsetAttachment), texture gradation.
   v0.37.2: flamePos y 0.85 above the bore (Decimation convention), aim
   sight picture matched to the Uzi in the same shot; every user revision
-  updates the skill's revision log (user rule).
+  updates the skill's revision log (user rule). v0.37.3: MAC-10 gaps
+  closed (`study.py gaps`, declared sizes, more bevels and details).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

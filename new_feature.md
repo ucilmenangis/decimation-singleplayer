@@ -546,6 +546,18 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### MAC-10 gaps closed (v0.37.3, 10 Oktober 2026)
+User: "perfect is perfect, we close the gaps until the mac10 looks really
+like decimation guns". New `study.py gaps` (ours vs the 13 Decimation
+SMGs). Shape kinds 60 / 31 / 5 / 5 % (Decimation 60 / 31 / 5 / 4), 110
+parts, declared sizes like Decimation's (gunmodel.size / layout: long
+parts 1x1xN with gradation along them), tone 47, middle details from the
+photos (rivets, housing plates, SAFE / FIRE lever, deflector, slot
+notch), raised details 0.08 proud. Only the short real length and what
+follows from it stay outside. Checked: geometry unchanged by the size
+change, aim holes on the line with the Uzi, suppressor unchanged, reload
+30. Details: skill casebook case 9.
+
 ### MAC-10 accepted (v0.37.2, 10 Oktober 2026)
 User verdict in game: aim fixed, "i like the style of the gun firing",
 icon "good art". Screenshot docs/shots/mac10_v0.37/user_v0372_final.png.

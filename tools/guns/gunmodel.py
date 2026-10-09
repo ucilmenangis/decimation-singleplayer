@@ -15,11 +15,13 @@ start from a box and bend it:
     q = p.mirror()                           # the same part on the other side of z -0.15
 
 build() writes, into dev/src/main/resources/assets/deci/:
-- models/guns/<cat>/<gun>.bmodel: one part per shape, declared 1x1x1 with the
-  real shape in the 8 corner offsets (as 99 % of Decimation's parts),
-  textureWidth 512, UV islands stepping by 8;
-- textures/model/guns/<cat>/<gun>/<gun>.png: one flat tone per part island with
-  faint per texel noise, 2 pixels per unit (PNG 1024 wide);
+- models/guns/<cat>/<gun>.bmodel: one part per shape, declared at its rounded
+  size (at least 1, so long parts are 1x1xN like Decimation's) with the rest
+  of the shape in the 8 corner offsets, textureWidth 512, UV islands shelf
+  packed in steps of 8;
+- textures/model/guns/<cat>/<gun>/<gun>.png: one tone per part with gradation
+  (part shade, height gradient, face shifts, drift along long faces, texel
+  noise), 2 pixels per unit (PNG 1024 wide);
 - textures/items/gun/<cat>/<gun>.png: 32x32 icon from the model's side render
   (tools/guns/study.py), muzzle right, 1 px dark outline;
 - animations/<gun>/<gun><Name>.anib from anib() keyframes.
@@ -118,17 +120,31 @@ def numbered(parts):
     return out
 
 
-def tex_height(n):
-    rows = (n + TEX_W // STEP - 1) // (TEX_W // STEP)
-    h = 16
-    while h < rows * STEP:
-        h *= 2
-    return h
+def size(p):
+    """Declared box size: each real extent rounded, at least 1 (Decimation declares long parts
+    1x1xN, so their faces get N texels and gradation along them; the rest of the shape goes into
+    the corner offsets, median 0.35 like Decimation's SMGs)."""
+    pts = p.points()
+    return [max(1, int(round(max(q[a] for q in pts) - min(q[a] for q in pts)))) for a in range(3)]
 
 
-def uv(i):
-    per_row = TEX_W // STEP
-    return (i % per_row) * STEP + 1, (i // per_row) * STEP + 1
+def layout(parts):
+    """Box UV islands (2(d+w) x (d+h) units) shelf packed in a textureWidth 512 sheet, cells in
+    steps of 8 units like Decimation's; returns [(u, v)] and the texture height (power of 2)."""
+    out, x, y, row = [], 0, 0, 0
+    for p in parts:
+        w, h, d = size(p)
+        cw = -(-(2 * (d + w) + 1) // STEP) * STEP
+        ch = -(-(d + h + 1) // STEP) * STEP
+        if x + cw > TEX_W:
+            x, y, row = 0, y + row, 0
+        out.append((x + 1, y + 1))
+        x += cw
+        row = max(row, ch)
+    hgt = 16
+    while hgt < y + row:
+        hgt *= 2
+    return out, hgt
 
 
 def bmodel(spec, parts):
@@ -136,53 +152,61 @@ def bmodel(spec, parts):
     for k in ("flamePos", "ejectPos", "rhPos", "rhRot", "lhPos", "lhRot"):
         if k in spec:
             lines.append("  %s: %s;" % (k, ", ".join("%g" % c for c in spec[k])))
-    lines += ["  textureWidth = %d;" % TEX_W, "  textureHeight = %d;" % tex_height(len(parts))]
+    uvs, th = layout(parts)
+    lines += ["  textureWidth = %d;" % TEX_W, "  textureHeight = %d;" % th]
     for i, (n, p) in enumerate(numbered(parts)):
         pts = p.points()
         piv = [min(q[a] for q in pts) for a in range(3)]
+        s = size(p)
         offs = [None] * 8
         for k, q in p.c.items():
-            offs[INDEX[k]] = [q[a] - piv[a] - k[a] for a in range(3)]
-        u, v = uv(i)
+            offs[INDEX[k]] = [q[a] - piv[a] - k[a] * s[a] for a in range(3)]
+        u, v = uvs[i]
         corners = ", ".join("{%s}" % ", ".join(fnum(c) for c in o) for o in offs)
         lines += ["",
                   "  // %s" % p.name,
                   "  %s = new BeardieModelRenderer(this, %d, %d);" % (n, u, v),
-                  "  %s.addShape(0F,0F,0F, new float[][]{%s}, 1, 1, 1);" % (n, corners),
+                  "  %s.addShape(0F,0F,0F, new float[][]{%s}, %d, %d, %d);" % (n, corners, s[0], s[1], s[2]),
                   "  %s.setRotationPoint(%s, %s, %s);" % (n, fnum(piv[0]), fnum(piv[1]), fnum(piv[2])),
                   "  %s.setRotation(0F, 0F, 0F);" % n]
     return "\n".join(lines) + "\n"
 
 
 def paint(parts, seed=7):
-    """RGBA rows: each part's 1x1x1 island (4 x 2 units), toned like Decimation's guns
+    """RGBA rows: each part's box UV island, toned like Decimation's guns
     (docs/gun_style_guide.md section 4, measured on Uzi / AK74 / MP5A3: 15 to 31 distinct part
     tones a gun, faces of one part about 5 apart, texel noise about 2.5, top of the gun a bit
     lighter than the bottom):
     - every part its own shade of its material (+-6 %, seeded per part),
     - a gentle gradient over the gun's height (+5 at the top, -5 at the bottom),
     - per face: top +2, bottom -2, the four sides -1.5..+1.5,
-    - per texel noise -4..+4."""
+    - along a long face a slow drift (+-2 over its length) and per texel noise -4..+4."""
     rnd = random.Random(seed)
-    W, H = TEX_W * PX, tex_height(len(parts)) * PX
+    uvs, th = layout(parts)
+    W, H = TEX_W * PX, th * PX
     px = [[(0, 0, 0, 0)] * W for _ in range(H)]
     ys = [q[1] for p in parts for q in p.points()]
     y0, y1 = min(ys), max(ys)
     for i, p in enumerate(parts):
-        u, v = uv(i)
+        u, v = uvs[i]
+        w, h, d = size(p)
         f = 1 + rnd.uniform(-0.06, 0.06)
         cy = sum(q[1] for q in p.points()) / 8
         grad = 5 - 10 * (cy - y0) / max(1e-6, y1 - y0)
         base = [c * f + grad for c in p.colour]
-        # box UV of a 1x1x1 island: row v: top (u+1), bottom (u+2); row v+1: sides u .. u+3
-        faces = {(u + 1, v): 2, (u + 2, v): -2}
-        for k in range(4):
-            faces[(u + k, v + 1)] = rnd.uniform(-1.5, 1.5)
-        for (fu, fv), shift in faces.items():
-            for yy in range(fv * PX, (fv + 1) * PX):
-                for xx in range(fu * PX, (fu + 1) * PX):
+        # box UV (vanilla ModelBox): row v: top (u+d, w x d), bottom (u+d+w, w x d);
+        # row v+d: x0 side (u, d x h), z0 side (u+d, w x h), x1 side (u+d+w, d x h), z1 side (u+2d+w, w x h)
+        faces = [(u + d, v, w, d, 2), (u + d + w, v, w, d, -2)]
+        for (fu, fw) in ((u, d), (u + d, w), (u + d + w, d), (u + 2 * d + w, w)):
+            faces.append((fu, v + d, fw, h, rnd.uniform(-1.5, 1.5)))
+        for fu, fv, fw, fh, shift in faces:
+            drift = rnd.uniform(-2, 2)
+            n_px = max(1, fw * PX)
+            for yy in range(fv * PX, (fv + fh) * PX):
+                for xx in range(fu * PX, (fu + fw) * PX):
+                    along = drift * ((xx - fu * PX) / n_px * 2 - 1)
                     n = rnd.randint(-4, 4)
-                    px[yy][xx] = tuple(max(0, min(255, int(round(c + shift + n)))) for c in base) + (255,)
+                    px[yy][xx] = tuple(max(0, min(255, int(round(c + shift + along + n)))) for c in base) + (255,)
     return px
 
 
@@ -265,4 +289,4 @@ def build(spec, out_root):
     groups = {}
     for p in parts:
         groups[p.group] = groups.get(p.group, 0) + 1
-    return {"parts": len(parts), "groups": groups, "texture": [TEX_W, tex_height(len(parts))], "model": model}
+    return {"parts": len(parts), "groups": groups, "texture": [TEX_W, layout(parts)[1]], "model": model}

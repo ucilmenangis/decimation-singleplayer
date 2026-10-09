@@ -25,7 +25,7 @@ Anchors (style guide sections 9, 13, 14):
   Decimation's convention: suppressors hang from it);
 - right side (where casings go, ejectPos z negative like Decimation's guns)
   is -z: the ejection port is there.
-Part budget (Uzi table style): receiver 20, barrel 15, front sight 6, rear
+Part budget (Uzi table style): receiver 28 (8 middle details added in v0.37.3), barrel 15, front sight 6, rear
 sight 11, cocking knob and bolt 4 (slideModel), grip 14, trigger group 6,
 magazine 5 (ammoModel), stock 12.
 
@@ -37,15 +37,15 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gunmodel import ZC, anib, build, octagon, part, slide_names  # noqa: E402
 
-STEEL = (38, 38, 40)    # parkerized receiver
-STEEL2 = (44, 44, 46)   # raised panels, caps
-DARK = (24, 24, 26)     # sights, port inside, slot
-BARREL = (50, 50, 52)
-THREAD = (58, 58, 60)
-GRIP = (30, 30, 32)
-MAG = (34, 34, 36)
-ROD = (56, 56, 58)      # bright wire stock
-BOLT = (70, 70, 72)     # bolt face seen in the port
+STEEL = (42, 42, 44)    # parkerized receiver
+STEEL2 = (48, 48, 50)   # raised panels, caps
+DARK = (28, 28, 30)     # sights, port inside, slot
+BARREL = (54, 54, 56)
+THREAD = (62, 62, 64)
+GRIP = (34, 34, 36)
+MAG = (38, 38, 40)
+ROD = (60, 60, 62)      # bright wire stock
+BOLT = (74, 74, 76)     # bolt face seen in the port
 
 G, A, S = "gunModel", "ammoModel", "slideModel"
 P = []
@@ -64,7 +64,7 @@ add(part("topCover", G, STEEL, (2.0, -4.45, -0.75), (9.0, -4.3, 0.45)).inset("y"
 add(part("rearCap", G, STEEL2, (1.85, -4.35, -0.72), (2.0, -2.7, 0.42)).inset("x", 0, y=(0.1, 0.08), z=(0.1, 0.1)))
 add(part("frontCap", G, STEEL2, (9.0, -4.35, -0.72), (9.15, -2.75, 0.42)).inset("x", 1, y=(0.12, 0.12), z=(0.1, 0.1)))
 add(part("lowerCore", G, STEEL, (2.0, -3.2, -0.7), (8.8, -2.6, 0.4)).inset("y", 1, z=(0.06, 0.06)))
-add(part("seam", G, STEEL2, (2.1, -3.26, 0.45), (8.9, -3.14, 0.5)), pair=True)
+add(part("seam", G, STEEL2, (2.1, -3.26, 0.45), (8.9, -3.14, 0.5)).inset("z", 1, y=(0.02, 0.02)), pair=True)
 add(part("stampRect", G, STEEL2, (4.4, -4.25, 0.45), (5.7, -3.55, 0.49)).inset("z", 1, x=(0.06, 0.06), y=(0.06, 0.06)))
 add(part("stampLine", G, STEEL2, (2.55, -4.25, 0.45), (2.7, -3.45, 0.48)).shift("y", 1, x=0.9))
 add(part("pin", G, STEEL2, (8.4, -3.05, 0.45), (8.62, -2.83, 0.5)).inset("z", 1, x=(0.05, 0.05), y=(0.05, 0.05)), pair=True)
@@ -77,10 +77,18 @@ add(part("portInside", G, DARK, (5.6, -4.02, -0.77), (6.9, -3.62, -0.75)))
 # cocking slot on top: two lips and a dark insert
 add(part("slotLip", G, STEEL2, (3.2, -4.52, -0.34), (8.3, -4.45, -0.24)).inset("y", 0, x=(0.05, 0.05)), pair=True)
 add(part("slotInsert", G, DARK, (3.2, -4.47, -0.24), (8.3, -4.45, -0.06)))
+# middle detail (photos 1 and 3): rivets, trigger housing side plates, SAFE / FIRE lever on the
+# left, ejection deflector under the port, the locking notch beside the cocking slot (v0.37.3)
+add(part("rivet", G, STEEL2, (5.85, -3.05, 0.4), (6.0, -2.9, 0.45)).inset("z", 1, x=(0.03, 0.03), y=(0.03, 0.03)), pair=True)
+add(part("housingPlate", G, STEEL, (4.4, -3.12, 0.4), (7.2, -2.66, 0.43)).inset("z", 1, x=(0.05, 0.05), y=(0.04, 0.04)), pair=True)
+add(part("safetyPivot", G, DARK, (6.25, -3.05, 0.43), (6.4, -2.85, 0.5)).inset("z", 1, x=(0.03, 0.03), y=(0.03, 0.03)))
+add(part("safetyLever", G, DARK, (6.35, -3.0, 0.45), (6.8, -2.9, 0.5)).inset("x", 1, y=(0.03, 0.03)))
+add(part("deflector", G, STEEL2, (5.6, -3.5, -0.8), (6.9, -3.42, -0.75)).inset("z", 0, y=(0.02, 0.02)))
+add(part("slotNotch", G, DARK, (4.0, -4.47, -0.06), (4.2, -4.45, 0.04)))
 # front strap loop under the front of the receiver
 add(part("lugFront", G, STEEL, (8.85, -2.6, -0.32), (9.0, -2.05, 0.02)))
 add(part("lugBottom", G, STEEL, (8.25, -2.17, -0.32), (9.0, -2.05, 0.02)).inset("y", 1, x=(0.05, 0.05)))
-add(part("lugRear", G, STEEL, (8.25, -2.6, -0.32), (8.4, -2.15, 0.02)))
+add(part("lugRear", G, STEEL, (8.25, -2.6, -0.32), (8.4, -2.15, 0.02)).inset("y", 1, x=(0.15, 0)))
 
 # ---------------------------------------------------------------- barrel (15)
 add(*octagon("collar", G, STEEL2, 9.15, 9.3, -3.9, ZC, 0.36))
@@ -129,13 +137,13 @@ for i, (y0, y1) in enumerate(((-2.6, -1.55), (-1.55, -0.5), (-0.5, 0.2))):
 gp = part("gripPanel", G, GRIP, (grip_rear(-2.3) + 0.08, -2.3, 0.3), (4.3, 0.0, 0.34))
 gp.inset("y", 1, x=(grip_rear(0.0) - grip_rear(-2.3), 0))
 add(gp.inset("z", 1, x=(0.05, 0.05), y=(0.08, 0.08)), pair=True)
-add(part("housingRib", G, STEEL2, (4.5, -2.4, 0.32), (5.4, -2.3, 0.36)), pair=True)
-add(part("housingRib2", G, STEEL2, (4.5, 0.0, 0.32), (5.4, 0.1, 0.36)), pair=True)
+add(part("housingRib", G, STEEL2, (4.5, -2.4, 0.32), (5.4, -2.3, 0.36)).inset("z", 1, x=(0.04, 0.04)), pair=True)
+add(part("housingRib2", G, STEEL2, (4.5, 0.0, 0.32), (5.4, 0.1, 0.36)).inset("z", 1, x=(0.04, 0.04)), pair=True)
 add(part("magRelease", G, DARK, (4.25, 0.1, -0.35), (4.37, 0.38, 0.05)).inset("x", 0, y=(0.05, 0.05)))
 add(part("gripLip", G, STEEL2, (4.3, 0.15, -0.66), (5.6, 0.27, 0.36)).inset("y", 1, x=(0.05, 0.05), z=(0.05, 0.05)))
 
 # ---------------------------------------------------------------- trigger group (6)
-add(part("trigger", G, DARK, (5.8, -2.6, -0.22), (5.95, -2.2, -0.08)))
+add(part("trigger", G, DARK, (5.8, -2.6, -0.22), (5.95, -2.2, -0.08)).shift("y", 1, x=0.04))
 add(part("triggerTip", G, DARK, (5.75, -2.2, -0.22), (5.9, -1.9, -0.08)).shift("y", 1, x=-0.05).inset("y", 1, x=(0.03, 0)))
 add(part("guardFront", G, STEEL, (6.9, -2.6, -0.26), (7.05, -1.62, -0.04)).shift("y", 1, x=-0.12))
 add(part("guardBottom", G, STEEL, (5.55, -1.62, -0.26), (6.93, -1.5, -0.04)))
@@ -143,7 +151,7 @@ add(part("guardCorner", G, STEEL, (6.7, -1.75, -0.26), (6.93, -1.62, -0.04)).ins
 add(part("safety", G, DARK, (6.45, -2.6, -0.3), (6.65, -2.47, 0.0)).inset("y", 1, x=(0.04, 0.04)))
 
 # ---------------------------------------------------------------- magazine (ammoModel, 5)
-add(part("magBody", A, MAG, (4.45, 0.27, -0.5), (5.45, 2.9, 0.2)))
+add(part("magBody", A, MAG, (4.45, 0.27, -0.5), (5.45, 2.9, 0.2)).inset("y", 1, z=(0.03, 0.03)))
 add(part("magBase", A, DARK, (4.35, 2.9, -0.56), (5.55, 3.05, 0.26)).inset("y", 1, x=(0.05, 0.05), z=(0.05, 0.05)))
 add(part("magRib", A, MAG, (4.65, 0.5, 0.2), (5.25, 2.7, 0.24)), pair=True)
 add(part("magFront", A, MAG, (5.45, 0.45, -0.42), (5.49, 2.8, 0.12)))
@@ -153,15 +161,31 @@ add(part("rod", G, ROD, (1.6, -2.95, 0.42), (8.5, -2.77, 0.56)), pair=True)
 add(part("rodCap", G, STEEL2, (8.5, -3.0, 0.39), (8.7, -2.72, 0.6)).inset("x", 1, y=(0.05, 0.05)), pair=True)
 add(part("rodGuide", G, STEEL2, (2.0, -3.05, 0.4), (2.4, -2.67, 0.6)).inset("x", 0, y=(0.06, 0.06)), pair=True)
 add(part("buttTop", G, DARK, (1.2, -3.3, -0.85), (1.75, -3.1, 0.55)).inset("x", 0, y=(0.05, 0)))
-add(part("buttUp", G, DARK, (1.2, -3.1, 0.37), (1.45, -2.05, 0.55)), pair=True)
+add(part("buttUp", G, DARK, (1.2, -3.1, 0.37), (1.45, -2.05, 0.55)).shift("y", 1, x=-0.06), pair=True)
 add(part("buttPad", G, DARK, (1.15, -2.05, -0.85), (1.75, -1.85, 0.55)).inset("x", 0, y=(0, 0.06), z=(0.08, 0.08)))
 add(part("hinge", G, STEEL2, (1.75, -3.3, 0.5), (1.95, -3.05, 0.6)), pair=True)
 # folded wire shoulder loop lying over the rear top, its sides outside the rear sight
 # (top at -4.57: the rear bar stays under the aperture hole in aim, v0.37.2)
 add(part("loopSide", G, ROD, (1.25, -4.57, 0.45), (3.6, -4.45, 0.57)), pair=True)
 add(part("loopRear", G, ROD, (1.25, -4.57, -0.87), (1.37, -4.45, 0.57)))
-add(part("loopFront", G, ROD, (3.48, -4.45, 0.45), (3.6, -4.3, 0.57)), pair=True)
+add(part("loopFront", G, ROD, (3.48, -4.45, 0.45), (3.6, -4.3, 0.57)).inset("y", 1, x=(0.12, 0)), pair=True)
 add(part("loopDown", G, ROD, (1.25, -4.45, 0.45), (1.37, -3.3, 0.57)), pair=True)
+
+# raised side details stand about 0.08 proud like Decimation's plates (v0.37.3: ours were 0.03 to
+# 0.05 and read too faint; study.py gaps flagged the part sizes): grow the outer face only
+PROUD = {"seam", "stampRect", "stampLine", "pin", "portTop", "portBottom", "portRear", "portFront", "rivet",
+         "housingPlate", "safetyPivot", "safetyLever", "deflector", "rsScrew", "gripPanel", "housingRib",
+         "housingRib2", "magRib"}
+for p in P:
+    if p.name.rstrip("R") not in PROUD and p.name not in PROUD:
+        continue
+    zs = [q[2] for q in p.points()]
+    grow = 0.08 - (max(zs) - min(zs))
+    if grow > 0:
+        if sum(zs) / 8 > ZC:
+            p.shift("z", 1, z=grow)
+        else:
+            p.shift("z", 0, z=-grow)
 
 SPEC = {
     "name": "mac10",

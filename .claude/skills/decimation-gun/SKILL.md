@@ -92,8 +92,14 @@ into the repo: measure and learn from them, build our own.
 - `python3 tools/guns/study.py sheet <ref> ours:<gun> --cols 2 --scale 24
   --out ...`: silhouette, width, density, tone next to the reference.
 - `python3 tools/guns/study.py render ours:<gun> --split`: part cuts.
-- `python3 tools/guns/study.py stats` line for ours vs the category
-  (parts, shaped %, size); `vocab ours:<gun>` vs 60 / 31 / 5 / 4 %.
+- `python3 tools/guns/study.py gaps ours:<gun>`: every metric vs the
+  Decimation guns of its category (median, q10 .. q90, "<- outside"):
+  parts, size, part sizes (absolute and relative to the length: read the
+  "/L%" rows for short or long guns), offsets, detail placement, shape
+  kinds, tone. Close every gap that is not explained by the real gun
+  (a short real gun stays short).
+- `vocab ours:<gun>` vs 60 / 31 / 5 / 4 % (all guns; SMGs pooled 59 /
+  33 / 6 / 3).
 - `python3 tools/guns/study.py attach ours:<gun> reddot smgSuppressor`:
   sight sits on the receiver, suppressor on the bore line. Compare
   suppressor x and y centre with a Decimation gun (Uzi: starts 0.12
@@ -200,6 +206,13 @@ source of truth about the real gun and about how it must look in game.
    slideModel parts kick back about 1.6, no whole gun kick), Rack and
    Reload1 on Decimation's timings, SlideBack held when empty, and the
    icon rendered from the model (transparent background, dark outline).
+12. "Perfect is perfect" (user, v0.37.3): after acceptance, keep closing
+   measurable gaps with `study.py gaps` until every metric not explained
+   by the real gun sits inside the category's q10 .. q90: shape kinds
+   (convert plain blocks to bevels / skews / wedges where they help the
+   look; octagon middles, windows and rods stay plain), declared sizes
+   rounded (long parts 1x1xN), raised details about 0.08 proud, tone near
+   the median, middle detail from the photos.
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -316,6 +329,28 @@ revision (same commit), never remove old ones.
 - Path to acceptance: v1 rejected (case 1), v2 from photos, three
   revisions (cases 2 to 7). Reuse this path: photos, study, anchors,
   side by side checks, user screenshots.
+
+### Case 9: closing the gaps after acceptance (v0.37.3, 10 Oktober 2026)
+- Request (user): "perfect is perfect, we close the gaps until the mac10
+  looks really like decimation guns" (after asking what tapers are).
+- Measured with the new `study.py gaps` (13 Decimation SMGs): shape kinds
+  58 / 32 / 5 / 5 -> 60 / 31 / 5 / 5 % (13 plain blocks turned into
+  bevelled seams and ribs, a drafted magazine, a curved trigger, leaning
+  butt struts, wedge bends on the loop and the strap lug); declared sizes
+  were all 1x1x1, now rounded (78 % 1x1x1, 11 % 1x1x2, long panels 1x1x5 to
+  7) so long faces get texels with gradation along them (gunmodel.size,
+  layout, paint); tone 42 -> 47 (median 49); middle detail 44 -> 48 %
+  (rivets, housing side plates, SAFE / FIRE lever, ejection deflector,
+  slot notch from photos 1 and 3; the real MAC-10 has a short receiver,
+  so it stays under the median 60); raised details 0.03 to 0.05 -> 0.08
+  proud (PROUD set in mac10.py). Remaining "outside": length and the
+  absolute part sizes / offsets that follow from the short real gun;
+  every length relative size is inside.
+- Check: geometry identical after the size change (all 8 corners of all
+  parts compared), gaps report, study.py sheet with the Uzi, gunview aim
+  (holes still on the line, v0373_aim_cmp.png), hip with suppressor
+  (v0373_hip_supp_crop.png), gun test (reload 30), suppressor numbers
+  unchanged (x 9.25 to 14.25, centre -3.90).
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

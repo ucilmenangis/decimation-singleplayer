@@ -181,6 +181,20 @@ What worked, keep doing it:
 Numbers: 102 parts (SMG median 105), shape kinds 52 / 44 / 2 / 2 % (taper
 / cuboid / skew / wedge; Decimation 60 / 31 / 5 / 4).
 
+## 6c. Closing the gaps: `study.py gaps` (v0.37.3)
+
+`python3 tools/guns/study.py gaps ours:<gun>` lists every metric of ours
+next to the Decimation guns of its category (median, q10 .. q90, marks
+what is outside): parts, length / height / width, part sizes (also as %
+of the length, for guns shorter or longer than the category), corner
+offsets, top two fifths and middle detail shares, shape kinds, tone. The
+MAC-10 after v0.37.3 is inside on all of them except length and what
+follows from it (absolute part sizes, offsets): a short real gun.
+Builder rules learned on the way: declare parts at their rounded size
+(long parts 1x1xN; gunmodel.size), raised details about 0.08 proud,
+convert plain blocks to bevels / skews / wedges only where the real
+part has that shape.
+
 ## 7. Shape vocabulary (second pass, all 16757 parts classified)
 
 | Kind | Share | What it is | Used for |
