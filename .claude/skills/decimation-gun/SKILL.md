@@ -137,6 +137,15 @@ into the repo: measure and learn from them, build our own.
 - Live traps: new classes / fields need `--stop`; `key=value` persists,
   clear with `key=`.
 
+## 6b. Performance (user rule 10 Oktober 2026: "add verify performance")
+
+- `python3 tools/devtest.py --live gunperf guns=<ref>,<gun> attach=` and
+  again with `attach=reddot,<cat>Suppressor`: fps dropped and held next to
+  the Decimation reference; ours must be within a few fps of it.
+- If anything lags: docs/performance.md section 4 (perfcheck log / world,
+  census growth, JFR on the live game). Lag is often not the gun: measure
+  before blaming it.
+
 ## 7. Finish
 
 - Shots worth keeping to docs/shots/<topic>_v<version>/ and described in
@@ -224,6 +233,13 @@ source of truth about the real gun and about how it must look in game.
    The generated files are git ignored (public repo: never Decimation
    art), NewGuns registers the gun only when its model exists. Aim,
    suppressor and hands are then Decimation's own.
+
+14. Verify performance for every gun (user, v0.38.0: "1 fps after i drop
+   it ... add verify performance skills on guns too"): run gunperf against
+   the reference gun before handing a gun over; when the user reports lag,
+   measure first (docs/performance.md checklist): in that report the gun
+   was innocent (a corrupt dev world chunk doubling entities, and
+   Decimation's infected path searching every tick).
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -392,6 +408,21 @@ revision (same commit), never remove old ones.
   cmp_side.png), render three; gunview guns=ump45,ump9: hip and aim
   identical to the UMP45; gun test gun=ump9: registered, reload 30.
   DevTestGun now takes -Pgun=NAME.
+
+### Case 11: "1 fps after dropping the gun" (v0.38.0 -> v0.38.1, 10 Oktober 2026)
+- Symptom (user): huge lag, 1 fps after dropping a gun in the dev world.
+- First check: gunperf (new dev test) dropped / held vs baseline for
+  Uzi, UMP45, MAC-10, UMP9: all within 2 fps of each other and of the
+  baseline. The guns were not the cause.
+- Real causes (docs/performance.md): the dev world's region slot (-1,-6)
+  held chunk (-4,-1), entities doubled on every save / load (40 730, 31 010
+  Hulks) with a Forge stack trace per entity per tick; and Decimation's
+  infected running a full path search every tick on both sides.
+- Fix: tools/perfcheck.py fixchunk + census kill= (dev world only);
+  tools/patches/PatchInfectedAI.java (three jars) for the real game: fps
+  21 -> 35 with the same 53 infected, client pathfinding 60 % -> 0 %;
+  zombies test still passes.
+- Lesson 14; tools: gunperf, census, perfcheck, JFR via jcmd.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

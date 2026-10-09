@@ -651,3 +651,6 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   read clearly). gun_fp / gun_reload_14 / 22 / 36.png and reload_sheet.png:
   dev test gun with -Pgun=ump9 (first person, reload tilt). In game hip
   and aim identical to the UMP45 (gunview guns=ump45,ump9).
+- gunperf_<gun>_dropped / _held (dev/run/client/screenshots, not copied):
+  gun dropped 2.5 blocks in front of the camera on the arena and held;
+  fps numbers in docs/performance.md section 2.

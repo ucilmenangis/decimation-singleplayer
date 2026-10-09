@@ -50,14 +50,14 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791575996.5252717,
-    "ast_hash": "d67415d541719591400e19a7e630d53c",
-    "semantic_hash": "d67415d541719591400e19a7e630d53c"
+    "mtime": 1791578716.7420626,
+    "ast_hash": "8a852683844fa95462c4592801dced88",
+    "semantic_hash": "8a852683844fa95462c4592801dced88"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791569396.8061275,
-    "ast_hash": "677cf1f19698b1b948d4b176e60725a5",
-    "semantic_hash": "677cf1f19698b1b948d4b176e60725a5"
+    "mtime": 1791577899.1993551,
+    "ast_hash": "afb2597d87bb231e09c2f45ad99788dd",
+    "semantic_hash": "afb2597d87bb231e09c2f45ad99788dd"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791575996.5260847,
-    "ast_hash": "8c29fddc6714c89e81677d9e1e620e27",
-    "semantic_hash": "8c29fddc6714c89e81677d9e1e620e27"
+    "mtime": 1791578716.7414181,
+    "ast_hash": "8a7a93382ad97c3092207afb3c665d39",
+    "semantic_hash": "8a7a93382ad97c3092207afb3c665d39"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -120,9 +120,9 @@
     "semantic_hash": "aa4550575e47e7c1d0b020a51afbb501"
   },
   "bug.md": {
-    "mtime": 1791497371.8323393,
-    "ast_hash": "9d73e48bad0240bf52a5b84c234e8265",
-    "semantic_hash": "9d73e48bad0240bf52a5b84c234e8265"
+    "mtime": 1791578716.7387218,
+    "ast_hash": "7cebc6db53a8d0425a4ea1c61d5a8b73",
+    "semantic_hash": "7cebc6db53a8d0425a4ea1c61d5a8b73"
   },
   "create_weapons.md": {
     "mtime": 1791570457.0174904,
@@ -325,9 +325,9 @@
     "semantic_hash": "32134db33ff2599b79a45d05e9fdfdc1"
   },
   "docs/shots_index.md": {
-    "mtime": 1791575996.5267587,
-    "ast_hash": "0446df664a49e49ac9c606f873a9ebca",
-    "semantic_hash": "0446df664a49e49ac9c606f873a9ebca"
+    "mtime": 1791578716.7448597,
+    "ast_hash": "9487cf398853fa5e0aedeec632a6f87d",
+    "semantic_hash": "9487cf398853fa5e0aedeec632a6f87d"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -655,9 +655,9 @@
     "semantic_hash": "bd30941e1a4e2e62f6bc1cbfe45efd40"
   },
   "docs/roadmap.md": {
-    "mtime": 1791575996.5219374,
-    "ast_hash": "bf01a32477938527572c0f9a8a3198e7",
-    "semantic_hash": "bf01a32477938527572c0f9a8a3198e7"
+    "mtime": 1791578716.7432435,
+    "ast_hash": "5a2279b3ab52d8b0862624eac7a20c92",
+    "semantic_hash": "5a2279b3ab52d8b0862624eac7a20c92"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -810,13 +810,38 @@
     "semantic_hash": "d01245d58d40abe7d0133dce1e0eb8af"
   },
   ".claude/skills/decimation-gun/SKILL.md": {
-    "mtime": 1791575996.5189216,
-    "ast_hash": "3853fa685be1406f5aa2bfc04cd6e812",
-    "semantic_hash": "3853fa685be1406f5aa2bfc04cd6e812"
+    "mtime": 1791578716.7444744,
+    "ast_hash": "327cd7e262c45f6c88e7fdce576a9f98",
+    "semantic_hash": "327cd7e262c45f6c88e7fdce576a9f98"
   },
   "tools/guns/ump9.py": {
     "mtime": 1791575647.9663312,
     "ast_hash": "89eaa15bf5c74d27a53f10f5393658b2",
     "semantic_hash": "89eaa15bf5c74d27a53f10f5393658b2"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/CensusTest.java": {
+    "mtime": 1791577966.572068,
+    "ast_hash": "aa77a4d4602989cfb3f37b13bcbf1a9c",
+    "semantic_hash": "aa77a4d4602989cfb3f37b13bcbf1a9c"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/GunPerfTest.java": {
+    "mtime": 1791576953.4811535,
+    "ast_hash": "48d1e60c0b9c58e653ecfa2cbadc95f6",
+    "semantic_hash": "48d1e60c0b9c58e653ecfa2cbadc95f6"
+  },
+  "tools/patches/PatchInfectedAI.java": {
+    "mtime": 1791578451.2432134,
+    "ast_hash": "be5e75dd875ddfcae32afd3012fa5972",
+    "semantic_hash": "be5e75dd875ddfcae32afd3012fa5972"
+  },
+  "tools/perfcheck.py": {
+    "mtime": 1791577898.604009,
+    "ast_hash": "83db1dd61a8d31981e798b7c2a8028fb",
+    "semantic_hash": "83db1dd61a8d31981e798b7c2a8028fb"
+  },
+  "docs/performance.md": {
+    "mtime": 1791578692.2052364,
+    "ast_hash": "e364db1cc13c0af5b01adda5a83cf33c",
+    "semantic_hash": "e364db1cc13c0af5b01adda5a83cf33c"
   }
 }

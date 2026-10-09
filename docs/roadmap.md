@@ -18,7 +18,11 @@ or `[not decided]`.
    impact; height can differ between two new worlds of one seed near the
    edge of the generated area). bug.md "Building base height depends on
    chunk generation order".
-3. **Arrows still pick up empty vehicles** (punching was fixed in v0.8.1).
+3. **Prop tile entities tick for nothing** (10 694 PropTile in the dev
+   world sit in the ticking list, canUpdate() default true): small steady
+   cost in cities `[inferred]`; patch canUpdate() false after measuring.
+   docs/performance.md section 3.
+4. **Arrows still pick up empty vehicles** (punching was fixed in v0.8.1).
    bug.md "Military jeep/tank/helicopter destroyed in one hit".
 
 ## Worldgen and cities

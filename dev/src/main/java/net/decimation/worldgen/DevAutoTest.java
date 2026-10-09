@@ -118,6 +118,8 @@ public class DevAutoTest
         if (name.equals("zombies")) return new net.decimation.worldgen.devtest.ZombieTest();
         if (name.equals("gun")) return new net.decimation.worldgen.devtest.GunTest();
         if (name.equals("gunview")) return new net.decimation.worldgen.devtest.GunViewTest();
+        if (name.equals("gunperf")) return new net.decimation.worldgen.devtest.GunPerfTest();
+        if (name.equals("census")) return new net.decimation.worldgen.devtest.CensusTest();
         return null;
     }
 

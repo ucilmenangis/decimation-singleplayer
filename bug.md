@@ -10,6 +10,21 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### 1 fps in the dev world: entity explosion through a corrupt chunk (v0.38.1, 10 Oktober 2026)
+User: "really big performance issue now ... 1 fps after i drop it to the ground". Not the gun
+(gunperf: our guns cost what Decimation's cost). The dev world's region slot (-1,-6) held chunk
+(-4,-1)'s data, so entities were saved twice and doubled on every load (9 800 -> 40 730 in one
+session, 31 010 Hulks), and Forge printed a stack trace for each every tick. Fixed in the save
+(tools/perfcheck.py fixchunk, census kill=); origin of the broken slot unknown `[not verified]`
+(it already crashed the server on 10-09 04:12). docs/performance.md section 2.
+
+### Infected path search every tick (Decimation, v0.38.1, 10 Oktober 2026)
+InfectedEntity.onLivingUpdate (deci.ag.d) ran updateWanderPath every tick on server and client
+plus a 40 x 40 horde scan every tick: about 60 % of both threads in pathfinding. Patch
+tools/patches/PatchInfectedAI.java (three jars): wander server side once a second, horde scan
+every 10 ticks. Same 53 infected: fps 21 -> 35, client pathfinding 60 % -> 0 %. zombies test
+passes. docs/performance.md section 2.
+
 ### Upper storeys unreachable (ladder popped off, stair core collapsed)
 - **Found**: 7 Oktober 2026 by the building audit (`tools/floorplan.py`
   reachability): shop b-4_1_0 storey 1 0% reachable, office b-3_2_2 top

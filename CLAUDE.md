@@ -83,6 +83,10 @@ Knowledge index:
   tools) in one list with links; add new requests there, move done items.
 - `docs/gun_model_spec.md`: gun `.bmodel` / `.anib` formats, paths, renderer,
   new gun checklist.
+- `docs/performance.md`: how to check lag (dev test modes gunperf, census,
+  tools/perfcheck.py world / log / fixchunk, JFR on the live game with
+  jcmd) and what was found (corrupt chunk entity explosion, infected path
+  search every tick, prop tile entities in the ticking list).
 - `docs/gun_style_guide.md`: READ BEFORE MODELLING A GUN. Study of all 98
   Decimation guns (tools/guns/study.py renders them from the jar, no
   game; dataset docs/references/decimation_guns.tsv): shape box parts,
@@ -254,6 +258,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   the packet, `shotHook` in BanditEntity.shootAt, NPC tracers always
   visible) then `PatchFactions.java` on top of its deci/ag/a output
   (Soviets vs everyone else);
+  `PatchInfectedAI.java` (2026-10-10, docs/performance.md): infected
+  wander path search server side once a second instead of every tick on
+  both sides, horde scan every 10 ticks (deci/ag/d);
   `PatchPropCulling.java` step 3 (2026-10-09) caches line of sight answers,
   step 4 render distance by prop size, config deciworldgen_props.cfg,
   default 64 = vanilla). Patch from the ORIGINAL classes
@@ -648,6 +655,9 @@ of the last session:
   v0.38.0: UMP9 = Decimation's UMP45 generated locally from the jar
   (tools/guns/ump9.py, outputs git ignored, run it before building) with
   our curved 9 mm magazine; DevTest gun takes -Pgun=NAME.
+  v0.38.1: performance (docs/performance.md): PatchInfectedAI, dev test
+  modes gunperf and census, tools/perfcheck.py; the dev world was repaired
+  (a corrupt chunk had doubled entities to 40 000).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim
