@@ -10,9 +10,10 @@ or `[not decided]`.
 ## Open bugs
 
 1. **Drawing cost of props in open prop-heavy views** (measured again
-   10 Oktober 2026, docs/performance.md section 5: the models' geometry
-   through display lists is the cost; batching per type was slower;
-   waiting for the user's lag spots): 225 props in plain
+   10 Oktober 2026, docs/performance.md section 5: about 18 % of a city
+   view; render distance by size 48 / 32 / 24 removes it, new defaults in
+   v0.38.2; batching per type was slower; Angelica draws no far terrain on
+   this Mac): 225 props in plain
    view still about halve the fps (driver / GPU work in glCallList). Fix if
    the user finds places that still drop: bake static props into chunk
    meshes (prop textures into the block atlas, both model formats to

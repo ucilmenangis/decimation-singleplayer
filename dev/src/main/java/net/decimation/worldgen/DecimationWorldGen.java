@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.38.1",
+     version = "0.38.2",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -85,10 +85,12 @@ public class DecimationWorldGen
             // prop render distance by size (tools/patches/PatchPropCulling.java step 4)
             net.minecraftforge.common.config.Configuration props = new net.minecraftforge.common.config.Configuration(
                 new File(event.getModConfigurationDirectory(), "deciworldgen_props.cfg"));
-            // 64 = vanilla for all: in a city street 32 / 48 measured no fps gain (2026-10-09)
-            String[][] dist = {{"small", "64", "props smaller than 0.8 block (cans, bags, cones); e.g. 32"},
-                               {"medium", "64", "props up to 1.6 blocks (crates, bins, benches); e.g. 48"},
-                               {"large", "64", "bigger props (cars, shelves, lamps); 64 = vanilla"}};
+            // 2026-10-10 (docs/performance.md section 5): looking over a city 48 / 32 / 24 took the
+            // props' cost (about 18 % of the frame, 34 vs 41 fps with them hidden) to nothing, with
+            // no visible loss at those distances; 64 = vanilla for all
+            String[][] dist = {{"small", "24", "props smaller than 0.8 block (cans, bags, cones); 64 = vanilla"},
+                               {"medium", "32", "props up to 1.6 blocks (crates, bins, benches); 64 = vanilla"},
+                               {"large", "48", "bigger props (cars, shelves, lamps); 64 = vanilla"}};
             for (String[] d : dist)
             {
                 System.setProperty("decimation.props." + d[0], String.valueOf(props.getInt(d[0], "distance",

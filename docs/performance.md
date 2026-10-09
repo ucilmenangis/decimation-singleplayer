@@ -90,16 +90,26 @@ every run: rain particles cost frame time and made runs differ) and JFR:
   with steady entity counts: probably the machine heating up after GPU heavy runs
   `[inferred]`; compare only within one run.
 The user's lag spot (screenshots 10 Oktober 2026, F3): 70 to 90 fps away from the city, 40 to
-55 looking over the seed 1 city from the test arena (x 3, y 151, z -9, render distance 12:
-C 823 vs 1 023 chunk sections drawn). Dev test `cityview` (that spot, props drawn vs their
-renderer swapped for one that draws nothing, alternating three times so the drift cancels):
-on / off 47 / 38, 34 / 40, 35 / 34 with 4 293 to 4 527 props in the render chunks. Props cost 0
-to 3 fps of about 35 there: noise level. The city's cost is its blocks: about 200 more chunk
-sections of buildings within render distance 12 (terrain display lists, the 70 % glCallLists
-wait). The fps also falls steadily in every session (47 -> 34 within minutes); the user's menu
-bar showed 90 and 101 degrees, so the Mac heating up and throttling is likely `[inferred]`.
-Options: render distance 8 to 10 in cities (vanilla setting), FastCraft / OptiFine for 1.7.10
-(known terrain render speedups; compatibility with Decimation not checked `[not verified]`),
-fewer hidden faces in our buildings (interiors behind walls still produce chunk geometry), or
-baking props (no gain here, so not worth it for this view).
-
+55 looking over the seed 1 city (render distance 12; C 823 vs 1 023 chunk sections drawn).
+Dev test `cityview` (props drawn vs their renderer swapped for one that draws nothing,
+alternating three times so the drift cancels; -Pview=x,y,z,yaw,pitch).
+- First views were WRONG: from the arena (y 151) the floor or the cloud layer (y 128) filled
+  the picture, no city in it (props on = off there). Always look at the cityview screenshot.
+- Valid view x 3, y 110, z 40, south, 30 down (under the clouds, past the arena's south edge,
+  the city fills the picture, 4 651 props in the render chunks): props on / off 38 / 50,
+  31 / 38, 32 / 35: props cost about 18 % (34 vs 41 fps). The rest of the drop from the 82 fps
+  outside the city is the city's blocks (more chunk sections) and the Mac heating up.
+- Prop render distance by size (PatchPropCulling step 4, deciworldgen_props.cfg) large 48 /
+  medium 32 / small 24: props on / off 45 / 42, 39 / 37, 39 / 39: the props' cost gone, no
+  visible difference in the screenshot (far props are a few pixels). New defaults (v0.38.2);
+  64 = vanilla. An older note said 32 / 48 gave nothing in a street: that view had few props.
+- Angelica (GTNH rendering overhaul, dev only: `tools/devtest.py --live --angelica`,
+  `gradlew runClient -Pangelica -PforceEnableMixins=true`): needs a newer fastutil than the
+  copy Decimation bundles, so the dev run uses libs/Decimation-base-nofastutil.jar
+  (`zip -d` of it/unimi/dsi/*; no class in the jar references fastutil). It starts (20 mods),
+  but on this Mac (OpenGL 2.1 context) it does NOT draw the far terrain: the city view is
+  empty sky at 700 fps, so its numbers mean nothing; our MAC-10 also drew slowly under it
+  (held 60 fps vs the Uzi's 703). Not usable here `[inferred: the GL 2.1 context]`; Prism keeps
+  OptiFine. "Entity is already tracked" server errors appeared in that session only.
+- Other options left: render distance 8 to 10 in cities, OptiFine in the dev client, fewer
+  hidden faces in our buildings.

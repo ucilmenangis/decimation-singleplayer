@@ -36,7 +36,10 @@
 dependencies {
     // Decimation itself (closed source). libs/Decimation-base.jar = Decimation.jar.patched
     // minus our own net/decimation/{worldgen,fixes} classes; RFG remaps it SRG -> MCP.
-    devOnlyNonPublishable(rfg.deobf(project.files("libs/Decimation-base.jar")))
+    // With -Pangelica: a copy without the fastutil Decimation bundles (unused by it: no class in
+    // the jar references it) because GTNHLib needs a newer fastutil (docs/performance.md).
+    devOnlyNonPublishable(rfg.deobf(project.files(project.hasProperty("angelica")
+        ? "libs/Decimation-base-nofastutil.jar" : "libs/Decimation-base.jar")))
 }
 
 // Decimation's main menu swaps "Play" for "Update" unless mods/DecimationVoiceChat.jar
@@ -157,3 +160,15 @@ tasks.matching { it.name == "runServer" }.configureEach {
         jvmArgs("-Ddeciworldgen.debugsets=true")
     }
 }
+
+// `gradlew runClient -Pangelica -PforceEnableMixins=true` (or tools/devtest.py --live --angelica):
+// Angelica, the GTNH rendering overhaul (Sodium style chunk meshing, modern GL), in the dev
+// client only, to measure it against the plain renderer (docs/performance.md). Never in the
+// release jar (runtime only, not published). Angelica brings its mixins: forceEnableMixins.
+if (project.hasProperty("angelica")) {
+    dependencies {
+        runtimeOnlyNonPublishable("com.github.GTNewHorizons:Angelica:2.2.30:dev")
+        runtimeOnlyNonPublishable("com.github.GTNewHorizons:GTNHLib:0.11.52:dev")
+    }
+}
+

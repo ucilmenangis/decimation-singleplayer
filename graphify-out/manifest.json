@@ -20,9 +20,9 @@
     "semantic_hash": "f6d0ec3d1c5bb5c1802a7544eafa4896"
   },
   "dev/dependencies.gradle": {
-    "mtime": 1791559795.849071,
-    "ast_hash": "124055c6d238f3f77f154e7ae35644cb",
-    "semantic_hash": "124055c6d238f3f77f154e7ae35644cb"
+    "mtime": 1791583596.1260238,
+    "ast_hash": "a441b15dada55da39461421264a0eaf4",
+    "semantic_hash": "a441b15dada55da39461421264a0eaf4"
   },
   "dev/repositories.gradle": {
     "mtime": 1791314872.0,
@@ -50,9 +50,9 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791580683.1114228,
-    "ast_hash": "8a852683844fa95462c4592801dced88",
-    "semantic_hash": "8a852683844fa95462c4592801dced88"
+    "mtime": 1791584243.4049747,
+    "ast_hash": "a7279b73ad1fc25847dbef73d12256ad",
+    "semantic_hash": "a7279b73ad1fc25847dbef73d12256ad"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791581145.5801084,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791581994.2783592,
-    "ast_hash": "707211f03078f8a6324ab2583c49f8ad",
-    "semantic_hash": "707211f03078f8a6324ab2583c49f8ad"
+    "mtime": 1791584243.4056582,
+    "ast_hash": "2550419e5c19bd0ad8c2a99144dc3ce8",
+    "semantic_hash": "2550419e5c19bd0ad8c2a99144dc3ce8"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -650,14 +650,14 @@
     "semantic_hash": "fe52ba76871cd7e9a2bdd0e75f8f5a9d"
   },
   "tools/devtest.py": {
-    "mtime": 1791559795.8494253,
-    "ast_hash": "bd30941e1a4e2e62f6bc1cbfe45efd40",
-    "semantic_hash": "bd30941e1a4e2e62f6bc1cbfe45efd40"
+    "mtime": 1791582952.0337825,
+    "ast_hash": "d7a11c41d1081d106cb072b41054a283",
+    "semantic_hash": "d7a11c41d1081d106cb072b41054a283"
   },
   "docs/roadmap.md": {
-    "mtime": 1791580683.1141531,
-    "ast_hash": "1102ab402e5282ac9078e389f3d9f06b",
-    "semantic_hash": "1102ab402e5282ac9078e389f3d9f06b"
+    "mtime": 1791584243.4061973,
+    "ast_hash": "b4d2bca514316cd2a28f7b4a87e37d07",
+    "semantic_hash": "b4d2bca514316cd2a28f7b4a87e37d07"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -840,9 +840,9 @@
     "semantic_hash": "83db1dd61a8d31981e798b7c2a8028fb"
   },
   "docs/performance.md": {
-    "mtime": 1791581565.2676625,
-    "ast_hash": "6e51206a327abe7d38be03bedb7d9728",
-    "semantic_hash": "6e51206a327abe7d38be03bedb7d9728"
+    "mtime": 1791584243.4048464,
+    "ast_hash": "00f25a92f6342ba32935449b6c39e013",
+    "semantic_hash": "00f25a92f6342ba32935449b6c39e013"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/CityViewTest.java": {
     "mtime": 1791581459.197368,

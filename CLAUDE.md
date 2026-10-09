@@ -661,7 +661,10 @@ of the last session:
   our curved 9 mm magazine; DevTest gun takes -Pgun=NAME.
   v0.38.1: performance (docs/performance.md): PatchInfectedAI, dev test
   modes gunperf and census, tools/perfcheck.py; the dev world was repaired
-  (a corrupt chunk had doubled entities to 40 000).
+  (a corrupt chunk had doubled entities to 40 000). v0.38.2: prop render
+  distance defaults 48 / 32 / 24 (large / medium / small; city view props
+  cost about 18 % -> 0), dev test cityview; Angelica tried in the dev
+  client (-Pangelica): draws no far terrain on this Mac, not usable.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim
