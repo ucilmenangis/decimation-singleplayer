@@ -546,6 +546,34 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### MAC-10 v2 in Decimation's style (DONE v0.37.0, 10 Oktober 2026)
+After the user's "not good, needs polish" and the gun study
+(docs/gun_style_guide.md, skill .claude/skills/decimation-gun).
+- tools/guns/gunmodel.py v2: every part a hexahedron (box bent with inset
+  / shift / mirror / octagon), written as Decimation does (1x1x1 declared,
+  shape in the corner offsets), one flat tone per part (textureWidth 512,
+  UV step 8, 2 px a unit), icon from the model's side render, animations
+  with Decimation's timings (Fire 2 frames slide only, Reload1 57,
+  Rack 19 Hand 1, new SlideBack static), our own keyframe values.
+- tools/guns/mac10.py v2: 102 parts (93 body, 4 slide: knob halves with
+  the sight notch, stem, bolt in the ejection port; 5 magazine), 9.35 x
+  8.1 x 1.5 units (v1: 23 plain boxes, 12 x 10.2 x 2.2). Proportions
+  measured on the user's side photo (receiver = 7.0 units): raked grip
+  behind the mag housing, threads right at the receiver, thin barrel,
+  knob forward, front sight, strap loop, butt pad, the folded wire loop
+  over the rear top, left side stamping and pins, ejection port with the
+  bolt on the right (-z). Sight tops y -4.95 to -5.0, receiver top -4.45.
+- Checked: study.py renders next to the Uzi; in game (gunview, gun):
+  dark slim gun where the Uzi sits, the rear seen inside the wire loop
+  frame (no grey block), aim centre exactly at the sight tops (v1: 0.75
+  above), red dot on the receiver and its ring at the aim centre,
+  suppressor on the muzzle, flashlight; reload loads 30 (animation:
+  tilt, magazine out and in), a bandit holds and fires it. Not checked:
+  the player firing it (mouse) and the feel `[not verified]`; icon only
+  seen as a file.
+- Shape kinds 52 % taper / 44 % cuboid / 2 / 2 (Decimation 60 / 31 / 5 /
+  4): more tapered chamfers would move it closer `[idea]`.
+
 ### MAC-10, the first gun of our own (DONE v0.36.0, 9 Oktober 2026)
 User: a gun made by Claude with tools (docs/roadmap.md pilot); user picked
 the MAC-10. Pipeline in docs/gun_model_spec.md section 6. Model: 23 boxes

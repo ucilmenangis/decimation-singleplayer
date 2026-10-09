@@ -637,6 +637,9 @@ of the last session:
   attribute modifiers (operation 2 to multiply on top of others).
   v0.35.0: 60 round mags (`fixes/Magazines`); our own item names live in
   dev/src/main/resources/assets/deciworldgen/lang/en_US.lang.
+  v0.37.0: MAC-10 v2 in Decimation's style (gunmodel.py v2: shape parts,
+  flat tones, icon from the render, Decimation's animation timings; 102
+  parts, sights at the aim centre), new_feature.md.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

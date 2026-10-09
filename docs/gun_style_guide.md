@@ -156,6 +156,23 @@ block.
 6. Stats from section 16; sounds, loot, magazines, registration:
    docs/gun_model_spec.md section 6.
 
+## 6b. First rebuild with this guide: MAC-10 v2 (v0.37.0)
+
+What worked, keep doing it:
+- A real side photo of the gun, measured in pixels against one known
+  length (receiver = 7.0 units), fixed every proportion in one pass
+  (grip rake, knob and sight positions, magazine length, barrel threads).
+- Anchors first (receiver top -4.45, sight tops -4.95 to -5.0, z -0.15):
+  the aim view matched the Uzi on the first in game run.
+- A one piece rake: `inset("y", 1, x=(-d, 0))` grows the bottom rear
+  corners backward (a negative inset), per segment along one line.
+- A short gun's rear: frame it (wire loop, butt pad frame) instead of a
+  plate; in aim it then reads like Decimation's guns.
+- Icons: render on a transparent background (bg alpha 0) and keep only
+  solid pixels; a light background leaves a halo.
+Numbers: 102 parts (SMG median 105), shape kinds 52 / 44 / 2 / 2 % (taper
+/ cuboid / skew / wedge; Decimation 60 / 31 / 5 / 4).
+
 ## 7. Shape vocabulary (second pass, all 16757 parts classified)
 
 | Kind | Share | What it is | Used for |

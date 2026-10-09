@@ -1,4 +1,4 @@
-Length: 48
+Length: 57
 Hand: 0
 ---------------------------
 START
@@ -20,100 +20,176 @@ Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
-Frame SKIP
 Frame {
+Shake: 1;
+PlaySound: MagOut;
+ OffHand {
+  Pos: 0, 0.4, 0;
+  Rot: -12, 4, 30;
+ }
  Model {
   Pos: 0, 0, 0;
-  Rot: 12, 0, 4;
- }
- OffHand {
-  Pos: 0, 0.3, 0;
-  Rot: -12, 0, 25;
+  Rot: 8, 0, 6;
  }
 }
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame {
+ ammoModel0 {
+  Pos: 0, 2.5, -1.5;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: -0.8, 2.2, 1.2;
+  Rot: -30, 4, 32;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 8, 0, 12;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame {
+ ammoModel0 {
+  Pos: -0.5, 7, -3.5;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: 0.5, 5, 1;
+  Rot: -35, 4, 45;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 2, -4, 18;
+ }
+}
+Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 SWITCH Frame {
-Shake: 0.8;
-PlaySound: MagOut;
  ammoModel0 {
-  Pos: 0, 3, 0;
+  Pos: -3, 16, -6;
   Rot: 0, 0, 0;
  }
  OffHand {
-  Pos: 0, 0.6, 0;
-  Rot: -12, 0, 25;
+  Pos: 3, 12.5, -1;
+  Rot: -48, 4, 65;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 0, -5, 20;
  }
 }
-Frame SKIP
-Frame SKIP
-Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame {
  ammoModel0 {
-  Pos: 0, 14, 0;
-  Rot: 0, 0, 10;
+  Pos: -3.5, 15.5, -5.5;
+  Rot: 0, 0, 0;
  }
  OffHand {
-  Pos: 0, 1.2, 0;
-  Rot: -20, 0, 35;
+  Pos: 2.4, 12, 0.4;
+  Rot: -48, 4, 65;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 0, -3, 20;
  }
 }
-Frame SKIP
-Frame SKIP
-Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame {
  ammoModel0 {
-  Pos: 0, 7, 0;
-  Rot: 0, 0, 4;
+  Pos: -1, 9, -6;
+  Rot: 0, 0, 0;
  }
  OffHand {
-  Pos: 0, 0.8, 0;
-  Rot: -15, 0, 30;
+  Pos: 3, 6.4, -1;
+  Rot: -34, 4, 55;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 4, 0, 22;
  }
 }
 Frame SKIP
 Frame SKIP
 Frame SKIP
+Frame SKIP
+Frame {
+ ammoModel0 {
+  Pos: -1, 6.8, -4.5;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: 1.2, 5.4, 1.4;
+  Rot: -34, 4, 46;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 12, 4, 22;
+ }
+}
 Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 LOAD Frame {
-Shake: 1;
+Shake: 1.1;
 PlaySound: MagIn;
  ammoModel0 {
-  Pos: 0, 0, 0;
+  Pos: 0, 2.2, -2;
   Rot: 0, 0, 0;
  }
  OffHand {
-  Pos: 0, 0.4, 0;
-  Rot: -10, 0, 20;
+  Pos: -1.8, -0.2, 2.8;
+  Rot: -32, 4, 14;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 22, 12, 22;
  }
 }
 Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
+Frame {
+ ammoModel0 {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: -3.6, -3.2, 3.8;
+  Rot: -32, 4, 14;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 26, 12, 22;
+ }
+}
+Frame SKIP
 Frame SKIP
 Frame SKIP
 Frame SKIP
 TRYBOLT Frame {
- Model {
-  Pos: 0, 0, 0;
-  Rot: 4, 0, 0;
- }
  OffHand {
   Pos: 0, 0, 0;
-  Rot: 0, 0, 0;
+  Rot: -18, 0, 4;
+ }
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 12, 4, 12;
  }
 }
 Frame SKIP
@@ -134,4 +210,5 @@ Frame {
   Rot: 0, 0, 0;
  }
 }
+Frame SKIP
 END

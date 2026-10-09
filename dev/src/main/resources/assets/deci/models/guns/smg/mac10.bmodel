@@ -1,77 +1,620 @@
-  flamePos: 11.8, -4.15, -0.15;
-  ejectPos: 6, -4.4, 0.8;
+  flamePos: 10.4, -3.9, -0.15;
+  ejectPos: 6.25, -3.82, -0.8;
   rhPos: -5, 1.52, -2.5;
   rhRot: 0, 0, 0;
   lhPos: 0.3, 10.07, 4.92;
   lhRot: 0, 0, 0;
-  textureWidth = 128;
-  textureHeight = 8;
-  gunModel0 = new ModelRenderer(this, 22, 0);
-  gunModel0.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 9F, 1.8F, 1.7F);
-  gunModel0.setRotationPoint(1F, -5F, -1F);
-  gunModel1 = new ModelRenderer(this, 48, 0);
-  gunModel1.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 7.6F, 0.8F, 1.6F);
-  gunModel1.setRotationPoint(1F, -3.2F, -0.95F);
-  gunModel2 = new ModelRenderer(this, 89, 0);
-  gunModel2.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1.8F, 0.8F, 0.8F);
-  gunModel2.setRotationPoint(10F, -4.55F, -0.55F);
-  gunModel3 = new ModelRenderer(this, 73, 0);
-  gunModel3.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.3F, 1F, 1F);
-  gunModel3.setRotationPoint(10.5F, -4.65F, -0.65F);
-  gunModel4 = new ModelRenderer(this, 77, 0);
-  gunModel4.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.3F, 1F, 1F);
-  gunModel4.setRotationPoint(11.1F, -4.65F, -0.65F);
-  gunModel5 = new ModelRenderer(this, 116, 0);
-  gunModel5.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.4F, 0.6F, 0.3F);
-  gunModel5.setRotationPoint(9.1F, -5.6F, -0.3F);
-  gunModel6 = new ModelRenderer(this, 119, 0);
-  gunModel6.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.6F, 0.7F, 0.2F);
-  gunModel6.setRotationPoint(9F, -5.7F, -0.75F);
-  gunModel7 = new ModelRenderer(this, 122, 0);
-  gunModel7.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.6F, 0.7F, 0.2F);
-  gunModel7.setRotationPoint(9F, -5.7F, 0.25F);
-  gunModel8 = new ModelRenderer(this, 96, 0);
-  gunModel8.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.8F, 0.25F, 1.2F);
-  gunModel8.setRotationPoint(1.2F, -5.25F, -0.75F);
-  gunModel9 = new ModelRenderer(this, 108, 0);
-  gunModel9.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.8F, 0.5F, 0.4F);
-  gunModel9.setRotationPoint(1.2F, -5.75F, -0.75F);
-  gunModel10 = new ModelRenderer(this, 112, 0);
-  gunModel10.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.8F, 0.5F, 0.4F);
-  gunModel10.setRotationPoint(1.2F, -5.75F, 0.05F);
-  gunModel11 = new ModelRenderer(this, 0, 0);
-  gunModel11.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1.9F, 3.3F, 1.5F);
-  gunModel11.setRotationPoint(4F, -2.4F, -0.9F);
-  gunModel12 = new ModelRenderer(this, 101, 0);
-  gunModel12.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.35F, 1F, 0.3F);
-  gunModel12.setRotationPoint(6.4F, -2.4F, -0.3F);
-  gunModel13 = new ModelRenderer(this, 45, 0);
-  gunModel13.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.4F, 2.1F, 0.5F);
-  gunModel13.setRotationPoint(7.6F, -2.4F, -0.4F);
-  gunModel14 = new ModelRenderer(this, 0, 6);
-  gunModel14.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 2.1F, 0.3F, 0.5F);
-  gunModel14.setRotationPoint(5.9F, -0.6F, -0.4F);
-  gunModel15 = new ModelRenderer(this, 7, 6);
-  gunModel15.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.5F, 0.4F, 0.15F);
-  gunModel15.setRotationPoint(3.3F, -3F, 0.65F);
-  gunModel16 = new ModelRenderer(this, 68, 0);
-  gunModel16.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1F, 1.2F, 0.9F);
-  gunModel16.setRotationPoint(8.6F, -3.2F, -0.6F);
-  gunModel17 = new ModelRenderer(this, 10, 6);
-  gunModel17.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 8.7F, 0.3F, 0.25F);
-  gunModel17.setRotationPoint(0.3F, -3.55F, -1.25F);
-  gunModel18 = new ModelRenderer(this, 29, 6);
-  gunModel18.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 8.7F, 0.3F, 0.25F);
-  gunModel18.setRotationPoint(0.3F, -3.55F, 0.7F);
-  gunModel19 = new ModelRenderer(this, 15, 0);
-  gunModel19.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.4F, 2.2F, 2.2F);
-  gunModel19.setRotationPoint(-0.15F, -4.5F, -1.25F);
-  slideModel0 = new ModelRenderer(this, 104, 0);
-  slideModel0.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 0.8F, 0.6F, 0.6F);
-  slideModel0.setRotationPoint(6.6F, -5.6F, -0.45F);
-  ammoModel0 = new ModelRenderer(this, 8, 0);
-  ammoModel0.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1.6F, 3.3F, 1.2F);
-  ammoModel0.setRotationPoint(4.15F, 0.9F, -0.75F);
-  ammoModel1 = new ModelRenderer(this, 81, 0);
-  ammoModel1.addShape(0F,0F,0F, new float[][]{{0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1.9F, 0.3F, 1.4F);
-  ammoModel1.setRotationPoint(4F, 4.2F, -0.85F);
+  textureWidth = 512;
+  textureHeight = 16;
+
+  // upperCore
+  gunModel0 = new BeardieModelRenderer(this, 1, 1);
+  gunModel0.addShape(0F,0F,0F, new float[][]{{6F, 0.1F, 0.2F}, {0F, 0.1F, 0.2F}, {6F, 0F, 0.2F}, {0F, 0F, 0.2F}, {6F, 0.1F, 0F}, {0F, 0.1F, 0F}, {6F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel0.setRotationPoint(2F, -4.3F, -0.75F);
+  gunModel0.setRotation(0F, 0F, 0F);
+
+  // topCover
+  gunModel1 = new BeardieModelRenderer(this, 9, 1);
+  gunModel1.addShape(0F,0F,0F, new float[][]{{6F, -0.85F, 0.2F}, {0F, -0.85F, 0.2F}, {6F, 0F, 0.1F}, {0F, 0F, 0.1F}, {6F, -0.85F, 0F}, {0F, -0.85F, 0F}, {6F, 0F, 0.1F}, {0F, 0F, 0.1F}}, 1, 1, 1);
+  gunModel1.setRotationPoint(2F, -4.45F, -0.75F);
+  gunModel1.setRotation(0F, 0F, 0F);
+
+  // rearCap
+  gunModel2 = new BeardieModelRenderer(this, 17, 1);
+  gunModel2.addShape(0F,0F,0F, new float[][]{{-0.85F, 0.65F, 0.14F}, {0F, 0.57F, 0.04F}, {-0.85F, 0F, 0.14F}, {0F, 0.1F, 0.04F}, {-0.85F, 0.65F, 0F}, {0F, 0.57F, 0.1F}, {-0.85F, 0F, 0F}, {0F, 0.1F, 0.1F}}, 1, 1, 1);
+  gunModel2.setRotationPoint(1.85F, -4.35F, -0.72F);
+  gunModel2.setRotation(0F, 0F, 0F);
+
+  // frontCap
+  gunModel3 = new BeardieModelRenderer(this, 25, 1);
+  gunModel3.addShape(0F,0F,0F, new float[][]{{-0.85F, 0.48F, 0.04F}, {0F, 0.6F, 0.14F}, {-0.85F, 0.12F, 0.04F}, {0F, 0F, 0.14F}, {-0.85F, 0.48F, 0.1F}, {0F, 0.6F, 0F}, {-0.85F, 0.12F, 0.1F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel3.setRotationPoint(9F, -4.35F, -0.72F);
+  gunModel3.setRotation(0F, 0F, 0F);
+
+  // lowerCore
+  gunModel4 = new BeardieModelRenderer(this, 33, 1);
+  gunModel4.addShape(0F,0F,0F, new float[][]{{5.8F, -0.4F, 0.04F}, {0F, -0.4F, 0.04F}, {5.8F, 0F, 0.1F}, {0F, 0F, 0.1F}, {5.8F, -0.4F, 0.06F}, {0F, -0.4F, 0.06F}, {5.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel4.setRotationPoint(2F, -3.2F, -0.7F);
+  gunModel4.setRotation(0F, 0F, 0F);
+
+  // seam
+  gunModel5 = new BeardieModelRenderer(this, 41, 1);
+  gunModel5.addShape(0F,0F,0F, new float[][]{{5.8F, -0.88F, -0.95F}, {0F, -0.88F, -0.95F}, {5.8F, 0F, -0.95F}, {0F, 0F, -0.95F}, {5.8F, -0.88F, 0F}, {0F, -0.88F, 0F}, {5.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel5.setRotationPoint(2.1F, -3.26F, 0.45F);
+  gunModel5.setRotation(0F, 0F, 0F);
+
+  // seamR
+  gunModel6 = new BeardieModelRenderer(this, 49, 1);
+  gunModel6.addShape(0F,0F,0F, new float[][]{{5.8F, -0.88F, -0.95F}, {0F, -0.88F, -0.95F}, {5.8F, 0F, -0.95F}, {0F, 0F, -0.95F}, {5.8F, -0.88F, 0F}, {0F, -0.88F, 0F}, {5.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel6.setRotationPoint(2.1F, -3.26F, -0.8F);
+  gunModel6.setRotation(0F, 0F, 0F);
+
+  // stampRect
+  gunModel7 = new BeardieModelRenderer(this, 57, 1);
+  gunModel7.addShape(0F,0F,0F, new float[][]{{0.24F, -0.36F, -0.96F}, {0.06F, -0.36F, -0.96F}, {0.24F, 0.06F, -0.96F}, {0.06F, 0.06F, -0.96F}, {0.3F, -0.3F, 0F}, {0F, -0.3F, 0F}, {0.3F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel7.setRotationPoint(4.4F, -4.25F, 0.45F);
+  gunModel7.setRotation(0F, 0F, 0F);
+
+  // stampLine
+  gunModel8 = new BeardieModelRenderer(this, 65, 1);
+  gunModel8.addShape(0F,0F,0F, new float[][]{{0.05F, -0.2F, -0.97F}, {0.9F, -0.2F, -0.97F}, {-0.85F, 0F, -0.97F}, {0F, 0F, -0.97F}, {0.05F, -0.2F, 0F}, {0.9F, -0.2F, 0F}, {-0.85F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel8.setRotationPoint(2.55F, -4.25F, 0.45F);
+  gunModel8.setRotation(0F, 0F, 0F);
+
+  // pin
+  gunModel9 = new BeardieModelRenderer(this, 73, 1);
+  gunModel9.addShape(0F,0F,0F, new float[][]{{-0.83F, -0.83F, -0.95F}, {0.05F, -0.83F, -0.95F}, {-0.83F, 0.05F, -0.95F}, {0.05F, 0.05F, -0.95F}, {-0.78F, -0.78F, 0F}, {0F, -0.78F, 0F}, {-0.78F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel9.setRotationPoint(8.4F, -3.05F, 0.45F);
+  gunModel9.setRotation(0F, 0F, 0F);
+
+  // pinR
+  gunModel10 = new BeardieModelRenderer(this, 81, 1);
+  gunModel10.addShape(0F,0F,0F, new float[][]{{-0.78F, -0.78F, -0.95F}, {0F, -0.78F, -0.95F}, {-0.78F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.83F, -0.83F, 0F}, {0.05F, -0.83F, 0F}, {-0.83F, 0.05F, 0F}, {0.05F, 0.05F, 0F}}, 1, 1, 1);
+  gunModel10.setRotationPoint(8.4F, -3.05F, -0.8F);
+  gunModel10.setRotation(0F, 0F, 0F);
+
+  // portTop
+  gunModel11 = new BeardieModelRenderer(this, 89, 1);
+  gunModel11.addShape(0F,0F,0F, new float[][]{{0.5F, -0.9F, -0.95F}, {0F, -0.9F, -0.95F}, {0.5F, 0F, -0.95F}, {0F, 0F, -0.95F}, {0.5F, -0.9F, 0F}, {0F, -0.9F, 0F}, {0.5F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel11.setRotationPoint(5.5F, -4.12F, -0.8F);
+  gunModel11.setRotation(0F, 0F, 0F);
+
+  // portBottom
+  gunModel12 = new BeardieModelRenderer(this, 97, 1);
+  gunModel12.addShape(0F,0F,0F, new float[][]{{0.5F, -0.9F, -0.95F}, {0F, -0.9F, -0.95F}, {0.5F, 0F, -0.95F}, {0F, 0F, -0.95F}, {0.5F, -0.9F, 0F}, {0F, -0.9F, 0F}, {0.5F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel12.setRotationPoint(5.5F, -3.62F, -0.8F);
+  gunModel12.setRotation(0F, 0F, 0F);
+
+  // portRear
+  gunModel13 = new BeardieModelRenderer(this, 105, 1);
+  gunModel13.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.6F, -0.95F}, {0F, -0.6F, -0.95F}, {-0.9F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.9F, -0.6F, 0F}, {0F, -0.6F, 0F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel13.setRotationPoint(5.5F, -4.02F, -0.8F);
+  gunModel13.setRotation(0F, 0F, 0F);
+
+  // portFront
+  gunModel14 = new BeardieModelRenderer(this, 113, 1);
+  gunModel14.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.6F, -0.95F}, {0F, -0.6F, -0.95F}, {-0.9F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.9F, -0.6F, 0F}, {0F, -0.6F, 0F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel14.setRotationPoint(6.9F, -4.02F, -0.8F);
+  gunModel14.setRotation(0F, 0F, 0F);
+
+  // portInside
+  gunModel15 = new BeardieModelRenderer(this, 121, 1);
+  gunModel15.addShape(0F,0F,0F, new float[][]{{0.3F, -0.6F, -0.98F}, {0F, -0.6F, -0.98F}, {0.3F, 0F, -0.98F}, {0F, 0F, -0.98F}, {0.3F, -0.6F, 0F}, {0F, -0.6F, 0F}, {0.3F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel15.setRotationPoint(5.6F, -4.02F, -0.77F);
+  gunModel15.setRotation(0F, 0F, 0F);
+
+  // slotLip
+  gunModel16 = new BeardieModelRenderer(this, 129, 1);
+  gunModel16.addShape(0F,0F,0F, new float[][]{{4.1F, -0.93F, -0.9F}, {0F, -0.93F, -0.9F}, {4.05F, 0F, -0.9F}, {0.05F, 0F, -0.9F}, {4.1F, -0.93F, 0F}, {0F, -0.93F, 0F}, {4.05F, 0F, 0F}, {0.05F, 0F, 0F}}, 1, 1, 1);
+  gunModel16.setRotationPoint(3.2F, -4.52F, -0.34F);
+  gunModel16.setRotation(0F, 0F, 0F);
+
+  // slotLipR
+  gunModel17 = new BeardieModelRenderer(this, 137, 1);
+  gunModel17.addShape(0F,0F,0F, new float[][]{{4.1F, -0.93F, -0.9F}, {0F, -0.93F, -0.9F}, {4.05F, 0F, -0.9F}, {0.05F, 0F, -0.9F}, {4.1F, -0.93F, 0F}, {0F, -0.93F, 0F}, {4.05F, 0F, 0F}, {0.05F, 0F, 0F}}, 1, 1, 1);
+  gunModel17.setRotationPoint(3.2F, -4.52F, -0.06F);
+  gunModel17.setRotation(0F, 0F, 0F);
+
+  // slotInsert
+  gunModel18 = new BeardieModelRenderer(this, 145, 1);
+  gunModel18.addShape(0F,0F,0F, new float[][]{{4.1F, -0.98F, -0.82F}, {0F, -0.98F, -0.82F}, {4.1F, 0F, -0.82F}, {0F, 0F, -0.82F}, {4.1F, -0.98F, 0F}, {0F, -0.98F, 0F}, {4.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel18.setRotationPoint(3.2F, -4.47F, -0.24F);
+  gunModel18.setRotation(0F, 0F, 0F);
+
+  // lugFront
+  gunModel19 = new BeardieModelRenderer(this, 153, 1);
+  gunModel19.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.45F, -0.66F}, {0F, -0.45F, -0.66F}, {-0.85F, 0F, -0.66F}, {0F, 0F, -0.66F}, {-0.85F, -0.45F, 0F}, {0F, -0.45F, 0F}, {-0.85F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel19.setRotationPoint(8.85F, -2.6F, -0.32F);
+  gunModel19.setRotation(0F, 0F, 0F);
+
+  // lugBottom
+  gunModel20 = new BeardieModelRenderer(this, 161, 1);
+  gunModel20.addShape(0F,0F,0F, new float[][]{{-0.3F, -0.88F, -0.66F}, {0.05F, -0.88F, -0.66F}, {-0.25F, 0F, -0.66F}, {0F, 0F, -0.66F}, {-0.3F, -0.88F, 0F}, {0.05F, -0.88F, 0F}, {-0.25F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel20.setRotationPoint(8.25F, -2.17F, -0.32F);
+  gunModel20.setRotation(0F, 0F, 0F);
+
+  // lugRear
+  gunModel21 = new BeardieModelRenderer(this, 169, 1);
+  gunModel21.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.55F, -0.66F}, {0F, -0.55F, -0.66F}, {-0.85F, 0F, -0.66F}, {0F, 0F, -0.66F}, {-0.85F, -0.55F, 0F}, {0F, -0.55F, 0F}, {-0.85F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel21.setRotationPoint(8.25F, -2.6F, -0.32F);
+  gunModel21.setRotation(0F, 0F, 0F);
+
+  // collarMid
+  gunModel22 = new BeardieModelRenderer(this, 177, 1);
+  gunModel22.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.6976F, -0.28F}, {0F, -0.6976F, -0.28F}, {-0.85F, 0F, -0.28F}, {0F, 0F, -0.28F}, {-0.85F, -0.6976F, 0F}, {0F, -0.6976F, 0F}, {-0.85F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel22.setRotationPoint(9.15F, -4.0512F, -0.51F);
+  gunModel22.setRotation(0F, 0F, 0F);
+
+  // collarTop
+  gunModel23 = new BeardieModelRenderer(this, 185, 1);
+  gunModel23.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.7912F, -0.28F}, {0F, -0.7912F, -0.28F}, {-0.85F, 0F, -0.4888F}, {0F, 0F, -0.4888F}, {-0.85F, -0.7912F, 0F}, {0F, -0.7912F, 0F}, {-0.85F, 0F, 0.2088F}, {0F, 0F, 0.2088F}}, 1, 1, 1);
+  gunModel23.setRotationPoint(9.15F, -4.26F, -0.51F);
+  gunModel23.setRotation(0F, 0F, 0F);
+
+  // collarBot
+  gunModel24 = new BeardieModelRenderer(this, 193, 1);
+  gunModel24.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.7912F, -0.4888F}, {0F, -0.7912F, -0.4888F}, {-0.85F, 0F, -0.28F}, {0F, 0F, -0.28F}, {-0.85F, -0.7912F, 0.2088F}, {0F, -0.7912F, 0.2088F}, {-0.85F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel24.setRotationPoint(9.15F, -3.7488F, -0.51F);
+  gunModel24.setRotation(0F, 0F, 0F);
+
+  // threadMid
+  gunModel25 = new BeardieModelRenderer(this, 201, 1);
+  gunModel25.addShape(0F,0F,0F, new float[][]{{-0.35F, -0.7648F, -0.44F}, {0F, -0.7648F, -0.44F}, {-0.35F, 0F, -0.44F}, {0F, 0F, -0.44F}, {-0.35F, -0.7648F, 0F}, {0F, -0.7648F, 0F}, {-0.35F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel25.setRotationPoint(9.3F, -4.0176F, -0.43F);
+  gunModel25.setRotation(0F, 0F, 0F);
+
+  // threadTop
+  gunModel26 = new BeardieModelRenderer(this, 209, 1);
+  gunModel26.addShape(0F,0F,0F, new float[][]{{-0.35F, -0.8376F, -0.44F}, {0F, -0.8376F, -0.44F}, {-0.35F, 0F, -0.6024F}, {0F, 0F, -0.6024F}, {-0.35F, -0.8376F, 0F}, {0F, -0.8376F, 0F}, {-0.35F, 0F, 0.1624F}, {0F, 0F, 0.1624F}}, 1, 1, 1);
+  gunModel26.setRotationPoint(9.3F, -4.18F, -0.43F);
+  gunModel26.setRotation(0F, 0F, 0F);
+
+  // threadBot
+  gunModel27 = new BeardieModelRenderer(this, 217, 1);
+  gunModel27.addShape(0F,0F,0F, new float[][]{{-0.35F, -0.8376F, -0.6024F}, {0F, -0.8376F, -0.6024F}, {-0.35F, 0F, -0.44F}, {0F, 0F, -0.44F}, {-0.35F, -0.8376F, 0.1624F}, {0F, -0.8376F, 0.1624F}, {-0.35F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel27.setRotationPoint(9.3F, -3.7824F, -0.43F);
+  gunModel27.setRotation(0F, 0F, 0F);
+
+  // ring1Mid
+  gunModel28 = new BeardieModelRenderer(this, 225, 1);
+  gunModel28.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.7312F, -0.36F}, {0F, -0.7312F, -0.36F}, {-0.9F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.9F, -0.7312F, 0F}, {0F, -0.7312F, 0F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel28.setRotationPoint(9.45F, -4.0344F, -0.47F);
+  gunModel28.setRotation(0F, 0F, 0F);
+
+  // ring1Top
+  gunModel29 = new BeardieModelRenderer(this, 233, 1);
+  gunModel29.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.8144F, -0.36F}, {0F, -0.8144F, -0.36F}, {-0.9F, 0F, -0.5456F}, {0F, 0F, -0.5456F}, {-0.9F, -0.8144F, 0F}, {0F, -0.8144F, 0F}, {-0.9F, 0F, 0.1856F}, {0F, 0F, 0.1856F}}, 1, 1, 1);
+  gunModel29.setRotationPoint(9.45F, -4.22F, -0.47F);
+  gunModel29.setRotation(0F, 0F, 0F);
+
+  // ring1Bot
+  gunModel30 = new BeardieModelRenderer(this, 241, 1);
+  gunModel30.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.8144F, -0.5456F}, {0F, -0.8144F, -0.5456F}, {-0.9F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.9F, -0.8144F, 0.1856F}, {0F, -0.8144F, 0.1856F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel30.setRotationPoint(9.45F, -3.7656F, -0.47F);
+  gunModel30.setRotation(0F, 0F, 0F);
+
+  // ring2Mid
+  gunModel31 = new BeardieModelRenderer(this, 249, 1);
+  gunModel31.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.7312F, -0.36F}, {0F, -0.7312F, -0.36F}, {-0.9F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.9F, -0.7312F, 0F}, {0F, -0.7312F, 0F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel31.setRotationPoint(9.7F, -4.0344F, -0.47F);
+  gunModel31.setRotation(0F, 0F, 0F);
+
+  // ring2Top
+  gunModel32 = new BeardieModelRenderer(this, 257, 1);
+  gunModel32.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.8144F, -0.36F}, {0F, -0.8144F, -0.36F}, {-0.9F, 0F, -0.5456F}, {0F, 0F, -0.5456F}, {-0.9F, -0.8144F, 0F}, {0F, -0.8144F, 0F}, {-0.9F, 0F, 0.1856F}, {0F, 0F, 0.1856F}}, 1, 1, 1);
+  gunModel32.setRotationPoint(9.7F, -4.22F, -0.47F);
+  gunModel32.setRotation(0F, 0F, 0F);
+
+  // ring2Bot
+  gunModel33 = new BeardieModelRenderer(this, 265, 1);
+  gunModel33.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.8144F, -0.5456F}, {0F, -0.8144F, -0.5456F}, {-0.9F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.9F, -0.8144F, 0.1856F}, {0F, -0.8144F, 0.1856F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel33.setRotationPoint(9.7F, -3.7656F, -0.47F);
+  gunModel33.setRotation(0F, 0F, 0F);
+
+  // barrelMid
+  gunModel34 = new BeardieModelRenderer(this, 273, 1);
+  gunModel34.addShape(0F,0F,0F, new float[][]{{-0.45F, -0.8236F, -0.58F}, {0F, -0.8236F, -0.58F}, {-0.45F, 0F, -0.58F}, {0F, 0F, -0.58F}, {-0.45F, -0.8236F, 0F}, {0F, -0.8236F, 0F}, {-0.45F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel34.setRotationPoint(9.95F, -3.9882F, -0.36F);
+  gunModel34.setRotation(0F, 0F, 0F);
+
+  // barrelTop
+  gunModel35 = new BeardieModelRenderer(this, 281, 1);
+  gunModel35.addShape(0F,0F,0F, new float[][]{{-0.45F, -0.8782F, -0.58F}, {0F, -0.8782F, -0.58F}, {-0.45F, 0F, -0.7018F}, {0F, 0F, -0.7018F}, {-0.45F, -0.8782F, 0F}, {0F, -0.8782F, 0F}, {-0.45F, 0F, 0.1218F}, {0F, 0F, 0.1218F}}, 1, 1, 1);
+  gunModel35.setRotationPoint(9.95F, -4.11F, -0.36F);
+  gunModel35.setRotation(0F, 0F, 0F);
+
+  // barrelBot
+  gunModel36 = new BeardieModelRenderer(this, 289, 1);
+  gunModel36.addShape(0F,0F,0F, new float[][]{{-0.45F, -0.8782F, -0.7018F}, {0F, -0.8782F, -0.7018F}, {-0.45F, 0F, -0.58F}, {0F, 0F, -0.58F}, {-0.45F, -0.8782F, 0.1218F}, {0F, -0.8782F, 0.1218F}, {-0.45F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel36.setRotationPoint(9.95F, -3.8118F, -0.36F);
+  gunModel36.setRotation(0F, 0F, 0F);
+
+  // fsBase
+  gunModel37 = new BeardieModelRenderer(this, 297, 1);
+  gunModel37.addShape(0F,0F,0F, new float[][]{{-0.45F, -0.85F, -0.4F}, {0F, -0.85F, -0.4F}, {-0.55F, 0F, -0.4F}, {0.1F, 0F, -0.4F}, {-0.45F, -0.85F, 0F}, {0F, -0.85F, 0F}, {-0.55F, 0F, 0F}, {0.1F, 0F, 0F}}, 1, 1, 1);
+  gunModel37.setRotationPoint(8.3F, -4.6F, -0.45F);
+  gunModel37.setRotation(0F, 0F, 0F);
+
+  // fsPost
+  gunModel38 = new BeardieModelRenderer(this, 305, 1);
+  gunModel38.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.65F, -0.86F}, {0F, -0.65F, -0.86F}, {-0.9F, 0F, -0.88F}, {0.02F, 0F, -0.88F}, {-0.88F, -0.65F, 0F}, {0F, -0.65F, 0F}, {-0.9F, 0F, 0.02F}, {0.02F, 0F, 0.02F}}, 1, 1, 1);
+  gunModel38.setRotationPoint(8.52F, -4.95F, -0.22F);
+  gunModel38.setRotation(0F, 0F, 0F);
+
+  // fsEar
+  gunModel39 = new BeardieModelRenderer(this, 313, 1);
+  gunModel39.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.63F, -0.9F}, {0F, -0.63F, -0.9F}, {-0.72F, 0F, -0.9F}, {0.12F, 0F, -0.9F}, {-0.6F, -0.63F, 0F}, {0F, -0.63F, 0F}, {-0.72F, 0F, 0F}, {0.12F, 0F, 0F}}, 1, 1, 1);
+  gunModel39.setRotationPoint(8.38F, -4.97F, 0.04F);
+  gunModel39.setRotation(0F, 0F, 0F);
+
+  // fsEarR
+  gunModel40 = new BeardieModelRenderer(this, 321, 1);
+  gunModel40.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.63F, -0.9F}, {0F, -0.63F, -0.9F}, {-0.72F, 0F, -0.9F}, {0.12F, 0F, -0.9F}, {-0.6F, -0.63F, 0F}, {0F, -0.63F, 0F}, {-0.72F, 0F, 0F}, {0.12F, 0F, 0F}}, 1, 1, 1);
+  gunModel40.setRotationPoint(8.38F, -4.97F, -0.44F);
+  gunModel40.setRotation(0F, 0F, 0F);
+
+  // fsBrace
+  gunModel41 = new BeardieModelRenderer(this, 329, 1);
+  gunModel41.addShape(0F,0F,0F, new float[][]{{-0.68F, -0.88F, -0.88F}, {0F, -0.88F, -0.88F}, {-0.68F, 0F, -0.98F}, {0F, 0F, -0.98F}, {-0.68F, -0.88F, 0F}, {0F, -0.88F, 0F}, {-0.68F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel41.setRotationPoint(8.42F, -4.72F, 0.14F);
+  gunModel41.setRotation(0F, 0F, 0F);
+
+  // fsBraceR
+  gunModel42 = new BeardieModelRenderer(this, 337, 1);
+  gunModel42.addShape(0F,0F,0F, new float[][]{{-0.68F, -0.88F, -0.88F}, {0F, -0.88F, -0.88F}, {-0.68F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.68F, -0.88F, 0F}, {0F, -0.88F, 0F}, {-0.68F, 0F, 0.1F}, {0F, 0F, 0.1F}}, 1, 1, 1);
+  gunModel42.setRotationPoint(8.42F, -4.72F, -0.56F);
+  gunModel42.setRotation(0F, 0F, 0F);
+
+  // rsBase
+  gunModel43 = new BeardieModelRenderer(this, 345, 1);
+  gunModel43.addShape(0F,0F,0F, new float[][]{{-0.25F, -0.85F, -0.2F}, {0F, -0.85F, -0.2F}, {-0.33F, 0F, -0.25F}, {0.08F, 0F, -0.25F}, {-0.25F, -0.85F, 0F}, {0F, -0.85F, 0F}, {-0.33F, 0F, 0.05F}, {0.08F, 0F, 0.05F}}, 1, 1, 1);
+  gunModel43.setRotationPoint(2.1F, -4.6F, -0.55F);
+  gunModel43.setRotation(0F, 0F, 0F);
+
+  // rsRingTop
+  gunModel44 = new BeardieModelRenderer(this, 353, 1);
+  gunModel44.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.91F, -0.76F}, {0F, -0.91F, -0.76F}, {-0.88F, 0F, -0.81F}, {0F, 0F, -0.81F}, {-0.88F, -0.91F, 0F}, {0F, -0.91F, 0F}, {-0.88F, 0F, 0.05F}, {0F, 0F, 0.05F}}, 1, 1, 1);
+  gunModel44.setRotationPoint(2.4F, -4.97F, -0.27F);
+  gunModel44.setRotation(0F, 0F, 0F);
+
+  // rsRingBottom
+  gunModel45 = new BeardieModelRenderer(this, 361, 1);
+  gunModel45.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.92F, -0.81F}, {0F, -0.92F, -0.81F}, {-0.88F, 0F, -0.76F}, {0F, 0F, -0.76F}, {-0.88F, -0.92F, 0.05F}, {0F, -0.92F, 0.05F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel45.setRotationPoint(2.4F, -4.68F, -0.27F);
+  gunModel45.setRotation(0F, 0F, 0F);
+
+  // rsRingSide
+  gunModel46 = new BeardieModelRenderer(this, 369, 1);
+  gunModel46.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.8F, -0.92F}, {0F, -0.8F, -0.92F}, {-0.88F, 0F, -0.92F}, {0F, 0F, -0.92F}, {-0.88F, -0.8F, 0F}, {0F, -0.8F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel46.setRotationPoint(2.4F, -4.88F, -0.07F);
+  gunModel46.setRotation(0F, 0F, 0F);
+
+  // rsRingSideR
+  gunModel47 = new BeardieModelRenderer(this, 377, 1);
+  gunModel47.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.8F, -0.92F}, {0F, -0.8F, -0.92F}, {-0.88F, 0F, -0.92F}, {0F, 0F, -0.92F}, {-0.88F, -0.8F, 0F}, {0F, -0.8F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel47.setRotationPoint(2.4F, -4.88F, -0.31F);
+  gunModel47.setRotation(0F, 0F, 0F);
+
+  // rsEar
+  gunModel48 = new BeardieModelRenderer(this, 385, 1);
+  gunModel48.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.6F, -0.88F}, {0F, -0.6F, -0.88F}, {-0.54F, 0F, -0.88F}, {0.14F, 0F, -0.88F}, {-0.4F, -0.6F, 0F}, {0F, -0.6F, 0F}, {-0.54F, 0F, 0F}, {0.14F, 0F, 0F}}, 1, 1, 1);
+  gunModel48.setRotationPoint(2.15F, -5F, 0.12F);
+  gunModel48.setRotation(0F, 0F, 0F);
+
+  // rsEarR
+  gunModel49 = new BeardieModelRenderer(this, 393, 1);
+  gunModel49.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.6F, -0.88F}, {0F, -0.6F, -0.88F}, {-0.54F, 0F, -0.88F}, {0.14F, 0F, -0.88F}, {-0.4F, -0.6F, 0F}, {0F, -0.6F, 0F}, {-0.54F, 0F, 0F}, {0.14F, 0F, 0F}}, 1, 1, 1);
+  gunModel49.setRotationPoint(2.15F, -5F, -0.54F);
+  gunModel49.setRotation(0F, 0F, 0F);
+
+  // rsBrace
+  gunModel50 = new BeardieModelRenderer(this, 401, 1);
+  gunModel50.addShape(0F,0F,0F, new float[][]{{-0.5F, -0.85F, -0.88F}, {0F, -0.85F, -0.88F}, {-0.5F, 0F, -0.98F}, {0F, 0F, -0.98F}, {-0.5F, -0.85F, 0F}, {0F, -0.85F, 0F}, {-0.5F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel50.setRotationPoint(2.2F, -4.75F, 0.24F);
+  gunModel50.setRotation(0F, 0F, 0F);
+
+  // rsBraceR
+  gunModel51 = new BeardieModelRenderer(this, 409, 1);
+  gunModel51.addShape(0F,0F,0F, new float[][]{{-0.5F, -0.85F, -0.88F}, {0F, -0.85F, -0.88F}, {-0.5F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.5F, -0.85F, 0F}, {0F, -0.85F, 0F}, {-0.5F, 0F, 0.1F}, {0F, 0F, 0.1F}}, 1, 1, 1);
+  gunModel51.setRotationPoint(2.2F, -4.75F, -0.66F);
+  gunModel51.setRotation(0F, 0F, 0F);
+
+  // rsScrew
+  gunModel52 = new BeardieModelRenderer(this, 417, 1);
+  gunModel52.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.9F, -0.96F}, {0F, -0.9F, -0.96F}, {-0.9F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.9F, -0.9F, 0F}, {0F, -0.9F, 0F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel52.setRotationPoint(2.42F, -4.5F, 0.25F);
+  gunModel52.setRotation(0F, 0F, 0F);
+
+  // rsScrewR
+  gunModel53 = new BeardieModelRenderer(this, 425, 1);
+  gunModel53.addShape(0F,0F,0F, new float[][]{{-0.9F, -0.9F, -0.96F}, {0F, -0.9F, -0.96F}, {-0.9F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.9F, -0.9F, 0F}, {0F, -0.9F, 0F}, {-0.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel53.setRotationPoint(2.42F, -4.5F, -0.59F);
+  gunModel53.setRotation(0F, 0F, 0F);
+
+  // knob
+  slideModel0 = new BeardieModelRenderer(this, 433, 1);
+  slideModel0.addShape(0F,0F,0F, new float[][]{{-0.65F, -0.55F, -0.87F}, {0F, -0.55F, -0.87F}, {-0.71F, 0F, -0.87F}, {0.06F, 0F, -0.87F}, {-0.65F, -0.55F, 0F}, {0F, -0.55F, 0F}, {-0.71F, 0F, 0.03F}, {0.06F, 0F, 0.03F}}, 1, 1, 1);
+  slideModel0.setRotationPoint(7.2F, -4.92F, -0.34F);
+  slideModel0.setRotation(0F, 0F, 0F);
+
+  // knobR
+  slideModel1 = new BeardieModelRenderer(this, 441, 1);
+  slideModel1.addShape(0F,0F,0F, new float[][]{{-0.65F, -0.55F, -0.87F}, {0F, -0.55F, -0.87F}, {-0.71F, 0F, -0.9F}, {0.06F, 0F, -0.9F}, {-0.65F, -0.55F, 0F}, {0F, -0.55F, 0F}, {-0.71F, 0F, 0F}, {0.06F, 0F, 0F}}, 1, 1, 1);
+  slideModel1.setRotationPoint(7.2F, -4.92F, -0.09F);
+  slideModel1.setRotation(0F, 0F, 0F);
+
+  // knobStem
+  slideModel2 = new BeardieModelRenderer(this, 449, 1);
+  slideModel2.addShape(0F,0F,0F, new float[][]{{-0.75F, -0.92F, -0.88F}, {0F, -0.92F, -0.88F}, {-0.75F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.75F, -0.92F, 0F}, {0F, -0.92F, 0F}, {-0.75F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  slideModel2.setRotationPoint(7.25F, -4.52F, -0.21F);
+  slideModel2.setRotation(0F, 0F, 0F);
+
+  // bolt
+  slideModel3 = new BeardieModelRenderer(this, 457, 1);
+  slideModel3.addShape(0F,0F,0F, new float[][]{{-0.5F, -0.68F, -0.97F}, {0F, -0.68F, -0.97F}, {-0.5F, 0F, -0.97F}, {0F, 0F, -0.97F}, {-0.5F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.5F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  slideModel3.setRotationPoint(6F, -3.98F, -0.79F);
+  slideModel3.setRotation(0F, 0F, 0F);
+
+  // housing0
+  gunModel54 = new BeardieModelRenderer(this, 465, 1);
+  gunModel54.addShape(0F,0F,0F, new float[][]{{0.2F, 0.05F, -0.14F}, {0F, 0.05F, -0.06F}, {0.2F, 0F, -0.14F}, {0F, 0F, -0.06F}, {0.2F, 0.05F, 0.08F}, {0F, 0.05F, 0F}, {0.2F, 0F, 0.08F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel54.setRotationPoint(4.35F, -2.6F, -0.62F);
+  gunModel54.setRotation(0F, 0F, 0F);
+
+  // grip0
+  gunModel55 = new BeardieModelRenderer(this, 473, 1);
+  gunModel55.addShape(0F,0F,0F, new float[][]{{-0.49F, 0.05F, -0.1F}, {0F, 0.05F, -0.22F}, {-0.49F, 0F, -0.1F}, {0.15F, 0F, -0.22F}, {-0.49F, 0.05F, 0F}, {0F, 0.05F, 0.12F}, {-0.49F, 0F, 0F}, {0.15F, 0F, 0.12F}}, 1, 1, 1);
+  gunModel55.setRotationPoint(3.85F, -2.6F, -0.6F);
+  gunModel55.setRotation(0F, 0F, 0F);
+
+  // housing1
+  gunModel56 = new BeardieModelRenderer(this, 481, 1);
+  gunModel56.addShape(0F,0F,0F, new float[][]{{0.2F, 0.05F, -0.14F}, {0F, 0.05F, -0.06F}, {0.2F, 0F, -0.14F}, {0F, 0F, -0.06F}, {0.2F, 0.05F, 0.08F}, {0F, 0.05F, 0F}, {0.2F, 0F, 0.08F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel56.setRotationPoint(4.35F, -1.55F, -0.62F);
+  gunModel56.setRotation(0F, 0F, 0F);
+
+  // grip1
+  gunModel57 = new BeardieModelRenderer(this, 489, 1);
+  gunModel57.addShape(0F,0F,0F, new float[][]{{-0.34F, 0.05F, -0.1F}, {0F, 0.05F, -0.22F}, {-0.34F, 0F, -0.1F}, {0.15F, 0F, -0.22F}, {-0.34F, 0.05F, 0F}, {0F, 0.05F, 0.12F}, {-0.34F, 0F, 0F}, {0.15F, 0F, 0.12F}}, 1, 1, 1);
+  gunModel57.setRotationPoint(3.7F, -1.55F, -0.6F);
+  gunModel57.setRotation(0F, 0F, 0F);
+
+  // housing2
+  gunModel58 = new BeardieModelRenderer(this, 497, 1);
+  gunModel58.addShape(0F,0F,0F, new float[][]{{0.2F, -0.3F, -0.14F}, {0F, -0.3F, -0.06F}, {0.2F, 0F, -0.14F}, {0F, 0F, -0.06F}, {0.2F, -0.3F, 0.08F}, {0F, -0.3F, 0F}, {0.2F, 0F, 0.08F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel58.setRotationPoint(4.35F, -0.5F, -0.62F);
+  gunModel58.setRotation(0F, 0F, 0F);
+
+  // grip2
+  gunModel59 = new BeardieModelRenderer(this, 505, 1);
+  gunModel59.addShape(0F,0F,0F, new float[][]{{-0.24F, -0.3F, -0.1F}, {0F, -0.3F, -0.22F}, {-0.24F, 0F, -0.1F}, {0.1F, 0F, -0.22F}, {-0.24F, -0.3F, 0F}, {0F, -0.3F, 0.12F}, {-0.24F, 0F, 0F}, {0.1F, 0F, 0.12F}}, 1, 1, 1);
+  gunModel59.setRotationPoint(3.6F, -0.5F, -0.6F);
+  gunModel59.setRotation(0F, 0F, 0F);
+
+  // gripPanel
+  gunModel60 = new BeardieModelRenderer(this, 1, 9);
+  gunModel60.addShape(0F,0F,0F, new float[][]{{-0.4586F, 1.22F, -0.96F}, {0.05F, 1.22F, -0.96F}, {-0.4586F, 0.08F, -0.96F}, {0.3786F, 0.08F, -0.96F}, {-0.4086F, 1.3F, 0F}, {0F, 1.3F, 0F}, {-0.4086F, 0F, 0F}, {0.3286F, 0F, 0F}}, 1, 1, 1);
+  gunModel60.setRotationPoint(3.7086F, -2.3F, 0.3F);
+  gunModel60.setRotation(0F, 0F, 0F);
+
+  // gripPanelR
+  gunModel61 = new BeardieModelRenderer(this, 9, 9);
+  gunModel61.addShape(0F,0F,0F, new float[][]{{-0.4086F, 1.3F, -0.96F}, {0F, 1.3F, -0.96F}, {-0.4086F, 0F, -0.96F}, {0.3286F, 0F, -0.96F}, {-0.4586F, 1.22F, 0F}, {0.05F, 1.22F, 0F}, {-0.4586F, 0.08F, 0F}, {0.3786F, 0.08F, 0F}}, 1, 1, 1);
+  gunModel61.setRotationPoint(3.7086F, -2.3F, -0.64F);
+  gunModel61.setRotation(0F, 0F, 0F);
+
+  // housingRib
+  gunModel62 = new BeardieModelRenderer(this, 17, 9);
+  gunModel62.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.9F, -0.96F}, {0F, -0.9F, -0.96F}, {-0.1F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.1F, -0.9F, 0F}, {0F, -0.9F, 0F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel62.setRotationPoint(4.5F, -2.4F, 0.32F);
+  gunModel62.setRotation(0F, 0F, 0F);
+
+  // housingRibR
+  gunModel63 = new BeardieModelRenderer(this, 25, 9);
+  gunModel63.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.9F, -0.96F}, {0F, -0.9F, -0.96F}, {-0.1F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.1F, -0.9F, 0F}, {0F, -0.9F, 0F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel63.setRotationPoint(4.5F, -2.4F, -0.66F);
+  gunModel63.setRotation(0F, 0F, 0F);
+
+  // housingRib2
+  gunModel64 = new BeardieModelRenderer(this, 33, 9);
+  gunModel64.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.9F, -0.96F}, {0F, -0.9F, -0.96F}, {-0.1F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.1F, -0.9F, 0F}, {0F, -0.9F, 0F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel64.setRotationPoint(4.5F, 0F, 0.32F);
+  gunModel64.setRotation(0F, 0F, 0F);
+
+  // housingRib2R
+  gunModel65 = new BeardieModelRenderer(this, 41, 9);
+  gunModel65.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.9F, -0.96F}, {0F, -0.9F, -0.96F}, {-0.1F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.1F, -0.9F, 0F}, {0F, -0.9F, 0F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel65.setRotationPoint(4.5F, 0F, -0.66F);
+  gunModel65.setRotation(0F, 0F, 0F);
+
+  // magRelease
+  gunModel66 = new BeardieModelRenderer(this, 49, 9);
+  gunModel66.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.72F, -0.6F}, {0F, -0.77F, -0.6F}, {-0.88F, 0F, -0.6F}, {0F, 0.05F, -0.6F}, {-0.88F, -0.72F, 0F}, {0F, -0.77F, 0F}, {-0.88F, 0F, 0F}, {0F, 0.05F, 0F}}, 1, 1, 1);
+  gunModel66.setRotationPoint(4.25F, 0.1F, -0.35F);
+  gunModel66.setRotation(0F, 0F, 0F);
+
+  // gripLip
+  gunModel67 = new BeardieModelRenderer(this, 57, 9);
+  gunModel67.addShape(0F,0F,0F, new float[][]{{0.25F, -0.88F, -0.03F}, {0.05F, -0.88F, -0.03F}, {0.3F, 0F, 0.02F}, {0F, 0F, 0.02F}, {0.25F, -0.88F, 0.05F}, {0.05F, -0.88F, 0.05F}, {0.3F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel67.setRotationPoint(4.3F, 0.15F, -0.66F);
+  gunModel67.setRotation(0F, 0F, 0F);
+
+  // trigger
+  gunModel68 = new BeardieModelRenderer(this, 65, 9);
+  gunModel68.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.6F, -0.86F}, {0F, -0.6F, -0.86F}, {-0.85F, 0F, -0.86F}, {0F, 0F, -0.86F}, {-0.85F, -0.6F, 0F}, {0F, -0.6F, 0F}, {-0.85F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel68.setRotationPoint(5.8F, -2.6F, -0.22F);
+  gunModel68.setRotation(0F, 0F, 0F);
+
+  // triggerTip
+  gunModel69 = new BeardieModelRenderer(this, 73, 9);
+  gunModel69.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.7F, -0.86F}, {0F, -0.7F, -0.86F}, {-0.83F, 0F, -0.86F}, {0.02F, 0F, -0.86F}, {-0.88F, -0.7F, 0F}, {0F, -0.7F, 0F}, {-0.83F, 0F, 0F}, {0.02F, 0F, 0F}}, 1, 1, 1);
+  gunModel69.setRotationPoint(5.73F, -2.2F, -0.22F);
+  gunModel69.setRotation(0F, 0F, 0F);
+
+  // guardFront
+  gunModel70 = new BeardieModelRenderer(this, 81, 9);
+  gunModel70.addShape(0F,0F,0F, new float[][]{{-0.85F, -0.02F, -0.78F}, {0F, -0.02F, -0.78F}, {-0.73F, 0F, -0.78F}, {0.12F, 0F, -0.78F}, {-0.85F, -0.02F, 0F}, {0F, -0.02F, 0F}, {-0.73F, 0F, 0F}, {0.12F, 0F, 0F}}, 1, 1, 1);
+  gunModel70.setRotationPoint(6.78F, -2.6F, -0.26F);
+  gunModel70.setRotation(0F, 0F, 0F);
+
+  // guardBottom
+  gunModel71 = new BeardieModelRenderer(this, 89, 9);
+  gunModel71.addShape(0F,0F,0F, new float[][]{{0.38F, -0.88F, -0.78F}, {0F, -0.88F, -0.78F}, {0.38F, 0F, -0.78F}, {0F, 0F, -0.78F}, {0.38F, -0.88F, 0F}, {0F, -0.88F, 0F}, {0.38F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel71.setRotationPoint(5.55F, -1.62F, -0.26F);
+  gunModel71.setRotation(0F, 0F, 0F);
+
+  // guardCorner
+  gunModel72 = new BeardieModelRenderer(this, 97, 9);
+  gunModel72.addShape(0F,0F,0F, new float[][]{{-0.77F, -0.87F, -0.78F}, {0F, -0.87F, -0.78F}, {-0.77F, 0F, -0.78F}, {0.2F, 0F, -0.78F}, {-0.77F, -0.87F, 0F}, {0F, -0.87F, 0F}, {-0.77F, 0F, 0F}, {0.2F, 0F, 0F}}, 1, 1, 1);
+  gunModel72.setRotationPoint(6.7F, -1.75F, -0.26F);
+  gunModel72.setRotation(0F, 0F, 0F);
+
+  // safety
+  gunModel73 = new BeardieModelRenderer(this, 105, 9);
+  gunModel73.addShape(0F,0F,0F, new float[][]{{-0.84F, -0.87F, -0.7F}, {0.04F, -0.87F, -0.7F}, {-0.8F, 0F, -0.7F}, {0F, 0F, -0.7F}, {-0.84F, -0.87F, 0F}, {0.04F, -0.87F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel73.setRotationPoint(6.45F, -2.6F, -0.3F);
+  gunModel73.setRotation(0F, 0F, 0F);
+
+  // magBody
+  ammoModel0 = new BeardieModelRenderer(this, 113, 9);
+  ammoModel0.addShape(0F,0F,0F, new float[][]{{0F, 1.63F, -0.3F}, {0F, 1.63F, -0.3F}, {0F, 0F, -0.3F}, {0F, 0F, -0.3F}, {0F, 1.63F, 0F}, {0F, 1.63F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  ammoModel0.setRotationPoint(4.45F, 0.27F, -0.5F);
+  ammoModel0.setRotation(0F, 0F, 0F);
+
+  // magBase
+  ammoModel1 = new BeardieModelRenderer(this, 121, 9);
+  ammoModel1.addShape(0F,0F,0F, new float[][]{{0.15F, -0.85F, -0.23F}, {0.05F, -0.85F, -0.23F}, {0.2F, 0F, -0.18F}, {0F, 0F, -0.18F}, {0.15F, -0.85F, 0.05F}, {0.05F, -0.85F, 0.05F}, {0.2F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  ammoModel1.setRotationPoint(4.35F, 2.9F, -0.56F);
+  ammoModel1.setRotation(0F, 0F, 0F);
+
+  // magRib
+  ammoModel2 = new BeardieModelRenderer(this, 129, 9);
+  ammoModel2.addShape(0F,0F,0F, new float[][]{{-0.4F, 1.2F, -0.96F}, {0F, 1.2F, -0.96F}, {-0.4F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.4F, 1.2F, 0F}, {0F, 1.2F, 0F}, {-0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  ammoModel2.setRotationPoint(4.65F, 0.5F, 0.2F);
+  ammoModel2.setRotation(0F, 0F, 0F);
+
+  // magRibR
+  ammoModel3 = new BeardieModelRenderer(this, 137, 9);
+  ammoModel3.addShape(0F,0F,0F, new float[][]{{-0.4F, 1.2F, -0.96F}, {0F, 1.2F, -0.96F}, {-0.4F, 0F, -0.96F}, {0F, 0F, -0.96F}, {-0.4F, 1.2F, 0F}, {0F, 1.2F, 0F}, {-0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  ammoModel3.setRotationPoint(4.65F, 0.5F, -0.54F);
+  ammoModel3.setRotation(0F, 0F, 0F);
+
+  // magFront
+  ammoModel4 = new BeardieModelRenderer(this, 145, 9);
+  ammoModel4.addShape(0F,0F,0F, new float[][]{{-0.96F, 1.35F, -0.46F}, {0F, 1.35F, -0.46F}, {-0.96F, 0F, -0.46F}, {0F, 0F, -0.46F}, {-0.96F, 1.35F, 0F}, {0F, 1.35F, 0F}, {-0.96F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  ammoModel4.setRotationPoint(5.45F, 0.45F, -0.42F);
+  ammoModel4.setRotation(0F, 0F, 0F);
+
+  // rod
+  gunModel74 = new BeardieModelRenderer(this, 153, 9);
+  gunModel74.addShape(0F,0F,0F, new float[][]{{5.9F, -0.82F, -0.86F}, {0F, -0.82F, -0.86F}, {5.9F, 0F, -0.86F}, {0F, 0F, -0.86F}, {5.9F, -0.82F, 0F}, {0F, -0.82F, 0F}, {5.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel74.setRotationPoint(1.6F, -2.95F, 0.42F);
+  gunModel74.setRotation(0F, 0F, 0F);
+
+  // rodR
+  gunModel75 = new BeardieModelRenderer(this, 161, 9);
+  gunModel75.addShape(0F,0F,0F, new float[][]{{5.9F, -0.82F, -0.86F}, {0F, -0.82F, -0.86F}, {5.9F, 0F, -0.86F}, {0F, 0F, -0.86F}, {5.9F, -0.82F, 0F}, {0F, -0.82F, 0F}, {5.9F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel75.setRotationPoint(1.6F, -2.95F, -0.86F);
+  gunModel75.setRotation(0F, 0F, 0F);
+
+  // rodCap
+  gunModel76 = new BeardieModelRenderer(this, 169, 9);
+  gunModel76.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.77F, -0.79F}, {0F, -0.72F, -0.79F}, {-0.8F, 0.05F, -0.79F}, {0F, 0F, -0.79F}, {-0.8F, -0.77F, 0F}, {0F, -0.72F, 0F}, {-0.8F, 0.05F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel76.setRotationPoint(8.5F, -3F, 0.39F);
+  gunModel76.setRotation(0F, 0F, 0F);
+
+  // rodCapR
+  gunModel77 = new BeardieModelRenderer(this, 177, 9);
+  gunModel77.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.77F, -0.79F}, {0F, -0.72F, -0.79F}, {-0.8F, 0.05F, -0.79F}, {0F, 0F, -0.79F}, {-0.8F, -0.77F, 0F}, {0F, -0.72F, 0F}, {-0.8F, 0.05F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel77.setRotationPoint(8.5F, -3F, -0.9F);
+  gunModel77.setRotation(0F, 0F, 0F);
+
+  // rodGuide
+  gunModel78 = new BeardieModelRenderer(this, 185, 9);
+  gunModel78.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.62F, -0.8F}, {0F, -0.68F, -0.8F}, {-0.6F, 0F, -0.8F}, {0F, 0.06F, -0.8F}, {-0.6F, -0.62F, 0F}, {0F, -0.68F, 0F}, {-0.6F, 0F, 0F}, {0F, 0.06F, 0F}}, 1, 1, 1);
+  gunModel78.setRotationPoint(2F, -3.05F, 0.4F);
+  gunModel78.setRotation(0F, 0F, 0F);
+
+  // rodGuideR
+  gunModel79 = new BeardieModelRenderer(this, 193, 9);
+  gunModel79.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.62F, -0.8F}, {0F, -0.68F, -0.8F}, {-0.6F, 0F, -0.8F}, {0F, 0.06F, -0.8F}, {-0.6F, -0.62F, 0F}, {0F, -0.68F, 0F}, {-0.6F, 0F, 0F}, {0F, 0.06F, 0F}}, 1, 1, 1);
+  gunModel79.setRotationPoint(2F, -3.05F, -0.9F);
+  gunModel79.setRotation(0F, 0F, 0F);
+
+  // buttTop
+  gunModel80 = new BeardieModelRenderer(this, 201, 9);
+  gunModel80.addShape(0F,0F,0F, new float[][]{{-0.45F, -0.8F, 0.4F}, {0F, -0.8F, 0.4F}, {-0.45F, 0F, 0.4F}, {0F, 0.05F, 0.4F}, {-0.45F, -0.8F, 0F}, {0F, -0.8F, 0F}, {-0.45F, 0F, 0F}, {0F, 0.05F, 0F}}, 1, 1, 1);
+  gunModel80.setRotationPoint(1.2F, -3.3F, -0.85F);
+  gunModel80.setRotation(0F, 0F, 0F);
+
+  // buttUp
+  gunModel81 = new BeardieModelRenderer(this, 209, 9);
+  gunModel81.addShape(0F,0F,0F, new float[][]{{-0.75F, 0.05F, -0.82F}, {0F, 0.05F, -0.82F}, {-0.75F, 0F, -0.82F}, {0F, 0F, -0.82F}, {-0.75F, 0.05F, 0F}, {0F, 0.05F, 0F}, {-0.75F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel81.setRotationPoint(1.2F, -3.1F, 0.37F);
+  gunModel81.setRotation(0F, 0F, 0F);
+
+  // buttUpR
+  gunModel82 = new BeardieModelRenderer(this, 217, 9);
+  gunModel82.addShape(0F,0F,0F, new float[][]{{-0.75F, 0.05F, -0.82F}, {0F, 0.05F, -0.82F}, {-0.75F, 0F, -0.82F}, {0F, 0F, -0.82F}, {-0.75F, 0.05F, 0F}, {0F, 0.05F, 0F}, {-0.75F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel82.setRotationPoint(1.2F, -3.1F, -0.85F);
+  gunModel82.setRotation(0F, 0F, 0F);
+
+  // buttPad
+  gunModel83 = new BeardieModelRenderer(this, 225, 9);
+  gunModel83.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.8F, 0.4F}, {0F, -0.86F, 0.32F}, {-0.4F, 0F, 0.4F}, {0F, 0F, 0.32F}, {-0.4F, -0.8F, 0F}, {0F, -0.86F, 0.08F}, {-0.4F, 0F, 0F}, {0F, 0F, 0.08F}}, 1, 1, 1);
+  gunModel83.setRotationPoint(1.15F, -2.05F, -0.85F);
+  gunModel83.setRotation(0F, 0F, 0F);
+
+  // hinge
+  gunModel84 = new BeardieModelRenderer(this, 233, 9);
+  gunModel84.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.75F, -0.9F}, {0F, -0.75F, -0.9F}, {-0.8F, 0F, -0.9F}, {0F, 0F, -0.9F}, {-0.8F, -0.75F, 0F}, {0F, -0.75F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel84.setRotationPoint(1.75F, -3.3F, 0.5F);
+  gunModel84.setRotation(0F, 0F, 0F);
+
+  // hingeR
+  gunModel85 = new BeardieModelRenderer(this, 241, 9);
+  gunModel85.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.75F, -0.9F}, {0F, -0.75F, -0.9F}, {-0.8F, 0F, -0.9F}, {0F, 0F, -0.9F}, {-0.8F, -0.75F, 0F}, {0F, -0.75F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel85.setRotationPoint(1.75F, -3.3F, -0.9F);
+  gunModel85.setRotation(0F, 0F, 0F);
+
+  // loopSide
+  gunModel86 = new BeardieModelRenderer(this, 249, 9);
+  gunModel86.addShape(0F,0F,0F, new float[][]{{1.35F, -0.88F, -0.88F}, {0F, -0.88F, -0.88F}, {1.35F, 0F, -0.88F}, {0F, 0F, -0.88F}, {1.35F, -0.88F, 0F}, {0F, -0.88F, 0F}, {1.35F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel86.setRotationPoint(1.25F, -4.72F, 0.45F);
+  gunModel86.setRotation(0F, 0F, 0F);
+
+  // loopSideR
+  gunModel87 = new BeardieModelRenderer(this, 257, 9);
+  gunModel87.addShape(0F,0F,0F, new float[][]{{1.35F, -0.88F, -0.88F}, {0F, -0.88F, -0.88F}, {1.35F, 0F, -0.88F}, {0F, 0F, -0.88F}, {1.35F, -0.88F, 0F}, {0F, -0.88F, 0F}, {1.35F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel87.setRotationPoint(1.25F, -4.72F, -0.87F);
+  gunModel87.setRotation(0F, 0F, 0F);
+
+  // loopRear
+  gunModel88 = new BeardieModelRenderer(this, 265, 9);
+  gunModel88.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.88F, 0.44F}, {0F, -0.88F, 0.44F}, {-0.88F, 0F, 0.44F}, {0F, 0F, 0.44F}, {-0.88F, -0.88F, 0F}, {0F, -0.88F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel88.setRotationPoint(1.25F, -4.72F, -0.87F);
+  gunModel88.setRotation(0F, 0F, 0F);
+
+  // loopFront
+  gunModel89 = new BeardieModelRenderer(this, 273, 9);
+  gunModel89.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.75F, -0.88F}, {0F, -0.75F, -0.88F}, {-0.88F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.88F, -0.75F, 0F}, {0F, -0.75F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel89.setRotationPoint(3.48F, -4.6F, 0.45F);
+  gunModel89.setRotation(0F, 0F, 0F);
+
+  // loopFrontR
+  gunModel90 = new BeardieModelRenderer(this, 281, 9);
+  gunModel90.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.75F, -0.88F}, {0F, -0.75F, -0.88F}, {-0.88F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.88F, -0.75F, 0F}, {0F, -0.75F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel90.setRotationPoint(3.48F, -4.6F, -0.87F);
+  gunModel90.setRotation(0F, 0F, 0F);
+
+  // loopDown
+  gunModel91 = new BeardieModelRenderer(this, 289, 9);
+  gunModel91.addShape(0F,0F,0F, new float[][]{{-0.88F, 0.3F, -0.88F}, {0F, 0.3F, -0.88F}, {-0.88F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.88F, 0.3F, 0F}, {0F, 0.3F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel91.setRotationPoint(1.25F, -4.6F, 0.45F);
+  gunModel91.setRotation(0F, 0F, 0F);
+
+  // loopDownR
+  gunModel92 = new BeardieModelRenderer(this, 297, 9);
+  gunModel92.addShape(0F,0F,0F, new float[][]{{-0.88F, 0.3F, -0.88F}, {0F, 0.3F, -0.88F}, {-0.88F, 0F, -0.88F}, {0F, 0F, -0.88F}, {-0.88F, 0.3F, 0F}, {0F, 0.3F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gunModel92.setRotationPoint(1.25F, -4.6F, -0.87F);
+  gunModel92.setRotation(0F, 0F, 0F);

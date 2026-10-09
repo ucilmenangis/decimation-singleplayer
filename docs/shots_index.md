@@ -598,3 +598,20 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   attachments) and fp_aim_iron.png (crops with red lines at the screen
   centre): the centre is at the top of the iron sights for Decimation's
   guns; the MAC-10 sight ears stick out about 40 px above it.
+
+## mac10_v0.37/ (MAC-10 v2, gunmodel v2)
+- cmp_side.png: Uzi next to the MAC-10 v2 at the same scale: both near
+  black, similar density; MAC-10 boxy receiver with sights, threads,
+  raked grip, long magazine, wire loop on the rear top. side.png: the
+  final side view (one piece raked grip).
+- ours_mac10_side / other / top / three(_split).png: renders and part
+  split of v2.
+- gunview_uzi / mac10 (_aim / _npc).png: first person, aim, bandit side
+  view; aim_centre.png: crops with the screen centre lines, the MAC-10
+  sight tops on the line like the Uzi's.
+- icon_vs_uzi.png: Decimation's Uzi icon next to ours at 4x: both dark
+  silhouettes with a dark outline (after the halo fix).
+- sheet_gun.png: dev test gun on v2: first person, reload frames (tilt,
+  magazine down and back), fire frames, Uzi control, bandit side / front /
+  firing. sheet_gunview_attach.png: MAC-10 with reddot, smgSuppressor,
+  flashlight: hip, aim (red dot ring at the centre), bandit side view.

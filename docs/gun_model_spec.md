@@ -194,22 +194,27 @@ Look and construction rules: docs/gun_style_guide.md (study of all 98
 Decimation guns, 10 Oktober 2026); read it first.
 
 Every asset is our own work (public repo: never copy Decimation art).
-1. Spec: `tools/guns/<gun>.py` lists boxes in model units (x forward, y
-   down, z sideways), part group (gunModel / ammoModel / slideModel),
-   colour, face style (port, grip, rings), the header (flamePos, ejectPos,
-   rhPos / lhPos) and the animations (`gunmodel.anib` keyframes).
-2. Build: `python3 tools/guns/<gun>.py` (`tools/guns/gunmodel.py`) writes
-   into dev/src/main/resources/assets/deci/: `models/guns/<cat>/<gun>.bmodel`
-   (one part per box, addShape with 8 zero corners, decimal sizes are
-   fine: BModelLoader parses doubles), the texture (box UV exactly as
-   BModelBox maps it, painted procedurally at 4 px per unit), the 32x32
-   icon (side silhouette with outline), `animations/<gun>/*.anib`; plus a
-   .bbmodel ops file for previews.
-3. Preview without the game: `python3 tools/bbmcp.py batch FILE.json`
-   drives the headless Blockbench MCP (bbmodel_create / edit /
-   add_texture / validate / contact_sheet); renders land in
-   tools/guns/models/render_*.png (git ignored). Views front / back are the
-   gun's sides, three-quarter, top.
+1. Spec (gunmodel v2, v0.37.0): `tools/guns/<gun>.py` makes parts in model
+   units (x forward, y down, z sideways, centre z -0.15) with
+   `part(name, group, colour, a, b)` and bends them: `.inset(axis, side,
+   other=(lo, hi))` (taper / wedge; negative values grow a corner),
+   `.shift(axis, side, other=d)` (skew), `.mirror()` (pair about z
+   -0.15), `octagon(...)` (3 part round bar); groups gunModel /
+   ammoModel / slideModel; header (flamePos, ejectPos, rhPos / lhPos);
+   animations with `gunmodel.anib` and `slide_names(parts)` (every
+   slideModel part). Example: tools/guns/mac10.py.
+2. Build: `python3 tools/guns/<gun>.py` writes into
+   dev/src/main/resources/assets/deci/: `models/guns/<cat>/<gun>.bmodel`
+   (each part declared 1x1x1 with its real shape in the 8 corner offsets,
+   pivot at its lowest corner, a comment line with the readable name,
+   textureWidth 512, UV islands stepping by 8), the texture (one tone per
+   island with faint noise, 2 px a unit), the 32x32 icon (the model's
+   side render from study.py on a transparent background, dark outline),
+   `animations/<gun>/*.anib`.
+3. Preview without the game: tools/guns/study.py (`sheet REF ours:<gun>`,
+   `render ours:<gun> [--split]`, `attach ours:<gun> reddot ...`, `vocab`,
+   `stats`); docs/gun_style_guide.md section 6. The headless Blockbench
+   MCP (tools/bbmcp.py) still works but is no longer part of the loop.
 4. Register in Java (fixes/NewGuns): `Deci.newMagazine` (bullet of an
    existing mag, an existing mag's icon), `Deci.newGun` (GunStats, category,
    magazines, slowdown, damage; registers as deciworldgen:<gun>),

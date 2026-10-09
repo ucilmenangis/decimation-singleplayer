@@ -1,18 +1,9 @@
-Length: 2
+Length: 1
 Hand: 0
+STATIC
 ---------------------------
 START
 Frame {
- Model {
-  Pos: 0, 0, 0;
-  Rot: 0, 0, 0;
- }
- OffHand {
-  Pos: 0, 0, 0;
-  Rot: 0, 0, 0;
- }
-}
-RAND Frame {
  slideModel0 {
   Pos: -1.6, 0, 0;
   Rot: 0, 0, 0;
