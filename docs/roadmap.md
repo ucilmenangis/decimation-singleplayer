@@ -83,3 +83,6 @@ or `[not decided]`.
 - v0.31.0 juggernaut (Soviet side, juggernaut set, machine guns or an
   armor piercing Barrett, 200 hp, takes 25%, slow; only with military
   groups in military sectors, and its egg).
+- v0.32.0 elite military (marine black, night vision, MGs / snipers with
+  all attachments, 2 magazines to kill, x2 damage); NPC auto fire in
+  bursts with recoil spread, real magazines and 4 s reloads.

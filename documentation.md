@@ -132,7 +132,10 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   v0.30.4: hit cooldown 0.25 s (`npcHitCooldownTicks` 5); RPG bandits
   (RPG-7) and RPG military (RPG-18) fire real rockets. v0.31.0: juggernaut
   (200 hp, takes 25%, machine guns or an armor piercing Barrett), only with
-  military groups (`juggernautChance` 0.15) and its egg.
+  military groups (`juggernautChance` 0.15) and its egg. v0.32.0: elite
+  military (`eliteChance` 0.2, 150 hp, takes 16%, x2 damage); NPCs fire
+  bursts with recoil, empty their real magazine, reload 4 s (category
+  `npc_fire`).
 
 ## Bug and feature tracking
 

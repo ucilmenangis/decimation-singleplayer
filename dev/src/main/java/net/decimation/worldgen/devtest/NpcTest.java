@@ -37,7 +37,8 @@ public class NpcTest extends DevTestMode
         {"bandit_light", "bandit_light", "bandit_medium", "bandit_medium", "bandit_heavy", "bandit_heavy"},
         {"soldier_marine", "soldier_marineforest", "soldier_marineurban", "soldier_marineblack"},
         {"military", "military", "military", "military"},
-        {"juggernaut", "juggernaut", "juggernaut"}};
+        {"juggernaut", "juggernaut", "juggernaut"},
+        {"elite_military", "elite_military", "elite_military"}};
 
     private volatile boolean done;
     private volatile int ticks;
@@ -46,7 +47,7 @@ public class NpcTest extends DevTestMode
     private final List<EntityLiving> shown = new ArrayList<EntityLiving>();
     private volatile Map<Integer, String> shownGuns = new HashMap<Integer, String>();
     private volatile double camX, camY, camZ;
-    private int clientMatch, clientTotal, checked = -1, shot = -1, eggTicks;
+    private int clientMatch, clientTotal, checked = -1, shot = -1, eggTicks, eliteOk, eliteTotal;
 
     public boolean client(Minecraft mc)
     {
@@ -66,9 +67,18 @@ public class NpcTest extends DevTestMode
                     Entity c = mc.theWorld.getEntityByID(e.getKey());
                     ItemStack g = c == null ? null : Deci.npcGun(c);
                     clientTotal++;
-                    if (g != null && g.getItem() == NpcLoadoutsAccess.item(e.getValue()))
+                    if (g != null && g.getItem() == NpcLoadoutsAccess.item(NpcLoadouts.gunName(e.getValue())))
                     {
                         clientMatch++;
+                        if (e.getValue().contains("mask="))
+                        {
+                            // elite: goggles on the face and the attachments on the client's gun
+                            ItemStack m = Deci.npcMask(c);
+                            boolean kit = g.stackTagCompound != null && !g.stackTagCompound.getString("sightAttach").isEmpty()
+                                && !g.stackTagCompound.getString("barrelAttach").isEmpty();
+                            eliteTotal++;
+                            eliteOk += m != null && m.getItem() == NpcLoadoutsAccess.item("nvgoggles") && kit ? 1 : 0;
+                        }
                     }
                     else
                     {
@@ -109,6 +119,8 @@ public class NpcTest extends DevTestMode
             mc.gameSettings.hideGUI = false;
             DevTestResults.check(name(), "client shows the server's gun", clientMatch + " / " + clientTotal,
                                  clientTotal > 0 && clientMatch == clientTotal, "all lineup NPCs");
+            DevTestResults.check(name(), "elite goggles and attachments on the client", eliteOk + " / " + eliteTotal,
+                                 eliteTotal > 0 && eliteOk == eliteTotal, "all elite lineup NPCs");
             done = true;
         }
         return !done;
@@ -173,7 +185,7 @@ public class NpcTest extends DevTestMode
         DevTestResults.value(name(), "soviet tiers", spawnBatch(world, NpcKind.SOVIET, 12, bx, bz));
 
         // a player's gun hit: the tier's share
-        for (String tn : new String[] {"bandit_light", "bandit_heavy", "military", "juggernaut"})
+        for (String tn : new String[] {"bandit_light", "bandit_heavy", "military", "juggernaut", "elite_military"})
         {
             NpcLoadouts.Tier tier = loadouts.byName(tn);
             EntityLiving npc = tier.kind == NpcKind.SOVIET ? Deci.newSoviet(world) : Deci.newBandit(world);
@@ -221,6 +233,11 @@ public class NpcTest extends DevTestMode
             p.setCurrentItemOrArmor(sl + 1, new ItemStack(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", marine[sl])));
         }
         float normal = hitPlayer(p, false), piercing = hitPlayer(p, true);
+        net.decimation.fixes.NpcShots.damageScale = 2;
+        float elite = hitPlayer(p, false);
+        net.decimation.fixes.NpcShots.damageScale = 1;
+        DevTestResults.check(name(), "elite hit 6 on a marine body set", String.format("%.2f (normal %.2f)", elite, normal),
+                             Math.abs(elite - 2 * normal) < 0.05, "2 x normal (damageDealt 2)");
         for (int sl = 1; sl <= 3; sl++)
         {
             p.setCurrentItemOrArmor(sl, null);
@@ -267,7 +284,8 @@ public class NpcTest extends DevTestMode
         for (EntityLiving e : after)
         {
             String tg = e.getEntityData().getString(NpcLoadouts.TAG);
-            tagged += before.contains(e) || !(tg.equals("military") || tg.equals("military_rpg") || tg.equals("juggernaut"))
+            tagged += before.contains(e) || !(tg.equals("military") || tg.equals("military_rpg") || tg.equals("juggernaut")
+                || tg.equals("elite_military"))
                 ? 0 : 1;
         }
         DevTestResults.check(name(), "military spawner group", placed + ", " + tagged + " new",
@@ -305,7 +323,7 @@ public class NpcTest extends DevTestMode
             }
             ItemStack gun = Deci.npcGun(npc);
             String gunName = npc.getEntityData().getString(NpcLoadouts.GUN_TAG);
-            if (problem == null && (gun == null || gun.getItem() != NpcLoadoutsAccess.item(gunName)))
+            if (problem == null && (gun == null || gun.getItem() != NpcLoadoutsAccess.item(NpcLoadouts.gunName(gunName))))
             {
                 problem = "gun " + gun + " vs " + gunName;
             }
@@ -420,6 +438,22 @@ public class NpcTest extends DevTestMode
         int y = ground(world, x0, z);
         Map<Integer, String> guns = new HashMap<Integer, String>();
         String[] names = LINEUPS[l];
+        // plants between the camera and the lineup hide it (fresh worlds grow tall grass)
+        for (int dx = -6; dx <= 6; dx++)
+        {
+            for (int dz = -1; dz <= 8; dz++)
+            {
+                for (int dy = 0; dy <= 3; dy++)
+                {
+                    net.minecraft.block.Block b = world.getBlock(x0 + dx, y + dy, z + dz);
+                    if (b.getMaterial() == net.minecraft.block.material.Material.plants
+                        || b.getMaterial() == net.minecraft.block.material.Material.vine)
+                    {
+                        world.setBlockToAir(x0 + dx, y + dy, z + dz);
+                    }
+                }
+            }
+        }
         for (int i = 0; i < names.length; i++)
         {
             NpcLoadouts.Tier tier = loadouts.byName(names[i]);

@@ -437,6 +437,36 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.32.0 (user requests 9 Oktober 2026):
+- ELITE MILITARY, tier "elite_military" (Soviet side): marine black set,
+  night vision goggles (mask "nvgoggles"), heavy machine guns (PKP, M240,
+  MK48, MG3, PKM) with 4x sight, MG suppressor and laser, or sniper rifles
+  (L115A3, JNG90, SV98, M110) with 8x sight, rifle suppressor and laser;
+  150 hp, takes 16% (about 59 rifle hits, 2 magazines), its hits x2 on a
+  player (tier damageDealt, on top of x5), speed 0.27, knockback
+  resistance 0.5. Only MilitarySpawner (eliteChance 0.2 per group) and its
+  egg. The gun spec "name;sight=4x;barrel=..;grip=..;mask=.." is stored in
+  ForgeData and synced through watcher slot 26, so the client shows the
+  attachments (Decimation's NBT keys sightAttach / barrelAttach / ...) and
+  the goggles (HumanEntity.setMask).
+- AUTO FIRE: guns with an AUTO or BURST fire mode fire bursts (3..6 rounds,
+  machine guns 6..12) at the gun's own rate (GunStats.secondsPerShot), each
+  shot's spread x (1 + 0.35 x its place in the burst), then a pause (3 x
+  the tier's delay). Sniper rifles stay single shot.
+- MAGAZINES (user: "M16 30 rounds, then reload around 4 seconds"): an NPC
+  fires its gun's magazine (Deci.gunMagazine: the first ammo item's
+  capacity, M16 / AK 30, PKM belt 250; loose rounds or clips: the gun's
+  capacity), then reloads reloadTicks (80, +-10) with the MagOut sound.
+- Config category npc_fire: autoFire, recoilSpread, reloadTicks.
+- Checked (dev test modes, fresh world, 39 PASS): elite 1.6 of a 10 hit,
+  elite hit = 2 x normal, goggles and attachments on all 3 client lineup
+  elites, 12 eggs; shots: AKM 12 bursts / 53 shots, first shots hit 7/12
+  at 20 blocks vs 3/18 from the 4th on, first magazine 30 rounds then 82
+  ticks; tracers 0.2 deg from the shot line. Photo npc_elite.png.
+  Test trap: calling shootAt from a test while the AI also calls it
+  halves every cooldown (reloads looked 2 s); the burst phase lets the AI
+  shoot alone.
+
 v0.31.0 (user choice, step 2 of the NPC plan): the JUGGERNAUT, tier
 "juggernaut" (Soviet side, so hostile to every player): one matching
 juggernaut set (normal or gray), PKM / PKP / M240 / MK48 or a Barrett,

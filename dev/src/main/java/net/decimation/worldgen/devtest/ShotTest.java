@@ -24,11 +24,15 @@ public class ShotTest extends DevTestMode
 {
     public String name() { return "shots"; }
 
-    private static final int[] DIST = {10, 20, 10, 24};
-    private static final boolean[] WALL = {false, false, true, false};
+    private static final int[] DIST = {10, 20, 10, 24, 20};
+    private static final boolean[] WALL = {false, false, true, false, false};
+    /** Phase with an AKM firing bursts (accuracy by place in the burst). */
+    private static final int BURST_PHASE = 4;
+    private final int[][] byIndex = new int[2][13]; // shots, hits by place in burst
+    private final java.util.List<Integer> burstShotTicks = new java.util.ArrayList<Integer>();
     /** Phase with an RPG-7 bandit (real rockets, NpcShots.rocket). */
     private static final int ROCKET_PHASE = 3;
-    private static final int LEN = 300, START = 20;
+    private static final int LEN = 500, START = 20; // long enough for a reload (4 s) or two per phase
     private static final int Y = 140;
 
     private volatile int ticks;
@@ -80,6 +84,35 @@ public class ShotTest extends DevTestMode
             DevTestResults.check(name(), "rockets fired and hits", shotCount[ROCKET_PHASE] + " fired, "
                                  + hitCount[ROCKET_PHASE] + " hurt the pig", shotCount[ROCKET_PHASE] >= 2
                                  && hitCount[ROCKET_PHASE] >= 1, ">= 2 rockets, >= 1 hit at 24 blocks");
+            int first = byIndex[0][0], firstHit = byIndex[1][0], late = 0, lateHit = 0, bursts = first;
+            for (int i = 3; i < 13; i++)
+            {
+                late += byIndex[0][i];
+                lateHit += byIndex[1][i];
+            }
+            DevTestResults.value(name(), "burst shots by place", java.util.Arrays.toString(byIndex[0])
+                                 + " hits " + java.util.Arrays.toString(byIndex[1]));
+            DevTestResults.check(name(), "AKM fires bursts", bursts + " bursts, " + shotCount[BURST_PHASE] + " shots",
+                                 bursts >= 3 && shotCount[BURST_PHASE] >= bursts * 3, ">= 3 bursts of >= 3 rounds");
+            DevTestResults.check(name(), "recoil: first vs 4th+ shot hit rate at 20",
+                                 String.format("%d/%d vs %d/%d", firstHit, first, lateHit, late),
+                                 first > 0 && late > 0 && firstHit / (double) first > lateHit / (double) late,
+                                 "first shots hit more often");
+            // the first magazine: shots before the first gap of 3 s or more (the reload)
+            int firstMag = 0, gap = 0;
+            for (int i = 0; i < burstShotTicks.size(); i++)
+            {
+                firstMag++;
+                if (i + 1 < burstShotTicks.size() && burstShotTicks.get(i + 1) - burstShotTicks.get(i) >= 60)
+                {
+                    gap = burstShotTicks.get(i + 1) - burstShotTicks.get(i);
+                    break;
+                }
+            }
+            int cap = net.decimation.fixes.Deci.gunMagazine(new ItemStack(
+                cpw.mods.fml.common.registry.GameRegistry.findItem("deci", "akm")));
+            DevTestResults.check(name(), "AKM magazine then reload", firstMag + " rounds, then " + gap + " ticks",
+                                 firstMag == cap && gap >= 60, cap + " rounds, then >= 60 ticks (reload 80)");
             double r10 = rate(0), r20 = rate(1);
             DevTestResults.check(name(), "hit rate at 10 blocks", String.format("%.0f%%", 100 * r10),
                                  shotCount[0] > 20 && r10 > 0.6, "> 60% (spread 1.3 deg)");
@@ -127,6 +160,16 @@ public class ShotTest extends DevTestMode
                         rocketFiredAt = ticks;
                     }
                     shotCount[ph]++;
+                    if (ph == BURST_PHASE)
+                    {
+                        burstShotTicks.add(ticks);
+                    }
+                    if (ph == BURST_PHASE && net.decimation.fixes.NpcShots.lastBurstIndex >= 0)
+                    {
+                        int bi = Math.min(12, net.decimation.fixes.NpcShots.lastBurstIndex);
+                        byIndex[0][bi]++;
+                        byIndex[1][bi] += pig.getHealth() < h ? 1 : 0;
+                    }
                     if (ph != ROCKET_PHASE && pig.getHealth() < h)
                     {
                         hitCount[ph]++;
@@ -173,7 +216,10 @@ public class ShotTest extends DevTestMode
             pig.hurtResistantTime = 0;
             pigLast = pig.getHealth();
         }
-        Deci.banditShootAt(bandit, pig);
+        if (phase != BURST_PHASE)
+        {
+            Deci.banditShootAt(bandit, pig); // the AI shoots too: cooldowns run twice as fast here
+        }
     }
 
     private void setup(World world, EntityPlayerMP p, int phase)
@@ -183,12 +229,13 @@ public class ShotTest extends DevTestMode
         NpcLoadouts.Tier tier = NpcLoadouts.instance().byName(rocket ? "bandit_rpg" : "bandit_medium");
         bandit = Deci.newBandit(world);
         NpcLoadouts.instance().equip(bandit, tier, bandit.getEntityData());
-        String gun = rocket ? "rpg7" : "akm";
+        // single shot phases use a semi automatic rifle (bursts would mix recoil into the spread)
+        String gun = rocket ? "rpg7" : phase == BURST_PHASE ? "akm" : "sks";
         bandit.getEntityData().setString(NpcLoadouts.GUN_TAG, gun);
         bandit.setPosition(x0, Y, z0);
         world.spawnEntityInWorld(bandit);
         Deci.setNpcGun(bandit, new ItemStack(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", gun)));
-        if (!rocket)
+        if (!rocket && phase != BURST_PHASE)
         {
             Deci.setNpcShotDelay(bandit, 1, 1);
         }

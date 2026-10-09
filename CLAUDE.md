@@ -598,6 +598,9 @@ of the last session:
   tiers go LAST in NpcLoadouts (egg metadata = index).
   v0.31.0: juggernaut tier (weights 0: MilitarySpawner juggernautChance
   and its egg only), Barrett hits armor piercing (NpcShots.armorPiercing).
+  v0.32.0: elite military, bursts, magazines and reloads (new_feature.md
+  "v0.32.0"). Test trap: a test calling shootAt while the AI also does
+  halves every cooldown.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

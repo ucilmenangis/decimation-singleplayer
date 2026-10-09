@@ -41,6 +41,16 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
      * damage since it's .50 BMG".
      */
     public static boolean armorPiercing;
+    /** Set while a hit is applied: the shooter tier's damageDealt (NpcLoadouts.onHurt). */
+    public static float damageScale = 1;
+    /** Dev tests: the last shot's place in its burst (0 = first), -1 when it was a single shot. */
+    public static volatile int lastBurstIndex = -1;
+    /** Dev tests: rounds the last emptied magazine fired before its reload. */
+    public static volatile int lastMagazineFired;
+    /** Rounds left in each shooter's magazine. */
+    private final java.util.Map<Entity, int[]> magazines = new java.util.WeakHashMap<Entity, int[]>();
+    /** Bursts in progress: shooter -> {rounds left, rounds fired}. */
+    private final java.util.Map<Entity, int[]> bursts = new java.util.WeakHashMap<Entity, int[]>();
     static final String[] PIERCING = {"barrett"};
 
     /** Dev tests: when set, every shot's direction {x, y, z, shooter entity id} is added here. */
@@ -70,6 +80,21 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         }
         double yaw = Math.atan2(dz, dx), pitch = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz));
         double sigma = Math.toRadians(loadouts.spread(shooter, gun));
+        // automatic guns: bursts, each shot spreading more (recoil), then a pause
+        NpcLoadouts.Tier tier = loadouts.byName(shooter.getEntityData().getString(NpcLoadouts.TAG));
+        int[] burst = null;
+        if (loadouts.autoFire() && Deci.gunIsAutomatic(gun) && !NpcLoadouts.contains(NpcLoadouts.SNIPER, gunName))
+        {
+            burst = bursts.get(shooter);
+            if (burst == null || burst[0] <= 0)
+            {
+                boolean mg = NpcLoadouts.contains(NpcLoadouts.MG, gunName);
+                burst = new int[] {mg ? 6 + random.nextInt(7) : 3 + random.nextInt(4), 0};
+                bursts.put(shooter, burst);
+            }
+            sigma *= 1 + loadouts.recoilSpread() * burst[1];
+        }
+        lastBurstIndex = burst == null ? -1 : burst[1];
         yaw += random.nextGaussian() * sigma;
         pitch += random.nextGaussian() * sigma;
         double cx = Math.cos(pitch) * Math.cos(yaw), cy = Math.sin(pitch), cz = Math.cos(pitch) * Math.sin(yaw);
@@ -111,6 +136,7 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         if (hit != null)
         {
             armorPiercing = NpcLoadouts.contains(PIERCING, gunName);
+            damageScale = tier == null ? 1 : tier.damageDealt;
             try
             {
                 hit.attackEntityFrom(Deci.humanDamage(), (float) (damage / (Deci.isInfected(hit) ? 1 : 8)));
@@ -118,6 +144,7 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
             finally
             {
                 armorPiercing = false;
+                damageScale = 1;
             }
         }
         else if (block != null)
@@ -129,6 +156,48 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         // the client only needs the direction: a point far along the line keeps it exact even
         // when the shot stopped close to the shooter (client and server positions differ a little)
         Deci.sendNpcShot(shooter, target, sx + cx * 64, sy + cy * 64, sz + cz * 64);
+        // the magazine: empty means a reload (the burst ends with it)
+        int capacity = Math.max(1, Deci.gunMagazine(gun));
+        int[] mag = magazines.get(shooter);
+        if (mag == null || mag[1] != capacity)
+        {
+            mag = new int[] {capacity, capacity};
+            magazines.put(shooter, mag);
+        }
+        if (--mag[0] <= 0)
+        {
+            lastMagazineFired = capacity;
+            mag[0] = capacity;
+            if (burst != null)
+            {
+                burst[0] = 0;
+            }
+            int r = loadouts.reloadTicks();
+            Deci.setNpcShotDelay(shooter, Math.max(0, r - 10), r + 10);
+            shooter.worldObj.playSoundAtEntity(shooter, "deci:" + gunName + "MagOut", 1.0f, 1.0f);
+            return Boolean.TRUE;
+        }
+        if (burst == null)
+        {
+            int[] d = NpcLoadouts.shotDelay(tier, gunName); // back from a reload
+            Deci.setNpcShotDelay(shooter, d[0], d[1]);
+        }
+        if (burst != null)
+        {
+            burst[0]--;
+            burst[1]++;
+            if (burst[0] > 0)
+            {
+                // next round at the gun's rate: shootAt waits cooldown + 1 ticks
+                int every = Math.max(1, (int) Math.round(Deci.gunSecondsPerShot(gun) * 20));
+                Deci.setNpcShotDelay(shooter, every - 1, every - 1);
+            }
+            else
+            {
+                int[] pause = NpcLoadouts.burstPause(tier);
+                Deci.setNpcShotDelay(shooter, pause[0], pause[1]);
+            }
+        }
         java.util.Queue<double[]> r = record;
         if (r != null)
         {

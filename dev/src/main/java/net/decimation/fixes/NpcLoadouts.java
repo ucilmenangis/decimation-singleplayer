@@ -62,6 +62,11 @@ public class NpcLoadouts
         boolean matchedSet;
         /** Walk speed (Decimation's humans 0.25) and knockback resistance; 0 = unchanged. */
         double speed, knockbackResistance;
+        /** NPC gun damage on a player x this, on top of npcDamageToPlayer (NpcShots.damageScale). */
+        public float damageDealt = 1;
+        /** Attachments per gun class ("sight=4x", "barrel=mgSuppressor", "grip=laser") and a mask item. */
+        String[] mgKit = {}, sniperKit = {}, rifleKit = {};
+        String mask;
         final String[][] armor; // helmet, chest, legs, boots: registry names to pick from
         final String[] guns;
 
@@ -91,6 +96,15 @@ public class NpcLoadouts
             return this;
         }
 
+        Tier elite(float damageDealt, String mask, String[] mgKit, String[] sniperKit)
+        {
+            this.damageDealt = damageDealt;
+            this.mask = mask;
+            this.mgKit = mgKit;
+            this.sniperKit = sniperKit;
+            return this;
+        }
+
         Tier heavy(double speed, double knockbackResistance)
         {
             this.speed = speed;
@@ -100,10 +114,10 @@ public class NpcLoadouts
         }
     }
 
-    private static final String[] MG = {"pkm", "pkp", "m240", "m60", "rpd", "mk48", "mg3", "m1919a6"};
+    static final String[] MG = {"pkm", "pkp", "m240", "m60", "rpd", "mk48", "mg3", "m1919a6"};
     /** Rocket launchers NPCs fire as real rockets (NpcShots); grenade launchers are not used. */
     static final String[] ROCKET = {"rpg7", "rpg18"};
-    private static final String[] SNIPER = {"sv98", "svd", "mosinnagant", "kar98k", "l115a3", "jng90", "barrett",
+    static final String[] SNIPER = {"sv98", "svd", "mosinnagant", "kar98k", "l115a3", "jng90", "barrett",
                                             "m110", "m1garand", "svt40"};
 
     private static final String[] CAPS = {"banditHelm", "militiaHelm", "capRed", "capBlue", "capGreen", "banditHelm"};
@@ -120,6 +134,11 @@ public class NpcLoadouts
     private float npcDamageToPlayer = 5;
     /** NPC gun hits on a player are ignored this many ticks after a hit (vanilla 10). */
     private int hitCooldown = 5;
+    /** Automatic guns fire bursts (NpcShots); spread grows by recoilSpread per shot of a burst. */
+    private boolean autoFire = true;
+    private float recoilSpread = 0.35f;
+    /** Ticks a reload takes once the magazine is empty (user 2026-10-09: about 4 s). */
+    private int reloadTicks = 80;
     /** Spread factor for machine guns; sniper rifles use SNIPER_SPREAD degrees. */
     static final float MG_SPREAD = 1.4f, SNIPER_SPREAD = 0.25f, UNTIERED_SPREAD = 1.2f;
     private final Random random = new Random();
@@ -171,6 +190,15 @@ public class NpcLoadouts
             new String[][] {{"juggernautHelm", "juggernautHelmGray"}, {"juggernautVest", "juggernautVestGray"},
                             {"juggernautPants", "juggernautPantsGray"}, {"juggernautBoots", "juggernautBootsGray"}},
             "pkm", "pkp", "m240", "mk48", "barrett").spread(1.0f).heavy(0.18, 1.0));
+        // elite military (user 2026-10-09): marine black + night vision, heavy machine guns or sniper
+        // rifles with every attachment, about 2 magazines to kill, x2 damage; only MilitarySpawner
+        // (eliteChance) and its egg
+        tiers.add(new Tier("elite_military", NpcKind.SOVIET, 0, 0, 150, 0.16f,
+            new String[][] {{"marineblackHelm"}, {"marineblackVest"}, {"marineblackPants"}, {"marineblackBoots"}},
+            "pkp", "m240", "mk48", "mg3", "pkm", "l115a3", "jng90", "sv98", "m110").spread(0.8f).delay(2, 6)
+            .heavy(0.27, 0.5).elite(2.0f, "nvgoggles",
+                new String[] {"sight=4x", "barrel=mgSuppressor", "grip=laser"},
+                new String[] {"sight=8x", "barrel=arSuppressor", "grip=laser"}));
 
         load(new File(configDir, "deciworldgen_npc.cfg"));
     }
@@ -194,6 +222,8 @@ public class NpcLoadouts
             t.weight = cfg.getInt("weight", cat, t.weight, 0, 1000, "chance against the other tiers of its kind");
             t.militaryWeight = cfg.getInt("militaryWeight", cat, t.militaryWeight, 0, 1000,
                                           "the same inside military areas");
+            t.damageDealt = cfg.getFloat("damageDealt", cat, t.damageDealt, 0, 100,
+                "its gun hits on a player x this (on top of npcDamageToPlayer)");
             t.spread = cfg.getFloat("spread", cat, t.spread, 0, 45,
                 "aim spread in degrees: about 85% hits at 10 blocks with 1.2, 50% at 20 (machine guns x1.4)");
         }
@@ -202,6 +232,12 @@ public class NpcLoadouts
         // v0.30.2 / 0.30.3 keys; user 2026-10-09: 0.25 s (v0.30.4)
         cfg.getCategory("player").remove("everyNpcHitCounts");
         cfg.getCategory("player").remove("npcHitsSkipCooldown");
+        autoFire = cfg.getBoolean("autoFire", "npc_fire", autoFire,
+            "automatic guns fire bursts (3..6 rounds, machine guns 6..12) at the gun's own rate of fire");
+        recoilSpread = cfg.getFloat("recoilSpread", "npc_fire", recoilSpread, 0, 5,
+            "each shot of a burst spreads this much more than the first (0.35: the 6th shot 2.75x)");
+        reloadTicks = cfg.getInt("reloadTicks", "npc_fire", reloadTicks, 0, 1200,
+            "an NPC fires its gun's magazine (M16 30, PKM 250), then reloads this many ticks (20 = 1 s)");
         hitCooldown = cfg.getInt("npcHitCooldownTicks", "player", hitCooldown, 0, 10,
             "after a hit, NPC gun hits are ignored for this many ticks (20 = 1 s): 10 = vanilla's 0.5 s, "
             + "5 = 0.25 s, 0 = every hit of a group lands");
@@ -211,6 +247,45 @@ public class NpcLoadouts
     public float npcDamageToPlayer()
     {
         return npcDamageToPlayer;
+    }
+
+    public boolean autoFire()
+    {
+        return autoFire;
+    }
+
+    public float recoilSpread()
+    {
+        return recoilSpread;
+    }
+
+    public int reloadTicks()
+    {
+        return reloadTicks;
+    }
+
+    /** Ticks between single shots of this tier with this gun (min, max). */
+    static int[] shotDelay(Tier tier, String gunName)
+    {
+        if (contains(MG, gunName))
+        {
+            return new int[] {3, 8};
+        }
+        if (contains(ROCKET, gunName))
+        {
+            return new int[] {60, 100}; // one rocket, then a reload
+        }
+        if (contains(SNIPER, gunName))
+        {
+            return new int[] {25, 45};
+        }
+        return tier == null ? new int[] {4, 12} : new int[] {tier.delayMin, tier.delayMax};
+    }
+
+    /** Ticks an NPC of this tier waits after a burst. */
+    static int[] burstPause(Tier t)
+    {
+        return t == null ? new int[] {15, 40} : new int[] {Math.max(10, t.delayMin * 3), Math.max(20, t.delayMax * 3)};
     }
 
     public int npcHitCooldownTicks()
@@ -297,10 +372,58 @@ public class NpcLoadouts
             equip(npc, tier, data);
         }
         String gun = data.getString(GUN_TAG);
-        Item g = item(gun);
+        Item g = item(gunName(gun));
         if (g != null)
         {
             arm(npc, tier, gun, g);
+        }
+    }
+
+    /** The gun's registry name in a spec ("pkm;sight=4x;..."). */
+    public static String gunName(String spec)
+    {
+        int i = spec.indexOf(';');
+        return i < 0 ? spec : spec.substring(0, i);
+    }
+
+    /** The gun of a spec with its attachments (Decimation's NBT keys sightAttach, barrelAttach, ...). */
+    public static ItemStack gunStack(String spec)
+    {
+        Item g = item(gunName(spec));
+        if (g == null)
+        {
+            return null;
+        }
+        ItemStack stack = new ItemStack(g);
+        for (String part : spec.split(";"))
+        {
+            int eq = part.indexOf('=');
+            if (eq > 0 && !part.startsWith("mask="))
+            {
+                if (stack.stackTagCompound == null)
+                {
+                    stack.stackTagCompound = new NBTTagCompound();
+                }
+                stack.stackTagCompound.setString(part.substring(0, eq) + "Attach", part.substring(eq + 1));
+            }
+        }
+        return stack;
+    }
+
+    /** Gun (with attachments) and mask of a spec onto an NPC, either side. */
+    static void applySpec(Entity npc, String spec)
+    {
+        ItemStack gun = gunStack(spec);
+        if (gun != null)
+        {
+            Deci.setNpcGun(npc, gun);
+        }
+        for (String part : spec.split(";"))
+        {
+            if (part.startsWith("mask=") && item(part.substring(5)) != null)
+            {
+                Deci.setNpcMask(npc, new ItemStack(item(part.substring(5))));
+            }
         }
     }
 
@@ -327,10 +450,10 @@ public class NpcLoadouts
             return;
         }
         ItemStack held = Deci.npcGun(e);
-        Item g = item(name);
+        Item g = item(gunName(name));
         if (g != null && (held == null || held.getItem() != g))
         {
-            Deci.setNpcGun(e, new ItemStack(g));
+            applySpec(e, name);
         }
     }
 
@@ -349,7 +472,7 @@ public class NpcLoadouts
         if ("human".equals(event.source.getDamageType())
             && event.entityLiving instanceof net.minecraft.entity.player.EntityPlayer)
         {
-            event.ammount *= npcDamageToPlayer;
+            event.ammount *= npcDamageToPlayer * NpcShots.damageScale;
             return;
         }
         if (!"gunDeci".equals(event.source.getDamageType()))
@@ -421,6 +544,18 @@ public class NpcLoadouts
         {
             gun = "ak74";
         }
+        // the gun spec "name;sight=4x;barrel=...;mask=nvgoggles" (gunStack / applySpec read it)
+        String[] kit = contains(MG, gun) ? tier.mgKit : contains(SNIPER, gun) ? tier.sniperKit : tier.rifleKit;
+        StringBuilder spec = new StringBuilder(gun);
+        for (String k : kit)
+        {
+            spec.append(';').append(k);
+        }
+        if (tier.mask != null)
+        {
+            spec.append(";mask=").append(tier.mask);
+        }
+        gun = spec.toString();
         npc.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(tier.health);
         if (tier.speed > 0)
         {
@@ -436,26 +571,12 @@ public class NpcLoadouts
     }
 
     /** Gun in hand (server field + watcher for the client) and a fire rate that fits it. */
-    private static void arm(EntityLiving npc, Tier tier, String name, Item gun)
+    private static void arm(EntityLiving npc, Tier tier, String spec, Item gun)
     {
-        Deci.setNpcGun(npc, new ItemStack(gun));
-        npc.getDataWatcher().updateObject(GUN_SLOT, name);
-        if (contains(MG, name))
-        {
-            Deci.setNpcShotDelay(npc, 3, 8);
-        }
-        else if (contains(ROCKET, name))
-        {
-            Deci.setNpcShotDelay(npc, 60, 100); // one rocket, then a reload
-        }
-        else if (contains(SNIPER, name))
-        {
-            Deci.setNpcShotDelay(npc, 25, 45);
-        }
-        else
-        {
-            Deci.setNpcShotDelay(npc, tier.delayMin, tier.delayMax);
-        }
+        applySpec(npc, spec);
+        npc.getDataWatcher().updateObject(GUN_SLOT, spec);
+        int[] d = shotDelay(tier, gunName(spec));
+        Deci.setNpcShotDelay(npc, d[0], d[1]);
     }
 
     static boolean contains(String[] list, String s)

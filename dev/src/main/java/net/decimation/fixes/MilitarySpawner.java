@@ -26,7 +26,7 @@ public class MilitarySpawner
 {
     private final boolean enabled;
     private final int interval, cap;
-    private final float chance, juggernautChance;
+    private final float chance, juggernautChance, eliteChance;
     private final Random random = new Random();
     private int ticks;
 
@@ -40,6 +40,8 @@ public class MilitarySpawner
         cap = cfg.getInt("cap", cat, 4, 0, 64, "no new group while this many are within 64 blocks");
         juggernautChance = cfg.getFloat("juggernautChance", cat, 0.15f, 0, 1,
             "chance a group brings a juggernaut (the only way one spawns, besides its egg)");
+        eliteChance = cfg.getFloat("eliteChance", cat, 0.2f, 0, 1,
+            "chance a group brings an elite military (the only way one spawns, besides its egg)");
         cfg.save();
     }
 
@@ -102,19 +104,21 @@ public class MilitarySpawner
             }
             int size = 2 + random.nextInt(2);
             boolean juggernaut = random.nextFloat() < juggernautChance;
+            boolean elite = random.nextFloat() < eliteChance;
             for (int i = 0; i < size; i++)
             {
                 EntityLiving npc = Deci.newSoviet(world);
-                if (juggernaut && i == 0 && NpcLoadouts.instance() != null)
+                String special = juggernaut && i == 0 ? "juggernaut" : elite && i == (juggernaut ? 1 : 0) ? "elite_military" : null;
+                if (special != null && NpcLoadouts.instance() != null)
                 {
-                    NpcLoadouts.instance().equip(npc, NpcLoadouts.instance().byName("juggernaut"), npc.getEntityData());
+                    NpcLoadouts.instance().equip(npc, NpcLoadouts.instance().byName(special), npc.getEntityData());
                 }
                 npc.setLocationAndAngles(x + 0.5 + random.nextInt(3) - 1, y, z + 0.5 + random.nextInt(3) - 1,
                                          random.nextFloat() * 360, 0);
                 world.spawnEntityInWorld(npc);
             }
-            FMLLog.info("[deciworldgen] enemy military group of %d%s at %d,%d,%d", size,
-                        juggernaut ? " with a juggernaut" : "", x, y, z);
+            FMLLog.info("[deciworldgen] enemy military group of %d%s%s at %d,%d,%d", size,
+                        juggernaut ? " with a juggernaut" : "", elite ? " with an elite" : "", x, y, z);
             return true;
         }
         return false;

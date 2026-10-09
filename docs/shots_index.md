@@ -504,3 +504,10 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   before; npc_3 three juggernauts: bulky dark juggernaut armor with olive
   accents, machine guns in hand; npc_eggs the first 9 eggs in the hotbar,
   held egg named "Spawn Soldier (marineforest)".
+
+## npc_elite_v0.32.0/ (dev test mode npc, fresh world)
+- npc_elite.png: three elite military in the all black marine set with
+  glowing green night vision goggles; a bipod machine gun and a long
+  sniper rifle in hand; tall grass cleared around the lineup.
+- sheet_npc.png: all lineups (bandits, soldiers, Soviets, juggernauts,
+  elites) and the egg hotbar.

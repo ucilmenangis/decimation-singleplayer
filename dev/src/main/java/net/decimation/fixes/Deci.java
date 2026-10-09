@@ -489,6 +489,62 @@ public final class Deci
         shooter.worldObj.spawnEntityInWorld(rocket);
     }
 
+    /** GunItem.stats (aeq).fireModes (adp) holds AUTO or BURST (GunStats$FireMode deci.ay.e$a). */
+    public static boolean gunIsAutomatic(net.minecraft.item.ItemStack gun)
+    {
+        if (gun == null || !(gun.getItem() instanceof deci.ay.i))
+        {
+            return false;
+        }
+        for (deci.ay.e.a mode : ((deci.ay.i) gun.getItem()).aeq.adp)
+        {
+            if (mode == deci.ay.e.a.AUTO || mode == deci.ay.e.a.BURST)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Rounds in one magazine, as GunItem's max ammo rule: the first ammo type's
+     * capacity (AmmoItem deci.ay.f.adF) unless it feeds loose rounds or
+     * stripper clips (feedType adE bullet / sclip), then the gun's own
+     * capacity (shotguns, bolt rifles, launchers).
+     */
+    public static int gunMagazine(net.minecraft.item.ItemStack gun)
+    {
+        if (gun == null || !(gun.getItem() instanceof deci.ay.i))
+        {
+            return 30;
+        }
+        deci.ay.i g = (deci.ay.i) gun.getItem();
+        deci.ay.f first = g.aep != null && g.aep.length > 0 ? g.aep[0] : null;
+        if (first != null && first.adE != deci.ay.a.bullet && first.adE != deci.ay.a.sclip)
+        {
+            return first.adF;
+        }
+        return g.getCapacity();
+    }
+
+    /** GunItem.stats (aeq).secondsPerShot (ads): the gun's own rate of fire. */
+    public static double gunSecondsPerShot(net.minecraft.item.ItemStack gun)
+    {
+        return gun != null && gun.getItem() instanceof deci.ay.i ? ((deci.ay.i) gun.getItem()).aeq.ads : 0.1;
+    }
+
+    /** HumanEntity.getMask (deci.af.d.cx). */
+    public static net.minecraft.item.ItemStack npcMask(net.minecraft.entity.Entity npc)
+    {
+        return ((deci.af.d) npc).cx();
+    }
+
+    /** HumanEntity.setMask (deci.af.d.j): the face item it wears (gas mask, night vision goggles). */
+    public static void setNpcMask(net.minecraft.entity.Entity npc, net.minecraft.item.ItemStack mask)
+    {
+        ((deci.af.d) npc).j(mask);
+    }
+
     /** BanditEntity.shootAt (e): fires when its cooldown has run out. */
     public static void banditShootAt(net.minecraft.entity.Entity bandit, net.minecraft.entity.EntityLivingBase target)
     {
