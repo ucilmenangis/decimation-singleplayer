@@ -130,7 +130,9 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   (`npcHitsSkipCooldown` false), NPC shots are traced bullets (spread per
   tier, stopped by walls, impact particles, tracer = the real shot).
   v0.30.4: hit cooldown 0.25 s (`npcHitCooldownTicks` 5); RPG bandits
-  (RPG-7) and RPG military (RPG-18) fire real rockets.
+  (RPG-7) and RPG military (RPG-18) fire real rockets. v0.31.0: juggernaut
+  (200 hp, takes 25%, machine guns or an armor piercing Barrett), only with
+  military groups (`juggernautChance` 0.15) and its egg.
 
 ## Bug and feature tracking
 

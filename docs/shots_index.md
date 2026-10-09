@@ -498,3 +498,9 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
 - sheet_shots_rocket_v0.30.4.png: the same from 5 blocks, 3 ticks after
   each launch: the bandit holds the RPG-7 (clear in rocket_3), the rocket
   is a small dark body flying west with white smoke puffs behind it.
+
+## npc_juggernaut_v0.31.0/ (dev test mode npc, fresh world)
+- sheet_npc.png: npc_0 to npc_2 the bandit, soldier and Soviet lineups as
+  before; npc_3 three juggernauts: bulky dark juggernaut armor with olive
+  accents, machine guns in hand; npc_eggs the first 9 eggs in the hotbar,
+  held egg named "Spawn Soldier (marineforest)".

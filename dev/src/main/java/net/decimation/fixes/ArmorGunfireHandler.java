@@ -66,14 +66,17 @@ public class ArmorGunfireHandler
             return;
         }
         float damage = event.ammount;
+        float armor = 1;
         for (int slot = 0; slot < HELMET; slot++)
         {
-            damage *= multiplier(victim, slot);
+            armor *= multiplier(victim, slot);
         }
         if (random.nextDouble() < HEADSHOT_CHANCE)
         {
-            damage *= multiplier(victim, HELMET);
+            armor *= multiplier(victim, HELMET);
         }
+        // a .50 BMG NPC hit (NpcShots.armorPiercing): armor at half strength
+        damage *= NpcShots.armorPiercing ? (float) Math.sqrt(armor) : armor;
         event.ammount = damage;
     }
 

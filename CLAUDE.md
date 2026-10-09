@@ -596,6 +596,8 @@ of the last session:
   tiers bandit_rpg / military_rpg fire RocketEntity (Deci.fireRocket);
   deciworldgen_npc.cfg has config version "2" (weights reset once). New
   tiers go LAST in NpcLoadouts (egg metadata = index).
+  v0.31.0: juggernaut tier (weights 0: MilitarySpawner juggernautChance
+  and its egg only), Barrett hits armor piercing (NpcShots.armorPiercing).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

@@ -34,6 +34,15 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
     static final double RANGE = 96;
     private final NpcLoadouts loadouts;
     private final Random random = new Random();
+    /**
+     * Set while a .50 BMG hit is applied (server thread): ArmorGunfireHandler
+     * then counts the victim's armor at half strength (square root of its
+     * multiplier). User 2026-10-09: the juggernaut's Barrett, "ridiculous
+     * damage since it's .50 BMG".
+     */
+    public static boolean armorPiercing;
+    static final String[] PIERCING = {"barrett"};
+
     /** Dev tests: when set, every shot's direction {x, y, z, shooter entity id} is added here. */
     public static volatile java.util.Queue<double[]> record;
 
@@ -101,7 +110,15 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         Deci.gunFlash(gun);
         if (hit != null)
         {
-            hit.attackEntityFrom(Deci.humanDamage(), (float) (damage / (Deci.isInfected(hit) ? 1 : 8)));
+            armorPiercing = NpcLoadouts.contains(PIERCING, gunName);
+            try
+            {
+                hit.attackEntityFrom(Deci.humanDamage(), (float) (damage / (Deci.isInfected(hit) ? 1 : 8)));
+            }
+            finally
+            {
+                armorPiercing = false;
+            }
         }
         else if (block != null)
         {

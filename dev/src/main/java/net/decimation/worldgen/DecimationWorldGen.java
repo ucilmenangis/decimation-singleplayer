@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.30.4",
+     version = "0.31.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {

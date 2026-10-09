@@ -35,10 +35,8 @@ or `[not decided]`.
 
 ## NPCs and combat (user plan, "later")
 
-1. **Enemy juggernaut**: full juggernaut armor, machine guns (PKM, M240, any
-   in the registry) or a Barrett with very high (.50 BMG) damage.
-2. **More zombie variants.**
-3. Civilian NPC; traders that spawn on their own and walk.
+1. **More zombie variants.**
+2. Civilian NPC; traders that spawn on their own and walk.
    All in new_feature.md ("New hostile NPCs and stronger bandits", "More
    zombie variants...", "3 new mobs", "More clothing variety").
 
@@ -82,3 +80,6 @@ or `[not decided]`.
   Soviets no longer kill each other (bug.md).
 - v0.30.4 NPC hit cooldown 0.25 s; RPG-7 bandits and RPG-18 military fire
   real rockets (new_feature.md).
+- v0.31.0 juggernaut (Soviet side, juggernaut set, machine guns or an
+  armor piercing Barrett, 200 hp, takes 25%, slow; only with military
+  groups in military sectors, and its egg).

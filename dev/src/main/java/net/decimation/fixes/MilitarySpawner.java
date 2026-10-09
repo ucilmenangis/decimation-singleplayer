@@ -26,7 +26,7 @@ public class MilitarySpawner
 {
     private final boolean enabled;
     private final int interval, cap;
-    private final float chance;
+    private final float chance, juggernautChance;
     private final Random random = new Random();
     private int ticks;
 
@@ -38,6 +38,8 @@ public class MilitarySpawner
         interval = cfg.getInt("interval", cat, 400, 20, 72000, "ticks between tries per player (20 = 1 s)");
         chance = cfg.getFloat("chance", cat, 0.5f, 0, 1, "chance a try spawns a group");
         cap = cfg.getInt("cap", cat, 4, 0, 64, "no new group while this many are within 64 blocks");
+        juggernautChance = cfg.getFloat("juggernautChance", cat, 0.15f, 0, 1,
+            "chance a group brings a juggernaut (the only way one spawns, besides its egg)");
         cfg.save();
     }
 
@@ -99,14 +101,20 @@ public class MilitarySpawner
                 continue;
             }
             int size = 2 + random.nextInt(2);
+            boolean juggernaut = random.nextFloat() < juggernautChance;
             for (int i = 0; i < size; i++)
             {
                 EntityLiving npc = Deci.newSoviet(world);
+                if (juggernaut && i == 0 && NpcLoadouts.instance() != null)
+                {
+                    NpcLoadouts.instance().equip(npc, NpcLoadouts.instance().byName("juggernaut"), npc.getEntityData());
+                }
                 npc.setLocationAndAngles(x + 0.5 + random.nextInt(3) - 1, y, z + 0.5 + random.nextInt(3) - 1,
                                          random.nextFloat() * 360, 0);
                 world.spawnEntityInWorld(npc);
             }
-            FMLLog.info("[deciworldgen] enemy military group of %d at %d,%d,%d", size, x, y, z);
+            FMLLog.info("[deciworldgen] enemy military group of %d%s at %d,%d,%d", size,
+                        juggernaut ? " with a juggernaut" : "", x, y, z);
             return true;
         }
         return false;

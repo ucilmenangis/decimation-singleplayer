@@ -58,6 +58,10 @@ public class NpcLoadouts
         int delayMin = 4, delayMax = 12;
         /** Aim spread, degrees (sigma of a gaussian per axis; NpcShots); machine guns x MG_SPREAD. */
         public float spread = 1.2f;
+        /** Armor pools hold whole sets: one index for all 4 slots (juggernaut colours stay matched). */
+        boolean matchedSet;
+        /** Walk speed (Decimation's humans 0.25) and knockback resistance; 0 = unchanged. */
+        double speed, knockbackResistance;
         final String[][] armor; // helmet, chest, legs, boots: registry names to pick from
         final String[] guns;
 
@@ -84,6 +88,14 @@ public class NpcLoadouts
         Tier spread(float degrees)
         {
             spread = degrees;
+            return this;
+        }
+
+        Tier heavy(double speed, double knockbackResistance)
+        {
+            this.speed = speed;
+            this.knockbackResistance = knockbackResistance;
+            matchedSet = true;
             return this;
         }
     }
@@ -154,6 +166,11 @@ public class NpcLoadouts
             new String[][] {{"militiaHelm", "banditHelm"}, {"militiaVest", "banditVest"}, {"militiaPants"},
                             {"militiaBoots"}},
             "rpg7").spread(1.6f));
+        // juggernaut: never rolled (weights 0), only MilitarySpawner (juggernautChance) and its egg
+        tiers.add(new Tier("juggernaut", NpcKind.SOVIET, 0, 0, 200, 0.25f,
+            new String[][] {{"juggernautHelm", "juggernautHelmGray"}, {"juggernautVest", "juggernautVestGray"},
+                            {"juggernautPants", "juggernautPantsGray"}, {"juggernautBoots", "juggernautBootsGray"}},
+            "pkm", "pkp", "m240", "mk48", "barrett").spread(1.0f).heavy(0.18, 1.0));
 
         load(new File(configDir, "deciworldgen_npc.cfg"));
     }
@@ -389,10 +406,11 @@ public class NpcLoadouts
     /** Applies a tier to a new NPC: armor, gun, health; remembers it in the entity data. */
     public void equip(EntityLiving npc, Tier tier, NBTTagCompound data)
     {
+        int set = random.nextInt(tier.armor[0].length);
         for (int slot = 0; slot < 4; slot++)
         {
             String[] pool = tier.armor[slot];
-            Item piece = item(pool[random.nextInt(pool.length)]);
+            Item piece = item(pool[tier.matchedSet ? set % pool.length : random.nextInt(pool.length)]);
             if (piece != null)
             {
                 npc.setCurrentItemOrArmor(4 - slot, new ItemStack(piece)); // 4 helmet .. 1 boots
@@ -404,6 +422,14 @@ public class NpcLoadouts
             gun = "ak74";
         }
         npc.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(tier.health);
+        if (tier.speed > 0)
+        {
+            npc.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(tier.speed);
+        }
+        if (tier.knockbackResistance > 0)
+        {
+            npc.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(tier.knockbackResistance);
+        }
         npc.setHealth(tier.health);
         data.setString(TAG, tier.name);
         data.setString(GUN_TAG, gun);

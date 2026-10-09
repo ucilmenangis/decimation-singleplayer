@@ -36,7 +36,8 @@ public class NpcTest extends DevTestMode
     private static final String[][] LINEUPS = {
         {"bandit_light", "bandit_light", "bandit_medium", "bandit_medium", "bandit_heavy", "bandit_heavy"},
         {"soldier_marine", "soldier_marineforest", "soldier_marineurban", "soldier_marineblack"},
-        {"military", "military", "military", "military"}};
+        {"military", "military", "military", "military"},
+        {"juggernaut", "juggernaut", "juggernaut"}};
 
     private volatile boolean done;
     private volatile int ticks;
@@ -172,7 +173,7 @@ public class NpcTest extends DevTestMode
         DevTestResults.value(name(), "soviet tiers", spawnBatch(world, NpcKind.SOVIET, 12, bx, bz));
 
         // a player's gun hit: the tier's share
-        for (String tn : new String[] {"bandit_light", "bandit_heavy", "military"})
+        for (String tn : new String[] {"bandit_light", "bandit_heavy", "military", "juggernaut"})
         {
             NpcLoadouts.Tier tier = loadouts.byName(tn);
             EntityLiving npc = tier.kind == NpcKind.SOVIET ? Deci.newSoviet(world) : Deci.newBandit(world);
@@ -196,6 +197,39 @@ public class NpcTest extends DevTestMode
         DevTestResults.check(name(), "factions soviet>soviet, soviet>bandit, soviet>soldier, bandit>soviet, soldier>soviet",
                              java.util.Arrays.toString(got), java.util.Arrays.equals(got, want), java.util.Arrays.toString(want));
 
+        // juggernaut: slow, no knockback, one matching armor set
+        EntityLiving jug = Deci.newSoviet(world);
+        loadouts.equip(jug, loadouts.byName("juggernaut"), jug.getEntityData());
+        String helm = net.minecraft.item.Item.itemRegistry.getNameForObject(jug.getEquipmentInSlot(4).getItem());
+        boolean gray = helm.endsWith("Gray");
+        boolean matched = true;
+        for (int sl = 1; sl <= 4; sl++)
+        {
+            String n = net.minecraft.item.Item.itemRegistry.getNameForObject(jug.getEquipmentInSlot(sl).getItem());
+            matched &= n.contains("juggernaut") && n.endsWith("Gray") == gray;
+        }
+        double speed = jug.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getBaseValue();
+        double kb = jug.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).getBaseValue();
+        DevTestResults.check(name(), "juggernaut set / speed / knockback", matched + " / " + speed + " / " + kb,
+                             matched && Math.abs(speed - 0.18) < 1e-6 && kb == 1.0, "true / 0.18 / 1.0");
+
+        // .50 BMG (NpcShots.armorPiercing): armor at half strength against a full marine body set
+        String[] marine = {"marineBoots", "marinePants", "marineVest"};
+        p.setGameType(net.minecraft.world.WorldSettings.GameType.SURVIVAL);
+        for (int sl = 0; sl < 3; sl++)
+        {
+            p.setCurrentItemOrArmor(sl + 1, new ItemStack(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", marine[sl])));
+        }
+        float normal = hitPlayer(p, false), piercing = hitPlayer(p, true);
+        for (int sl = 1; sl <= 3; sl++)
+        {
+            p.setCurrentItemOrArmor(sl, null);
+        }
+        p.setHealth(p.getMaxHealth());
+        p.setGameType(net.minecraft.world.WorldSettings.GameType.CREATIVE);
+        DevTestResults.check(name(), "barrett hit 6 on a marine body set", String.format("%.2f (normal %.2f)", piercing, normal),
+                             piercing > normal * 2, "more than twice a normal hit (armor at half strength)");
+
         // every tier's spawn egg spawns that tier
         net.minecraft.item.Item egg = cpw.mods.fml.common.registry.GameRegistry.findItem("deciworldgen", "npc_egg");
         int eggs = 0, eggOk = 0;
@@ -205,7 +239,11 @@ public class NpcTest extends DevTestMode
             eggs++;
             int y = ground(world, bx, bz) - 1;
             List<EntityLiving> before0 = humans(world, bx, y, bz);
-            egg.onItemUse(new ItemStack(egg, 1, i), p, world, bx, y, bz, 1, 0.5f, 1, 0.5f);
+            // a soldier egg can come out as a mech (Decimation's 5% swap): try again
+            for (int attempt = 0; attempt < 5 && humans(world, bx, y, bz).size() == before0.size(); attempt++)
+            {
+                egg.onItemUse(new ItemStack(egg, 1, i), p, world, bx, y, bz, 1, 0.5f, 1, 0.5f);
+            }
             for (EntityLiving e : humans(world, bx, y, bz))
             {
                 if (!before0.contains(e))
@@ -228,7 +266,9 @@ public class NpcTest extends DevTestMode
         int tagged = 0;
         for (EntityLiving e : after)
         {
-            tagged += before.contains(e) || !"military".equals(e.getEntityData().getString(NpcLoadouts.TAG)) ? 0 : 1;
+            String tg = e.getEntityData().getString(NpcLoadouts.TAG);
+            tagged += before.contains(e) || !(tg.equals("military") || tg.equals("military_rpg") || tg.equals("juggernaut"))
+                ? 0 : 1;
         }
         DevTestResults.check(name(), "military spawner group", placed + ", " + tagged + " new",
                              placed && tagged >= 2, "2 or 3 new tier military NPCs");
@@ -285,6 +325,24 @@ public class NpcTest extends DevTestMode
                              + (refused > 0 ? " (" + refused + " refused, mech)" : "") + (bad > 0 ? " " + firstBad : ""),
                              bad == 0, "tier, 4 armor pieces, tier gun, tier health");
         return tiers;
+    }
+
+    /** One NPC gun hit of 6 (a Barrett, 50 / 8) on the player; armor piercing or not. */
+    private static float hitPlayer(EntityPlayerMP p, boolean piercing)
+    {
+        p.setHealth(p.getMaxHealth());
+        p.hurtResistantTime = 0;
+        float before = p.getHealth();
+        net.decimation.fixes.NpcShots.armorPiercing = piercing;
+        try
+        {
+            p.attackEntityFrom(Deci.humanDamage(), 6.0f);
+        }
+        finally
+        {
+            net.decimation.fixes.NpcShots.armorPiercing = false;
+        }
+        return before - p.getHealth();
     }
 
     private static EntityLiving newSoldier(World world)

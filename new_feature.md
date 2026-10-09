@@ -437,6 +437,20 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.31.0 (user choice, step 2 of the NPC plan): the JUGGERNAUT, tier
+"juggernaut" (Soviet side, so hostile to every player): one matching
+juggernaut set (normal or gray), PKM / PKP / M240 / MK48 or a Barrett,
+200 hp, takes 25% of a player's gun damage (a 16 damage rifle hit does 4:
+about 50 hits, near two magazines), walk speed 0.18 (others 0.25),
+knockback resistance 1. Never rolled at random (weights 0): only
+MilitarySpawner brings one (juggernautChance 0.15 per group, so only in
+military sectors) and its egg. Barrett hits are armor piercing
+(NpcShots.armorPiercing): ArmorGunfireHandler applies the square root of
+the armor multiplier. Barrett hit (50 / 8 = 6, x5): 30 hp bare (one shot
+kills), 11.6 through a full marine body set (normal 6 hit: 4.5). Checked
+(npc mode, all PASS): 2.5 of a 10 hit, set / speed / knockback, piercing,
+11 eggs, spawner group; lineup photo npc_3.
+
 v0.30.4 (user request): rocket launchers. Tiers bandit_rpg (RPG-7,
 weight 3, 8 in military sectors, 30 hp, takes 75%) and military_rpg
 (RPG-18 standard rockets, about 1 in 10 Soviets: military weight 9 vs 1,
