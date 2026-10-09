@@ -46,3 +46,9 @@ docs/shots/
 
 # gun preview renders (tools/bbmcp.py output; rebuildable)
 tools/guns/models/render_*.png
+
+# ---- Guns generated locally from the user's Decimation.jar (tools/guns/ump9.py): Decimation art, never public ----
+dev/src/main/resources/assets/deci/models/guns/smg/ump9.bmodel
+dev/src/main/resources/assets/deci/textures/model/guns/smg/ump9/
+dev/src/main/resources/assets/deci/textures/items/gun/smg/ump9.png
+dev/src/main/resources/assets/deci/animations/ump9/

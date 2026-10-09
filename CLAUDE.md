@@ -645,6 +645,9 @@ of the last session:
   sight picture matched to the Uzi in the same shot; every user revision
   updates the skill's revision log (user rule). v0.37.3: MAC-10 gaps
   closed (`study.py gaps`, declared sizes, more bevels and details).
+  v0.38.0: UMP9 = Decimation's UMP45 generated locally from the jar
+  (tools/guns/ump9.py, outputs git ignored, run it before building) with
+  our curved 9 mm magazine; DevTest gun takes -Pgun=NAME.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

@@ -214,6 +214,17 @@ source of truth about the real gun and about how it must look in game.
    rounded (long parts 1x1xN), raised details about 0.08 proud, tone near
    the median, middle detail from the photos.
 
+13. A variant of a gun Decimation already has (user, UMP9: "mostly same
+   like ump45, take from 45acp asset then replace the mag"): do not model
+   it from scratch. Generate it locally from the user's Decimation.jar
+   (tools/guns/ump9.py is the template): their model without the parts
+   that differ, our own parts added (anchored on the replaced part's
+   position, e.g. the old magazine's top face), their texture with our
+   islands below, their animations under our name, the icon rendered.
+   The generated files are git ignored (public repo: never Decimation
+   art), NewGuns registers the gun only when its model exists. Aim,
+   suppressor and hands are then Decimation's own.
+
 ## Revision casebook (never delete a case; look here first)
 
 Every user revision and every problem found on the way, with how it was
@@ -351,6 +362,36 @@ revision (same commit), never remove old ones.
   (holes still on the line, v0373_aim_cmp.png), hip with suppressor
   (v0373_hip_supp_crop.png), gun test (reload 30), suppressor numbers
   unchanged (x 9.25 to 14.25, centre -3.90).
+
+### Case 10: UMP9, a variant of Decimation's UMP45 (v0.38.0, 10 Oktober 2026)
+- Request (user): UMP9, "basically 9mm version of the ump45 ... ump9 has
+  rounded mag like rpk, akm mag"; photos 4 (side views, three quarter,
+  suppressor); then "mostly same like ump45, you can take from 45acp
+  asset then replace the mag with new model 9mm".
+- First plan was a full model from the photos (photo 2 measured: scaled
+  to the UMP45's 19.7 length, bore -2.93 vs the UMP45's about -2.9,
+  flamePos (14.25, -3.78) vs (13.9, -3.75), so the photo and Decimation's
+  model agree); the user's shortcut is better: exact Decimation look.
+- How: tools/guns/ump9.py reads ump45.bmodel / ump45.png / ump45*.anib
+  from Decimation.jar, drops every line with ammoModel (their straight
+  2 part magazine), doubles textureHeight, appends our magazine
+  (gunmodel.part_block, islands in the new lower half, gunmodel.paint),
+  writes the assets (git ignored), copies the animations as ump9*.anib
+  (their magazine pose moves every ammoModel* part), renders the icon.
+- Our magazine: anchored on the UMP45 magazine's top face (rear
+  (7.41, -1.18), front (8.58, -1.43), 1.17 deep); 0.75 wide; 6 skewed
+  segments curving forward 1.92 over 4.43 (photo: about 0.45 forward per
+  unit down, growing toward the base); smoked window strips both sides;
+  base plate; 15 parts.
+- Registration (fixes/NewGuns.registerUmp9): only if
+  /assets/deci/models/guns/smg/ump9.bmodel exists; ump9Mag 30 rounds
+  with the MP5A3 magazine's 9 mm bullet and curved icon; damage 11, 650
+  rpm, recoil 5.5 / 0.4, recovery 5, slowdown 0.14; loot where the
+  UMP45 and its magazine are; the UMP45's sounds.
+- Check: study.py sheet ump45 ours:ump9 (docs/shots/ump9_v0.38/
+  cmp_side.png), render three; gunview guns=ump45,ump9: hip and aim
+  identical to the UMP45; gun test gun=ump9: registered, reload 30.
+  DevTestGun now takes -Pgun=NAME.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

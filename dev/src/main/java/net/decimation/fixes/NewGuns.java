@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
  */
 public final class NewGuns
 {
-    public static Item mac10, mac10Mag;
+    public static Item mac10, mac10Mag, ump9, ump9Mag;
 
     private NewGuns()
     {
@@ -45,5 +45,31 @@ public final class NewGuns
         }
         FMLLog.info("[deciworldgen] MAC-10 registered: loot %d gun / %d mag pools, %d sounds from the Uzi, suppressor %s",
                     gunPools, magPools, sounds, suppressor ? "moved" : "not moved");
+        registerUmp9();
+    }
+
+    /**
+     * UMP9 (user request 10 Oktober 2026): Decimation's UMP45 with our curved 9 mm magazine. Its
+     * model, texture, icon and animations are generated locally from the user's Decimation.jar by
+     * tools/guns/ump9.py (git ignored: nothing of Decimation in the repo), so the gun is registered
+     * only when that model is there. 9 mm like the MP5A3 (its rounds, its curved magazine icon),
+     * 30 rounds; damage 11 (Uzi 11, MP5A3 12, UMP45 13), 650 rpm, a bit less kick than the UMP45,
+     * its weight; the UMP45's sounds; found where the UMP45 and its magazine are found.
+     */
+    private static void registerUmp9()
+    {
+        if (NewGuns.class.getResource("/assets/deci/models/guns/smg/ump9.bmodel") == null)
+        {
+            FMLLog.info("[deciworldgen] UMP9 not registered: run tools/guns/ump9.py (needs Decimation.jar)");
+            return;
+        }
+        ump9Mag = Deci.newMagazine("ump9Mag", 30, "mp5a3Mag", "mp5a3Mag");
+        ump9 = Deci.newGun("ump9", "smg", 5.5f, 0.4f, true, 5.0f, 650f, 0.14, 11, ump9Mag);
+        Item ump45 = GameRegistry.findItem("deci", "ump45"), ump45Mag = GameRegistry.findItem("deci", "ump45Mag");
+        int gunPools = Deci.addLootLike(ump45, new ItemStack(ump9, 1));
+        int magPools = Deci.addLootLike(ump45Mag, new ItemStack(ump9Mag, 2));
+        int sounds = FMLCommonHandler.instance().getSide().isClient() ? Deci.useGunSounds("ump9", "smg", "ump45", "smg") : 0;
+        FMLLog.info("[deciworldgen] UMP9 registered: loot %d gun / %d mag pools, %d sounds from the UMP45",
+                    gunPools, magPools, sounds);
     }
 }

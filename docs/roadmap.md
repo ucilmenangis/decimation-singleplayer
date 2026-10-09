@@ -54,8 +54,17 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
+0. UMP9 (v0.38.0): waiting for the user's verdict in game; more variants
+   of Decimation guns can be made the same way (skill lesson 13).
+
 1. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
+
+## UI
+
+1. **Main menu GUI fix** (user, 10 Oktober 2026: "later in future, we fix
+   the GUI on main menu, not our priority"): what is wrong is
+   `[not decided]`, ask the user when we get to it.
 
 ## Code and tools
 

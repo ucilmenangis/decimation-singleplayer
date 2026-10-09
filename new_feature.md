@@ -546,6 +546,29 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### UMP9 (DONE v0.38.0, 10 Oktober 2026, waiting for the user's verdict)
+Built as the user suggested: Decimation's UMP45 generated locally from
+their Decimation.jar (tools/guns/ump9.py, outputs git ignored) with our
+own curved 9 mm magazine (15 parts); registered only when the generated
+model exists; ump9Mag 30 rounds (MP5A3 bullet and icon); damage 11, 650
+rpm. Checked: hip / aim identical to the UMP45, reload 30. Details:
+skill casebook case 10. The notes below were written before the
+shortcut.
+User request: the 9 mm UMP, Decimation has only the UMP45 (straight .45
+magazine); the UMP9's magazine is curved like the RPK / AKM ones. Built
+with the decimation-gun skill (second gun).
+Reference measurements (Decimation's ump45, numbers only, nothing copied):
+19.7 long, 9.9 high, 2.0 wide, 142 parts; x -5.35 to 14.3 (skeleton stock
+extended, receiver about x 2 to 12.5, top rail, front sight hood at the
+front, rear sight at the rear top, railed handguard with vents, short
+barrel with a muzzle cap); magazine in front of the trigger guard at x
+7.4 to 9.9, straight, leaning forward, 2 parts; flamePos (13.9, -3.75,
+-0.15), rhPos (-5.6, 2.62, -2.0), lhPos (6.5, 8.12, 4.62); stats damage
+13, 600 rpm, recoil 6 / 0.4, recovery 5, slowdown 0.14, AUTO / SINGLE.
+Curved magazine recipes: AK74 11 parts, MP5A3 4 segments shifted forward
+each (children of ammoModel0). Renders docs/shots/ump9_v0.38/
+(ref_side.png, ump45_*.png). Waiting for the user's photos (lesson 1).
+
 ### MAC-10 gaps closed (v0.37.3, 10 Oktober 2026)
 User: "perfect is perfect, we close the gaps until the mac10 looks really
 like decimation guns". New `study.py gaps` (ours vs the 13 Decimation

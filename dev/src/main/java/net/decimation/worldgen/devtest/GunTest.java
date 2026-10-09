@@ -1,7 +1,6 @@
 package net.decimation.worldgen.devtest;
 
 import net.decimation.fixes.Deci;
-import net.decimation.fixes.NewGuns;
 import net.decimation.fixes.NpcLoadouts;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -13,7 +12,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 /**
- * A gun of our own on the test arena (-Ptest=gun, fixes/NewGuns, the MAC-10):
+ * A gun of our own on the test arena (-Ptest=gun, fixes/NewGuns; -Pgun=NAME, default the MAC-10):
  * first person still (gun_fp), the reload animation (Decimation's reload key
  * pressed: gun_reload_<tick>), firing with the attack key held (gun_fire_<tick>),
  * Decimation's Uzi for comparison (gun_fp_uzi), then a bandit holding it from
@@ -122,9 +121,27 @@ public class GunTest extends DevTestMode
     }
 
     /** A full magazine: Decimation keeps a mag's rounds in its NBT "ammo" (none = empty). */
+    /** The gun under test: -Pgun=NAME (deciworldgen:NAME with magazine NAMEMag; default mac10). */
+    private static final String GUN = System.getProperty("deciworldgen.autotest.gun", "mac10");
+
+    private static Item ours(String name)
+    {
+        return (Item) Item.itemRegistry.getObject("deciworldgen:" + name);
+    }
+
+    private static Item gun()
+    {
+        return ours(GUN);
+    }
+
+    private static Item mag()
+    {
+        return ours(GUN + "Mag");
+    }
+
     private static ItemStack fullMag()
     {
-        ItemStack m = new ItemStack(NewGuns.mac10Mag);
+        ItemStack m = new ItemStack(mag());
         m.stackTagCompound = new net.minecraft.nbt.NBTTagCompound();
         m.stackTagCompound.setInteger("ammo", 30);
         return m;
@@ -146,15 +163,15 @@ public class GunTest extends DevTestMode
             w.difficultySetting = EnumDifficulty.NORMAL;
             w.setWorldTime(6000);
             p.capabilities.isFlying = true;
-            DevTestResults.check(name(), "MAC-10 registered", NewGuns.mac10 + " / " + NewGuns.mac10Mag,
-                                 NewGuns.mac10 != null && NewGuns.mac10Mag != null && Deci.gunTakes(NewGuns.mac10,
-                                 NewGuns.mac10Mag), "gun and magazine, the gun takes it");
+            DevTestResults.check(name(), GUN + " registered", gun() + " / " + mag(),
+                                 gun() != null && mag() != null && Deci.gunTakes(gun(), mag()),
+                                 "gun and magazine, the gun takes it");
         }
         // the items on the SERVER (reload and firing are checked there), synced to the client
         if (t == 30 || t == 135)
         {
             p.inventory.currentItem = 0;
-            ItemStack gun = new ItemStack(t == 30 ? NewGuns.mac10 : (Item) Item.itemRegistry.getObject("deci:uzi"));
+            ItemStack gun = new ItemStack(t == 30 ? gun() : (Item) Item.itemRegistry.getObject("deci:uzi"));
             gun.stackTagCompound = new net.minecraft.nbt.NBTTagCompound(); // set up already: a fresh gun's data
             gun.stackTagCompound.setInteger("ammo", 0);                    // appears a tick later, a reload before that is lost
             p.inventory.mainInventory[0] = gun;
@@ -186,13 +203,13 @@ public class GunTest extends DevTestMode
             if (t == 105)
             {
                 ammoAfterReload = ammo;
-                DevTestResults.check(name(), "MAC-10 loaded by the reload", String.valueOf(ammo), ammo == 30, "30");
+                DevTestResults.check(name(), GUN + " loaded by the reload", String.valueOf(ammo), ammo == 30, "30");
             }
             else
             {
                 // Decimation reads the fire button from the mouse itself (GunItem: Mouse.isButtonDown(0)),
                 // so a test cannot pull the trigger: player firing stays a manual check
-                DevTestResults.value(name(), "MAC-10 rounds after the (simulated) trigger, not testable",
+                DevTestResults.value(name(), GUN + " rounds after the (simulated) trigger, not testable",
                                      ammoAfterReload + " -> " + ammo);
             }
         }
@@ -201,7 +218,7 @@ public class GunTest extends DevTestMode
         {
             bandit = Deci.newBandit(w);
             NpcLoadouts.instance().equip(bandit, NpcLoadouts.instance().byName("bandit_medium"), bandit.getEntityData());
-            bandit.getEntityData().setString(NpcLoadouts.GUN_TAG, "mac10"); // synced to the client
+            bandit.getEntityData().setString(NpcLoadouts.GUN_TAG, GUN); // synced to the client
             bandit.setPosition(x, y, z);
             w.spawnEntityInWorld(bandit);
             target = Deci.newSoviet(w);

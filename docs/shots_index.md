@@ -637,3 +637,17 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   with the Uzi, both holes on the centre line; v0373_hip_crop.png,
   v0373_hip_supp_crop.png: first person, side details now 0.08 proud,
   suppressor over the threads; v0373_mac10_att(_npc).png full shots.
+
+## ump9_v0.38/ (UMP9, second gun of our own; references)
+- ref_side.png: Decimation's UMP45, MP5A3, AK74 side views (curved mag
+  recipes: MP5 4 skewed segments, AK74 11 parts). ump45_side / other /
+  top / three(_split).png: the UMP45 renders and part split (receiver
+  panels, top rail as small teeth parts, railed handguard with vents as
+  rows of small blocks, skeleton stock as a frame of long bars, straight
+  mag of 2 parts in front of the guard, raked grip).
+- cmp_side.png: Decimation's UMP45 next to our UMP9 (their body, our
+  curved magazine with window strips, 155 parts). ours_ump9_side / other /
+  top / three.png: UMP9 renders (three quarter: the curve and windows
+  read clearly). gun_fp / gun_reload_14 / 22 / 36.png and reload_sheet.png:
+  dev test gun with -Pgun=ump9 (first person, reload tilt). In game hip
+  and aim identical to the UMP45 (gunview guns=ump45,ump9).

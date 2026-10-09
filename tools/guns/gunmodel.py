@@ -155,21 +155,25 @@ def bmodel(spec, parts):
     uvs, th = layout(parts)
     lines += ["  textureWidth = %d;" % TEX_W, "  textureHeight = %d;" % th]
     for i, (n, p) in enumerate(numbered(parts)):
-        pts = p.points()
-        piv = [min(q[a] for q in pts) for a in range(3)]
-        s = size(p)
-        offs = [None] * 8
-        for k, q in p.c.items():
-            offs[INDEX[k]] = [q[a] - piv[a] - k[a] * s[a] for a in range(3)]
-        u, v = uvs[i]
-        corners = ", ".join("{%s}" % ", ".join(fnum(c) for c in o) for o in offs)
-        lines += ["",
-                  "  // %s" % p.name,
-                  "  %s = new BeardieModelRenderer(this, %d, %d);" % (n, u, v),
-                  "  %s.addShape(0F,0F,0F, new float[][]{%s}, %d, %d, %d);" % (n, corners, s[0], s[1], s[2]),
-                  "  %s.setRotationPoint(%s, %s, %s);" % (n, fnum(piv[0]), fnum(piv[1]), fnum(piv[2])),
-                  "  %s.setRotation(0F, 0F, 0F);" % n]
+        lines += part_block(n, p, *uvs[i])
     return "\n".join(lines) + "\n"
+
+
+def part_block(n, p, u, v):
+    """The .bmodel lines of one part named n with its UV island at (u, v)."""
+    pts = p.points()
+    piv = [min(q[a] for q in pts) for a in range(3)]
+    s = size(p)
+    offs = [None] * 8
+    for k, q in p.c.items():
+        offs[INDEX[k]] = [q[a] - piv[a] - k[a] * s[a] for a in range(3)]
+    corners = ", ".join("{%s}" % ", ".join(fnum(c) for c in o) for o in offs)
+    return ["",
+            "  // %s" % p.name,
+            "  %s = new BeardieModelRenderer(this, %d, %d);" % (n, u, v),
+            "  %s.addShape(0F,0F,0F, new float[][]{%s}, %d, %d, %d);" % (n, corners, s[0], s[1], s[2]),
+            "  %s.setRotationPoint(%s, %s, %s);" % (n, fnum(piv[0]), fnum(piv[1]), fnum(piv[2])),
+            "  %s.setRotation(0F, 0F, 0F);" % n]
 
 
 def paint(parts, seed=7):
@@ -290,3 +294,59 @@ def build(spec, out_root):
     for p in parts:
         groups[p.group] = groups.get(p.group, 0) + 1
     return {"parts": len(parts), "groups": groups, "texture": [TEX_W, layout(parts)[1]], "model": model}
+
+
+def smg_animations(parts, slide=1.6):
+    """Fire / SlideBack / Rack / Reload1 on Decimation's timings with our own values (first made for
+    the MAC-10, accepted by the user: "i like the style of the gun firing"; docs/gun_style_guide.md
+    section 10, skill lesson 11): Fire 2 frames, RAND, only the slideModel parts kick back by `slide`;
+    SlideBack held back; Rack 19 frames Hand 1 with the sound at 6; Reload1 57 frames (MagOut at 5,
+    SWITCH 20, LOAD 40 with MagIn, TRYBOLT 50), the magazine (every ammoModel part) dropping down
+    and back."""
+    Z = ((0, 0, 0), (0, 0, 0))
+    SL = slide_names(parts)
+    back = {n: ((-slide, 0, 0), (0, 0, 0)) for n in SL}
+    home = {n: Z for n in SL}
+    return {
+        # every shot: the bolt and knob run back (RAND frame); the game does the recoil
+        "Fire": anib(2, 0, {
+            0: {"parts": dict(Model=Z, OffHand=Z)},
+            1: {"kind": "RAND", "parts": dict(back, Model=Z, OffHand=Z)},
+        }),
+        # empty: bolt and knob held back
+        "SlideBack": anib(1, 0, {0: {"parts": dict(back, Model=Z, OffHand=Z)}}, static=True),
+        # charging: start held back, the off hand rides the knob home (sound at 6)
+        "Rack": anib(19, 1, {
+            0: {"parts": dict(back, OffHand=((0, 0, 0), (-6, 0, 0)), Model=((0, 0, 0), (8, 0, 8)))},
+            3: {"parts": dict(back, OffHand=((2.6, 0, -0.4), (-12, 0, 8)), Model=((0, 0, 0), (4, 0, 4)))},
+            6: {"sound": "Rack", "shake": 1.1, "parts": dict(home, OffHand=((2.6, 0, -2.2), (-8, 0, 8)), Model=Z)},
+            9: {"parts": dict(OffHand=((2.6, 0, -2.2), (0, 0, 8)), Model=Z)},
+            12: {"parts": dict(OffHand=((3.8, 0, -2.2), (0, 0, 8)), Model=Z)},
+            15: {"parts": dict(OffHand=((2.5, 0, -0.7), (0, 0, 0)), Model=Z)},
+            18: {"parts": dict(OffHand=Z, Model=Z)},
+        }),
+        # magazine out down the grip, a new one in, then the bolt if it ran dry
+        "Reload1": anib(57, 0, {
+            0: {"parts": dict(Model=Z, OffHand=Z, ammoModel0=Z)},
+            5: {"sound": "MagOut", "shake": 1.0,
+                "parts": dict(OffHand=((0, 0.4, 0), (-12, 4, 30)), Model=((0, 0, 0), (8, 0, 6)))},
+            10: {"parts": dict(ammoModel0=((0, 2.5, -1.5), (0, 0, 0)), OffHand=((-0.8, 2.2, 1.2), (-30, 4, 32)),
+                               Model=((0, 0, 0), (8, 0, 12)))},
+            15: {"parts": dict(ammoModel0=((-0.5, 7, -3.5), (0, 0, 0)), OffHand=((0.5, 5, 1), (-35, 4, 45)),
+                               Model=((0, 0, 0), (2, -4, 18)))},
+            20: {"kind": "SWITCH", "parts": dict(ammoModel0=((-3, 16, -6), (0, 0, 0)), OffHand=((3, 12.5, -1), (-48, 4, 65)),
+                                                 Model=((0, 0, 0), (0, -5, 20)))},
+            25: {"parts": dict(ammoModel0=((-3.5, 15.5, -5.5), (0, 0, 0)), OffHand=((2.4, 12, 0.4), (-48, 4, 65)),
+                               Model=((0, 0, 0), (0, -3, 20)))},
+            30: {"parts": dict(ammoModel0=((-1, 9, -6), (0, 0, 0)), OffHand=((3, 6.4, -1), (-34, 4, 55)),
+                               Model=((0, 0, 0), (4, 0, 22)))},
+            35: {"parts": dict(ammoModel0=((-1, 6.8, -4.5), (0, 0, 0)), OffHand=((1.2, 5.4, 1.4), (-34, 4, 46)),
+                               Model=((0, 0, 0), (12, 4, 22)))},
+            40: {"kind": "LOAD", "sound": "MagIn", "shake": 1.1,
+                 "parts": dict(ammoModel0=((0, 2.2, -2), (0, 0, 0)), OffHand=((-1.8, -0.2, 2.8), (-32, 4, 14)),
+                               Model=((0, 0, 0), (22, 12, 22)))},
+            45: {"parts": dict(ammoModel0=Z, OffHand=((-3.6, -3.2, 3.8), (-32, 4, 14)), Model=((0, 0, 0), (26, 12, 22)))},
+            50: {"kind": "TRYBOLT", "parts": dict(OffHand=((0, 0, 0), (-18, 0, 4)), Model=((0, 0, 0), (12, 4, 12)))},
+            55: {"parts": dict(Model=Z, OffHand=Z, ammoModel0=Z)},
+        }),
+    }

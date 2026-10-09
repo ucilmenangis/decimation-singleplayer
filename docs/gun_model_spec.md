@@ -213,6 +213,11 @@ Every asset is our own work (public repo: never copy Decimation art).
    faces, texel noise; 2 px a unit), the 32x32 icon (the model's
    side render from study.py on a transparent background, dark outline),
    `animations/<gun>/*.anib`.
+2b. Variant of a Decimation gun (UMP9): tools/guns/ump9.py builds it
+   from Decimation.jar locally (their parts minus the replaced ones plus
+   ours via gunmodel.part_block, texture extended below, animations
+   copied); the outputs are git ignored and NewGuns registers the gun
+   only when its model exists.
 3. Preview without the game: tools/guns/study.py (`sheet REF ours:<gun>`,
    `render ours:<gun> [--split]`, `attach ours:<gun> reddot ...`, `gaps
    ours:<gun>`, `vocab`, `stats`); docs/gun_style_guide.md section 6. The headless Blockbench

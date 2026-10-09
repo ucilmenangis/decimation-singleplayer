@@ -181,6 +181,15 @@ What worked, keep doing it:
 Numbers: 102 parts (SMG median 105), shape kinds 52 / 44 / 2 / 2 % (taper
 / cuboid / skew / wedge; Decimation 60 / 31 / 5 / 4).
 
+## 6d. Variants of Decimation guns (v0.38.0, UMP9)
+
+A gun Decimation already has in another version (UMP45 -> UMP9) is
+generated locally from the user's Decimation.jar: their model minus the
+parts that differ plus our own parts, anchored where the replaced parts
+were (tools/guns/ump9.py; outputs git ignored, registered only when
+present). Everything else (aim, attachments, hands, animations) is then
+Decimation's own and needs no checking beyond the new parts.
+
 ## 6c. Closing the gaps: `study.py gaps` (v0.37.3)
 
 `python3 tools/guns/study.py gaps ours:<gun>` lists every metric of ours
