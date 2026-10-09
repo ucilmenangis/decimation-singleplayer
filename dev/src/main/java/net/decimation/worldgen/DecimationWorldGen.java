@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.32.2",
+     version = "0.33.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -57,6 +57,7 @@ public class DecimationWorldGen
 
     private net.decimation.fixes.NpcLoadouts npcLoadouts;
     private net.decimation.fixes.MilitarySpawner militarySpawner;
+    private net.decimation.fixes.VanillaMobs vanillaMobs;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -98,6 +99,7 @@ public class DecimationWorldGen
         // bandit / soldier / Soviet tiers (both sides: the client applies the synced gun)
         npcLoadouts = new net.decimation.fixes.NpcLoadouts(event.getModConfigurationDirectory());
         militarySpawner = new net.decimation.fixes.MilitarySpawner(event.getModConfigurationDirectory());
+        vanillaMobs = new net.decimation.fixes.VanillaMobs(event.getModConfigurationDirectory());
         cpw.mods.fml.common.registry.GameRegistry.registerItem(
             new net.decimation.fixes.NpcEgg(npcLoadouts), "npc_egg");
 
@@ -191,6 +193,10 @@ public class DecimationWorldGen
     public void postInit(cpw.mods.fml.common.event.FMLPostInitializationEvent event)
     {
         net.decimation.worldgen.terrain.DecimationBiomes.copySpawns();
+        if (vanillaMobs != null && vanillaMobs.enabled())
+        {
+            vanillaMobs.removeFromBiomes(); // after copySpawns and Decimation's own spawn setup
+        }
     }
 
     @Mod.EventHandler
@@ -253,6 +259,10 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(militarySpawner);
         }
         FMLLog.info("[%s] NPC tiers and military spawner registered", MODID);
+        if (vanillaMobs.enabled())
+        {
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(vanillaMobs);
+        }
 
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new net.decimation.fixes.HumanityKillHandler());

@@ -138,6 +138,10 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   `npc_fire`). v0.32.1: sniper versions (juggernaut_sniper Barrett,
   elite_sniper), `sniperShare` 0.5. v0.32.2: snipers spot enemies up to
   `sniperRange` 96 blocks (others 32).
+- **No vanilla mobs (v0.33.0)**: vanilla monsters, animals, squid, bats,
+  villagers and golems are gone from the overworld (spawn lists and a join
+  filter); Decimation's own mobs and the Nether untouched. Config
+  `deciworldgen_mobs.cfg` (`removeVanillaMobs`, `keep`).
 
 ## Bug and feature tracking
 

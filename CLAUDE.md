@@ -602,6 +602,11 @@ of the last session:
   "v0.32.0"). Test trap: a test calling shootAt while the AI also does
   halves every cooldown. v0.32.1: juggernaut_sniper / elite_sniper tiers
   (sniperShare). v0.32.2: sniperSearch (sniperRange 96).
+  v0.33.0: `fixes/VanillaMobs` removes vanilla mobs from the overworld;
+  a dev test that needs a vanilla mob (pig target) must set
+  getEntityData().setBoolean(VanillaMobs.KEEP, true) before spawning it.
+  Runtime class names are obfuscated in the shipped game: never test
+  vanilla classes by package name.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

@@ -299,6 +299,7 @@ public class ShotTest extends DevTestMode
         }
         pigLast = -1;
         pig = new EntityPig(world);
+        pig.getEntityData().setBoolean(net.decimation.fixes.VanillaMobs.KEEP, true); // vanilla mobs are refused
         pig.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1000);
         pig.setHealth(1000);
         pig.setPosition(x0 - DIST[phase], Y, z0);

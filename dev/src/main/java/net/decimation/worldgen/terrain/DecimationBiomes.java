@@ -113,7 +113,10 @@ public final class DecimationBiomes
                 to.clear();
                 for (BiomeGenBase.SpawnListEntry e : from)
                 {
-                    boolean animal = e.entityClass.getName().startsWith("net.minecraft.entity.passive.");
+                    // vanilla animals (by package: obfuscated in the shipped game, so also by class)
+                    boolean animal = e.entityClass.getName().startsWith("net.minecraft.entity.passive.")
+                        || net.minecraft.entity.passive.EntityAnimal.class.isAssignableFrom(e.entityClass)
+                        && e.entityClass.getName().indexOf('.') < 0;
                     if (animal && (b == urban || b == military))
                     {
                         continue;

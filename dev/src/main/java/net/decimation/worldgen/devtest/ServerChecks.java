@@ -69,6 +69,10 @@ public class ServerChecks extends DevTestMode
                     checkBottlecaps();
                     checkArmor();
                     checkHelmet();
+                    if (player() != null)
+                    {
+                        checkVanillaMobs(player());
+                    }
                     waitTicks = 100;
                     return;
                 default: // poll until the crate has landed, at most ~60 s
@@ -313,6 +317,46 @@ public class ServerChecks extends DevTestMode
         p.setGameType(WorldSettings.GameType.CREATIVE);
         DevTestResults.check("checks", "NPC hit cooldown " + cd + " ticks", "early lands " + early + ", on time lands " + onTime,
                              cd == 0 || !early && onTime, "early false, on time true");
+    }
+
+    /** VanillaMobs: vanilla mobs refused in the overworld, Decimation's own still spawn, no vanilla spawn entries. */
+    private void checkVanillaMobs(net.minecraft.entity.player.EntityPlayerMP p)
+    {
+        net.minecraft.world.World w = p.worldObj;
+        int refused = 0, total = 0;
+        for (net.minecraft.entity.EntityLiving e : new net.minecraft.entity.EntityLiving[] {
+            new net.minecraft.entity.passive.EntityPig(w), new net.minecraft.entity.passive.EntityCow(w),
+            new net.minecraft.entity.monster.EntityZombie(w), new net.minecraft.entity.monster.EntityCreeper(w),
+            new net.minecraft.entity.passive.EntitySquid(w)})
+        {
+            e.setPosition(p.posX + 3, p.posY, p.posZ);
+            total++;
+            refused += w.spawnEntityInWorld(e) ? 0 : 1;
+            e.setDead();
+        }
+        net.minecraft.entity.EntityLiving infected = net.decimation.fixes.Deci.newInfected(w);
+        infected.setPosition(p.posX + 3, p.posY, p.posZ);
+        boolean deci = w.spawnEntityInWorld(infected);
+        infected.setDead();
+        int entries = 0;
+        for (net.minecraft.world.biome.BiomeGenBase b : net.minecraft.world.biome.BiomeGenBase.getBiomeGenArray())
+        {
+            if (b == null || b == net.minecraft.world.biome.BiomeGenBase.hell || b == net.minecraft.world.biome.BiomeGenBase.sky)
+            {
+                continue;
+            }
+            for (net.minecraft.entity.EnumCreatureType t : net.minecraft.entity.EnumCreatureType.values())
+            {
+                for (Object o : b.getSpawnableList(t))
+                {
+                    Class<?> c = ((net.minecraft.world.biome.BiomeGenBase.SpawnListEntry) o).entityClass;
+                    entries += c.getName().startsWith("net.minecraft.") ? 1 : 0;
+                }
+            }
+        }
+        DevTestResults.check("checks", "vanilla mobs refused / infected spawns / vanilla spawn entries",
+                             refused + "/" + total + " / " + deci + " / " + entries,
+                             refused == total && deci && entries == 0, total + "/" + total + " / true / 0");
     }
 
     private void checkHelmet()

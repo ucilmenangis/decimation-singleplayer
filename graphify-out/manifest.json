@@ -50,9 +50,9 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791530269.3396246,
-    "ast_hash": "6c03ced8bc622633b3c74d79dc65805a",
-    "semantic_hash": "6c03ced8bc622633b3c74d79dc65805a"
+    "mtime": 1791541458.0460947,
+    "ast_hash": "14c5847944f49b13e5593c9e7378d719",
+    "semantic_hash": "14c5847944f49b13e5593c9e7378d719"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791493377.3283305,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791530269.384096,
-    "ast_hash": "6db99a3a70c919e975d9f2218311b0f8",
-    "semantic_hash": "6db99a3a70c919e975d9f2218311b0f8"
+    "mtime": 1791541458.064159,
+    "ast_hash": "34151461f1f5641d01207d120d173ea4",
+    "semantic_hash": "34151461f1f5641d01207d120d173ea4"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -145,14 +145,14 @@
     "semantic_hash": "f621a823eb9474151095cff6f992f3da"
   },
   "documentation.md": {
-    "mtime": 1791530269.3834388,
-    "ast_hash": "c5eddbd5b5e5725b93d2c864d9f915aa",
-    "semantic_hash": "c5eddbd5b5e5725b93d2c864d9f915aa"
+    "mtime": 1791541458.063841,
+    "ast_hash": "c5e833c9b5ae2b3bbadfa7b6d5305e23",
+    "semantic_hash": "c5e833c9b5ae2b3bbadfa7b6d5305e23"
   },
   "new_feature.md": {
-    "mtime": 1791530269.3810325,
-    "ast_hash": "7cc53133694a5a5be02a6eb5faf2ba75",
-    "semantic_hash": "7cc53133694a5a5be02a6eb5faf2ba75"
+    "mtime": 1791541458.0630963,
+    "ast_hash": "9252faa45f3a1cb95b686c7b3b1a53e0",
+    "semantic_hash": "9252faa45f3a1cb95b686c7b3b1a53e0"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -275,9 +275,9 @@
     "semantic_hash": "51a1514316a0b913419f05ed014e5b6e"
   },
   "dev/src/main/java/net/decimation/worldgen/terrain/DecimationBiomes.java": {
-    "mtime": 1791372683.6888561,
-    "ast_hash": "a18c8ecefca15c6722af0a46ad1dccc8",
-    "semantic_hash": "a18c8ecefca15c6722af0a46ad1dccc8"
+    "mtime": 1791541148.112283,
+    "ast_hash": "99eff53fdc2ab46a3c4c8b2e72f9239d",
+    "semantic_hash": "99eff53fdc2ab46a3c4c8b2e72f9239d"
   },
   "dev/src/main/java/net/decimation/worldgen/terrain/DecimationWorldType.java": {
     "mtime": 1791372683.694567,
@@ -775,9 +775,9 @@
     "semantic_hash": "5a57ddd6059ac0651c1ae759f7fcfd29"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/ServerChecks.java": {
-    "mtime": 1791496804.3955443,
-    "ast_hash": "e519c01f191f1becdc6ce4a9f95d3e56",
-    "semantic_hash": "e519c01f191f1becdc6ce4a9f95d3e56"
+    "mtime": 1791541162.0760815,
+    "ast_hash": "46c87eb8a027357c4b4e1b98aacd1ecf",
+    "semantic_hash": "46c87eb8a027357c4b4e1b98aacd1ecf"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/TracerTest.java": {
     "mtime": 1791494998.092133,
@@ -790,9 +790,9 @@
     "semantic_hash": "237f95f08e85f8b81a2441ccf2ae1fdd"
   },
   "docs/roadmap.md": {
-    "mtime": 1791530269.382471,
-    "ast_hash": "25c4f9830674411452ef97555adf8f4b",
-    "semantic_hash": "25c4f9830674411452ef97555adf8f4b"
+    "mtime": 1791541458.0634673,
+    "ast_hash": "42300f3f977116f09224a3d97a4e6397",
+    "semantic_hash": "42300f3f977116f09224a3d97a4e6397"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -860,13 +860,18 @@
     "semantic_hash": "4755c5a99894bf212c941290457b5415"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/ShotTest.java": {
-    "mtime": 1791529756.3941276,
-    "ast_hash": "47c8bbf6de1852c686b9f6e2166096c8",
-    "semantic_hash": "47c8bbf6de1852c686b9f6e2166096c8"
+    "mtime": 1791541148.1139987,
+    "ast_hash": "e22708606f8b26df5445b8584c6e72ce",
+    "semantic_hash": "e22708606f8b26df5445b8584c6e72ce"
   },
   "tools/patches/PatchFactions.java": {
     "mtime": 1791493668.5192976,
     "ast_hash": "308c0ada63f94ea06900b4d1e8a2fc26",
     "semantic_hash": "308c0ada63f94ea06900b4d1e8a2fc26"
+  },
+  "dev/src/main/java/net/decimation/fixes/VanillaMobs.java": {
+    "mtime": 1791541148.11261,
+    "ast_hash": "ede1fc582585ebd1c1da4803cd57b5e3",
+    "semantic_hash": "ede1fc582585ebd1c1da4803cd57b5e3"
   }
 }

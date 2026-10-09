@@ -437,6 +437,28 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.33.0 (user: "remove vanilla mobs since this is a zombie mod";
+`fixes/VanillaMobs`, config deciworldgen_mobs.cfg): vanilla zombies,
+skeletons, creepers, spiders, cave spiders, endermen, slimes, witches,
+silverfish, zombie pigmen, pigs, cows, sheep, chickens, horses, wolves,
+ocelots, mooshrooms, squid, bats, villagers, iron golems and snow golems
+leave every biome's spawn lists but Hell and Sky (postInit, after
+DecimationBiomes.copySpawns) and are refused (and marked dead, so old
+chunks drop them) when they join the overworld (spawners, villages, eggs,
+breeding, old saves). Exact class match: Decimation's mobs that extend
+vanilla classes stay. Config: removeVanillaMobs, keep (entity names).
+Dev tests tag mobs they need with VanillaMobs.KEEP (the shots test pig).
+Checked: checks mode 5 / 5 vanilla mobs refused, infected still spawn, 0
+vanilla spawn entries; fresh seed 1 world: saved entities only Decimation's
+(Bandit 43, Human 17, Boar 17, Hazmat 9, Buck 6, Doggo 2, Soviet, Mech).
+Also: DecimationBiomes.copySpawns told vanilla animals by package name,
+which only works in dev (the shipped game is obfuscated); it now also
+checks the class. Juggernaut armor (user question): ArmorGunfireHandler
+covers every ItemArmorDeci, juggernaut pieces included (body x 0.022 after
+the 35% buff: an NPC rifle hit about 0.22 hp, a Barrett about 4.4)
+`[not verified]` in game, computed from the formula the marine numbers
+matched.
+
 v0.32.2 (user: snipers should spot players further than infantry):
 Decimation's findTarget looks 32 blocks around (15 up / down) for every
 armed NPC. NpcLoadouts.sniperSearch: once a second, an NPC holding a sniper

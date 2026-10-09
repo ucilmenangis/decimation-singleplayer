@@ -89,3 +89,5 @@ or `[not decided]`.
 - v0.32.1 sniper versions of the juggernaut (Barrett) and elite, half of
   the spawner's juggernauts / elites, own eggs.
 - v0.32.2 snipers spot enemies up to 96 blocks (others 32).
+- v0.33.0 vanilla mobs removed from the overworld (config
+  deciworldgen_mobs.cfg).
