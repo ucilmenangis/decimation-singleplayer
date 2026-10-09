@@ -546,6 +546,30 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### 60 round magazines (DONE v0.35.0, 9 Oktober 2026)
+`fixes/Magazines`, Deci newMagazine / gunTakes / addGunMagazine /
+addLootLike. Read from deobf: a magazine is an AmmoItem (deci.ay.f: name,
+feed type mag, capacity, stack 3, bullet item adI) registered by its own
+constructor; a gun keeps the mags it loads in ammoTypes (deci.ay.i.aep,
+copied at construction: the AK family shares ak74 / aks74u / rpk74 / ak12
+mags, the M16 family the STANAG list); its max ammo is the loaded mag's
+capacity. Loot: LootTableRegistry (DecimationMod.getLootTable) builds item
+lists per container block in Decimation's preInit (entries awA, package
+private class, lists awC), then pools (init).
+- 60rnd NATO STANAG Magazine (deciworldgen:stanag60Mag, 5.56): M16A1 /
+  A2, M231, AR-15, XM177, Honey Badger (Decimation's STANAG list) plus M4A4,
+  ACR, L85A1, SCAR-L (own mag in Decimation, STANAG in reality). Not FAMAS,
+  G36C, AUG, Galil, INSAS. Icon of m16a2Mag.
+- 60rnd AK Magazine (deciworldgen:ak60Mag, 5.45): every gun taking ak74Mag
+  (AK-74, AKS-74, AKS-74U, AK-12, RPK-74, and AKM / AKMS as Decimation
+  shares that list). Icon of the longer rpk74Mag.
+- Names in assets/deciworldgen/lang/en_US.lang (also names the egg items).
+- Loot: one in every pool already holding the 30 round mag (8 STANAG pools,
+  7 AK pools). Black market trader offers not added `[not decided]`.
+- Checked (checks mode): right guns take them, wrong ones not, capacity
+  60; hotbar photo npc_mags (names, icons). Reloading a gun with one in
+  game `[not verified]`.
+
 ### Zones, factions and world (user list 9 Oktober 2026, "later")
 Only the list and starting points; scope of each is `[not decided]`, ask
 the user before building.

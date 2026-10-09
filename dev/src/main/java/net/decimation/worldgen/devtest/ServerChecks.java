@@ -73,6 +73,7 @@ public class ServerChecks extends DevTestMode
                     {
                         checkVanillaMobs(player());
                     }
+                    checkMagazines();
                     waitTicks = 100;
                     return;
                 default: // poll until the crate has landed, at most ~60 s
@@ -317,6 +318,38 @@ public class ServerChecks extends DevTestMode
         p.setGameType(WorldSettings.GameType.CREATIVE);
         DevTestResults.check("checks", "NPC hit cooldown " + cd + " ticks", "early lands " + early + ", on time lands " + onTime,
                              cd == 0 || !early && onTime, "early false, on time true");
+    }
+
+    /** Magazines: the 60 round STANAG / AK exist, hold 60, and the right guns take them (not others). */
+    private void checkMagazines()
+    {
+        net.minecraft.item.Item s60 = net.decimation.fixes.Magazines.stanag60, a60 = net.decimation.fixes.Magazines.ak60;
+        String[] stanagGuns = {"m16a2", "m16a1", "m4a4", "acr", "l85a1", "fnscarl"}, akGuns = {"ak74", "aks74u", "rpk74"},
+            neither = {"sks", "pkm", "g36c", "famas"};
+        boolean ok = s60 != null && a60 != null;
+        StringBuilder bad = new StringBuilder();
+        for (String g : stanagGuns)
+        {
+            boolean t = net.decimation.fixes.Deci.gunTakes(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", g), s60);
+            ok &= t;
+            bad.append(t ? "" : " " + g);
+        }
+        for (String g : akGuns)
+        {
+            boolean t = net.decimation.fixes.Deci.gunTakes(cpw.mods.fml.common.registry.GameRegistry.findItem("deci", g), a60);
+            ok &= t;
+            bad.append(t ? "" : " " + g);
+        }
+        for (String g : neither)
+        {
+            net.minecraft.item.Item gun = cpw.mods.fml.common.registry.GameRegistry.findItem("deci", g);
+            boolean t = net.decimation.fixes.Deci.gunTakes(gun, s60) || net.decimation.fixes.Deci.gunTakes(gun, a60);
+            ok &= !t;
+            bad.append(t ? " " + g + "(wrongly)" : "");
+        }
+        int cap = s60 == null ? 0 : s60.getMaxDamage();
+        DevTestResults.check("checks", "60 round mags (guns, capacity)", (bad.length() == 0 ? "all right" : bad.toString().trim())
+                             + ", " + cap, ok && cap == 60, "all right, 60");
     }
 
     /** VanillaMobs: vanilla mobs refused in the overworld, Decimation's own still spawn, no vanilla spawn entries. */

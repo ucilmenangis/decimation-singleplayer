@@ -618,6 +618,8 @@ of the last session:
   v0.34.0: zombie variants (`fixes/InfectedVariants`, dev test mode
   `zombies`). Decimation resets infected walk speed BASE every tick: use
   attribute modifiers (operation 2 to multiply on top of others).
+  v0.35.0: 60 round mags (`fixes/Magazines`); our own item names live in
+  dev/src/main/resources/assets/deciworldgen/lang/en_US.lang.
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

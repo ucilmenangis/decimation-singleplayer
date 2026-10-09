@@ -533,6 +533,101 @@ public final class Deci
         return g.getCapacity();
     }
 
+    /**
+     * A new magazine: an AmmoItem (deci.ay.f, feed type mag) that loads the
+     * same bullet as an existing mag (its bulletItem adI) and shows another
+     * mag's icon (no new art). Registered by AmmoItem's constructor under
+     * the running mod (deciworldgen:NAME). Stacks of 3 as Decimation's mags.
+     */
+    public static Item newMagazine(String name, int capacity, String bulletOfMag, String iconOfMag)
+    {
+        deci.ay.f like = (deci.ay.f) cpw.mods.fml.common.registry.GameRegistry.findItem("deci", bulletOfMag);
+        return new Magazine(name, capacity, like.adI, "deci:ammo/mag/" + iconOfMag);
+    }
+
+    private static final class Magazine extends deci.ay.f
+    {
+        private final String icon;
+
+        Magazine(String name, int capacity, Item bullet, String icon)
+        {
+            super(name, capacity, 3, bullet);
+            this.icon = icon;
+        }
+
+        @Override
+        @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+        public void registerIcons(net.minecraft.client.renderer.texture.IIconRegister reg)
+        {
+            itemIcon = reg.registerIcon(icon);
+        }
+    }
+
+    /** True when the gun (GunItem deci.ay.i) loads this magazine (its ammoTypes aep). */
+    public static boolean gunTakes(Item gun, Item mag)
+    {
+        if (!(gun instanceof deci.ay.i) || ((deci.ay.i) gun).aep == null)
+        {
+            return false;
+        }
+        for (deci.ay.f m : ((deci.ay.i) gun).aep)
+        {
+            if (m == mag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Lets a gun load one more magazine (appended to its ammoTypes aep). */
+    public static void addGunMagazine(Item gun, Item mag)
+    {
+        deci.ay.i g = (deci.ay.i) gun;
+        deci.ay.f[] now = g.aep == null ? new deci.ay.f[0] : g.aep;
+        deci.ay.f[] more = java.util.Arrays.copyOf(now, now.length + 1);
+        more[now.length] = (deci.ay.f) mag;
+        g.aep = more;
+    }
+
+    /**
+     * Adds a stack to every loot pool that already holds `like`
+     * (LootTableRegistry deci.aD.l, DecimationMod.getLootTable deci.a.b.a().f():
+     * its entries awA are a package private class, item lists in field awC),
+     * then rebuilds the pools (init). Returns the number of pools changed.
+     */
+    @SuppressWarnings("unchecked")
+    public static int addLootLike(Item like, net.minecraft.item.ItemStack add)
+    {
+        deci.aD.l table = deci.a.b.a().f();
+        int n = 0;
+        try
+        {
+            for (Object entry : table.awA)
+            {
+                java.lang.reflect.Field f = entry.getClass().getDeclaredField("awC");
+                f.setAccessible(true);
+                java.util.List<net.minecraft.item.ItemStack> items = (java.util.List<net.minecraft.item.ItemStack>) f.get(entry);
+                boolean has = false;
+                for (net.minecraft.item.ItemStack s : items)
+                {
+                    has |= s != null && s.getItem() == like;
+                }
+                if (has)
+                {
+                    items.add(add.copy());
+                    n++;
+                }
+            }
+            table.init();
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] loot table change failed: %s", e);
+        }
+        return n;
+    }
+
     /** GunItem.stats (aeq).secondsPerShot (ads): the gun's own rate of fire. */
     public static double gunSecondsPerShot(net.minecraft.item.ItemStack gun)
     {

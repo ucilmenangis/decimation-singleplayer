@@ -54,8 +54,7 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
-1. **60 round STANAG and 60 round 5.45 AK magazines.** new_feature.md.
-2. Custom weapon creation: how-to written, a new model needs Techne.
+1. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
 
 ## Code and tools
@@ -104,3 +103,4 @@ Details and starting points: new_feature.md "Zones, factions and world".
 - v0.33.0 vanilla mobs removed from the overworld (config
   deciworldgen_mobs.cfg).
 - v0.34.0 zombie variants: runner, riot, screamer, night frenzy, eggs.
+- v0.35.0 60 round STANAG and AK magazines (guns, loot).

@@ -530,3 +530,8 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   Decimation's random stance) firing, rockets with smoke trails in flight.
   A first arena run (not kept) still had blood marks, dropped items and
   NPCs of earlier modes on the floor: build() now cleans both.
+
+## mags_v0.35.0/
+- npc_mags.png: hotbar with the 30 round STANAG, 60rnd NATO STANAG
+  Magazine (selected, name shown), 30 round AK, 60rnd AK Magazine (RPK
+  style long icon), 40 round RPK mag.

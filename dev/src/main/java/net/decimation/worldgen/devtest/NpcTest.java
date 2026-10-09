@@ -95,7 +95,7 @@ public class NpcTest extends DevTestMode
                 DevTestUtil.screenshot(mc, name(), "npc_" + l);
             }
         }
-        if (t > 300 + LINEUPS.length * 200 + 20 && eggTicks < 40)
+        if (t > 300 + LINEUPS.length * 200 + 20 && eggTicks < 71)
         {
             // the eggs in the hotbar, GUI on
             mc.gameSettings.hideGUI = false;
@@ -112,6 +112,19 @@ public class NpcTest extends DevTestMode
             if (eggTicks == 39)
             {
                 DevTestUtil.screenshot(mc, name(), "npc_eggs");
+                // the 60 round mags beside the 30 round ones, the STANAG 60 selected (its name shows)
+                String[] mags = {"deci:m16a2Mag", "deciworldgen:stanag60Mag", "deci:ak74Mag", "deciworldgen:ak60Mag",
+                                 "deci:rpk74Mag"};
+                for (int i = 0; i < 9; i++)
+                {
+                    Object it = i < mags.length ? net.minecraft.item.Item.itemRegistry.getObject(mags[i]) : null;
+                    mc.thePlayer.inventory.mainInventory[i] = it == null ? null : new ItemStack((net.minecraft.item.Item) it);
+                }
+                mc.thePlayer.inventory.currentItem = 1;
+            }
+            if (eggTicks == 70)
+            {
+                DevTestUtil.screenshot(mc, name(), "npc_mags");
             }
             return true;
         }

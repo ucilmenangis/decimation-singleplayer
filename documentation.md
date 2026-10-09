@@ -146,6 +146,9 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   hp, takes 50%), screamer (5%, its scream sends infected within 32 blocks
   after its target), night frenzy (all infected x1.2 speed, +2 attack at
   night). Config `deciworldgen_zombies.cfg`; eggs "Spawn Infected (...)".
+- **60 round magazines (v0.35.0)**: 60rnd NATO STANAG (M16 family, M4A4,
+  ACR, L85A1, SCAR-L) and 60rnd AK (AK-74 family), found in the same loot
+  as the 30 round mags.
 
 ## Bug and feature tracking
 
