@@ -546,7 +546,7 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
-### UMP9 (DONE v0.38.0, 10 Oktober 2026, waiting for the user's verdict)
+### UMP9 (DONE v0.38.0, 10 Oktober 2026; user: "the ump9 work really well and no problem")
 Built as the user suggested: Decimation's UMP45 generated locally from
 their Decimation.jar (tools/guns/ump9.py, outputs git ignored) with our
 own curved 9 mm magazine (15 parts); registered only when the generated

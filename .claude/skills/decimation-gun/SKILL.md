@@ -424,6 +424,11 @@ revision (same commit), never remove old ones.
   zombies test still passes.
 - Lesson 14; tools: gunperf, census, perfcheck, JFR via jcmd.
 
+### Case 12: verdict, UMP9 accepted (v0.38.1, 10 Oktober 2026)
+- User: "the ump9 work really well and no problem". The variant route
+  (lesson 13: Decimation's model plus our part, generated locally) needed
+  no revision: aim, attachments and hands were Decimation's own.
+
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first
   person shots need the GUI on.

@@ -58,8 +58,17 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
-0. UMP9 (v0.38.0): waiting for the user's verdict in game; more variants
-   of Decimation guns can be made the same way (skill lesson 13).
+0. UMP9 (v0.38.0): accepted by the user ("work really well and no
+   problem"); more variants of Decimation guns can be made the same way
+   (skill lesson 13).
+1. **More scope models** (user, 10 Oktober 2026, "later"): new sight /
+   scope attachments of our own. Starting points: attachments are
+   AttachmentItem (slot sight, zoom fov, sway), models in
+   models/attachments/sight/<name>.bmodel placed at the fixed sight offset
+   (docs/gun_style_guide.md section 14), scope glass and overlay handled
+   by our ScopeZoom (v0.28.x). Which scopes `[not decided]`: ask the user
+   (for example ACOG 4x, holographic, PSO-1 for the AK family, 6x / 10x
+   sniper scopes) and for photos.
 
 1. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
