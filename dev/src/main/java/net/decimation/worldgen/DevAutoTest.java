@@ -100,6 +100,7 @@ public class DevAutoTest
         if (name.equals("cityfps")) return new CityFpsTest();
         if (name.equals("npc")) return new net.decimation.worldgen.devtest.NpcTest();
         if (name.equals("shots")) return new net.decimation.worldgen.devtest.ShotTest();
+        if (name.equals("zombies")) return new net.decimation.worldgen.devtest.ZombieTest();
         return null;
     }
 

@@ -142,6 +142,10 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
   villagers and golems are gone from the overworld (spawn lists and a join
   filter); Decimation's own mobs and the Nether untouched. Config
   `deciworldgen_mobs.cfg` (`removeVanillaMobs`, `keep`).
+- **Zombie variants (v0.34.0)**: runner (12%, fast, 14 hp), riot (8%, 30
+  hp, takes 50%), screamer (5%, its scream sends infected within 32 blocks
+  after its target), night frenzy (all infected x1.2 speed, +2 attack at
+  night). Config `deciworldgen_zombies.cfg`; eggs "Spawn Infected (...)".
 
 ## Bug and feature tracking
 

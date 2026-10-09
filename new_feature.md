@@ -547,6 +547,36 @@ vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
 ### More zombie variants, 60 round magazines, NPC bullet impacts (9 Oktober 2026, "later")
+#### Zombie variants design (started 9 Oktober 2026, user choice)
+Read from deobf source: InfectedEntity (deci.ag.d) is a HumanEntity with
+skins from the "infected" folder, 20 hp, attack 3, speed set EVERY TICK in
+onLivingUpdate (0.25, 0.3 in a horde of 10+), 8% bite infection. Variant
+(watcher 21): COMMON, MILITARY (marine set), POLICE (NYPD set), the armor
+re-applied every tick while it holds nothing; zones pick military / police
+for 25%. Specials exist as own classes: crawler, dog, frail (screams),
+gawker, hulk, bloater (10% of infected spawns become hulk / bloater).
+Plan (`fixes/InfectedVariants`, tag "deciworldgen_zvariant", eggs):
+- runner (12%): civilian clothes (hoodie, casual), 14 hp, speed x1.55;
+- riot (8%): combat helmet + police clothes, 30 hp, takes 50% of player
+  gun damage, speed x0.85;
+- screamer (5%): hazmat suit, 16 hp; when it gets a target it screams
+  (deci:mob.frail.scream) and every infected within 32 blocks takes the
+  same target (once per 10 s);
+- night frenzy: at night every infected walks x1.2 and hits +2.
+Speed through attribute MODIFIERS (the base value is reset every tick).
+Only plain infected with the common variant get one (zone looks stay).
+DONE v0.34.0 (`fixes/InfectedVariants`, `fixes/ZombieEgg`
+deciworldgen:zombie_egg, config deciworldgen_zombies.cfg). Night frenzy
+speed uses modifier operation 2 (multiplies on top of a variant's speed;
+operation 1 amounts add up: riot 0.85 + night 0.2 gave 1.05). The join
+handler runs at LOWEST priority, after the zone looks. Checked (dev test
+mode zombies, about 30 s, all PASS): 265 infected (the rest became hulks /
+bloaters): runner 31, riot 21, screamer 14; runner speed x1.55, health per
+variant; riot takes 5.0 of a 10 gun hit; a scream reached all 6 infected
+25 blocks away (49 in range); night x1.20 speed and +2 attack, off by day;
+lineup photo zombies_v0.34.0. Not seen by the user in game yet
+`[not verified]`.
+
 - More infected / zombie variants.
 - New magazines: 60 round STANAG and 60 round 5.45 AK.
 - Bullet impact particles on blocks hit by NPC shots (today only player

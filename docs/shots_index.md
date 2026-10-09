@@ -513,3 +513,10 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   elites) and the egg hotbar.
 - npc_snipers_v0.32.1.png: a juggernaut (dark set) with a Barrett and three
   elite snipers (black set, green night vision goggles, long scoped rifles).
+
+## zombies_v0.34.0/ (dev test mode zombies)
+- sheet_zombies.png: lineup of four infected on a grass terrace, left to
+  right: common (red top, jeans), runner (dark hoodie), riot (combat helmet,
+  dark police clothes), screamer (white hazmat suit). Two earlier tries
+  (not kept) had the lineup below the camera (ground taken 18 blocks away)
+  and natural spawns walking in front.

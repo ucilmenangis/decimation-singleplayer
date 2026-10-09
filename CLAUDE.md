@@ -607,6 +607,9 @@ of the last session:
   getEntityData().setBoolean(VanillaMobs.KEEP, true) before spawning it.
   Runtime class names are obfuscated in the shipped game: never test
   vanilla classes by package name.
+  v0.34.0: zombie variants (`fixes/InfectedVariants`, dev test mode
+  `zombies`). Decimation resets infected walk speed BASE every tick: use
+  attribute modifiers (operation 2 to multiply on top of others).
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

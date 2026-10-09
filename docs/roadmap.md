@@ -35,8 +35,7 @@ or `[not decided]`.
 
 ## NPCs and combat (user plan, "later")
 
-1. **More zombie variants.**
-2. Civilian NPC; traders that spawn on their own and walk.
+1. Civilian NPC; traders that spawn on their own and walk.
    All in new_feature.md ("New hostile NPCs and stronger bandits", "More
    zombie variants...", "3 new mobs", "More clothing variety").
 
@@ -91,3 +90,4 @@ or `[not decided]`.
 - v0.32.2 snipers spot enemies up to 96 blocks (others 32).
 - v0.33.0 vanilla mobs removed from the overworld (config
   deciworldgen_mobs.cfg).
+- v0.34.0 zombie variants: runner, riot, screamer, night frenzy, eggs.

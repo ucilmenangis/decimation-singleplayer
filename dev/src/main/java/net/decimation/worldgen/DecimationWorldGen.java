@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.33.0",
+     version = "0.34.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -58,6 +58,7 @@ public class DecimationWorldGen
     private net.decimation.fixes.NpcLoadouts npcLoadouts;
     private net.decimation.fixes.MilitarySpawner militarySpawner;
     private net.decimation.fixes.VanillaMobs vanillaMobs;
+    private net.decimation.fixes.InfectedVariants infectedVariants;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -100,6 +101,9 @@ public class DecimationWorldGen
         npcLoadouts = new net.decimation.fixes.NpcLoadouts(event.getModConfigurationDirectory());
         militarySpawner = new net.decimation.fixes.MilitarySpawner(event.getModConfigurationDirectory());
         vanillaMobs = new net.decimation.fixes.VanillaMobs(event.getModConfigurationDirectory());
+        infectedVariants = new net.decimation.fixes.InfectedVariants(event.getModConfigurationDirectory());
+        cpw.mods.fml.common.registry.GameRegistry.registerItem(
+            new net.decimation.fixes.ZombieEgg(infectedVariants), "zombie_egg");
         cpw.mods.fml.common.registry.GameRegistry.registerItem(
             new net.decimation.fixes.NpcEgg(npcLoadouts), "npc_egg");
 
@@ -263,6 +267,7 @@ public class DecimationWorldGen
         {
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(vanillaMobs);
         }
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(infectedVariants);
 
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
             new net.decimation.fixes.HumanityKillHandler());

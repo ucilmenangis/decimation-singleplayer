@@ -324,6 +324,12 @@ public final class Deci
         return e instanceof deci.ag.d;
     }
 
+    /** Exactly an InfectedEntity (deci.ag.d), not one of its special subclasses (crawler, hulk, ...). */
+    public static boolean isPlainInfected(net.minecraft.entity.Entity e)
+    {
+        return e != null && e.getClass() == deci.ag.d.class;
+    }
+
     public static net.minecraft.entity.EntityLiving newInfected(net.minecraft.world.World world)
     {
         return new deci.ag.d(world);
