@@ -89,7 +89,17 @@ every run: rain particles cost frame time and made runs differ) and JFR:
 - The fps of the empty platform falls from run to run in one live session (48 -> about 33)
   with steady entity counts: probably the machine heating up after GPU heavy runs
   `[inferred]`; compare only within one run.
-Open: which places the user sees lag in (screenshot plus F3 fps), then measure there.
-Options: render distance by size there (deciworldgen_props.cfg, already in place), a
-lower detail model for far props, or baking props into chunk meshes (big).
+The user's lag spot (screenshots 10 Oktober 2026, F3): 70 to 90 fps away from the city, 40 to
+55 looking over the seed 1 city from the test arena (x 3, y 151, z -9, render distance 12:
+C 823 vs 1 023 chunk sections drawn). Dev test `cityview` (that spot, props drawn vs their
+renderer swapped for one that draws nothing, alternating three times so the drift cancels):
+on / off 47 / 38, 34 / 40, 35 / 34 with 4 293 to 4 527 props in the render chunks. Props cost 0
+to 3 fps of about 35 there: noise level. The city's cost is its blocks: about 200 more chunk
+sections of buildings within render distance 12 (terrain display lists, the 70 % glCallLists
+wait). The fps also falls steadily in every session (47 -> 34 within minutes); the user's menu
+bar showed 90 and 101 degrees, so the Mac heating up and throttling is likely `[inferred]`.
+Options: render distance 8 to 10 in cities (vanilla setting), FastCraft / OptiFine for 1.7.10
+(known terrain render speedups; compatibility with Decimation not checked `[not verified]`),
+fewer hidden faces in our buildings (interiors behind walls still produce chunk geometry), or
+baking props (no gain here, so not worth it for this view).
 
