@@ -10,6 +10,19 @@ the last autotest world). Example:
 
     python3 tools/devtest.py checks scope tracer
 
+LIVE (no game launch per run, docs/roadmap.md "Live dev test mode"):
+
+    python3 tools/devtest.py --live MODE [MODE ...]   # starts the game once if needed
+    python3 tools/devtest.py --live --swap MODE ...   # first push changed code (tools/hotswap.py)
+    python3 tools/devtest.py --stop                   # close the live game
+
+--live sends the modes to a game started with `gradlew runClient -Plive`
+(devtest/DevTestLive, 127.0.0.1:25599); if none answers it starts one in the
+background (log build/live.log) and waits until it is ready. Runs happen
+in the world that is open; -Pkey=value becomes a system property for that
+run. Method body changes reach the open game with --swap; new classes,
+fields or methods need --stop and a new start.
+
 Runs `./gradlew runClient -Pdevtest=checks,scope,tracer` in dev/, then prints
 run/client/devtest/results.txt (one line per value, PASS / FAIL with the
 expectation) and builds one contact sheet per mode from the screenshots the
@@ -57,25 +70,98 @@ def sheets(shots):
         print("sheet %-8s %s (%d shots)" % (mode, os.path.relpath(out, ROOT), len(ims)))
 
 
+PORT = 25599
+LIVE_LOG = os.path.join(ROOT, "build", "live.log")
+
+
+def live_send(line, timeout=1800):
+    """One command to the live game; its reply lines (up to END), or None when nobody listens."""
+    import socket
+    try:
+        s = socket.create_connection(("127.0.0.1", PORT), timeout=3)
+    except OSError:
+        return None
+    s.settimeout(timeout)
+    with s:
+        s.sendall((line + "\n").encode())
+        data = b""
+        while True:
+            chunk = s.recv(65536)
+            if not chunk:
+                break
+            data += chunk
+            if data.endswith(b"END\n"):
+                break
+    return data.decode(errors="replace").splitlines()
+
+
+def live_ready(wait):
+    """True once the live game answers ping with ready (waits up to `wait` seconds)."""
+    end = time.time() + wait
+    while True:
+        r = live_send("ping", 5)
+        if r and r[0] == "ready":
+            return True
+        if time.time() > end:
+            return False
+        time.sleep(2)
+
+
+def run_live(modes, extra, swap):
+    if live_send("ping", 5) is None:
+        print("no live game: starting one (log %s)..." % os.path.relpath(LIVE_LOG, ROOT))
+        os.makedirs(os.path.dirname(LIVE_LOG), exist_ok=True)
+        subprocess.Popen(["./gradlew", "runClient", "-q", "-Plive"], cwd=DEV, stdout=open(LIVE_LOG, "w"),
+                         stderr=subprocess.STDOUT, start_new_session=True)
+        t0 = time.time()
+        if not live_ready(600):
+            print("the live game did not come up (see the log)")
+            return False
+        print("live game ready after %.0f s" % (time.time() - t0))
+    if swap:
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "hotswap.py")], capture_output=True, text=True)
+        print("hotswap:", (r.stdout + r.stderr).strip().splitlines()[-1:] or ["?"])
+    if not live_ready(1800):
+        print("the live game stays busy")
+        return False
+    props = []
+    for e in extra:  # -Pkey=value / -Pflag -> key=value / flag=true for this run
+        kv = e[2:]
+        props.append(kv if "=" in kv else kv + "=true")
+    if os.path.isfile(RESULTS):
+        os.remove(RESULTS)
+    t0 = time.time()
+    reply = live_send("run " + " ".join(modes + props))
+    print("ran %s live in %.0f s" % (" ".join(modes), time.time() - t0))
+    return reply is not None
+
+
 def main():
     args = sys.argv[1:]
     modes = [a for a in args if not a.startswith("-")]
     extra = [a for a in args if a.startswith("-P")]
+    if "--stop" in args:
+        print(live_send("quit", 10) or "no live game")
+        return 0
     if not modes:
         print(__doc__)
         return 2
-    if os.path.isfile(RESULTS):
-        os.remove(RESULTS)
-    cmd = ["./gradlew", "runClient", "-q", "-Pdevtest=" + ",".join(modes)] + extra
-    t0 = time.time()
-    proc = subprocess.run(cmd, cwd=DEV, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    print("ran %s in %.0f s" % (" ".join(modes), time.time() - t0))
-    errors = [l for l in proc.stdout.splitlines() if "error:" in l or "FAILED" in l]
-    if proc.returncode != 0 and errors:
-        print("BUILD FAILED:")
-        for l in errors[:10]:
-            print("  " + l.strip())
-        return 1
+    if "--live" in args:
+        if not run_live(modes, extra, "--swap" in args):
+            return 1
+    else:
+        if os.path.isfile(RESULTS):
+            os.remove(RESULTS)
+        cmd = ["./gradlew", "runClient", "-q", "-Pdevtest=" + ",".join(modes)] + extra
+        t0 = time.time()
+        proc = subprocess.run(cmd, cwd=DEV, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        print("ran %s in %.0f s" % (" ".join(modes), time.time() - t0))
+        errors = [l for l in proc.stdout.splitlines() if "error:" in l or "FAILED" in l]
+        if proc.returncode != 0 and errors:
+            print("BUILD FAILED:")
+            for l in errors[:10]:
+                print("  " + l.strip())
+            return 1
     if not os.path.isfile(RESULTS):
         print("NO RESULTS (crash?): newest crash report:")
         crash = os.path.join(RUN, "crash-reports")

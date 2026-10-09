@@ -100,9 +100,16 @@ public class ZombieTest extends DevTestMode
         }
         if (t == 100)
         {
-            night = Deci.newInfected(w);
-            night.setPosition(x0 + 0.5, ground, z0 - 24 + 0.5);
-            w.spawnEntityInWorld(night);
+            // Decimation turns 10% of infected spawns into hulks / bloaters: try until one is in
+            for (int attempt = 0; attempt < 10; attempt++)
+            {
+                night = Deci.newInfected(w);
+                night.setPosition(x0 + 0.5, ground, z0 - 24 + 0.5);
+                if (w.spawnEntityInWorld(night))
+                {
+                    break;
+                }
+            }
             InfectedVariants.instance().apply(night, InfectedVariants.instance().byName("riot"));
             w.setWorldTime(18000);
             nightSpeed0 = ratio(night); // Decimation resets the base every tick: compare value / base

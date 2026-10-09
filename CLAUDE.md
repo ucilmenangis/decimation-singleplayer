@@ -265,7 +265,18 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
 
 ## Testing without the user (no screen capture permission here)
 
-- FIRST CHOICE (2026-10-09): `python3 tools/devtest.py MODE [MODE ...]
+- LIVE FIRST (2026-10-09): `python3 tools/devtest.py --live MODE ...`
+  sends the modes to a game that stays open (`gradlew runClient -Plive`,
+  devtest/DevTestLive on 127.0.0.1:25599; started in the background on
+  the first call, ready after about 26 s, log build/live.log). A run then
+  costs only its own time (gun 18 to 20 s, zombies 15 to 17 s, checks +
+  npc + shots + tracer + zombies 305 s). `--swap` first pushes changed
+  method bodies (tools/hotswap.py; the live game has the debug port);
+  new classes / fields / methods need `--stop` and a new start. Runs happen
+  in the open world (no fresh world per run); -Pkey=value become system
+  properties for the run. `--stop` closes it. Flaky test spawns: always
+  retry Decimation-refused spawns (see the arena note).
+- ONE LAUNCH (2026-10-09): `python3 tools/devtest.py MODE [MODE ...]
   [-P<flag>]` (venv python for the contact sheets) runs dev test modes in
   ONE game launch (no boot per test) and prints run/client/devtest/
   results.txt: one line per value, PASS / FAIL with the expectation, exit

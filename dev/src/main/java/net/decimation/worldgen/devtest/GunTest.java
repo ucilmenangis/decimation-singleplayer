@@ -55,7 +55,7 @@ public class GunTest extends DevTestMode
             {
                 DevTestUtil.screenshot(mc, name(), "gun_fp");
             }
-            if (t == 50)
+            if (t == 50) // 20 ticks after the gun was handed over (server, synced)
             {
                 KeyBinding.setKeyBindState(RELOAD_KEY, true);
                 KeyBinding.onTick(RELOAD_KEY); // isPressed() on Decimation's next client tick
@@ -154,7 +154,10 @@ public class GunTest extends DevTestMode
         if (t == 30 || t == 135)
         {
             p.inventory.currentItem = 0;
-            p.inventory.mainInventory[0] = new ItemStack(t == 30 ? NewGuns.mac10 : (Item) Item.itemRegistry.getObject("deci:uzi"));
+            ItemStack gun = new ItemStack(t == 30 ? NewGuns.mac10 : (Item) Item.itemRegistry.getObject("deci:uzi"));
+            gun.stackTagCompound = new net.minecraft.nbt.NBTTagCompound(); // set up already: a fresh gun's data
+            gun.stackTagCompound.setInteger("ammo", 0);                    // appears a tick later, a reload before that is lost
+            p.inventory.mainInventory[0] = gun;
             if (t == 30)
             {
                 p.inventory.mainInventory[1] = fullMag();

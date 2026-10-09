@@ -65,6 +65,18 @@ tasks.matching { it.name == "runClient" }.configureEach {
     }
 }
 
+// `gradlew runClient -Plive`: the game stays open and takes test runs over
+// 127.0.0.1:25599 (devtest/DevTestLive; tools/devtest.py --live), with the
+// hotswap debug port too, so code changes in method bodies need no restart
+tasks.matching { it.name == "runClient" }.configureEach {
+    if (project.hasProperty("live")) {
+        jvmArgs("-Ddeciworldgen.autotest=true", "-Ddeciworldgen.autotest.live=true")
+        if (!project.hasProperty("hotswap")) {
+            jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005")
+        }
+    }
+}
+
 // `gradlew runClient -Pdevtest=checks,scope,tracer` runs those dev test modes
 // in one game session (package worldgen.devtest; tools/devtest.py wraps it):
 // checks, views, scope, tracer, props, cityfps. Results: run/client/devtest/results.txt

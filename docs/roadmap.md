@@ -59,8 +59,7 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Code and tools
 
-1. **Live dev test mode** `[idea]`: keep the dev game open and start test
-   modes over a localhost port, so most reruns need no restart.
+(nothing open)
 
 ## Last: only when nothing else is left (user 9 Oktober 2026)
 
@@ -119,3 +118,6 @@ Details and starting points: new_feature.md "Zones, factions and world".
 - v0.35.0 60 round STANAG and AK magazines (guns, loot).
 - v0.36.0 MAC-10, the first gun of our own (model, texture, icon,
   animations by script; Blockbench MCP previews; Uzi sounds by reference).
+- Live dev test mode (9 Oktober 2026): `tools/devtest.py --live [--swap]`,
+  the game stays open (`-Plive`, port 127.0.0.1:25599), a rerun costs only
+  its own time (CLAUDE.md "Testing").

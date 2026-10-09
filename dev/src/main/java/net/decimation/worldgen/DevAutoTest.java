@@ -43,7 +43,9 @@ public class DevAutoTest
     /** Infected spawned per zone test batch (ServerChecks). */
     public static final int SPAWNS = 40;
 
-    private final List<DevTestMode> modes = modesFromProperties();
+    private volatile List<DevTestMode> modes = modesFromProperties();
+    /** Live mode (devtest/DevTestLive): the run that is going, answered when it ends. */
+    private net.decimation.worldgen.devtest.DevTestLive.Command liveRun;
     private volatile int current;
     private volatile boolean active;
     private int clientTicks;
@@ -54,6 +56,15 @@ public class DevAutoTest
     private static List<DevTestMode> modesFromProperties()
     {
         String list = System.getProperty(PROPERTY + ".test");
+        if (list == null && net.decimation.worldgen.devtest.DevTestLive.enabled())
+        {
+            list = ""; // live: nothing at launch, runs come over the port
+        }
+        return modesFromList(list);
+    }
+
+    private static List<DevTestMode> modesFromList(String list)
+    {
         if (list == null)
         {
             if (flag("scopeonly"))
@@ -72,6 +83,10 @@ public class DevAutoTest
         List<DevTestMode> out = new ArrayList<DevTestMode>();
         for (String name : list.split(","))
         {
+            if (name.trim().isEmpty())
+            {
+                continue;
+            }
             DevTestMode m = mode(name.trim());
             if (m != null)
             {
@@ -144,8 +159,43 @@ public class DevAutoTest
             DevTestResults.value(modes.get(current).name(), "done", "");
             current++;
         }
+        if (net.decimation.worldgen.devtest.DevTestLive.enabled())
+        {
+            live(mc);
+            return;
+        }
         FMLLog.info("[%s] AUTOTEST done, shutting down", DecimationWorldGen.MODID);
         mc.shutdown();
+    }
+
+    /** Live mode: report the finished run, then take the next command (one per tick at most). */
+    private void live(Minecraft mc)
+    {
+        if (liveRun != null)
+        {
+            liveRun.finished();
+            liveRun = null;
+        }
+        net.decimation.worldgen.devtest.DevTestLive.idle = true;
+        net.decimation.worldgen.devtest.DevTestLive.Command c = net.decimation.worldgen.devtest.DevTestLive.QUEUE.poll();
+        if (c == null)
+        {
+            return;
+        }
+        if (c.quit)
+        {
+            FMLLog.info("[%s] AUTOTEST live: quit", DecimationWorldGen.MODID);
+            mc.shutdown();
+            return;
+        }
+        net.decimation.worldgen.devtest.DevTestLive.idle = false;
+        DevTestResults.start(mc.mcDataDir);
+        DevTestResults.value("run", "modes", c.modes + " (live)");
+        List<DevTestMode> next = modesFromList(c.modes);
+        current = 0;
+        modes = next;
+        liveRun = c;
+        FMLLog.info("[%s] AUTOTEST live: running %s", DecimationWorldGen.MODID, c.modes);
     }
 
     @SubscribeEvent
@@ -161,6 +211,10 @@ public class DevAutoTest
     /** Opens the world the modes need: a study map, the fresh test world or the last one. */
     private void launch(Minecraft mc)
     {
+        if (net.decimation.worldgen.devtest.DevTestLive.enabled())
+        {
+            net.decimation.worldgen.devtest.DevTestLive.start(mc.mcDataDir);
+        }
         DevTestResults.start(mc.mcDataDir);
         StringBuilder names = new StringBuilder();
         boolean fresh = false;
