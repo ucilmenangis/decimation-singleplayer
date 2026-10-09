@@ -12,8 +12,10 @@ into the repo: measure and learn from them, build our own.
 
 ## 0. Read first (cheap, do not re-derive)
 
-0. "Lessons for every gun" at the end of this file: the user's reviews,
-   turned into rules. Apply all of them.
+0. "Lessons for every gun" and the "Revision casebook" at the end of
+   this file: the user's reviews turned into rules, and every past issue
+   with its cause, code location, fix and check. Apply the lessons; when
+   a problem appears, find its case first.
 
 1. `docs/gun_style_guide.md`: numbers, construction rules, shape kinds,
    detail placement, placement conventions, animations, first person,
@@ -141,9 +143,11 @@ into the repo: measure and learn from them, build our own.
   verdict.
 - After EVERY user revision (user rule 10 Oktober 2026): turn it into a
   general rule in "Lessons for every gun" below (what to check on ANY
-  gun, with the numbers), add one line to the per gun history, put the
-  rule into docs/gun_style_guide.md, all in the same commit. Ask: would
-  this mistake happen on the next gun too? Then it is a lesson.
+  gun, with the numbers) AND write a full case in the "Revision
+  casebook" (symptom, cause, where in the code, fix, check, evidence),
+  put the rule into docs/gun_style_guide.md, all in the same commit.
+  Never delete cases: they are the book for the next time the same issue
+  shows up on another gun.
 
 ## Lessons for every gun (from user reviews; read before starting)
 
@@ -191,12 +195,122 @@ source of truth about the real gun and about how it must look in game.
    their photo) before asking for an in game test; ask what still looks
    off rather than assuming it is done.
 
-## Per gun history (short; the lessons above are what matters)
+## Revision casebook (never delete a case; look here first)
 
-- MAC-10 v1 (v0.36.0): rejected, "not good, needs polish" (lessons 1, 3).
-- MAC-10 v2 (v0.37.0): "huge upgrade"; then aim, suppressor, gradation
-  revisions (lessons 3, 4, 6, 7).
-- MAC-10 v0.37.1: suppressor low and not over the threads, aim 0.25 high
-  vs the Uzi (lessons 4, 5, 7, 8, 9). Fixed in v0.37.2: flamePos y -4.75,
-  suppressor offset (-2.37, -0.16, 0), aperture hole -4.8 to -4.55, post
-  tip -4.67, stock loop top -4.57.
+Every user revision and every problem found on the way, with how it was
+found, why it happened, where the code is, the fix and how it was
+checked. When something similar shows up on another gun, start from the
+matching case instead of researching again. Add a new case after every
+revision (same commit), never remove old ones.
+
+### Case 1: the gun looks bad, boxy, toy like (MAC-10 v1, v0.36.0)
+- Symptom (user): "not good, needs polish"; first person a light grey
+  block seen from behind, bigger than the Uzi.
+- Cause: 23 plain boxes, painted texture detail (ports, rings,
+  checkering), light grey, 12 x 10.2 x 2.2 units (real gun about 8.7 x 1.4).
+- How Decimation does it: docs/gun_style_guide.md (all 98 guns studied):
+  99 % shape parts, 1x1x1 declared, tapers first, many small parts, flat
+  dark tones, slim.
+- Fix: gunmodel.py v2 (part / inset / shift / mirror / octagon), MAC-10
+  rebuilt to 102 parts from the user's photo (v0.37.0).
+- Check: study.py sheet uzi ours:mac10, vocab, stats; gunview hip.
+- Evidence: docs/shots/guns_study_v0.36/cmp_uzi_mac10.png (before),
+  docs/shots/mac10_v0.37/cmp_side.png (after).
+
+### Case 2: aim not centred on the crosshair (v0.37.0 to v0.37.2)
+- Symptom (user): aiming, the sights are not on the 0 crosshair.
+- How aim works: GunItemRenderer (deobf/src/decimation/render/
+  GunItemRenderer.java) aim branch draws EVERY gun at one fixed place
+  (x scaled 0.5, translate (-1, -0.35, 0.923)); sPos is not used in
+  first person. So the sight picture is a fixed MODEL height.
+- First wrong turn: my gunview test (camera held still) said the sight
+  tops were on the centre, and I blamed Decimation's aim sway
+  (ClientEventHandler headYawSway / dP). The user then sent MAC-10 and
+  Uzi aim screenshots from the same game: the centre goes through the
+  Uzi's rear APERTURE HOLE (about y -4.65), ours sat 0.25 higher.
+- Fix (v0.37.2, tools/guns/mac10.py "front sight" / "rear sight"
+  blocks): aperture hole y -4.8 to -4.55 (centre -4.675), front post tip
+  -4.67, ears to -4.97, centred z -0.15.
+- Check: `devtest.py --live gunview guns=uzi,mac10 attach=`, crop both
+  aim shots around the centre with centre lines side by side
+  (docs/shots/mac10_v0.37/v0372_aim_iron_cmp.png): both holes on the
+  line. Measure user screenshots the same way (game area starts below
+  the 83 px title bar on their Mac window).
+- Uzi reference numbers: rear aperture hole about -4.75 to -4.55 [inferred from its parts], rear
+  ears top -4.97, front post tip -4.52, front ears top -4.83.
+
+### Case 3: suppressor floating ahead of the muzzle (v0.37.0)
+- Symptom (user): suppressor "flying"; a gap of about 1.1 units in their
+  hip screenshot.
+- Cause: GunItemRenderer.renderAttachments places a barrel attachment at
+  translate(-1.55, 0.27, -0.003) + flamePos / 21 (GL units, 0.0625 per
+  model unit), so x = constant + 0.762 flamePos x: it meets the muzzle
+  only for muzzles around x 12 to 15. Gaps (study.py): Uzi 0.12, UMP45 0,
+  MP5A3 / Vector 0.44, MP7 -0.56 (Decimation hardcodes an MP7 shift),
+  MAC-10 1.12.
+- Fix: `Deci.offsetAttachment(gun, "smgSuppressor", dx, dy, dz)`
+  (fixes/Deci.java): loads the attachment's .bmodel (BModelLoader
+  deci.n.g.a), adds to its offset (BModel deci.n.f fields lc / ld / le,
+  package private, reflection; renderParts applies them) and puts it in
+  the attachment's per gun model cache (AttachmentItem deci.ay.h, field
+  ST, read by getModelFor b). Called client side in fixes/NewGuns; the
+  same numbers in tools/guns/study.py ATTACH_FIX for renders.
+- Check: study.py attach ours:<gun> smgSuppressor (x gap like the Uzi's),
+  then in game (first person hip crop, NPC side view); log line
+  "suppressor moved".
+- Other barrel attachments per category: pistolSuppressor,
+  arSuppressor, shotgunSuppressor, mgSuppressor, bayonet (rifle): same
+  formula, same fix.
+
+### Case 4: suppressor low and not over the threads (v0.37.1)
+- Symptom (user): suppressor "doesn't match the MAC-10 flash hider";
+  their hip screenshot: about 0.9 units below the bore, starting after
+  the thread tip (real one screws over the threads, user photo 2).
+- Cause: flamePos y was on the bore. Decimation's convention: flamePos y
+  about 0.85 ABOVE the bore (Uzi flamePos -4.5, barrel centre -3.5; UMP45
+  -3.75 over about -2.95); barrel attachments hang from flamePos, so they
+  land on the bore only with that convention. I first misread study.py's
+  low suppressors as a render bug: the renders were right.
+- Fix (v0.37.2): flamePos (10.4, -4.75, -0.15); offset (-2.37, -0.16, 0)
+  so the suppressor covers the threads up to the receiver front.
+- Check: study.py attach (suppressor x 9.25 to 14.25, centre on the bore
+  -3.9), first person crop docs/shots/mac10_v0.37/v0372_hip_crop.png.
+
+### Case 5: no gradation, few static colours (v0.37.0)
+- Symptom (user): Decimation guns have gradation "if you look closely";
+  ours only a few static colours.
+- Measured (1x1x1 islands of Uzi / AK74 / MP5A3; script idea: read the 6
+  face texels of each island at u+1,v / u+2,v / u..u+3,v+1): 15 to 31
+  distinct part tones per gun, faces of one part 4.7 to 5.7 apart, texel
+  noise 2.0 to 2.7, sometimes top lighter (Glock tone vs height -0.55).
+  Ours had 9 tones, faces 2.6, noise 1.6.
+- Fix: gunmodel.paint: part shade +-6 %, +5 top to -5 bottom, faces top
+  +2 / bottom -2 / sides +-1.5, texel noise +-4 (MAC-10: 37 tones, 5.2,
+  2.1).
+- Check: re-run the island measurement on ours vs a Decimation gun.
+
+### Case 6: the stock crosses the sight picture (v0.37.2, found while fixing case 2)
+- Symptom: aiming, the folded wire stock loop's rear bar showed just under
+  the aperture hole.
+- Fix: loop top lowered from -4.72 to -4.57 (tools/guns/mac10.py "folded
+  wire shoulder loop"). Rule: nothing behind the rear sight above about
+  -4.57.
+
+### Case 7: inventory icon with a light halo (v0.37.0, found by me)
+- Cause: icon downscaled from a render on the light study background.
+- Fix: gunmodel.icon renders with bg (0, 0, 0, 0), keeps pixels with
+  alpha >= 140, un-premultiplies, dark outline. Check: enlarge next to
+  Decimation's icon (docs/shots/mac10_v0.37/icon_vs_uzi.png).
+
+### Case 8: test traps met on the way (dev test gunview)
+- No gun in the shots: F1 (hideGUI) hides the held item too; first
+  person shots need the GUI on.
+- Missing shots / aim stuck on: the client reads the server's tick
+  counter and can skip values; phases are ranges, shots taken on the
+  first tick at or after their time, aim set every tick.
+- Live runs: a key=value stays set for later runs (clear with key=); new
+  classes or fields need --stop and a restart; .bmodel / texture changes
+  need a restart (models load at item construction); wait a few seconds
+  after --stop.
+- A stray NPC killed the test bandit: kill other living entities during
+  the NPC phase; a Soviet target makes the bandit turn its side.
