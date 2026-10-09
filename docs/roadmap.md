@@ -55,15 +55,21 @@ Details and starting points: new_feature.md "Zones, factions and world".
 ## Items and weapons
 
 1. **Pilot: a new gun made by Claude with tools** (user 9 Oktober 2026,
-   "later"; use internet tools, not hand written boxes only): Blockbench
-   (.bbmodel is JSON: cuboids, sizes, UVs) plus a converter script
-   .bbmodel -> Decimation .bmodel (Techne style text, docs/gun_model_spec.md);
-   free models only with a licence that allows it (CC0 / CC-BY with credit,
-   repo is public; cuboid Minecraft style models convert, Sketchfab style
-   meshes do not); sounds CC0 (e.g. freesound.org) or Decimation's by name;
-   check in game with a dev test that films the gun on the test arena (in
-   hand, firing, reload, icon). Start small (a pistol or SMG Decimation
-   lacks) `[not decided]` which gun.
+   "later"; tools Claude runs itself, not hand written boxes only, not for
+   the user):
+   - find assets: web search / web reader / agent-browser; only licences
+     that allow a public repo (CC0, CC-BY with credit);
+   - models: Blockbench .bbmodel / Minecraft item JSON read and written
+     directly (no app); a Python converter to Decimation .bmodel
+     (docs/gun_model_spec.md); mesh guns (.obj / .glb) voxelized with
+     trimesh and merged into boxes;
+   - textures / icon: PIL, ImageMagick (installed);
+   - quick preview: own Python box renderer (no game launch);
+   - final check: arena dev test (in hand, firing, reload, icon);
+   - sounds: CC0 or Decimation's by name; ffmpeg converts to ogg;
+   - to install first: `pip install trimesh` (venv), `brew install ffmpeg`;
+     Blender headless optional (about 1 GB, ask the user first).
+   Which gun `[not decided]` (start small: a pistol or SMG Decimation lacks).
 2. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
 
