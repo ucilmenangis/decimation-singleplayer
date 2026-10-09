@@ -190,6 +190,9 @@ names already match.
 
 ## 6. Our own guns: the tools/guns pipeline (v0.36.0, MAC-10 pilot)
 
+Look and construction rules: docs/gun_style_guide.md (study of all 98
+Decimation guns, 10 Oktober 2026); read it first.
+
 Every asset is our own work (public repo: never copy Decimation art).
 1. Spec: `tools/guns/<gun>.py` lists boxes in model units (x forward, y
    down, z sideways), part group (gunModel / ammoModel / slideModel),

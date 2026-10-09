@@ -550,3 +550,26 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
 - gun_npc_front.png: a bandit holding the MAC-10 at the chest.
 - gun_npc_fire_110 / 120.png: behind the bandit, firing at a Soviet,
   tracers both ways.
+
+## guns_study_v0.36/ (tools/guns/study.py, Decimation's guns drawn from the jar, 10 Oktober 2026)
+- sheet_smg / sheet_pistol / sheet_mg / sheet_shotgun_rocket / sheet_rifle1..3.png:
+  side views of all 98 Decimation guns with their textures, label = parts,
+  shaped %, length x height. Near black metal, dark brown wood, tan or
+  green only on guns of that colour; slim silhouettes; magazines and
+  grips skewed, not boxy.
+- uzi / mp5a3 / glock17 / ak74 / ours_mac10 _side / _other / _top / _three.png:
+  close renders at 40 px a unit. Uzi: chamfered sight ears, layered
+  receiver, thin bent trigger guard, near black. MP5: rounded receiver
+  rear, curved mag lighter grey, raised top rail. AK74: octagon barrel and
+  gas tube, brown polymer curved mag, dark red brown wood.
+- *_split.png (uzi, mp5a3, ak74, glock17): every part a flat colour with
+  outlines. Uzi side: receiver = long panels stacked (top, upper, lower)
+  with thin raised strips 0.1 thick, front taper trapezoids, stock of
+  skewed bars, grip of stacked skewed segments. AK74 three quarter:
+  barrel / gas tube / muzzle as 3 part octagon slices, magazine of
+  segments, stock of big tapered panels with an inset panel.
+- cmp_uzi_mac10.png, cmp_three.png: our MAC-10 v0.36 next to the Uzi:
+  ours is light grey, chunky, 23 plain boxes, grip and mag as thick as the
+  receiver; the Uzi is near black, slim, 105 shaped parts.
+- tex_crops.png: Uzi, AK74, MP5 texture strips at 5x: one flat tone per
+  part island with faint noise, no painted detail.

@@ -1,0 +1,100 @@
+gun	cat	parts	shaped%	rotated%	length	height	width	median_vol	thin%	tex	groups
+crotchbow	crossbow	162	100	9	22.8	7.1	9.6	1	100	512x32@2x	gunModel=145 defaultScopeModel=11 ammoModel=6
+m1919a6	mg	487	100	0	40.6	7.1	8.3	1	100	512x64@2x	ammoModel=387 gunModel=100
+m240	mg	289	100	1	40.1	12.6	12.8	1	99	512x64@2x	gunModel=195 ammoModel=94
+m60	mg	351	100	1	38.6	8.8	6.7	1	99	2048x2048@2x	gunModel=257 ammoModel=94
+mg3	mg	347	100	0	32.6	9.4	9.8	1	99	512x64@2x	gunModel=253 ammoModel=94
+minigun	mg	157	95	22	25.8	12.3	9.4	4	100	512x64@2x	gunModel=90 minigunBarrelModel=48 ammoModel=19
+mk48	mg	260	100	2	28.9	9.8	12.0	1	100	512x64@2x	gunModel=202 ammoModel=58
+pkm	mg	287	100	3	33.3	8.3	7.2	1	100	512x64@2x	ammoModel=148 gunModel=138 slideModel=1
+pkp	mg	288	100	1	33.3	8.3	7.2	1	100	512x64@2x	ammoModel=148 gunModel=139 slideModel=1
+rpd	mg	306	100	1	33.9	8.4	5.6	1	100	512x64@2x	ammoModel=201 gunModel=105
+aps	pistol	100	100	8	10.0	6.7	1.1	1	100	512x16@2x	slideModel=62 gunModel=37 ammoModel=1
+barettam9	pistol	126	100	6	7.1	4.7	0.9	1	100	512x32@2x	gunModel=76 slideModel=40 defaultScopeModel=4 defaultBarrelModel=3 ammoModel=2 defaultGripModel=1
+browninghp	pistol	52	100	0	8.4	5.5	1.1	1	100	512x8@2x	gunModel=30 slideModel=20 ammoModel=2
+colt	pistol	68	100	0	8.3	5.6	1.1	1	100	512x16@2x	gunModel=41 slideModel=26 ammoModel=1
+cz52	pistol	83	100	10	8.6	5.4	1.1	1	100	512x16@2x	gunModel=50 slideModel=32 ammoModel=1
+deagle	pistol	86	100	1	9.3	5.3	1.4	1	100	512x16@2x	gunModel=54 slideModel=30 ammoModel=2
+glock17	pistol	68	100	12	6.5	4.3	0.9	1	100	512x16@2x	gunModel=45 slideModel=21 ammoModel=2
+m1934	pistol	74	100	4	7.1	5.6	1.2	1	100	512x16@2x	gunModel=43 slideModel=27 ammoModel=4
+makarov	pistol	97	100	4	6.5	5.2	1.2	1	100	512x16@2x	slideModel=54 gunModel=41 ammoModel=2
+model642	revolver	84	100	29	7.0	4.7	1.4	1	100	512x16@1x	gunModel=50 ammoModel=18 revolverBarrelModel=16
+ragingbull	revolver	105	100	25	10.8	4.9	1.4	1	100	512x16@1x	gunModel=71 ammoModel=18 revolverBarrelModel=16
+acr	rifle	192	100	0	22.0	8.0	2.0	1	100	512x32@2x	gunModel=165 defaultScopeModel=21 ammoModel=4 slideModel=2
+ak12	rifle	242	100	10	28.2	8.1	1.9	1	100	512x64@2x	gunModel=225 ammoModel=11 slideModel=6
+ak74	rifle	214	100	10	30.4	8.1	1.9	1	100	512x32@2x	gunModel=197 ammoModel=11 slideModel=6
+akm	rifle	194	100	12	28.5	8.1	1.9	1	100	512x32@2x	gunModel=175 ammoModel=13 slideModel=6
+akms	rifle	210	100	10	28.0	8.1	2.0	1	100	512x32@2x	gunModel=191 ammoModel=13 slideModel=6
+aks74	rifle	197	100	10	30.4	8.1	1.9	1	100	512x32@2x	gunModel=180 ammoModel=11 slideModel=6
+aks74u	rifle	188	100	11	23.7	8.2	1.8	1	100	512x32@2x	gunModel=171 ammoModel=11 slideModel=6
+ar15	rifle	131	100	41	22.1	5.8	1.1	1	100	512x32@2x	gunModel=99 defaultStockModel=11 defaultScopeModel=9 defaultBarrelModel=6 slideModel=3 ammoModel=2 defaultGripModel=1
+ar15beowulf	rifle	170	100	36	25.1	6.2	1.4	1	100	512x32@2x	gunModel=114 defaultBarrelModel=30 defaultStockModel=16 defaultScopeModel=3 slideModel=3 defaultGripModel=2 ammoModel=2
+asval	rifle	83	100	23	24.7	6.6	1.6	1	100	512x16@2x	gunModel=43 defaultScopeModel=13 defaultStockModel=12 defaultBarrelModel=8 defaultGripModel=5 ammoModel=2
+aug1	rifle	206	99	3	20.3	7.8	2.2	1	100	512x32@2x	gunModel=136 defaultStockModel=31 defaultScopeModel=16 ammoModel=15 defaultBarrelModel=6 scopeGlass=1 scopeOverlay=1
+aug3	rifle	231	100	10	20.3	6.7	2.2	1	100	512x64@2x	gunModel=190 defaultScopeModel=20 ammoModel=15 defaultBarrelModel=6
+aug3para	rifle	225	100	10	17.3	6.4	2.2	1	100	512x32@2x	gunModel=198 defaultScopeModel=20 defaultBarrelModel=6 ammoModel=1
+barrett	rifle	119	100	7	46.2	6.7	3.1	1	100	128x128@4x	gunModel=114 slideModel=3 ammoModel=2
+fal	rifle	67	100	7	36.0	6.7	1.6	1	100	512x16@2x	gunModel=66 ammoModel=1
+famas	rifle	133	100	11	21.0	7.3	1.1	1	100	512x32@2x	gunModel=124 defaultBarrelModel=9
+famasi	rifle	520	100	49	25.9	6.8	5.7	1	99	512x128@2x	gunModel=445 defaultBarrelModel=45 defaultScopeModel=18 ammoModel=12
+fnscar	rifle	300	100	0	27.9	7.6	1.4	1	100	512x64@2x	gunModel=277 ammoModel=13 slideModel=6 defaultBarrelModel=3 defaultGripModel=1
+fnscarhamr	rifle	347	99	6	28.9	7.7	6.5	1	100	512x64@2x	gunModel=337 slideModel=6 defaultBarrelModel=3 defaultGripModel=1
+fnscarl	rifle	311	100	0	23.8	8.8	1.4	1	100	512x64@2x	gunModel=301 slideModel=6 defaultBarrelModel=3 defaultGripModel=1
+fnscarsc	rifle	338	100	0	19.5	8.8	1.4	1	100	512x64@2x	gunModel=328 slideModel=6 defaultBarrelModel=3 defaultGripModel=1
+fnscarssr	rifle	369	100	0	30.8	7.3	1.4	1	100	512x64@2x	gunModel=346 ammoModel=13 slideModel=6 defaultBarrelModel=3 defaultGripModel=1
+g36c	rifle	208	100	0	19.6	7.7	1.7	1	100	512x32@2x	gunModel=124 defaultStockModel=40 ammoModel=26 defaultScopeModel=9 defaultBarrelModel=6 defaultGripModel=3
+g3a3	rifle	86	100	2	38.7	8.1	1.9	1	100	512x16@2x	gunModel=83 pumpModel=2 ammoModel=1
+g3a4	rifle	81	100	2	38.7	8.1	1.9	1	100	512x16@2x	gunModel=78 pumpModel=2 ammoModel=1
+galil	rifle	129	100	10	33.3	8.8	1.7	1	100	512x32@2x	gunModel=117 slideModel=9 ammoModel=3
+galilsar	rifle	129	100	10	27.0	8.8	1.7	1	100	512x32@2x	gunModel=117 slideModel=9 ammoModel=3
+honeybadger	rifle	162	100	1	22.8	8.5	2.0	1	100	512x32@2x	gunModel=148 defaultScopeModel=11 ammoModel=3
+insas	rifle	146	100	7	26.4	5.6	1.9	1	100	512x32@2x	gunModel=138 ammoModel=8
+jng90	rifle	193	100	4	34.5	7.3	2.7	1	100	512x32@2x	gunModel=164 defaultScopeModel=21 pumpModel=7 ammoModel=1
+kar98k	rifle	164	100	1	34.5	6.0	3.2	1	100	512x32@2x	gunModel=117 ammoModel=26 pumpModel=21
+kms72	rifle	130	100	13	27.8	7.7	1.8	1	100	512x32@2x	gunModel=112 pumpModel=11 ammoModel=6 slideModel=1
+l115a3	rifle	110	100	2	30.1	4.5	2.1	1	100	512x32@2x	gunModel=104 pumpModel=3 bolt=2 ammoModel=1
+l85a1	rifle	139	100	14	24.0	9.3	2.0	1	100	512x32@2x	gunModel=136 ammoModel=3
+m110	rifle	174	100	34	29.2	5.6	1.4	1	100	512x32@2x	gunModel=151 defaultScopeModel=9 defaultBarrelModel=6 defaultStockModel=3 slideModel=3 defaultGripModel=1 ammoModel=1
+m14	rifle	154	100	0	33.1	6.0	2.0	1	100	512x32@2x	gunModel=134 ammoModel=14 slideModel=6
+m16a1	rifle	122	100	2	34.3	8.7	2.2	1	100	512x32@2x	gunModel=119 ammoModel=3
+m16a2	rifle	209	100	1	34.3	8.7	2.2	1	100	512x32@2x	gunModel=206 ammoModel=3
+m1garand	rifle	189	100	0	33.3	6.0	2.1	1	100	512x32@2x	gunModel=139 ammoModel=43 slideModel=7
+m231	rifle	109	100	2	25.9	8.7	2.0	1	100	512x32@2x	gunModel=106 ammoModel=3
+m4a4	rifle	229	100	1	24.3	7.4	2.2	1	100	512x32@2x	gunModel=211 defaultScopeModel=16 ammoModel=2
+mosinnagant	rifle	159	100	1	27.3	4.0	1.5	1	100	512x32@2x	gunModel=159
+mpt76	rifle	216	100	1	27.3	7.6	2.2	1	100	512x64@2x	gunModel=187 defaultScopeModel=27 ammoModel=2
+parafal	rifle	74	100	8	33.2	7.3	2.2	1	100	512x16@2x	gunModel=73 ammoModel=1
+rpk	rifle	208	100	12	32.2	8.7	2.0	1	100	512x32@2x	gunModel=187 ammoModel=15 slideModel=6
+rpk74	rifle	206	100	12	32.2	9.9	2.0	1	100	512x32@2x	gunModel=187 ammoModel=13 slideModel=6
+sks	rifle	161	100	22	26.8	4.6	1.4	1	100	512x32@2x	gunModel=121 ammoModel=34 slideModel=6
+sv98	rifle	134	100	5	32.4	7.1	5.1	1	100	512x32@2x	gunModel=127 pumpModel=4 bolt=2 ammoModel=1
+svd	rifle	187	100	2	37.0	5.3	2.1	1	100	512x32@2x	gunModel=161 ammoModel=21 slideModel=5
+svt40	rifle	137	100	0	36.2	5.2	2.2	1	100	512x32@2x	gunModel=126 slideModel=7 ammoModel=4
+vz52	rifle	123	100	3	31.6	6.3	1.8	1	100	512x32@2x	gunModel=110 slideModel=9 ammoModel=4
+vz58	rifle	102	100	13	26.9	8.0	1.7	1	100	512x16@2x	gunModel=90 ammoModel=7 slideModel=5
+xm177	rifle	181	100	2	26.4	8.6	2.1	1	100	512x32@2x	gunModel=178 ammoModel=3
+m79	rocket	80	100	4	27.0	7.1	1.6	1	100	512x16@2x	gunModel=77 ammoModel=3
+mglml1l	rocket	214	100	22	19.0	5.8	4.5	1	100	512x32@2x	gunModel=214
+rpg18	rocket	109	100	0	30.2	6.7	2.3	2	100	512x32@2x	gunModel=109
+rpg7	rocket	120	100	2	49.2	10.7	4.3	2	100	512x32@2x	gunModel=100 ammoModel=20
+aa12	shotgun	60	100	0	22.4	7.5	1.1	1	100	512x16@2x	gunModel=56 defaultScopeModel=4
+benellim4	shotgun	136	100	0	22.1	4.5	1.3	1	100	512x32@2x	gunModel=100 defaultBarrelModel=30 slideModel=6
+dbarrel	shotgun	88	100	8	34.1	6.0	1.7	1	100	512x32@2x	gunModel=63 breakActionModel=25
+dbarrels	shotgun	84	100	8	19.6	3.9	1.7	1	100	512x32@2x	gunModel=60 breakActionModel=24
+ks23	shotgun	74	100	7	38.4	6.4	1.5	1	100	512x16@2x	gunModel=57 pumpModel=17
+r870	shotgun	79	100	6	36.2	6.4	1.4	1	100	512x16@2x	gunModel=44 pumpModel=29 gunModel8_=2 gunModel9_=2 gunModel11_=2
+spas12	shotgun	138	100	0	29.9	5.9	1.8	1	100	512x32@2x	gunModel=138
+kp31	smg	88	100	3	32.9	7.2	5.0	1	100	1024x16@2x	gunModel=77 ammoModel=11
+mp40	smg	155	100	1	23.5	8.1	1.6	1	100	512x32@2x	gunModel=136 defaultBarrelModel=9 ammoModel=5 slideModel=5
+mp5a3	smg	96	100	3	16.5	7.0	1.5	1	100	512x16@2x	gunModel=92 ammoModel=4
+mp7	smg	124	100	2	15.3	7.3	1.4	1	100	512x32@2x	gunModel=110 ammoModel=8 defaultBarrelModel=3 slideModel=3
+mpi40	smg	247	100	4	25.8	7.4	1.9	1	100	512x64@2x	gunModel=222 defaultBarrelModel=13 ammoModel=5 slideModel=5 defaultScopeModel=2
+p90	smg	86	100	12	13.7	4.8	1.2	1	100	512x16@2x	gunModel=68 defaultStockModel=4 ammoModel=4 slideModel=4 defaultBarrelModel=3 defaultGripModel=3
+stenmk2	smg	58	100	5	31.5	8.3	11.5	2	100	512x32@2x	gunModel=55 ammoModel=2 slideModel=1
+thompson	smg	262	100	0	24.7	6.5	1.6	1	100	512x64@2x	gunModel=153 defaultStockModel=54 defaultBarrelModel=36 slideModel=14 ammoModel=5
+thompsoni	smg	391	100	0	24.6	6.6	1.6	1	100	512x64@2x	gunModel=151 ammoModel=142 defaultStockModel=51 defaultBarrelModel=41 slideModel=6
+ump45	smg	142	100	3	19.7	9.9	2.0	1	100	512x32@2x	gunModel=140 ammoModel=2
+uzi	smg	105	100	2	13.6	7.5	1.2	1	100	512x16@2x	gunModel=103 ammoModel=2
+vector	smg	103	99	20	17.4	7.4	1.6	1	100	512x16@2x	gunModel=78 defaultStockModel=11 defaultScopeModel=6 defaultBarrelModel=3 slideModel=3 defaultGripModel=1 ammoModel=1
+vz24	smg	103	100	10	19.9	7.1	1.4	1	100	512x16@2x	gunModel=100 slideModel=2 ammoModel=1
+mac10	smg	23	0	0	12.0	10.2	2.2	0.315	87	128x8@4x	gunModel=20 ammoModel=2 slideModel=1

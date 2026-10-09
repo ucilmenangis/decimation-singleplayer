@@ -83,6 +83,10 @@ Knowledge index:
   tools) in one list with links; add new requests there, move done items.
 - `docs/gun_model_spec.md`: gun `.bmodel` / `.anib` formats, paths, renderer,
   new gun checklist.
+- `docs/gun_style_guide.md`: READ BEFORE MODELLING A GUN. Study of all 98
+  Decimation guns (tools/guns/study.py renders them from the jar, no
+  game; dataset docs/references/decimation_guns.tsv): shape box parts,
+  part counts, sizes, octagon / curve / panel recipes, dark flat tones.
 - `docs/building_design.md`: researched floor plans (apartment / office /
   shop), palettes, decay, biome overgrowth, street and car facing rules.
 - `docs/terrain.md`: the "Decimation" world type (biome map, biomes,

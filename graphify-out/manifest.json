@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791560384.3227994,
-    "ast_hash": "ea31f1d2ac0a0ba2278cf1712fb3b712",
-    "semantic_hash": "ea31f1d2ac0a0ba2278cf1712fb3b712"
+    "mtime": 1791569035.475454,
+    "ast_hash": "ebe88dc31adf14922d65184f337d0799",
+    "semantic_hash": "ebe88dc31adf14922d65184f337d0799"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -140,9 +140,9 @@
     "semantic_hash": "f5f7ed9764011af0e3df121e92cff225"
   },
   "docs/gun_model_spec.md": {
-    "mtime": 1791568468.1663506,
-    "ast_hash": "889486fa278ceeecd9e57c4f5a8988a7",
-    "semantic_hash": "889486fa278ceeecd9e57c4f5a8988a7"
+    "mtime": 1791569035.4762838,
+    "ast_hash": "9b2c6aba083f63ff568bb338a89720e2",
+    "semantic_hash": "9b2c6aba083f63ff568bb338a89720e2"
   },
   "documentation.md": {
     "mtime": 1791548233.2715552,
@@ -325,9 +325,9 @@
     "semantic_hash": "32134db33ff2599b79a45d05e9fdfdc1"
   },
   "docs/shots_index.md": {
-    "mtime": 1791553206.1959722,
-    "ast_hash": "89ea6bdc377386b9526af4ac492181e3",
-    "semantic_hash": "89ea6bdc377386b9526af4ac492181e3"
+    "mtime": 1791569035.4747052,
+    "ast_hash": "64b102dafd6cb832b01fc3c7889779f6",
+    "semantic_hash": "64b102dafd6cb832b01fc3c7889779f6"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -655,9 +655,9 @@
     "semantic_hash": "bd30941e1a4e2e62f6bc1cbfe45efd40"
   },
   "docs/roadmap.md": {
-    "mtime": 1791560384.32344,
-    "ast_hash": "de61520269ec3c8646c5b96cc9b7bf76",
-    "semantic_hash": "de61520269ec3c8646c5b96cc9b7bf76"
+    "mtime": 1791569035.4759784,
+    "ast_hash": "5c3a021af5ee4329eefcc36da28f7256",
+    "semantic_hash": "5c3a021af5ee4329eefcc36da28f7256"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -793,5 +793,15 @@
     "mtime": 1791559763.3853965,
     "ast_hash": "a641b38a828ab9b54715b96fdf0b2375",
     "semantic_hash": "a641b38a828ab9b54715b96fdf0b2375"
+  },
+  "tools/guns/study.py": {
+    "mtime": 1791568907.5166678,
+    "ast_hash": "019638cb4f93abaa28e25193de7ded2e",
+    "semantic_hash": "019638cb4f93abaa28e25193de7ded2e"
+  },
+  "docs/gun_style_guide.md": {
+    "mtime": 1791569017.8860943,
+    "ast_hash": "91318f393f35d3713fd09496d6a26985",
+    "semantic_hash": "91318f393f35d3713fd09496d6a26985"
   }
 }
