@@ -12,6 +12,9 @@ into the repo: measure and learn from them, build our own.
 
 ## 0. Read first (cheap, do not re-derive)
 
+0. "Lessons for every gun" at the end of this file: the user's reviews,
+   turned into rules. Apply all of them.
+
 1. `docs/gun_style_guide.md`: numbers, construction rules, shape kinds,
    detail placement, placement conventions, animations, first person,
    icons, aiming, attachments, the Uzi walkthrough, stats.
@@ -136,26 +139,64 @@ into the repo: measure and learn from them, build our own.
   push, no attribution lines, no dash punctuation).
 - Ask the user to try it in game (firing, aiming, feel) and record the
   verdict.
-- After EVERY user revision: add the lesson to the revision log below
-  and the rule to docs/gun_style_guide.md, in the same commit (user rule
-  10 Oktober 2026).
+- After EVERY user revision (user rule 10 Oktober 2026): turn it into a
+  general rule in "Lessons for every gun" below (what to check on ANY
+  gun, with the numbers), add one line to the per gun history, put the
+  rule into docs/gun_style_guide.md, all in the same commit. Ask: would
+  this mistake happen on the next gun too? Then it is a lesson.
 
-## Revision log (lessons from user reviews; read before starting)
+## Lessons for every gun (from user reviews; read before starting)
 
-- MAC-10 v1 (v0.36.0, "not good, needs polish"): 23 plain light grey
-  boxes, too big, painted detail. Led to the whole study and gunmodel v2.
-- MAC-10 v2 (v0.37.0, "huge upgrade"): the user's photos gave the
-  proportions; shape parts, flat dark tones and Decimation timings made
-  it read as a Decimation gun.
-- v0.37.0 review: (1) aim not centred, (2) suppressor flying, (3) no
-  gradation. (2): the barrel attachment formula only fits muzzles at x
-  12 to 15: Deci.offsetAttachment. (3): Decimation textures have 15 to
-  31 part shades, faces about 5 apart, noise about 2.5: gunmodel.paint
-  now does that. (1): my held camera test said fine; it was not.
-- v0.37.1 review (user screenshots of MAC-10 and Uzi aiming, suppressor
-  hip view): the suppressor sat 0.9 below the bore because flamePos y
-  must be 0.85 ABOVE the bore (Decimation convention), and it should
-  cover the threads like the real one (user photo 2); the aim centre is
-  the Uzi's aperture hole (about -4.65), not the sight tops. Fixed in
-  v0.37.2: flamePos y -4.75, suppressor (-2.37, -0.16, 0), aperture hole
-  -4.8 to -4.55, front post tip -4.67, stock loop lowered to -4.57.
+The user knows real guns far better than my training does (user,
+10 Oktober 2026): treat their photos, screenshots and remarks as the
+source of truth about the real gun and about how it must look in game.
+
+1. Ask for the real gun first: photos (clean side view, three quarter,
+   with each accessory), and ask how its parts and accessories really
+   work when unsure (how the stock folds, where the charging handle is,
+   how a suppressor mounts). Do not guess gun facts. (MAC-10: the user's
+   photos fixed every proportion; my guesses were wrong.)
+2. Measure the photos: pixels against one known length, write the
+   numbers into the spec header. Decimation then draws guns a bit slimmer
+   than real (SMG about 1.2 to 1.6 wide).
+3. Look like Decimation, not like a toy: many small shape parts (tapers
+   first), dark flat tones per part with gradation (15 to 31 shades,
+   faces about 5 apart, texel noise about 2.5), no painted detail. (MAC-10
+   v1: 23 light grey boxes, rejected; v0.37.0: too few shades.)
+4. Accessories follow the real gun: check how each mounts on THIS gun in
+   the photos. A suppressor on a threaded barrel screws over the threads
+   up to the nut / receiver front, centred on the bore; it never floats
+   ahead or hangs low. (MAC-10 v0.37.0 and v0.37.1.)
+5. flamePos y goes about 0.85 ABOVE the bore (Decimation's convention,
+   Uzi -4.5 over a barrel at -3.5); x at the muzzle tip minus 0.1. Barrel
+   attachments hang from it. (MAC-10 v0.37.1: flamePos on the bore put
+   the suppressor 0.9 low.)
+6. Short guns (muzzle below x about 12): the game's barrel attachment
+   formula misses the muzzle; fix with Deci.offsetAttachment in NewGuns
+   plus study.py ATTACH_FIX, then check x and height against a
+   Decimation gun with study.py attach. (MAC-10 v0.37.0.)
+7. Aim: build the sight picture like a Decimation gun of the same kind
+   (Uzi: the screen centre passes through the rear aperture hole, about
+   y -4.65, front post tip at the same height) and check it SIDE BY SIDE
+   with that gun in the same run, cropped with centre lines. Absolute
+   numbers and my held camera test fooled me once. (MAC-10 v0.37.0 and
+   v0.37.1.)
+8. Keep the line of sight clear: nothing behind the rear sight (stock
+   loops, charging handles, scope mounts) may rise above about -4.57.
+   (MAC-10 v0.37.1: the stock loop crossed the aperture.)
+9. Judge small offsets by numbers (study.py) or enlarged crops, not by an
+   854 x 480 NPC shot; when the user's screenshot disagrees with my test,
+   the user's screenshot wins: crop it and measure. (MAC-10 v0.37.1.)
+10. Show the user side by side renders (ours next to the reference and
+   their photo) before asking for an in game test; ask what still looks
+   off rather than assuming it is done.
+
+## Per gun history (short; the lessons above are what matters)
+
+- MAC-10 v1 (v0.36.0): rejected, "not good, needs polish" (lessons 1, 3).
+- MAC-10 v2 (v0.37.0): "huge upgrade"; then aim, suppressor, gradation
+  revisions (lessons 3, 4, 6, 7).
+- MAC-10 v0.37.1: suppressor low and not over the threads, aim 0.25 high
+  vs the Uzi (lessons 4, 5, 7, 8, 9). Fixed in v0.37.2: flamePos y -4.75,
+  suppressor offset (-2.37, -0.16, 0), aperture hole -4.8 to -4.55, post
+  tip -4.67, stock loop top -4.57.
