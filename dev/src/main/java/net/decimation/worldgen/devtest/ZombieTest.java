@@ -71,9 +71,10 @@ public class ZombieTest extends DevTestMode
             w.difficultySetting = EnumDifficulty.NORMAL;
             w.setWorldTime(6000);
             p.capabilities.isFlying = true;
-            x0 = (int) Math.floor(p.posX);
-            z0 = (int) Math.floor(p.posZ);
-            ground = w.getTopSolidOrLiquidBlock(x0, z0 - 24);
+            DevTestArena.build(w, p);
+            x0 = DevTestArena.X;
+            z0 = DevTestArena.Z;
+            ground = DevTestArena.Y;
             batch(w);
             screamSetup(w);
         }
@@ -81,7 +82,7 @@ public class ZombieTest extends DevTestMode
         {
             // the AI may drop a far target: set it again each tick, the scream reads it first
             screamer.setAttackTarget(bait);
-            bait.setPosition(x0 + 0.5, ground + 2, z0 - 40 + 0.5);
+            bait.setPosition(x0 + 0.5, ground, z0 - 10 + 0.5);
             bait.motionX = bait.motionY = bait.motionZ = 0;
             if (InfectedVariants.lastAlerted > 0 || t == 80)
             {
@@ -95,7 +96,6 @@ public class ZombieTest extends DevTestMode
                 }
                 screamer.setDead();
                 bait.setDead();
-                w.setBlockToAir(x0, ground + 1, z0 - 40);
             }
         }
         if (t == 100)
@@ -225,20 +225,26 @@ public class ZombieTest extends DevTestMode
      */
     private void screamSetup(World w)
     {
-        int y = ground + 2;
-        w.setBlock(x0, y - 1, z0 - 40, Blocks.stone);
+        int y = ground;
         InfectedVariants.lastAlerted = 0;
         bait = Deci.newBandit(w);
-        bait.setPosition(x0 + 0.5, y, z0 - 40 + 0.5);
+        bait.setPosition(x0 + 0.5, y, z0 - 10 + 0.5);
         w.spawnEntityInWorld(bait);
-        screamer = Deci.newInfected(w);
-        screamer.setPosition(x0 + 5.5, ground, z0 - 40 + 0.5);
-        w.spawnEntityInWorld(screamer);
+        // Decimation turns 10% of infected spawns into hulks / bloaters: try until one is in
+        for (int attempt = 0; attempt < 10; attempt++)
+        {
+            screamer = Deci.newInfected(w);
+            screamer.setPosition(x0 - 4.5, ground, z0 - 10 + 0.5);
+            if (w.spawnEntityInWorld(screamer))
+            {
+                break;
+            }
+        }
         InfectedVariants.instance().apply(screamer, InfectedVariants.instance().byName("screamer"));
         for (int i = 0; i < 6; i++)
         {
             EntityLiving z = Deci.newInfected(w);
-            z.setPosition(x0 + 30.5, ground, z0 - 43 + i + 0.5);
+            z.setPosition(x0 - 29.5, ground, z0 - 13 + i + 0.5);
             if (w.spawnEntityInWorld(z))
             {
                 alerted.add(z);
@@ -253,7 +259,7 @@ public class ZombieTest extends DevTestMode
         {
             ((EntityLiving) o).setDead();
         }
-        lineGround = w.getTopSolidOrLiquidBlock(x0, z0 - 6);
+        lineGround = DevTestArena.Y;
         for (int dx = -4; dx <= 4; dx++)
         {
             for (int dz = -7; dz <= 1; dz++)

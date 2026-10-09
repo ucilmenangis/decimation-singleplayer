@@ -31,6 +31,9 @@ public class TracerTest extends DevTestMode
 {
     public String name() { return "tracer"; }
 
+    /** The test bandit's place on the arena; the player stands 8 blocks south. */
+    private static final double BX = DevTestArena.X + 0.5, BZ = DevTestArena.Z + 0.5;
+
     public boolean client(Minecraft mc)
     {
         if (!tracerDone)
@@ -74,12 +77,11 @@ public class TracerTest extends DevTestMode
             // the camera views switch to peaceful, which removes a hostile bandit at once
             sp.worldObj.difficultySetting = net.minecraft.world.EnumDifficulty.NORMAL;
             sp.capabilities.isFlying = true;
-            sp.setPositionAndUpdate(8.5, 80, 40.5);
+            DevTestArena.build(sp.worldObj, sp);
+            sp.setPositionAndUpdate(BX, DevTestArena.Y, BZ + 8);
             net.decimation.fixes.NpcShots.record = shotDirs;
-            // a block to stand on: held in the air, the client's copy falls and its tracers start lower
-            sp.worldObj.setBlock(8, 79, 32, net.minecraft.init.Blocks.stone);
             tracerBandit = net.decimation.fixes.Deci.newBandit(sp.worldObj);
-            tracerBandit.setPosition(8.5, 80, 32.5);
+            tracerBandit.setPosition(BX, DevTestArena.Y, BZ);
             // a fixed gun and rate (a random tier could roll a slow sniper rifle)
             net.decimation.fixes.NpcLoadouts.instance().equip(tracerBandit,
                 net.decimation.fixes.NpcLoadouts.instance().byName("bandit_medium"), tracerBandit.getEntityData());
@@ -89,7 +91,7 @@ public class TracerTest extends DevTestMode
         }
         if (tracerBandit != null && tracerTicks > 40 && tracerTicks < 400)
         {
-            tracerBandit.setPosition(8.5, 80, 32.5);
+            tracerBandit.setPosition(BX, DevTestArena.Y, BZ);
             tracerBandit.motionX = tracerBandit.motionY = tracerBandit.motionZ = 0;
             tracerBandit.rotationYaw = tracerBandit.rotationYawHead = tracerBandit.renderYawOffset = 180; // away
             tracerBandit.rotationPitch = 0;
@@ -100,7 +102,6 @@ public class TracerTest extends DevTestMode
         {
             tracerBandit.setDead();
             net.decimation.fixes.NpcShots.record = null;
-            tracerBandit.worldObj.setBlockToAir(8, 79, 32);
         }
     }
 
@@ -147,8 +148,8 @@ public class TracerTest extends DevTestMode
                 org.lwjgl.util.vector.Vector3f[] line = net.decimation.fixes.Deci.tracerLine(t);
                 org.lwjgl.util.vector.Vector3f a = line[0], b = line[1];
                 allSeen++;
-                // only the test bandit's tracers (8.5, 80, 32.5): other NPCs nearby fight each other
-                if (Math.abs(a.x - 8.5) > 4 || Math.abs(a.z - 32.5) > 4 || Math.abs(a.y - 81.5) > 4)
+                // only the test bandit's tracers (on the arena, 8 north of the player): others fight nearby
+                if (Math.abs(a.x - BX) > 4 || Math.abs(a.z - BZ) > 4 || Math.abs(a.y - (DevTestArena.Y + 1.5)) > 4)
                 {
                     if (rejected++ < 6)
                     {

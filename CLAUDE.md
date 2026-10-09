@@ -283,6 +283,14 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   register its name in DevAutoTest.mode(), record values with
   DevTestResults.value / check, screenshots with DevTestUtil.screenshot.
   The old flags below still work (-Pautotest = checks + views).
+  TEST ARENA (user request 2026-10-09): modes that place NPCs (npc, shots,
+  tracer, zombies) use `devtest/DevTestArena`: a flat stone floor at
+  y 150 around (8, 8), 97 x 49 blocks, stand at DevTestArena.Y. Each mode
+  calls DevTestArena.build(world, player) first (clean floor, no leftover
+  entities). Never film on terrain or hold NPCs in the air again (grass
+  hid lineups, client copies of held mobs fall). Decimation refuses some
+  spawns (10% of infected become hulks / bloaters, 5% of soldiers mechs):
+  retry until spawnEntityInWorld returns true.
 
 - `python3 tools/servertest.py SEED [keep]`: dev dedicated server, fresh
   world, waits for spawn generation, stops via console `stop`, prints our

@@ -37,7 +37,7 @@ public class ShotTest extends DevTestMode
     /** Phase with an RPG-7 bandit (real rockets, NpcShots.rocket). */
     private static final int ROCKET_PHASE = 3;
     private static final int LEN = 500, START = 20; // long enough for a reload (4 s) or two per phase
-    private static final int Y = 140;
+    private static final int Y = DevTestArena.Y; // everything stands on the test arena
 
     private volatile int ticks;
     private volatile boolean done;
@@ -188,8 +188,9 @@ public class ShotTest extends DevTestMode
             world.difficultySetting = EnumDifficulty.NORMAL;
             world.setWorldTime(6000);
             p.capabilities.isFlying = true;
-            x0 = Math.floor(p.posX) + 0.5;
-            z0 = Math.floor(p.posZ) + 0.5;
+            DevTestArena.build(world, p);
+            x0 = DevTestArena.X + 0.5;
+            z0 = DevTestArena.Z + 0.5;
         }
         if (t < START || t >= START + DIST.length * LEN)
         {
@@ -248,9 +249,6 @@ public class ShotTest extends DevTestMode
             l.equip(enemy, l.byName("bandit_light"), enemy.getEntityData());
             enemy.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1000);
             enemy.setHealth(1000);
-            world.setBlock(bx, Y - 1, bz - 3, Blocks.stone);
-            world.setBlock(bx, Y - 1, bz + 3, Blocks.stone);
-            world.setBlock(bx - DIST[RANGE_PHASE], Y - 1, bz, Blocks.stone);
             for (EntityLiving e : new EntityLiving[] {sniperNpc, mgNpc, enemy})
             {
                 world.spawnEntityInWorld(e);
@@ -274,9 +272,6 @@ public class ShotTest extends DevTestMode
             {
                 e.setDead();
             }
-            world.setBlockToAir(bx, Y - 1, bz - 3);
-            world.setBlockToAir(bx, Y - 1, bz + 3);
-            world.setBlockToAir(bx - DIST[RANGE_PHASE], Y - 1, bz);
         }
     }
 
@@ -304,7 +299,7 @@ public class ShotTest extends DevTestMode
         pig.setHealth(1000);
         pig.setPosition(x0 - DIST[phase], Y, z0);
         world.spawnEntityInWorld(pig);
-        for (int dy = -1; dy <= 3; dy++)
+        for (int dy = 0; dy <= 3; dy++)
         {
             for (int dz = -2; dz <= 2; dz++)
             {
@@ -312,19 +307,11 @@ public class ShotTest extends DevTestMode
                                WALL[phase] ? Blocks.stone : Blocks.air);
             }
         }
-        // blocks to stand on (held in the air, their client copies fall)
-        world.setBlock((int) Math.floor(x0), Y - 1, (int) Math.floor(z0), Blocks.stone);
-        world.setBlock((int) Math.floor(x0) - DIST[phase], Y - 1, (int) Math.floor(z0), Blocks.stone);
         p.setPositionAndUpdate(x0 + 4, Y + 1, z0 - 5);
     }
 
     private void cleanup(World world)
     {
-        for (int d : DIST)
-        {
-            world.setBlockToAir((int) Math.floor(x0) - d, Y - 1, (int) Math.floor(z0));
-        }
-        world.setBlockToAir((int) Math.floor(x0), Y - 1, (int) Math.floor(z0));
         if (bandit != null)
         {
             bandit.setDead();
@@ -333,7 +320,7 @@ public class ShotTest extends DevTestMode
         {
             pig.setDead();
         }
-        for (int dy = -1; dy <= 3; dy++)
+        for (int dy = 0; dy <= 3; dy++)
         {
             for (int dz = -2; dz <= 2; dz++)
             {

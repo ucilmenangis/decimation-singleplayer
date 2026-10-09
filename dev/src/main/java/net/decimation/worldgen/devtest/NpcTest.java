@@ -168,7 +168,8 @@ public class NpcTest extends DevTestMode
     private void batches(World world, EntityPlayerMP p)
     {
         NpcLoadouts loadouts = NpcLoadouts.instance();
-        int bx = (int) p.posX, bz = (int) p.posZ - 24;
+        DevTestArena.build(world, p);
+        int bx = DevTestArena.X, bz = DevTestArena.Z - 10;
         Map<String, Integer> plain = spawnBatch(world, NpcKind.BANDIT, 60, bx, bz);
         DevTestResults.value(name(), "bandit tiers outside military", plain);
         int[] mil = militaryChunk(world, p);
@@ -441,8 +442,14 @@ public class NpcTest extends DevTestMode
         return null;
     }
 
+    /** The arena floor inside it (DevTestArena), else the ground (the military sector batch). */
     private static int ground(World world, int x, int z)
     {
+        if (x >= DevTestArena.X - DevTestArena.BACK && x <= DevTestArena.X + DevTestArena.FRONT
+            && Math.abs(z - DevTestArena.Z) <= DevTestArena.SIDE)
+        {
+            return DevTestArena.Y;
+        }
         return world.getTopSolidOrLiquidBlock(x, z);
     }
 
@@ -453,8 +460,8 @@ public class NpcTest extends DevTestMode
         clear();
         clearOthers(world, p);
         NpcLoadouts loadouts = NpcLoadouts.instance();
-        int x0 = (int) Math.floor(p.posX), z = (int) Math.floor(p.posZ) - 6;
-        int y = ground(world, x0, z);
+        int x0 = DevTestArena.X, z = DevTestArena.Z - 6;
+        int y = DevTestArena.Y;
         Map<Integer, String> guns = new HashMap<Integer, String>();
         String[] names = LINEUPS[l];
         // plants between the camera and the lineup hide it (fresh worlds grow tall grass)

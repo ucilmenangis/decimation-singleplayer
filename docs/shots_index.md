@@ -520,3 +520,13 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   dark police clothes), screamer (white hazmat suit). Two earlier tries
   (not kept) had the lineup below the camera (ground taken 18 blocks away)
   and natural spawns walking in front.
+
+## arena_v0.34.0/ (all NPC test modes on the test arena, DevTestArena)
+- sheet_npc.png: the six lineups (bandits, soldiers, Soviets, juggernauts,
+  elites, snipers) on the flat grey stone floor against the sky, nothing
+  in front; the egg hotbar.
+- sheet_zombies.png: common, runner, riot, screamer on the arena floor.
+- sheet_shots.png: impacts on the test wall; the RPG bandit (one prone,
+  Decimation's random stance) firing, rockets with smoke trails in flight.
+  A first arena run (not kept) still had blood marks, dropped items and
+  NPCs of earlier modes on the floor: build() now cleans both.
