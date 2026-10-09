@@ -237,3 +237,5 @@ material (MTL), no texture; a converter (to write: obj to the tools/guns
 spec) turns each 8 vertex object into a box with corner offsets, and
 gunmodel.py paints the box UV texture as usual. The generator's own atlas
 and UVs are useless here (box UV is fixed by BModelBox).
+Decision (user, 2026-10-10): keep the tools/guns pipeline (spec boxes +
+Blockbench MCP previews); no OBJ converter, no outside generator.
