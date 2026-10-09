@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.35.0",
+     version = "0.36.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -104,6 +104,8 @@ public class DecimationWorldGen
         infectedVariants = new net.decimation.fixes.InfectedVariants(event.getModConfigurationDirectory());
         // 60 round STANAG / AK magazines: guns and loot of Decimation exist after its preInit
         net.decimation.fixes.Magazines.register();
+        // guns of our own (tools/guns, assets/deci/...): the MAC-10 pilot
+        net.decimation.fixes.NewGuns.register();
         cpw.mods.fml.common.registry.GameRegistry.registerItem(
             new net.decimation.fixes.ZombieEgg(infectedVariants), "zombie_egg");
         cpw.mods.fml.common.registry.GameRegistry.registerItem(

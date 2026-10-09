@@ -535,3 +535,18 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
 - npc_mags.png: hotbar with the 30 round STANAG, 60rnd NATO STANAG
   Magazine (selected, name shown), 30 round AK, 60rnd AK Magazine (RPK
   style long icon), 40 round RPK mag.
+
+## mac10_v0.36.0/ (the MAC-10 pilot)
+- render_bbmodel_contact_sheet_1..4.png: Blockbench MCP previews (dark
+  flat lighting, first texture): left side, right side, three-quarter,
+  top: boxy receiver with a dark ejection port window, threaded barrel,
+  sights, cocking knob, checkered grip, long magazine, trigger guard,
+  stock rods and butt plate. The texture was brightened after this.
+- gun_fp.png: first person on the test arena, the MAC-10 seen from behind
+  and above (rear sight, top, stock plate), grey metal; name "MAC-10";
+  hotbar with its icon and two magazines. gun_fp_uzi.png: Decimation's Uzi
+  in the same view for comparison (the Uzi shows more of its side).
+- gun_reload_8.png: start of the reload (gun tilted).
+- gun_npc_front.png: a bandit holding the MAC-10 at the chest.
+- gun_npc_fire_110 / 120.png: behind the bandit, firing at a Soviet,
+  tracers both ways.

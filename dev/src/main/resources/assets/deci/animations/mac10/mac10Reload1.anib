@@ -1,0 +1,137 @@
+Length: 48
+Hand: 0
+---------------------------
+START
+Frame {
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+ ammoModel0 {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame {
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 12, 0, 4;
+ }
+ OffHand {
+  Pos: 0, 0.3, 0;
+  Rot: -12, 0, 25;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+SWITCH Frame {
+Shake: 0.8;
+PlaySound: MagOut;
+ ammoModel0 {
+  Pos: 0, 3, 0;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: 0, 0.6, 0;
+  Rot: -12, 0, 25;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame {
+ ammoModel0 {
+  Pos: 0, 14, 0;
+  Rot: 0, 0, 10;
+ }
+ OffHand {
+  Pos: 0, 1.2, 0;
+  Rot: -20, 0, 35;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame {
+ ammoModel0 {
+  Pos: 0, 7, 0;
+  Rot: 0, 0, 4;
+ }
+ OffHand {
+  Pos: 0, 0.8, 0;
+  Rot: -15, 0, 30;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+LOAD Frame {
+Shake: 1;
+PlaySound: MagIn;
+ ammoModel0 {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: 0, 0.4, 0;
+  Rot: -10, 0, 20;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+TRYBOLT Frame {
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 4, 0, 0;
+ }
+ OffHand {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+}
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame SKIP
+Frame {
+ Model {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+ OffHand {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+ ammoModel0 {
+  Pos: 0, 0, 0;
+  Rot: 0, 0, 0;
+ }
+}
+END

@@ -41,3 +41,6 @@ __pycache__/
 
 # ---- Local screenshots (show Decimation models / textures: never public) ----
 docs/shots/
+
+# gun preview renders (tools/bbmcp.py output; rebuildable)
+tools/guns/models/render_*.png

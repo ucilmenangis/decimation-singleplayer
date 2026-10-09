@@ -50,14 +50,14 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791548233.255168,
-    "ast_hash": "a886fc42c4782fbc08de188ccc9211ff",
-    "semantic_hash": "a886fc42c4782fbc08de188ccc9211ff"
+    "mtime": 1791553206.179031,
+    "ast_hash": "e84586a539baf0e34fd4b0f57b15b4b2",
+    "semantic_hash": "e84586a539baf0e34fd4b0f57b15b4b2"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
-    "mtime": 1791543738.557701,
-    "ast_hash": "831870629c610aa4b07aa922295abe23",
-    "semantic_hash": "831870629c610aa4b07aa922295abe23"
+    "mtime": 1791552305.0309794,
+    "ast_hash": "fb396828ce1d26735d88fc8095f4d4da",
+    "semantic_hash": "fb396828ce1d26735d88fc8095f4d4da"
   },
   "dev/src/main/java/net/decimation/worldgen/Rotation.java": {
     "mtime": 1791315242.0110583,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791548233.2719212,
-    "ast_hash": "ffbc845c07af3fbfad55f744f1656134",
-    "semantic_hash": "ffbc845c07af3fbfad55f744f1656134"
+    "mtime": 1791553206.1962872,
+    "ast_hash": "df7beadefa86034a89924db38375a3f3",
+    "semantic_hash": "df7beadefa86034a89924db38375a3f3"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -140,9 +140,9 @@
     "semantic_hash": "f5f7ed9764011af0e3df121e92cff225"
   },
   "docs/gun_model_spec.md": {
-    "mtime": 1791443688.5313113,
-    "ast_hash": "f621a823eb9474151095cff6f992f3da",
-    "semantic_hash": "f621a823eb9474151095cff6f992f3da"
+    "mtime": 1791553206.1949334,
+    "ast_hash": "62f7997a125c8fe28a190278a3eedefc",
+    "semantic_hash": "62f7997a125c8fe28a190278a3eedefc"
   },
   "documentation.md": {
     "mtime": 1791548233.2715552,
@@ -150,9 +150,9 @@
     "semantic_hash": "684b36c6d19ac6a24a55f1ed3839190c"
   },
   "new_feature.md": {
-    "mtime": 1791548233.2704544,
-    "ast_hash": "31c77290aa7ff11146b96c80845a2014",
-    "semantic_hash": "31c77290aa7ff11146b96c80845a2014"
+    "mtime": 1791553206.1954648,
+    "ast_hash": "43ed5d41009b8594baf7287baede4ee4",
+    "semantic_hash": "43ed5d41009b8594baf7287baede4ee4"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -325,9 +325,9 @@
     "semantic_hash": "32134db33ff2599b79a45d05e9fdfdc1"
   },
   "docs/shots_index.md": {
-    "mtime": 1791548233.2710261,
-    "ast_hash": "3b26b3953a1723ad4b21c19409b63841",
-    "semantic_hash": "3b26b3953a1723ad4b21c19409b63841"
+    "mtime": 1791553206.1959722,
+    "ast_hash": "89ea6bdc377386b9526af4ac492181e3",
+    "semantic_hash": "89ea6bdc377386b9526af4ac492181e3"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -354,111 +354,6 @@
     "ast_hash": "592ff50c6e4ca1de5733ac7374e51ea7",
     "semantic_hash": "592ff50c6e4ca1de5733ac7374e51ea7"
   },
-  "dev/src/main/resources/assets/deciworldgen/sets/bath_toilet_sink.json": {
-    "mtime": 1791383829.5137563,
-    "ast_hash": "5dd4458a2e70bff15a780d9f71c0f295",
-    "semantic_hash": "5dd4458a2e70bff15a780d9f71c0f295"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/bath_tub.json": {
-    "mtime": 1791383829.5205846,
-    "ast_hash": "418cf37d971004ee0157fa61d4f500f9",
-    "semantic_hash": "418cf37d971004ee0157fa61d4f500f9"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/bed_along_wall.json": {
-    "mtime": 1791384452.5910404,
-    "ast_hash": "92ab9cde92a51298c9eb0ba755f64dd9",
-    "semantic_hash": "92ab9cde92a51298c9eb0ba755f64dd9"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/bed_nightstands.json": {
-    "mtime": 1791383941.430944,
-    "ast_hash": "555bc626171b4edead3b60eb8923b9cd",
-    "semantic_hash": "555bc626171b4edead3b60eb8923b9cd"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/bed_single.json": {
-    "mtime": 1791384281.5096564,
-    "ast_hash": "8727dc9ef45920f4ee52a5f7f770a22d",
-    "semantic_hash": "8727dc9ef45920f4ee52a5f7f770a22d"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/closet_boxes.json": {
-    "mtime": 1791384547.4953558,
-    "ast_hash": "4b774c5a07868b30815e05c53b9cc7a3",
-    "semantic_hash": "4b774c5a07868b30815e05c53b9cc7a3"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/desk_chair.json": {
-    "mtime": 1791383941.4318764,
-    "ast_hash": "688c8f2a95fad3b18c055900e982ff89",
-    "semantic_hash": "688c8f2a95fad3b18c055900e982ff89"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/dining_small.json": {
-    "mtime": 1791384281.5212173,
-    "ast_hash": "afe8086564ac0563a631829aef217312",
-    "semantic_hash": "afe8086564ac0563a631829aef217312"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/dining_table.json": {
-    "mtime": 1791383837.068114,
-    "ast_hash": "8a6fc147ba414d87d6c32bc3dfc9316b",
-    "semantic_hash": "8a6fc147ba414d87d6c32bc3dfc9316b"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/dresser.json": {
-    "mtime": 1791384452.6000073,
-    "ast_hash": "f408813edd77d61d4998a5875f54dc5d",
-    "semantic_hash": "f408813edd77d61d4998a5875f54dc5d"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_4.json": {
-    "mtime": 1791395757.522758,
-    "ast_hash": "5312f4b4d1e9257bd6830de1a1dd7794",
-    "semantic_hash": "5312f4b4d1e9257bd6830de1a1dd7794"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_5.json": {
-    "mtime": 1791395757.5229223,
-    "ast_hash": "5d9f2baa73b7b1c5f6aedad4738e6c00",
-    "semantic_hash": "5d9f2baa73b7b1c5f6aedad4738e6c00"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/kitchen_run_6.json": {
-    "mtime": 1791395757.523076,
-    "ast_hash": "041a9d614d55900d13c7b2c589140c9c",
-    "semantic_hash": "041a9d614d55900d13c7b2c589140c9c"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/kitchenette_3.json": {
-    "mtime": 1791395757.5232263,
-    "ast_hash": "b05326896b2548f802cc8a63900d6586",
-    "semantic_hash": "b05326896b2548f802cc8a63900d6586"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/living_couch_wall.json": {
-    "mtime": 1791384452.5949144,
-    "ast_hash": "bfc96670f340e38e1f220ef43629f57c",
-    "semantic_hash": "bfc96670f340e38e1f220ef43629f57c"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/living_tv_armchair.json": {
-    "mtime": 1791384281.5153985,
-    "ast_hash": "72e1d52eaf7de50bb80911e1521cb97d",
-    "semantic_hash": "72e1d52eaf7de50bb80911e1521cb97d"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/living_tv_small.json": {
-    "mtime": 1791385022.202564,
-    "ast_hash": "4920d2821d622927f320b8ce6d06276a",
-    "semantic_hash": "4920d2821d622927f320b8ce6d06276a"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/living_tv_sofa.json": {
-    "mtime": 1791385022.2022622,
-    "ast_hash": "4395a6fbfa72f4de669ec286b11db601",
-    "semantic_hash": "4395a6fbfa72f4de669ec286b11db601"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/lobby_bikes.json": {
-    "mtime": 1791385022.2019007,
-    "ast_hash": "752e728886c48c42ec0747894fde70c7",
-    "semantic_hash": "752e728886c48c42ec0747894fde70c7"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/lobby_bin_plant.json": {
-    "mtime": 1791383829.532019,
-    "ast_hash": "53d95eb1265fb57db8acc06c025771df",
-    "semantic_hash": "53d95eb1265fb57db8acc06c025771df"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/wardrobe.json": {
-    "mtime": 1791385022.2028313,
-    "ast_hash": "95dcb4fb9a5fdd69ca9d7150cf87cd78",
-    "semantic_hash": "95dcb4fb9a5fdd69ca9d7150cf87cd78"
-  },
   "tools/hotswap.py": {
     "mtime": 1791385651.0708683,
     "ast_hash": "ddc856a527654c00da45dc82887d74e8",
@@ -468,11 +363,6 @@
     "mtime": 1791397145.3199964,
     "ast_hash": "d6ab1190acec20c4a0b38288106130f4",
     "semantic_hash": "d6ab1190acec20c4a0b38288106130f4"
-  },
-  "dev/src/main/resources/assets/deciworldgen/sets/lobby_bench.json": {
-    "mtime": 1791388159.0348103,
-    "ast_hash": "d05e9d2646958a38973a377394185f5a",
-    "semantic_hash": "d05e9d2646958a38973a377394185f5a"
   },
   "docs/references/apartment.md": {
     "mtime": 1791387227.3897967,
@@ -543,31 +433,6 @@
     "mtime": 1791395333.1847131,
     "ast_hash": "ffef9b75cde3f6360f61d0e0573baaef",
     "semantic_hash": "ffef9b75cde3f6360f61d0e0573baaef"
-  },
-  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_birch.json": {
-    "mtime": 1791395465.850849,
-    "ast_hash": "96a36b8eab154acc3d149db38b8a2013",
-    "semantic_hash": "96a36b8eab154acc3d149db38b8a2013"
-  },
-  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_dark_oak.json": {
-    "mtime": 1791395465.850904,
-    "ast_hash": "4ecd024c6cb65251a4c41fcabe251412",
-    "semantic_hash": "4ecd024c6cb65251a4c41fcabe251412"
-  },
-  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_oak.json": {
-    "mtime": 1791395465.8507216,
-    "ast_hash": "a04f022bf75e9d1376217538595bb127",
-    "semantic_hash": "a04f022bf75e9d1376217538595bb127"
-  },
-  "dev/src/main/resources/assets/deciworldgen/palettes/kitchen_spruce.json": {
-    "mtime": 1791395465.850791,
-    "ast_hash": "52d8261a08e381b2037dbad230729ca3",
-    "semantic_hash": "52d8261a08e381b2037dbad230729ca3"
-  },
-  "dev/src/main/resources/assets/deciworldgen/styles/kitchen_wood.json": {
-    "mtime": 1791395465.851016,
-    "ast_hash": "63c26d7f8fd16d92d147881d596a0063",
-    "semantic_hash": "63c26d7f8fd16d92d147881d596a0063"
   },
   "tools/asset_hashes.py": {
     "mtime": 1791395508.1948228,
@@ -710,9 +575,9 @@
     "semantic_hash": "19275604e6c6abad26e5e80b5ec68fc6"
   },
   "dev/src/main/java/net/decimation/fixes/Deci.java": {
-    "mtime": 1791547816.2654383,
-    "ast_hash": "4f616cc1599989091d0c6c232b4c45ec",
-    "semantic_hash": "4f616cc1599989091d0c6c232b4c45ec"
+    "mtime": 1791552228.4636447,
+    "ast_hash": "f5f80fbbb65a7ebc45ff932e48611ed8",
+    "semantic_hash": "f5f80fbbb65a7ebc45ff932e48611ed8"
   },
   "dev/src/main/java/net/decimation/fixes/ScopeZoom.java": {
     "mtime": 1791478003.8243053,
@@ -790,9 +655,9 @@
     "semantic_hash": "237f95f08e85f8b81a2441ccf2ae1fdd"
   },
   "docs/roadmap.md": {
-    "mtime": 1791549191.9811814,
-    "ast_hash": "98ee49b72f50c5e5c903c78be9c3b6f5",
-    "semantic_hash": "98ee49b72f50c5e5c903c78be9c3b6f5"
+    "mtime": 1791553206.1957726,
+    "ast_hash": "a1c8d44c0e8e886cbe516344544f91e1",
+    "semantic_hash": "a1c8d44c0e8e886cbe516344544f91e1"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -840,14 +705,14 @@
     "semantic_hash": "cb2569338e9777d443d387da0264df05"
   },
   "dev/src/main/java/net/decimation/fixes/NpcLoadouts.java": {
-    "mtime": 1791529731.678691,
-    "ast_hash": "2fe1abd5df8b2b404c0573ceef5cd313",
-    "semantic_hash": "2fe1abd5df8b2b404c0573ceef5cd313"
+    "mtime": 1791552879.2384694,
+    "ast_hash": "752dce93ce95ef054280bbd791349570",
+    "semantic_hash": "752dce93ce95ef054280bbd791349570"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/NpcTest.java": {
-    "mtime": 1791547848.505241,
-    "ast_hash": "81cd6f7007431cd4e56998bf64b8f58f",
-    "semantic_hash": "81cd6f7007431cd4e56998bf64b8f58f"
+    "mtime": 1791553072.9354696,
+    "ast_hash": "da530b4dbfcf6f99e1eff588c4a8b374",
+    "semantic_hash": "da530b4dbfcf6f99e1eff588c4a8b374"
   },
   "dev/src/main/java/net/decimation/fixes/NpcEgg.java": {
     "mtime": 1791529552.548283,
@@ -898,5 +763,30 @@
     "mtime": 1791548041.9730947,
     "ast_hash": "dc1f87d89604e3addea77a62920b5b03",
     "semantic_hash": "dc1f87d89604e3addea77a62920b5b03"
+  },
+  "dev/src/main/java/net/decimation/fixes/NewGuns.java": {
+    "mtime": 1791552239.7876978,
+    "ast_hash": "3f47886fe7d1dc36d44ad579f76a8b4e",
+    "semantic_hash": "3f47886fe7d1dc36d44ad579f76a8b4e"
+  },
+  "dev/src/main/java/net/decimation/worldgen/devtest/GunTest.java": {
+    "mtime": 1791552879.2379317,
+    "ast_hash": "8402a005a642ea855ed60847750ae839",
+    "semantic_hash": "8402a005a642ea855ed60847750ae839"
+  },
+  "tools/bbmcp.py": {
+    "mtime": 1791552105.9255676,
+    "ast_hash": "753f30144c83aff4de97533b15bc8430",
+    "semantic_hash": "753f30144c83aff4de97533b15bc8430"
+  },
+  "tools/guns/gunmodel.py": {
+    "mtime": 1791552277.8394065,
+    "ast_hash": "14dc2a8ff996eaaff91e1eba2dfc95df",
+    "semantic_hash": "14dc2a8ff996eaaff91e1eba2dfc95df"
+  },
+  "tools/guns/mac10.py": {
+    "mtime": 1791552460.005594,
+    "ast_hash": "b6d4eabaff7119d99c1132fbf63f7c6a",
+    "semantic_hash": "b6d4eabaff7119d99c1132fbf63f7c6a"
   }
 }

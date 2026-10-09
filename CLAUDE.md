@@ -620,6 +620,11 @@ of the last session:
   attribute modifiers (operation 2 to multiply on top of others).
   v0.35.0: 60 round mags (`fixes/Magazines`); our own item names live in
   dev/src/main/resources/assets/deciworldgen/lang/en_US.lang.
+  v0.36.0: MAC-10, first gun of our own: pipeline tools/guns (spec ->
+  .bmodel / texture / icon / .anib), tools/bbmcp.py drives the headless
+  Blockbench MCP (renders without the game), fixes/NewGuns, dev test mode
+  `gun`; docs/gun_model_spec.md section 6. Our items register as
+  deciworldgen:<name>: lookups by name must try "deci" then "deciworldgen".
 - Obfuscated Decimation names in OUR code go through
   `net.decimation.fixes.Deci` (readable accessors: player data as
   `Deci.player(p).bottlecaps()`, server config, registry items / blocks,

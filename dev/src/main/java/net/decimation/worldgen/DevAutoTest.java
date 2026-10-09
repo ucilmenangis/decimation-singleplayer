@@ -101,6 +101,7 @@ public class DevAutoTest
         if (name.equals("npc")) return new net.decimation.worldgen.devtest.NpcTest();
         if (name.equals("shots")) return new net.decimation.worldgen.devtest.ShotTest();
         if (name.equals("zombies")) return new net.decimation.worldgen.devtest.ZombieTest();
+        if (name.equals("gun")) return new net.decimation.worldgen.devtest.GunTest();
         return null;
     }
 

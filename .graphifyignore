@@ -34,3 +34,7 @@ tools/shim_src/
 dev/gradlew
 dev/src/main/resources/assets/deciworldgen/*/known.txt
 dev/src/main/resources/assets/deciworldgen/*/index.txt
+
+# gun assets and preview models (images / generated, not knowledge)
+dev/src/main/resources/assets/
+tools/guns/models/

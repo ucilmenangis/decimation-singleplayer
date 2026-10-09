@@ -54,40 +54,11 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
-1. **Pilot: a new gun made by Claude with tools** (user 9 Oktober 2026,
-   "later"; tools Claude runs itself, not hand written boxes only, not for
-   the user):
-   - find assets: web search / web reader / agent-browser; only licences
-     that allow a public repo (CC0, CC-BY with credit);
-   - models: Blockbench .bbmodel / Minecraft item JSON read and written
-     directly (no app); a Python converter to Decimation .bmodel
-     (docs/gun_model_spec.md); mesh guns (.obj / .glb) voxelized with
-     trimesh and merged into boxes;
-   - textures / icon: PIL, ImageMagick (installed);
-   - quick preview: own Python box renderer (no game launch);
-   - final check: arena dev test (in hand, firing, reload, icon);
-   - sounds: CC0 or Decimation's by name; ffmpeg converts to ogg;
-   - to install first: `pip install trimesh` (venv), `brew install ffmpeg`;
-     Blender headless optional (about 1 GB, ask the user first).
-   Which gun `[not decided]` (start small: a pistol or SMG Decimation lacks).
-   MCP tools found 9 Oktober 2026 (third party, check before installing,
-   they run code locally; adding one changes the user's Claude config, so
-   ask first):
-   - Blockbench MCP, jasonjgardner/blockbench-mcp-plugin (GPL-3.0, a tool
-     only, nothing of it ships): HEADLESS stdio mode via `npx -y
-     github:jasonjgardner/blockbench-mcp-plugin --root <models dir>`, no
-     Blockbench app; tools to create / edit cubes, UVs, textures,
-     animations, validate geometry and animations, import / export Java
-     item JSON, and RENDER PNG views / contact sheets (needs Node >= 23.6,
-     here 24.12, and a GPU). First choice.
-   - Blender MCP, ahujasid/blender-mcp: needs Blender (about 1 GB) and its
-     add-on; Sketchfab search / download, Poly Haven assets, Hyper3D Rodin
-     text-to-3D (daily free limit), runs Python in Blender (mesh to boxes).
-   - Sounds: the official ElevenLabs MCP (text to sound effects, free tier
-     about 10k credits a month, API key) or a Freesound MCP (API key);
-     Bfxr MCP only makes retro sounds.
-   - Text to 3D (Meshy / Tripo / Rodin MCPs, Trident): paid API keys, mesh
-     output only (would need voxelizing); last resort.
+1. More guns of our own with the tools/guns pipeline (docs/gun_model_spec.md
+   section 6); the MAC-10 pilot is done (v0.36.0). Which next
+   `[not decided]`. MCP tools noted 9 Oktober 2026: Blockbench MCP
+   headless (in use), Blender MCP (Sketchfab / Poly Haven / Rodin, needs
+   Blender), ElevenLabs or Freesound MCP for sounds (API keys).
 2. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.
 
@@ -138,3 +109,5 @@ Details and starting points: new_feature.md "Zones, factions and world".
   deciworldgen_mobs.cfg).
 - v0.34.0 zombie variants: runner, riot, screamer, night frenzy, eggs.
 - v0.35.0 60 round STANAG and AK magazines (guns, loot).
+- v0.36.0 MAC-10, the first gun of our own (model, texture, icon,
+  animations by script; Blockbench MCP previews; Uzi sounds by reference).

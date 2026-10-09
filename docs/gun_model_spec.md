@@ -187,3 +187,42 @@ bolted.
 Fastest path: start from an existing gun of the same action type (copy its
 `.bmodel` and `.anib` files) and change the shape, so the animation part
 names already match.
+
+## 6. Our own guns: the tools/guns pipeline (v0.36.0, MAC-10 pilot)
+
+Every asset is our own work (public repo: never copy Decimation art).
+1. Spec: `tools/guns/<gun>.py` lists boxes in model units (x forward, y
+   down, z sideways), part group (gunModel / ammoModel / slideModel),
+   colour, face style (port, grip, rings), the header (flamePos, ejectPos,
+   rhPos / lhPos) and the animations (`gunmodel.anib` keyframes).
+2. Build: `python3 tools/guns/<gun>.py` (`tools/guns/gunmodel.py`) writes
+   into dev/src/main/resources/assets/deci/: `models/guns/<cat>/<gun>.bmodel`
+   (one part per box, addShape with 8 zero corners, decimal sizes are
+   fine: BModelLoader parses doubles), the texture (box UV exactly as
+   BModelBox maps it, painted procedurally at 4 px per unit), the 32x32
+   icon (side silhouette with outline), `animations/<gun>/*.anib`; plus a
+   .bbmodel ops file for previews.
+3. Preview without the game: `python3 tools/bbmcp.py batch FILE.json`
+   drives the headless Blockbench MCP (bbmodel_create / edit /
+   add_texture / validate / contact_sheet); renders land in
+   tools/guns/models/render_*.png (git ignored). Views front / back are the
+   gun's sides, three-quarter, top.
+4. Register in Java (fixes/NewGuns): `Deci.newMagazine` (bullet of an
+   existing mag, an existing mag's icon), `Deci.newGun` (GunStats, category,
+   magazines, slowdown, damage; registers as deciworldgen:<gun>),
+   `Deci.addLootLike` (loot where a similar gun is), and on the client
+   `Deci.useGunSounds` (points the gun's SoundEntry paths at an existing
+   gun's files and rewrites Decimation's sounds.json; no copied audio).
+   Names in assets/deciworldgen/lang/en_US.lang (item.<gun>.name).
+5. Test: `python3 tools/devtest.py gun` (devtest/GunTest, test arena):
+   first person still, reload key pressed (Decimation's key 19, isPressed
+   on its client tick; items must be given on the SERVER, mags need NBT
+   "ammo"), the gun's rounds after the reload, a bandit holding and firing
+   it. Player firing cannot be automated: GunItem reads the fire button
+   from the mouse itself (Mouse.isButtonDown(0)).
+Facts learned: BModelBox corner array order (index 7 = (0,0,0) corner, 6
+= (w,0,0), 4 = (w,h,0), 5 = (0,h,0), 3 = (0,0,d), 2 = (w,0,d), 0 =
+(w,h,d), 1 = (0,h,d)), offsets are added; face UVs: top (y = 0) at
+(u+d, v), bottom at (u+d+w, v), then x = 0, z = 0, x = w, z = d sides on
+the row v+d. Decimation's guns use 2 px per unit textures (Uzi 1024x32
+for a 512x16 layout), 32x32 icons.

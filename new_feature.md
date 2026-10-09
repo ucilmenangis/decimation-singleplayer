@@ -546,6 +546,26 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### MAC-10, the first gun of our own (DONE v0.36.0, 9 Oktober 2026)
+User: a gun made by Claude with tools (docs/roadmap.md pilot); user picked
+the MAC-10. Pipeline in docs/gun_model_spec.md section 6. Model: 23 boxes
+of our own (boxy receiver with ejection port, threaded barrel, sights,
+checkered grip with the magazine inside, trigger guard, strap lug,
+retracted wire stock, cocking knob as slideModel0), texture and icon
+painted by script, animations Fire / Reload1 / Rack written by us. Gun:
+smg, .45 ACP (the UMP45 / Uzi rounds), 30 round mac10Mag (Uzi mag icon),
+1100 rpm, damage 12, slowdown 0.08, the Uzi's sounds; in the loot pools
+of the Uzi (8) and its magazine (8), and in the light bandits' guns.
+Checked (dev test mode gun): registered, takes its magazine, the reload
+key loads 30 rounds (control: the Uzi loads its 32 the same way), a
+bandit holds it (third person) and fires it (tracers); first person it
+renders where the Uzi does, lighter texture after a first run that was
+almost black. Not testable here: the player firing it (mouse read
+directly) `[not verified]`; how it looks while aiming and the fire / rack
+animations in first person `[not verified]`. Tools: headless Blockbench
+MCP (registered for later sessions, `claude mcp add blockbench`), our
+client tools/bbmcp.py for this session.
+
 ### 60 round magazines (DONE v0.35.0, 9 Oktober 2026)
 `fixes/Magazines`, Deci newMagazine / gunTakes / addGunMagazine /
 addLootLike. Read from deobf: a magazine is an AmmoItem (deci.ay.f: name,

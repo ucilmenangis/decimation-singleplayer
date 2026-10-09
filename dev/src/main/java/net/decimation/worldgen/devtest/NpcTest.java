@@ -560,7 +560,8 @@ public class NpcTest extends DevTestMode
     {
         static net.minecraft.item.Item item(String name)
         {
-            return cpw.mods.fml.common.registry.GameRegistry.findItem("deci", name);
+            net.minecraft.item.Item i = cpw.mods.fml.common.registry.GameRegistry.findItem("deci", name);
+            return i != null ? i : cpw.mods.fml.common.registry.GameRegistry.findItem("deciworldgen", name); // our guns
         }
     }
 }

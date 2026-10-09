@@ -563,6 +563,61 @@ public final class Deci
         }
     }
 
+    /**
+     * A new gun (GunItem deci.ay.i): GunStats (deci.ay.e: recoil pitch / yaw,
+     * fire modes AUTO / SINGLE, mode params, aim table as the Uzi's, recoil
+     * recovery, rounds per minute), category (WeaponCategory deci.ay.c by
+     * name: smg, rifle, pistol ...), its magazines, setMovementSlowdown (f),
+     * setDamage (am). Its constructor registers the item (under the running
+     * mod), its sounds (guns/<category>/<name>/...) and, on the client, loads
+     * models/guns/<category>/<name>.bmodel (docs/gun_model_spec.md).
+     */
+    public static Item newGun(String name, String category, float recoilPitch, float recoilYaw, boolean auto,
+                              float recovery, float rpm, double slowdown, int damage, Item... mags)
+    {
+        deci.ay.e.a[] modes = auto ? new deci.ay.e.a[] {deci.ay.e.a.AUTO, deci.ay.e.a.SINGLE}
+            : new deci.ay.e.a[] {deci.ay.e.a.SINGLE};
+        deci.ay.e stats = new deci.ay.e(new float[] {recoilPitch, recoilYaw}, modes, new int[] {1, 1},
+            new float[][] {{16.0f, 1.5f}, {14.0f, 2.0f, 50.0f}, {9.0f, 4.0f, 100.0f}}, recovery, rpm);
+        return new deci.ay.i(name, stats, deci.ay.c.valueOf(category), mags).f(slowdown).am(damage);
+    }
+
+    /**
+     * Points a gun's sounds (its SoundEntry paths guns/<cat>/<gun>/..., in
+     * SoundRegistry deci.N.a.Ue, DecimationMod.getSoundRegistry p) at another
+     * gun's files (no copied audio) and writes Decimation's generated
+     * sounds.json again (writeSoundsJsonAndMount bw: Decimation wrote it
+     * before our guns existed). Client only (the registry is client side).
+     */
+    public static int useGunSounds(String gun, String category, String fromGun, String fromCategory)
+    {
+        deci.N.a reg = deci.a.b.a().p();
+        int n = 0;
+        try
+        {
+            java.lang.reflect.Field name = deci.N.c.class.getDeclaredField("name");
+            java.lang.reflect.Field path = deci.N.c.class.getDeclaredField("path");
+            name.setAccessible(true);
+            path.setAccessible(true);
+            String from = "guns/" + category + "/" + gun + "/", to = "guns/" + fromCategory + "/" + fromGun + "/";
+            for (Object o : reg.Ue)
+            {
+                String p = (String) path.get(o);
+                if (((String) name.get(o)).startsWith(gun) && p != null && p.startsWith(from))
+                {
+                    path.set(o, to + p.substring(from.length()));
+                    n++;
+                }
+            }
+            reg.bw();
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] sound redirect for %s failed: %s", gun, e);
+        }
+        return n;
+    }
+
     /** True when the gun (GunItem deci.ay.i) loads this magazine (its ammoTypes aep). */
     public static boolean gunTakes(Item gun, Item mag)
     {

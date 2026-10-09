@@ -158,7 +158,7 @@ public class NpcLoadouts
         tiers.add(new Tier("bandit_light", NpcKind.BANDIT, 55, 25, 20, 1.0f,
             new String[][] {CAPS, CASUAL_CHEST, CASUAL_LEGS, CASUAL_BOOTS},
             "makarov", "colt", "glock17", "browninghp", "uzi", "mp5a3", "r870", "dbarrel", "sks", "insas",
-            "ak12", "m14", "mosinnagant").delay(5, 20).spread(1.6f)); // Decimation's own bandit rate
+            "ak12", "m14", "mosinnagant", "mac10").delay(5, 20).spread(1.6f)); // Decimation's own bandit rate
         tiers.add(new Tier("bandit_medium", NpcKind.BANDIT, 35, 45, 26, 0.8f,
             new String[][] {{"militiaHelm", "banditHelm"}, {"militiaVest", "banditVest"},
                             {"militiaPants", "banditPants"}, {"militiaBoots", "banditBoots"}},
@@ -345,9 +345,11 @@ public class NpcLoadouts
             == StructureGenerator.MIL;
     }
 
+    /** Decimation's items, or ours (guns and magazines of our own register as deciworldgen:NAME). */
     static Item item(String name)
     {
-        return GameRegistry.findItem("deci", name);
+        Item i = GameRegistry.findItem("deci", name);
+        return i != null ? i : GameRegistry.findItem("deciworldgen", name);
     }
 
     @SubscribeEvent
