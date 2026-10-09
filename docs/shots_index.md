@@ -622,3 +622,9 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   suppressor flush on the muzzle and in line; gunview_mac10_supp.png:
   first person hip with the suppressor attached at the front;
   gunview_<gun>_supp_npc.png: the full NPC shots.
+- v0372_aim_cmp.png / v0372_aim_iron_cmp.png: v0.37.2 aim crops (centre
+  lines), Uzi left, MAC-10 right, with the suppressor / iron only: both
+  rear aperture holes on the centre line; the MAC-10 stock loop bar now
+  below the hole. v0372_<gun>_aim(_iron).png, v0372_<gun>_hip.png full
+  shots; v0372_hip_crop.png: first person, the suppressor over the
+  threads at the receiver front.

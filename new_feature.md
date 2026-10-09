@@ -546,6 +546,23 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### MAC-10 v2 revision 2 (DONE v0.37.2, 10 Oktober 2026)
+User review of 0.37.1 with screenshots (MAC-10 and Uzi aiming, MAC-10
+hip view with the suppressor): suppressor not matching the muzzle and
+still low; aim compared with the Uzi; asked that every revision updates
+the skill.
+- Suppressor: flamePos y must sit 0.85 above the bore (Decimation's
+  convention, Uzi / UMP45); now -4.75 over the bore at -3.9. Offset
+  (-2.37, -0.16, 0): it screws over the threads up to the receiver front
+  like the real one (user photo 2), centred on the bore.
+- Aim: the user's Uzi shot shows the centre in the Uzi's rear aperture
+  hole; ours sat 0.25 higher. Rear aperture hole now -4.8 to -4.55, front
+  post tip -4.67, stock loop top lowered to -4.57. Checked in the same
+  gunview run as the Uzi: both holes on the centre line.
+- Skill .claude/skills/decimation-gun: photos first, corrected anchors,
+  side by side aim check, attachment check, revision log; style guide
+  sections 9, 13, 14 corrected.
+
 ### MAC-10 v2 revision (DONE v0.37.1, 10 Oktober 2026)
 User review of 0.37.0 ("huge upgrade"): 1. aim not centred on the
 crosshair, 2. suppressor flying, 3. no gradation like Decimation's guns.

@@ -641,6 +641,9 @@ of the last session:
   flat tones, icon from the render, Decimation's animation timings; 102
   parts, sights at the aim centre), new_feature.md. v0.37.1: suppressor
   flush on short guns (Deci.offsetAttachment), texture gradation.
+  v0.37.2: flamePos y 0.85 above the bore (Decimation convention), aim
+  sight picture matched to the Uzi in the same shot; every user revision
+  updates the skill's revision log (user rule).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

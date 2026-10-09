@@ -229,6 +229,11 @@ mOff, no Scale in any shipped gun). Medians:
   same layout (our MAC-10 took the Uzi's; in first person it sits where the
   Uzi sits, hands on it [only the hip view checked]), then tune in game.
 - ejectPos is 0,0,0 on many guns (no casing spot set).
+- flamePos y is NOT the bore: it sits about 0.85 above it (Uzi flamePos
+  -4.5 over a barrel centred at -3.5; UMP45 -3.75 over about -2.95). Barrel
+  attachments are hung from flamePos, so they land on the bore only with
+  this convention (MAC-10 v0.37.1 had flamePos on the bore and its
+  suppressor 0.9 too low in the user's game).
 
 ## 10. Animations
 
@@ -303,10 +308,16 @@ and checked in game (`gunview`, shot gunview_<gun>_aim.png):
   a screenshot right after looking up or down shows the sights off the
   centre for a moment (the user's 0.37.0 shot: about 0.2 units) for any
   gun [inferred]; judge the aim only steady (gunview holds the camera).
-- Rules: the highest point of the iron sights (rear notch edges, front
-  post) at y -4.85 to -5.0 on z -0.15; receiver top in the sight zone (x
-  1.5 to 5) at y -4.8 to -5.05; the rear section below the sights at most
-  about 1.2 wide and dark.
+- CORRECTED v0.37.2 (user's screenshots, Uzi and MAC-10 aiming in the
+  same game): the aim centre passes through the Uzi's rear aperture hole
+  (about y -4.65; its post tip -4.52, rear ears -4.97), not the sight
+  tops. The held camera gunview shot first suggested the tops; judge
+  only by comparing with a Decimation gun in the same shot.
+- Rules: rear aperture hole centre about y -4.65 to -4.68 and front post
+  tip at the same height on z -0.15, ears up to about -4.97; receiver top
+  in the sight zone about -4.45; nothing behind the rear sight above
+  about -4.57 (it crosses the sight picture); the rear section below the
+  sights at most about 1.2 wide and dark.
 
 ## 14. Attachments
 
@@ -342,10 +353,10 @@ Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
   screenshot). Fix for a short gun: `Deci.offsetAttachment(gun,
   "smgSuppressor", dx, dy, dz)` puts our own copy of the attachment model
   in AttachmentItem.ST for that gun with a BModel offset (MAC-10: -1.02,
-  +0.14, 0; checked in game, flush on the muzzle). Mirror it in
-  study.py ATTACH_FIX. study.py draws barrel attachments about 0.85 too
-  low for every gun (its y conversion is off): compare heights against a
-  Decimation gun, not the bore. Sights land at x 0.8 to 5.5 (scope) or 2.4 to 2.8 (red
+  -0.16, 0 after v0.37.2: over the threads up to the receiver front).
+  Mirror it in study.py ATTACH_FIX. study.py's attachment heights are
+  right (an earlier note here called them 0.85 too low: that was the
+  flamePos convention above, wrongly read as a render error). Sights land at x 0.8 to 5.5 (scope) or 2.4 to 2.8 (red
   dot) over y -5.9 to -3.1: a new gun needs its receiver top there (section
   13). The foregrip renders behind and below even Decimation's M4A4
   (study render and the NPC shot) [inferred: misplaced in the game too].

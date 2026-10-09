@@ -16,11 +16,13 @@ threads right at the receiver then a thin barrel to 10.5, butt pad behind
 the lower rear, the folded wire loop over the rear top.
 
 Anchors (style guide sections 9, 13, 14):
-- receiver top y -4.45 (red dot bottom lands at -4.43), sight tops -4.95 to
-  -5.0 (the aim centre), everything centred on z -0.15, receiver 1.2 wide;
+- receiver top y -4.45 (red dot bottom lands at -4.43); aim: rear aperture
+  hole centre -4.675, front post tip -4.67, like the Uzi's sight picture in
+  the user's game (v0.37.2); everything centred on z -0.15, receiver 1.2 wide;
 - grip at x 3.6 to 5.55 (photo), hands as the v1 MAC-10
   (Uzi based, looked right in first person);
-- muzzle tip x 10.5, flamePos x 10.4 on the bore (y -3.9);
+- muzzle tip x 10.5, flamePos x 10.4, y -4.75 (0.85 above the bore at -3.9,
+  Decimation's convention: suppressors hang from it);
 - right side (where casings go, ejectPos z negative like Decimation's guns)
   is -z: the ejection port is there.
 Part budget (Uzi table style): receiver 20, barrel 15, front sight 6, rear
@@ -88,18 +90,21 @@ add(*octagon("ring2", G, THREAD, 9.7, 9.8, -3.9, ZC, 0.32))
 add(*octagon("barrel", G, BARREL, 9.95, 10.5, -3.9, ZC, 0.21))
 
 # ---------------------------------------------------------------- front sight (6)
-add(part("fsBase", G, DARK, (8.3, -4.6, -0.45), (8.85, -4.45, 0.15)).inset("y", 0, x=(0.1, 0.1)))
-add(part("fsPost", G, DARK, (8.52, -4.95, -0.22), (8.64, -4.6, -0.08)).inset("y", 0, x=(0.02, 0.02), z=(0.02, 0.02)))
-add(part("fsEar", G, DARK, (8.38, -4.97, 0.04), (8.78, -4.6, 0.14)).inset("y", 0, x=(0.12, 0.12)), pair=True)
-add(part("fsBrace", G, DARK, (8.42, -4.72, 0.14), (8.74, -4.6, 0.26)).inset("y", 0, z=(0, 0.1)), pair=True)
+# heights from the user's aim comparison with the Uzi (v0.37.2): the screen centre in aim passes
+# through the Uzi's rear aperture hole (centre about y -4.65; its front post tip -4.52)
+add(part("fsBase", G, DARK, (8.3, -4.52, -0.45), (8.85, -4.45, 0.15)).inset("y", 0, x=(0.1, 0.1)))
+add(part("fsPost", G, DARK, (8.52, -4.67, -0.21), (8.64, -4.52, -0.09)).inset("y", 0, x=(0.02, 0.02), z=(0.02, 0.02)))
+add(part("fsEar", G, DARK, (8.38, -4.86, 0.04), (8.78, -4.52, 0.14)).inset("y", 0, x=(0.12, 0.12)), pair=True)
+add(part("fsBrace", G, DARK, (8.42, -4.64, 0.14), (8.74, -4.52, 0.26)).inset("y", 0, z=(0, 0.1)), pair=True)
 
 # ---------------------------------------------------------------- rear sight (11)
-add(part("rsBase", G, DARK, (2.1, -4.6, -0.55), (2.85, -4.45, 0.25)).inset("y", 0, x=(0.08, 0.08), z=(0.05, 0.05)))
-add(part("rsRingTop", G, DARK, (2.4, -4.97, -0.27), (2.52, -4.88, -0.03)).inset("y", 0, z=(0.05, 0.05)))
-add(part("rsRingBottom", G, DARK, (2.4, -4.68, -0.27), (2.52, -4.6, -0.03)).inset("y", 1, z=(0.05, 0.05)))
-add(part("rsRingSide", G, DARK, (2.4, -4.88, -0.07), (2.52, -4.68, 0.01)), pair=True)
-add(part("rsEar", G, DARK, (2.15, -5.0, 0.12), (2.75, -4.6, 0.24)).inset("y", 0, x=(0.14, 0.14)), pair=True)
-add(part("rsBrace", G, DARK, (2.2, -4.75, 0.24), (2.7, -4.6, 0.36)).inset("y", 0, z=(0, 0.1)), pair=True)
+# aperture hole y -4.8 to -4.55 (centre -4.675) around z -0.15, ears to -4.97
+add(part("rsBase", G, DARK, (2.1, -4.55, -0.55), (2.85, -4.45, 0.25)).inset("y", 0, x=(0.08, 0.08), z=(0.05, 0.05)))
+add(part("rsRingTop", G, DARK, (2.4, -4.9, -0.29), (2.52, -4.8, -0.01)).inset("y", 0, z=(0.05, 0.05)))
+add(part("rsRingSide", G, DARK, (2.4, -4.8, -0.29), (2.52, -4.55, -0.23)), pair=True)
+add(part("rsRingFoot", G, DARK, (2.4, -4.58, -0.23), (2.52, -4.55, -0.07)))
+add(part("rsEar", G, DARK, (2.15, -4.97, 0.12), (2.75, -4.55, 0.24)).inset("y", 0, x=(0.14, 0.14)), pair=True)
+add(part("rsBrace", G, DARK, (2.2, -4.7, 0.24), (2.7, -4.55, 0.36)).inset("y", 0, z=(0, 0.1)), pair=True)
 add(part("rsScrew", G, STEEL2, (2.42, -4.5, 0.25), (2.52, -4.4, 0.29)), pair=True)
 
 # ---------------------------------------------------------------- cocking knob + bolt (slideModel, 4)
@@ -152,15 +157,18 @@ add(part("buttUp", G, DARK, (1.2, -3.1, 0.37), (1.45, -2.05, 0.55)), pair=True)
 add(part("buttPad", G, DARK, (1.15, -2.05, -0.85), (1.75, -1.85, 0.55)).inset("x", 0, y=(0, 0.06), z=(0.08, 0.08)))
 add(part("hinge", G, STEEL2, (1.75, -3.3, 0.5), (1.95, -3.05, 0.6)), pair=True)
 # folded wire shoulder loop lying over the rear top, its sides outside the rear sight
-add(part("loopSide", G, ROD, (1.25, -4.72, 0.45), (3.6, -4.6, 0.57)), pair=True)
-add(part("loopRear", G, ROD, (1.25, -4.72, -0.87), (1.37, -4.6, 0.57)))
-add(part("loopFront", G, ROD, (3.48, -4.6, 0.45), (3.6, -4.35, 0.57)), pair=True)
-add(part("loopDown", G, ROD, (1.25, -4.6, 0.45), (1.37, -3.3, 0.57)), pair=True)
+# (top at -4.57: the rear bar stays under the aperture hole in aim, v0.37.2)
+add(part("loopSide", G, ROD, (1.25, -4.57, 0.45), (3.6, -4.45, 0.57)), pair=True)
+add(part("loopRear", G, ROD, (1.25, -4.57, -0.87), (1.37, -4.45, 0.57)))
+add(part("loopFront", G, ROD, (3.48, -4.45, 0.45), (3.6, -4.3, 0.57)), pair=True)
+add(part("loopDown", G, ROD, (1.25, -4.45, 0.45), (1.37, -3.3, 0.57)), pair=True)
 
 SPEC = {
     "name": "mac10",
     "category": "smg",
-    "flamePos": (10.4, -3.9, ZC),
+    # Decimation's flamePos y sits about 0.85 above the bore (Uzi -4.5 over a barrel at -3.5):
+    # barrel attachments hang from it, on the bore line (v0.37.2)
+    "flamePos": (10.4, -4.75, ZC),
     "ejectPos": (6.25, -3.82, -0.8),
     "rhPos": (-5.0, 1.52, -2.5),
     "rhRot": (0, 0, 0),

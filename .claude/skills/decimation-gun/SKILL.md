@@ -23,6 +23,12 @@ into the repo: measure and learn from them, build our own.
 
 ## 1. Pick references (5 min)
 
+- Photos first: ask the user for 2 to 4 pictures of the real gun (one
+  clean side view, one three quarter, one with the accessory you will
+  test, for example the suppressor), or use what they already sent. The
+  MAC-10's side photo fixed every proportion in one pass: measure it in
+  pixels against one known length (receiver = N units) and write the
+  numbers into the spec header.
 - Real gun: length, height, width in mm; divide by 31 for model units
   (Decimation guns are slimmer than real: SMG width about 1.2 to 1.6).
 - Two or three Decimation guns of the same category and layout from the
@@ -39,11 +45,18 @@ into the repo: measure and learn from them, build our own.
   receiver top and right side, rear section (sections 8, 11, 15).
 - List areas with a part budget, like the Uzi table (section 15).
 - Fix the anchors first (sections 9, 13, 14):
-  - top of receiver in the sight zone (x 1.5 to 5) at y -4.8 to -5.05;
-  - highest point of the iron sights at y -4.85 to -5.0, centred z -0.15;
+  - top of receiver in the sight zone (x 1.5 to 5) at about y -4.45 (the
+    red dot's bottom is -4.43);
+  - iron sight picture like the Uzi's: rear aperture hole centre about
+    y -4.65 to -4.68, front post tip at the same height, ears up to
+    -4.97, centred z -0.15 (measured in the user's game, v0.37.2; the
+    older "sight tops at -4.85 to -5.0" rule was wrong);
+  - nothing else in the line of sight above about -4.57 behind the rear
+    sight (a stock loop there crosses the aperture in aim);
   - gun centred on z -0.15, side details as mirrored pairs about it;
-  - flamePos at the muzzle tip minus 0.1, y about 10 % of the height
-    below the top, z -0.15 (suppressors follow it);
+  - flamePos x at the muzzle tip minus 0.1, y about 0.85 ABOVE the bore
+    (Decimation's convention: Uzi -4.5 over a barrel at -3.5; barrel
+    attachments hang from it), z -0.15;
   - rhPos / lhPos from the closest Decimation gun of the same layout.
 
 ## 3. Build the model (tools/guns/<gun>.py + gunmodel.py)
@@ -77,7 +90,13 @@ into the repo: measure and learn from them, build our own.
 - `python3 tools/guns/study.py stats` line for ours vs the category
   (parts, shaped %, size); `vocab ours:<gun>` vs 60 / 31 / 5 / 4 %.
 - `python3 tools/guns/study.py attach ours:<gun> reddot smgSuppressor`:
-  sight sits on the receiver, suppressor on the muzzle.
+  sight sits on the receiver, suppressor on the bore line. Compare
+  suppressor x and y centre with a Decimation gun (Uzi: starts 0.12
+  after the muzzle, centre 0.05 above its barrel centre). A short gun
+  (muzzle below x about 12) needs `Deci.offsetAttachment(gun, name, dx,
+  dy, dz)` in NewGuns plus the same numbers in study.py ATTACH_FIX; a
+  threaded barrel: let the suppressor cover the threads up to the
+  receiver front (the real gun does).
 
 ## 5. Register (Java, dev/src/main/java/net/decimation/fixes/NewGuns)
 
@@ -92,8 +111,16 @@ into the repo: measure and learn from them, build our own.
 ## 6. Test in game (live, about 30 s a run)
 
 - `python3 tools/devtest.py --live gunview guns=<ref>,<gun> attach=` then
-  `attach=reddot,<cat>Suppressor`: hip, aim (centre at the sight top),
-  NPC side view. Read dev/run/client/devtest/sheet_gunview.png.
+  `attach=reddot,<cat>Suppressor`: hip, aim, NPC side view. Read
+  dev/run/client/devtest/sheet_gunview.png.
+- Aim: never judge by absolute numbers; crop the reference gun's and
+  ours' aim shots around the screen centre with centre lines, side by
+  side (docs/shots/mac10_v0.37/v0372_aim_iron_cmp.png): our aperture
+  hole must sit on the line where the reference's sits. The user's own
+  screenshots are the ground truth: crop them the same way.
+- Small features (suppressor height) are too small to judge in the
+  854 x 480 NPC shot: use study.py numbers or crop and enlarge first
+  person shots.
 - `python3 tools/devtest.py --live gun` (reload loads the magazine, NPC
   fires it). Player firing is manual (Decimation reads the mouse).
 - Live traps: new classes / fields need `--stop`; `key=value` persists,
@@ -109,3 +136,26 @@ into the repo: measure and learn from them, build our own.
   push, no attribution lines, no dash punctuation).
 - Ask the user to try it in game (firing, aiming, feel) and record the
   verdict.
+- After EVERY user revision: add the lesson to the revision log below
+  and the rule to docs/gun_style_guide.md, in the same commit (user rule
+  10 Oktober 2026).
+
+## Revision log (lessons from user reviews; read before starting)
+
+- MAC-10 v1 (v0.36.0, "not good, needs polish"): 23 plain light grey
+  boxes, too big, painted detail. Led to the whole study and gunmodel v2.
+- MAC-10 v2 (v0.37.0, "huge upgrade"): the user's photos gave the
+  proportions; shape parts, flat dark tones and Decimation timings made
+  it read as a Decimation gun.
+- v0.37.0 review: (1) aim not centred, (2) suppressor flying, (3) no
+  gradation. (2): the barrel attachment formula only fits muzzles at x
+  12 to 15: Deci.offsetAttachment. (3): Decimation textures have 15 to
+  31 part shades, faces about 5 apart, noise about 2.5: gunmodel.paint
+  now does that. (1): my held camera test said fine; it was not.
+- v0.37.1 review (user screenshots of MAC-10 and Uzi aiming, suppressor
+  hip view): the suppressor sat 0.9 below the bore because flamePos y
+  must be 0.85 ABOVE the bore (Decimation convention), and it should
+  cover the threads like the real one (user photo 2); the aim centre is
+  the Uzi's aperture hole (about -4.65), not the sight tops. Fixed in
+  v0.37.2: flamePos y -4.75, suppressor (-2.37, -0.16, 0), aperture hole
+  -4.8 to -4.55, front post tip -4.67, stock loop lowered to -4.57.
