@@ -226,3 +226,14 @@ Facts learned: BModelBox corner array order (index 7 = (0,0,0) corner, 6
 (u+d, v), bottom at (u+d+w, v), then x = 0, z = 0, x = w, z = d sides on
 the row v+d. Decimation's guns use 2 px per unit textures (Uzi 1024x32
 for a 512x16 layout), 32x32 icons.
+
+Outside 3D generators (Claude Design "3D object", 2026-10-10, judged from
+a screenshot only, no file tried): they export OBJ meshes (triangles, own
+UV atlas). Decimation draws only `addShape` parts (8 corners each), so an
+OBJ cannot be loaded as is. Usable path [not verified]: ask for boxes only
+(every part one cuboid or 8 vertex block, no cylinders), one OBJ object per
+part, named by group (gunModel / ammoModel / slideModel), colours per
+material (MTL), no texture; a converter (to write: obj to the tools/guns
+spec) turns each 8 vertex object into a box with corner offsets, and
+gunmodel.py paints the box UV texture as usual. The generator's own atlas
+and UVs are useless here (box UV is fixed by BModelBox).
