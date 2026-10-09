@@ -38,7 +38,8 @@ public class NpcTest extends DevTestMode
         {"soldier_marine", "soldier_marineforest", "soldier_marineurban", "soldier_marineblack"},
         {"military", "military", "military", "military"},
         {"juggernaut", "juggernaut", "juggernaut"},
-        {"elite_military", "elite_military", "elite_military"}};
+        {"elite_military", "elite_military", "elite_military"},
+        {"juggernaut_sniper", "elite_sniper", "elite_sniper", "elite_sniper"}};
 
     private volatile boolean done;
     private volatile int ticks;
@@ -247,6 +248,25 @@ public class NpcTest extends DevTestMode
         DevTestResults.check(name(), "barrett hit 6 on a marine body set", String.format("%.2f (normal %.2f)", piercing, normal),
                              piercing > normal * 2, "more than twice a normal hit (armor at half strength)");
 
+        // sniper versions: juggernaut_sniper always a Barrett, elite_sniper only sniper rifles, base ones none
+        int jugBarrett = 0, eliteSnipers = 0, baseSnipers = 0, n = 40;
+        for (int k = 0; k < n; k++)
+        {
+            for (String tn : new String[] {"juggernaut_sniper", "elite_sniper", "juggernaut", "elite_military"})
+            {
+                EntityLiving e = Deci.newSoviet(world);
+                loadouts.equip(e, loadouts.byName(tn), e.getEntityData());
+                String g = NpcLoadouts.gunName(e.getEntityData().getString(NpcLoadouts.GUN_TAG));
+                boolean sniper = java.util.Arrays.asList("barrett", "l115a3", "jng90", "sv98", "m110").contains(g);
+                jugBarrett += tn.equals("juggernaut_sniper") && g.equals("barrett") ? 1 : 0;
+                eliteSnipers += tn.equals("elite_sniper") && sniper ? 1 : 0;
+                baseSnipers += !tn.endsWith("sniper") && sniper ? 1 : 0;
+            }
+        }
+        DevTestResults.check(name(), "sniper tiers (jugg Barrett, elite snipers, base snipers)",
+                             jugBarrett + " / " + eliteSnipers + " / " + baseSnipers,
+                             jugBarrett == n && eliteSnipers == n && baseSnipers == 0, n + " / " + n + " / 0");
+
         // every tier's spawn egg spawns that tier
         net.minecraft.item.Item egg = cpw.mods.fml.common.registry.GameRegistry.findItem("deciworldgen", "npc_egg");
         int eggs = 0, eggOk = 0;
@@ -284,8 +304,7 @@ public class NpcTest extends DevTestMode
         for (EntityLiving e : after)
         {
             String tg = e.getEntityData().getString(NpcLoadouts.TAG);
-            tagged += before.contains(e) || !(tg.equals("military") || tg.equals("military_rpg") || tg.equals("juggernaut")
-                || tg.equals("elite_military"))
+            tagged += before.contains(e) || !(tg.startsWith("military") || tg.startsWith("juggernaut") || tg.startsWith("elite"))
                 ? 0 : 1;
         }
         DevTestResults.check(name(), "military spawner group", placed + ", " + tagged + " new",

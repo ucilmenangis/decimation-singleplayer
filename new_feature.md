@@ -437,6 +437,18 @@ sniper rifles 25..45. Spawner: every 400 ticks per player in a military
 sector, chance 0.5, group 2..3 at 24..48 blocks, cap 4 within 64.
 Not seen by the user in game yet `[not verified]`; balance numbers are
 first guesses for "hard but fair".
+v0.32.1 (user: Barrett for the elite, split sniper eggs, "don't make it
+rare"): juggernaut and elite_military are machine gun only now; new tiers
+juggernaut_sniper (juggernaut set, Barrett with 8x, always) and
+elite_sniper (elite gear, Barrett 4 in 8 / L115A3 / JNG90 / SV98 / M110,
+8x, suppressor, laser, x2 damage). MilitarySpawner: sniperShare 0.5 of its
+juggernauts / elites are the sniper version: a Barrett in about 12% of
+groups (was 3%). Elite Barrett hit: 6 x 5 x 2 = 60 hp bare, about 23
+through a marine body set (armor piercing). 14 eggs. Checked (npc mode):
+40 / 40 juggernaut_sniper Barrett, 40 / 40 elite_sniper sniper rifles, 0
+snipers in the base tiers, 14 / 14 eggs, client guns 24 / 24, goggles and
+attachments 6 / 6; photo npc_snipers_v0.32.1.
+
 v0.32.0 (user requests 9 Oktober 2026):
 - ELITE MILITARY, tier "elite_military" (Soviet side): marine black set,
   night vision goggles (mask "nvgoggles"), heavy machine guns (PKP, M240,

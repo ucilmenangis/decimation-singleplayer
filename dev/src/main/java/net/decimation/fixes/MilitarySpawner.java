@@ -26,7 +26,7 @@ public class MilitarySpawner
 {
     private final boolean enabled;
     private final int interval, cap;
-    private final float chance, juggernautChance, eliteChance;
+    private final float chance, juggernautChance, eliteChance, sniperShare;
     private final Random random = new Random();
     private int ticks;
 
@@ -42,6 +42,8 @@ public class MilitarySpawner
             "chance a group brings a juggernaut (the only way one spawns, besides its egg)");
         eliteChance = cfg.getFloat("eliteChance", cat, 0.2f, 0, 1,
             "chance a group brings an elite military (the only way one spawns, besides its egg)");
+        sniperShare = cfg.getFloat("sniperShare", cat, 0.5f, 0, 1,
+            "share of those juggernauts / elites that are the sniper version (Barrett / sniper rifles)");
         cfg.save();
     }
 
@@ -108,7 +110,13 @@ public class MilitarySpawner
             for (int i = 0; i < size; i++)
             {
                 EntityLiving npc = Deci.newSoviet(world);
-                String special = juggernaut && i == 0 ? "juggernaut" : elite && i == (juggernaut ? 1 : 0) ? "elite_military" : null;
+                String special = juggernaut && i == 0 ? "juggernaut" : elite && i == (juggernaut ? 1 : 0) ? "elite" : null;
+                if (special != null)
+                {
+                    boolean sniper = random.nextFloat() < sniperShare;
+                    special = special.equals("juggernaut") ? (sniper ? "juggernaut_sniper" : "juggernaut")
+                        : sniper ? "elite_sniper" : "elite_military";
+                }
                 if (special != null && NpcLoadouts.instance() != null)
                 {
                     NpcLoadouts.instance().equip(npc, NpcLoadouts.instance().byName(special), npc.getEntityData());

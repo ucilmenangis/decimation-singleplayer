@@ -86,3 +86,5 @@ or `[not decided]`.
 - v0.32.0 elite military (marine black, night vision, MGs / snipers with
   all attachments, 2 magazines to kill, x2 damage); NPC auto fire in
   bursts with recoil spread, real magazines and 4 s reloads.
+- v0.32.1 sniper versions of the juggernaut (Barrett) and elite, half of
+  the spawner's juggernauts / elites, own eggs.

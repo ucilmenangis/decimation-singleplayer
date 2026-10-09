@@ -139,6 +139,8 @@ public class NpcEgg extends Item
         return n.endsWith("light") ? 0x7A5230 : n.endsWith("medium") ? 0x556B2F : n.endsWith("heavy") ? 0x1E1E1E
             : n.endsWith("forest") ? 0x2F4F2F : n.endsWith("urban") ? 0x9A9A9A : n.endsWith("black") ? 0x111111
             : n.equals("military") ? 0x7F0000 : n.endsWith("rpg") ? 0xD2691E : n.equals("juggernaut") ? 0x333333
+            : n.equals("juggernaut_sniper") ? 0x6B6B6B : n.equals("elite_military") ? 0x101010
+            : n.equals("elite_sniper") ? 0x2E8B57
             : 0xA09159;
     }
 }

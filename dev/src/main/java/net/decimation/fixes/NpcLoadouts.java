@@ -189,15 +189,26 @@ public class NpcLoadouts
         tiers.add(new Tier("juggernaut", NpcKind.SOVIET, 0, 0, 200, 0.25f,
             new String[][] {{"juggernautHelm", "juggernautHelmGray"}, {"juggernautVest", "juggernautVestGray"},
                             {"juggernautPants", "juggernautPantsGray"}, {"juggernautBoots", "juggernautBootsGray"}},
-            "pkm", "pkp", "m240", "mk48", "barrett").spread(1.0f).heavy(0.18, 1.0));
+            "pkm", "pkp", "m240", "mk48").spread(1.0f).heavy(0.18, 1.0));
         // elite military (user 2026-10-09): marine black + night vision, heavy machine guns or sniper
         // rifles with every attachment, about 2 magazines to kill, x2 damage; only MilitarySpawner
         // (eliteChance) and its egg
         tiers.add(new Tier("elite_military", NpcKind.SOVIET, 0, 0, 150, 0.16f,
             new String[][] {{"marineblackHelm"}, {"marineblackVest"}, {"marineblackPants"}, {"marineblackBoots"}},
-            "pkp", "m240", "mk48", "mg3", "pkm", "l115a3", "jng90", "sv98", "m110").spread(0.8f).delay(2, 6)
+            "pkp", "m240", "mk48", "mg3", "pkm").spread(0.8f).delay(2, 6)
             .heavy(0.27, 0.5).elite(2.0f, "nvgoggles",
                 new String[] {"sight=4x", "barrel=mgSuppressor", "grip=laser"},
+                new String[] {"sight=8x", "barrel=arSuppressor", "grip=laser"}));
+        // sniper versions (user 2026-10-09: "split eggs for sniper on juggernaut and elite, don't make it
+        // rare"): MilitarySpawner picks them for sniperShare of its juggernauts / elites
+        tiers.add(new Tier("juggernaut_sniper", NpcKind.SOVIET, 0, 0, 200, 0.25f,
+            new String[][] {{"juggernautHelm", "juggernautHelmGray"}, {"juggernautVest", "juggernautVestGray"},
+                            {"juggernautPants", "juggernautPantsGray"}, {"juggernautBoots", "juggernautBootsGray"}},
+            "barrett").spread(1.0f).heavy(0.18, 1.0).elite(1.0f, null, new String[0], new String[] {"sight=8x"}));
+        tiers.add(new Tier("elite_sniper", NpcKind.SOVIET, 0, 0, 150, 0.16f,
+            new String[][] {{"marineblackHelm"}, {"marineblackVest"}, {"marineblackPants"}, {"marineblackBoots"}},
+            "barrett", "barrett", "barrett", "barrett", "l115a3", "jng90", "sv98", "m110").spread(0.8f)
+            .heavy(0.27, 0.5).elite(2.0f, "nvgoggles", new String[0],
                 new String[] {"sight=8x", "barrel=arSuppressor", "grip=laser"}));
 
         load(new File(configDir, "deciworldgen_npc.cfg"));
