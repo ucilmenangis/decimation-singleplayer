@@ -11,6 +11,7 @@ not something we introduced or need to fix) see `documentation.md`.
 ## Fixed
 
 ### Some NPC machine guns fire at double rate (v0.39.2, 10 Oktober 2026)
+- Verdict (user, in game, 10 Oktober 2026): "feels right now, wew. better than before".
 - User: "juggernaut who using pkm, the firerate is ridiculous, like using mg guns ... the elite
   mobs who using pkp is most balance ... this happen not in juggernaut but on other npc too".
 - Measured (new dev test `firerate`: one NPC per tier and gun on the arena, its own AI only,
