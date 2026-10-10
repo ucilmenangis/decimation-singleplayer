@@ -316,6 +316,13 @@ source of truth about the real gun and about how it must look in game.
    reticle a few dozen pixels on screen must be pixel art at its drawn size (32 px, 2 px lines):
    Minecraft samples textures without smoothing, a 512 px reticle shrank into dashes.
 
+22. Keep what the user accepted for sights (v0.41.1 verdict, 10 Oktober 2026: "its really good
+   result"): iron sights in the defaultScope group fold away ONLY when a sight is attached (user:
+   "keep it, fold away only with sight is fine": without a sight the irons stay to aim with);
+   sights sit on each gun's rail (sightfit); reticles live in the glass and sway with the gun;
+   detailed sight models built from the user's photos at real proportions x 0.52. Do new sights
+   and new flat top guns the same way.
+
 ## Revision casebook (never delete a case; look here first)
 
 Every user revision and every problem found on the way, with how it was
@@ -679,6 +686,14 @@ revision (same commit), never remove old ones.
 - Check: gunview aim Mk18 / HK416 / MP5 with EOTech and ACOG: reticle in the glass, centred,
   ACOG numbers on the right; HK416 hip with EOTech: no front sight
   (docs/shots/sights_v0.41.1/).
+
+### Case 20: verdict, sights accepted (v0.41.1, 10 Oktober 2026)
+- User: "keep it, fold away only with sight is fine ... its really good result btw, you can add it
+  to skills". Accepted together: Mk18 Mod 1 with the IMI TS stock, EOTech 558 and ACOG TA11 with
+  reticles in the glass, sights on the rail on every gun, HK416 / Mk18 front sights folding away
+  under a sight (kept up without one). Path that worked: user photos -> measured proportions ->
+  render sheets -> in game hip / aim / NPC on a flat top and an Uzi -> user review -> fix the
+  mechanism, not the symptom (cases 16 to 19). Lesson 22.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

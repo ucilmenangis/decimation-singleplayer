@@ -150,9 +150,9 @@
     "semantic_hash": "684b36c6d19ac6a24a55f1ed3839190c"
   },
   "new_feature.md": {
-    "mtime": 1791638294.2519577,
-    "ast_hash": "c74d544e3e6d62145dfd1e66f149f39a",
-    "semantic_hash": "c74d544e3e6d62145dfd1e66f149f39a"
+    "mtime": 1791640987.0498602,
+    "ast_hash": "6e37bbb61c6a8d4bf700df18913280ee",
+    "semantic_hash": "6e37bbb61c6a8d4bf700df18913280ee"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -655,9 +655,9 @@
     "semantic_hash": "fcaf65f43d983d02c0fb54297bfc77a4"
   },
   "docs/roadmap.md": {
-    "mtime": 1791638294.2533312,
-    "ast_hash": "6343b48c87e426dab185cbc9301f5e93",
-    "semantic_hash": "6343b48c87e426dab185cbc9301f5e93"
+    "mtime": 1791640987.048928,
+    "ast_hash": "6dbeab236d27670243a1a0308e64d070",
+    "semantic_hash": "6dbeab236d27670243a1a0308e64d070"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -810,9 +810,9 @@
     "semantic_hash": "9c323a4f7fad7e1d89f2c84f7ebd94d1"
   },
   ".claude/skills/decimation-gun/SKILL.md": {
-    "mtime": 1791638294.2478738,
-    "ast_hash": "a205332c38162adff572aae2dd15bba8",
-    "semantic_hash": "a205332c38162adff572aae2dd15bba8"
+    "mtime": 1791640987.048225,
+    "ast_hash": "75437fb0fa170ae35dd75c00f6ae9088",
+    "semantic_hash": "75437fb0fa170ae35dd75c00f6ae9088"
   },
   "tools/guns/ump9.py": {
     "mtime": 1791575647.9663312,
