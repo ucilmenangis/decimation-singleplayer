@@ -669,6 +669,9 @@ of the last session:
   run it before building, outputs git ignored). v0.39.1: HK416 review
   fixes (seated stock details, U front sight, M4A4 rear sight texture
   wrap; skill case 14); `study.py contact` finds floating parts.
+  v0.39.2: NPC burst rate capped (maxBurstRpm 600, bug.md "Some NPC
+  machine guns fire at double rate"); dev test `firerate` times every
+  NPC shot per tier and gun (-Pcases=tier:gun,...).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

@@ -10,6 +10,24 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Some NPC machine guns fire at double rate (v0.39.2, 10 Oktober 2026)
+- User: "juggernaut who using pkm, the firerate is ridiculous, like using mg guns ... the elite
+  mobs who using pkp is most balance ... this happen not in juggernaut but on other npc too".
+- Measured (new dev test `firerate`: one NPC per tier and gun on the arena, its own AI only,
+  every shot timed): inside a burst the PKM, M240, MG3 and M4A4 fired every tick (1200 rpm),
+  the PKP, AK74, AKM every 2nd tick (600). Juggernaut PKM: 1 tick gaps, 46 shots in 15 s.
+- Cause: Decimation runs a gun at 1.3 x its listed rpm (GunStats: seconds per shot =
+  1 / (rpm x 1.3 / 60)); our burst code (NpcShots) rounded that to whole ticks: PKP 600 ->
+  780 -> 1.54 ticks -> 2; PKM 650 -> 845 -> 1.42 ticks -> 1. A 50 rpm gap on paper became
+  double the rate.
+- Fix: NPC bursts never faster than `maxBurstRpm` (config deciworldgen_npc.cfg, npc_fire,
+  default 600 = the elite PKP), slower guns at their own rate with the tick fraction carried
+  from round to round instead of rounded away (NpcLoadouts.burstTicksPerShot, NpcShots).
+- Check: firerate after the fix: every case 2 tick gaps; juggernaut PKM 232 rpm overall,
+  elite PKP 340, elite PKM 268, elite MG3 324, soldier M240 304, bandit heavy PKM 244, AKM
+  124, Uzi 84 (15 s each, bursts plus pauses); `shots` all PASS. Players keep Decimation's
+  real rates (a player's gun times shots in milliseconds, not ticks).
+
 ### 1 fps in the dev world: entity explosion through a corrupt chunk (v0.38.1, 10 Oktober 2026)
 User: "really big performance issue now ... 1 fps after i drop it to the ground". Not the gun
 (gunperf: our guns cost what Decimation's cost). The dev world's region slot (-1,-6) held chunk

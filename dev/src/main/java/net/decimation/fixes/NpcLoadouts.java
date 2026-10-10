@@ -137,6 +137,12 @@ public class NpcLoadouts
     /** Automatic guns fire bursts (NpcShots); spread grows by recoilSpread per shot of a burst. */
     private boolean autoFire = true;
     private float recoilSpread = 0.35f;
+    /**
+     * Fastest rate inside an NPC burst (user 2026-10-10: the elite's PKP is the balanced one). Decimation
+     * runs a gun at 1.3 x its listed rpm and a tick is 50 ms, so rounding made the PKM (650 -> 845, 1.4
+     * ticks) fire every tick, 1200 rpm, while the PKP (600 -> 780, 1.5 ticks) fired every 2nd, 600.
+     */
+    private int maxBurstRpm = 600;
     /** Ticks a reload takes once the magazine is empty (user 2026-10-09: about 4 s). */
     private int reloadTicks = 80;
     /** How far an NPC with a sniper rifle looks for enemies (Decimation's findTarget: 32 for all). */
@@ -249,6 +255,9 @@ public class NpcLoadouts
             "automatic guns fire bursts (3..6 rounds, machine guns 6..12) at the gun's own rate of fire");
         recoilSpread = cfg.getFloat("recoilSpread", "npc_fire", recoilSpread, 0, 5,
             "each shot of a burst spreads this much more than the first (0.35: the 6th shot 2.75x)");
+        maxBurstRpm = cfg.getInt("maxBurstRpm", "npc_fire", maxBurstRpm, 60, 1200,
+            "fastest rate inside an NPC burst, rounds per minute (600 = a round every 2nd tick, the elite's PKP; "
+            + "1200 = every tick); slower guns keep their own rate");
         sniperRange = cfg.getInt("sniperRange", "npc_fire", sniperRange, 32, 256,
             "an NPC holding a sniper rifle spots enemies this far (blocks); others 32 (Decimation)");
         reloadTicks = cfg.getInt("reloadTicks", "npc_fire", reloadTicks, 0, 1200,
@@ -267,6 +276,12 @@ public class NpcLoadouts
     public boolean autoFire()
     {
         return autoFire;
+    }
+
+    /** Ticks between two rounds of a burst with this gun: its own rate, never faster than maxBurstRpm. */
+    public double burstTicksPerShot(double gunSecondsPerShot)
+    {
+        return Math.max(1200.0 / Math.max(1, maxBurstRpm), gunSecondsPerShot * 20);
     }
 
     public float recoilSpread()

@@ -89,7 +89,8 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
             if (burst == null || burst[0] <= 0)
             {
                 boolean mg = NpcLoadouts.contains(NpcLoadouts.MG, gunName);
-                burst = new int[] {mg ? 6 + random.nextInt(7) : 3 + random.nextInt(4), 0};
+                // rounds left, place in the burst, tick fraction carried (thousandths)
+                burst = new int[] {mg ? 6 + random.nextInt(7) : 3 + random.nextInt(4), 0, 0};
                 bursts.put(shooter, burst);
             }
             sigma *= 1 + loadouts.recoilSpread() * burst[1];
@@ -189,8 +190,11 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
             burst[1]++;
             if (burst[0] > 0)
             {
-                // next round at the gun's rate: shootAt waits cooldown + 1 ticks
-                int every = Math.max(1, (int) Math.round(Deci.gunSecondsPerShot(gun) * 20));
+                // next round at the gun's rate (capped, maxBurstRpm), the tick fraction carried to the next
+                // round instead of rounded away; shootAt waits cooldown + 1 ticks
+                double want = loadouts.burstTicksPerShot(Deci.gunSecondsPerShot(gun)) + burst[2] / 1000.0;
+                int every = Math.max(1, (int) want);
+                burst[2] = (int) Math.round((want - every) * 1000);
                 Deci.setNpcShotDelay(shooter, every - 1, every - 1);
             }
             else

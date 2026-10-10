@@ -113,6 +113,8 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Recently done (details in bug.md / new_feature.md)
 
+- v0.39.2 NPC machine guns no longer fire at double rate (burst rate
+  capped at 600 rpm, config maxBurstRpm), dev test firerate.
 - v0.28.0..0.28.4 cheap scope (zoom, see-through glass, sniper overlay
   from 4x); v0.28.5 NPC tracers aimed at the target; v0.28.6 / 0.28.7 prop
   and entity line of sight cache, prop render distance option; v0.28.8
