@@ -555,6 +555,15 @@ serpentine), TOC, B-hut living area with bunkers, logistics (ASP, fuel, motor po
 hangar), services (DFAC, aid station, gym, helipads), loot in Decimation's crates. Details:
 docs/military_base.md; skill decimation-military-base.
 
+### Military bases v0.42.1: user review fixes (11 Oktober 2026)
+User review of v0.42.0 (28 shots, docs/shots/milbase_v0.42_review/): fix the orange dirt, the
+raw dirt ASP berm, replace BlockMilitaryBarrier (FPS), make the TOC door a locked keycard door,
+and every prop position. Done: deciworldgen:hesco (own texture), Door_Emergency_1_Locked + the
+military keycard screen, gravel ground, sandbag ASP, the prop placement study
+(docs/prop_placement.md, tools/props/propgeom.py + propclash.py, skill decimation-props),
+Canvas.validateProps in the generator, every module re-laid (0 clashes). Tile entity props per
+base: 1020 / 2007 / 2902 -> 129 / 381 / 571.
+
 ### EOTech 558, ACOG TA11 3.5x, Mk18 TS stock (DONE v0.41.0, 10 Oktober 2026, waiting for the user's verdict)
 User: holographic 558 and ACOG 3.5x "so detailed ... same like in real life", the Mk18 with an IMI
 Defense TS stock. tools/guns/sights.py (our art, committed): EOTech 558 (92 parts) and ACOG TA11

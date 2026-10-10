@@ -68,6 +68,45 @@ public class MilBaseTest extends DevTestMode
         return true;
     }
 
+    /**
+     * Every block of the built base to run/client/devtest/milbase_<size>.tsv ("x y z name meta",
+     * relative to the plan corner and Y) for tools/props/propclash.py (props against walls, props,
+     * doors; facing).
+     */
+    private static void dump(World w, MilitaryBasePlan plan, int size)
+    {
+        java.io.File f = new java.io.File(Minecraft.getMinecraft().mcDataDir, "devtest/milbase_" + size + ".tsv");
+        try (java.io.PrintWriter out = new java.io.PrintWriter(f, "UTF-8"))
+        {
+            out.println("# origin " + plan.minX() + " " + Y + " " + plan.minZ() + " size " + size);
+            for (Map.Entry<String, float[]> e : plan.pointsOfInterest().entrySet())
+            {
+                float[] q = e.getValue();
+                out.println("# poi " + e.getKey() + " " + q[0] + " " + q[1] + " " + q[2]);
+            }
+            for (int y = Y - 1; y <= Y + plan.height(); y++)
+            {
+                for (int x = plan.minX(); x <= plan.maxX(); x++)
+                {
+                    for (int z = plan.minZ(); z <= plan.maxZ(); z++)
+                    {
+                        net.minecraft.block.Block b = w.getBlock(x, y, z);
+                        if (b != net.minecraft.init.Blocks.air)
+                        {
+                            out.println((x - plan.minX()) + " " + (y - Y) + " " + (z - plan.minZ()) + " "
+                                        + net.minecraft.block.Block.blockRegistry.getNameForObject(b) + " "
+                                        + w.getBlockMetadata(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+        catch (java.io.IOException e)
+        {
+            DevTestResults.value("milbase", "dump failed", e.toString());
+        }
+    }
+
     public void server()
     {
         int t = ++ticks;
@@ -97,6 +136,7 @@ public class MilBaseTest extends DevTestMode
                 long t0 = System.nanoTime();
                 Slices.placeAt(w, plan, Y, false);   // no ramp: the ground far below would grow pillars
                 DevTestResults.value(name(), MilitaryBase.SIZE_NAME[size] + " built ms", (System.nanoTime() - t0) / 1000000);
+                dump(w, plan, size);
                 for (String line : plan.debugLog())
                 {
                     if (!line.contains(" ok "))

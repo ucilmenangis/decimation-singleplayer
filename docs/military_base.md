@@ -35,14 +35,15 @@ WBDG / Air Force entry control facility guidance; Smithsonian "HESCO barriers, n
 
 | Real thing | Built from |
 |---|---|
-| HESCO MIL7 wall | deci:BlockMilitaryBarrier (brown mesh cube), 2 thick x 3 high, sandbag cap in places |
-| sandbags | deci:BlockSandbagStack (green grey) / BlockSandbagStackBeige |
+| HESCO MIL7 wall | deciworldgen:hesco (our own plain block, tools/props/hesco_textures.py: tan fabric in a grey welded mesh), 2 thick x 3 high, sandbag cap in places. NOT deci:BlockMilitaryBarrier: that one is a prop, a tile entity per cell, thousands per base (user: "really hurt fps") |
+| sandbags | deci:BlockSandbagStack (green grey) / BlockSandbagStackBeige: plain cubes, but BlockFalling (keep them supported) |
 | concertina wire | deci:BlockConcertinaWire, ring outside the wall, double at the gate |
 | T-wall | deci:BlockBarrierTall (tall concrete slab, multiblock) |
 | jersey barrier | deci:BlockBarrier (long along x at meta 3) |
 | hedgehog, sawhorse | deci:BlockHedgehog, deci:BlockHazardbarrier |
 | plywood (B-hut) | birch planks walls, spruce frame / stairs / slabs, trapdoor shutters |
 | tent (TEMPER) | smooth sandstone vault (hardened clay read orange), birch plank floor |
+| locked door | deci:Door_Emergency_1_Locked (the only locked door): opened by a military keycard on deci:BlockKeycardScreenMilitary within 3 blocks, a lockpick, or creative; military crates, wrecks and care packages can drop the military keycard |
 | concrete | stone / deci:BlockStone_* |
 | loot | deci:BlockMilitaryCrate, BlockAmmoCrate(Large), BlockWeaponCabinet, BlockMedicalCrate, BlockWoodCrate, BlockStorageCrate (footlocker), BlockCarePackage |
 | equipment | BlockMilitaryRadio(Small), BlockRadioTower, BlockSpotlight, BlockPowerGenerator, BlockHazardLight, BlockFlagPollUAHD, BlockWallflag, BlockMonitor, BlockMetalTable, BlockOfficeChair, BlockKeycardScreen_Military |
@@ -69,23 +70,34 @@ From outside in:
 - gravel ring road 3 wide inside the wall, main road 5 wide from the gate to the TOC front.
 Inside (fixed first, then a greedy placer: each module scans its zone until its rectangle and a
 1 block margin are free; roads may border modules, modules never touch each other):
-- TOC (north, centre): concrete building, sandbag roof, metal door with keycard screen, map
-  table, computer / radio desks, commander's desk, wall flag, weapon cabinet and ammo by the door,
-  ceiling lights; flag pole, antenna mast, generators, light tower; FOB / large: HESCO ring 2
-  high, 3 out (COP: sandbag wall instead).
+- TOC (north, centre): concrete building, flat sandbag layer on the roof with a low sandbag
+  parapet, LOCKED door with the military keycard screen beside it, map table, desk runs on both
+  walls (a metal table is drawn 2 long: runs start 2 in from the wall and step 2) with monitors
+  and big radios lying along the desk (dials to the room), commander's desk under the wall flag,
+  weapon cabinet and ammo case by the door, ceiling lights; flag pole, antenna mast, generators,
+  light tower; FOB / large: HESCO ring 2 high, 3 out (COP: sandbag wall instead).
 - Living area (west): B-huts 5 x 10 in rows facing each other across company streets (9 wide)
-  with duck and cover bunkers between the door columns, sandbag blast walls between huts; kinds
-  barracks (bunks with upper bunk and mattress, footlockers), arms room (cabinets and crates:
-  the loot), office (desks, monitors, radios, cabinet), chapel (benches, altar table, flag);
-  latrine shed, porta-john rows, shower conex.
-- Logistics (east): ASP (sloped earth berm, crate rows, care package), fuel point (bladder in a
-  sandbag berm, drums, pump generator), motor pool (gravel, oil stains, vehicles, camo net on
-  posts, T-wall screen, conexes with loot, maintenance shelter), dining tent (tables, serving
-  line, supplies), helipad (concrete, white H, landing lights, windsock; a crashed helicopter on
-  the large base), clamshell hangar and conex yards (large).
-- Anywhere it fits: aid station tent (stretchers, medical crates, body bags outside), gym (large),
-  mortar pit, burn pit (large), generator farm, parked Humvees, bunkers; light towers along the
-  main road.
+  with duck and cover bunkers between the door columns, sandbag blast walls between huts. The hut:
+  raised floor, a step at the door, a low gable roof (planks, a 3 wide slab ridge, slab eaves),
+  windows on the long sides with some shutters (open trapdoors against the wall), a window and a
+  power panel on the back end. Kinds: barracks (bunks with upper bunk and mattress,
+  footlockers), arms room (a wall of 6 weapon cabinets, a wall of crates with a large ammo case,
+  a cleaning bench at the far end, the row by the door free), office (desk run, monitors, radios,
+  cabinet between the chairs, flag), chapel (benches, altar table, flag); latrine shed with a
+  step, porta-john rows, shower conex.
+- Logistics (east): ASP 12 x 12 (sandbag berm 2 thick: raw dirt read orange and grew grass;
+  three rows of crates, a small ammo case on each large one, a care package, warning lights),
+  fuel point (bladder in a sandbag berm, drums, pump generator), motor pool (gravel, oil stains,
+  vehicles long along z, camo net on posts, T-wall screen, conexes with loot, maintenance
+  shelter), dining tent, helipad (concrete, white H, landing lights, windsock; a 13 x 13 pad with
+  a crashed helicopter on the large base), clamshell hangar and conex yards (large).
+- Anywhere it fits: aid station tent (stretchers along both sides 3 apart, medical crates at the
+  north end, the middle aisle free, body bags outside), dining tent (one long table down the
+  middle, chairs both sides, a serving line with stoves on a metal table at the south end), gym
+  (weights, chess tables; large), mortar pit, burn pit (large), generator farm, parked Humvees,
+  bunkers; light towers along the main road.
+- Guard towers: the searchlight (drawn 2.5 x 3.2) stands on the roof, the deck holds a crate and
+  a radio. Guard booth (4 x 4 sandbags) north of the gate tower, window to the lane.
 - Decay (overrun base): a wall breach (burst cells, spilled fill, wire gone), slumped cells, trash
   bags, open crates.
 
@@ -104,6 +116,12 @@ the DFAC; care packages at the ASP / helipad.
 - `LargeSites`: military sector sites build a base instead of a `mil_` schematic.
 
 ## 5. Status
+
+v0.42.1 (11 Oktober 2026), after the user's review (28 shots, docs/shots/milbase_v0.42_review/):
+HESCO as our own plain block (tile entity props per base 1020 / 2007 / 2902 -> 129 / 381 / 571),
+locked TOC door, ground mostly gravel, sandbag ASP, every prop placed from its drawn box
+(docs/prop_placement.md) and checked by `Canvas.validateProps` (0 clashes on all three sizes)
+and tools/props/propclash.py (0 findings).
 
 v0.42.0 (10 Oktober 2026): all three sizes built and photographed (dev test `milbase`,
 docs/shots/milbase_v0.42/, docs/shots_index.md), checked in real worldgen (seed 1, two COPs at

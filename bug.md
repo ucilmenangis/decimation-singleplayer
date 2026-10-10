@@ -8,6 +8,24 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ---
 
+## Open
+
+### Military jeep and tank wrecks break with one punch (reported 10 Oktober 2026, fix later)
+- User: "tank, jeep military can be destroyed with one click hand".
+- Cause (read in deobf/src, net/decimation/mod/common/block/props/
+  BlockWreckageMilitary1 and 2): the constructors call only
+  `super(Material.iron)`, never `setHardness`, so hardness stays 0 and the
+  block breaks instantly by hand, also in survival. The car wrecks
+  (BlockProp) get hardness 10 from BlockProp. BlockWreckageMilitary3 not
+  checked yet [not verified].
+- Not the same as the vehicle entity bug fixed in v0.8.1 ("Military
+  jeep/tank/helicopter destroyed in one hit" below): these are the WRECK
+  props our military bases place. The user's shots were taken in creative,
+  where any block breaks with one click; with hardness 0 survival breaks
+  them in one click too [inferred from code, not tested in survival].
+- Fix idea: set hardness / resistance on those blocks from our side at
+  init (Deci accessor, `Block.setHardness`), like a BlockProp (10).
+
 ## Fixed
 
 ### Colourful rail teeth on the M4A4 under a sight (v0.41.0, 10 Oktober 2026)

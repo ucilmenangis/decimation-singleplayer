@@ -157,7 +157,7 @@ public final class MilitaryBase
             bhut(ix0 + 4, iz0 + 20, 2, false);
             fit("aid tent", ex0, zz0, zx1, zz1, true, false, (x, z) -> tent(x, z, 7, 9, 0));
             fit("mortar pit", ex0, zz0, zx1, zz1, true, false, (x, z) -> mortarPit(x, z));
-            if (!fit("vehicles", ex0, zz0, zx1, zz1, true, true, (x, z) -> vehiclePark(x, z, 2, true)))
+            if (!fit("vehicles", ex0, zz0, zx1, zz1, true, true, (x, z) -> vehiclePark(x, z, 2, false)))
             {
                 fit("vehicle", zx0, zz0, zx1, zz1, true, true, (x, z) -> vehiclePark(x, z, 1, false));
             }
@@ -168,7 +168,7 @@ public final class MilitaryBase
         {
             toc(gx - tocW / 2, tocZ0, tocW, tocL);
             lsa(zx0 + 1, zz0 + 2, wx1, zz1, size == LARGE ? 4 : 2);
-            fit("ASP", ex0, zz0, zx1, zz1, true, false, (x, z) -> asp(x, z, x + 9, z + 9));
+            fit("ASP", ex0, zz0, zx1, zz1, true, false, (x, z) -> asp(x, z, x + 11, z + 11));
             fit("fuel point", ex0, zz0, zx1, zz1, true, false, (x, z) -> fuelPoint(x, z, x + 8, z + 7));
             int mw = size == LARGE ? 30 : 20, ml = size == LARGE ? 18 : 14;
             fit("motor pool", ex0, zz0, zx1, zz1, true, true, (x, z) -> motorPool(x, z, x + mw - 1, z + ml - 1));
@@ -211,6 +211,8 @@ public final class MilitaryBase
         }
         roadside();
         decay();
+        // every prop against what it is drawn into (docs/prop_placement.md); the log names them
+        c.validateProps(log);
         // overview cameras
         poi("aerial_sw", -18, 40, c.l + 14, 225, 38);
         poi("aerial_ne", c.w + 16, 44, -16, 45, 40);
@@ -351,7 +353,7 @@ public final class MilitaryBase
         c.prop(mx, 1, z0 + 7, b.apc, S);
         c.prop(x0 + 1, 1, z0 + 2, b.metalTable, E);
         c.prop(x0 + 1, 1, z0 + 5, b.storageCrate, E);
-        c.prop(x1 - 1, 1, z0 + 2, b.tireStack, W);
+        c.prop(x1 - 2, 1, z0 + 2, b.tireStack, W);        // drawn 1.3 wide: off the curved skin
         c.prop(x1 - 1, 1, z0 + 4, b.tire, W);
         c.prop(x1 - 1, 1, z0 + 11, b.generator, W);
         c.prop(x0 + 1, 1, z1 - 1, b.barrel, E);
@@ -402,9 +404,10 @@ public final class MilitaryBase
             {
                 double n = noise(x, z);
                 boolean inside = x >= wx0 && x <= wx1 && z >= wz0 && z <= wz1;
-                // bulldozed ground: packed dirt with gravel patches, a little coarse dirt, grass
-                // left in the outer ring (coarse dirt is bright orange in Decimation's pack: sparing)
-                Block g = n < 0.58 ? Blocks.gravel : n > 0.88 && !inside ? Blocks.grass : Blocks.dirt;
+                // bulldozed ground: gravel with a few packed dirt patches (dirt reads orange in
+                // Decimation's pack, user review 10 Oktober 2026), grass left in the outer ring
+                Block g = inside ? (n > 0.9 ? Blocks.dirt : Blocks.gravel)
+                    : (n > 0.86 ? Blocks.grass : n > 0.78 ? Blocks.dirt : Blocks.gravel);
                 c.set(x, 0, z, g);
             }
         }
@@ -534,7 +537,9 @@ public final class MilitaryBase
         }
         c.set(x0 + 1, 1, z0, b.sandbag);
         c.set(x0 + 1, 1, z0 + 2, b.sandbag);
-        c.prop(x0 + 1, 1, z0 + 1, b.ammoCrate, dir > 0 ? E : W);
+        // a military crate: drawn exactly 1 cell (the ammo case is 1.6 long and went into the bags)
+        c.prop(x0 + 1, 1, z0 + 1, b.militaryCrate, dir > 0 ? E : W);
+        poi("fighting_position", x0 + 1.5 + dir * 3, 10.6, z0 + 1.5, dir > 0 ? 90 : 270, 65);
     }
 
     private void hesco(int x, int z)
@@ -562,12 +567,14 @@ public final class MilitaryBase
             c.prop(gx - 4, 1, z, b.tWall, E);
             c.prop(gx + 4, 1, z, b.tWall, W);
         }
-        // serpentine: jersey barriers from alternate sides, every 3 blocks
+        // serpentine: jersey barriers from alternate sides, every 3 blocks. A jersey barrier is
+        // drawn 2 long across its cell (x - 0.5 .. x + 1.5 at meta 3), so the cells gx - 2 and gx
+        // close the west 4 blocks of the 5 wide lane, gx + 2 and gx the east 4: a 1.5 gap left.
         boolean left = true;
         for (int z = z0 + 3; z <= z1 - 2; z += 3)
         {
             c.prop(left ? gx - 2 : gx + 2, 1, z, b.jersey, S);
-            c.prop(left ? gx - 1 : gx + 1, 1, z, b.jersey, S);
+            c.prop(gx, 1, z, b.jersey, S);
             left = !left;
         }
         // hedgehogs and sawhorses outside the T-wall lines, a warning sawhorse at the lane mouth
@@ -586,7 +593,7 @@ public final class MilitaryBase
         c.prop(gx + 1, 1, wz1 - 3, b.sawhorse, S);
         poi("ecp_inside_lane", gx + 0.5, 2.6, wz1 + 2.5, 0, 8);
         // guard shack inside the gate (west of the lane): sandbag booth, plank roof
-        int sx = gx - 7, sz = wz1 - 6;
+        int sx = gx - 7, sz = wz1 - 7;                   // north of the gate tower (wz1 - 3 ..)
         sandbagBooth(sx, sz);
         // search area inside the gate (east of the lane) on the bigger bases
         if (size != SMALL)
@@ -614,7 +621,10 @@ public final class MilitaryBase
         }
     }
 
-    /** 3 x 3 sandbag guard booth: walls 2 high, door gap on the east, window gap south, roof. */
+    /**
+     * 4 x 4 sandbag guard booth west of the lane: walls 2 high, a window gap toward the lane
+     * (east), the door on the north, a plank roof; the guard sits at the window with a radio.
+     */
     private void sandbagBooth(int x0, int z0)
     {
         for (int x = x0; x <= x0 + 3; x++)
@@ -625,7 +635,7 @@ public final class MilitaryBase
                 if (edge)
                 {
                     c.set(x, 1, z, b.sandbagBeige);
-                    boolean window = z == z0 + 3 && (x == x0 + 1 || x == x0 + 2);
+                    boolean window = x == x0 + 3 && (z == z0 + 1 || z == z0 + 2);
                     if (!window)
                     {
                         c.set(x, 2, z, b.sandbagBeige);
@@ -634,12 +644,13 @@ public final class MilitaryBase
                 c.set(x, 3, z, Blocks.wooden_slab, 1);  // spruce slab roof
             }
         }
-        c.clear(x0 + 3, 1, z0 + 1);                     // door to the lane
-        c.clear(x0 + 3, 2, z0 + 1);
-        c.prop(x0 + 1, 1, z0 + 2, b.chair, S);
-        c.prop(x0 + 2, 1, z0 + 2, b.radioSmall, S);
-        c.prop(x0 + 1, 1, z0 + 1, b.ammoCrate, E);
-        c.prop(x0 + 3, 4, z0 + 3, b.redLight, S);
+        c.clear(x0 + 1, 1, z0);                         // door on the north
+        c.clear(x0 + 1, 2, z0);
+        c.prop(x0 + 2, 1, z0 + 1, b.chair, E);          // looking out at the lane
+        c.prop(x0 + 2, 1, z0 + 2, b.radioSmall, E);
+        c.prop(x0 + 1, 1, z0 + 2, b.militaryCrate, S);
+        c.prop(x0 + 3, 4, z0, b.redLight, S);
+        poi("guard_booth", x0 + 6.5, 6.6, z0 + 2.0, 90, 45);       // above the lane, looking west
     }
 
     // ================================================================ towers
@@ -733,18 +744,26 @@ public final class MilitaryBase
         {
             for (int z = z0 - 1; z <= z0 + 4; z++)
             {
-                c.set(x, 8, z, Blocks.wooden_slab, 1);
+                boolean mid = x >= x0 && x <= x0 + 3 && z >= z0 && z <= z0 + 3;
+                // spruce: planks over the posts (the searchlight stands on them), slab eaves
+                c.set(x, 8, z, mid ? Blocks.planks : Blocks.wooden_slab, 1);
             }
         }
         poi("tower_deck", x0 + 1.5 + (ix > 0 ? 0.5 : 0), 6.6, z0 + 1.5 + (iz > 0 ? 0.5 : 0), ix > 0 ? 315 : 45, 18);
-        // on the deck: spotlight looking out, ammo, radio
+        // searchlight on the roof looking out (its lens faces the placer side: front N for the
+        // north towers, S for the gate side); on the deck an ammo crate and a radio
         int cx = x0 + (ix > 0 ? 1 : 2), cz = z0 + (iz > 0 ? 1 : 2);
-        int look = iz > 0 ? N : S;
-        c.prop(cx, 5, cz, b.spotlight, look);
+        c.prop(cx, 9, cz, b.spotlight, iz > 0 ? N : S);
+        poi("tower_roof", x0 + 1.5 + ix * 5, 12.6, z0 + 1.5 + iz * 5, (float) Math.toDegrees(Math.atan2(ix, -iz)), 30);
         int ax = x0 + (ix > 0 ? 2 : 1), az = z0 + (iz > 0 ? 2 : 1);
         if (!(ax == lx && az == lz))
         {
-            c.prop(ax, 5, az, r.nextBoolean() ? b.ammoCrate : b.militaryCrate, ix > 0 ? E : W);
+            c.prop(ax, 5, az, b.militaryCrate, ix > 0 ? E : W);
+        }
+        int rx = x0 + (ix > 0 ? 1 : 2), rz = z0 + (iz > 0 ? 2 : 1);
+        if (!(rx == lx && rz == lz))
+        {
+            c.prop(rx, 5, rz, b.radioSmall, iz > 0 ? N : S);
         }
     }
 
@@ -782,7 +801,7 @@ public final class MilitaryBase
     {
         Block g = c.get(x, 0, z);
         // gravel with the odd packed dirt patch (tyre tracks)
-        c.set(x, 0, z, noise(x * 3, z * 3) > 0.82 ? Blocks.dirt : Blocks.gravel);
+        c.set(x, 0, z, noise(x * 3, z * 3) > 0.93 ? Blocks.dirt : Blocks.gravel);
     }
 
     // ================================================================ TOC
@@ -861,9 +880,10 @@ public final class MilitaryBase
                     c.set(x, y, z, edge ? b.concrete : null);
                 }
                 c.set(x, 5, z, b.concrete);
-                // two layers of sandbags on the roof slab, the upper one in loose piles
+                // a flat layer of sandbags on the roof slab and a low sandbag parapet round the
+                // edge (piles on top read as a maze from above, user review 10 Oktober 2026)
                 c.set(x, 6, z, noise(x * 5, z * 5) < 0.5 ? b.sandbag : b.sandbagBeige);
-                if (!edge && noise(x * 7 + 3, z * 7 + 1) > 0.55)
+                if (edge)
                 {
                     c.set(x, 7, z, noise(x, z * 3) < 0.5 ? b.sandbagBeige : b.sandbag);
                 }
@@ -871,8 +891,10 @@ public final class MilitaryBase
         }
         poi("toc_inside", dx + 0.5, 2.6, z1 - 1.5, 180, 12);
         poi("toc_outside", dx + 0.5, 2.6, z1 + 7.5, 180, 4);
-        // door (south), keycard screen, slit windows high on the sides
-        door(dx, 1, z1, b.metalDoor, S);
+        poi("toc_door", dx + 0.5, 2.6, z1 + 3.5, 180, 12);
+        // locked door (south) and the military keycard screen beside it on the outer wall: the
+        // reader opens a locked door within 3 blocks (Decimation's KeycardReaderBlock)
+        door(dx, 1, z1, b.lockedDoor, S);
         c.prop(dx + 1, 2, z1 + 1, b.keycard, S);
         for (int z = z0 + 2; z <= z1 - 2; z += 3)
         {
@@ -885,14 +907,18 @@ public final class MilitaryBase
         c.prop(dx, 1, mz + 1, b.woodTable, S);
         c.prop(dx - 2, 1, mz, b.chair, E);
         c.prop(dx + 2, 1, mz + 1, b.chair, W);
-        // radio and computer desks along the west and east walls
-        for (int z = z0 + 1; z <= z1 - 2; z += 2)
+        // radio and computer desks along the west and east walls: a metal table is drawn 2 long
+        // (centre cell +- 1 half cell), so a run starts 2 in from the wall and steps 2. The big
+        // radio is 1.7 deep with its dials on a long side: lying along the desk (meta 5 on the
+        // west wall, 3 on the east) its dials face the room (docs/prop_placement.md).
+        int k = 0;
+        for (int z = z0 + 2; z + 1 <= z1 - 2; z += 2, k++)
         {
             c.prop(x0 + 1, 1, z, b.metalTable, E);
-            c.prop(x0 + 1, 2, z, (z / 2) % 2 == 0 ? b.radio : b.monitor, E);
+            c.prop(x0 + 1, 2, z, k % 2 == 0 ? b.radio : b.monitor, k % 2 == 0 ? N : E);
             c.prop(x0 + 2, 1, z, b.officeChair, W);
             c.prop(x1 - 1, 1, z, b.metalTable, W);
-            c.prop(x1 - 1, 2, z, (z / 2) % 2 == 1 ? b.radioSmall : b.monitor, W);
+            c.prop(x1 - 1, 2, z, k % 2 == 1 ? b.radio : b.monitor, k % 2 == 1 ? S : W);
             c.prop(x1 - 2, 1, z, b.officeChair, E);
         }
         // north wall: flag, the commander's desk
@@ -902,7 +928,7 @@ public final class MilitaryBase
         c.prop(dx - 1, 1, z0 + 2, b.officeChair, N);
         // by the door: weapon cabinet, ammo
         c.prop(dx - 2, 1, z1 - 1, b.weaponCabinet, E);
-        c.prop(dx + 2, 1, z1 - 1, b.ammoCrateLarge, W);
+        c.prop(dx + 2, 1, z1 - 1, b.ammoCrateLarge, S);   // drawn 1.9 long: along the door wall
         // ceiling lights
         for (int z = z0 + 2; z <= z1 - 2; z += 3)
         {
@@ -912,14 +938,13 @@ public final class MilitaryBase
         c.prop(dx - 3, 1, z1 + 2, b.flagPole, S);
         for (int y = 1; y <= 9; y++)
         {
-            c.prop(x1 + 2, y, z0 - 1, b.radioTower, S);
+            c.prop(x1 + 1, y, z0 - 1, b.radioTower, S);       // drawn 1.1 wide: clear of the ring
         }
-        c.set(x1 + 2, 10, z0 - 1, Blocks.fence);
+        c.set(x1 + 1, 10, z0 - 1, Blocks.fence);
         c.prop(x1 + 2, 1, z1 - 1, b.generator, W);
         c.prop(x1 + 2, 1, z1 - 2, b.generator, W);
         c.prop(x1 + 2, 1, z1 - 4, b.barrel, W);
         c.prop(x0 - 2, 1, z1 + 1, b.lightTower, S);
-        c.prop(dx + 1, 3, z1 + 1, b.wallFlag, S);
     }
 
     /** A Decimation (vanilla metadata) door, both halves; front = the side it opens to. */
@@ -1018,25 +1043,30 @@ public final class MilitaryBase
                 }
             }
         }
-        // roof: stairs on the eaves, planks, a ridge of slabs; overhang at the gable ends
+        // roof: a low gable of spruce: planks over the walls (1 overhang at the gable ends), a
+        // 3 wide slab ridge on top, slab eaves along the long sides. (Stairs here read as a saw
+        // tooth from above, user review 10 Oktober 2026.)
         for (int z = z0 - 1; z <= z1 + 1; z++)
         {
-            c.set(x0, 5, z, Blocks.spruce_stairs, 0);     // high side east
-            c.set(x1, 5, z, Blocks.spruce_stairs, 1);     // high side west
-            for (int x = x0 + 1; x <= x1 - 1; x++)
+            for (int x = x0; x <= x1; x++)
             {
                 c.set(x, 5, z, Blocks.planks, 1);
             }
-            c.set(x0 + 1, 6, z, Blocks.spruce_stairs, 0);
-            c.set(x1 - 1, 6, z, Blocks.spruce_stairs, 1);
-            c.set(x0 + 2, 6, z, Blocks.wooden_slab, 1);
+            for (int x = x0 + 1; x <= x1 - 1; x++)
+            {
+                c.set(x, 6, z, Blocks.wooden_slab, 1);
+            }
+            c.set(x0 - 1, 4, z, Blocks.wooden_slab, 9);   // eave, top half
+            c.set(x1 + 1, 4, z, Blocks.wooden_slab, 9);
         }
         // door, step, a light over it
         int dz = doorSouth ? z1 : z0;
         door(x0 + 2, 2, dz, Blocks.wooden_door, doorSouth ? S : N);
         c.set(x0 + 2, 1, doorSouth ? z1 + 1 : z0 - 1, Blocks.spruce_stairs, doorSouth ? 3 : 2);
         c.prop(x0 + 3, 4, doorSouth ? z1 + 1 : z0 - 1, b.light, doorSouth ? S : N);
-        // windows along the long sides, some boarded (trapdoor shutters closed outside)
+        // windows along the long sides, some shuttered: an OPEN trapdoor flat against the wall
+        // (open bit 4; 2 = against the east face of its cell, 3 = the west face). A closed one
+        // lies flat and read as a shelf under the window (user review 10 Oktober 2026).
         for (int z = z0 + 2; z <= z1 - 2; z += 3)
         {
             for (int x : new int[] {x0, x1})
@@ -1044,9 +1074,17 @@ public final class MilitaryBase
                 c.set(x, 3, z, Blocks.glass_pane);
                 if (r.nextFloat() < 0.4f)
                 {
-                    c.set(x == x0 ? x - 1 : x + 1, 3, z, Blocks.trapdoor, x == x0 ? 3 : 2);
+                    c.set(x == x0 ? x - 1 : x + 1, 3, z, Blocks.trapdoor, x == x0 ? 4 | 2 : 4 | 3);
                 }
             }
+        }
+        // back end: a window and the power panel (junction box on a pole against the wall)
+        int bz = doorSouth ? z0 : z1;
+        poi("hut_back", x0 + 2.5, 2.6, doorSouth ? z0 - 4.5 : z1 + 4.5, doorSouth ? 0 : 180, 8);
+        c.set(x0 + 2, 3, bz, Blocks.glass_pane);
+        if (b.powerBox != null)
+        {
+            c.prop(x0 + 3, 1, doorSouth ? z0 - 1 : z1 + 1, b.powerBox, doorSouth ? N : S);
         }
         // interior y 2..4, x0+1..x1-1, z0+1..z1-1
         int in0 = z0 + 1, in1 = z1 - 1;
@@ -1062,23 +1100,35 @@ public final class MilitaryBase
                     c.prop(x0 + 1, 3, z, z % 4 == 0 ? b.monitor : b.radioSmall, E);
                     c.prop(x0 + 2, 2, z, b.officeChair, W);
                 }
-                c.prop(x1 - 1, 2, in0 + 1, b.weaponCabinet, W);
-                c.prop(x1 - 1, 2, in0 + 3, b.storageCrate, W);
+                // the cabinet's doors stand 0.3 into the aisle: between two chairs
+                c.prop(x1 - 1, 2, in0 + 2, b.weaponCabinet, W);
+                c.prop(x1 - 1, 2, in0 + 4, b.storageCrate, W);
                 c.prop(x1 - 1, 3, in0 + 5, b.wallFlag, W);
-                c.prop(x1 - 1, 2, in1 - 1, b.cardboard, W);
+                c.prop(x1 - 1, 2, in1, b.militaryCrate, W);
                 break;
-            case 2: // arms room: cabinets and crates, the loot
-                for (int z = in0; z <= in1; z++)
+            case 2: // arms room: a cabinet wall, a crate wall, a cleaning bench at the far end
+            {
+                // drawn sizes (docs/prop_placement.md): a cabinet 1 x 1.3 x 2 (doors 0.3 into
+                // the aisle), a military crate 1 x 1, a large ammo case 1.9 long, so the case
+                // gets a free cell each side; the row by the door stays empty
+                int far = doorSouth ? in0 : in1, step = doorSouth ? 1 : -1;
+                c.prop(x0 + 2, 2, far, b.metalTable, S);
+                c.prop(x0 + 2, 3, far, b.ammoCrate, S);
+                for (int i = 1; i <= 6; i++)
                 {
-                    if (z == (doorSouth ? in1 : in0))
+                    int z = far + i * step;
+                    c.prop(x0 + 1, 2, z, b.weaponCabinet, E);
+                    if (i == 3)
                     {
-                        continue;
+                        c.prop(x1 - 1, 2, z, b.ammoCrateLarge, W);
                     }
-                    c.prop(x0 + 1, 2, z, z % 2 == 0 ? b.weaponCabinet : b.militaryCrate, E);
-                    c.prop(x1 - 1, 2, z, z % 3 == 0 ? b.ammoCrateLarge : (z % 3 == 1 ? b.ammoCrate : b.militaryCrate), W);
+                    else if (i != 2 && i != 4)
+                    {
+                        c.prop(x1 - 1, 2, z, b.militaryCrate, W);
+                    }
                 }
-                c.prop(x0 + 2, 2, (in0 + in1) / 2, b.metalTable, S);
                 break;
+            }
             case 3: // chapel: benches facing the altar end
                 for (int z = in0 + 1; z <= in1 - 2; z += 2)
                 {
@@ -1177,6 +1227,7 @@ public final class MilitaryBase
             }
         }
         door(x0 + 3, 2, z1, Blocks.wooden_door, S);
+        c.set(x0 + 3, 1, z1 + 1, Blocks.spruce_stairs, 3);   // step up to the raised floor
         for (int x = x0 + 1; x <= x1 - 1; x += 2)
         {
             c.set(x, 2, z0 + 1, Blocks.cauldron, 0);   // seats
@@ -1232,15 +1283,14 @@ public final class MilitaryBase
         c.clear(ox, 2, oz);
         if (content == 1)
         {
+            poi("conex_inside", ox + 0.5 + (alongX ? 2 : 0), 2.1, oz + 0.5 + (alongX ? 0 : 2), alongX ? 90 : 180, 15);
             int ix = alongX ? x0 + 1 : x0 + 1, iz = alongX ? z0 + 1 : z0 + 1;
+            // the hold is 1 wide and 2 high: military crates (drawn exactly 1 x 1 x 1.15; a wood
+            // crate is 1.4 long and meets its neighbours, a stacked crate meets the roof)
             for (int k = 0; k < 4; k++)
             {
                 int x = alongX ? ix + k : ix, z = alongX ? iz : iz + k;
-                c.prop(x, 1, z, k % 2 == 0 ? b.militaryCrate : b.woodCrate, alongX ? W : N);
-                if (k < 2)
-                {
-                    c.prop(x, 2, z, b.cardboard, alongX ? W : N);
-                }
+                c.prop(x, 1, z, b.militaryCrate, alongX ? N : W);
             }
         }
         else if (content == 2)
@@ -1253,8 +1303,11 @@ public final class MilitaryBase
     // ================================================================ east side
 
     /**
-     * Ammunition supply point: a sloped earth berm (3 wide: 1, 2, 1 high) around a gravel pad of
-     * crates, entry gap on the west.
+     * Ammunition supply point: a sandbag berm (2 thick: an outer course 1 high, an inner one 2
+     * high; raw dirt reads orange and grew grass, user review 10 Oktober 2026) around a gravel
+     * pad of crate stacks, entry gap on the west. Drawn sizes (docs/prop_placement.md): the large
+     * ammo case is 1.9 long along x at meta 3, so a row steps 2; a small case rides on top of
+     * each large one; the care package (2.2 x 1.9) takes the south east corner.
      */
     private boolean asp(int x0, int z0, int x1, int z1)
     {
@@ -1268,40 +1321,36 @@ public final class MilitaryBase
             for (int z = z0; z <= z1; z++)
             {
                 int d = Math.min(Math.min(x - x0, x1 - x), Math.min(z - z0, z1 - z));   // 0 outer ring
-                boolean entry = x <= x0 + 2 && Math.abs(z - ez) <= 1;
-                if (d <= 2 && !entry)
+                boolean entry = x <= x0 + 1 && Math.abs(z - ez) <= 1;
+                c.set(x, 0, z, Blocks.gravel);
+                if (d <= 1 && !entry)
                 {
-                    int top = d == 1 ? 2 : 1;
-                    for (int y = 1; y <= top; y++)
+                    for (int y = 1; y <= d + 1; y++)
                     {
-                        c.set(x, y, z, Blocks.dirt, noise(x * 9, z * 9) > 0.7 ? 1 : 0);
+                        c.set(x, y, z, noise(x * 9 + y, z * 9) > 0.5 ? b.sandbag : b.sandbagBeige);
                     }
-                    if (d == 1 && noise(x * 4, z * 4) > 0.8)
-                    {
-                        c.set(x, 3, z, Blocks.tallgrass, 1);              // weeds on the crest
-                    }
-                }
-                else
-                {
-                    c.set(x, 0, z, Blocks.gravel);
                 }
             }
         }
-        x0 += 2;
-        z0 += 2;
-        x1 -= 2;
-        z1 -= 2;
-        // crate rows on pallets (the loot), a care package, a warning light
-        for (int x = x0 + 2; x <= x1 - 2; x += 2)
+        int px = x0 + 2, pz = z0 + 2;                      // the pad, 8 x 8 inside the berm
+        poi("asp", px + 3.5, 5.6, z1 + 3.5, 180, 40);
+        for (int row = 0; row < 3; row++)
         {
-            for (int z = z0 + 2; z <= z1 - 2; z += 3)
+            int z = pz + 1 + row * 2;
+            for (int col = 0; col < (row == 2 ? 2 : 3); col++)
             {
-                Block crate = (x + z) % 3 == 0 ? b.ammoCrateLarge : ((x + z) % 3 == 1 ? b.ammoCrate : b.militaryCrate);
-                c.prop(x, 1, z, crate, S);
+                int x = px + 1 + col * 2;
+                boolean large = (row + col) % 2 == 0;
+                c.prop(x, 1, z, large ? b.ammoCrateLarge : b.militaryCrate, S);
+                if (large)
+                {
+                    c.prop(x, 2, z, b.ammoCrate, S);
+                }
             }
         }
-        c.prop(x1 - 2, 1, z1 - 1, b.carePackage, S);
-        c.prop(x0 + 1, 1, z0 + 1, b.redLight, S);
+        c.prop(px + 5, 1, pz + 6, b.carePackage, S);
+        c.prop(px, 1, pz, b.redLight, S);
+        c.prop(px + 7, 1, pz, b.redLight, S);
         return true;
     }
 
@@ -1340,6 +1389,7 @@ public final class MilitaryBase
         c.prop(x1 - 2, 1, z0 + 2, b.barrel, S);
         c.prop(x1 - 1, 1, z1 - 2, b.generator, W);
         c.prop(x0 + 2, 1, z1 - 1, b.barrel, S);
+        poi("fuel_point", (x0 + x1) / 2.0 + 0.5, 5.6, z1 + 4.5, 180, 40);
         return true;
     }
 
@@ -1357,26 +1407,28 @@ public final class MilitaryBase
         {
             for (int z = z0; z <= z1; z++)
             {
-                c.set(x, 0, z, noise(x, z) > 0.75 ? Blocks.dirt : Blocks.gravel);
+                c.set(x, 0, z, noise(x, z) > 0.92 ? Blocks.dirt : Blocks.gravel);
                 if (noise(x * 7, z * 5) > 0.93)
                 {
                     c.set(x, 0, z, Blocks.coal_block);              // oil stain
                 }
             }
         }
-        poi("motor_pool", x0 + 0.5, 3.6, z1 + 1.5, 200, 14);
-        // vehicles: APCs and jeeps, long axis north-south (meta 3 / 5), spaced 6
+        poi("motor_pool", x0 + 8.5, 8.6, z1 + 6.5, 180, 30);
+        // vehicles: APCs and jeeps, long axis north-south, spaced 6. Decimation's military
+        // wrecks are drawn long along z at meta 2 / 3 and along x at 4 / 5 (their renderer's own
+        // table, docs/prop_placement.md); an APC is drawn 4.5 wide, a jeep 2.2
         int vz = z0 + 2;
         int count = size == SMALL ? 2 : size == MEDIUM ? 3 : 5;
         for (int i = 0; i < count; i++)
         {
             int vx = x0 + 3 + i * 6;
-            if (vx + 3 > x1)
+            boolean apc = i % 2 == 1 || (size == LARGE && i == 4);
+            if (vx + (apc ? 4 : 2) >= x1 - 2)           // the conex row stands at x1 - 2
             {
                 break;
             }
-            boolean apc = i % 2 == 1 || (size == LARGE && i == 4);
-            c.prop(vx, 1, vz + (apc ? 4 : 2), apc ? b.apc : b.jeep, r.nextBoolean() ? S : N);
+            c.prop(vx, 1, vz + (apc ? 4 : 2), apc ? b.apc : b.jeep, r.nextBoolean() ? S : E);
         }
         // camo net on posts over the first two vehicles (green wool, holes in it)
         int nx0 = x0 + 1, nx1 = Math.min(x1 - 4, x0 + 13), nz0 = z0, nz1 = z0 + 8;
@@ -1425,9 +1477,9 @@ public final class MilitaryBase
             c.prop(sx + 2, 1, sz + 1, b.metalTable, S);
             c.prop(sx + 4, 1, sz + 3, b.tireStack, S);
             c.prop(sx + 1, 1, sz + 3, b.tire, S);
-            c.prop(sx + 3, 1, sz + 3, b.storageCrate, S);
+            c.prop(sx + 2, 1, sz + 3, b.storageCrate, S);
         }
-        c.prop(x0 + 1, 1, z0, b.lightTower, S);
+        c.prop(x0, 1, z1, b.lightTower, S);                  // (a net post stands at x0 + 1, z0)
         c.prop(x1 - 4, 1, z1, b.tireStack, S);
         c.prop(x1 - 5, 1, z1, b.barrel, S);
         return true;
@@ -1452,9 +1504,11 @@ public final class MilitaryBase
                 }
             }
         }
-        c.prop(x0 + 1, 1, z0 + 1, b.ammoCrateLarge, S);
-        c.prop(x0 + 3, 1, z0 + 1, b.ammoCrate, S);
-        c.prop(x0 + 2, 1, z0 + 2, b.militaryCrate, S);
+        // the cases lie along the side walls (drawn 1.9 / 1.6 long), a crate at the back
+        c.prop(x0 + 1, 1, z0 + 2, b.ammoCrateLarge, E);
+        c.prop(x0 + 3, 1, z0 + 2, b.ammoCrate, W);
+        c.prop(x0 + 2, 1, z0 + 1, b.militaryCrate, S);
+        poi("mortar_pit", x0 + 2.5, 5.6, z0 + 8.5, 180, 40);
         return true;
     }
 
@@ -1528,45 +1582,55 @@ public final class MilitaryBase
         switch (kind)
         {
             case 0: // aid station / casualty collection point
-                for (int z = z0 + 2; z <= z1 - 2; z += 2)
+                // stretchers along both sides (drawn 2.1 long: along the tent, 3 apart), medical
+                // crates at the north end beside the door, the aisle down the middle stays free
+                for (int z = z0 + 2; z + 1 <= z1 - 1; z += 3)
                 {
-                    c.prop(x0 + 1, 1, z, b.stretcher, S);
-                    c.prop(x1 - 1, 1, z, z % 4 == 0 ? b.medicalCrate : b.stretcher, S);
+                    c.prop(x0 + 1, 1, z, b.stretcher, E);
+                    c.prop(x1 - 1, 1, z, b.stretcher, W);
                 }
-                c.prop(mx, 1, z0 + 2, b.metalTable, S);
-                c.prop(mx, 2, z0 + 2, b.medicalCrate, S);
+                c.prop(mx - 1, 1, z0 + 1, b.medicalCrate, S);
+                c.prop(mx + 1, 1, z0 + 1, b.medicalCrate, S);
+                c.prop(mx + 1, 2, z0 + 1, b.medicalCrate, S);
                 c.prop(x1 + 2, 1, z0 + 2, b.bodyBag, S);
                 c.prop(x1 + 2, 1, z0 + 5, b.bodyBag, S);
                 c.prop(x0 - 2, 1, z1 - 1, b.generator, S);
                 break;
-            case 1: // DFAC: table rows, serving line, supplies
-                for (int z = z0 + 2; z <= z1 - 5; z += 2)
+            case 1: // DFAC: one long table down the middle, chairs both sides, serving line
+            {
+                // wood tables are drawn 2 long across their cell: along the tent (meta 2) every 2
+                // cells they join into one long table; the chairs face it from both sides
+                int tz1 = z1 - 5;
+                for (int z = z0 + 2; z + 1 <= tz1; z += 2)
                 {
-                    c.prop(x0 + 2, 1, z, b.woodTable, S);
-                    c.prop(x0 + 1, 1, z, b.chair, E);
-                    c.prop(x1 - 2, 1, z, b.woodTable, S);
-                    c.prop(x1 - 1, 1, z, b.chair, W);
+                    c.prop(mx, 1, z, b.woodTable, E);
                 }
-                for (int x = x0 + 1; x <= x1 - 1; x++)
+                for (int z = z0 + 2; z <= tz1; z++)
                 {
-                    if (x != mx)
-                    {
-                        c.prop(x, 1, z1 - 2, x % 2 == 0 ? b.cooking : b.metalTable, N);
-                    }
+                    c.prop(mx - 1, 1, z, b.chair, E);
+                    c.prop(mx + 1, 1, z, b.chair, W);
                 }
-                c.prop(x0 + 1, 1, z1 - 1, b.cardboard, S);
-                c.prop(x1 - 1, 1, z1 - 1, b.waterPallet, S);
+                // serving line at the south end: a metal table with stoves on it, food and
+                // water on the other side
+                c.prop(x0 + 1, 1, z1 - 3, b.metalTable, E);
+                c.prop(x0 + 1, 2, z1 - 3, b.cooking, E);
+                c.prop(x0 + 1, 2, z1 - 2, b.cooking, E);
+                c.prop(x0 + 1, 1, z1 - 1, b.militaryCrate, E);
+                c.prop(x1 - 1, 1, z1 - 3, b.waterPallet, S);
+                c.prop(x1 - 1, 1, z1 - 1, b.militaryCrate, W);
                 c.prop(x1 + 2, 1, z1, b.trashcan, S);
                 c.prop(x1 + 2, 1, z1 - 1, b.trashBag, S);
                 break;
+            }
             default: // gym / MWR
+                // the chess table is drawn 1.4 wide: one cell in from the side wall, its chair
+                // between it and the wall
                 for (int z = z0 + 2; z <= z1 - 2; z += 3)
                 {
                     c.set(x0 + 1, 1, z, Blocks.anvil, 0);       // weights
-                    c.prop(x1 - 1, 1, z, b.chessTable, S);
-                    c.prop(x1 - 2, 1, z, b.chair, E);
+                    c.prop(x1 - 2, 1, z, b.chessTable, S);
+                    c.prop(x1 - 1, 1, z, b.chair, W);
                 }
-                c.prop(mx, 2, z1 - 1, b.wallFlag, N);
                 break;
         }
         return true;
@@ -1575,7 +1639,7 @@ public final class MilitaryBase
     /** Helipad: concrete square with a white H, landing lights, windsock; a wreck on the big base. */
     private boolean helipad(int x0, int z0, boolean wreck)
     {
-        int s = 9;
+        int s = wreck ? 13 : 9;
         if (!reserve(x0, z0, x0 + s + 2, z0 + s - 1))
         {
             return false;
@@ -1588,14 +1652,15 @@ public final class MilitaryBase
             }
         }
         // the H
-        for (int z = z0 + 2; z <= z0 + 6; z++)
+        int hx = x0 + (s - 9) / 2, hz = z0 + (s - 9) / 2;   // the H in the middle of the pad
+        for (int z = hz + 2; z <= hz + 6; z++)
         {
-            c.set(x0 + 2, 0, z, Blocks.quartz_block);
-            c.set(x0 + 6, 0, z, Blocks.quartz_block);
+            c.set(hx + 2, 0, z, Blocks.quartz_block);
+            c.set(hx + 6, 0, z, Blocks.quartz_block);
         }
-        for (int x = x0 + 3; x <= x0 + 5; x++)
+        for (int x = hx + 3; x <= hx + 5; x++)
         {
-            c.set(x, 0, z0 + 4, Blocks.quartz_block);
+            c.set(x, 0, hz + 4, Blocks.quartz_block);
         }
         for (int[] p : new int[][] {{x0, z0}, {x0 + s - 1, z0}, {x0, z0 + s - 1}, {x0 + s - 1, z0 + s - 1}})
         {
@@ -1608,7 +1673,7 @@ public final class MilitaryBase
         c.set(wx + 1, 4, wz, Blocks.wool, 1);
         if (wreck)
         {
-            c.prop(x0 + 4, 1, z0 + 4, b.helicopter, S);
+            c.prop(x0 + 6, 1, z0 + 5, b.helicopter, S);
         }
         else
         {
@@ -1647,7 +1712,7 @@ public final class MilitaryBase
             if (c.get(x, 3, z) == b.hesco && c.get(x, 4, z) == null)
             {
                 c.clear(x, 3, z);
-                c.set(x, 0, z + (z == wz0 ? -1 : 1), Blocks.dirt, 1);
+                c.set(x, 0, z + (z == wz0 ? -1 : 1), Blocks.gravel);
             }
         }
         // trash and bags along the inner ring road edges
@@ -1656,7 +1721,7 @@ public final class MilitaryBase
         {
             int x = ix0 + 3 + r.nextInt(Math.max(1, ix1 - ix0 - 6));
             int z = iz0 + 3 + r.nextInt(Math.max(1, iz1 - iz0 - 6));
-            if (c.get(x, 1, z) == null && c.get(x, 0, z) != Blocks.gravel && c.get(x, 0, z) != null)
+            if (c.get(x, 1, z) == null && c.get(x, 2, z) == null && occ[x + z * c.w] == 0 && c.get(x, 0, z) != null)
             {
                 float roll = r.nextFloat();
                 c.prop(x, 1, z, roll < 0.5f ? b.trashBag : roll < 0.8f ? b.trashBag2 : roll < 0.9f ? b.woodCrateOpen : b.barrel, r.nextInt(4) + 2);
@@ -1672,7 +1737,7 @@ public final class MilitaryBase
             {
                 int x = alongX ? x0 + k : x0 + t, z = alongX ? z0 + t : z0 + k;
                 c.clearBox(x, 1, z, x, 3, z);
-                c.set(x, 0, z, Blocks.dirt, 1);
+                c.set(x, 0, z, Blocks.gravel);
                 if (k == 0 || k == len - 1)
                 {
                     c.set(x, 1, z, b.hesco);               // stumps at the ends
@@ -1681,7 +1746,7 @@ public final class MilitaryBase
             // spilled fill on both sides, the wire there gone
             int ox = alongX ? x0 + k : x0 - 1, oz = alongX ? z0 - 1 : z0 + k;
             int px = alongX ? x0 + k : x0 + 2, pz = alongX ? z0 + 2 : z0 + k;
-            c.set(ox, 1, oz, Blocks.dirt, 1);
+            c.set(ox, 1, oz, Blocks.gravel);
             c.set(px, 1, pz, Blocks.gravel);
             int wx = alongX ? x0 + k : x0 - 2, wz = alongX ? z0 - 2 : z0 + k;
             c.clear(wx, 1, wz);
@@ -1704,7 +1769,7 @@ public final class MilitaryBase
             canFire, bodyBag, stretcher, cooking, chessTable;
         Block metalTable, woodTable, chair, officeChair;
         Block jeep, apc, helicopter;
-        Block metalGreen, metalRust, metalPlate, concrete, concreteFloor, metalDoor;
+        Block metalGreen, metalRust, metalPlate, concrete, concreteFloor, metalDoor, lockedDoor, powerBox;
 
         static B get()
         {
@@ -1717,7 +1782,8 @@ public final class MilitaryBase
 
         private B()
         {
-            hesco = d("BlockMilitaryBarrier", Blocks.sandstone);
+            // our plain HESCO block: Decimation's BlockMilitaryBarrier is a prop (a tile entity per cell)
+            hesco = BlockHesco.instance != null ? BlockHesco.instance : d("BlockMilitaryBarrier", Blocks.sandstone);
             sandbag = d("BlockSandbagStack", Blocks.sandstone);
             sandbagBeige = d("BlockSandbagStackBeige", Blocks.sandstone);
             wire = d("BlockConcertinaWire", Blocks.web);
@@ -1774,6 +1840,10 @@ public final class MilitaryBase
             concrete = d("BlockStone_7", Blocks.stone);
             concreteFloor = d("BlockStone_6", Blocks.stone);
             metalDoor = d("Door_Metal_3", Blocks.iron_door);
+            // the only locked door Decimation has: opened by a military keycard on a keycard screen
+            // within 3 blocks (KeycardReaderBlock), by a lockpick, or in creative
+            lockedDoor = d("Door_Emergency_1_Locked", metalDoor);
+            powerBox = d("BlockElectricBox1", null);
         }
 
         private static Block d(String name, Block fallback)

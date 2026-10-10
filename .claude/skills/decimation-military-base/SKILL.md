@@ -12,9 +12,10 @@ check small detail ... be detailed person and architecture person ... work on lo
 props placement".
 
 ## 0. Read first
-1. docs/military_base.md (all of it), docs/prop_catalogue.md (what every Decimation block looks
-   like), docs/prop_footprints.tsv (how far big props reach: APC 5 x 8, helicopter 8 x 9,
-   jersey barrier / metal table 3 long, care package 3 x 3, spotlight 3 x 3).
+1. docs/military_base.md (all of it), docs/prop_placement.md and the skill decimation-props
+   (how props are drawn, facing, drawn sizes: a jersey barrier / table 2 long, large ammo case
+   1.9, care package 2.25 x 1.9, spotlight 2.5 x 3.2, APC 4.5 x 8.9), docs/prop_catalogue.md
+   (what every Decimation block looks like).
 2. Code: worldgen/military/ (Canvas, MilitaryBase, MilitaryBasePlan), LargeSites.militaryBase,
    Slices.placeAt, devtest/MilBaseTest.
 3. The lessons and casebook at the end of this file.
@@ -38,10 +39,17 @@ props placement".
 - Record camera points (`poi`) inside every module worth a look; the dev test photographs them.
 - Loot = Decimation's own crate blocks placed with intent (arms room, ASP, towers, fighting
   positions, conexes, aid station, footlockers); its loot registry fills them.
+- Every prop from its DRAWN box (PropBoxes, docs/prop_placement.md): rows step by drawn length,
+  long props along walls, aisles and door fronts free, tall props with free cells above.
+  `c.validateProps(log)` at the end of build() removes and logs clashes; keep it at 0.
+- Walls placed by the hundreds are plain blocks (deciworldgen:hesco), never props.
 
 ## 3. Test (live, minutes per round)
 - `python3 tools/devtest.py --live milbase sizes=0,1,2 points=none`: builds and lists what did not
   fit ("refused"). Fix the layout until nothing important is refused.
+- The same run writes run/client/devtest/milbase_<size>.tsv; `python3 tools/props/propclash.py
+  dev/run/client/devtest/milbase_1.tsv` must report findings 0 (walls, props, doors, facing,
+  wall mounts, floating).
 - `python3 tools/devtest.py --live milbase sizes=...`: all shots; read the sheet and the single
   shots (aerials, top, gate, every inside). New classes / methods need `--stop` first.
 - Real worldgen: `python3 tools/servertest.py 1 type=decimation pregen=-64,448,9` and a top down
@@ -74,6 +82,14 @@ props placement".
    battlements; use noise for piles and rough edges.
 7. Name camera points in the generator itself (poi), so every module can be photographed after
    every change without hand placed cameras.
+8. Props are models, not blocks (user review of v0.42.0, 28 shots): compute the drawn box of
+   every prop before placing it and validate the whole base (skill decimation-props). The first
+   bases had about 40 clashes per FOB that pictures from a distance did not show.
+9. Count tile entities: a prop used as a building material (BlockMilitaryBarrier as HESCO) makes
+   thousands of model renders. Use a plain block of our own.
+10. Locked buildings: the TOC uses Door_Emergency_1_Locked + a military keycard screen; the key
+    drops from military crates, wrecks and care packages, so the room stays reachable.
+11. Ground in Decimation's pack: gravel with about 10 % dirt patches; coarse dirt never.
 
 ## Casebook (never delete a case)
 
@@ -90,3 +106,16 @@ props placement".
 - Round 4: large FOB too empty in the south-east: hangar and conex yards. Real worldgen on seed
   1: two COPs placed, no errors.
 - Evidence: docs/shots/milbase_v0.42/ (shots_index.md).
+
+### Case 2: user review of v0.42.0 (11 Oktober 2026) -> v0.42.1
+- User: "fix 1 and 2 now, replace military barrier ... its really hurt fps ... door type is using
+  non locked type ... dataset issue about props position ... read fully codebase about props
+  placement direction". 28 shots: docs/shots/milbase_v0.42_review/ (shots_index.md).
+- Found: HESCO prop per cell (FPS), unlocked TOC door, keycard on the outside wall flag, raw dirt
+  ASP berm and orange ground patches, about 40 prop clashes per FOB (arms room, TOC desks,
+  DFAC, kitchen, tower spotlight, fighting positions, conexes, vehicles sideways), stair roofs
+  reading as a saw tooth, closed trapdoor shutters as shelves, latrine without a step, guard
+  booth built into the gate tower.
+- Fix: deciworldgen:hesco, Door_Emergency_1_Locked, gravel ground, sandbag ASP, the prop
+  placement study (docs/prop_placement.md, tools/props, skill decimation-props), validateProps,
+  every module re-laid; 0 clashes on all sizes. Shots: docs/shots/milbase_v0.42.1/.

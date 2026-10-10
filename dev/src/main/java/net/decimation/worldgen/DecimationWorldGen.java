@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.42.0",
+     version = "0.42.1",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -113,6 +113,9 @@ public class DecimationWorldGen
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
         }
+        // HESCO cells of our bases: a plain block, not Decimation's per cell prop (docs/military_base.md)
+        net.decimation.worldgen.military.BlockHesco.instance = new net.decimation.worldgen.military.BlockHesco();
+        cpw.mods.fml.common.registry.GameRegistry.registerBlock(net.decimation.worldgen.military.BlockHesco.instance, "hesco");
         cpw.mods.fml.common.registry.GameRegistry.registerItem(
             new net.decimation.fixes.ZombieEgg(infectedVariants), "zombie_egg");
         cpw.mods.fml.common.registry.GameRegistry.registerItem(

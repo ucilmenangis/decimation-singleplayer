@@ -93,6 +93,12 @@ Knowledge index:
   part counts, sizes, octagon / curve / panel recipes, dark flat tones.
 - `docs/military_base.md`: US FOB style military bases (reference research,
   layout of the three sizes, prop mapping, code map, how to test).
+- `docs/prop_placement.md`: READ BEFORE PLACING ANY DECIMATION PROP FROM CODE.
+  How props are drawn (renderer chain, per renderer metadata tables, model
+  offsets), facing rule and exceptions, drawn sizes, placement rules;
+  tools/props/propgeom.py (drawn box per metadata from the code,
+  docs/references/prop_geometry.tsv), tools/props/propclash.py (checks a
+  block dump), skill decimation-props.
 - `docs/building_design.md`: researched floor plans (apartment / office /
   shop), palettes, decay, biome overgrowth, street and car facing rules.
 - `docs/terrain.md`: the "Decimation" world type (biome map, biomes,
@@ -691,6 +697,12 @@ of the last session:
   v0.42.0: US FOB style military bases in military sectors, three sizes
   (docs/military_base.md, worldgen/military, skill decimation-military-base,
   dev test `milbase`); the mil_ test schematics are no longer placed.
+  v0.42.1: user review fixes: HESCO as our own plain block deciworldgen:hesco
+  (Decimation's BlockMilitaryBarrier is a tile entity per cell), locked TOC
+  door + keycard, gravel ground, sandbag ASP, every prop placed from its
+  drawn box (worldgen/military/PropBoxes, Canvas.validateProps: 0 clashes);
+  the milbase test writes run/client/devtest/milbase_<size>.tsv for
+  tools/props/propclash.py.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

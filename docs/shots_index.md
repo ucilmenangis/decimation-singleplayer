@@ -655,6 +655,67 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## milbase_v0.42.1/ (military bases after the user's review, 11 Oktober 2026)
+milbase_<size>_<point>.png, sizes 0 COP, 1 FOB, 2 large FOB, turns 0 (sky test at y 200):
+- toc_inside: desk runs on both walls (radios lying along the desks, monitors), map table with
+  chairs at its sides, flag behind the commander's desk; nothing in a wall.
+- toc_door: the red brown LOCKED door (Door_Emergency_1_Locked) with the green military keycard
+  screen beside it on the wall, no flag there.
+- hut_arms_inside: open weapon cabinets along the left wall, crates and a large case on the
+  right, the aisle free, a cleaning bench at the far end.
+- dfac_inside (from the south end): serving table with camping stoves on top, water pallet, the
+  long middle table with chairs on both sides beyond.
+- aid_inside: stretchers along both sides, medical crates at the far end, aisle free.
+- tower_roof: the searchlight standing on the tower's plank roof.
+- asp: sandbag berm 2 thick (no dirt), crate rows with small cases on the large ones.
+- hut_back: B-hut back end with a window and the junction box power panel; clean low roofs.
+- lsa_street: hut door with its step and light, gravel street with few dirt patches.
+- hut_barracks_inside: bunks with upper slab bunks, footlockers.
+- fighting_position (from above): sandbag U against the HESCO wall, a crate inside.
+- guard_booth: the booth north of the gate tower, window toward the lane.
+- motor_pool: camo net on posts over a jeep and an APC lying north south, conex row, T-wall
+  screen, work light, tyre stack.
+- 2_helipad: crashed helicopter on the 13 x 13 pad, landing lights; 2_hangar: APC inside.
+- aerial_sw / top: the sky test bases (dirt pillars below are left over from an earlier graded
+  run), clean B-hut roofs.
+
+## milbase_v0.42_review/ (the user's review of v0.42.0 in the dev client, 10 Oktober 2026)
+User screenshots, creative mode, the milbase sky test bases; each finding is fixed in v0.42.1
+(docs/prop_placement.md, docs/military_base.md):
+- user_71: aerial of a FOB: HESCO walls, wire rings, helipad, TOC with antenna, sandstone tents,
+  B-huts; many orange dirt patches on the gravel.
+- user_72: TOC inside: wall flag on the north wall behind the commander's desk (monitor, office
+  chairs), radio desk on the right.
+- user_73: TOC inside toward the door: footlocker style crate, open weapon cabinet, the metal
+  door standing open (not a locked door), an NPC.
+- user_74: TOC front outside: the keycard screen drawn ON the outside wall flag next to the metal
+  door (both on one wall spot).
+- user_75: COP TOC side: work light tower, two generators against the sandbag ring, barrels,
+  flag + keycard on the wall, a trash bag; the radio tower drawn black.
+- user_76: a work light tower with a log pole (camo net post) standing through it, by a tent.
+- user_77: ASP: raw dirt berm with grass growing; fuel bladder (black wool) in a sandbag berm,
+  drums, a generator.
+- user_78: inside the ASP: gravel pad, one large crate on a pallet, an ammo case, a red light,
+  dirt walls with grass (sparse).
+- user_79: a sandbag fighting position / pit with crates clipping into the sandbags, dirt patch.
+- user_80, user_82: DFAC: wood tables across the tent with chairs at the table ENDS, partly inside
+  the tables; a barrel under a table.
+- user_81: DFAC serving end: pink camping stoves under the grey metal tables, water pallet.
+- user_83: looking into a conex: crates in a 1 wide hold, a wood crate clipping the walls.
+- user_84 to user_86: guard tower: the 2.5 x 3.2 searchlight crammed on the 2 x 2 deck into the
+  sandbag parapet, an ammo crate overlapping it, ladder, plank deck, roof on posts.
+- user_87: latrine front: door one block up with no step, dirt in front.
+- user_88: B-hut back end: blank wall, sandbag blast wall pillar beside it.
+- user_89: fighting position: ammo case wider than the 1 wide U, drawn into the bags.
+- user_90, user_91: B-hut sides and roof: closed trapdoor "shutters" lying flat like shelves
+  under the windows; the stair roof reads as a saw tooth from above.
+- user_92, user_93, user_96, user_97: barracks: beds with spruce top slab upper bunks on the
+  walls, footlockers at the bed ends.
+- user_94, user_95: arms room: weapon cabinets on one wall, crates on the other, a metal table in
+  the aisle, cases and crates drawn into each other.
+- user_98, user_99: sunset aerials: TOC roof sandbag piles read as a maze / battlements, B-hut
+  saw tooth roofs, flag pole, radio tower.
+
 ## milbase_v0.42/ (military bases, 10 Oktober 2026)
 - milbase_<size>_<point>.png: dev test shots, size 0 COP, 1 FOB, 2 large FOB; points aerial_sw /
   aerial_ne / top (sky test: the bases float at y 200, the dirt pillars under them are left

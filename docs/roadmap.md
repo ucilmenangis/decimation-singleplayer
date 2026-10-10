@@ -22,6 +22,8 @@ or `[not decided]`.
    impact; height can differ between two new worlds of one seed near the
    edge of the generated area). bug.md "Building base height depends on
    chunk generation order".
+3. **Military jeep / tank wrecks break with one punch** (bug.md "Open",
+   hardness 0 in Decimation, fix later).
 4. **Arrows still pick up empty vehicles** (punching was fixed in v0.8.1).
    bug.md "Military jeep/tank/helicopter destroyed in one hit".
 
@@ -42,6 +44,19 @@ or `[not decided]`.
 1. Traders that spawn on their own and walk.
    All in new_feature.md ("New hostile NPCs and stronger bandits", "More
    zombie variants...", "3 new mobs", "More clothing variety").
+2. **Gunshot noise** (user, 10 Oktober 2026, "later but not now"): a shot
+   from a gun without a suppressor draws attention; zombies walk toward
+   where the shot came from, and NPCs react the same way. Suppressed shots
+   stay quiet.
+3. **Sniper NPC nerf** (user, 10 Oktober 2026, "fix later"): sniper damage
+   about 20 % lower, sniper range 70 blocks instead of the current one
+   (config sniperRange, now 96 [not verified against the user's "90"]);
+   the Barrett NPC tiers (juggernaut_sniper, elite_sniper with the Barrett)
+   about 40 % lower and their health cut so one 5.56 magazine kills them.
+4. **NPC loot system** (user, 10 Oktober 2026, new feature): what NPCs drop
+   when killed, how it works, the rewards per tier; design first (ask).
+5. **Smart NPCs** (user, 10 Oktober 2026, "later, idk yet like what").
+   Ideas to be collected with the user before any design.
 
 ## Zones, factions and world (user list 9 Oktober 2026, "later", no order yet)
 
@@ -54,7 +69,9 @@ Details and starting points: new_feature.md "Zones, factions and world".
 5. **Survivor civilians** carrying a minimal weapon.
 6. **Radiated areas.**
 7. **Advanced military base.** IN PROGRESS: v0.42.0 US FOB style bases of our own in three
-   sizes (docs/military_base.md, skill decimation-military-base), waiting for the user's review.
+   sizes (docs/military_base.md, skill decimation-military-base); v0.42.1 after the user's
+   review (prop placement study docs/prop_placement.md, HESCO block, locked TOC door), waiting
+   for the next review.
 8. **Advanced bandits.**
 
 ## Items and weapons

@@ -159,7 +159,12 @@ public final class MilitaryBasePlan implements Graded
                 m = Rotation.rotateMeta(64, m, turns);       // Decimation doors use vanilla door metadata
                 break;
             case Canvas.PROP:
-                m = 2 + ((m - 2 + turns) & 3);               // front E 2 -> S 3 -> W 4 -> N 5 is clockwise
+                // a quarter turn clockwise per turn; per prop, since some renderers have their
+                // own metadata tables (military wrecks: 2 -> 5 -> 3 -> 4), docs/prop_placement.md
+                for (int t = 0; t < turns; t++)
+                {
+                    m = PropBoxes.turn(b, m);
+                }
                 break;
             default:
                 break;
