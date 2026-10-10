@@ -43,6 +43,8 @@ WBDG / Air Force entry control facility guidance; Smithsonian "HESCO barriers, n
 | hedgehog, sawhorse | deci:BlockHedgehog, deci:BlockHazardbarrier |
 | plywood (B-hut) | birch planks walls, spruce frame / stairs / slabs, trapdoor shutters |
 | tent (TEMPER) | smooth sandstone vault (hardened clay read orange), birch plank floor |
+| footlocker | deci:BlockStorageCrate or (half) a vanilla chest: the chest has Decimation's loot, the storage crate is a player box (empty) |
+| shelves, tool locker | deci:BlockMetalShelf / _Empty (multiblock, drawn 2 wide, 2 tall), deci:BlockElectricBoxBin |
 | locked door | deci:Door_Emergency_1_Locked (the only locked door): opened by a military keycard on deci:BlockKeycardScreenMilitary within 3 blocks, a lockpick, or creative; military crates, wrecks and care packages can drop the military keycard |
 | concrete | stone / deci:BlockStone_* |
 | loot | deci:BlockMilitaryCrate, BlockAmmoCrate(Large), BlockWeaponCabinet, BlockMedicalCrate, BlockWoodCrate, BlockStorageCrate (footlocker), BlockCarePackage |
@@ -121,6 +123,13 @@ the DFAC; care packages at the ASP / helipad.
 
 ## 5. Status
 
+v0.42.2 (11 Oktober 2026), second review (docs/shots/milbase_v0.42.1_review/): TOC door wall with
+two weapon cabinets facing the room, police and military crates and the large ammo case; half of
+the barracks footlockers are vanilla chests (Decimation's chest loot; its storage crate is
+empty); the DFAC counter has the small field radio instead of stoves; the motor pool has a parts
+yard along its south edge (shelves, tyre stacks, drums, a covered pallet, open crates) and a
+workshop (bench with a toolbox, tool locker, parts shelf). 0 clashes, checker 0 findings.
+
 v0.42.1 (11 Oktober 2026), after the user's review (28 shots, docs/shots/milbase_v0.42_review/):
 HESCO as our own plain block (tile entity props per base 1020 / 2007 / 2902 -> 129 / 381 / 571),
 locked TOC door, ground mostly gravel, sandbag ASP, every prop placed from its drawn box
@@ -147,11 +156,18 @@ Traps met (the skill decimation-military-base has them as lessons):
 ## 6. How to test
 
 - `python3 tools/devtest.py --live milbase [sizes=0,1,2] [turns=0..3] [seed=N] [points=a,b]`:
-  builds the sizes side by side in the sky at -4000,200,-4000, one shot per camera point
+  builds the sizes side by side in the sky at -20000,230,-20000 (since 11 Oktober 2026; the old
+  sites at 3000,110,3000 and -4000,200,-4000 cut into cities in the user's dev world and were
+  cleared with `python3 tools/perfcheck.py clearblocks WORLD X0 Z0 X1 Z1`, game closed, region
+  backup in dev/run/client/world_backups/), one shot per camera point
   (dev/run/client/screenshots/milbase_<size>_<point>), refused modules in the results.
 - `points=none` only builds and reports what did not fit and the prop clashes (fast).
 - Every run writes dev/run/client/devtest/milbase_<size>.tsv (all blocks); `python3
   tools/props/propclash.py dev/run/client/devtest/milbase_1.tsv` must report findings 0.
 - `turns=1` / `turns=3` too: rotated bases use the per prop quarter turn table.
+- Test trap: rebuilding a base IN PLACE over its previous copy makes the multiblock props
+  (T-walls, street barriers, shelves) vanish on every second run (writing over the old parts
+  breaks the new masters); real worldgen writes fresh chunks. Prop counts in the dumps then
+  alternate (COP 128 / 68); judge multiblocks on a first build.
 - Real worldgen: `python3 tools/servertest.py 1 type=decimation pregen=-64,448,9` places the
   two seed 1 COPs; the log lines "military base (...) ... at x,y,z".

@@ -373,6 +373,88 @@ public final class Deci
         return null;
     }
 
+    /**
+     * A human: a player, an armed human NPC (npcKind), a civilian (HumanEntity deci.af.d,
+     * HumanEntity2 deci.ah.d) or a trader (TraderEntity deci.ai.a and its kinds).
+     */
+    public static boolean isHuman(net.minecraft.entity.Entity e)
+    {
+        if (isInfectedKind(e))
+        {
+            return false;            // InfectedEntity extends Decimation's human entity class
+        }
+        return e instanceof net.minecraft.entity.player.EntityPlayer || npcKind(e) != null
+            || e instanceof deci.af.d || e instanceof deci.ah.d || e instanceof deci.ai.a;
+    }
+
+    /** Any infected: InfectedEntity deci.ag.d and its special kinds, and the infected dog deci.ag.g. */
+    public static boolean isInfectedKind(net.minecraft.entity.Entity e)
+    {
+        return e instanceof deci.ag.d || e instanceof deci.ag.g;
+    }
+
+    // ---- main menu / HUD state (client): ClientState deci.b.i, BackendProfileCache deci.aO.b,
+    // DeciConstants deci.Q.c
+
+    /** The session check result (ClientState.bv): false = "Play offline" and the invalid session banner. */
+    public static void setSessionValid(boolean valid)
+    {
+        deci.b.i.bv = valid;
+    }
+
+    /** The local player's UUID as the menu looks it up, or null without a session. */
+    public static String sessionUuid()
+    {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
+        if (mc == null || mc.getSession() == null || mc.getSession().func_148256_e() == null
+            || mc.getSession().func_148256_e().getId() == null)
+        {
+            return null;
+        }
+        return mc.getSession().func_148256_e().getId().toString();
+    }
+
+    /** The profile the menu and HUD show (BackendProfileCache.profile, filled by the dead backend before). */
+    public static void setLocalProfile(String uuid, long humanKills, long deaths, long infectedKills)
+    {
+        net.decimation.mod.utilities.net.client_network.api.objects.ObjectPlayerProfile p = deci.aO.b.aBV;
+        if (p == null || !uuid.equals(p.playerUUID))
+        {
+            p = new net.decimation.mod.utilities.net.client_network.api.objects.ObjectPlayerProfile(uuid);
+            deci.aO.b.aBV = p;
+        }
+        p.playerKills = humanKills;
+        p.playerDeaths = deaths;
+        p.zombieKills = infectedKills;
+    }
+
+    /** {session valid, profile kills, deaths, infected kills, total humans, total infected} (dev test). */
+    public static long[] menuState()
+    {
+        net.decimation.mod.utilities.net.client_network.api.objects.ObjectPlayerProfile p = deci.aO.b.aBV;
+        return new long[] {deci.b.i.bv ? 1 : 0, p == null ? -1 : p.playerKills, p == null ? -1 : p.playerDeaths,
+                           p == null ? -1 : p.zombieKills, deci.Q.c.Xj, deci.Q.c.Xk};
+    }
+
+    /** The in game HUD's stats list on (ClientState.cf false; Decimation's HUD toggle). */
+    public static void showHudStats()
+    {
+        deci.b.i.cf = false;
+    }
+
+    /** Decimation's home menu screen (GuiMenuHome deci.i.e), e.g. for a dev test picture. */
+    public static net.minecraft.client.gui.GuiScreen homeMenu()
+    {
+        return new deci.i.e(deci.a.b.a());
+    }
+
+    /** The totals line at the bottom of the main menu (DeciConstants.globalHumanDeaths / globalZombieDeaths). */
+    public static void setStatTotals(long humans, long infected)
+    {
+        deci.Q.c.Xj = humans;
+        deci.Q.c.Xk = infected;
+    }
+
     /** A new SoldierEntity (deci.ag.l). */
     public static net.minecraft.entity.EntityLiving newSoldier(net.minecraft.world.World world)
     {

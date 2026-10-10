@@ -40,6 +40,8 @@ public class DevAutoTest
 {
     public static final String PROPERTY = "deciworldgen.autotest";
     public static final String SAVE = "deciworldgen_autotest";
+    /** A test mode showing a screen on purpose (stats: the home menu) sets this while it does. */
+    public static volatile boolean keepScreen;
     /** Infected spawned per zone test batch (ServerChecks). */
     public static final int SPAWNS = 40;
 
@@ -121,6 +123,7 @@ public class DevAutoTest
         if (name.equals("gunperf")) return new net.decimation.worldgen.devtest.GunPerfTest();
         if (name.equals("firerate")) return new net.decimation.worldgen.devtest.FireRateTest();
         if (name.equals("milbase")) return new net.decimation.worldgen.devtest.MilBaseTest();
+        if (name.equals("stats")) return new net.decimation.worldgen.devtest.StatsTest();
         if (name.equals("census")) return new net.decimation.worldgen.devtest.CensusTest();
         if (name.equals("cityview")) return new net.decimation.worldgen.devtest.CityViewTest();
         return null;
@@ -138,7 +141,7 @@ public class DevAutoTest
         // an unfocused window opens the pause menu, and a paused
         // singleplayer server stops ticking
         mc.gameSettings.pauseOnLostFocus = false;
-        if (launched && mc.theWorld != null && mc.currentScreen != null)
+        if (launched && mc.theWorld != null && mc.currentScreen != null && !keepScreen)
         {
             mc.displayGuiScreen(null);
         }

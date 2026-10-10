@@ -1,4 +1,5 @@
-# gun sight dy: move that sight down by dy model units on that gun (tools/guns/sightfit.py)
+# gun sight dy [dx]: move that sight down by dy and forward by dx model units on that gun
+# (tools/guns/sightfit.py)
 m60 reddot 1.6
 m60 2x 1.6
 m60 4x 1.6
@@ -13,6 +14,13 @@ acr 8x 0.58
 acr dragunovScope 0.58
 acr eotech558 0.58
 acr ta11acog 0.58
+asval reddot 0.0 -4.0
+asval 2x 0.0 -4.0
+asval 4x 0.0 -4.0
+asval 8x 0.0 -4.0
+asval dragunovScope 0.0 -4.0
+asval eotech558 0.0 -4.0
+asval ta11acog 0.0 -4.0
 aug3 reddot 0.125
 aug3 2x 0.125
 aug3 4x 0.125

@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.42.1",
+     version = "0.42.2",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -112,6 +112,17 @@ public class DecimationWorldGen
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
+        }
+        // local kill / death counters for the menu and HUD; the menu's session check calls a
+        // Mojang service that no longer answers, so the menu said "Play offline" with an invalid
+        // session banner for every account: singleplayer does not need it (bug.md)
+        net.decimation.fixes.LocalStats stats = new net.decimation.fixes.LocalStats(event.getModConfigurationDirectory());
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(stats);
+        if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
+        {
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(stats);
+            net.decimation.fixes.Deci.setSessionValid(true);
+            net.decimation.fixes.LocalStats.show();
         }
         // HESCO cells of our bases: a plain block, not Decimation's per cell prop (docs/military_base.md)
         net.decimation.worldgen.military.BlockHesco.instance = new net.decimation.worldgen.military.BlockHesco();

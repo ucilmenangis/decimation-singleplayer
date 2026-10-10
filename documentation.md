@@ -17,8 +17,8 @@ game layer on top of vanilla Forge 1.7.10:
   custom TCP protocol (Kryonet) for stats tracking (kills, deaths, supporter status,
   clan bounties). That service is dead - the mod tries to reconnect forever and just
   fails silently now. Mostly harmless, noisy in logs; since v0.28.8 (PatchBackend) the
-  launch no longer waits 5 s for it. Still open (bug.md): the main menu shows an offline
-  banner and "Play offline", and the kill / death counters read the dead service (0).
+  launch no longer waits 5 s for it. Since v0.42.2 the menu no longer says "Play offline" with
+  an invalid session banner, and the kill / death counters show local numbers (below).
 - **Vehicles**: rideable car/vehicle entities (`deci.ad.c`) with horn, headlights,
   passenger seats. No lootable trunk feature exists in this build - vehicles are
   ride-only.
@@ -172,12 +172,22 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
 - `deciworldgen_scope.cfg`: `pictureInPicture` (false = the cheap zoom scope; true =
   Decimation's own, about half the fps), `sensitivity` (mouse slowdown while zoomed),
   `overlayFrom` (scopes from this magnification show the black sniper overlay, 4).
+- `deciworldgen_stats.cfg`: the local kill / death counters per player UUID (delete a player's
+  block to reset them).
 - `deciworldgen_props.cfg`: prop render distance by size: small 24, medium 32, large 48
   blocks (64 = vanilla; city views lost about 18 % of the frame to props before).
 - `deciworldgen_npc.cfg`, `deciworldgen_mobs.cfg`, `deciworldgen_zombies.cfg`: see the
   balance list above.
 - `decimation_worldgen/`: our world generation data (city pack, schematics, furniture
   sets, palettes); docs/worldgen.md and docs/city_engine.md.
+
+## Stats on the HUD and main menu (v0.42.2)
+
+Human Kills (players and every human NPC: bandits, soldiers, Soviets, hazmat soldiers,
+civilians, traders), Zombie Kills (every infected) and Deaths, counted on this computer per
+player across all singleplayer worlds (`config/deciworldgen_stats.cfg`), shown in the in game
+HUD list, the main menu profile box (with K/D) and the totals line at the bottom (Total Human
+Kills, Total Infected Kills). Days Survived and Humanity are the world's own values as before.
 
 ## Military bases (v0.42, our world generation)
 

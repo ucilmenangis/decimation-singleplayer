@@ -67,6 +67,9 @@ props placement".
 - Shots saved to docs/shots/<topic>_v<version>/ and described in docs/shots_index.md.
 
 ## Lessons (read before starting)
+0. A test site must stay out of the user's play area: the sky test now builds at x -20000,
+   z -20000, y 230; the earlier sites (3000 / 110 and -4000 / 200) cut into cities and were
+   cleared from the dev world with `tools/perfcheck.py clearblocks` (game closed, region backup).
 1. Research real references first and write them down with sources; the layout follows real
    doctrine (perimeter rings, ECP, TOC in the interior, living area, logistics, services).
 2. Modules overlap unless something stops them: the occupancy grid with a road class and a module
@@ -120,3 +123,15 @@ props placement".
 - Fix: deciworldgen:hesco, Door_Emergency_1_Locked, gravel ground, sandbag ASP, the prop
   placement study (docs/prop_placement.md, tools/props, skill decimation-props), validateProps,
   every module re-laid; 0 clashes on all sizes. Shots: docs/shots/milbase_v0.42.1/.
+
+### Case 3: second review (v0.42.1 -> v0.42.2, 11 Oktober 2026)
+- User shots docs/shots/milbase_v0.42.1_review/user_100..106: TOC door side held only an ammo
+  case and a cabinet turned toward the door; barracks footlockers should partly be real chests
+  (loot); the DFAC counter stoves should be the 1 block radio; the motor pool "boring" (the user
+  placed shelves to show what they want); our test structures cut into a city in their world.
+- Fix: door wall loot (cabinets facing the room, police / military crates, the large case with a
+  small one on top), footlocker() half vanilla chests, radioSmall on the counter, parts yard +
+  workshop in the motor pool (shelves drawn 2 wide step 3), test site moved and old sites cleared.
+- Test traps found: rebuilding a base in place drops its multiblocks every second run; the first
+  build into brand new sky chunks can leave a tower knocked down (rebuild was clean) [inferred:
+  generation of the chunks being written].

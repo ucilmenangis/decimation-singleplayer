@@ -21,7 +21,10 @@ public class MilBaseTest extends DevTestMode
 {
     public String name() { return "milbase"; }
 
-    private static final int Y = 200, X0 = -4000, Z0 = -4000, STEP = 170;
+    // far from where the user plays and above the tallest city buildings (about y 206): the old
+    // sites (3000, 3000 at y 110; -4000, -4000 at y 200) cut into cities and were cleared from the
+    // dev world on 11 Oktober 2026 (tools/perfcheck.py clearblocks)
+    private static final int Y = 230, X0 = -20000, Z0 = -20000, STEP = 170;
     private static final int BUILD = 10, SETTLE = 40, SHOT = 70;
 
     private final String[] sizes = System.getProperty("deciworldgen.autotest.sizes", "0,1,2").split(",");

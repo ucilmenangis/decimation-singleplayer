@@ -892,6 +892,7 @@ public final class MilitaryBase
         poi("toc_inside", dx + 0.5, 2.6, z1 - 1.5, 180, 12);
         poi("toc_outside", dx + 0.5, 2.6, z1 + 7.5, 180, 4);
         poi("toc_door", dx + 0.5, 2.6, z1 + 3.5, 180, 12);
+        poi("toc_door_wall", dx + 0.5, 2.6, z0 + 2.5, 0, 15);
         // locked door (south) and the military keycard screen beside it on the outer wall: the
         // reader opens a locked door within 3 blocks (Decimation's KeycardReaderBlock)
         door(dx, 1, z1, b.lockedDoor, S);
@@ -926,9 +927,32 @@ public final class MilitaryBase
         c.prop(dx - 1, 1, z0 + 1, b.metalTable, S);
         c.prop(dx - 1, 2, z0 + 1, b.monitor, S);
         c.prop(dx - 1, 1, z0 + 2, b.officeChair, N);
-        // by the door: weapon cabinet, ammo
-        c.prop(dx - 2, 1, z1 - 1, b.weaponCabinet, E);
-        c.prop(dx + 2, 1, z1 - 1, b.ammoCrateLarge, S);   // drawn 1.9 long: along the door wall
+        // the door wall: weapon cabinets with their backs to the wall (front into the room), loot
+        // crates both sides of the door (user review 11 Oktober 2026: "just ammo box and cabinet",
+        // the cabinet turned toward the door). The cell in front of the door stays free.
+        c.prop(dx - 1, 1, z1 - 1, b.policeCrate, N);
+        c.prop(dx - 2, 1, z1 - 1, b.weaponCabinet, N);
+        if (dx - 3 > x0)
+        {
+            c.prop(dx - 3, 1, z1 - 1, b.weaponCabinet, N);
+        }
+        if (dx - 4 > x0)
+        {
+            c.prop(dx - 4, 1, z1 - 1, b.policeCrate, N);
+            c.prop(dx - 4, 2, z1 - 1, b.militaryCrate, N);
+        }
+        c.prop(dx + 1, 1, z1 - 1, b.militaryCrate, N);
+        c.prop(dx + 1, 2, z1 - 1, b.militaryCrate, N);
+        if (dx + 4 < x1)
+        {
+            // drawn 1.9 long along the wall (x dx + 2.6 .. dx + 4.4), a small case on top
+            c.prop(dx + 3, 1, z1 - 1, b.ammoCrateLarge, S);
+            c.prop(dx + 3, 2, z1 - 1, b.ammoCrate, S);
+        }
+        else
+        {
+            c.prop(dx + 2, 1, z1 - 1, b.policeCrate, N);
+        }
         // ceiling lights
         for (int z = z0 + 2; z <= z1 - 2; z += 3)
         {
@@ -1151,10 +1175,12 @@ public final class MilitaryBase
                     int lz = z + 2;
                     if (lz <= in1 && lz != (doorSouth ? in1 : in0))
                     {
-                        c.prop(x0 + 1, 2, lz, b.storageCrate, E);
+                        // footlockers: half of them vanilla chests (Decimation's loot table has the
+                        // plain chest; its own storage crate is empty), user review 11 Oktober 2026
+                        footlocker(x0 + 1, 2, lz, true);
                         if (r.nextFloat() < 0.6f)
                         {
-                            c.prop(x1 - 1, 2, lz, b.storageCrate, W);
+                            footlocker(x1 - 1, 2, lz, false);
                         }
                     }
                 }
@@ -1162,6 +1188,19 @@ public final class MilitaryBase
                 break;
         }
         return true;
+    }
+
+    /** A footlocker against a long wall: Decimation's storage crate, or (half) a vanilla chest with loot. */
+    private void footlocker(int x, int y, int z, boolean westWall)
+    {
+        if (r.nextBoolean())
+        {
+            c.set(x, y, z, Blocks.chest, westWall ? 5 : 4);      // vanilla chest meta: 5 faces east, 4 west
+        }
+        else
+        {
+            c.prop(x, y, z, b.storageCrate, westWall ? E : W);
+        }
     }
 
     /** A bunk: bed (foot toward the door end) with an upper bunk slab and a mattress carpet. */
@@ -1474,10 +1513,41 @@ public final class MilitaryBase
             {
                 c.fill(p[0], 1, p[1], p[0], 3, p[1], Blocks.fence);
             }
+            // workshop: a work bench with a toolbox, a tool locker (2 high, under the roof at 4),
+            // a parts shelf on the open side, tyres
             c.prop(sx + 2, 1, sz + 1, b.metalTable, S);
+            c.prop(sx + 2, 2, sz + 1, b.storageCrate, S);
+            c.prop(sx + 4, 1, sz + 1, b.toolLocker, S);
             c.prop(sx + 4, 1, sz + 3, b.tireStack, S);
             c.prop(sx + 1, 1, sz + 3, b.tire, S);
-            c.prop(sx + 2, 1, sz + 3, b.storageCrate, S);
+            c.prop(sx + 2, 1, sz + 3, b.militaryCrate, S);
+            c.prop(sx + 2, 1, sz + 4, b.shelf, W);
+        }
+        // parts yard along the south edge (user review 11 Oktober 2026: "more props so it doesnt
+        // boring"): shelving units with boxes (drawn 2 wide along x at meta 4), tyre stacks,
+        // drums, a covered pallet, open crates, in groups of 3 cells
+        int k = 0;
+        for (int px = x0 + 2; px + 2 <= x1 - 6; px += 3, k++)
+        {
+            switch (k % 4)
+            {
+                case 0:
+                    c.prop(px + 1, 1, z1, k % 8 == 0 ? b.shelf : b.shelfEmpty, W);
+                    break;
+                case 1:
+                    c.prop(px, 1, z1, b.tireStack, S);
+                    c.prop(px + 1, 1, z1, b.tire, S);   // a tyre is drawn 0.33 high: none stacked on it
+                    break;
+                case 2:
+                    c.prop(px, 1, z1, b.barrel, S);
+                    c.prop(px + 1, 1, z1, b.barrel, S);
+                    c.prop(px, 1, z1 - 1, b.barrel, S);
+                    break;
+                default:
+                    c.prop(px, 1, z1, b.waterPalletTarp, S);
+                    c.prop(px + 1, 1, z1, b.woodCrateOpen, E);
+                    break;
+            }
         }
         c.prop(x0, 1, z1, b.lightTower, S);                  // (a net post stands at x0 + 1, z0)
         c.prop(x1 - 4, 1, z1, b.tireStack, S);
@@ -1613,8 +1683,9 @@ public final class MilitaryBase
                 // serving line at the south end: a metal table with stoves on it, food and
                 // water on the other side
                 c.prop(x0 + 1, 1, z1 - 3, b.metalTable, E);
-                c.prop(x0 + 1, 2, z1 - 3, b.cooking, E);
-                c.prop(x0 + 1, 2, z1 - 2, b.cooking, E);
+                // the small (1 block) field radio on the counter, not the stoves (user review
+                // 11 Oktober 2026; not the big 2 box radio either)
+                c.prop(x0 + 1, 2, z1 - 3, b.radioSmall, E);
                 c.prop(x0 + 1, 1, z1 - 1, b.militaryCrate, E);
                 c.prop(x1 - 1, 1, z1 - 3, b.waterPallet, S);
                 c.prop(x1 - 1, 1, z1 - 1, b.militaryCrate, W);
@@ -1767,7 +1838,7 @@ public final class MilitaryBase
             redLight, light, monitor;
         Block waterPallet, waterPalletTarp, barrel, tire, tireStack, cardboard, trashBag, trashBag2, trashcan,
             canFire, bodyBag, stretcher, cooking, chessTable;
-        Block metalTable, woodTable, chair, officeChair;
+        Block metalTable, woodTable, chair, officeChair, shelf, shelfEmpty, policeCrate, toolLocker;
         Block jeep, apc, helicopter;
         Block metalGreen, metalRust, metalPlate, concrete, concreteFloor, metalDoor, lockedDoor, powerBox;
 
@@ -1828,6 +1899,10 @@ public final class MilitaryBase
             cooking = d("BlockCookingStation", null);
             chessTable = d("BlockChesstable", null);
             metalTable = d("BlockMetalTable", null);
+            shelf = d("BlockMetalShelf", null);             // multiblock 1 x 2 tall, drawn 2 wide
+            shelfEmpty = d("BlockMetalShelf_Empty", null);
+            policeCrate = d("BlockPoliceCrate", Blocks.chest);
+            toolLocker = d("BlockElectricBoxBin", null);     // tall grey cabinet: a tool locker
             woodTable = d("BlockWoodTable", null);
             chair = d("BlockChair", null);
             officeChair = d("BlockOfficeChair", null);

@@ -24,6 +24,8 @@ public final class SightPlacement
 {
     /** "gunRegistryName sightName" -> dy (model units, down). */
     private static final java.util.Map<String, Float> OFFSETS = new java.util.HashMap<String, Float>();
+    /** "gunRegistryName sightName" -> dx (model units, forward; the AS Val's sights sit 4 back). */
+    private static final java.util.Map<String, Float> SHIFTS = new java.util.HashMap<String, Float>();
 
     private SightPlacement()
     {
@@ -50,11 +52,21 @@ public final class SightPlacement
         {
             return;
         }
-        Float dy = OFFSETS.get(GameRegistry.findUniqueIdentifierFor(stack.getItem()).name + " " + Deci.attachmentName(sight));
+        String key = GameRegistry.findUniqueIdentifierFor(stack.getItem()).name + " " + Deci.attachmentName(sight);
+        Float dy = OFFSETS.get(key), dx = SHIFTS.get(key);
         if (dy != null)
         {
-            org.lwjgl.opengl.GL11.glTranslatef(0, -dy * 0.0625f, 0);
+            // a sight moved back (dx < 0) comes nearer the eye while aiming: the gun goes forward by
+            // as much, so the sight picture is the one every other gun has
+            org.lwjgl.opengl.GL11.glTranslatef(dx == null ? 0 : -dx * 0.0625f, -dy * 0.0625f, 0);
         }
+    }
+
+    /** dx this sight is moved forward on this gun (0 when it sits where Decimation draws it). */
+    static float shiftFor(String gun, String sight)
+    {
+        Float dx = SHIFTS.get(gun + " " + sight);
+        return dx == null ? 0f : dx;
     }
 
     /** dy this sight is moved down on this gun (0 when it sits where Decimation draws it). */
@@ -79,7 +91,7 @@ public final class SightPlacement
             for (String line; (line = r.readLine()) != null; )
             {
                 String[] f = line.trim().split("\\s+");
-                if (f.length != 3 || line.startsWith("#"))
+                if ((f.length != 3 && f.length != 4) || line.startsWith("#"))
                 {
                     continue;
                 }
@@ -88,9 +100,15 @@ public final class SightPlacement
                 {
                     gun = GameRegistry.findItem("deciworldgen", f[0]);
                 }
-                if (gun != null && Deci.offsetAttachment(gun, f[1], 0, Float.parseFloat(f[2]), 0))
+                // optional 4th column dx: forward (+) / back (-), e.g. the AS Val's sights onto its receiver
+                float dx = f.length == 4 ? Float.parseFloat(f[3]) : 0f;
+                if (gun != null && Deci.offsetAttachment(gun, f[1], dx, Float.parseFloat(f[2]), 0))
                 {
                     OFFSETS.put(f[0] + " " + f[1], Float.parseFloat(f[2]));
+                    if (dx != 0f)
+                    {
+                        SHIFTS.put(f[0] + " " + f[1], dx);
+                    }
                     done++;
                 }
                 else

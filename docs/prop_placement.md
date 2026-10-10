@@ -89,6 +89,10 @@ Exceptions (from the model geometry and the gallery):
 | BlockWreckageMilitary3 (helicopter) | 9.4 x 14, 3.8 | with the rotor |
 | BlockHedgehog | 1.7 x 2.0, 1.4 | sinks 1 block into the ground |
 | BlockFlagPollUAHD | pole + 1.7 cloth, 8 tall | cloth to the east at 3 |
+| BlockMetalShelf (+_Empty) | 2 x 1, 2.05 | long along x at 2 / 4, along z at 3 / 5; multiblock |
+| BlockPoliceCrate | 1 x 1, 1.15 | one cell |
+| BlockMilitaryRadioSmall | 0.9 x 0.8, 0.6 | the 1 block field radio |
+| BlockElectricBoxBin | 1 x 1, 2.0 | tall grey cabinet (tool locker) |
 
 ## 5. Rules (each one from a user review case)
 

@@ -95,12 +95,9 @@ docs/gun_model_spec.md); every user review goes into its lessons and casebook.
 ## UI
 
 1. **Main menu GUI fix** (user, 10 Oktober 2026: "later in future, we fix
-   the GUI on main menu, not our priority"). Known so far (11 Oktober 2026):
-   with a real account the menu shows an offline banner and "Play offline"
-   instead of "Play" on green (bug.md "Main menu shows Play offline").
-2. **Human Kills counter** (user, 11 Oktober 2026, later): "Player Kills"
-   becomes "Human Kills" (NPC humans and players), in game and at the bottom
-   of the main menu, from local data (bug.md "Kill and death counters").
+   the GUI on main menu, not our priority"). The offline banner / "Play
+   offline" and the Human Kills counters are DONE (v0.42.2, bug.md); anything
+   else on the menu: ask the user.
 
 ## Code and tools
 
@@ -189,6 +186,9 @@ docs/gun_model_spec.md); every user review goes into its lessons and casebook.
   rail.
 - v0.41.0 / 0.41.1 EOTech 558 and ACOG TA11 of our own, reticles in the glass swaying with the
   gun, Mk18 IMI TS stock, HK416 front sight folds away; accepted.
+- v0.42.2 AS Val sights over the receiver, local Human Kills / Infected Kills / Deaths on the
+  HUD and menu, green Play without the session banner, base review fixes (TOC door wall loot,
+  barracks chests, DFAC radio, motor pool parts yard), test sites cleared from the dev world.
 - v0.42.0 / 0.42.1 US FOB style military bases in three sizes (docs/military_base.md), own
   HESCO block, locked TOC door, the prop placement study (docs/prop_placement.md); waiting
   for the user's review.

@@ -655,6 +655,33 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## milbase_v0.42.1_review/ (the user's second review, 11 Oktober 2026)
+- user_100: AS Val with an ACOG at the hip: the sight sits forward on the handguard, not over the
+  receiver (fixed: sights 4 back, docs/gun_style_guide.md section 14).
+- user_101: TOC inside toward the locked door: only a large ammo case and a weapon cabinet whose
+  doors face the door.
+- user_102: barracks: footlockers (storage crates) at the bed ends; asked for real chests (loot).
+- user_103: DFAC serving table with two pink camping stoves on it (asked: the 1 block radio).
+- user_104, user_105: motor pool at night: the user placed metal shelves with boxes and a tyre
+  stack by a jeep and an APC to show "more props"; T-walls, conex, camo net post.
+- user_106: Decimation main menu in the dev client: "Warning! Your session is invalid!" banner,
+  grey "Play Offline", profile box Player Kills / Deaths / Zombie Kills 0, Total Player / Infected
+  Casualties 0.
+
+## milbase_v0.42.2/ (after the second review, 11 Oktober 2026)
+- stats_hud: the in game HUD list "Human Kills / Zombie Kills / Deaths / Days Survived /
+  Humanity / Bottlecaps" with local numbers (dev test stats).
+- stats_menu: Decimation's home menu opened in the world: no session banner, profile box "Human
+  Kills: 4 (K/D: 4), Deaths: 0, Zombie Kills: 4", bottom "Total Human Kills: 4 / Total Infected
+  Kills: 4" (test kills, put back after the test); the button reads Resume Game in a world.
+- gunview_asval_att*, gunview_ak74_att*: AS Val with the ACOG on the receiver at the hip, aim
+  picture the same as the AK-74's (reticle centred); with the red dot too.
+- milbase_<size>_toc_door_wall: the door wall seen from the map table: crates, cabinets, the
+  locked door. milbase_<size>_hut_barracks_inside: a vanilla chest among the footlockers.
+  milbase_<size>_dfac_inside: the small radio on the counter. milbase_<size>_motor_pool: the parts
+  yard (shelves, tyre stacks, drums, covered pallet, open crate) along the south edge.
+- milbase_<size>_aerial_sw: the new test site at -20000, y 230: no dirt pillars, nothing around.
+
 ## milbase_v0.42.1/ (military bases after the user's review, 11 Oktober 2026)
 milbase_<size>_<point>.png, sizes 0 COP, 1 FOB, 2 large FOB, turns 0 (sky test at y 200):
 - toc_inside: desk runs on both walls (radios lying along the desks, monitors), map table with

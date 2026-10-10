@@ -231,8 +231,8 @@ def sight_offsets():
         if os.path.exists(path) and os.environ.get("STUDY_NO_SIGHT_OFFSETS") is None:
             for line in open(path):
                 f = line.split()
-                if len(f) == 3 and not line.startswith("#"):
-                    _SIGHT_OFFSETS[(f[0], f[1])] = float(f[2])
+                if len(f) in (3, 4) and not line.startswith("#"):
+                    _SIGHT_OFFSETS[(f[0], f[1])] = (float(f[2]), float(f[3]) if len(f) == 4 else 0.0)
     return _SIGHT_OFFSETS
 
 
@@ -253,7 +253,8 @@ def with_attachments(gun, names):
         a = Gun(n, slot, text, img, False)
         ox, oy, oz = attach_offset(gun, n)
         fix = ATTACH_FIX.get(gun.name, {}).get(n, (0, 0, 0)) if gun.ours else (0, 0, 0)
-        ox, oy, oz = ox + fix[0], oy + fix[1] + sight_offsets().get((gun.name, n), 0.0), oz + fix[2]
+        dy, dx = sight_offsets().get((gun.name, n), (0.0, 0.0))
+        ox, oy, oz = ox + fix[0] + dx, oy + fix[1] + dy, oz + fix[2]
         for p in a.parts:
             p.name = n + "_" + p.name
             p.tex = (img, a.tw, a.th)

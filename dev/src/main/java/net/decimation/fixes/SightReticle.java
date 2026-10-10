@@ -85,8 +85,9 @@ public final class SightReticle
         {
             return;
         }
-        float dy = SightPlacement.offsetFor(GameRegistry.findUniqueIdentifierFor(stack.getItem()).name, name);
-        float u = 0.0625f, x = s[0], y = s[1] + dy, z = s[2], h = s[3] / 2;
+        String gun = GameRegistry.findUniqueIdentifierFor(stack.getItem()).name;
+        float dy = SightPlacement.offsetFor(gun, name), dx = SightPlacement.shiftFor(gun, name);
+        float u = 0.0625f, x = s[0] + dx, y = s[1] + dy, z = s[2], h = s[3] / 2;
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glTranslatef(0.05f, 0.07f, -0.008f);          // renderAttachments' sight translate

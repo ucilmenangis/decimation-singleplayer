@@ -272,6 +272,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   the packet, `shotHook` in BanditEntity.shootAt, NPC tracers always
   visible) then `PatchFactions.java` on top of its deci/ag/a output
   (Soviets vs everyone else);
+  `PatchMenuStats.java` (2026-10-11, ASM not Javassist: rewrites string
+  constants): menu / HUD stat labels (Human Kills, Deaths, Total Human Kills,
+  Total Infected Kills) in deci/i/a, deci/i/e, deci/g/j;
   `PatchIronSights.java` (2026-10-10): defaultScope parts hidden while a
   sight is attached (deci/K/b, deci/n/f on top of PatchScope; Javassist
   reads a class path as a jar only if it ends in `.jar`, so feed it
@@ -705,6 +708,12 @@ of the last session:
   drawn box (worldgen/military/PropBoxes, Canvas.validateProps: 0 clashes);
   the milbase test writes run/client/devtest/milbase_<size>.tsv for
   tools/props/propclash.py.
+  v0.42.2: second review: AS Val sights over the receiver (sightfit SHIFT,
+  dx column in sight_offsets.txt, aim compensated), local stats
+  (fixes/LocalStats, PatchMenuStats, dev test `stats`), menu session flag set
+  valid (green Play), base loot / props (TOC door wall, chests, DFAC radio,
+  motor pool parts yard); milbase test site moved to -20000,230,-20000 and the
+  old sites cleared from the dev world (tools/perfcheck.py clearblocks).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

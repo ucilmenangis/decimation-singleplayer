@@ -381,6 +381,12 @@ attaching attachment"): put every iron sight part in the `defaultScopeModel` gro
 while a sight is attached (docs/gun_model_spec.md "Part names"). Keep the sight picture without an
 attachment like the reference gun's (aim check), the attachment picture is then clean.
 
+Sight position along the gun (v0.42.2, AS Val): every sight is drawn in one fixed zone (scopes x
+0.8 .. 5.5); the receiver top must reach over it. Where it does not (AS Val, receiver ends at x
+2.6), tools/guns/sightfit.py SHIFT moves that gun's sights back (sight_offsets.txt dx column) and
+the aim pose compensates (fixes/SightPlacement, SightReticle). Check new guns with `study.py attach
+GUN ta11acog 4x`.
+
 Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
 .renderAttachments; stored in the gun's NBT as `sightAttach`,
 `barrelAttach`, `gripAttach` (also `stockAttach`, `skin`,

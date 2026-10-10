@@ -322,6 +322,15 @@ source of truth about the real gun and about how it must look in game.
    sights sit on each gun's rail (sightfit); reticles live in the glass and sway with the gun;
    detailed sight models built from the user's photos at real proportions x 0.52. Do new sights
    and new flat top guns the same way.
+23. Sights must sit over the RECEIVER, not just on the right height (user, AS Val, 11 Oktober
+   2026: the scope "not match with upper bolt or ejector"). Decimation draws every sight in one
+   fixed zone (x 0.8 .. 5.5, built for receivers that reach that far); a gun whose receiver ends
+   earlier (AS Val: receiver x -6.7 .. 2.6, handguard after) gets its sights on the handguard.
+   Check every gun (and every new one) with `study.py attach GUN ta11acog 4x`: the sight's mount
+   must be over the receiver top, near the ejection port. Fix: a dx in tools/guns/sightfit.py
+   SHIFT (sight_offsets.txt 4th column); SightPlacement then pushes the gun forward by -dx while
+   aiming and SightReticle moves the reticle with it, so the aim picture stays the one every
+   other gun has (check gunview hip AND aim next to an AK-74).
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -694,6 +703,22 @@ revision (same commit), never remove old ones.
   under a sight (kept up without one). Path that worked: user photos -> measured proportions ->
   render sheets -> in game hip / aim / NPC on a flat top and an Uzi -> user review -> fix the
   mechanism, not the symptom (cases 16 to 19). Lesson 22.
+
+### Case 21: AS Val sights on the handguard (v0.42.2, 11 Oktober 2026)
+- Symptom (user screenshot docs/shots/milbase_v0.42.1_review/user_100.png): with a scope the AS
+  Val looks wrong, the attachment "not match with upper bolt or ejector ammo"; asked to move it
+  backward.
+- Cause: GunItemRenderer puts every sight at one fixed spot (study.py attach_offset): x 0.8 ..
+  5.5 for scopes. The AS Val's receiver runs x -6.7 .. 2.6 (study.py parts), so its sights sat on
+  the handguard ahead of the bolt. Decimation's own placement, not ours (no sight_offsets entry).
+- Fix: sightfit.py SHIFT {"asval": -4.0} -> sight_offsets.txt "asval <sight> 0.0 -4.0" (dx
+  column, read by fixes/SightPlacement: Deci.offsetAttachment(gun, sight, dx, dy, 0));
+  aimShift translates the gun by -dx while aiming (the sight moved 4 nearer the eye made the
+  ACOG fill the screen with no reticle); SightReticle adds dx to its glass position.
+- Check: study.py attach asval ta11acog / 4x (mount over the receiver); `devtest.py --live
+  gunview guns=asval,ak74 attach=ta11acog` and `attach=reddot`: hip sight on the receiver, aim
+  picture identical to the AK-74 (reticle centred). Shots docs/shots/milbase_v0.42.2/
+  gunview_asval_*.png. Lesson 23.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

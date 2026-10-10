@@ -39,18 +39,25 @@ def bbox(parts):
 DESIGN_TOP = -4.45   # receiver top Decimation's sights are placed for (red dot bottom -4.43)
 ZONE = (2.0, 3.5)    # where every sight sits on the gun (red dot 2.4 .. 2.8, scopes 0.8 .. 5.5)
 LONG = 1.0           # a receiver panel or rail: at least this long (sight ears and pins are shorter)
+# guns whose receiver ends before the sight zone: every sight moves by dx (model units, - = back).
+# AS Val (user review 11 Oktober 2026, docs/shots/milbase_v0.42.1_review/user_100.png): its
+# receiver runs x -6.7 .. 2.6 and the handguard starts there, so the sights (x 0.8 .. 5.5) sat
+# on the handguard ahead of the bolt and ejection port; -4 puts them over the receiver.
+SHIFT = {"asval": -4.0}
 
 
 def rail_top(gun_name):
     """Top of the receiver / rail in the sight zone: the highest long part there, iron sights
     (defaultScope, hidden under a sight) and the magazine excluded."""
     g = study.load(gun_name)
+    dx = SHIFT.get(gun_name.split(":")[-1], 0.0)
+    zone = (ZONE[0] + dx, ZONE[1] + dx)
     top = None
     for p in g.parts:
         if p.name.startswith(("defaultScope", "ammo")):
             continue
         (a0, a1), (b0, b1), (c0, c1) = bbox([p])
-        if a1 - a0 < LONG or a1 < ZONE[0] or a0 > ZONE[1] or c1 < -0.45 or c0 > 0.15:
+        if a1 - a0 < LONG or a1 < zone[0] or a0 > zone[1] or c1 < -0.45 or c0 > 0.15:
             continue
         top = b0 if top is None else min(top, b0)
     if top is None:
@@ -61,7 +68,7 @@ def rail_top(gun_name):
         if p.name.startswith(("defaultScope", "ammo")):
             continue
         (a0, a1), (b0, b1), (c0, c1) = bbox([p])
-        if a1 < ZONE[0] or a0 > ZONE[1] or c1 < -0.45 or c0 > 0.15:
+        if a1 < zone[0] or a0 > zone[1] or c1 < -0.45 or c0 > 0.15:
             continue
         if top - 0.15 <= b0 < top and b1 >= top - 0.02:
             teeth = min(teeth, b0)
@@ -94,13 +101,15 @@ def main():
             dy, top, bottom = r
             if not write and s == SIGHTS[0]:
                 print("%-14s rail top %.2f -> sights %+.2f" % (n, top, dy))
-            if dy > TOL:                 # only down: a gun whose top is higher keeps Decimation's fit
-                rows.append((n.split(":")[-1], s, round(dy, 3)))
+            dx = SHIFT.get(n.split(":")[-1], 0.0)
+            if dy > TOL or dx:           # only down: a gun whose top is higher keeps Decimation's fit
+                rows.append((n.split(":")[-1], s, round(max(dy, 0.0) if dy > TOL else 0.0, 3), dx))
     if write:
         with open(OUT, "w") as f:
-            f.write("# gun sight dy: move that sight down by dy model units on that gun (tools/guns/sightfit.py)\n")
+            f.write("# gun sight dy [dx]: move that sight down by dy and forward by dx model units on that gun\n"
+                    "# (tools/guns/sightfit.py)\n")
             for r in rows:
-                f.write("%s %s %s\n" % r)
+                f.write(("%s %s %s %s\n" % r) if r[3] else ("%s %s %s\n" % r[:3]))
         print("%d offsets -> %s" % (len(rows), OUT))
 
 

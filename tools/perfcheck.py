@@ -5,6 +5,7 @@ skill decimation-gun "Performance"; docs/performance.md).
     python3 tools/perfcheck.py world WORLD_DIR [--top N]   # entities by type, crowded chunks, broken chunks
     python3 tools/perfcheck.py log LOG_FILE [--top N]      # most repeated lines (exception spam)
     python3 tools/perfcheck.py fixchunk WORLD_DIR CX CZ    # drop one chunk from its region file (backup first!)
+    python3 tools/perfcheck.py clearblocks WORLD_DIR X0 Z0 X1 Z1   # drop every chunk of a block area
 
 world: reads every region file (no game needed): entity count per id, the chunks with the most
 entities, chunks stored in the wrong region slot (xPos / zPos not matching the slot: Forge logs
@@ -113,6 +114,17 @@ def main():
         log_report(a[1], top)
     elif a[0] == "fixchunk":
         fix_chunk(a[1], int(a[2]), int(a[3]))
+    elif a[0] == "clearblocks":
+        # every chunk touching the block area: the game generates them again on the next visit
+        # (used to take the milbase sky test bases out of the dev world, 11 Oktober 2026)
+        x0, z0, x1, z1 = (int(v) for v in a[2:6])
+        n = 0
+        for cx in range(min(x0, x1) >> 4, (max(x0, x1) >> 4) + 1):
+            for cz in range(min(z0, z1) >> 4, (max(z0, z1) >> 4) + 1):
+                if os.path.exists(os.path.join(a[1], "region", "r.%d.%d.mca" % (cx >> 5, cz >> 5))):
+                    fix_chunk(a[1], cx, cz)
+                    n += 1
+        print("cleared", n, "chunks")
 
 
 if __name__ == "__main__":
