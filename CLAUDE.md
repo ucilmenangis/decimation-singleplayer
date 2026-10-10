@@ -91,6 +91,8 @@ Knowledge index:
   Decimation guns (tools/guns/study.py renders them from the jar, no
   game; dataset docs/references/decimation_guns.tsv): shape box parts,
   part counts, sizes, octagon / curve / panel recipes, dark flat tones.
+- `docs/military_base.md`: US FOB style military bases (reference research,
+  layout of the three sizes, prop mapping, code map, how to test).
 - `docs/building_design.md`: researched floor plans (apartment / office /
   shop), palettes, decay, biome overgrowth, street and car facing rules.
 - `docs/terrain.md`: the "Decimation" world type (biome map, biomes,
@@ -686,6 +688,9 @@ of the last session:
   fixes/NewSights, registered as deci:<name>), Mk18 IMI TS stock.
   v0.41.1: reticles drawn in the sight's glass, swaying with the gun
   (fixes/SightReticle, sight_reticles.txt); HK416 front sight folds away.
+  v0.42.0: US FOB style military bases in military sectors, three sizes
+  (docs/military_base.md, worldgen/military, skill decimation-military-base,
+  dev test `milbase`); the mil_ test schematics are no longer placed.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

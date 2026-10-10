@@ -31,21 +31,26 @@ public class LargeSites
         this.subs = subs;
     }
 
+    /** Never empty: military sectors always have their procedural bases (worldgen/military). */
     public boolean isEmpty()
     {
-        return schematics.isEmpty();
+        return false;
     }
 
     /** The plan of one site, or null. Pure function of seed + site + sector. */
     public Plan plan(World world, int siteX, int siteZ, StructureGenerator gen)
     {
-        if (schematics.isEmpty())
-        {
-            return null;
-        }
         int sector = gen.sectorOf(world, siteX * SITE, siteZ * SITE);
         Random r = new Random(world.getSeed() ^ (siteX * 192837465L + siteZ * 564738291L) ^ 0x1A26E5L);
         if (r.nextFloat() >= CHANCE[sector])
+        {
+            return null;
+        }
+        if (sector == StructureGenerator.MIL)
+        {
+            return militaryBase(world, siteX, siteZ, r);
+        }
+        if (schematics.isEmpty())
         {
             return null;
         }
@@ -80,6 +85,31 @@ public class LargeSites
             ? ZoneKind.MILITARY
             : s.name.startsWith("city_") ? ZoneKind.POLICE : null;
         return new SchematicPlan("L" + siteX + "_" + siteZ, s, x, z, turns, subs, zone);
+    }
+
+    /**
+     * A US style forward base of our own (docs/military_base.md): 45 % combat outpost, 35 % FOB,
+     * 20 % large FOB, turned 0..270, placed inside the site; the mil_ schematics are not used.
+     */
+    private Plan militaryBase(World world, int siteX, int siteZ, Random r)
+    {
+        float roll = r.nextFloat();
+        int size = roll < 0.45f ? net.decimation.worldgen.military.MilitaryBase.SMALL
+            : roll < 0.80f ? net.decimation.worldgen.military.MilitaryBase.MEDIUM
+            : net.decimation.worldgen.military.MilitaryBase.LARGE;
+        int turns = r.nextInt(4);
+        int[] f = net.decimation.worldgen.military.MilitaryBasePlan.footprint(size, turns);
+        int span = SITE * 16;
+        int x = siteX * span + 4 + r.nextInt(Math.max(1, span - 8 - f[0]));
+        int z = siteZ * span + 4 + r.nextInt(Math.max(1, span - 8 - f[1]));
+        if (net.decimation.worldgen.city.LcCity.enabled()
+            && (net.decimation.worldgen.city.LcCity.nearCity(world.getSeed(), x - 10, z - 10, x + f[0] + 9, z + f[1] + 9)
+                || net.decimation.worldgen.city.Highways.near(world.getSeed(), x - 10, z - 10, x + f[0] + 9, z + f[1] + 9)))
+        {
+            return null;
+        }
+        long seed = world.getSeed() ^ (siteX * 341873128712L + siteZ * 132897987541L) ^ 0xF0B5L;
+        return new net.decimation.worldgen.military.MilitaryBasePlan("M" + siteX + "_" + siteZ, size, seed, x, z, turns);
     }
 
     /** Write the slices of every large plan crossing this chunk's window. */

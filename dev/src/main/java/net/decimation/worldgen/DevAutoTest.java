@@ -120,6 +120,7 @@ public class DevAutoTest
         if (name.equals("gunview")) return new net.decimation.worldgen.devtest.GunViewTest();
         if (name.equals("gunperf")) return new net.decimation.worldgen.devtest.GunPerfTest();
         if (name.equals("firerate")) return new net.decimation.worldgen.devtest.FireRateTest();
+        if (name.equals("milbase")) return new net.decimation.worldgen.devtest.MilBaseTest();
         if (name.equals("census")) return new net.decimation.worldgen.devtest.CensusTest();
         if (name.equals("cityview")) return new net.decimation.worldgen.devtest.CityViewTest();
         return null;

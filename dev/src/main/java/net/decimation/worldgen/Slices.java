@@ -195,7 +195,20 @@ public final class Slices
         return true;
     }
 
+    /** Writes a whole plan at a given floor height, lot grading included (dev tests, commands). */
+    public static void placeAt(World world, Plan p, int baseY, boolean grade)
+    {
+        StructureData.get(world).setBaseY(p.id(), baseY);
+        int[] e = grade ? extent(p) : new int[] {p.minX(), p.minZ(), p.maxX(), p.maxZ()};
+        write(world, p, baseY, e[0], e[1], e[2], e[3], grade);
+    }
+
     private static void write(World world, Plan p, int baseY, int x0, int z0, int x1, int z1)
+    {
+        write(world, p, baseY, x0, z0, x1, z1, true);
+    }
+
+    private static void write(World world, Plan p, int baseY, int x0, int z0, int x1, int z1, boolean grade)
     {
         int[] meta = new int[1];
         java.util.List<int[]> props = new java.util.ArrayList<int[]>();
@@ -204,7 +217,7 @@ public final class Slices
         {
             for (int z = z0; z <= z1; z++)
             {
-                if (p instanceof Graded)
+                if (grade && p instanceof Graded)
                 {
                     ((Graded) p).grade(world, x, z, baseY);
                 }

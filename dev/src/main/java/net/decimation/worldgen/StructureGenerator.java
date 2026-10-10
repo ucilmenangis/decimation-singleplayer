@@ -208,10 +208,11 @@ public class StructureGenerator implements IWorldGenerator
             boolean city = s.name.startsWith("city_");
             boolean mil = s.name.startsWith("mil_");
             boolean tagged = civ || city || mil;
+            // mil_ schematics are not placed any more: military sectors get the procedural
+            // bases (worldgen/military, docs/military_base.md); the old ones were test boxes
             if (!tagged
                 || (sector == CIV && civ)
-                || (sector == CITY && city)
-                || (sector == MIL && mil))
+                || (sector == CITY && city))
             {
                 out.add(s);
             }

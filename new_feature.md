@@ -546,6 +546,15 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### Military bases, US FOB style (v0.42.0, 10 Oktober 2026, waiting for the user's review)
+User: "military zone with buildings ... our own generator, all three sizes, US FOB style ... really
+really good output ... work on loots especially props placement". worldgen/military: combat
+outpost (50 x 58), FOB (78 x 84), large FOB (112 x 118) in military sector sites (45 / 35 / 20 %),
+turned 0..270, ground ramped around them, MILITARY zone. Perimeter (wire, HESCO, towers, ECP with
+serpentine), TOC, B-hut living area with bunkers, logistics (ASP, fuel, motor pool, conexes,
+hangar), services (DFAC, aid station, gym, helipads), loot in Decimation's crates. Details:
+docs/military_base.md; skill decimation-military-base.
+
 ### EOTech 558, ACOG TA11 3.5x, Mk18 TS stock (DONE v0.41.0, 10 Oktober 2026, waiting for the user's verdict)
 User: holographic 558 and ACOG 3.5x "so detailed ... same like in real life", the Mk18 with an IMI
 Defense TS stock. tools/guns/sights.py (our art, committed): EOTech 558 (92 parts) and ACOG TA11

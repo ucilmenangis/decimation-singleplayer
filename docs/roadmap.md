@@ -53,7 +53,8 @@ Details and starting points: new_feature.md "Zones, factions and world".
 4. **Police NPC.**
 5. **Survivor civilians** carrying a minimal weapon.
 6. **Radiated areas.**
-7. **Advanced military base.**
+7. **Advanced military base.** IN PROGRESS: v0.42.0 US FOB style bases of our own in three
+   sizes (docs/military_base.md, skill decimation-military-base), waiting for the user's review.
 8. **Advanced bandits.**
 
 ## Items and weapons

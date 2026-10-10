@@ -655,6 +655,23 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## milbase_v0.42/ (military bases, 10 Oktober 2026)
+- milbase_<size>_<point>.png: dev test shots, size 0 COP, 1 FOB, 2 large FOB; points aerial_sw /
+  aerial_ne / top (sky test: the bases float at y 200, the dirt pillars under them are left
+  from an earlier graded run), gate_approach (wire rows, hedgehogs, T-wall lane, sawhorses,
+  flanking towers), ecp_inside_lane (serpentine jersey barriers between T-walls), main_road,
+  tower_deck (sandbag parapet, spotlight), toc_outside (concrete, HESCO ring, flag, keycard),
+  toc_inside (map table, desks with monitors and radios, chairs, flag, lights),
+  hut_barracks_inside (bunks with upper bunk, footlockers), hut_arms_inside (cabinets, crates),
+  hut_office_inside, lsa_street, motor_pool (net shelter, vehicles, oil stains), asp (berm,
+  crates), aid_inside (stretchers, medical crates), dfac_inside (table rows, serving line),
+  gym_inside, helipad (H, lights, windsock; the large base's crashed helicopter), hangar
+  (clamshell vault with an APC).
+- round1_details.png: first round problems (orange ground, ASP planter, TOC battlements);
+  round3_overview.png / round3_details.png: after the greedy placer; round4_sheet.png: hangar and
+  conex yards. real_world_cop_topdown.png: top down block map of the seed 1 COP at -90,66,404
+  (rot 180, gate north) on real grassland.
+
 ## sights_v0.41.1/ (reticles in the glass, 10 Oktober 2026)
 - user_acog_barrett_fixed_reticle.png: the user's Barrett + ACOG screenshot: BDC reticle in the
   screen centre while the scope swayed right of it (the v0.41.0 HUD reticle).
