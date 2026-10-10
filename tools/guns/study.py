@@ -215,7 +215,7 @@ def attach_offset(gun, name):
 
 
 # our per gun attachment corrections (fixes/NewGuns: Deci.offsetAttachment), model units
-ATTACH_FIX = {"mac10": {"smgSuppressor": (-2.37, -0.16, 0)}}
+ATTACH_FIX = {"mac10": {"smgSuppressor": (-2.37, -0.16, 0)}, "mk18": {"arSuppressor": (-0.73, 0, 0)}}
 
 
 def with_attachments(gun, names):

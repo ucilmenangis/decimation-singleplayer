@@ -655,6 +655,19 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## mk18_v0.40/ (Mk18 Mod 1, iron sights hidden under a sight, 10 Oktober 2026)
+- photo42_rail.png: the user's photo 2 rail enlarged: tall side rail with cross teeth and 3 screws,
+  two staggered rows of round holes above it, one row below, round bolt at the front end.
+- cmp_side_m4a4_hk416_mk18_v1.png: first pass (rail too light, holes tiny); cmp_side.png: M4A4 and
+  Mk18 now; rail_v2_side.png: the reworked rail side; ours_mk18_<view>(_split).png renders.
+- attach_ours_mk18_reddot_arSuppressor_three.png: suppressor from the rail front over the flash
+  hider (study.py, which draws the irons even with a sight).
+- hip_plain_vs_reddot_shots.png: in game hip, M4A4 / Mk18, no attachment (both rows).
+- irons_hidden_reddot.png: top: hip with red dot, M4A4 (A-frame front sight still up) and Mk18
+  (no iron sights); bottom: aim crops M4A4 / Mk18 without attachment (same picture, post on the
+  line), then with red dot (M4A4 front post inside the dot, Mk18 clean).
+- attach_five_guns.png: M4A4, Mk18, ACR, G36C, AR15 with red dot and suppressor, hip and NPC side.
+
 ## mac10_v0.39.3/ (MAC-10 parts seated, 10 Oktober 2026)
 - cmp_three_before_after.png / cmp_low_before_after.png: v0.39.2 left, v0.39.3 right: no visible
   change at this size (the fixes are 0.04 to 0.14), hinge now around the rod end, trigger tip

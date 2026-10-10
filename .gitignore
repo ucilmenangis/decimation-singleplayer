@@ -56,3 +56,7 @@ dev/src/main/resources/assets/deci/models/guns/rifle/hk416*.bmodel
 dev/src/main/resources/assets/deci/textures/model/guns/rifle/hk416*/
 dev/src/main/resources/assets/deci/textures/items/gun/rifle/hk416*.png
 dev/src/main/resources/assets/deci/animations/hk416*/
+dev/src/main/resources/assets/deci/models/guns/rifle/mk18.bmodel
+dev/src/main/resources/assets/deci/textures/model/guns/rifle/mk18/
+dev/src/main/resources/assets/deci/textures/items/gun/rifle/mk18.png
+dev/src/main/resources/assets/deci/animations/mk18/

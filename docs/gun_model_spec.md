@@ -94,9 +94,20 @@ meaningful because their `.anib` files target them by name):
 `minigunBarrelModel*`, `bolt*`, `defaultBarrelModel*`, `defaultScopeModel*`,
 `defaultGripModel*`, `defaultStockModel*`.
 
-Important: **nothing in the code hides `default*Model` parts when an
-attachment is fitted** (no reference to those names anywhere). They are
-ordinary parts that always render. Attachments are simply drawn on top.
+Important: **Decimation's own code hides no `default*Model` part when an
+attachment is fitted** (no reference to those names anywhere). Since
+v0.40.0 our patch does it for sights: `defaultScopeModel*` parts of the gun
+being drawn are skipped while its NBT `sightAttach` is set
+(fixes/IronSights + tools/patches/PatchIronSights.java: begin / end around
+GunItemRenderer deci.K.b.a(ItemStack, Object[]), skip in BModel.renderParts
+deci.n.f.bm). Only the gun's own model: the Dragunov scope attachment has
+defaultScope parts of its own. 19 guns have defaultScope parts (crotchbow,
+barettam9, acr, ar15, ar15beowulf, asval, aug1, aug3, aug3para, famasi,
+g36c, honeybadger, jng90, m110, m4a4 (its folding rear sight, not its
+A-frame front sight), mpt76, aa12, mpi40, vector). `defaultBarrel`,
+`defaultGrip`, `defaultStock` parts still always render. Name the iron
+sights of a new gun `defaultScopeModel*` (the build scripts use the part's
+group as the name prefix).
 
 ## 3. The `.anib` animation format
 

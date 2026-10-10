@@ -376,6 +376,11 @@ and checked in game (`gunview`, shot gunview_<gun>_aim.png):
 
 ## 14. Attachments
 
+Iron sights fold away under a sight (v0.40.0, user: "make the front and rear sight disappear when
+attaching attachment"): put every iron sight part in the `defaultScopeModel` group; it is hidden
+while a sight is attached (docs/gun_model_spec.md "Part names"). Keep the sight picture without an
+attachment like the reference gun's (aim check), the attachment picture is then clean.
+
 Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
 .renderAttachments; stored in the gun's NBT as `sightAttach`,
 `barrelAttach`, `gripAttach` (also `stockAttach`, `skin`,

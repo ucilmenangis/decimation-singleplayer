@@ -275,6 +275,20 @@ source of truth about the real gun and about how it must look in game.
    before the geometry: paint our islands one colour and the base's
    another in a debug texture and look again (case 14).
 
+17. Iron sights go in the `defaultScopeModel` group (user, Mk18: "if possible dont put iron and
+   rear sight ... make the front and rear sight disappear when attaching attachment"): they are
+   hidden while a sight is attached (fixes/IronSights, PatchIronSights), shown without one so the
+   gun still aims like its reference. Variant scripts name each part by its group
+   (tools/guns/mk18.py: `part_block("%s%d" % (p.group, 1000 + i), ...)`). A front sight that
+   the base gun did not name defaultScope (the M4A4's A-frame) stays up: drop or rename it.
+
+18. A shorter variant of a base gun: take the scale from the base gun, not from inches. Decimation
+   draws the M4A4's front shorter than real (7 inch handguard 7.5 .. 14.7 on a receiver 7.45 long);
+   apply the same squeeze to the new gun's real lengths and keep the photo's ratios (Mk18 rail
+   1.25 x the receiver, flash hider 0.196 of the rail past it): Mk18 rail 7.5 .. 14.7, muzzle 16.1,
+   visibly shorter than the M4A4's 19.15. Then move flamePos to the new muzzle and offset the
+   barrel attachment so it overlaps the muzzle device like on the base gun (study.py attach).
+
 ## Revision casebook (never delete a case; look here first)
 
 Every user revision and every problem found on the way, with how it was
@@ -552,6 +566,35 @@ revision (same commit), never remove old ones.
 - Check: contact; before / after renders three and low
   (docs/shots/mac10_v0.39.3/); gunview aim next to the Uzi: aperture
   holes on the centre line as before (aim_cmp_uzi.png).
+
+### Case 16: Mk18 Mod 1 and iron sights hidden under a sight (v0.40.0, 10 Oktober 2026)
+- Request (user): Mk18 Mod 1, black only, 9 photos; "dont put iron and rear sight so its ready to
+  be place an attachment, and if possible make the front and rear sight disappear when attaching
+  attachment (new mechanic and i think its hard)".
+- Found: Decimation's models already mark iron sights as `defaultScopeModel*` (19 guns), and
+  `defaultBarrel / Grip / Stock` too, but no class reads those names (searched every class for the
+  string). So the mechanic is: skip defaultScope parts while `sightAttach` is set.
+- How (tools/patches/PatchIronSights.java, three jars; fixes/IronSights): begin(gun.model, stack)
+  / end() around GunItemRenderer deci.K.b.a(ItemStack, Object[]) (the one draw method for first
+  person, third person and dropped), skip(this, part) around each BModelPart render in
+  BModel.renderParts (deci.n.f.bm). Only the gun's own model: attachments are drawn inside the
+  same method and the Dragunov scope attachment has defaultScope parts.
+- Traps: deci.n.f was already patched by PatchScope, so the patch reads the patched class; and
+  Javassist reads a class path as a jar only when it ends in `.jar` (Decimation.jar.patched
+  gave NotFoundException for every class): read dist/Decimation.jar (same classes).
+- Mk18 (tools/guns/mk18.py, template hk416.py): M4A4 minus quad rail, A-frame, barrel and
+  birdcage (137 parts); ours 186: DD RIS II rail flush with the receiver (top / bottom rails, a
+  tall side rail with teeth and screws, two staggered hole rows above, small holes below, front
+  bolt, sling cup), flip up front sight in the defaultScope group (U, post -4.7), barrel and
+  flash hider to 16.1; flamePos x 16.1; Deci.offsetAttachment(mk18, "arSuppressor", -0.73)
+  so the suppressor covers the flash hider like on the M4A4 (15.24 .. 20.24). First rail pass
+  was lighter than the receiver and had small holes in the wrong places: the user's photo
+  showed one tall side rail with screws, two hole rows above, one below (photo42_rail.png).
+- Check: contact 1 (flash hider collar); gunview m4a4 / mk18 no attachment: same iron picture,
+  post on the line; with reddot: Mk18 irons gone, clean dot view; M4A4 rear sight gone, its
+  A-frame stays; ACR, G36C, AR15 with reddot and suppressor draw normally; gun test reload 30;
+  gunperf within the M4A4's numbers (held 18 / 20 vs 17 / 18; absolute fps of the dev world low
+  and noisy that day). Evidence docs/shots/mk18_v0.40/.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

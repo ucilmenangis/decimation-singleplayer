@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
  */
 public final class NewGuns
 {
-    public static Item mac10, mac10Mag, ump9, ump9Mag, hk416, hk416tan;
+    public static Item mac10, mac10Mag, ump9, ump9Mag, hk416, hk416tan, mk18;
 
     private NewGuns()
     {
@@ -47,6 +47,37 @@ public final class NewGuns
                     gunPools, magPools, sounds, suppressor ? "moved" : "not moved");
         registerUmp9();
         registerHk416();
+        registerMk18();
+    }
+
+    /**
+     * Mk18 Mod 1 (user request 10 Oktober 2026, black only): Decimation's M4A4 with our Daniel Defense
+     * RIS II rail, flip up front sight (hidden with a sight attached, fixes/IronSights), 10.3 inch
+     * barrel and flash hider, generated locally by tools/guns/mk18.py (git ignored, registered only
+     * when the model exists). STANAG magazines like the M4A4; the short barrel: damage 15 (M4A4 16),
+     * 800 rpm, a bit more kick and lighter (slowdown 0.12); the M4A4's sounds and loot places.
+     */
+    private static void registerMk18()
+    {
+        if (NewGuns.class.getResource("/assets/deci/models/guns/rifle/mk18.bmodel") == null)
+        {
+            FMLLog.info("[deciworldgen] Mk18 not registered: run tools/guns/mk18.py (needs Decimation.jar)");
+            return;
+        }
+        Item m4a4 = GameRegistry.findItem("deci", "m4a4"), m4a4Mag = GameRegistry.findItem("deci", "m4a4Mag");
+        mk18 = Deci.newGun("mk18", "rifle", 7.5f, 0.3f, true, 3.0f, 800f, 0.12, 15, m4a4Mag, Magazines.stanag60);
+        int pools = Deci.addLootLike(m4a4, new ItemStack(mk18, 1));
+        int sounds = 0;
+        boolean suppressor = false;
+        if (FMLCommonHandler.instance().getSide().isClient())
+        {
+            sounds = Deci.useGunSounds("mk18", "rifle", "m4a4", "rifle");
+            // over the flash hider like on the M4A4 (it covers the last 0.86 of the birdcage there,
+            // only 0.13 at the Mk18's shorter muzzle without this; study.py attach)
+            suppressor = Deci.offsetAttachment(mk18, "arSuppressor", -0.73f, 0, 0);
+        }
+        FMLLog.info("[deciworldgen] Mk18 Mod 1 registered: loot %d pools, %d sounds from the M4A4, suppressor %s",
+                    pools, sounds, suppressor);
     }
 
     /**

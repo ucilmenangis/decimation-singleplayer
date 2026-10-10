@@ -546,6 +546,15 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### Mk18 Mod 1 and iron sights that fold away (DONE v0.40.0, 10 Oktober 2026, waiting for the user's verdict)
+User: "mk18 mod 1, black only", 9 photos; irons ready for attachments and hidden when one is
+fitted. Mk18 from Decimation's M4A4 (tools/guns/mk18.py, generated locally, git ignored): DD RIS
+II rail, flip up front sight, short barrel and flash hider (muzzle 16.1 vs 19.15), flamePos
+moved, suppressor offset; registered as deciworldgen:mk18 (STANAG, damage 15, 800 rpm, recoil 7.5
+/ 0.3, slowdown 0.12, M4A4 sounds and loot). Mechanic: every `defaultScopeModel*` part of a gun is
+hidden while a sight is attached (fixes/IronSights, tools/patches/PatchIronSights.java): our Mk18
+and 19 Decimation guns. Details: skill casebook case 16.
+
 ### HK416 and HK416 Tan (DONE v0.39.0, 10 Oktober 2026, waiting for the user's verdict)
 User: "try hk416 ... make 2 version, black and tan", 5 photos; "two separate guns" (asked:
 skin spray can vs two guns vs both). Variant route like the UMP9: tools/guns/hk416.py builds

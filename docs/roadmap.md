@@ -61,6 +61,9 @@ Details and starting points: new_feature.md "Zones, factions and world".
 0b. HK416 and HK416 Tan: v0.39.1 fixes the user's review of v0.39.0 (floating stock
    pieces, "2 pillar" front sight: really the rear sight reading our texture; skill
    casebook case 14); waiting for the user's verdict.
+0d. Mk18 Mod 1 (v0.40.0) and iron sights hidden under a sight (all guns with defaultScope
+   parts): waiting for the user's verdict. Possible polish: study.py gaps lists 7 metrics
+   outside the rifle range (mostly the M4A4 base and the many rail teeth).
 0c. MAC-10 parts seated (v0.39.3, skill casebook case 15): 17 flagged -> 2 flanges
    kept on purpose; aim unchanged. Waiting for the user's look in game.
 0. UMP9 (v0.38.0): accepted by the user ("work really well and no

@@ -262,6 +262,10 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   the packet, `shotHook` in BanditEntity.shootAt, NPC tracers always
   visible) then `PatchFactions.java` on top of its deci/ag/a output
   (Soviets vs everyone else);
+  `PatchIronSights.java` (2026-10-10): defaultScope parts hidden while a
+  sight is attached (deci/K/b, deci/n/f on top of PatchScope; Javassist
+  reads a class path as a jar only if it ends in `.jar`, so feed it
+  dist/Decimation.jar, not Decimation.jar.patched);
   `PatchInfectedAI.java` (2026-10-10, docs/performance.md): infected
   wander path search server side once a second instead of every tick on
   both sides, horde scan every 10 ticks (deci/ag/d);
@@ -673,6 +677,8 @@ of the last session:
   machine guns fire at double rate"); dev test `firerate` times every
   NPC shot per tier and gun (-Pcases=tier:gun,...).
   v0.39.3: MAC-10 parts seated (skill case 15).
+  v0.40.0: Mk18 Mod 1 (tools/guns/mk18.py, run before building) and iron
+  sights hidden under a sight (fixes/IronSights, PatchIronSights).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim
