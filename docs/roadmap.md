@@ -62,7 +62,8 @@ Details and starting points: new_feature.md "Zones, factions and world".
    pieces, "2 pillar" front sight: really the rear sight reading our texture; skill
    casebook case 14); waiting for the user's verdict.
 0e. Sights onto the rail (v0.40.1, bug.md); Mk18 IMI Defense TS stock, EOTech 558 and ACOG TA11
-   (v0.41.0): waiting for the user's detailed look ("small detail will be i analyze"). Open: the
+   (v0.41.0), reticles in the glass, HK416 front sight folds away (v0.41.1, skill case 19): waiting
+   for the user's detailed look ("small detail will be i analyze"). Open: the
    Mk18 held fps was 14 vs the M4A4's 22 in one gunperf run and equal in the next (318 parts, 82
    of them rail holes) `[not verified]`.
 0d. Mk18 Mod 1 (v0.40.0) and iron sights hidden under a sight (all guns with defaultScope

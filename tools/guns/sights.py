@@ -39,6 +39,7 @@ HEADER = """
   lhRot: 0, 0, 0;"""        # the red dot's header (attachments carry the gun header fields, unused)
 S = "sightModel"
 GLASS = "scopeGlass"
+RETICLE = {}                  # name -> (x, y, z, size) in gun space: the reticle plane in the glass
 
 
 def oct_z(name, group, colour, cx, cy, z0, z1, r, flat=0.42):
@@ -128,6 +129,9 @@ def eotech():
         add(part("rimSide", S, EDGE, (x0, WT, WZ1), (x1, WB, WZ1 + 0.07)), pair=True)
     # window: see through glass at the rear (the reticle sits in it), tinted lens at the front
     add(part("glass", GLASS, LENS, (X0 + 0.12, WT, WZ0), (X0 + 0.14, WB, WZ1)))
+    # reticle on the glass's eye side; the 68 MOA ring about a fifth of the window height
+    # (user v0.41.0: "too big ... like 20 now, make it 5"; a quarter came out a few pixels, a third reads)
+    RETICLE["eotech558"] = (X0 + 0.115, (WT + WB) / 2, ZC, 0.18)
     add(part("frontLens", S, LENS, (X1 - 0.12, WT, WZ0), (X1 - 0.1, WB, WZ1)))
     add(part("lensEdge", S, DARK, (X1 - 0.1, WT, WZ0), (X1 - 0.02, WT + 0.04, WZ1)))
 
@@ -194,6 +198,7 @@ def acog():
     add(*octagon("eyeTube", S, BODY, XR + 0.14, 2.35, AC, ZC, 0.29))
     add(*octagon("eyeRing", S, EDGE, 2.0, 2.06, AC, ZC, 0.31))
     add(part("glass", GLASS, (30, 36, 40), (XR - 0.02, AC - 0.24, ZC - 0.24), (XR, AC + 0.24, ZC + 0.24)))
+    RETICLE["ta11acog"] = (XR - 0.025, AC, ZC, 0.48)    # the reticle fills the eyepiece
     # the eyepiece opening is round: wedges nearer the eye mask the square glass's corners
     for sy in (-1, 1):
         for sz in (-1, 1):
@@ -273,23 +278,27 @@ def to_file(parts):
     return parts
 
 
-def reticle_eotech(path, n=512):
-    from PIL import Image, ImageDraw, ImageFilter
+def reticle_eotech(path, n=32):
+    """68 MOA ring, centre dot, four ticks across the ring (photo 62), red. Drawn about 15 to 30
+    screen pixels wide in the glass (the reticle sways with the gun: SightReticle), and Minecraft
+    samples textures without smoothing, so a big texture loses its thin lines (a 512 px first
+    version came out as dashes): pixel art at 32 px with 2 px lines."""
+    from PIL import Image
     img = Image.new("RGBA", (n, n), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    c, red = n / 2, (255, 46, 40, 255)
-    r = n * 0.3
-    d.ellipse((c - r, c - r, c + r, c + r), outline=red, width=int(n * 0.014))
-    rd = n * 0.012
-    d.ellipse((c - rd, c - rd, c + rd, c + rd), fill=red)
-    for ang in range(0, 360, 90):        # the four ticks across the ring (photo 62)
-        a = math.radians(ang)
-        x0, y0 = c + math.cos(a) * r * 0.8, c + math.sin(a) * r * 0.8
-        x1, y1 = c + math.cos(a) * r * 1.2, c + math.sin(a) * r * 1.2
-        d.line((x0, y0, x1, y1), fill=red, width=int(n * 0.012))
-    glow = img.filter(ImageFilter.GaussianBlur(n * 0.012))
-    out = Image.alpha_composite(Image.eval(glow, lambda v: v), img)
-    out.save(path)
+    red, glow = (255, 40, 34, 255), (255, 60, 50, 110)
+    c = (n - 1) / 2.0
+    for y in range(n):
+        for x in range(n):
+            d = math.hypot(x - c, y - c)
+            on = 9.6 <= d <= 11.6                                    # the ring
+            on |= d <= 1.0                                           # the dot
+            on |= (abs(x - c) <= 0.6 and 7.5 <= abs(y - c) <= 13.5)   # ticks top / bottom
+            on |= (abs(y - c) <= 0.6 and 7.5 <= abs(x - c) <= 13.5)   # ticks left / right
+            if on:
+                img.putpixel((x, y), red)
+            elif 9.0 <= d <= 12.3 or d <= 1.7:
+                img.putpixel((x, y), glow)                           # a soft edge: the holographic glow
+    img.save(path)
 
 
 def reticle_acog(path, n=512):
@@ -381,6 +390,18 @@ def icon(name, text, img, path, size=32, width=30):
     edge.save(path)
 
 
+def write_reticles():
+    """assets/deciworldgen/sight_reticles.txt for fixes/SightReticle: name x y z size, in the
+    attachment FILE space (gun space minus SHIFT), model units."""
+    path = os.path.join(ROOT, "dev", "src", "main", "resources", "assets", "deciworldgen", "sight_reticles.txt")
+    with open(path, "w") as f:
+        f.write("# name x y z size: reticle square on the sight's glass, attachment file space (tools/guns/sights.py)\n")
+        for n, (x, y, z, s) in sorted(RETICLE.items()):
+            f.write("%s %.4f %.4f %.4f %.4f\n" % (n, x - SHIFT[0], y - SHIFT[1], z - SHIFT[2], s))
+    return path
+
+
 if __name__ == "__main__":
     print(write("eotech558", eotech(), reticle_eotech))
     print(write("ta11acog", acog(), reticle_acog))
+    print(write_reticles())

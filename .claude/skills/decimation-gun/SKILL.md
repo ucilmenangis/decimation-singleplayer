@@ -300,13 +300,21 @@ source of truth about the real gun and about how it must look in game.
    the file gets minus (0.8, 1.12, -0.128), renderAttachments' sight translate), real sizes x 0.52
    (Decimation's 4x: 4.7 long, 1.35 wide, glass 0.8). The see through glass is a part named
    scopeGlass* (one part: PatchScope measures its box), its reticle a PNG in
-   textures/model/guns/scopes/<name>.png drawn by ScopeZoom (GLASS_RETICLES: size, blend; alpha
-   for coloured reticles, additive washes red to white on a bright sky). Register it with
+   textures/model/guns/scopes/<name>.png drawn IN the glass by fixes/SightReticle (lesson 21;
+   position and size from sights.py's RETICLE -> sight_reticles.txt). Register it with
    Deci.newSightAttachment (deci:<name>: Decimation looks attachments up in its own namespace),
    magnification in ScopeZoom.magnification, add it to sightfit.py SIGHTS and study.py
    ATTACH_SLOT. Avoid names Decimation's jar already has assets for (it ships an unused
    attachments/sight/acog.png). Check hip AND aim on a flat top and on an Uzi, twice (ScopeZoom
    learns the glass position during the first aim).
+
+21. Reticles live in the sight, not on the screen (user, v0.41.0: "the crosshair is intact now
+   following guns sway or scope sway ... tarkov style where scope follow sway"): Decimation's red
+   dot carries its dot in the model, so it sways and kicks with the gun. Ours: a textured square on
+   the glass's eye side in the gun's matrix (SightReticle from IronSights.end), never a HUD
+   overlay. Size it like the real reticle in the window (user: the EOTech ring "20 -> 5"); a
+   reticle a few dozen pixels on screen must be pixel art at its drawn size (32 px, 2 px lines):
+   Minecraft samples textures without smoothing, a 512 px reticle shrank into dashes.
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -652,6 +660,25 @@ revision (same commit), never remove old ones.
 - Check: renders (docs/shots/sights_v0.41/), gunview hip / aim on Mk18, M4A4, HK416, MP5, Uzi;
   EOTech ring centred in the window on the second aim (first aim: still learning), ACOG reticle
   centred; gunperf with each sight (numbers noisy that day, see roadmap 0e).
+
+### Case 19: reticles fixed on the screen, EOTech reticle too big, HK416 front sight (v0.41.1, 10 Oktober 2026)
+- Symptom (user, Barrett with the ACOG): the reticle stayed in the screen centre while the scope
+  swayed away from it; the EOTech ring too big ("like 20 now ... make it 5"); "learn how the scope
+  working on 1x, 2x ... tarkov style where scope follow sway". HK416: "remove front sight".
+- Cause: v0.41.0 drew our reticles as a HUD overlay at the screen centre (ScopeZoom), so sway and
+  recoil moved the scope but not the reticle; Decimation's red dot has its dot in the model.
+- Fix: fixes/SightReticle draws the reticle as a textured square on the eye side of the sight's
+  glass, in the gun's matrix (called from IronSights.end inside the gun draw method, the per gun
+  SightPlacement offset added), first person only; ScopeZoom only hides the crosshair while
+  aiming through our sights. sights.py records each reticle plane (RETICLE ->
+  assets/deciworldgen/sight_reticles.txt). EOTech ring: a quarter of the size first (a few pixels,
+  512 px texture shrank into dashes), then a third with a 32 px pixel art reticle (2 px lines).
+  HK416 front sight in the defaultScope group: folds away under a sight like the Mk18's (it stood
+  in front of the EOTech); fully removing it would leave no post for the iron sight picture, asked
+  the user.
+- Check: gunview aim Mk18 / HK416 / MP5 with EOTech and ACOG: reticle in the glass, centred,
+  ACOG numbers on the right; HK416 hip with EOTech: no front sight
+  (docs/shots/sights_v0.41.1/).
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

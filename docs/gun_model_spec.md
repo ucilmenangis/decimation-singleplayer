@@ -208,6 +208,9 @@ registerIcons uses deci:attach/<name>), textures/model/guns/scopes/<name>.png (r
 assets/deci in our jar (our own art, committed). fixes/NewSights registers them through
 Deci.newSightAttachment, which switches FML's active mod container to Decimation's for the
 AttachmentItem constructor (GunItem.getSightAttachment looks up GameRegistry.findItem("deci", ..)).
+Reticle: fixes/SightReticle draws textures/model/guns/scopes/<name>.png as a square on the
+glass's eye side (assets/deciworldgen/sight_reticles.txt from sights.py) in the gun's matrix,
+from IronSights.end, so it sways and kicks with the gun (v0.41.1).
 BModel.renderParts skips parts named scopeGlass / scopeOverlay; for scope attachments
 renderGun(-26.42) draws only scopeGlass parts (through PatchScope's projective glass).
 

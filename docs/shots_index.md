@@ -655,6 +655,16 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## sights_v0.41.1/ (reticles in the glass, 10 Oktober 2026)
+- user_acog_barrett_fixed_reticle.png: the user's Barrett + ACOG screenshot: BDC reticle in the
+  screen centre while the scope swayed right of it (the v0.41.0 HUD reticle).
+- in_glass_first.png: top EOTech, bottom ACOG, aim on Mk18 and HK416 (reticles in the glass,
+  centred, ACOG numbers right; EOTech ring at a quarter size nearly invisible) and HK416 hip: no
+  front sight under the sight.
+- eotech_512px_dashes.png: EOTech at a third with the 512 px texture: the ring broken into dashes.
+- eotech_32px_final.png: Mk18 and MP5 aim with the 32 px reticle: clean red ring, ticks, dot.
+- eotech_reticle_texture.png: the 32 px texture enlarged.
+
 ## sights_v0.41/ (EOTech 558, ACOG TA11, Mk18 TS stock, 10 Oktober 2026)
 - photos_eotech.png / photos_acog.png: the user's photos 60 to 67 and 52 to 59 as contact sheets.
 - ts_stock_v1_vs_photo.png: first TS stock render next to the user's photo (the M4A4's grey buffer

@@ -684,6 +684,8 @@ of the last session:
   or sight).
   v0.41.0: our sights EOTech 558 and ACOG TA11 (tools/guns/sights.py,
   fixes/NewSights, registered as deci:<name>), Mk18 IMI TS stock.
+  v0.41.1: reticles drawn in the sight's glass, swaying with the gun
+  (fixes/SightReticle, sight_reticles.txt); HK416 front sight folds away.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

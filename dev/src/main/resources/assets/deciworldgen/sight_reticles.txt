@@ -1,0 +1,3 @@
+# name x y z size: reticle square on the sight's glass, attachment file space (tools/guns/sights.py)
+eotech558 1.7650 -6.4700 -0.0220 0.1800
+ta11acog 0.7750 -6.3400 -0.0220 0.4800

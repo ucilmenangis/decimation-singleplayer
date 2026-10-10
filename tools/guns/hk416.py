@@ -35,6 +35,7 @@ import study  # noqa: E402
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 OUT = os.path.join(ROOT, "dev", "src", "main", "resources", "assets", "deci")
 G = "gunModel"
+SIGHT = "defaultScopeModel"   # folds away under a sight (fixes/IronSights; user v0.41.0)
 POLY = (34, 34, 36)     # polymer furniture
 RAIL = (40, 40, 42)     # aluminium rails
 DARK = (24, 24, 26)     # slots, sights
@@ -82,17 +83,19 @@ for i, (a, b) in enumerate(((8.0, 9.3), (9.6, 10.9), (11.2, 12.5), (12.8, 13.9))
     add(part("slotHigh%d" % i, G, DARK, (a + 0.2, -3.15, 0.38), (b - 0.2, -2.95, 0.52)).inset("z", 1, x=(0.05, 0.05)), pair=True)
 
 # ---------------------------------------------------------------- HK folding front sight on the rail front
-# post tip at -4.7 like the M4A4's front post (same sight picture, skill lesson 7). The real sight
+# post tip at -4.7 like the M4A4's front post (same sight picture, skill lesson 7). In the
+# defaultScope group since v0.41.1: it folds away under a sight (user: it stood in front of the
+# EOTech), like the Mk18's. The real sight
 # (user photo 36) is a U: two thick ears flared at the base on one bridge. Ear tops stop just over
 # the post tip like the M4A4's front ears (-4.7): higher ears show beside the rear sight's ears in
 # aim. v0.39.0 had two thin separate ears up to -4.97: from behind "2 pillars" (case 14).
-add(part("fsClamp", G, DARK, (13.9, -3.85, -0.48), (14.4, -3.6, 0.18)).inset("y", 0, x=(0.06, 0.06), z=(0.05, 0.05)))
-add(part("fsTower", G, DARK, (13.98, -4.45, -0.42), (14.32, -3.85, 0.12)).inset("y", 0, x=(0.05, 0.05), z=(0.02, 0.02)))
-add(part("fsBridge", G, DARK, (13.98, -4.58, ZC - 0.3), (14.32, -4.45, ZC + 0.3)).inset("y", 0, x=(0.02, 0.02)))
-add(part("fsEar", G, DARK, (14.0, -4.74, ZC + 0.14), (14.3, -4.58, ZC + 0.3)).inset("y", 0, x=(0.05, 0.05), z=(0.0, 0.06)), pair=True)
-add(part("fsPost", G, DARK, (14.1, -4.7, -0.21), (14.2, -4.58, -0.09)).inset("y", 0, x=(0.02, 0.02), z=(0.02, 0.02)))
-add(part("fsPostBase", G, DARK, (14.06, -4.62, ZC - 0.09), (14.24, -4.58, ZC + 0.09)))
-add(part("fsHinge", G, DARK, (13.92, -4.0, -0.4), (14.0, -3.85, 0.1)))
+add(part("fsClamp", SIGHT, DARK, (13.9, -3.85, -0.48), (14.4, -3.6, 0.18)).inset("y", 0, x=(0.06, 0.06), z=(0.05, 0.05)))
+add(part("fsTower", SIGHT, DARK, (13.98, -4.45, -0.42), (14.32, -3.85, 0.12)).inset("y", 0, x=(0.05, 0.05), z=(0.02, 0.02)))
+add(part("fsBridge", SIGHT, DARK, (13.98, -4.58, ZC - 0.3), (14.32, -4.45, ZC + 0.3)).inset("y", 0, x=(0.02, 0.02)))
+add(part("fsEar", SIGHT, DARK, (14.0, -4.74, ZC + 0.14), (14.3, -4.58, ZC + 0.3)).inset("y", 0, x=(0.05, 0.05), z=(0.0, 0.06)), pair=True)
+add(part("fsPost", SIGHT, DARK, (14.1, -4.7, -0.21), (14.2, -4.58, -0.09)).inset("y", 0, x=(0.02, 0.02), z=(0.02, 0.02)))
+add(part("fsPostBase", SIGHT, DARK, (14.06, -4.62, ZC - 0.09), (14.24, -4.58, ZC + 0.09)))
+add(part("fsHinge", SIGHT, DARK, (13.92, -4.0, -0.4), (14.0, -3.85, 0.1)))
 
 # ---------------------------------------------------------------- barrel and HK flash hider (bore -2.39)
 add(*octagon("barrelNut", G, METAL, X1, X1 + 0.25, BORE, ZC, 0.32))
@@ -241,7 +244,7 @@ def build():
     keep = keep[:first] + header + keep[first:]
     for i, p in enumerate(P):
         u, v = uvs[i]
-        keep += part_block("%s%d" % (G, 1000 + i), p, u, v + v0)
+        keep += part_block("%s%d" % (p.group, 1000 + i), p, u, v + v0)
     model = "\n".join(keep) + "\n"
     # texture: the M4A4's on top, ours below
     k = tex.width // 512

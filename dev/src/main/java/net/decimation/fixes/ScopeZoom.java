@@ -83,19 +83,12 @@ public class ScopeZoom
     /** The reticle texture of the overlay scope being aimed, or null when no overlay is shown. */
     private ResourceLocation overlay;
     /**
-     * Our sights (NewSights) draw their reticle in the glass while aiming: Decimation's sights carry
-     * theirs in the model or the sniper overlay, ours are a texture at the screen centre (where the
-     * shots go) sized to the glass on screen. name -> {size of the reticle image / smaller side of
-     * the glass box, 1 = additive (lit, the holographic red), 0 = alpha (etched lines)}.
+     * Our sights (NewSights): their reticle is drawn in the glass by SightReticle (it sways with the
+     * gun); while aiming through one, the vanilla crosshair is hidden (the reticle is the crosshair).
      */
-    private static final java.util.Map<String, float[]> GLASS_RETICLES = new java.util.HashMap<String, float[]>();
-    static
-    {
-        GLASS_RETICLES.put("eotech558", new float[] {0.9f, 0f}); // alpha: additive washed the red out to white on a bright sky
-        GLASS_RETICLES.put("ta11acog", new float[] {1.0f, 0f});
-    }
-    private ResourceLocation glassReticle;
-    private float[] glassReticleStyle;
+    private static final java.util.Set<String> OUR_SIGHTS = new java.util.HashSet<String>(
+        java.util.Arrays.asList("eotech558", "ta11acog"));
+    private boolean aimingOurSight;
 
     /** How much of the zoom the mouse follows: 1 = turning slows to 1 / zoom, 0 = unchanged. */
     private final float sensitivity;
@@ -459,67 +452,34 @@ public class ScopeZoom
         return new ResourceLocation("deci", "textures/model/guns/scopes/" + name + ".png");
     }
 
-    /** Our sights' reticle while aiming through them (zoom most of the way in), else null. */
+    /** True while aiming through one of our sights (zoom most of the way in). */
     private void glassReticleFor(Minecraft mc, float target)
     {
-        glassReticle = null;
         ItemStack held = mc.thePlayer != null ? mc.thePlayer.getHeldItem() : null;
         Item sight = held != null && Deci.isGun(held.getItem()) ? Deci.sightAttachment(held) : null;
-        float[] style = sight != null ? GLASS_RETICLES.get(Deci.attachmentName(sight)) : null;
-        if (style == null || overlay != null || target <= 1f || zoom < 1 + (target - 1) * 0.7)
-        {
-            return;
-        }
-        glassReticle = new ResourceLocation("deci", "textures/model/guns/scopes/" + Deci.attachmentName(sight) + ".png");
-        glassReticleStyle = style;
+        aimingOurSight = sight != null && OUR_SIGHTS.contains(Deci.attachmentName(sight)) && overlay == null
+            && target > 1f && zoom >= 1 + (target - 1) * 0.7;
     }
 
-    /** The glass reticle: centred on the screen, sized to the glass seen on screen (before the HUD). */
-    private void drawGlassReticle(RenderGameOverlayEvent.Pre e)
+    /**
+     * While aiming through one of our sights its reticle (drawn in the glass by SightReticle, moving
+     * with the gun's sway since v0.41.1; a screen fixed reticle before) is the crosshair.
+     */
+    private void hideCrosshair(RenderGameOverlayEvent.Pre e)
     {
         if (e.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
         {
-            e.setCanceled(true); // the reticle is the crosshair
-            return;
+            e.setCanceled(true);
         }
-        if (e.type != RenderGameOverlayEvent.ElementType.HELMET)
-        {
-            return;
-        }
-        double w = e.resolution.getScaledWidth_double(), h = e.resolution.getScaledHeight_double();
-        double side = Math.min(w, h) * 0.3;
-        if (System.nanoTime() - Deci.scopeGlassTime() < 500_000_000L)
-        {
-            float[] box = Deci.scopeGlassBox(); // window pixels
-            side = Math.min(box[2] - box[0], box[3] - box[1]) / e.resolution.getScaleFactor();
-        }
-        double r = side * glassReticleStyle[0] / 2, cx = w / 2, cy = h / 2;
-        Tessellator t = Tessellator.instance;
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, glassReticleStyle[1] > 0 ? GL11.GL_ONE : GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1f, 1f, 1f, 1f);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(glassReticle);
-        t.startDrawingQuads();
-        t.addVertexWithUV(cx - r, cy + r, 0, 0, 1);
-        t.addVertexWithUV(cx + r, cy + r, 0, 1, 1);
-        t.addVertexWithUV(cx + r, cy - r, 0, 1, 0);
-        t.addVertexWithUV(cx - r, cy - r, 0, 0, 0);
-        t.draw();
-        GL11.glPopAttrib();
-        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
     /** Sniper overlay: black screen but for a round view, the reticle, a soft edge (before the HUD). */
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Pre e)
     {
-        if (overlay == null && glassReticle != null)
+        if (overlay == null && aimingOurSight)
         {
-            drawGlassReticle(e);
+            hideCrosshair(e);
             return;
         }
         if (overlay == null || e.type != RenderGameOverlayEvent.ElementType.HELMET)

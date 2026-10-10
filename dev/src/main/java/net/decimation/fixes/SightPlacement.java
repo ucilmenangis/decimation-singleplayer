@@ -57,6 +57,13 @@ public final class SightPlacement
         }
     }
 
+    /** dy this sight is moved down on this gun (0 when it sits where Decimation draws it). */
+    static float offsetFor(String gun, String sight)
+    {
+        Float dy = OFFSETS.get(gun + " " + sight);
+        return dy == null ? 0f : dy;
+    }
+
     public static void apply()
     {
         InputStream in = SightPlacement.class.getResourceAsStream("/assets/deciworldgen/sight_offsets.txt");

@@ -552,6 +552,8 @@ Defense TS stock. tools/guns/sights.py (our art, committed): EOTech 558 (92 part
 (117 parts) as deci:eotech558 / deci:ta11acog (NewSights, loot like the red dot / 4x), reticles
 drawn in the glass while aiming (ScopeZoom: 1.25x red ring and dot, 3.5x BDC with green centre),
 on every gun's rail (sightfit). Mk18: TS stock from the user's photo. Details: skill case 18.
+v0.41.1 (user review): reticles drawn in the glass and swaying with the gun (SightReticle), EOTech
+ring smaller (32 px pixel art), HK416 front sight folds away under a sight (skill case 19).
 
 ### Mk18 Mod 1 and iron sights that fold away (DONE v0.40.0, 10 Oktober 2026, waiting for the user's verdict)
 User: "mk18 mod 1, black only", 9 photos; irons ready for attachments and hidden when one is

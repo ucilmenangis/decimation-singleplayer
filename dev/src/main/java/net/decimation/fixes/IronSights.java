@@ -32,6 +32,7 @@ public final class IronSights
             "gunModel205", "gunModel206", "gunModel207", "gunModel208")));
     }
     private static java.util.Set<String> extra;
+    private static ItemStack drawing;
 
     private IronSights()
     {
@@ -42,6 +43,7 @@ public final class IronSights
     {
         hideIn = hasSight(stack) ? gunModel : null;
         extra = null;
+        drawing = stack;
         if (hideIn != null)
         {
             extra = EXTRA.get(cpw.mods.fml.common.registry.GameRegistry.findUniqueIdentifierFor(stack.getItem()).name);
@@ -51,7 +53,12 @@ public final class IronSights
 
     public static void end()
     {
+        if (hideIn != null && drawing != null)
+        {
+            SightReticle.draw(drawing); // our sights' reticle, in the gun's matrix (sways with it)
+        }
         hideIn = null;
+        drawing = null;
     }
 
     /** True for a defaultScope part of the gun being drawn while it has a sight attached. */
