@@ -568,6 +568,10 @@ Not started unless marked DONE; each one also has a line in docs/roadmap.md.
 - **Human Kills** and the **main menu Play button**: DONE in v0.42.2 (bug.md, Fixed).
 - Bug for later: military jeep / tank wrecks break with one punch (bug.md).
 
+### v0.42.4: fourth review (11 Oktober 2026)
+Ladders walkable from the base on every tower (5 of 6 were walled in), the outpost's TOC back,
+a walk test for every base (ladders, doors, rooms, loot, traps; tools/props/walkcheck.py).
+
 ### v0.42.3: third review (11 Oktober 2026)
 Tower ladders reachable (middle of the inner side), hangar roof closed with loot inside, motor
 pool shelter with a full wooden roof; the "render issue" was worldgen below the sky test cutting

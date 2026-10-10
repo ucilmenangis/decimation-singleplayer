@@ -116,6 +116,9 @@ Exceptions (from the model geometry and the gallery):
 11. A trapdoor shutter is an OPEN trapdoor against the wall (meta 4 | side); a closed one lies
     flat and reads as a shelf.
 
+12. Every loot container must be reachable: a free floor cell next to it that a player can walk
+    to (tools/props/walkcheck.py LOOT); a container behind others or in a walled corner is lost.
+
 ## 6. Checks
 
 - In code: `Canvas.validateProps(log)` (worldgen/military) runs after a base is built: every
@@ -125,5 +128,7 @@ Exceptions (from the model geometry and the gallery):
 - Offline: the `milbase` test writes run/client/devtest/milbase_<size>.tsv (every block) and
   `python3 tools/props/propclash.py FILE` reports WALL / PROP / DOOR / FACE (front into a full
   height wall) / MOUNT (wall prop without a wall) / FLOAT (nothing under a standing prop).
+- Walk test: `python3 tools/props/walkcheck.py DUMP` (ladders, doors, floor areas, loot, traps
+  reachable from the gate; docs/military_base.md section 6).
 - Pictures: the milbase camera points (tower_roof, toc_door, guard_booth, fighting_position,
   conex_inside, hut_back, ...) for the final look.

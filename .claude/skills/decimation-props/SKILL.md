@@ -25,6 +25,8 @@ bases, 11 Oktober 2026, 28 screenshots). Everything learned is in docs/prop_plac
 ## 2. Writing the placement
 - Lay rows by drawn length (tables and large cases step 2, stretchers 3, military / medical
   crates and footlockers 1). Long props along walls with their long side along the wall.
+- Every loot container needs a reachable floor cell beside it (walk test LOOT), every door a
+  free cell on both sides (DOOR).
 - Leave free: aisles, the cell in front of every door, the cells above tall props, the space
   of big props (spotlight 2.5 x 3.2, APC 4.5 x 8.9, helicopter 9.4 x 14).
 - Things on tables stand on the table's top (same cell or the table's overhang half cell).

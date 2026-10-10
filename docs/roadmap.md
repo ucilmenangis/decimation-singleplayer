@@ -186,6 +186,8 @@ docs/gun_model_spec.md); every user review goes into its lessons and casebook.
   rail.
 - v0.41.0 / 0.41.1 EOTech 558 and ACOG TA11 of our own, reticles in the glass swaying with the
   gun, Mk18 IMI TS stock, HK416 front sight folds away; accepted.
+- v0.42.4 ladders walkable from the base (walk test tools/props/walkcheck.py), the outpost's TOC
+  back, test fails without a TOC.
 - v0.42.3 tower ladders reachable, hangar vault closed and stocked, shelter roof, sky test
   generates its chunks before building (worldgen no longer cuts into it).
 - v0.42.2 AS Val sights over the receiver, local Human Kills / Infected Kills / Deaths on the

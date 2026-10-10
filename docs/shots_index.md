@@ -668,6 +668,19 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   grey "Play Offline", profile box Player Kills / Deaths / Zombie Kills 0, Total Player / Infected
   Casualties 0.
 
+## milbase_v0.42.3_review/ (the user's fourth review, 11 Oktober 2026)
+- user_115: a corner guard tower seen from the HESCO wall top: the ladder runs up the tower face
+  above the side wall, so from the ground it is walled in (5 of 6 ladders were, by the dump).
+
+## milbase_v0.42.4/ (after the fourth review, 11 Oktober 2026)
+- milbase_<size>_tower_ladder: a tower's ladder seen from the base: a 1 wide shaft in the HESCO
+  with the ladder at its back, open gravel in front.
+- milbase_0_toc_inside / toc_door: the outpost's TOC, back after four versions without it:
+  desks with radios and monitors both sides, flag, the locked door ("This door needs a lockpick")
+  with the military keycard screen beside it between the sandbag ring ends.
+- milbase_<size>_toc_inside (FOB / large): map table with chairs, desk rows, flag.
+- milbase_<size>_hut_back: B-hut back end, window, power panel.
+
 ## milbase_v0.42.3/ (after the third review, 11 Oktober 2026)
 - milbase_<size>_tower_deck / tower_roof: tower decks and the searchlight on the plank roof; the
   ladder shafts (middle of the inner side, air above the hatch) were checked in the block dump.

@@ -76,6 +76,28 @@ public final class MilitaryBase
         return true;
     }
 
+    /** Why reserve() refused a rectangle: the first blocking cell and its class (dev test log). */
+    private String blockedAt(int x0, int z0, int x1, int z1)
+    {
+        if (x0 - 1 < ix0 || z0 - 1 < iz0 || x1 + 1 > ix1 || z1 + 1 > iz1)
+        {
+            return "outside the inner area " + x0 + "," + z0 + ".." + x1 + "," + z1 + " inner " + ix0 + "," + iz0 + ".." + ix1 + "," + iz1;
+        }
+        for (int z = z0 - 1; z <= z1 + 1; z++)
+        {
+            for (int x = x0 - 1; x <= x1 + 1; x++)
+            {
+                byte o = occ[x + z * c.w];
+                boolean foot = x >= x0 && x <= x1 && z >= z0 && z <= z1;
+                if (o == 2 || (foot && o != 0))
+                {
+                    return "cell " + x + "," + z + " class " + o;
+                }
+            }
+        }
+        return "?";
+    }
+
     /** Marks road / wall ground: modules may border it but not stand on it. */
     private void take(int x0, int z0, int x1, int z1)
     {
@@ -706,16 +728,24 @@ public final class MilitaryBase
     {
         towerSpots.add(new int[] {x0, z0});
         c.fill(x0, 1, z0, x0 + 3, 3, z0 + 3, b.hesco);
-        // the ladder in the middle of the side facing into the base (user review 11 Oktober 2026:
-        // in the inner corner the corner post stood over the hatch), a shaft cut into the HESCO,
-        // the ladder on the shaft's back face (toward the tower centre)
-        int lx = x0 + (ix > 0 ? 1 : 2), lz = iz > 0 ? z0 + 3 : z0;
+        // the ladder: a shaft cut into the HESCO in a middle cell of one of the two faces turned to
+        // the base, the ladder on its back face. The cell in front of it must be open ground: on a
+        // corner tower half of each inner face lies on a wall line, on the gate towers the guard
+        // booth stands in front of one (user review 11 Oktober 2026: 5 of 6 ladders were walled
+        // in; tools/props/walkcheck.py checks it). Walls and the booth exist already here.
+        int[] lad = ladderCell(x0, z0, ix, iz);
+        int lx = lad[0], lz = lad[1], fdx = lad[2], fdz = lad[3];
         c.clearBox(lx, 1, lz, lx, 4, lz);
-        int ladderMeta = iz > 0 ? 3 : 2;               // vanilla ladder: 3 faces south (block north of it), 2 north
+        // vanilla ladder metadata: the side it faces (2 north, 3 south, 4 west, 5 east)
+        int ladderMeta = fdz > 0 ? 3 : fdz < 0 ? 2 : fdx > 0 ? 5 : 4;
         for (int y = 1; y <= 4; y++)
         {
             c.set(lx, y, lz, Blocks.ladder, ladderMeta);
         }
+        // the cell in front of the ladder lies in the ring every tower already takes (t - 1 .. t + 4),
+        // so no module stands on it; a wider take cost the large FOB its TOC (11 Oktober 2026)
+        poi("tower_ladder", lx + 3 * fdx + 0.5, 2.6, lz + 3 * fdz + 0.5,
+            fdz > 0 ? 180 : fdz < 0 ? 0 : fdx > 0 ? 90 : 270, 25);
         // deck
         for (int x = x0; x <= x0 + 3; x++)
         {
@@ -775,9 +805,59 @@ public final class MilitaryBase
         int cx = x0 + (ix > 0 ? 1 : 2), cz = z0 + (iz > 0 ? 1 : 2);
         c.prop(cx, 9, cz, b.spotlight, iz > 0 ? N : S);
         poi("tower_roof", x0 + 1.5 + ix * 5, 12.6, z0 + 1.5 + iz * 5, (float) Math.toDegrees(Math.atan2(ix, -iz)), 30);
-        int far = iz > 0 ? z0 + 1 : z0 + 2;            // the deck row away from the hatch
-        c.prop(x0 + (ix > 0 ? 2 : 1), 5, far, b.militaryCrate, ix > 0 ? E : W);
-        c.prop(lx, 5, far, b.radioSmall, iz > 0 ? S : N);     // its panel toward the deck, not the parapet
+        // the deck's inner 2 x 2: the cell next to the hatch stays free to step onto, the crate and
+        // the radio on the two cells farthest from it, the radio's panel toward that cell
+        int sx = lx - fdx, sz = lz - fdz;
+        java.util.List<int[]> inner = new java.util.ArrayList<int[]>();
+        for (int x = x0 + 1; x <= x0 + 2; x++)
+        {
+            for (int z = z0 + 1; z <= z0 + 2; z++)
+            {
+                if (!(x == sx && z == sz))
+                {
+                    inner.add(new int[] {x, z, Math.abs(x - sx) + Math.abs(z - sz)});
+                }
+            }
+        }
+        java.util.Collections.sort(inner, (p, q) -> q[2] - p[2]);
+        int[] a = inner.get(0), r = inner.get(1);
+        c.prop(a[0], 5, a[1], b.militaryCrate, ix > 0 ? E : W);
+        c.prop(r[0], 5, r[1], b.radioSmall, facingToward(r[0], r[1], sx, sz));
+    }
+
+    /**
+     * The ladder cell of a tower: a non corner cell of a face turned to the base (the z face toward
+     * iz, then the x face toward ix) whose outside neighbour is open ground inside the base.
+     * Returns {x, z, front dx, front dz}; the first cell of the z face when none is open.
+     */
+    private int[] ladderCell(int x0, int z0, int ix, int iz)
+    {
+        int zf = iz > 0 ? z0 + 3 : z0, xf = ix > 0 ? x0 + 3 : x0;
+        int[][] cand = {
+            {x0 + (ix > 0 ? 2 : 1), zf, 0, iz}, {x0 + (ix > 0 ? 1 : 2), zf, 0, iz},
+            {xf, z0 + (iz > 0 ? 2 : 1), ix, 0}, {xf, z0 + (iz > 0 ? 1 : 2), ix, 0}};
+        for (int[] k : cand)
+        {
+            int fx = k[0] + k[2], fz = k[1] + k[3];
+            boolean inside = fx >= ix0 && fx <= ix1 && fz >= iz0 && fz <= iz1;
+            if (inside && c.get(fx, 0, fz) != null && c.get(fx, 1, fz) == null && c.get(fx, 2, fz) == null)
+            {
+                return k;
+            }
+        }
+        log.add("tower at " + x0 + "," + z0 + " has no open face for its ladder");
+        return cand[0];
+    }
+
+    /** The prop facing (2 E, 3 S, 4 W, 5 N) that points from (x, z) toward (tx, tz). */
+    private static int facingToward(int x, int z, int tx, int tz)
+    {
+        int dx = tx - x, dz = tz - z;
+        if (Math.abs(dx) >= Math.abs(dz))
+        {
+            return dx > 0 ? E : W;
+        }
+        return dz > 0 ? S : N;
     }
 
     // ================================================================ roads
@@ -831,6 +911,7 @@ public final class MilitaryBase
         int x1 = x0 + w - 1, z1 = z0 + l - 1, dx = x0 + w / 2;
         if (!reserve(x0 - 3, z0 - 3, x1 + 3, z1 + 3))
         {
+            log.add("TOC DID NOT FIT: " + blockedAt(x0 - 3, z0 - 3, x1 + 3, z1 + 3));
             return;
         }
         // HESCO ring 2 high, 2 out, opening in front of the door (south)
@@ -856,8 +937,11 @@ public final class MilitaryBase
     private void tocCore(int x0, int z0, int w, int l)
     {
         int x1 = x0 + w - 1, z1 = z0 + l - 1;
-        if (!reserve(x0 - 3, z0 - 1, x1 + 3, z1 + 3))
+        // up to z1 + 2: the main road starts at z1 + 3 (mainZ0); z1 + 3 here left the outpost
+        // without a TOC from v0.42.0 to v0.42.3 (found 11 Oktober 2026)
+        if (!reserve(x0 - 3, z0 - 1, x1 + 3, z1 + 2))
         {
+            log.add("TOC DID NOT FIT: " + blockedAt(x0 - 3, z0 - 1, x1 + 3, z1 + 2));
             return;
         }
         for (int x = x0 - 1; x <= x1 + 1; x++)
@@ -915,18 +999,24 @@ public final class MilitaryBase
             c.set(x0, 3, z, Blocks.iron_bars);
             c.set(x1, 3, z, Blocks.iron_bars);
         }
-        // inside: map table in the middle (two tables end to end), chairs around
+        // inside: map table in the middle (two tables end to end), chairs around; the outpost's
+        // TOC (5 wide inside) has no room for it between the desk rows: desks only
+        boolean small = w < 9;
         int mz = z0 + l / 2 - 1;
-        c.prop(dx, 1, mz, b.woodTable, S);
-        c.prop(dx, 1, mz + 1, b.woodTable, S);
-        c.prop(dx - 2, 1, mz, b.chair, E);
-        c.prop(dx + 2, 1, mz + 1, b.chair, W);
+        if (!small)
+        {
+            c.prop(dx, 1, mz, b.woodTable, S);
+            c.prop(dx, 1, mz + 1, b.woodTable, S);
+            c.prop(dx - 2, 1, mz, b.chair, E);
+            c.prop(dx + 2, 1, mz + 1, b.chair, W);
+        }
         // radio and computer desks along the west and east walls: a metal table is drawn 2 long
         // (centre cell +- 1 half cell), so a run starts 2 in from the wall and steps 2. The big
         // radio is 1.7 deep with its dials on a long side: lying along the desk (meta 5 on the
         // west wall, 3 on the east) its dials face the room (docs/prop_placement.md).
         int k = 0;
-        for (int z = z0 + 2; z + 1 <= z1 - 2; z += 2, k++)
+        // (in the small TOC the run starts a row later: the commander's desk is drawn into z0 + 2)
+        for (int z = z0 + (small ? 3 : 2); z + 1 <= z1 - 2; z += 2, k++)
         {
             c.prop(x0 + 1, 1, z, b.metalTable, E);
             c.prop(x0 + 1, 2, z, k % 2 == 0 ? b.radio : b.monitor, k % 2 == 0 ? N : E);
@@ -978,8 +1068,9 @@ public final class MilitaryBase
             c.prop(x1 + 1, y, z0 - 1, b.radioTower, S);       // drawn 1.1 wide: clear of the ring
         }
         c.set(x1 + 1, 10, z0 - 1, Blocks.fence);
-        c.prop(x1 + 2, 1, z1 - 1, b.generator, W);
-        c.prop(x1 + 2, 1, z1 - 2, b.generator, W);
+        // the outpost's sandbag ring stands right beside the building: its generators face along it
+        c.prop(x1 + 2, 1, z1 - 1, b.generator, small ? S : W);
+        c.prop(x1 + 2, 1, z1 - 2, b.generator, small ? S : W);
         c.prop(x1 + 2, 1, z1 - 4, b.barrel, W);
         c.prop(x0 - 2, 1, z1 + 1, b.lightTower, S);
     }

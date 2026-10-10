@@ -721,6 +721,9 @@ of the last session:
   loot, shelter roof; MilBaseTest pregenerates and populates the chunks under
   a base before building (worldgen below a sky base read its top as the
   ground and cut it) and places each size at X0 + size * STEP.
+  v0.42.4: tower ladders on an open face (MilitaryBase.ladderCell), the
+  outpost TOC back (missing since v0.42.0), walk test tools/props/walkcheck.py
+  (must be 0 before handing a base over), milbase test checks "has its TOC".
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

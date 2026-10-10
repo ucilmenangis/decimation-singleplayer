@@ -59,6 +59,11 @@ props placement".
 ## 4. Review checklist (small details; the user looks at these)
 - Nothing overlaps (refused list), nothing floats, no prop inside a wall, every door has a step
   and opens onto free ground, every ladder has a hatch, bunk beds have their upper bunk.
+- The walk test is 0 (tools/props/walkcheck.py on every size and turns 0 / 1 / 3): every ladder,
+  door, room and loot container can be walked to from the gate, no traps. Checking a thing's own
+  cells is NOT enough: check the player's way to it.
+- Every essential module was built: "has its TOC" PASS; read the refused list for anything else
+  that matters (motor pool, LSA, ASP).
 - Every area tells what it is from 10 blocks away (TOC antenna + flag, motor pool vehicles +
   net, ASP berm + crates, aid tent stretchers, helipad H + lights).
 - Density: no big empty dirt patches; fill with conex yards, hangars, bunkers, generator pads.
@@ -94,6 +99,12 @@ props placement".
 10. Locked buildings: the TOC uses Door_Emergency_1_Locked + a military keycard screen; the key
     drops from military crates, wrecks and care packages, so the room stays reachable.
 11. Ground in Decimation's pack: gravel with about 10 % dirt patches; coarse dirt never.
+12. Reachability, not just placement (user review v0.42.3: "check the corner dude"): a ladder in
+    the middle of a corner tower's inner face stood on the wall line. Place access points (ladders,
+    doors) by testing the cell in front, and run the walk test before handing over.
+13. A refused module must be loud: the outpost lost its TOC for four versions because a refused
+    reserve was silent. Every essential module logs its refusal with the blocking cell
+    (blockedAt) and the dev test fails on it.
 
 ## Casebook (never delete a case)
 
@@ -150,3 +161,15 @@ props placement".
   ground (a city edge ramp cut a band out of it). MilBaseTest now generates and populates every
   chunk under and 3 around a base before writing it, and puts each size at its own spot
   (X0 + size * STEP; a sizes=2 run used to land on the outpost's spot).
+
+### Case 5: walled in ladders, a missing TOC (v0.42.3 -> v0.42.4, 11 Oktober 2026)
+- User shot docs/shots/milbase_v0.42.3_review/user_115.png ("check the corner dude"): the corner
+  tower's ladder runs up above the side wall. The dump showed 5 of 6 ladders with HESCO or the
+  booth's sandbags in front; my v0.42.3 check only looked at the air above the hatch.
+- User choices (plan mode): ladder inside the tower in an open face cell; an automatic walk test
+  (no access to their computer) covering ladders and decks, doors and rooms, loot, traps, roofs.
+- Fix: MilitaryBase.ladderCell (first non corner cell of a base facing face with open ground in
+  front), deck crate / radio on the cells farthest from the step-in cell, radio facing it;
+  tools/props/walkcheck.py; the outpost TOC reserve fixed (overlapped the main road; missing
+  since v0.42.0, found only because the new ladder rule took the large FOB's TOC and its refusal
+  was logged); small TOC layout; "has its TOC" check. All walk tests 0, propclash 0.

@@ -123,6 +123,15 @@ the DFAC; care packages at the ASP / helipad.
 
 ## 5. Status
 
+v0.42.4 (11 Oktober 2026), fourth review (user_115): 5 of 6 tower ladders were walled in (the
+middle of a corner tower's inner face lies on the side wall line; one gate tower had the guard
+booth in front). tower() now takes the first non corner cell of a face turned to the base whose
+outside neighbour is open ground (ladderCell). Found on the way: the outpost had had NO TOC since
+the v0.42.0 layout rework (its reserve overlapped the main road by a row; nothing reported it):
+fixed, with a smaller TOC layout for its 5 wide room, and the milbase test now FAILS when a TOC
+does not fit ("has its TOC"). New tools/props/walkcheck.py: 0 LADDER / DOOR / AREA / LOOT / TRAP
+on all sizes and turns 0 / 1 / 3; propclash 0.
+
 v0.42.3 (11 Oktober 2026), third review (docs/shots/milbase_v0.42.2_review/): tower ladder in the
 middle of the inner side (the corner post blocked the corner hatch), deck crate and radio on the
 row away from the hatch, radio facing the deck; hangar vault closed between its steps (the roof
@@ -167,7 +176,15 @@ Traps met (the skill decimation-military-base has them as lessons):
   cleared with `python3 tools/perfcheck.py clearblocks WORLD X0 Z0 X1 Z1`, game closed, region
   backup in dev/run/client/world_backups/), one shot per camera point
   (dev/run/client/screenshots/milbase_<size>_<point>), refused modules in the results.
-- `points=none` only builds and reports what did not fit and the prop clashes (fast).
+- `points=none` only builds and reports what did not fit and the prop clashes (fast); "has its
+  TOC" must PASS for every size.
+- `python3 tools/props/walkcheck.py dev/run/client/devtest/milbase_<n>.tsv` (walk test, since
+  v0.42.4): from the main road inside the gate a player model (2 high, climbs 1, drops 3, ladders,
+  doors, no jumping onto anything at y 4 or higher) must reach every ladder foot and top, both
+  sides of every door, every floor area, a standing cell within 2 of every loot container, and
+  get back out of everywhere it gets in. LADDER / DOOR / AREA / LOOT / TRAP must be 0; NOTE lists
+  the locked TOC door; `--roofs` lists roofs reachable by jumping, for review. Self check: on the
+  v0.42.3 FOB it reports exactly the 5 walled in ladders.
 - Every run writes dev/run/client/devtest/milbase_<size>.tsv (all blocks); `python3
   tools/props/propclash.py dev/run/client/devtest/milbase_1.tsv` must report findings 0.
 - `turns=1` / `turns=3` too: rotated bases use the per prop quarter turn table.

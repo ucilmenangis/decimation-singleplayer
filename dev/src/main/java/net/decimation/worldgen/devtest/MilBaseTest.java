@@ -161,13 +161,20 @@ public class MilBaseTest extends DevTestMode
                 Slices.placeAt(w, plan, Y, false);   // no ramp: the ground far below would grow pillars
                 DevTestResults.value(name(), MilitaryBase.SIZE_NAME[size] + " built ms", (System.nanoTime() - t0) / 1000000);
                 dump(w, plan, size);
+                boolean toc = true;
                 for (String line : plan.debugLog())
                 {
+                    if (line.startsWith("TOC DID NOT FIT"))
+                    {
+                        toc = false;
+                    }
                     if (!line.contains(" ok "))
                     {
                         DevTestResults.value(name(), size + " refused", line);
                     }
                 }
+                // the TOC must always be there (the outpost had none for four versions unnoticed)
+                DevTestResults.check(name(), MilitaryBase.SIZE_NAME[size] + " has its TOC", toc, toc, "true");
                 for (Map.Entry<String, float[]> e : plan.pointsOfInterest().entrySet())
                 {
                     if (!only.isEmpty() && !("," + only + ",").contains("," + e.getKey() + ","))
