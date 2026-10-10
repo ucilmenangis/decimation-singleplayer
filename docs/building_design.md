@@ -110,6 +110,8 @@ the road). North-south streets use metadata 5/3, east-west streets 4/2.
   (`deci:BlockStreetBench`, 35% of slots) and bins (`deci:BlockStreetBin`,
   40%) on the inner sidewalk column, trash bags (`BlockTrashBag1/2`, 4%)
   scattered. Corners stay empty.
+- (The complete facing rules, every renderer and the drawn sizes:
+  docs/prop_placement.md, 11 Oktober 2026.)
 - Facing of any BlockProp, from deobf `PropRenderer`: translate, rotate 180
   about x, rotate metadata % 4 * 90 about y, then the prop's extra rotation.
   A model's +x then points: meta 4 west, 5 north, 2 east, 3 south for props

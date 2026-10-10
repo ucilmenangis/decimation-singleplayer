@@ -254,7 +254,9 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   Prism's `mods/` since 2026-10-07 (original in
   `minecraft/mods_backup_20261007/`); updated 2026-10-10 to 0.38.1 with the
   dev `config/decimation_worldgen` (lc city pack, large schematics), the
-  0.7.0 jars and old config in `minecraft/backup_20261010/`. The Prism
+  0.7.0 jars and old config in `minecraft/backup_20261010/`; since
+  2026-10-11 deciworldgen 0.42.1 (each replaced jar moved to
+  `minecraft/backup_20261010/`, older dist jars in `dist/previous/`). The Prism
   instance also has OptiFine HD U E7 and RTG; the dev client has neither
   (the user tests in the dev client: its fps are without OptiFine). Spotless is disabled to keep our style.
 - A Javassist patch to Decimation's own classes must go into THREE jars:
@@ -751,17 +753,18 @@ of the last session:
   v0.9.0 (dist only): armor vs NPC gunfire (`ArmorGunfireHandler`),
   singleplayer supply drops (`SupplyDropScheduler`) and humanity
   (`HumanityKillHandler`).
-  Next: user review of streets, lane markings, street furniture, driveways,
-  bridges.
+  What comes next: docs/roadmap.md.
   Decimation's own loot registry (`deci.aB.e`) is block-type-agnostic and will
   pick up its own crate/ammobox blocks in any structure regardless of who
   placed them, so loot inside our structures needs no new Decimation code —
   just place the right blocks in the schematics. Confirmed Decimation itself
   never touches world/biome generation (only an unrelated internal rendering
   stub, `deci.e.d`, implements `IChunkProvider`).
-- Performance complaints (scope-aiming FPS drop, prop-dense-area FPS drop) not
-  yet investigated — flagged as needing actual profiling, not guesswork, since
-  static bytecode reading alone won't reliably find a render bottleneck.
+- Performance: investigated and fixed by profiling (docs/performance.md): the
+  scope FPS drop (v0.28, bug.md), prop heavy views (PatchPropCulling, render
+  distance by size, v0.38.2), infected path search (v0.38.1), and props used
+  as building material (Decimation's BlockMilitaryBarrier: a tile entity per
+  cell, replaced by deciworldgen:hesco in v0.42.1). Profile before optimising.
 - Custom weapon models: `.bmodel` is PLAIN TEXT (Techne style model code,
   parsed line by line), fully documented 2026-10-07 in
   `docs/gun_model_spec.md` together with the `.anib` animation format, every

@@ -26,8 +26,9 @@ state, except the floor height of large structures (see Slices).
 
 - **Small schematics** (`config/decimation_worldgen/*.schematic`, max 24x24):
   one per cell with a sector dependent chance (wild 20%, civ 55%, mil 45%),
-  pool by filename prefix `civ_` / `city_` / `mil_` (untagged = every
-  sector), random rotation, anchored in the first 3 chunks of the cell,
+  pool by filename prefix `civ_` / `city_` (untagged = every sector; `mil_`
+  schematics are no longer placed since v0.42.0, military sectors get only
+  untagged small ones), random rotation, anchored in the first 3 chunks of the cell,
   written in ONE pass inside the safe 2x2 chunk population window. Skipped
   when the cell is covered by a large structure.
 - **City sectors** (v0.12.0 "city v2"): a street grid (`paintStreets`,
@@ -44,8 +45,11 @@ state, except the floor height of large structures (see Slices).
   schematics are NOT used in city sectors any more.
 - **Large schematics** (`config/decimation_worldgen/large/*.schematic`, any
   size up to 120x120): per site chance wild 15%, civ 30%, mil 50%, city 0,
-  same prefix pools, random rotation, placed fully inside the site.
-- **Zones**: `mil_` structures get a MILITARY zone, `city_` structures and
+  same prefix pools, random rotation, placed fully inside the site. A
+  military sector site always builds one of our US FOB style bases instead
+  (`LargeSites.militaryBase`, docs/military_base.md), never a schematic.
+- **Zones**: military bases (and `mil_` structures, no longer placed) get a
+  MILITARY zone, `city_` structures and
   every procedural building a POLICE zone (footprint + margin), stored per
   world in `<world>/deciworldgen_zones.json` (`ZoneStore`).
 
@@ -109,8 +113,9 @@ Decimation loot inside it, put the placeholder blocks where crates should be
 ## Adding community schematics
 
 1. Get `.schematic` files (MCEdit format) of ruins / buildings.
-2. Name them with the sector prefix: `mil_...`, `civ_...`, `city_...` (city
-   only applies to small ones), or no prefix for anywhere.
+2. Name them with the sector prefix: `civ_...`, `city_...` (city only applies
+   to small ones), or no prefix for anywhere. `mil_...` is ignored since
+   v0.42.0 (military sectors get our bases).
 3. Up to 24x24: `config/decimation_worldgen/`. Bigger: `config/decimation_worldgen/large/`.
 4. Restart the game fully (configs are read once per launch). The log lists
    `loaded large schematic '<name>' (WxHxL)` or why it was skipped.
@@ -192,6 +197,8 @@ never touches sidewalks, streets or the 3 block gaps between lots.
 - `python3 tools/worldcheck.py WORLD column|box ...` to read blocks; map ids to
   names through `level.dat` `FML.ItemData` (Decimation blocks can have ids
   below 256, so never assume >255 means modded).
-- Seed 1: city blocks near spawn, a `mil_compound` at -62,65,434 (rot 180).
+- Seed 1: city blocks near spawn; since v0.42.0 two combat outposts at
+  -216,63,435 (rot 90) and -90,66,404 (rot 180) where a `mil_compound` stood.
 - `tools/make_test_schematics.py` regenerates the 11 small test schematics
-  (byte identical) and `structures/large/mil_compound.schematic` (48x14x48).
+  (byte identical) and `structures/large/mil_compound.schematic` (48x14x48;
+  the `mil_` ones are not placed any more).

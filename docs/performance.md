@@ -121,3 +121,13 @@ alternating three times so the drift cancels; -Pview=x,y,z,yaw,pitch).
   `[inferred]` (and it would replace OptiFine, which works).
 - Other options left: render distance 8 to 10 in cities, OptiFine in the dev client, fewer
   hidden faces in our buildings.
+
+## 6. Props used as building material (11 Oktober 2026, v0.42.1)
+
+User on the v0.42.0 military bases: BlockMilitaryBarrier "really hurt fps lots cause its prop".
+Every BlockProp is a tile entity whose model the TileEntitySpecialRenderer draws each frame; the
+bases built their HESCO walls from it (about 900 / 1600 / 2300 cells per outpost / FOB / large
+FOB). Replaced by deciworldgen:hesco, a plain full block in the chunk mesh: tile entity props per
+base 1020 / 2007 / 2902 -> 129 / 381 / 571 (counted by tools/props/propclash.py on the dumps).
+The frame rate itself was not measured [not verified]. Rule: anything placed by the hundreds is
+a plain block, never a prop (docs/prop_placement.md).

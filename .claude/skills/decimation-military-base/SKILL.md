@@ -25,7 +25,8 @@ props placement".
   the layout, the sizes and the small things that make the place real. Write the facts with
   their sources into the design doc section 1 BEFORE coding.
 - Map every real element to a Decimation block (table in section 2 of the doc); the catalogue
-  has HESCO (BlockMilitaryBarrier), sandbags, concertina, T-walls (BlockBarrierTall), jersey
+  has HESCO (our block deciworldgen:hesco; Decimation's BlockMilitaryBarrier is a costly prop),
+  sandbags, concertina, T-walls (BlockBarrierTall), jersey
   barriers, hedgehogs, crates, cabinets, radios, generators, light towers, flags, wrecks.
 
 ## 2. Build

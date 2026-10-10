@@ -37,7 +37,9 @@ or `[not decided]`.
 3. apocalypsenow structures (.nbt) converter for military and other sites
    outside cities `[not decided]`. docs/references/deceasedcraft_buildings.md.
 4. Reserve the real footprint of wide props (bicycles, cars) in placers so
-   they do not overlap. docs/prop_footprints.tsv, docs/prop_catalogue.md.
+   they do not overlap. Done for the military bases (v0.42.1: PropBoxes +
+   Canvas.validateProps, docs/prop_placement.md); city placers (Slices,
+   furniture sets, street dressing) still to do with the same table.
 
 ## NPCs and combat (user plan, "later")
 

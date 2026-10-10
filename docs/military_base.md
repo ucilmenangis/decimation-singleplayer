@@ -113,6 +113,10 @@ the DFAC; care packages at the ASP / helipad.
   TOC, tents, motor pool, helipad, ...), deterministic from the site seed.
 - `worldgen/military/MilitaryBasePlan.java`: the Plan (Graded: ramps the ground around it),
   rotation, cache.
+- `worldgen/military/PropBoxes.java`: every prop's drawn box per metadata and its quarter turn
+  metadata (assets/deciworldgen/prop_boxes.tsv from tools/props/propgeom.py).
+- `Canvas.validateProps(log)`: removes and logs props drawn into blocks, doors or each other.
+- `worldgen/military/BlockHesco.java`: the HESCO block (textures from tools/props/hesco_textures.py).
 - `LargeSites`: military sector sites build a base instead of a `mil_` schematic.
 
 ## 5. Status
@@ -136,14 +140,18 @@ Traps met (the skill decimation-military-base has them as lessons):
 - The dev test builds in the sky (y 200) without the ground ramp (grading from y 200 down to the
   real terrain grew 100 block pillars), clouds off, render distance 16, a 30 tick capture
   window (slow frames skipped the 5 tick one).
-- Bigger props: the APC wreck is 5 x 8, the helicopter 8 x 9, jersey barriers and metal tables
-  3 long, the care package 3 x 3 (docs/prop_footprints.tsv).
+- Props are drawn bigger than their cell (computed, docs/prop_placement.md): APC 4.5 x 8.9,
+  helicopter 9.4 x 14, jersey barriers and tables 2 long, care package 2.25 x 1.9, spotlight
+  2.5 x 3.2. (The v0.42.0 notes said APC 5 x 8, helicopter 8 x 9, tables 3 long: eyeballed.)
 
 ## 6. How to test
 
 - `python3 tools/devtest.py --live milbase [sizes=0,1,2] [turns=0..3] [seed=N] [points=a,b]`:
   builds the sizes side by side in the sky at -4000,200,-4000, one shot per camera point
   (dev/run/client/screenshots/milbase_<size>_<point>), refused modules in the results.
-- `points=none` only builds and reports what did not fit (fast).
+- `points=none` only builds and reports what did not fit and the prop clashes (fast).
+- Every run writes dev/run/client/devtest/milbase_<size>.tsv (all blocks); `python3
+  tools/props/propclash.py dev/run/client/devtest/milbase_1.tsv` must report findings 0.
+- `turns=1` / `turns=3` too: rotated bases use the per prop quarter turn table.
 - Real worldgen: `python3 tools/servertest.py 1 type=decimation pregen=-64,448,9` places the
   two seed 1 COPs; the log lines "military base (...) ... at x,y,z".

@@ -9,9 +9,11 @@ there). Read THIS instead of re-shooting. Size = rough model size in blocks
 (w x h, long side first). "Faces camera" = its front points south at meta
 3 (camera stood south of the row).
 
-Facing rules (see docs/building_design.md "Street life"): BlockProp models
-turn by metadata % 4 * 90 deg; for props with extra rotation 180 the front
-points east 2, south 3, west 4, north 5. Doors use VANILLA door metadata
+Facing and drawn sizes: docs/prop_placement.md is the reference since
+11 Oktober 2026 (most props face the placer: front east 2, south 3, west 4,
+north 5; the exceptions; drawn boxes per metadata computed from the code).
+BlockProp models turn by metadata % 4 * 90 deg; props with their own
+renderer have their own table. Doors use VANILLA door metadata
 (they copy BlockDoor without extending it): lower half 0..3 (0 west edge,
 1 north edge, 2 east edge, 3 south edge of the cell), upper half 8; place
 both halves or the door removes itself. Decals and graffiti render as an
@@ -40,7 +42,9 @@ Full cube texture blocks (usable as building materials, not props):
   Bottom on the first course, Top above.
 - BlockSandbagStack green grey, BlockSandbagStackBeige beige: sandbag cubes.
 - BlockPackagedCocaineStack: cube of wrapped white packages.
-- BlockMilitaryBarrier: brown mesh cube (HESCO style).
+- BlockMilitaryBarrier: brown mesh cube (HESCO style). NOT a plain block: it
+  is a prop (a tile entity and a model render per cell); never use it as a
+  building material in bulk (v0.42.1: deciworldgen:hesco replaced it).
 
 Props (single block cell, model may be bigger):
 
@@ -193,4 +197,7 @@ block (west / east / north / south, blocks) and the cells it covers
 (overhang under 0.3 counts as inside). A plain cube measures 0 on every
 side. 26 props show nothing from above (flat decals, signs and wall
 screens seen edge on, or no model) and are listed as "-". Footprints
-turn with facing (meta % 4 * 90). Not used by the placer yet.
+turn with facing (meta % 4 * 90). Superseded (11 Oktober 2026) by the
+boxes computed from the renderer code, tools/props/propgeom.py and
+docs/references/prop_geometry.tsv (they match these photos for 204 of 221
+props), which the military base placer uses (docs/prop_placement.md).

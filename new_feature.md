@@ -797,6 +797,8 @@ the user before building.
    effect yet), hazmat suits and gas masks as items.
 7. Advanced military base. Exists: military sectors with mil_ schematics,
    MILITARY zones, MilitarySpawner groups (juggernaut / elite / snipers).
+   Update: since v0.42.0 / v0.42.1 our own US FOB style bases replace the
+   mil_ schematics (docs/military_base.md).
 8. Advanced bandits. Exists: bandit tiers (light / medium / heavy / rpg).
 
 ### More zombie variants, 60 round magazines, NPC bullet impacts (9 Oktober 2026, "later")
