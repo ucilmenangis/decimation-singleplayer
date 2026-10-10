@@ -259,9 +259,14 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   `minecraft/backup_20261010/`, older dist jars in `dist/previous/`). The Prism
   instance also has OptiFine HD U E7 and RTG; the dev client has neither
   (the user tests in the dev client: its fps are without OptiFine). Spotless is disabled to keep our style.
+- PRISM IS OFF LIMITS (user rule 2026-10-11): the user tests ONLY in the dev
+  client (`./gradlew runClient` / IntelliJ), never in Prism. Do not launch
+  Prism, do not kill its processes, do not copy jars into its `mods/`.
+  Releases end at `dist/`. The Prism notes here are history only; touch Prism
+  only when the user asks for it in that conversation.
 - A Javassist patch to Decimation's own classes must go into THREE jars:
   `Decimation.jar.patched`, `dist/Decimation.jar`, `dev/libs/Decimation-base.jar`
-  (then Prism's copy). Patch sources live in `tools/patches/` (so far:
+  (not Prism: see the rule above). Patch sources live in `tools/patches/` (so far:
   `PatchSwing.java`, SmoothSwingThread busy loop; `PatchPropCulling.java`,
   props not rendering, both 2026-10-07; `PatchScope.java`, picture in
   picture scope gated behind `decimation.scope.pip`, 2026-10-08;
@@ -288,12 +293,10 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   only after checking the target class is identical in the patched jar. Earlier
   patches (loot handler, proxy cast, weapon nerf, armor buff, intro skip,
   ammo crate) were one-off and have no saved source.
-- Prism: `CustomSkinLoader_Universal-15.0.1.jar` is renamed `.disabled`; it is
-  a Forge 1.8+ coremod and crashed every launch. Prism can be driven from the
-  shell: `"/Applications/Prism Launcher.app/Contents/MacOS/prismlauncher"
-  --launch "Decimation, but better."`, then read
-  `<instance>/minecraft/logs/fml-client-latest.log`. A splash "Minecraft
-  Crash Report" saying "THIS IS NOT A ERROR" is only a spec printout.
+- Prism (history, do not use without the user's request): `CustomSkinLoader_Universal-15.0.1.jar`
+  is renamed `.disabled`; it is a Forge 1.8+ coremod and crashed every launch.
+  A splash "Minecraft Crash Report" saying "THIS IS NOT A ERROR" is only a spec
+  printout.
 
 ## Testing without the user (no screen capture permission here)
 
