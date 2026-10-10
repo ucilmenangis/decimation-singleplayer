@@ -52,3 +52,7 @@ dev/src/main/resources/assets/deci/models/guns/smg/ump9.bmodel
 dev/src/main/resources/assets/deci/textures/model/guns/smg/ump9/
 dev/src/main/resources/assets/deci/textures/items/gun/smg/ump9.png
 dev/src/main/resources/assets/deci/animations/ump9/
+dev/src/main/resources/assets/deci/models/guns/rifle/hk416*.bmodel
+dev/src/main/resources/assets/deci/textures/model/guns/rifle/hk416*/
+dev/src/main/resources/assets/deci/textures/items/gun/rifle/hk416*.png
+dev/src/main/resources/assets/deci/animations/hk416*/

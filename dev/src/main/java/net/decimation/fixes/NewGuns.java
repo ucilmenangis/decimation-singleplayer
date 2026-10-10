@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
  */
 public final class NewGuns
 {
-    public static Item mac10, mac10Mag, ump9, ump9Mag;
+    public static Item mac10, mac10Mag, ump9, ump9Mag, hk416, hk416tan;
 
     private NewGuns()
     {
@@ -46,6 +46,34 @@ public final class NewGuns
         FMLLog.info("[deciworldgen] MAC-10 registered: loot %d gun / %d mag pools, %d sounds from the Uzi, suppressor %s",
                     gunPools, magPools, sounds, suppressor ? "moved" : "not moved");
         registerUmp9();
+        registerHk416();
+    }
+
+    /**
+     * HK416 and HK416 Tan (user request 10 Oktober 2026, "two separate guns"): Decimation's M4A4 with
+     * our HK handguard, front sight, barrel, flash hider, stock and grip, generated locally by
+     * tools/guns/hk416.py (git ignored, registered only when the models exist). STANAG magazines
+     * like the M4A4 (its m4a4Mag and our 60 round STANAG); damage 16 like the M4A4, 800 rpm, a bit
+     * less kick (gas piston); the M4A4's sounds; found where the M4A4 is found.
+     */
+    private static void registerHk416()
+    {
+        if (NewGuns.class.getResource("/assets/deci/models/guns/rifle/hk416.bmodel") == null
+            || NewGuns.class.getResource("/assets/deci/models/guns/rifle/hk416tan.bmodel") == null)
+        {
+            FMLLog.info("[deciworldgen] HK416 not registered: run tools/guns/hk416.py (needs Decimation.jar)");
+            return;
+        }
+        Item m4a4 = GameRegistry.findItem("deci", "m4a4"), m4a4Mag = GameRegistry.findItem("deci", "m4a4Mag");
+        hk416 = Deci.newGun("hk416", "rifle", 6.5f, 0.2f, true, 3.0f, 800f, 0.13, 16, m4a4Mag, Magazines.stanag60);
+        hk416tan = Deci.newGun("hk416tan", "rifle", 6.5f, 0.2f, true, 3.0f, 800f, 0.13, 16, m4a4Mag, Magazines.stanag60);
+        int pools = Deci.addLootLike(m4a4, new ItemStack(hk416, 1)) + Deci.addLootLike(m4a4, new ItemStack(hk416tan, 1));
+        int sounds = 0;
+        if (FMLCommonHandler.instance().getSide().isClient())
+        {
+            sounds = Deci.useGunSounds("hk416", "rifle", "m4a4", "rifle") + Deci.useGunSounds("hk416tan", "rifle", "m4a4", "rifle");
+        }
+        FMLLog.info("[deciworldgen] HK416 / HK416 Tan registered: loot %d pools, %d sounds from the M4A4", pools, sounds);
     }
 
     /**

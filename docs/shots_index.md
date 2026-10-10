@@ -654,3 +654,14 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
 - gunperf_<gun>_dropped / _held (dev/run/client/screenshots, not copied):
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
+
+## hk416_v0.39/ (HK416 black and tan, variant of the M4A4)
+- m4a4_side_split.png, m4a4_*.png: the M4A4's part split (handguard 112 parts x 7.5 .. 14.7, A-frame
+  and gas block 14.7 .. 16.6, barrel 12.15 .. 18.15, stock below x 0, A2 grip).
+- cmp_side.png: M4A4, HK416, HK416 Tan side by side: HK rail flush with the receiver rail, tall
+  folding front sight, thin barrel with HK flash hider, slim line stock with ribbed butt and fins,
+  raked grip; the tan one tan except sights, barrel, muzzle, trigger.
+- ours_hk416(_tan)_side / other / top / three.png renders; attach_ours_hk416tan_arSuppressor_reddot_*.png.
+- gunview_<gun>(_aim / _npc).png and aim_cmp.png: aim crops with centre lines, M4A4 / HK416 /
+  HK416 Tan: rear aperture and post tip on the same line. gunview_hk416tan_att(_npc).png: first
+  person with red dot and suppressor (tan furniture, black sight and suppressor).

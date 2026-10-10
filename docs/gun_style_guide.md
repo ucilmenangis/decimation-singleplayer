@@ -190,6 +190,11 @@ were (tools/guns/ump9.py; outputs git ignored, registered only when
 present). Everything else (aim, attachments, hands, animations) is then
 Decimation's own and needs no checking beyond the new parts.
 
+HK416 (v0.39.0, tools/guns/hk416.py): several areas replaced (handguard, front sight, barrel,
+stock, grip) by position rules on the M4A4; our parts fitted to the kept receiver's numbers
+(rail teeth y -3.6), lengths from the user's photo; a colour twin (tan) from the same model by
+recolouring every island to one tone with its gradation kept.
+
 ## 6c. Closing the gaps: `study.py gaps` (v0.37.3)
 
 `python3 tools/guns/study.py gaps ours:<gun>` lists every metric of ours

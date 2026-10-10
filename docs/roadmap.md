@@ -58,6 +58,7 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
+0b. HK416 and HK416 Tan (v0.39.0): waiting for the user's verdict.
 0. UMP9 (v0.38.0): accepted by the user ("work really well and no
    problem"); more variants of Decimation guns can be made the same way
    (skill lesson 13).

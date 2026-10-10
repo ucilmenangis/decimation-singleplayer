@@ -136,7 +136,9 @@ public class GunTest extends DevTestMode
 
     private static Item mag()
     {
-        return ours(GUN + "Mag");
+        // -Pmag=deci:m4a4Mag for guns that take a Decimation magazine (HK416); else deciworldgen:<gun>Mag
+        String m = System.getProperty("deciworldgen.autotest.mag", "");
+        return m.isEmpty() ? ours(GUN + "Mag") : (Item) Item.itemRegistry.getObject(m);
     }
 
     private static ItemStack fullMag()

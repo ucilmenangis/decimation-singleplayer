@@ -546,6 +546,25 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### HK416 and HK416 Tan (DONE v0.39.0, 10 Oktober 2026, waiting for the user's verdict)
+User: "try hk416 ... make 2 version, black and tan", 5 photos; "two separate guns" (asked:
+skin spray can vs two guns vs both). Variant route like the UMP9: tools/guns/hk416.py builds
+both from Decimation's M4A4 (generated locally, git ignored). Kept: receiver, trigger group,
+magazine, folding rear sight (aim and hands stay the M4A4's). Dropped by position (155 parts):
+quad rail, gas block and A-frame, barrel and birdcage, collapsible stock, A2 grip. Ours (121
+parts): HK rail handguard flush with the receiver rail (teeth y -3.6, 0.4 pitch; side and
+bottom rails, slots), tall HK folding front sight (post tip -4.7 like the M4A4's), thin barrel
+on the M4A4 bore and HK flash hider to the same muzzle x 19.15, HK slim line stock (ribbed
+butt, angled panel with fins, buffer tube), raked HK grip with finger bumps and panels.
+Lengths from the user's side photo (rear sight and muzzle as anchors: the butt then lands
+within 0.03 of the M4A4's). Tan: the same model, the texture's islands recoloured flat dark
+earth (each island brought to one tone, its gradation kept) except sights, barrel, muzzle,
+trigger, bolt. Registered as deciworldgen:hk416 / hk416tan (STANAG: m4a4Mag and our 60 round),
+damage 16, 800 rpm, recoil 6.5 / 0.2, the M4A4's sounds, loot where the M4A4 is.
+Checked: renders next to the M4A4 (docs/shots/hk416_v0.39), aim crops with the M4A4 (rear
+aperture and post tip on the same line), arSuppressor at the M4A4's place, red dot, reload 30,
+gunperf within noise of the M4A4.
+
 ### UMP9 (DONE v0.38.0, 10 Oktober 2026; user: "the ump9 work really well and no problem")
 Built as the user suggested: Decimation's UMP45 generated locally from
 their Decimation.jar (tools/guns/ump9.py, outputs git ignored) with our

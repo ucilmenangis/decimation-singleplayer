@@ -429,6 +429,29 @@ revision (same commit), never remove old ones.
   (lesson 13: Decimation's model plus our part, generated locally) needed
   no revision: aim, attachments and hands were Decimation's own.
 
+### Case 13: HK416 black and tan, a variant with many replaced parts (v0.39.0, 10 Oktober 2026)
+- Request (user): HK416, 5 photos, "make 2 version black and tan", then
+  "two separate guns" (choices offered: Decimation's skin spray can,
+  two guns, both).
+- How: tools/guns/hk416.py (template for variants that replace several
+  areas): parse the base model with study.Gun, choose the parts to drop
+  by POSITION (dropped(): x / y ranges per area, plus named grip parts;
+  beware long parts that start inside a dropped area and run past it,
+  like the M4A4 barrel 12.15 .. 18.15: drop anything reaching past the
+  area's end), filter their bmodel lines with a word boundary regex on
+  the names, append ours as gunModel1000+.
+- Fitting ours to theirs: read their receiver's numbers, not the photo's
+  heights (the M4A4 receiver rail teeth are at y -3.6 on a 0.4 pitch; the
+  first handguard stood 0.6 higher than the receiver, the real gun is
+  flush); lengths from the photo calibrated on two kept parts (rear
+  sight, muzzle) and checked on a third (butt within 0.03).
+- Colour variants: same model, recoloured texture; bring each island to
+  one tone first (their islands are darker than ours: the first tan
+  receiver came out dark brown), keep the texel gradation, a +-6 % shade
+  per island; parts that stay black chosen by name / position.
+- Checks: aim crops next to the base gun, suppressor numbers equal to
+  the base gun's, gun test with -Pmag=deci:m4a4Mag, gunperf.
+
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first
   person shots need the GUI on.
