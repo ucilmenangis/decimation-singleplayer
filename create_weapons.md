@@ -5,6 +5,12 @@ paths depending on ambition: **reskin** (reuse an existing 3D model, change
 stats/name/texture — easy, same-session doable) vs **new model** (genuinely new
 shape — needs Techne or similar, see below).
 
+Update (since v0.36.0, 10 Oktober 2026): new models are built in code by our own
+pipeline, no Techne needed: tools/guns (gunmodel.py, one spec per gun), renders and
+measurements with tools/guns/study.py, registration in fixes/NewGuns; the whole
+workflow is the project skill decimation-gun (docs/gun_model_spec.md section 6,
+docs/gun_style_guide.md). The Techne recipe below is the older manual route.
+
 ## The `.bmodel` format (not what it looks like)
 
 Every gun's 3D model file lives at `assets/deci/models/guns/<category>/<name>.
@@ -110,7 +116,7 @@ aqY = new i("ak74", e2, deci.ay.c.rifle, itemArray).f(0.13).am(15);
    (see `CLAUDE.md`) - `deci.aD.k` has no lambdas in the registration section,
    so straightforward `CtMethod` edits/insertions should work directly.
 
-## Recipe: genuinely new model (needs Techne)
+## Recipe: genuinely new model (manual Techne route; our pipeline: skill decimation-gun)
 
 1. Build the gun as boxes in Techne (or compatible 1.7.10-era cuboid editor),
    export as Java.

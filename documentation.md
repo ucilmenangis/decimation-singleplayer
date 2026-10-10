@@ -16,7 +16,9 @@ game layer on top of vanilla Forge 1.7.10:
 - **Central network service**: the mod talked to `network.mcdecimation.net` over a
   custom TCP protocol (Kryonet) for stats tracking (kills, deaths, supporter status,
   clan bounties). That service is dead - the mod tries to reconnect forever and just
-  fails silently now. Harmless, just noisy in logs.
+  fails silently now. Mostly harmless, noisy in logs; since v0.28.8 (PatchBackend) the
+  launch no longer waits 5 s for it. Still open (bug.md): the main menu shows an offline
+  banner and "Play offline", and the kill / death counters read the dead service (0).
 - **Vehicles**: rideable car/vehicle entities (`deci.ad.c`) with horn, headlights,
   passenger seats. No lootable trunk feature exists in this build - vehicles are
   ride-only.
@@ -26,7 +28,7 @@ game layer on top of vanilla Forge 1.7.10:
 ## How the loot table works
 
 Three moving parts, all server-side logic (this is exactly why singleplayer never
-worked before patching - see Session Log):
+worked before patching - see bug.md):
 
 1. **Loot pool definition** - `deci.aD.l` (main class). Its `gh()` method builds a
    `Block -> ItemPool` map at startup: each entry is `(Block, weight, List<ItemStack>)`.
@@ -115,6 +117,9 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
     Melee armor and helmet-affecting-ranged would both need separate new logic,
     not just a number tweak - left alone for now per user's call to keep this
     scoped.
+  - Update (v0.9.0 / v0.9.1, our deciworldgen jar, `ArmorGunfireHandler`): armor now
+    also reduces NPC gunfire, and helmets count, on headshots only (the aim line for
+    player guns, 20 % of NPC shots). Melee is still vanilla armor points.
 
 - **NPC tiers (v0.30.0, our deciworldgen jar)**: bandits, soldiers and
   Soviets get a tier when they spawn (gear, gun, health, fire rate, share
@@ -149,6 +154,40 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
 - **60 round magazines (v0.35.0)**: 60rnd NATO STANAG (M16 family, M4A4,
   ACR, L85A1, SCAR-L) and 60rnd AK (AK-74 family), found in the same loot
   as the 30 round mags.
+- **NPC burst rate (v0.39.2)**: NPC automatic fire is capped at 600 rounds a minute
+  (`maxBurstRpm` in deciworldgen_npc.cfg, category npc_fire); a gun slower than that
+  keeps its own rate. Before, machine guns (PKM, M240, MG3) fired every tick.
+- **Guns of our own (v0.36 to v0.41, deciworldgen items)**: MAC-10 (smg, 1100 rpm,
+  own 30 round mag), UMP9 (smg, 650 rpm, own curved 9 mm mag), HK416 and HK416 Tan
+  (rifle, 800 rpm, STANAG and 60 round mags), Mk18 Mod 1 (rifle, 800 rpm, STANAG and
+  60 round mags). Registered damage 12 / 11 / 16 / 15, halved like every gun by the
+  global patch above (6 / 6 / 8 / 8 per hit). They drop wherever their model gun drops
+  (MAC-10 with the Uzi, UMP9 with the UMP45, HK416 and Mk18 with the M4A4).
+- **Sights of our own (v0.41)**: EOTech 558 (1.25x, red ring and dot) and ACOG TA11
+  (3.5x, BDC reticle); the reticle is drawn in the sight's glass and sways with the gun.
+  Iron sights fold away while any sight is attached (v0.40.0).
+
+## Settings of our jar (config/)
+
+- `deciworldgen_scope.cfg`: `pictureInPicture` (false = the cheap zoom scope; true =
+  Decimation's own, about half the fps), `sensitivity` (mouse slowdown while zoomed),
+  `overlayFrom` (scopes from this magnification show the black sniper overlay, 4).
+- `deciworldgen_props.cfg`: prop render distance by size: small 24, medium 32, large 48
+  blocks (64 = vanilla; city views lost about 18 % of the frame to props before).
+- `deciworldgen_npc.cfg`, `deciworldgen_mobs.cfg`, `deciworldgen_zombies.cfg`: see the
+  balance list above.
+- `decimation_worldgen/`: our world generation data (city pack, schematics, furniture
+  sets, palettes); docs/worldgen.md and docs/city_engine.md.
+
+## Military bases (v0.42, our world generation)
+
+Military sectors of the "Decimation" world type get US FOB style bases: a combat outpost,
+a FOB or a large FOB (HESCO walls, towers, gate with a serpentine, TOC, B-huts, ammunition
+point, motor pool, tents, helipad). Loot is Decimation's own crates (its loot tables):
+military crates, ammo cases, weapon cabinets, medical crates, footlockers, care packages.
+The TOC door is locked: a military keycard on the screen beside it opens it (or a
+lockpick); military crates, military wrecks and care packages can drop that keycard.
+Details: docs/military_base.md.
 
 ## Bug and feature tracking
 

@@ -1,4 +1,4 @@
-# Roadmap: planned work (9 Oktober 2026)
+# Roadmap: planned work (9 Oktober 2026, updated 11 Oktober 2026)
 
 One list of everything still to build or fix, so nothing gets lost between
 sessions. Each item points at the doc that holds its details. Keep it
@@ -78,28 +78,19 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Items and weapons
 
-0b. HK416 and HK416 Tan: v0.39.1 fixes the user's review of v0.39.0 (floating stock
-   pieces, "2 pillar" front sight: really the rear sight reading our texture; skill
-   casebook case 14); waiting for the user's verdict.
-0e. Sights onto the rail (v0.40.1, bug.md); Mk18 IMI Defense TS stock, EOTech 558 and ACOG TA11
-   (v0.41.0), reticles in the glass, HK416 front sight folds away (v0.41.1, skill case 19):
-   ACCEPTED by the user 10 Oktober 2026 ("really good result"; skill case 20) ("small detail will be i analyze"). Open: the
-   Mk18 held fps was 14 vs the M4A4's 22 in one gunperf run and equal in the next (318 parts, 82
-   of them rail holes) `[not verified]`.
-0d. Mk18 Mod 1 (v0.40.0) and iron sights hidden under a sight (all guns with defaultScope
-   parts): waiting for the user's verdict. Possible polish: study.py gaps lists 7 metrics
-   outside the rifle range (mostly the M4A4 base and the many rail teeth).
-0c. MAC-10 parts seated (v0.39.3, skill casebook case 15): 17 flagged -> 2 flanges
-   kept on purpose; aim unchanged. Waiting for the user's look in game.
-0. UMP9 (v0.38.0): accepted by the user ("work really well and no
-   problem"); more variants of Decimation guns can be made the same way
-   (skill lesson 13).
-1. **More scope models**: EOTech 558 and ACOG TA11 3.5x DONE (v0.41.0, tools/guns/sights.py,
-   skill casebook case 18), waiting for the user's look. More later the same way (PSO-1 for the
-   AK family, 6x / 10x sniper scopes) `[not decided]`: ask the user and for photos.
+Guns are built with the skill decimation-gun (tools/guns, docs/gun_style_guide.md,
+docs/gun_model_spec.md); every user review goes into its lessons and casebook.
 
-1. Custom weapon creation: how-to written, a new model needs Techne.
-   create_weapons.md, docs/gun_model_spec.md.
+1. **Waiting for the user's look in game**: MAC-10 parts seated (v0.39.3, casebook case 15);
+   the HK416 stock / front sight fixes of v0.39.1 (case 14; its front sight folding away under a
+   sight was accepted with the sights). Open: the Mk18 held 14 fps against the M4A4's 22 in one
+   gunperf run and equal in the next (318 parts, 82 rail holes) `[not verified]`.
+2. **More scope models** the same way as the EOTech 558 / ACOG TA11 (accepted 10 Oktober 2026,
+   casebook case 20): PSO-1 for the AK family, 6x / 10x sniper scopes `[not decided]`: ask the
+   user for the models and photos.
+3. **More guns of our own** or variants of Decimation's (UMP9 / HK416 / Mk18 route, lesson 13),
+   on request with the user's photos.
+4. **Sniper NPC nerf** and the NPC loot system: under "NPCs and combat".
 
 ## UI
 
@@ -139,8 +130,6 @@ Details and starting points: new_feature.md "Zones, factions and world".
 
 ## Recently done (details in bug.md / new_feature.md)
 
-- v0.39.2 NPC machine guns no longer fire at double rate (burst rate
-  capped at 600 rpm, config maxBurstRpm), dev test firerate.
 - v0.28.0..0.28.4 cheap scope (zoom, see-through glass, sniper overlay
   from 4x); v0.28.5 NPC tracers aimed at the target; v0.28.6 / 0.28.7 prop
   and entity line of sight cache, prop render distance option; v0.28.8
@@ -186,3 +175,20 @@ Details and starting points: new_feature.md "Zones, factions and world".
 - Live dev test mode (9 Oktober 2026): `tools/devtest.py --live [--swap]`,
   the game stays open (`-Plive`, port 127.0.0.1:25599), a rerun costs only
   its own time (CLAUDE.md "Testing").
+- v0.33.0 vanilla mobs removed from the overworld (config deciworldgen_mobs.cfg).
+- v0.34.0 zombie variants: runner, riot, screamer, night frenzy, eggs.
+- v0.35.0 60 round STANAG and AK magazines.
+- v0.36.0 to v0.37.3 MAC-10, the first gun of our own (tools/guns pipeline, Decimation style
+  shape parts, aim matched to the Uzi, suppressor on the threads); accepted.
+- v0.38.0 UMP9 from Decimation's UMP45 with our curved 9 mm magazine; accepted.
+- v0.38.1 / 0.38.2 performance: infected path search patch, prop render distance by size,
+  dev test modes gunperf / census / cityview (docs/performance.md).
+- v0.39.0 / 0.39.1 HK416 and HK416 Tan from the M4A4, review fixes; v0.39.2 NPC burst rate
+  cap; v0.39.3 MAC-10 parts seated.
+- v0.40.0 Mk18 Mod 1, iron sights fold away under a sight; v0.40.1 sights sit on each gun's
+  rail.
+- v0.41.0 / 0.41.1 EOTech 558 and ACOG TA11 of our own, reticles in the glass swaying with the
+  gun, Mk18 IMI TS stock, HK416 front sight folds away; accepted.
+- v0.42.0 / 0.42.1 US FOB style military bases in three sizes (docs/military_base.md), own
+  HESCO block, locked TOC door, the prop placement study (docs/prop_placement.md); waiting
+  for the user's review.

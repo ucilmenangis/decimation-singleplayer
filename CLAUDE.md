@@ -768,6 +768,6 @@ of the last session:
 - Custom weapon models: `.bmodel` is PLAIN TEXT (Techne style model code,
   parsed line by line), fully documented 2026-10-07 in
   `docs/gun_model_spec.md` together with the `.anib` animation format, every
-  asset path, the renderer and a new gun checklist. Reskinning an existing
-  weapon is low risk; a new mesh needs Techne/Toolbox (visual work) plus the
-  checklist. (An older note here called it a binary format; that was wrong.)
+  asset path, the renderer and a new gun checklist. New meshes are built in
+  code since v0.36.0 (tools/guns, skill decimation-gun), no Techne needed.
+  (An older note here called it a binary format; that was wrong.)

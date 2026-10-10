@@ -182,7 +182,8 @@ bolted.
 
 ## 5. Checklist for a new gun
 
-1. Model in Techne/Toolbox, every box as a shape box (`addShape`). Name the
+1. Model (our way: tools/guns/gunmodel.py, section 6 and the skill
+   decimation-gun; or by hand in Techne/Toolbox), every box as a shape box (`addShape`). Name the
    body `gunModel*`, the magazine `ammoModel*`, the moving slide/bolt
    `slideModel*`. Export, add the header lines (`flamePos`, `ejectPos`,
    `sPos`, `rhPos`, `lhPos`, texture size).

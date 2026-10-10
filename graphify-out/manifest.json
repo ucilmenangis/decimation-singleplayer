@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791653327.6892412,
-    "ast_hash": "ff937a336b7fb4e9234e7566b2b41dd9",
-    "semantic_hash": "ff937a336b7fb4e9234e7566b2b41dd9"
+    "mtime": 1791653625.5970297,
+    "ast_hash": "4b362889f90eb508e927ca8b3f9dd0b4",
+    "semantic_hash": "4b362889f90eb508e927ca8b3f9dd0b4"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -125,9 +125,9 @@
     "semantic_hash": "aa57445b34224bbebcc18072b9d9caed"
   },
   "create_weapons.md": {
-    "mtime": 1791570457.0174904,
-    "ast_hash": "3941d6cff12c39931caeedbbf7ed8af8",
-    "semantic_hash": "3941d6cff12c39931caeedbbf7ed8af8"
+    "mtime": 1791653625.5948887,
+    "ast_hash": "f0b33c4f53a3ed5889ded90dff5179fa",
+    "semantic_hash": "f0b33c4f53a3ed5889ded90dff5179fa"
   },
   "deobf/BRIEF.md": {
     "mtime": 1791346228.5641508,
@@ -140,14 +140,14 @@
     "semantic_hash": "f5f7ed9764011af0e3df121e92cff225"
   },
   "docs/gun_model_spec.md": {
-    "mtime": 1791638294.2501588,
-    "ast_hash": "8085ab282bbc636795d1d1954a87df99",
-    "semantic_hash": "8085ab282bbc636795d1d1954a87df99"
+    "mtime": 1791653625.5958328,
+    "ast_hash": "5ec10a4c3f93750361afcbaae6df524a",
+    "semantic_hash": "5ec10a4c3f93750361afcbaae6df524a"
   },
   "documentation.md": {
-    "mtime": 1791548233.2715552,
-    "ast_hash": "684b36c6d19ac6a24a55f1ed3839190c",
-    "semantic_hash": "684b36c6d19ac6a24a55f1ed3839190c"
+    "mtime": 1791653583.0887794,
+    "ast_hash": "adf9e919783059d3ce457a60f41af4ce",
+    "semantic_hash": "adf9e919783059d3ce457a60f41af4ce"
   },
   "new_feature.md": {
     "mtime": 1791653327.6915376,
@@ -655,9 +655,9 @@
     "semantic_hash": "fcaf65f43d983d02c0fb54297bfc77a4"
   },
   "docs/roadmap.md": {
-    "mtime": 1791653327.691416,
-    "ast_hash": "8e4a7517ec8e736b07abe2e7fef4d4e0",
-    "semantic_hash": "8e4a7517ec8e736b07abe2e7fef4d4e0"
+    "mtime": 1791653608.888176,
+    "ast_hash": "ec3b85cf2382f3845141efc4d97bb742",
+    "semantic_hash": "ec3b85cf2382f3845141efc4d97bb742"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
