@@ -259,6 +259,14 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   `minecraft/backup_20261010/`, older dist jars in `dist/previous/`). The Prism
   instance also has OptiFine HD U E7 and RTG; the dev client has neither
   (the user tests in the dev client: its fps are without OptiFine). Spotless is disabled to keep our style.
+- TEST WORLD (2026-10-11): dev tests use their OWN world `deciworldgen_devtest`
+  (DevAutoTest.SAVE); the user plays in `deciworldgen_autotest` (same run
+  folder, dev/run/client). Never point a test at the user's world: a fresh
+  world test deletes its folder. The live test game quits safely (leaves the
+  world, waits for the save, then exits; DevAutoTest.quitSafely): mc.shutdown()
+  inside a world once wrote a broken level.dat id table into the user's world
+  (bug.md). Before starting a live test, check no game of the user's runs
+  (`pgrep -f "zulu-8.jdk.*GradleStart"`), and never run two games on one world.
 - PRISM IS OFF LIMITS (user rule 2026-10-11): the user tests ONLY in the dev
   client (`./gradlew runClient` / IntelliJ), never in Prism. Do not launch
   Prism, do not kill its processes, do not copy jars into its `mods/`.
@@ -376,7 +384,7 @@ SRG→MCP from the old root `src/` via `mcp_stable/12` CSVs; the root `src/` +
   them in `docs/shots_index.md`.
 - `./gradlew runClient -Pautotest` (in `dev/`): unattended singleplayer run
   (`DevAutoTest`, inert without the flag): makes world
-  `deciworldgen_autotest` from seed 1, spawns infected inside a generated
+  `deciworldgen_devtest` (was deciworldgen_autotest until v0.42.5) from seed 1, spawns infected inside a generated
   zone and outside, drops 5 bottlecaps on the player and checks they become
   balance, punches a spawned hummer as survival (plain and sneaking), hits
   the player with 10 "human" damage bare and in Decimation armor, kills an
@@ -724,6 +732,10 @@ of the last session:
   v0.42.4: tower ladders on an open face (MilitaryBase.ladderCell), the
   outpost TOC back (missing since v0.42.0), walk test tools/props/walkcheck.py
   (must be 0 before handing a base over), milbase test checks "has its TOC".
+  v0.42.5: wreck hardness 10 (fixes/WreckHardness), sniper NPC nerf (sniper
+  shots x0.8, Barrett x0.6, sniperRange 70, Barrett tiers die to one 5.56
+  magazine; deciworldgen_npc.cfg version 3), dev test `npckill`; tests in
+  their own world deciworldgen_devtest, safe quit of the live test game.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

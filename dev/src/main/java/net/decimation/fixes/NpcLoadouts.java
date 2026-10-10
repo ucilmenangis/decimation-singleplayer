@@ -146,7 +146,9 @@ public class NpcLoadouts
     /** Ticks a reload takes once the magazine is empty (user 2026-10-09: about 4 s). */
     private int reloadTicks = 80;
     /** How far an NPC with a sniper rifle looks for enemies (Decimation's findTarget: 32 for all). */
-    private int sniperRange = 96;
+    private int sniperRange = 70;             // 96 until v0.42.5 (user 2026-10-11: "now 70")
+    /** NPC shot damage for sniper rifles / for the Barrett (user 2026-10-11: about -20 % / -40 %). */
+    private float sniperDamage = 0.8f, barrettDamage = 0.6f;
     /** Spread factor for machine guns; sniper rifles use SNIPER_SPREAD degrees. */
     static final float MG_SPREAD = 1.4f, SNIPER_SPREAD = 0.25f, UNTIERED_SPREAD = 1.2f;
     private final Random random = new Random();
@@ -209,11 +211,13 @@ public class NpcLoadouts
                 new String[] {"sight=8x", "barrel=arSuppressor", "grip=laser"}));
         // sniper versions (user 2026-10-09: "split eggs for sniper on juggernaut and elite, don't make it
         // rare"): MilitarySpawner picks them for sniperShare of its juggernauts / elites
-        tiers.add(new Tier("juggernaut_sniper", NpcKind.SOVIET, 0, 0, 200, 0.25f,
+        // the Barrett tiers die to one 30 round 5.56 magazine (user 2026-10-11; dev test npckill: a
+        // player M4A4 hit is 8 x damageTaken: 60 / (8 x 0.25) = 30 hits, 38 / (8 x 0.16) = 30)
+        tiers.add(new Tier("juggernaut_sniper", NpcKind.SOVIET, 0, 0, 60, 0.25f,
             new String[][] {{"juggernautHelm", "juggernautHelmGray"}, {"juggernautVest", "juggernautVestGray"},
                             {"juggernautPants", "juggernautPantsGray"}, {"juggernautBoots", "juggernautBootsGray"}},
             "barrett").spread(1.0f).heavy(0.18, 1.0).elite(1.0f, null, new String[0], new String[] {"sight=8x"}));
-        tiers.add(new Tier("elite_sniper", NpcKind.SOVIET, 0, 0, 150, 0.16f,
+        tiers.add(new Tier("elite_sniper", NpcKind.SOVIET, 0, 0, 38, 0.16f,
             new String[][] {{"marineblackHelm"}, {"marineblackVest"}, {"marineblackPants"}, {"marineblackBoots"}},
             "barrett", "barrett", "barrett", "barrett", "l115a3", "jng90", "sv98", "m110").spread(0.8f)
             .heavy(0.27, 0.5).elite(2.0f, "nvgoggles", new String[0],
@@ -224,10 +228,34 @@ public class NpcLoadouts
 
     private void load(File file)
     {
-        Configuration cfg = new Configuration(file, "2");
+        Configuration cfg = new Configuration(file, "3");
+        int ver = 1;
+        try
+        {
+            ver = Integer.parseInt(String.valueOf(cfg.getLoadedConfigVersion()).trim());
+        }
+        catch (NumberFormatException e)
+        {
+            // no version: a file from before v0.30.4
+        }
         // v0.30.4 added rocket tiers and re-balanced the military weight (1 -> 9 against military_rpg 1):
         // an older file keeps its weights otherwise, so take the new defaults once
-        boolean oldFile = !"2".equals(cfg.getLoadedConfigVersion());
+        boolean oldFile = ver < 2;
+        // v0.42.5 (version 3): sniper nerf; an older file would keep 96 blocks and the old health
+        if (ver < 3)
+        {
+            if (cfg.hasCategory("npc_fire"))
+            {
+                cfg.getCategory("npc_fire").remove("sniperRange");
+            }
+            for (String cat : new String[] {"tier_juggernaut_sniper", "tier_elite_sniper"})
+            {
+                if (cfg.hasCategory(cat))
+                {
+                    cfg.getCategory(cat).remove("health");
+                }
+            }
+        }
         for (Tier t : tiers)
         {
             String cat = "tier_" + t.name;
@@ -258,6 +286,10 @@ public class NpcLoadouts
         maxBurstRpm = cfg.getInt("maxBurstRpm", "npc_fire", maxBurstRpm, 60, 1200,
             "fastest rate inside an NPC burst, rounds per minute (600 = a round every 2nd tick, the elite's PKP; "
             + "1200 = every tick); slower guns keep their own rate");
+        sniperDamage = cfg.getFloat("sniperDamage", "npc_fire", sniperDamage, 0, 10,
+            "an NPC's shot with a sniper rifle does this share of its damage (1 = full)");
+        barrettDamage = cfg.getFloat("barrettDamage", "npc_fire", barrettDamage, 0, 10,
+            "an NPC's shot with the Barrett does this share of its damage (instead of sniperDamage)");
         sniperRange = cfg.getInt("sniperRange", "npc_fire", sniperRange, 32, 256,
             "an NPC holding a sniper rifle spots enemies this far (blocks); others 32 (Decimation)");
         reloadTicks = cfg.getInt("reloadTicks", "npc_fire", reloadTicks, 0, 1200,
@@ -568,6 +600,12 @@ public class NpcLoadouts
         {
             event.ammount *= tier.taken;
         }
+    }
+
+    /** The damage share of an NPC shot with this gun: the Barrett, other sniper rifles, the rest 1. */
+    public float gunDamageShare(String gun)
+    {
+        return "barrett".equals(gun) ? barrettDamage : contains(SNIPER, gun) ? sniperDamage : 1f;
     }
 
     /** Tier by position in the list (spawn egg metadata), or null. */

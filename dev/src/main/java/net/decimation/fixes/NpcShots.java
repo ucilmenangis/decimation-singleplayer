@@ -138,7 +138,8 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
         if (hit != null)
         {
             armorPiercing = NpcLoadouts.contains(PIERCING, gunName);
-            damageScale = tier == null ? 1 : tier.damageDealt;
+            // the tier's damage, and sniper rifles weaker (user 2026-10-11: snipers -20 %, Barrett -40 %)
+            damageScale = (tier == null ? 1 : tier.damageDealt) * NpcLoadouts.instance().gunDamageShare(gunName);
             try
             {
                 hit.attackEntityFrom(Deci.humanDamage(), (float) (damage / (Deci.isInfected(hit) ? 1 : 8)));

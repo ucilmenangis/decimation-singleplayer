@@ -559,14 +559,14 @@ docs/military_base.md; skill decimation-military-base.
 Not started unless marked DONE; each one also has a line in docs/roadmap.md.
 - **Gunshot noise**: a shot from a gun without a suppressor draws attention; zombies walk to
   where the shot came from, NPCs react too; suppressed shots stay quiet.
-- **Sniper NPC nerf**: sniper damage about 20 % lower, sniper range 70 blocks (config
+- **Sniper NPC nerf** (DONE v0.42.5): sniper damage about 20 % lower, sniper range 70 blocks (config
   `sniperRange`, 96 now; the user said 90); Barrett NPCs (juggernaut_sniper, elite_sniper)
   about 40 % lower and health cut so one 5.56 magazine kills them.
 - **NPC loot system**: what NPCs drop on death, per tier, how it works, rewards; design first
   with the user.
 - **Smart NPCs**: open, ideas to be collected with the user.
 - **Human Kills** and the **main menu Play button**: DONE in v0.42.2 (bug.md, Fixed).
-- Bug for later: military jeep / tank wrecks break with one punch (bug.md).
+- Military jeep / tank wrecks breaking with one punch: DONE v0.42.5 (bug.md).
 
 ### v0.42.4: fourth review (11 Oktober 2026)
 Ladders walkable from the base on every tower (5 of 6 were walled in), the outpost's TOC back,

@@ -154,6 +154,13 @@ boot. Falls straight through to the mod's own (re-skinned) main menu after that.
 - **60 round magazines (v0.35.0)**: 60rnd NATO STANAG (M16 family, M4A4,
   ACR, L85A1, SCAR-L) and 60rnd AK (AK-74 family), found in the same loot
   as the 30 round mags.
+- **Sniper NPC nerf (v0.42.5)**: NPC shots with a sniper rifle do 80 % of their damage, with the
+  Barrett 60 % (`sniperDamage`, `barrettDamage` in deciworldgen_npc.cfg, category npc_fire);
+  snipers spot enemies up to `sniperRange` 70 blocks (was 96); the Barrett tiers (juggernaut
+  sniper 60 hp, elite sniper 38 hp) die to one 30 round 5.56 magazine (8 per player hit x their
+  damage share). Config version 3: older files take these new defaults once.
+- **Military wrecks (v0.42.5)**: the jeep, APC and helicopter wrecks take 50 s to break by hand
+  (were one punch).
 - **NPC burst rate (v0.39.2)**: NPC automatic fire is capped at 600 rounds a minute
   (`maxBurstRpm` in deciworldgen_npc.cfg, category npc_fire); a gun slower than that
   keeps its own rate. Before, machine guns (PKM, M240, MG3) fired every tick.

@@ -40,7 +40,10 @@ import lctranslate as lt  # noqa: E402
 import mapsurvey as ms  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REGISTRY_WORLD = os.path.join(ROOT, "dev/run/client/saves/deciworldgen_autotest")
+# block ids read from a dev world's level.dat (the tests' own world since v0.42.5, else the old one)
+REGISTRY_WORLD = next((p for p in (os.path.join(ROOT, "dev/run/client/saves/deciworldgen_devtest"),
+                                   os.path.join(ROOT, "dev/run/client/saves/deciworldgen_autotest"))
+                       if os.path.isdir(p)), os.path.join(ROOT, "dev/run/client/saves/deciworldgen_devtest"))
 SKIP_STYLES = ("dummycity",)
 
 

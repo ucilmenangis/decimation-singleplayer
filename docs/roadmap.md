@@ -22,8 +22,6 @@ or `[not decided]`.
    impact; height can differ between two new worlds of one seed near the
    edge of the generated area). bug.md "Building base height depends on
    chunk generation order".
-3. **Military jeep / tank wrecks break with one punch** (bug.md "Open",
-   hardness 0 in Decimation, fix later).
 4. **Arrows still pick up empty vehicles** (punching was fixed in v0.8.1).
    bug.md "Military jeep/tank/helicopter destroyed in one hit".
 
@@ -50,11 +48,7 @@ or `[not decided]`.
    from a gun without a suppressor draws attention; zombies walk toward
    where the shot came from, and NPCs react the same way. Suppressed shots
    stay quiet.
-3. **Sniper NPC nerf** (user, 10 Oktober 2026, "fix later"): sniper damage
-   about 20 % lower, sniper range 70 blocks instead of the current one
-   (config sniperRange, now 96 [not verified against the user's "90"]);
-   the Barrett NPC tiers (juggernaut_sniper, elite_sniper with the Barrett)
-   about 40 % lower and their health cut so one 5.56 magazine kills them.
+3. **Sniper NPC nerf**: DONE v0.42.5 (documentation.md balance list).
 4. **NPC loot system** (user, 10 Oktober 2026, new feature): what NPCs drop
    when killed, how it works, the rewards per tier; design first (ask).
 5. **Smart NPCs** (user, 10 Oktober 2026, "later, idk yet like what").
@@ -89,7 +83,7 @@ docs/gun_model_spec.md); every user review goes into its lessons and casebook.
    user for the models and photos.
 3. **More guns of our own** or variants of Decimation's (UMP9 / HK416 / Mk18 route, lesson 13),
    on request with the user's photos.
-4. **Sniper NPC nerf** and the NPC loot system: under "NPCs and combat".
+4. **NPC loot system**: under "NPCs and combat" (the sniper nerf is done, v0.42.5).
 
 ## UI
 
@@ -185,6 +179,8 @@ docs/gun_model_spec.md); every user review goes into its lessons and casebook.
   rail.
 - v0.41.0 / 0.41.1 EOTech 558 and ACOG TA11 of our own, reticles in the glass swaying with the
   gun, Mk18 IMI TS stock, HK416 front sight folds away; accepted.
+- v0.42.5 sniper NPC nerf, military wrecks no longer break with one punch, tests in their own
+  world with a safe quit (the user's dev world level.dat was restored).
 - v0.42.4 ladders walkable from the base (walk test tools/props/walkcheck.py), the outpost's TOC
   back, test fails without a TOC.
 - v0.42.3 tower ladders reachable, hangar vault closed and stocked, shelter roof, sky test

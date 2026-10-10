@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.42.4",
+     version = "0.42.5",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -231,6 +231,7 @@ public class DecimationWorldGen
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
+        net.decimation.fixes.WreckHardness.apply();   // military wrecks broke with one punch (bug.md)
         Map<Integer, Sub> subs = buildSubstitutions();
         StructureGenerator generator = new StructureGenerator(schematics, subs, roadBlocks(),
                                    Block.getBlockFromName("deci:BlockRoad"),

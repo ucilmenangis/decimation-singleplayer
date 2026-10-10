@@ -27,7 +27,7 @@ import net.minecraft.world.WorldType;
  *
  * Runs a list of modes (package devtest) one after another in ONE game
  * session, then quits: -Ptest=checks,views,scope,tracer,props,cityfps. A
- * fresh "deciworldgen_autotest" world (seed 1, Decimation world type) is
+ * fresh "deciworldgen_devtest" world (seed 1, Decimation world type) is
  * made when a mode needs it (checks, views); otherwise the last one is
  * reused (faster). Results: run/client/devtest/results.txt (DevTestResults).
  *
@@ -39,7 +39,10 @@ import net.minecraft.world.WorldType;
 public class DevAutoTest
 {
     public static final String PROPERTY = "deciworldgen.autotest";
-    public static final String SAVE = "deciworldgen_autotest";
+    // the tests' OWN world (user 2026-10-11): until v0.42.4 the tests used deciworldgen_autotest,
+    // which the user also plays in; a fresh-world test deletes this folder, and the test game's
+    // quit once broke that world's level.dat (docs/performance.md is unrelated; see bug.md)
+    public static final String SAVE = "deciworldgen_devtest";
     /** A test mode showing a screen on purpose (stats: the home menu) sets this while it does. */
     public static volatile boolean keepScreen;
     /** Infected spawned per zone test batch (ServerChecks). */
@@ -124,6 +127,7 @@ public class DevAutoTest
         if (name.equals("firerate")) return new net.decimation.worldgen.devtest.FireRateTest();
         if (name.equals("milbase")) return new net.decimation.worldgen.devtest.MilBaseTest();
         if (name.equals("stats")) return new net.decimation.worldgen.devtest.StatsTest();
+        if (name.equals("npckill")) return new net.decimation.worldgen.devtest.NpcKillTest();
         if (name.equals("census")) return new net.decimation.worldgen.devtest.CensusTest();
         if (name.equals("cityview")) return new net.decimation.worldgen.devtest.CityViewTest();
         return null;
@@ -168,12 +172,50 @@ public class DevAutoTest
             DevTestResults.value(modes.get(current).name(), "done", "");
             current++;
         }
+        if (quitting)
+        {
+            quitSafely(mc);
+            return;
+        }
         if (net.decimation.worldgen.devtest.DevTestLive.enabled())
         {
             live(mc);
             return;
         }
         FMLLog.info("[%s] AUTOTEST done, shutting down", DecimationWorldGen.MODID);
+        quitSafely(mc);
+    }
+
+    /** A live quit was asked for: quitSafely runs every tick until the game closes. */
+    private boolean quitting;
+
+    /** The integrated server being stopped by quitSafely, or null. */
+    private net.minecraft.server.integrated.IntegratedServer stopping;
+    private int stopTicks;
+
+    /**
+     * Leaves the world, waits until the integrated server has saved and stopped, then closes the
+     * game. mc.shutdown() from inside a world let the server's save and the shutdown hook's save
+     * write level.dat at the same moment: on 11 Oktober 2026 that left a level.dat whose item id
+     * table missed 603 entries, and the next start failed ("Can't map item deci:ItemSelectionTool
+     * to id -1"). Called every client tick until it shuts the game down.
+     */
+    private void quitSafely(Minecraft mc)
+    {
+        if (stopping == null && mc.theWorld != null)
+        {
+            stopping = mc.getIntegratedServer();
+            FMLLog.info("[%s] AUTOTEST leaving the world before closing", DecimationWorldGen.MODID);
+            mc.theWorld.sendQuittingDisconnectingPacket();
+            mc.loadWorld((net.minecraft.client.multiplayer.WorldClient) null);
+            mc.displayGuiScreen(new net.minecraft.client.gui.GuiMainMenu());
+            return;
+        }
+        if (stopping != null && !stopping.isServerStopped() && stopTicks++ < 20 * 60)
+        {
+            return;                                   // still saving
+        }
+        FMLLog.info("[%s] AUTOTEST world saved and closed, shutting down", DecimationWorldGen.MODID);
         mc.shutdown();
     }
 
@@ -194,7 +236,7 @@ public class DevAutoTest
         if (c.quit)
         {
             FMLLog.info("[%s] AUTOTEST live: quit", DecimationWorldGen.MODID);
-            mc.shutdown();
+            quitting = true;
             return;
         }
         net.decimation.worldgen.devtest.DevTestLive.idle = false;

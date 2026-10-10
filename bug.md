@@ -10,7 +10,22 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Open
 
-### Military jeep and tank wrecks break with one punch (reported 10 Oktober 2026, fix later)
+## Fixed
+
+### The user's dev world would not load: broken level.dat id table (11 Oktober 2026, FIXED v0.42.5)
+- User: "world got corrupted or idk". The live test game (npckill) ran in deciworldgen_autotest,
+  the world the user plays in. A cancelled command still sent "quit": DevAutoTest called
+  mc.shutdown() inside the world, and the server's save and the client shutdown hook's save both
+  wrote level.dat at 03:59:29; the file kept had 603 item ids missing (592 deci, 11 ours) and 15
+  at -1. The next start failed: "Can't map item deci:ItemSelectionTool to id -1 (seen at: 4096)".
+- Fixed: level.dat restored from level.dat_old (1656 entries, none at -1; the broken file kept
+  in dev/run/client/world_backups/broken_leveldat_20261011_0359/). DevAutoTest.quitSafely leaves
+  the world, waits until the integrated server stopped, then exits (checked: "leaving the world",
+  "Stopping server", "world saved and closed", id table complete). Tests now use their own world
+  deciworldgen_devtest; a fresh world test deleted the test world's folder, which was the user's
+  world. Checked: the user's level.dat untouched by the next test run.
+
+### Military jeep and tank wrecks break with one punch (reported 10 Oktober 2026, FIXED v0.42.5)
 - User: "tank, jeep military can be destroyed with one click hand".
 - Cause (read in deobf/src, net/decimation/mod/common/block/props/
   BlockWreckageMilitary1 and 2): the constructors call only
@@ -25,8 +40,9 @@ not something we introduced or need to fix) see `documentation.md`.
   them in one click too [inferred from code, not tested in survival].
 - Fix idea: set hardness / resistance on those blocks from our side at
   init (Deci accessor, `Block.setHardness`), like a BlockProp (10).
+- FIXED v0.42.5: fixes/WreckHardness sets hardness 10 on the three (like a BlockProp) at init;
+  dev test npckill: 50 s to break by hand in survival (log "wreck hardness 10: ...").
 
-## Fixed
 
 ### Kill and death counters read the dead backend, "Player Kills" should be "Human Kills" (reported 11 Oktober 2026, FIXED v0.42.2)
 - User: "players kill change to humans kill instead and the total can be view ingame or in main
