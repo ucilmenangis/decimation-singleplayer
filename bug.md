@@ -12,6 +12,26 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Gun creeps down while aiming through a scope until it leaves the screen (11 Oktober 2026, FIXED v0.43.1)
+- User (AK-74 with the ACOG, screenshots docs/shots/aimdrift_v0.43.1/user_116.png, user_117.png):
+  "the guns go to below ... second by second until the gun dont show up"; they suspected the
+  window size. Both shots have sniper NPCs in view; the scope sits down right of the centre, then
+  the gun is nearly gone.
+- Cause: ScopeZoom centres the sight by measuring where the scope glass is drawn (PatchScope adds
+  a GL feedback measurement to Decimation's renderScopeGlass, every 8th draw). That method draws
+  EVERY scope glass, also the scoped guns NPCs hold in the world. A measurement of an NPC's glass
+  was taken for the player's sight: ScopeZoom learned a wrong position and pushed the gun away
+  (reproduced: elite sniper NPC in view, gun shift x -3.89, gun off screen; without the NPC 0.005
+  / -0.22). The window size was not the cause (1160 x 650 and 854 x 480 gave the same shift).
+- Fix (fixes/ScopeZoom): measuring is off (mask -1) except during the player's own hand draw:
+  onRenderTick switches it off at the start of every frame, onRenderHand switches it on just
+  before the hand (ours while zoomed, vanilla's at hip) and off right after; a sample is learned
+  only when it was taken inside that draw.
+- Check: dev test `aimdrift` (AimDriftTest: AK-74 + ACOG aimed 15 s with an elite sniper NPC in
+  view, -Psize / -Pturn / -Pnpc): old code shift -3.8931, 0.1726 (gun gone); fixed 0.0049,
+  -0.2189 at 3, 8 and 15 s, same as with no NPC; sheet docs/shots/aimdrift_v0.43.1/
+  sheet_fixed_npc_in_view.png. Not yet confirmed by the user in their own game [not verified].
+
 ### The user's dev world would not load: broken level.dat id table (11 Oktober 2026, FIXED v0.42.5)
 - User: "world got corrupted or idk". The live test game (npckill) ran in deciworldgen_autotest,
   the world the user plays in. A cancelled command still sent "quit": DevAutoTest called
@@ -502,6 +522,8 @@ at the end of this file.)
     glasses are drawn AFTER the gun body, so its front sight showed in the
     glass, and the integrated scope stayed grey. Checked all 10 (5 sights x
     2 windows) centred and see-through, docs/shots/scope_v0.28.3.
+  - v0.43.1: measured only during the player's own hand draw (NPC guns' scope glass was taken
+    for the player's: "Gun creeps down while aiming" above).
   - v0.28.4 (user: "for 8x better use the fake it method with a black
     layout", then "include 4x"): scopes from `overlayFrom` (config,
     default 4) hide the gun once the zoom is 70% in and draw a classic

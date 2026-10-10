@@ -331,6 +331,11 @@ source of truth about the real gun and about how it must look in game.
    SHIFT (sight_offsets.txt 4th column); SightPlacement then pushes the gun forward by -dx while
    aiming and SightReticle moves the reticle with it, so the aim picture stays the one every
    other gun has (check gunview hip AND aim next to an AK-74).
+24. Test aiming with NPCs in view, not only on an empty arena (user, AK-74 + ACOG, 11 Oktober
+   2026: the gun crept off screen while aiming). Anything that hooks a Decimation render method
+   (scope glass, attachments, gun parts) runs for EVERY gun drawn, the NPCs' guns in the world
+   too; a measurement or state meant for the player's gun must be limited to the player's hand
+   draw. The aim tests (`aimdrift`, by default with an elite sniper NPC in view) cover this.
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -719,6 +724,23 @@ revision (same commit), never remove old ones.
   gunview guns=asval,ak74 attach=ta11acog` and `attach=reddot`: hip sight on the receiver, aim
   picture identical to the AK-74 (reticle centred). Shots docs/shots/milbase_v0.42.2/
   gunview_asval_*.png. Lesson 23.
+
+### Case 22: gun creeps off screen while aiming a scope (v0.43.1, 11 Oktober 2026)
+- Symptom (user screenshots docs/shots/aimdrift_v0.43.1/user_116.png, user_117.png): AK-74
+  with the ACOG, aimed: the scope drifts down right of the centre, then out of the screen. User
+  guessed the window size.
+- First wrong turn: I blamed ScopeZoom's slow running average (feedback of each sample into the
+  next shift) and changed it; the new `aimdrift` test showed no creep with the OLD code either,
+  at 854 x 480 and at the user's 1160 x 650, still or turning. The user's shots had sniper NPCs
+  in view; my arena had none.
+- Cause: PatchScope's glass measurement (GL feedback in Decimation's renderScopeGlass, deci.n.f
+  b) runs for every scope glass drawn, NPC guns included; ScopeZoom took an NPC's glass for the
+  player's sight (reproduced: elite sniper in view, gun shift -3.89 x, gun gone).
+- Fix: fixes/ScopeZoom: measuring off (Deci.setScopeGlassEvery(-1)) at the start of each frame,
+  on only around the player's hand draw, samples learned only when taken inside it. The slow
+  average was put back as it was.
+- Check: `devtest.py --live aimdrift size=1160x650` (elite sniper in view by default): shift
+  0.0049, -0.2189 at 3, 8, 15 s, gun centred; old code -3.8931, 0.1726. Lesson 24.
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

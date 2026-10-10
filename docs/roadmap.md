@@ -176,6 +176,7 @@ docs/gun_model_spec.md); every user review goes into its lessons and casebook.
   rail.
 - v0.41.0 / 0.41.1 EOTech 558 and ACOG TA11 of our own, reticles in the glass swaying with the
   gun, Mk18 IMI TS stock, HK416 front sight folds away; accepted.
+- v0.43.1 gun no longer creeps off screen while aiming a scope with a scoped NPC in view.
 - v0.43.0 gunshot noise: infected and enemy NPCs walk to unsuppressed shots (fixes/GunNoise).
 - v0.42.5 sniper NPC nerf, military wrecks no longer break with one punch, tests in their own
   world with a safe quit (the user's dev world level.dat was restored).

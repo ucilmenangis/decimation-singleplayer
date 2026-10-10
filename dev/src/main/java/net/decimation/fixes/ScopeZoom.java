@@ -96,6 +96,7 @@ public class ScopeZoom
 
     public ScopeZoom(File configDir)
     {
+        INSTANCE = this;
         cfg = new Configuration(new File(configDir, "deciworldgen_scope.cfg"));
         pictureInPicture = cfg.getBoolean("pictureInPicture", "scope", false,
             "true = Decimation's original scope (the world rendered a second time into the scope glass; about "
@@ -158,6 +159,7 @@ public class ScopeZoom
     private double zoom = 1;
     /** Gun offset applied while drawing the hand (projection units). */
     private double shiftX, shiftY;
+    private static ScopeZoom INSTANCE;
     /**
      * Sight position per gun + scope + window aspect ("item|sight|aspect"): the glass centre without
      * zoom and offset (normalised device coordinates) and the number of
@@ -198,6 +200,12 @@ public class ScopeZoom
             return Math.min(mag, 1.5f);
         }
         return mag;
+    }
+
+    /** Dev test: the gun shift applied while aiming {x, y} (normalised device coordinates). */
+    public static double[] debugShift()
+    {
+        return INSTANCE == null ? null : new double[] {INSTANCE.shiftX, INSTANCE.shiftY};
     }
 
     /** Settled samples needed before a sight position is trusted for zooming in. */
@@ -243,10 +251,10 @@ public class ScopeZoom
         }
         wasAiming = aiming;
         float target = mc.theWorld != null ? targetZoom(mc) : 1f;
-        if (target <= 1f)
-        {
-            Deci.setScopeGlassEvery(7); // not aiming: measure rarely
-        }
+        // the glass is measured only while our own gun is drawn (onRenderHand): scoped guns of NPCs
+        // in the world drew their glass too and were taken for ours (user report 11 Oktober 2026:
+        // the gun crept down while aiming until it left the screen, a sniper NPC in view)
+        Deci.setScopeGlassEvery(-1);
         // ease about 0.15 s, in log space so 1x -> 8x feels as quick as 1x -> 2x
         double lz = Math.log(zoom), lt = Math.log(target);
         lz += (lt - lz) * (1 - Math.exp(-dt * 18));
@@ -291,6 +299,7 @@ public class ScopeZoom
         }
         if (zoom == 1.0 || mc.entityRenderer == null)
         {
+            Deci.setScopeGlassEvery(7); // vanilla draws the hand next: measure for the glass copy
             return;
         }
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -299,8 +308,13 @@ public class ScopeZoom
         {
             CAMERA_YAW.setDouble(mc.entityRenderer, shiftX);
             CAMERA_PITCH.setDouble(mc.entityRenderer, -shiftY);
+            long before = Deci.scopeGlassTime();
             RENDER_HAND.invoke(mc.entityRenderer, e.partialTicks, e.renderPass);
-            learnSight(mc);
+            Deci.setScopeGlassEvery(-1);
+            if (Deci.scopeGlassTime() != before)
+            {
+                learnSight(mc);         // a sample of our own gun's glass, taken in this draw
+            }
         }
         catch (Exception ex)
         {
@@ -308,6 +322,7 @@ public class ScopeZoom
         }
         finally
         {
+            Deci.setScopeGlassEvery(-1);
             try
             {
                 CAMERA_YAW.setDouble(mc.entityRenderer, 0.0);
@@ -332,7 +347,8 @@ public class ScopeZoom
     {
         ItemStack held = mc.thePlayer != null ? mc.thePlayer.getHeldItem() : null;
         double[] sight = held != null && Deci.isGun(held.getItem()) ? sights.get(sightKey(held)) : null;
-        // measure often while a sight is being learned, rarely once it is known
+        // measure often while a sight is being learned, rarely once it is known (only during the
+        // hand draw below: onRenderHand switches measuring off again right after it)
         Deci.setScopeGlassEvery(held != null && Deci.isGun(held.getItem()) && targetZoom(mc) > 1f
                                 && (sight == null || sight[2] < LEARN) ? 1 : 7);
         if (sight == null || zoom <= 1.0)

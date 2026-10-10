@@ -11,6 +11,13 @@ How shots are made: `./gradlew runClient -Pautotest` (street views),
 `-Paudit` (building audit), `-Pgallery` (prop gallery); output in
 `dev/run/client/screenshots/`, then copied here into a versioned folder.
 
+## aimdrift_v0.43.1/ (gun creeps off screen while aiming, 11 Oktober 2026)
+- user_116.png: the user's dev client, AK-74 + ACOG aimed: the scope sits down right of the
+  screen centre, a sniper NPC in view at the centre. user_117.png: two minutes later the gun is
+  nearly gone (only the top of the scope in the bottom right), four NPCs in view.
+- sheet_fixed_npc_in_view.png: dev test aimdrift after the fix, 1160 x 650 window, elite sniper
+  NPC in front: at 3 s and 15 s the ACOG centred, reticle on the crosshair, identical pictures.
+
 ## worldmap_seed1_v0.14.png
 Top down map (`tools/worldmap.py`), seed 1, Decimation world type, 800x800
 around spawn. Grey squares = Decimated City sectors full of building

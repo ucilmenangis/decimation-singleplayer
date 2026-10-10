@@ -739,6 +739,9 @@ of the last session:
   v0.43.0: gunshot noise (fixes/GunNoise, config deciworldgen_noise.cfg,
   new_feature.md "Gunshot noise"): infected and enemy NPCs walk to shots
   heard (64 blocks, 12 suppressed); dev test `noise` (6 checks).
+  v0.43.1: aim drift fix (bug.md "Gun creeps down while aiming"): ScopeZoom
+  measured the scope glass of NPC guns too; measuring now only during the
+  player's hand draw. Dev test `aimdrift` (sniper NPC in view).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

@@ -117,7 +117,7 @@ public final class Deci
         return new float[] {deci.n.f.glassMinX, deci.n.f.glassMinY, deci.n.f.glassMaxX, deci.n.f.glassMaxY};
     }
 
-    /** Measure the scope glass every (mask + 1)th frame (mask 1 = every 2nd, 7 = every 8th). */
+    /** Measure the scope glass every (mask + 1)th frame (mask 1 = every 2nd, 7 = every 8th, -1 = never). */
     public static void setScopeGlassEvery(int mask)
     {
         deci.n.f.glassMask = mask;
