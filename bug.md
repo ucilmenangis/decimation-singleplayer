@@ -10,6 +10,35 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Open
 
+### Kill and death counters read the dead backend, "Player Kills" should be "Human Kills" (reported 11 Oktober 2026, fix later)
+- User: "players kill change to humans kill instead and the total can be view ingame or in main
+  menu at bottom". Their HUD shows Player Kills 0, Zombie Kills 0, Deaths 0 (shots
+  docs/shots/milbase_v0.42_review/).
+- Code: the in game HUD (deobf/src/decimation/hud/IngameHud.java line 128) and the main menu
+  list (GuiMenuBase line 180, GuiMenuHome line 111) read `ObjectPlayerProfile` from
+  `BackendProfileCache` (the dead backend), not the local PlayerData. PlayerData does count:
+  `DeathHandler` line 57 adds a player kill only when the dead entity is a PLAYER killed by a
+  player; zombie kills are counted there too [line not read yet].
+- Wanted: "Human Kills" = every human killed (bandits, soldiers, Soviets, juggernauts, elites,
+  survivors and players), shown in game and at the bottom of the main menu, from local data.
+- Fix idea: count human NPC kills in our own handler (like HumanityKillHandler), store in the
+  player's data, rename the label, feed the HUD / menu from local data (Javassist on the label
+  and the profile source, or draw our own line).
+
+### Main menu shows "Play offline" and an offline banner for a real account (reported 11 Oktober 2026, fix later)
+- User: "main menu have issue with non crack user where main menu show up offline banner and
+  play button say play offline instead play only text with green color background of the
+  button". Wanted: the button says "Play" on Decimation's green background, no offline banner.
+- Code (deobf/src/decimation/gui/GuiMenuBase.java around line 371): the green "Play" button
+  (colour -13395661, tooltip "Play now!") only when `ClientState.bv` is true, otherwise the grey
+  "Play offline" (-8355712); the same choice in GuiMenuProfile line 63 and
+  GuiMenuSupporterLounge line 78. The banner: GuiMenuHome around lines 66 to 76 (checks the
+  backend client's connection). `bv` is most likely set by a successful login to the dead
+  Decimation backend, so it never turns on now [inferred, not traced yet].
+- Fix idea: a Javassist patch (or Deci accessor at start) that treats a valid Minecraft session
+  as "online" for the menu, without touching the dead backend calls (PatchBackend already
+  removed the 5 s wait).
+
 ### Military jeep and tank wrecks break with one punch (reported 10 Oktober 2026, fix later)
 - User: "tank, jeep military can be destroyed with one click hand".
 - Cause (read in deobf/src, net/decimation/mod/common/block/props/

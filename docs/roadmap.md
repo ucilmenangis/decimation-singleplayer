@@ -102,8 +102,12 @@ Details and starting points: new_feature.md "Zones, factions and world".
 ## UI
 
 1. **Main menu GUI fix** (user, 10 Oktober 2026: "later in future, we fix
-   the GUI on main menu, not our priority"): what is wrong is
-   `[not decided]`, ask the user when we get to it.
+   the GUI on main menu, not our priority"). Known so far (11 Oktober 2026):
+   with a real account the menu shows an offline banner and "Play offline"
+   instead of "Play" on green (bug.md "Main menu shows Play offline").
+2. **Human Kills counter** (user, 11 Oktober 2026, later): "Player Kills"
+   becomes "Human Kills" (NPC humans and players), in game and at the bottom
+   of the main menu, from local data (bug.md "Kill and death counters").
 
 ## Code and tools
 

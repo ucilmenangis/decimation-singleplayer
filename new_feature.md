@@ -555,6 +555,22 @@ serpentine), TOC, B-hut living area with bunkers, logistics (ASP, fuel, motor po
 hangar), services (DFAC, aid station, gym, helipads), loot in Decimation's crates. Details:
 docs/military_base.md; skill decimation-military-base.
 
+### Requests for later (10 and 11 Oktober 2026, the user: "save this feat/fix later")
+Not started; each one also has a line in docs/roadmap.md.
+- **Gunshot noise**: a shot from a gun without a suppressor draws attention; zombies walk to
+  where the shot came from, NPCs react too; suppressed shots stay quiet.
+- **Sniper NPC nerf**: sniper damage about 20 % lower, sniper range 70 blocks (config
+  `sniperRange`, 96 now; the user said 90); Barrett NPCs (juggernaut_sniper, elite_sniper)
+  about 40 % lower and health cut so one 5.56 magazine kills them.
+- **NPC loot system**: what NPCs drop on death, per tier, how it works, rewards; design first
+  with the user.
+- **Smart NPCs**: open, ideas to be collected with the user.
+- **Human Kills**: "Player Kills" becomes "Human Kills" (every human killed, NPCs and players),
+  shown in game and at the bottom of the main menu (bug.md "Kill and death counters").
+- **Main menu Play button**: "Play" on green for a real account, no offline banner (bug.md
+  "Main menu shows Play offline").
+- Bug for later: military jeep / tank wrecks break with one punch (bug.md).
+
 ### Military bases v0.42.1: user review fixes (11 Oktober 2026)
 User review of v0.42.0 (28 shots, docs/shots/milbase_v0.42_review/): fix the orange dirt, the
 raw dirt ASP berm, replace BlockMilitaryBarrier (FPS), make the TOC door a locked keycard door,
