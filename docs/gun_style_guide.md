@@ -17,9 +17,14 @@ textures, without the game (pure Python + Pillow, about 0.1 s a view):
     python3 tools/guns/study.py sheet uzi mp5a3 ... --cols 3 --scale 16 --out FILE.png
     python3 tools/guns/study.py stats [--tsv FILE]
     python3 tools/guns/study.py parts uzi
+    python3 tools/guns/study.py contact ours:hk416 ['gunModel1\d{3}']
 
 Views: side (muzzle right), other, top, three (three quarter, front right,
-from above). `--split` paints every part a flat colour with outlines: shows
+from above), rear (from behind, a little above: the sight picture), low
+(three quarter from below: parts hanging off the bottom). `contact` lists
+parts that sit on nothing: a thin detail (0.15 or less) needs one whole face
+on or in another part, a thicker part has to overlap one (v0.39.1; Decimation
+itself: M4A4 2, Uzi 5 flagged). `--split` paints every part a flat colour with outlines: shows
 how a shape is cut into parts. Renderer: BModelBox corner order and
 offsets, rotation Z, Y, X about the rotation point, `addChild` children
 placed in their parent's space (1055 addChild lines across the guns,
@@ -100,7 +105,17 @@ block.
    hexagon), butt plates, magazine base plates.
 8. **Thin features stay thin:** trigger guard bars 0.15 to 0.2, trigger
    0.15, sights 0.2 to 0.3 wide, sling loops and pins 0.1.
-9. **Parts are named by group then index** (`gunModel0..N`,
+9. **Every detail sits on its host** (user, HK416 v0.39.0: "flying" stock
+   pieces). A detail on a leaning face (an inset side) starts 0.05 to 0.15
+   INSIDE the host, not at the host's nominal z; a detail along an angled
+   edge is placed from the edge's formula at its own x, never one fixed y.
+   `study.py contact` must list nothing but collars. Check the `low` render.
+10. **Sights look like the real one from behind and stay as low as the base
+   gun's** (user, HK416 v0.39.0: front sight "like 2 pillar"). HK front
+   sight: a U of thick flared ears on one bridge, not two thin posts; ear
+   tops no higher than the base gun's front ears (M4A4: at the post tip,
+   -4.7), or they show beside the rear ears in aim.
+11. **Parts are named by group then index** (`gunModel0..N`,
    `ammoModel0..N`, `slideModel0..N`); the readable name lives only in our
    spec file.
 
@@ -194,6 +209,15 @@ HK416 (v0.39.0, tools/guns/hk416.py): several areas replaced (handguard, front s
 stock, grip) by position rules on the M4A4; our parts fitted to the kept receiver's numbers
 (rail teeth y -3.6), lengths from the user's photo; a colour twin (tan) from the same model by
 recolouring every island to one tone with its gradation kept.
+
+Texture trap (v0.39.1): a base part may read past the base's textureHeight
+(the game wraps it to the top). Only the M4A4 of all 98 guns does it (rear
+sight defaultScopeModel3..15, v 33 on a 32 high texture). Making the texture
+taller handed those parts our islands (rear sight cut into a block and a
+pillar in aim). Copy the wrapped rows into place and start our islands below
+them (hk416.py "spill"); when a BASE part looks wrong only in a variant,
+suspect the texture first and look with a debug texture (ours one colour,
+theirs another).
 
 ## 6c. Closing the gaps: `study.py gaps` (v0.37.3)
 

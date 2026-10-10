@@ -666,7 +666,9 @@ of the last session:
   cost about 18 % -> 0), dev test cityview; Angelica tried in the dev
   client (-Pangelica): draws no far terrain on this Mac, not usable.
   v0.39.0: HK416 and HK416 Tan from Decimation's M4A4 (tools/guns/hk416.py,
-  run it before building, outputs git ignored).
+  run it before building, outputs git ignored). v0.39.1: HK416 review
+  fixes (seated stock details, U front sight, M4A4 rear sight texture
+  wrap; skill case 14); `study.py contact` finds floating parts.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

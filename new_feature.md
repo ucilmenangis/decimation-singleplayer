@@ -564,6 +564,14 @@ damage 16, 800 rpm, recoil 6.5 / 0.2, the M4A4's sounds, loot where the M4A4 is.
 Checked: renders next to the M4A4 (docs/shots/hk416_v0.39), aim crops with the M4A4 (rear
 aperture and post tip on the same line), arSuppressor at the M4A4's place, red dot, reload 30,
 gunperf within noise of the M4A4.
+v0.39.1 (user review: "flying" pieces under the stock, front sight "like 2 pillar"): stock
+lower panel rebuilt (square rear part plus angled wedge, ribbed band placed from the edge's
+formula), every detail seated (new `study.py contact`: 46 parts not seated before, 1 after,
+the flash hider collar); the "pillars" were the M4A4's rear sight reading texture rows past
+its 32 high texture, which our taller texture filled with our islands (fixed: wrapped rows
+copied, ours start below); front sight now a U of thick flared ears on a bridge, tops at
+-4.74. Aim crops match the M4A4 again (docs/shots/hk416_v0.39.1). Skill case 14, lessons 15
+and 16.
 
 ### UMP9 (DONE v0.38.0, 10 Oktober 2026; user: "the ump9 work really well and no problem")
 Built as the user suggested: Decimation's UMP45 generated locally from

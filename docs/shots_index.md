@@ -655,6 +655,21 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## hk416_v0.39.1/ (HK416 review fixes, 10 Oktober 2026)
+- user_stock_v0390.png / user_sight_v0390.png: the user's v0.39.0 screenshots enlarged: diagonal
+  fins hanging below the stock's angled panel; in aim a wide block left, a thin tall pillar right
+  and the aperture ring between (the rear sight cut by the texture bug, not the front sight).
+- photo36_sight_stock.png: the user's photo 36 enlarged: HK front sight a U (thick ears flared at
+  the base, short post between), slim line stock with a ribbed diagonal band and square butt end.
+- debug_colours_aim.png / debug_colours_hip.png: tan gun with a debug texture (our islands red,
+  the M4A4's green / blue): the rear sight (ring and both ears) came out red, so it read our
+  texture rows.
+- aim_cmp_before_texfix.png: M4A4 / HK416 / HK416 Tan aim crops with the new U sight but the old
+  texture: ours still asymmetric. aim_cmp.png: after the texture fix: all three the same
+  symmetric rear sight, post on the centre line. hip.png: HK416 and Tan hip, rear sight whole.
+- ours_hk416_<view>(_split).png: renders incl. the new rear (U sight, post centred) and low
+  views (ribs inside the angled panel, nothing hanging).
+
 ## hk416_v0.39/ (HK416 black and tan, variant of the M4A4)
 - m4a4_side_split.png, m4a4_*.png: the M4A4's part split (handguard 112 parts x 7.5 .. 14.7, A-frame
   and gas block 14.7 .. 16.6, barrel 12.15 .. 18.15, stock below x 0, A2 grip).

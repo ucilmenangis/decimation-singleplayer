@@ -92,6 +92,14 @@ into the repo: measure and learn from them, build our own.
 - `python3 tools/guns/study.py sheet <ref> ours:<gun> --cols 2 --scale 24
   --out ...`: silhouette, width, density, tone next to the reference.
 - `python3 tools/guns/study.py render ours:<gun> --split`: part cuts.
+  Views side, other, top, three, rear (from behind, slightly above: the
+  sight picture) and low (three quarter from below: parts hanging off
+  the bottom).
+- `python3 tools/guns/study.py contact ours:<gun> ['gunModel1\d{3}']`:
+  parts that do not sit on anything (a thin detail needs one whole face
+  on or in another part; a thicker part only has to overlap one). Must
+  list nothing but known collars (a ring around a barrel). Decimation's
+  own guns pass it almost clean (M4A4 2, Uzi 5).
 - `python3 tools/guns/study.py gaps ours:<gun>`: every metric vs the
   Decimation guns of its category (median, q10 .. q90, "<- outside"):
   parts, size, part sizes (absolute and relative to the length: read the
@@ -240,6 +248,31 @@ source of truth about the real gun and about how it must look in game.
    measure first (docs/performance.md checklist): in that report the gun
    was innocent (a corrupt dev world chunk doubling entities, and
    Decimation's infected path searching every tick).
+
+15. Every part sits on its host, and every sight looks like the real one
+   from behind (user, HK416 v0.39.0: "flying" stock pieces, front sight
+   "like 2 pillar"). Before handing over: `study.py contact` lists no
+   part (thin details on a slanted or angled face need their inner side
+   pushed INTO the host, 0.05 to 0.15, because the face leans); look at
+   the `low` and `rear` renders, not only side and three. Details on an
+   angled edge are placed from the edge's formula at their own x (a
+   function like lower_bottom(x)), never from one fixed y. Sight ears no
+   higher than the base gun's (M4A4 front ears stop at the post tip,
+   -4.7): higher ears show beside the rear sight in aim. Real gun
+   sight shapes from the user's photo (HK: a U of thick flared ears on
+   one bridge, not two thin posts).
+
+16. A variant that makes the base texture taller: first check that no
+   base part reads past the base's textureHeight (study.Gun parts with
+   v + d + h > th). The game wraps those reads to the top (GL_REPEAT);
+   a taller texture hands them OUR islands, transparent texels included,
+   and the part looks cut or recoloured. Copy the wrapped rows into
+   place and start our islands below them (tools/guns/hk416.py "spill").
+   Of all 98 Decimation guns only the M4A4 does this (its rear sight,
+   defaultScopeModel3..15, v 33 on a 32 high texture). When a part of
+   the BASE gun looks wrong only in our variant, suspect the texture
+   before the geometry: paint our islands one colour and the base's
+   another in a debug texture and look again (case 14).
 
 ## Revision casebook (never delete a case; look here first)
 
@@ -451,6 +484,52 @@ revision (same commit), never remove old ones.
   per island; parts that stay black chosen by name / position.
 - Checks: aim crops next to the base gun, suppressor numbers equal to
   the base gun's, gun test with -Pmag=deci:m4a4Mag, gunperf.
+
+### Case 14: HK416 floating stock pieces and "2 pillar" front sight (v0.39.0 -> v0.39.1, 10 Oktober 2026)
+- Symptom (user, screenshots): dropped gun, side: "flying" pieces under
+  the stock; first person from behind: "front sight looks like 2 pillar".
+- Stock cause: three diagonal fins (tools/guns/hk416.py, stock block)
+  were placed at one fixed y range (-1.2 .. -0.1) while the lower panel's
+  bottom edge rises toward the front (0.35 at the butt to -1.6 at x
+  -1.4): the front fin hung 0.77 below the panel. Their inner face also
+  sat at z 0.15 on a side that leans in toward the bottom (inset 0.06).
+- Stock fix: lower panel in two parts like the real slim line stock
+  (photo 36): square rear part, wedge in front with the angled edge;
+  lower_bottom(x) gives the edge's y at any x; seven short ribs (the
+  real stock's ribbed band) each 0.22 inside the edge at its own front
+  end, inner face at z 0.08 (inside the panel).
+- Found on the way by the new `study.py contact`: handguard side rails
+  and slots, the stock window slot (it ran past the bottom of the
+  stock's front taper), the grip panels and finger bumps all stood off
+  their leaning host faces by 0.02 to 0.06; their inner sides now start
+  inside the host. HK416 parts not seated: 46 before, 1 after (the
+  flash hider ring, a collar: correct).
+- Front sight, part 1 (the real cause of the "pillars"): the M4A4's rear
+  sight parts (defaultScopeModel3..15) read texture rows 33+ on a 32
+  high texture and wrap to the top rows in the game. Our variant made
+  the texture 64 high and put our islands at row 32+, so the rear sight
+  sampled our islands, transparent texels included: in aim the left ear
+  looked like a wide block, the right one a thin tall pillar (the user
+  took them for the front sight). Found with a debug texture: our
+  islands red, the M4A4's green: the rear sight came out red
+  (docs/shots/hk416_v0.39.1/debug_colours_aim.png). Fix in build():
+  spill = rows read past th (8), the M4A4's top rows copied there, our
+  islands start below (texture now 512 x 128). Scan of all 98 guns: only
+  the M4A4 does this, the UMP9 is safe.
+- Front sight, part 2: our front sight was two thin separate ears (0.1
+  wide, tops -4.97, 0.27 over the post): from behind two posts. Now a U
+  like the real HK sight (photo 36): bridge (fsBridge) across, thick
+  ears (0.16) flared at the base, tops at -4.74 (the M4A4's front ears
+  stop at the post tip, -4.7; ears at -4.84 still peeked out beside the
+  rear ears in aim), post base, post tip still -4.7.
+- Check: study.py contact ours:hk416 'gunModel1\d{3}' (1, the collar);
+  renders low / rear; gunview aim crops m4a4 / hk416 / hk416tan with
+  centre lines: same symmetric rear sight, post on the line
+  (docs/shots/hk416_v0.39.1/aim_cmp.png, before:
+  aim_cmp_before_texfix.png); gunperf m4a4 dropped / held 28 / 30,
+  hk416 25 / 29, baseline 29 (noise).
+- Also found: our MAC-10 has 17 parts flagged by contact (accepted gun,
+  not changed yet; roadmap).
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

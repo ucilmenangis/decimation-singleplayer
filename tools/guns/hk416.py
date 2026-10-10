@@ -70,21 +70,28 @@ x = X0 + 0.4
 while x + 0.2 <= X1 - 0.1:
     add(part("railBottomTooth", G, RAIL, (x, -1.42, -0.5), (x + 0.2, -1.32, 0.2)).inset("y", 1, x=(0.02, 0.02)))
     x += 0.8
-add(part("railSideBase", G, RAIL, (X0 + 0.2, -2.8, 0.55), (X1 - 0.1, -2.25, 0.65)), pair=True)
+# side details start inside the handguard: its sides lean in (insets), so a plate at z 0.55 stood off
+# them by up to 0.06 (study.py contact, case 14)
+add(part("railSideBase", G, RAIL, (X0 + 0.2, -2.8, 0.45), (X1 - 0.1, -2.25, 0.65)), pair=True)
 x = X0 + 0.3
 while x + 0.2 <= X1 - 0.1:
     add(part("railSideTooth", G, RAIL, (x, -2.8, 0.65), (x + 0.2, -2.25, 0.75)).inset("z", 1, y=(0.03, 0.03)), pair=True)
     x += 0.8
 for i, (a, b) in enumerate(((8.0, 9.3), (9.6, 10.9), (11.2, 12.5), (12.8, 13.9))):
-    add(part("slot%d" % i, G, DARK, (a, -2.12, 0.55), (b, -1.9, 0.6)).inset("z", 1, x=(0.06, 0.06)), pair=True)
-    add(part("slotHigh%d" % i, G, DARK, (a + 0.2, -3.15, 0.47), (b - 0.2, -2.95, 0.52)).inset("z", 1, x=(0.05, 0.05)), pair=True)
+    add(part("slot%d" % i, G, DARK, (a, -2.12, 0.4), (b, -1.9, 0.6)).inset("z", 1, x=(0.06, 0.06)), pair=True)
+    add(part("slotHigh%d" % i, G, DARK, (a + 0.2, -3.15, 0.38), (b - 0.2, -2.95, 0.52)).inset("z", 1, x=(0.05, 0.05)), pair=True)
 
 # ---------------------------------------------------------------- HK folding front sight on the rail front
-# post tip at -4.7 like the M4A4's front post (same sight picture, skill lesson 7)
+# post tip at -4.7 like the M4A4's front post (same sight picture, skill lesson 7). The real sight
+# (user photo 36) is a U: two thick ears flared at the base on one bridge. Ear tops stop just over
+# the post tip like the M4A4's front ears (-4.7): higher ears show beside the rear sight's ears in
+# aim. v0.39.0 had two thin separate ears up to -4.97: from behind "2 pillars" (case 14).
 add(part("fsClamp", G, DARK, (13.9, -3.85, -0.48), (14.4, -3.6, 0.18)).inset("y", 0, x=(0.06, 0.06), z=(0.05, 0.05)))
-add(part("fsTower", G, DARK, (13.98, -4.45, -0.42), (14.32, -3.85, 0.12)).inset("y", 0, x=(0.05, 0.05), z=(0.08, 0.08)))
-add(part("fsWing", G, DARK, (14.0, -4.97, 0.05), (14.3, -4.45, 0.15)).inset("y", 0, x=(0.08, 0.08)), pair=True)
-add(part("fsPost", G, DARK, (14.1, -4.7, -0.21), (14.2, -4.45, -0.09)).inset("y", 0, x=(0.02, 0.02), z=(0.02, 0.02)))
+add(part("fsTower", G, DARK, (13.98, -4.45, -0.42), (14.32, -3.85, 0.12)).inset("y", 0, x=(0.05, 0.05), z=(0.02, 0.02)))
+add(part("fsBridge", G, DARK, (13.98, -4.58, ZC - 0.3), (14.32, -4.45, ZC + 0.3)).inset("y", 0, x=(0.02, 0.02)))
+add(part("fsEar", G, DARK, (14.0, -4.74, ZC + 0.14), (14.3, -4.58, ZC + 0.3)).inset("y", 0, x=(0.05, 0.05), z=(0.0, 0.06)), pair=True)
+add(part("fsPost", G, DARK, (14.1, -4.7, -0.21), (14.2, -4.58, -0.09)).inset("y", 0, x=(0.02, 0.02), z=(0.02, 0.02)))
+add(part("fsPostBase", G, DARK, (14.06, -4.62, ZC - 0.09), (14.24, -4.58, ZC + 0.09)))
 add(part("fsHinge", G, DARK, (13.92, -4.0, -0.4), (14.0, -3.85, 0.1)))
 
 # ---------------------------------------------------------------- barrel and HK flash hider (bore -2.39)
@@ -101,17 +108,33 @@ add(part("flashRing", G, FLASH, (17.95, BORE - 0.32, ZC - 0.32), (18.05, BORE + 
 # ---------------------------------------------------------------- HK slim line stock (x -5.15 .. 0.4) + buffer tube
 add(*octagon("tube", G, POLY, 0.3, 1.3, -2.45, ZC, 0.32))
 add(part("stockUpper", G, POLY, (-4.75, -3.2, -0.5), (0.35, -1.65, 0.2)).inset("x", 1, y=(0.2, 0.25), z=(0.06, 0.06)).inset("y", 0, z=(0.08, 0.08)))
-lower = part("stockLower", G, POLY, (-4.75, -1.65, -0.45), (-1.4, 0.35, 0.15))
-lower.inset("x", 1, y=(0.0, 1.95))   # the bottom rises toward the front: an angled panel
+# lower panel: square at the butt, its front edge angled up to the tube (user photo 36); every
+# detail on it stays inside the outline (v0.39.0 fins hung 0.77 below it, case 14)
+LX, LF, LB = -3.4, -1.4, 0.35        # wedge start, wedge front, panel bottom
+
+
+def lower_bottom(x):
+    """y of the lower panel's bottom edge at x (the wedge's front face is collapsed to y -1.6)."""
+    return LB if x <= LX else LB - 1.95 * (x - LX) / (LF - LX)
+
+
+add(part("stockLowerRear", G, POLY, (-4.75, -1.65, -0.45), (LX, LB, 0.15)).inset("y", 1, z=(0.06, 0.06)))
+lower = part("stockLower", G, POLY, (LX, -1.65, -0.45), (LF, LB, 0.15))
+lower.inset("x", 1, y=(0.0, 1.95))   # the bottom rises toward the front: the angled front edge
 add(lower.inset("y", 1, z=(0.06, 0.06)))
 add(part("buttPlate", G, POLY, (-5.05, -3.15, -0.55), (-4.75, 0.3, 0.25)).inset("x", 0, y=(0.08, 0.08), z=(0.05, 0.05)))
 for i in range(7):
     y0 = -3.0 + i * 0.47
     add(part("buttRib", G, DARK, (-5.15, y0, -0.5), (-5.05, y0 + 0.24, 0.2)).inset("x", 0, y=(0.04, 0.04)))
-for i in range(3):
-    rib = part("stockFin%d" % i, G, DARK, (-3.9 + i * 0.55, -1.2, 0.15), (-3.6 + i * 0.55, -0.1, 0.22))
-    add(rib.shift("y", 0, x=0.55), pair=True)   # diagonal fins of the angled side panel
-add(part("stockSlot", G, DARK, (-4.3, -1.82, 0.2), (-3.2, -1.68, 0.24)).inset("z", 1, x=(0.05, 0.05)), pair=True)
+# the ribbed band along the angled edge: short ribs, each 0.22 inside the bottom edge at its front
+# end, so the whole rib lies on the panel (the edge falls toward the rear)
+for i in range(7):
+    xr = -3.0 + i * 0.25
+    yr = lower_bottom(xr) - 0.22
+    if yr - 0.07 < -1.55:
+        break
+    add(part("stockFin%d" % i, G, DARK, (xr - 0.42, yr - 0.07, 0.08), (xr, yr, 0.19)).inset("z", 1, x=(0.03, 0.03)), pair=True)
+add(part("stockSlot", G, DARK, (-4.3, -2.05, 0.14), (-3.2, -1.91, 0.24)).inset("z", 1, x=(0.05, 0.05)), pair=True)
 add(part("stockLatch", G, DARK, (-0.3, -2.18, -0.3), (0.2, -1.95, 0.0)).inset("y", 1, x=(0.05, 0.05)))  # under the tube
 
 # ---------------------------------------------------------------- HK ergonomic grip (top y -0.8 .. base 2.2)
@@ -131,8 +154,8 @@ for i, (y0, y1) in enumerate(((-0.8, 0.2), (0.2, 1.2), (1.2, 2.05))):
 add(part("gripBase", G, POLY, (0.65, 2.05, -0.66), (2.55, 2.25, 0.36)).inset("y", 1, x=(0.08, 0.08), z=(0.06, 0.06)))
 for i, y in enumerate((-0.35, 0.5, 1.3)):
     f = grip_edge(y + 0.25, 3.05, 2.45)
-    add(part("fingerBump%d" % i, G, POLY, (f, y, -0.5), (f + 0.12, y + 0.5, 0.2)).inset("x", 1, y=(0.15, 0.15)))
-gp = part("gripPanel", G, DARK, (grip_edge(-0.4, 2.05, 0.8) + 0.2, -0.4, 0.3), (grip_edge(-0.4, 3.05, 2.45) - 0.2, 1.8, 0.35))
+    add(part("fingerBump%d" % i, G, POLY, (f - 0.1, y, -0.5), (f + 0.12, y + 0.5, 0.2)).inset("x", 1, y=(0.15, 0.15)))
+gp = part("gripPanel", G, DARK, (grip_edge(-0.4, 2.05, 0.8) + 0.2, -0.4, 0.16), (grip_edge(-0.4, 3.05, 2.45) - 0.2, 1.8, 0.35))
 gp.c[(0, 1, 0)][0] = gp.c[(0, 1, 1)][0] = grip_edge(1.8, 2.05, 0.8) + 0.2
 gp.c[(1, 1, 0)][0] = gp.c[(1, 1, 1)][0] = grip_edge(1.8, 3.05, 2.45) - 0.2
 add(gp.inset("z", 1, x=(0.06, 0.06), y=(0.06, 0.06)), pair=True)
@@ -201,9 +224,16 @@ def build():
         if drop and pat.search(s):
             continue
         keep.append(line)
+    # some M4A4 parts (the rear sight, defaultScopeModel3..15) read rows past its textureHeight 32
+    # and wrap to the top in the game (GL_REPEAT); a taller texture would hand them our islands
+    # (v0.39.0: rear sight ears cut into a block and a pillar, casebook case 14). Copy the wrapped
+    # rows into place and start our islands below them.
+    spill = max(p.v + int(round(p.size[2])) + int(round(p.size[1])) for p in m4.parts) - th
+    spill = (spill + 7) // 8 * 8 if spill > 0 else 0
+    v0 = th + spill
     uvs, h = layout(P)
     total = th
-    while total < th + h:
+    while total < v0 + h:
         total *= 2
     keep = [l for l in keep if not l.strip().startswith("textureWidth")]
     header = ["  textureWidth = 512;", "  textureHeight = %d;" % total]
@@ -211,17 +241,19 @@ def build():
     keep = keep[:first] + header + keep[first:]
     for i, p in enumerate(P):
         u, v = uvs[i]
-        keep += part_block("%s%d" % (G, 1000 + i), p, u, v + th)
+        keep += part_block("%s%d" % (G, 1000 + i), p, u, v + v0)
     model = "\n".join(keep) + "\n"
     # texture: the M4A4's on top, ours below
     k = tex.width // 512
     mine = paint(P)
     black = Image.new("RGBA", (tex.width, total * k), (0, 0, 0, 0))
     black.paste(tex, (0, 0))
+    if spill:
+        black.paste(tex.crop((0, 0, tex.width, spill * k)), (0, th * k))
     for y, row in enumerate(mine):
         for x, c in enumerate(row):
-            if c[3] and th * k + y < black.height:
-                black.putpixel((x, th * k + y), c)
+            if c[3] and v0 * k + y < black.height:
+                black.putpixel((x, v0 * k + y), c)
     # tan islands: kept M4A4 parts except sights / bolt / trigger, our parts except metal ones
     islands = []
     for p in m4.parts:
@@ -238,7 +270,7 @@ def build():
             continue
         u, v = uvs[i]
         w, hh, d = size(p)
-        islands.append((u, v + th, 2 * (d + w), d + hh))
+        islands.append((u, v + v0, 2 * (d + w), d + hh))
     tan = recolour_tan(black, islands)
     out = {}
     for name, img in (("hk416", black), ("hk416tan", tan)):
@@ -255,7 +287,7 @@ def build():
                 open(os.path.join(adir, os.path.basename(n).replace("m4a4", name)), "wb").write(z.read(n))
         icon(name, os.path.join(OUT, "textures", "items", "gun", "rifle", name + ".png"))
         out[name] = mp
-    return {"dropped": len(drop), "ours": len(P), "texture": [512, total], "files": out}
+    return {"dropped": len(drop), "ours": len(P), "texture": [512, total], "spill rows": spill, "files": out}
 
 
 if __name__ == "__main__":

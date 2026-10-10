@@ -10,6 +10,7 @@ is copied into the repo (renders go to docs/shots/, git ignored).
     python3 tools/guns/study.py parts NAME                               # part list of one gun
     python3 tools/guns/study.py attach GUN ATTACHMENT [...]               # gun + attachments as placed in game
     python3 tools/guns/study.py gaps ours:NAME                           # ours vs its category, metric by metric
+    python3 tools/guns/study.py contact GUN [NAME_REGEX]                 # parts that sit on nothing (floating details)
     python3 tools/guns/study.py vocab [NAME ...]                         # taper / cuboid / skew / wedge shares
 
 NAME is a gun file name (uzi, m4a1, mac10); "ours:NAME" forces our own copy.
@@ -254,6 +255,8 @@ VIEWS = {
     "other": (180, 0),
     "top": (0, -90),
     "three": (-35, -25),
+    "rear": (90, -8),       # from behind the shooter, slightly above: the first person sight picture
+    "low": (-30, 25),       # three quarter from below: parts hanging off the bottom
 }
 
 
@@ -441,6 +444,58 @@ def stats(gun):
     }
 
 
+def inside(part, q, eps=0.03):
+    """True when point q lies in the part's (convex) shape, grown by eps."""
+    v = part.verts()
+    c = [sum(p[i] for p in v) / 8 for i in range(3)]
+    for quad, _ in part.quads():
+        a, b, d = quad[0], quad[1], quad[3]
+        e1 = [quad[2][i] - a[i] for i in range(3)]
+        e2 = [d[i] - b[i] for i in range(3)]
+        n = (e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0])
+        nl = math.sqrt(sum(x * x for x in n))
+        if nl < 1e-9:
+            continue          # a collapsed face (wedge edge)
+        n = [x / nl for x in n]
+        m = [sum(p[i] for p in quad) / 4 for i in range(3)]
+        if sum(n[i] * (c[i] - m[i]) for i in range(3)) > 0:
+            n = [-x for x in n]   # outward
+        if sum(n[i] * (q[i] - m[i]) for i in range(3)) > eps:
+            return False
+    return True
+
+
+def contact(gun, only=None):
+    """Parts that do not sit on anything. A thin detail (0.15 or less in some axis): for every
+    face, how many of its 4 corners lie inside or on another part; best face under 4 = it floats
+    or hangs over an edge. A thicker part only has to overlap another
+    (HK416 v0.39.0: stock fins 0.77 below the panel, skill casebook case 14)."""
+    bad = []
+    for p in gun.parts:
+        if only and not re.match(only, p.name):
+            continue
+        others = [o for o in gun.parts if o is not p]
+        v = p.verts()
+        thin = min(max(q[i] for q in v) - min(q[i] for q in v) for i in range(3))
+        if thin > 0.15:
+            # a body part: enough that it overlaps a neighbour (a butt plate wider than the stock,
+            # a collar around a barrel)
+            if any(inside(o, q) for o in others for q in v) or \
+                    any(inside(p, q) for o in others for q in o.verts()):
+                continue
+            bad.append((p.name, 0))
+            continue
+        best = 0
+        for quad, _ in p.quads():
+            k = sum(1 for q in quad if any(inside(o, q) for o in others))
+            best = max(best, k)
+            if best == 4:
+                break
+        if best < 4:
+            bad.append((p.name, best))
+    return bad
+
+
 def main():
     args = sys.argv[1:]
     if not args:
@@ -487,6 +542,12 @@ def main():
             path = os.path.join(out, "attach_%s%s_%s_%s.png" % ("ours_" if g.ours else "", g.name, "_".join(rest[1:]), v))
             render(g, v, scale).save(path)
             print(path)
+    elif cmd == "contact":
+        # study.py contact GUN [NAME_REGEX]: parts not resting on another part
+        bad = contact(load(rest[0]), rest[1] if len(rest) > 1 else None)
+        for name, k in bad:
+            print("%-22s best face corners on another part: %d / 4" % (name, k))
+        print("%d parts not seated" % len(bad))
     elif cmd == "gaps":
         # ours vs Decimation's guns of its category: median, q10, q90 per metric
         import statistics as st
