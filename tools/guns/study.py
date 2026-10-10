@@ -218,6 +218,23 @@ def attach_offset(gun, name):
 ATTACH_FIX = {"mac10": {"smgSuppressor": (-2.37, -0.16, 0)}, "mk18": {"arSuppressor": (-0.73, 0, 0)}}
 
 
+_SIGHT_OFFSETS = None
+
+
+def sight_offsets():
+    """(gun, sight) -> dy from tools/guns/sightfit.py's table (fixes/SightPlacement applies it)."""
+    global _SIGHT_OFFSETS
+    if _SIGHT_OFFSETS is None:
+        _SIGHT_OFFSETS = {}
+        path = os.path.join(ROOT, "dev", "src", "main", "resources", "assets", "deciworldgen", "sight_offsets.txt")
+        if os.path.exists(path) and os.environ.get("STUDY_NO_SIGHT_OFFSETS") is None:
+            for line in open(path):
+                f = line.split()
+                if len(f) == 3 and not line.startswith("#"):
+                    _SIGHT_OFFSETS[(f[0], f[1])] = float(f[2])
+    return _SIGHT_OFFSETS
+
+
 def with_attachments(gun, names):
     """The gun plus attachment models placed like the game does (plus ATTACH_FIX for ours)."""
     z = zipfile.ZipFile(JAR)
@@ -229,7 +246,7 @@ def with_attachments(gun, names):
         a = Gun(n, slot, text, img, False)
         ox, oy, oz = attach_offset(gun, n)
         fix = ATTACH_FIX.get(gun.name, {}).get(n, (0, 0, 0)) if gun.ours else (0, 0, 0)
-        ox, oy, oz = ox + fix[0], oy + fix[1], oz + fix[2]
+        ox, oy, oz = ox + fix[0], oy + fix[1] + sight_offsets().get((gun.name, n), 0.0), oz + fix[2]
         for p in a.parts:
             p.name = n + "_" + p.name
             p.tex = (img, a.tw, a.th)

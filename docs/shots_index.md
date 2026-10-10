@@ -655,6 +655,17 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## sights_v0.40.1/ (sights onto the rail, 10 Oktober 2026)
+- user_mk18_reddot_floating.png: the user's Mk18 hip screenshot enlarged, red dot frame in the air.
+- m4a4_v036_vs_v040_reddot_hip.png: M4A4 red dot hip, v0.36 (frame resting on the rear sight) and
+  v0.40.0 (rear sight folded: frame at the same spot, floating).
+- before_reddot_2x_4x_hip.png: M4A4 hip with red dot, 2x, 4x before the fix: all float.
+- study_8guns_lowered.png: study.py side renders with the table applied (M60, AA-12, M4A4, Honey
+  Badger, ACR, SCAR, JNG90, MP7; red dot left, 4x right): scopes on the rails.
+- lowered_no_aimshift.png: lowered without raising the gun in aim: dot below the centre.
+- after_reddot_hip_aim.png: Mk18, M4A4, ACR, Uzi: hip on the rail, aim on the centre lines.
+- after_2x_hip_aim.png: Mk18 and ACR with 2x: hip on the rail, aim centred.
+
 ## mk18_v0.40/ (Mk18 Mod 1, iron sights hidden under a sight, 10 Oktober 2026)
 - photo42_rail.png: the user's photo 2 rail enlarged: tall side rail with cross teeth and 3 screws,
   two staggered rows of round holes above it, one row below, round bolt at the front end.

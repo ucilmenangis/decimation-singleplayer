@@ -10,6 +10,25 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Sights float above flat top rifles (v0.40.1, 10 Oktober 2026)
+- User (Honey Badger and Mk18 screenshots, red dot): the sight hangs in the air above the gun.
+- Cause: GunItemRenderer.renderAttachments draws every sight at one spot, made for receivers
+  whose top in the sight zone is about y -4.45 (Uzi, MP5). Flat top rifles sit lower (M4A4 rail
+  teeth -3.6, Honey Badger -3.85, ACR -3.87): 0.6 to 1.6 of air. Their tall folding rear sight
+  used to fill it (the v0.36 M4A4 shot has the red dot frame at the same screen spot, resting on
+  the rear sight); since v0.40.0 that sight folds away under a sight (IronSights) and the gap
+  shows. Not a render bug: the NPC side view matched study.py.
+- Fix: tools/guns/sightfit.py measures each gun's rail top in the sight zone (x 2 to 3.5, long
+  parts plus rail teeth, iron sights excluded) and writes
+  assets/deciworldgen/sight_offsets.txt (dy = rail top + 4.45, only downwards, 20 guns x 5
+  sights); fixes/SightPlacement moves those sights down per gun at startup
+  (Deci.offsetAttachment) and, while aiming in first person, raises the whole gun by the same
+  dy (from IronSights.begin inside the gun draw method), so the sight picture stays where it was.
+- Check: gunview reddot on Mk18 / M4A4 / ACR / Uzi: hip on the rail, aim dot on the centre lines,
+  Uzi unchanged; 2x on Mk18 / ACR the same. docs/shots/sights_v0.40.1/.
+- Open: the muzzle flash is drawn outside the gun draw method, so while aiming with a lowered
+  sight it shows dy below the muzzle `[inferred, not checked]`.
+
 ### Some NPC machine guns fire at double rate (v0.39.2, 10 Oktober 2026)
 - Verdict (user, in game, 10 Oktober 2026): "feels right now, wew. better than before".
 - User: "juggernaut who using pkm, the firerate is ridiculous, like using mg guns ... the elite

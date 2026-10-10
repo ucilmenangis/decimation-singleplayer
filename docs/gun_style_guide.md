@@ -420,6 +420,9 @@ Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
   dot) over y -5.9 to -3.1: a new gun needs its receiver top there (section
   13). The foregrip renders behind and below even Decimation's M4A4
   (study render and the NPC shot) [inferred: misplaced in the game too].
+- Sight height per gun (v0.40.1): sights are placed for a receiver top of -4.45; lower rails get
+  sight_offsets.txt entries from tools/guns/sightfit.py (fixes/SightPlacement lowers the sight,
+  and raises the gun by the same amount while aiming). Rerun sightfit after a new gun or sight.
 - Render: `python3 tools/guns/study.py attach GUN reddot smgSuppressor ...`
   draws a gun with attachments as the game places them; in game:
   `devtest.py --live gunview guns=m4a4,mac10 attach=reddot,smgSuppressor`

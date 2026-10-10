@@ -61,6 +61,8 @@ Details and starting points: new_feature.md "Zones, factions and world".
 0b. HK416 and HK416 Tan: v0.39.1 fixes the user's review of v0.39.0 (floating stock
    pieces, "2 pillar" front sight: really the rear sight reading our texture; skill
    casebook case 14); waiting for the user's verdict.
+0e. Sights onto the rail (v0.40.1, bug.md); next (user 10 Oktober 2026): Mk18 stock IMI
+   Defense TS (user photo), new sights EOTech 558 holographic and ACOG TA11 3.5x, "very detailed".
 0d. Mk18 Mod 1 (v0.40.0) and iron sights hidden under a sight (all guns with defaultScope
    parts): waiting for the user's verdict. Possible polish: study.py gaps lists 7 metrics
    outside the rifle range (mostly the M4A4 base and the many rail teeth).

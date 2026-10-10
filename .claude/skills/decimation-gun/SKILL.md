@@ -289,6 +289,12 @@ source of truth about the real gun and about how it must look in game.
    visibly shorter than the M4A4's 19.15. Then move flamePos to the new muzzle and offset the
    barrel attachment so it overlaps the muzzle device like on the base gun (study.py attach).
 
+19. Sights must sit on the rail (user, v0.40.0: red dot "flying" on the Honey Badger and Mk18).
+   Decimation places every sight for a receiver top of -4.45; a gun whose rail is lower gets an
+   entry in sight_offsets.txt from `python3 tools/guns/sightfit.py` (rerun it after adding a gun
+   or a sight; ours are listed in its OURS). Check hip AND aim (gunview attach=reddot and 2x):
+   hip on the rail, aim centred. A gap hidden by iron sights shows once they fold away.
+
 ## Revision casebook (never delete a case; look here first)
 
 Every user revision and every problem found on the way, with how it was
@@ -595,6 +601,17 @@ revision (same commit), never remove old ones.
   A-frame stays; ACR, G36C, AR15 with reddot and suppressor draw normally; gun test reload 30;
   gunperf within the M4A4's numbers (held 18 / 20 vs 17 / 18; absolute fps of the dev world low
   and noisy that day). Evidence docs/shots/mk18_v0.40/.
+
+### Case 17: sights floating above flat top rifles (v0.40.1, 10 Oktober 2026)
+- Symptom (user screenshots): red dot (and 2x, 4x) hanging in the air at the hip on the Honey
+  Badger and the Mk18; aim looked fine.
+- First wrong turn: I suspected my new IronSights patch and Decimation's hip pose. An old v0.36
+  M4A4 shot showed the red dot frame at the same screen spot, resting on the tall rear sight:
+  the gap was always there, the folding rear sight now uncovers it.
+- Cause, fix, check: bug.md "Sights float above flat top rifles". Tools: sightfit.py (rail top
+  per gun), study.py applies the table in `attach` renders, gunview `npcdist=` brings the NPC
+  side view closer. Lowering alone moved the aim dot below the centre: the gun must be raised
+  by the same dy while aiming (SightPlacement.aimShift).
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

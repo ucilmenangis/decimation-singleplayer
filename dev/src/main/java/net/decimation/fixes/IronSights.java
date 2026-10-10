@@ -29,6 +29,10 @@ public final class IronSights
     public static void begin(Object gunModel, ItemStack stack)
     {
         hideIn = hasSight(stack) ? gunModel : null;
+        if (hideIn != null)
+        {
+            SightPlacement.aimShift(stack); // aiming: the gun up by its lowered sight's dy
+        }
     }
 
     public static void end()

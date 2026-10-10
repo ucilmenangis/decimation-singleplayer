@@ -196,8 +196,10 @@ public class GunViewTest extends DevTestMode
                 bandit.setPosition(bx, y, bz);
                 target.setPosition(bx - 14, y, bz);
             }
-            // camera north of the bandit, looking south (yaw 0): the bandit faces west, its right side north
-            p.playerNetServerHandler.setPlayerLocation(bx + 0.3, y, bz - 2.3, 0, 6);
+            // camera north of the bandit, looking south (yaw 0): the bandit faces west, its right side north;
+            // -Pnpcdist=1.1 comes closer (the gun fills the shot: sight height on the rail)
+            double dist = Double.parseDouble(System.getProperty("deciworldgen.autotest.npcdist", "2.3"));
+            p.playerNetServerHandler.setPlayerLocation(bx + 0.3, y - (2.3 - dist) * 0.12, bz - dist, 0, dist < 2.3 ? 12 : 6);
         }
         if (u == NPC_OFF && bandit != null)
         {

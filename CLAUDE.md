@@ -679,6 +679,9 @@ of the last session:
   v0.39.3: MAC-10 parts seated (skill case 15).
   v0.40.0: Mk18 Mod 1 (tools/guns/mk18.py, run before building) and iron
   sights hidden under a sight (fixes/IronSights, PatchIronSights).
+  v0.40.1: sights onto each gun's rail (tools/guns/sightfit.py ->
+  sight_offsets.txt, fixes/SightPlacement; rerun sightfit after a new gun
+  or sight).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim
