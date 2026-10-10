@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.42.5",
+     version = "0.43.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -124,6 +124,10 @@ public class DecimationWorldGen
             net.decimation.fixes.Deci.setSessionValid(true);
             net.decimation.fixes.LocalStats.show();
         }
+        // gunshot noise: infected and hostile NPCs walk to shots they hear (fixes/GunNoise)
+        net.decimation.fixes.GunNoise noise = new net.decimation.fixes.GunNoise(event.getModConfigurationDirectory());
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(noise);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(noise);
         // HESCO cells of our bases: a plain block, not Decimation's per cell prop (docs/military_base.md)
         net.decimation.worldgen.military.BlockHesco.instance = new net.decimation.worldgen.military.BlockHesco();
         cpw.mods.fml.common.registry.GameRegistry.registerBlock(net.decimation.worldgen.military.BlockHesco.instance, "hesco");

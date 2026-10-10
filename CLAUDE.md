@@ -736,6 +736,9 @@ of the last session:
   shots x0.8, Barrett x0.6, sniperRange 70, Barrett tiers die to one 5.56
   magazine; deciworldgen_npc.cfg version 3), dev test `npckill`; tests in
   their own world deciworldgen_devtest, safe quit of the live test game.
+  v0.43.0: gunshot noise (fixes/GunNoise, config deciworldgen_noise.cfg,
+  new_feature.md "Gunshot noise"): infected and enemy NPCs walk to shots
+  heard (64 blocks, 12 suppressed); dev test `noise` (6 checks).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

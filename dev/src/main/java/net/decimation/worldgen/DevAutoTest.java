@@ -128,6 +128,7 @@ public class DevAutoTest
         if (name.equals("milbase")) return new net.decimation.worldgen.devtest.MilBaseTest();
         if (name.equals("stats")) return new net.decimation.worldgen.devtest.StatsTest();
         if (name.equals("npckill")) return new net.decimation.worldgen.devtest.NpcKillTest();
+        if (name.equals("noise")) return new net.decimation.worldgen.devtest.NoiseTest();
         if (name.equals("census")) return new net.decimation.worldgen.devtest.CensusTest();
         if (name.equals("cityview")) return new net.decimation.worldgen.devtest.CityViewTest();
         return null;

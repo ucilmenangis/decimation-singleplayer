@@ -71,6 +71,7 @@ public class NpcShots implements BiFunction<Entity, EntityLivingBase, Object>
             return null; // Decimation's own shot
         }
         World world = shooter.worldObj;
+        GunNoise.shot(shooter, gun);                 // infected and hostile NPCs hear it
         double sx = shooter.posX, sy = shooter.posY + shooter.getEyeHeight(), sz = shooter.posZ;
         double dx = target.posX - sx, dy = target.boundingBox.minY + target.height * 0.6 - sy, dz = target.posZ - sz;
         String gunName = cpw.mods.fml.common.registry.GameRegistry.findUniqueIdentifierFor(gun.getItem()).name;

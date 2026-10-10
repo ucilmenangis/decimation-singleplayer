@@ -557,7 +557,7 @@ docs/military_base.md; skill decimation-military-base.
 
 ### Requests for later (10 and 11 Oktober 2026, the user: "save this feat/fix later")
 Not started unless marked DONE; each one also has a line in docs/roadmap.md.
-- **Gunshot noise**: a shot from a gun without a suppressor draws attention; zombies walk to
+- **Gunshot noise** (DONE v0.43.0, section "Gunshot noise"): a shot from a gun without a suppressor draws attention; zombies walk to
   where the shot came from, NPCs react too; suppressed shots stay quiet.
 - **Sniper NPC nerf** (DONE v0.42.5): sniper damage about 20 % lower, sniper range 70 blocks (config
   `sniperRange`, 96 now; the user said 90); Barrett NPCs (juggernaut_sniper, elite_sniper)
@@ -567,6 +567,28 @@ Not started unless marked DONE; each one also has a line in docs/roadmap.md.
 - **Smart NPCs**: open, ideas to be collected with the user.
 - **Human Kills** and the **main menu Play button**: DONE in v0.42.2 (bug.md, Fixed).
 - Military jeep / tank wrecks breaking with one punch: DONE v0.42.5 (bug.md).
+
+### Gunshot noise (v0.43.0, 11 Oktober 2026)
+User request (10 Oktober: "if player shot with non suppressor gun, it will draw attention to player
+and zombie will be go to direction where the shot from. this applied to npc too"); choices
+(11 Oktober): one range for every gun; zombies go to the spot and search; hostile NPCs
+investigate; NPC shots draw zombies too; "if the shot from their team or group, they dont need
+to go to direction ... except if its from the enemy or rival".
+- fixes/GunNoise: a shot is heard 64 blocks away, 12 with a suppressor (barrelAttach on the
+  gun, NPC guns too). Player shots: the held gun's ammo NBT drops (no packet hook); NPC shots:
+  NpcShots. A burst is one noise (10 ticks, 8 blocks).
+- Who reacts: every infected (InfectedEntity and the infected dog) in range; armed NPCs in range
+  only when Decimation's isHostileTo says the shooter is their enemy (so their own side, and a
+  player they do not fight, e.g. a bandit vs a player under humanity 50, are ignored).
+- How: an AI task (Investigate; infected priority 3, NPCs 2, before their wander) walks to the
+  spot in 12 block legs, then to random points within 6 blocks of it; search time 30 s
+  (infected) / 40 s (NPCs). A mob with a target fights it instead.
+- Config: config/deciworldgen_noise.cfg (enabled, range, suppressedRange, zombieSearchSeconds,
+  npcSearchSeconds).
+- Checked (dev test noise, 6 checks PASS): an infected 50 away comes 32 closer, one 76 away does
+  not; a suppressed shot does not move one 30 away; a Soviet 43 away walks 32 toward a bandit's
+  shot, a bandit does not; a real player shot (ammo 30 -> 29) brings an infected from 45 away.
+  Not measured: frame time with many infected walking to a firefight [not verified].
 
 ### v0.42.4: fourth review (11 Oktober 2026)
 Ladders walkable from the base on every tower (5 of 6 were walled in), the outpost's TOC back,

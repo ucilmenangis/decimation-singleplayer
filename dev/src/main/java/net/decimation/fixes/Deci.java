@@ -503,6 +503,19 @@ public final class Deci
             deci.ag.a.shotHook;
     }
 
+    /** Rounds in a gun's magazine (GunItem.getAmmo: its "ammo" NBT), -1 when the stack is not a gun. */
+    public static int gunAmmo(net.minecraft.item.ItemStack gun)
+    {
+        return gun != null && gun.getItem() instanceof deci.ay.i ? ((deci.ay.i) gun.getItem()).t(gun) : -1;
+    }
+
+    /** A suppressor on this gun (its "barrelAttach" NBT names one; NPC guns carry it the same way). */
+    public static boolean hasSuppressor(net.minecraft.item.ItemStack gun)
+    {
+        return gun != null && gun.stackTagCompound != null
+            && gun.stackTagCompound.getString("barrelAttach").toLowerCase().contains("suppressor");
+    }
+
     /** GunItem.damage (aew) of a gun stack, 0 when it is not a gun. */
     public static int gunDamageOf(net.minecraft.item.ItemStack gun)
     {
