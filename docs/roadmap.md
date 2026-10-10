@@ -70,10 +70,9 @@ Details and starting points: new_feature.md "Zones, factions and world".
 4. **Police NPC.**
 5. **Survivor civilians** carrying a minimal weapon.
 6. **Radiated areas.**
-7. **Advanced military base.** IN PROGRESS: v0.42.0 US FOB style bases of our own in three
-   sizes (docs/military_base.md, skill decimation-military-base); v0.42.1 after the user's
-   review (prop placement study docs/prop_placement.md, HESCO block, locked TOC door), waiting
-   for the next review.
+7. **Advanced military base.** DONE and ACCEPTED (user, 11 Oktober 2026: "i like the result. so
+   work is done"): US FOB style bases in three sizes, v0.42.0 to v0.42.4 (docs/military_base.md,
+   skills decimation-military-base and decimation-props).
 8. **Advanced bandits.**
 
 ## Items and weapons

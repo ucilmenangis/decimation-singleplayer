@@ -173,3 +173,9 @@ props placement".
   tools/props/walkcheck.py; the outpost TOC reserve fixed (overlapped the main road; missing
   since v0.42.0, found only because the new ladder rule took the large FOB's TOC and its refusal
   was logged); small TOC layout; "has its TOC" check. All walk tests 0, propclash 0.
+
+### Case 6: verdict, accepted (v0.42.4, 11 Oktober 2026)
+- User: "i like the result. so work is done". Accepted after four review rounds: the layout,
+  props from their drawn boxes, loot placement, reachable towers, the walk test. Path that
+  worked: research -> build -> sky test pictures -> user review -> fix the mechanism (prop
+  geometry, walk test, refusal logs), not the single symptom.
