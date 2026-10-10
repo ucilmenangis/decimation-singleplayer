@@ -668,6 +668,31 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   grey "Play Offline", profile box Player Kills / Deaths / Zombie Kills 0, Total Player / Infected
   Casualties 0.
 
+## milbase_v0.42.3/ (after the third review, 11 Oktober 2026)
+- milbase_<size>_tower_deck / tower_roof: tower decks and the searchlight on the plank roof; the
+  ladder shafts (middle of the inner side, air above the hatch) were checked in the block dump.
+- milbase_2_hangar: the closed sandstone vault seen from the open end, APC inside, crates along
+  the walls.
+- milbase_<size>_motor_pool: the workshop shelter with a full spruce roof, the parts yard.
+- milbase_<size>_aerial_sw / top: the rebuilt sky test site, bases whole (no band cut out).
+
+## milbase_v0.42.2_review/ (the user's third review, 11 Oktober 2026, their own runClient)
+- user_109, user_110: guard tower at night: the ladder runs up the inner corner and the corner
+  post (log) stands right over the hatch, so the deck cannot be reached (fixed: ladder in the
+  middle of the inner side). Parapet sandbags, a military crate on the deck, plank roof on posts.
+- user_111: hangar from the open end: the side walls are 3 high and the stepped roof starts at 5,
+  so a gap runs along both sides and the roof looks like it floats; APC wreck inside, a
+  footlocker, a table, drums, a generator (fixed: closed skin; more crates).
+- user_112: motor pool workshop shelter: roof a checkerboard of camo metal and slabs; under it
+  pallets, a tool locker, a table; camo net and jeep beside it (fixed: full spruce roof).
+- user_113: the underside of the sky test large base: rows of stone / grass / dirt / wire blocks
+  hanging below it in a band. Read from the world files: a city edge ramp generated in the
+  chunks below took the sky base top as the ground height, cut a 24 row band (z -19968 ..
+  -19945) out of the large base at -19660 and left its ramp blocks floating (not a render bug).
+- user_114: the sky test seen from above: two big pits through the large base (the cut band)
+  and the large base rebuilt over the outpost's spot (a test bug: sizes=2 alone went to the
+  first slot).
+
 ## milbase_v0.42.2/ (after the second review, 11 Oktober 2026)
 - stats_hud: the in game HUD list "Human Kills / Zombie Kills / Deaths / Days Survived /
   Humanity / Bottlecaps" with local numbers (dev test stats).

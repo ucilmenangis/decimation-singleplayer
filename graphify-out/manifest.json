@@ -50,9 +50,9 @@
     "semantic_hash": "b61303e0eda5fa4492617e32efaafe69"
   },
   "dev/src/main/java/net/decimation/worldgen/DecimationWorldGen.java": {
-    "mtime": 1791659994.4251575,
-    "ast_hash": "f53745b3e4ce4b191dc85d8f8597e468",
-    "semantic_hash": "f53745b3e4ce4b191dc85d8f8597e468"
+    "mtime": 1791663179.267525,
+    "ast_hash": "f0741076cf7d64d620cb822b75d27979",
+    "semantic_hash": "f0741076cf7d64d620cb822b75d27979"
   },
   "dev/src/main/java/net/decimation/worldgen/DevAutoTest.java": {
     "mtime": 1791658518.8829036,
@@ -110,9 +110,9 @@
     "semantic_hash": "de153d1f8408971d6190e16a7d4256f9"
   },
   "CLAUDE.md": {
-    "mtime": 1791659994.4237423,
-    "ast_hash": "cec4219751979debfeb55df7aaf03193",
-    "semantic_hash": "cec4219751979debfeb55df7aaf03193"
+    "mtime": 1791663179.2700574,
+    "ast_hash": "0cefeb5918a8d57b4232daf2020c8662",
+    "semantic_hash": "0cefeb5918a8d57b4232daf2020c8662"
   },
   "DECIMATION_MOD_TASK.md": {
     "mtime": 1784958353.0126374,
@@ -150,9 +150,9 @@
     "semantic_hash": "f6b8dd8ec529f0ccde2347b5521a953b"
   },
   "new_feature.md": {
-    "mtime": 1791660008.7142813,
-    "ast_hash": "3298524aac9fc64ff25288f94f236b01",
-    "semantic_hash": "3298524aac9fc64ff25288f94f236b01"
+    "mtime": 1791663179.2710516,
+    "ast_hash": "2e6cd2ef5e21ec2b1b5f7acaf45c123d",
+    "semantic_hash": "2e6cd2ef5e21ec2b1b5f7acaf45c123d"
   },
   "tools/graph_update.py": {
     "mtime": 1791348965.63658,
@@ -325,9 +325,9 @@
     "semantic_hash": "0145e0863788d451e8ae4273d3c2abdd"
   },
   "docs/shots_index.md": {
-    "mtime": 1791659994.4210002,
-    "ast_hash": "1ca7a6f2f33e431fe9b3dcfef963669a",
-    "semantic_hash": "1ca7a6f2f33e431fe9b3dcfef963669a"
+    "mtime": 1791663179.266609,
+    "ast_hash": "56c66feeac5d27af3355c22f85f44d3e",
+    "semantic_hash": "56c66feeac5d27af3355c22f85f44d3e"
   },
   "docs/interior_spec.md": {
     "mtime": 1791385593.9436893,
@@ -655,9 +655,9 @@
     "semantic_hash": "fcaf65f43d983d02c0fb54297bfc77a4"
   },
   "docs/roadmap.md": {
-    "mtime": 1791659962.3901503,
-    "ast_hash": "ef56c6718d5027d320f6ceb96294362b",
-    "semantic_hash": "ef56c6718d5027d320f6ceb96294362b"
+    "mtime": 1791663179.2689524,
+    "ast_hash": "08375d97fcaecc0966b7311c1fbe15a9",
+    "semantic_hash": "08375d97fcaecc0966b7311c1fbe15a9"
   },
   "dev/src/main/java/net/decimation/worldgen/LegacyStreets.java": {
     "mtime": 1791487239.5087948,
@@ -900,9 +900,9 @@
     "semantic_hash": "61b277b7c539412d919892e8e3b4566a"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/MilBaseTest.java": {
-    "mtime": 1791657667.541355,
-    "ast_hash": "10a49870a019255c4a303a2e15cfcd11",
-    "semantic_hash": "10a49870a019255c4a303a2e15cfcd11"
+    "mtime": 1791661482.7094796,
+    "ast_hash": "3b81a805316a3742e4fb9f6e1f276468",
+    "semantic_hash": "3b81a805316a3742e4fb9f6e1f276468"
   },
   "dev/src/main/java/net/decimation/worldgen/military/Canvas.java": {
     "mtime": 1791651707.3176758,
@@ -910,9 +910,9 @@
     "semantic_hash": "790783f2c75badc3543957a07f26ea7c"
   },
   "dev/src/main/java/net/decimation/worldgen/military/MilitaryBase.java": {
-    "mtime": 1791657415.209678,
-    "ast_hash": "671e1376d139606fc3d1f684e1032a35",
-    "semantic_hash": "671e1376d139606fc3d1f684e1032a35"
+    "mtime": 1791663019.9563167,
+    "ast_hash": "03faf980034070981e5c777bc38d9603",
+    "semantic_hash": "03faf980034070981e5c777bc38d9603"
   },
   "dev/src/main/java/net/decimation/worldgen/military/MilitaryBasePlan.java": {
     "mtime": 1791652347.956311,
@@ -920,14 +920,14 @@
     "semantic_hash": "3c6fcaa670373f83d0939e945faf60c0"
   },
   ".claude/skills/decimation-military-base/SKILL.md": {
-    "mtime": 1791659962.392831,
-    "ast_hash": "671b09859709d5e2b50fef304b8638ae",
-    "semantic_hash": "671b09859709d5e2b50fef304b8638ae"
+    "mtime": 1791661581.80349,
+    "ast_hash": "5e870e35917956a46e6546a1bc5f395f",
+    "semantic_hash": "5e870e35917956a46e6546a1bc5f395f"
   },
   "docs/military_base.md": {
-    "mtime": 1791659962.3910904,
-    "ast_hash": "2f30992ed87cdc5a4d2df139344ee4c3",
-    "semantic_hash": "2f30992ed87cdc5a4d2df139344ee4c3"
+    "mtime": 1791663179.268221,
+    "ast_hash": "5fd0eb6cd2708211303d663cc10a775d",
+    "semantic_hash": "5fd0eb6cd2708211303d663cc10a775d"
   },
   "dev/src/main/java/net/decimation/worldgen/military/BlockHesco.java": {
     "mtime": 1791651267.5664878,

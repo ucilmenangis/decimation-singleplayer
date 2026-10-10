@@ -110,6 +110,25 @@ public class MilBaseTest extends DevTestMode
         }
     }
 
+    /**
+     * Generates AND populates every chunk under the base and 2 chunks around it before the base is
+     * written. Otherwise those chunks get generated later (while writing, or when the player flies
+     * around) and their worldgen samples the ground height there: it reads the top of the sky base
+     * as the ground, and a city edge ramp cut a 24 block band out of the large base and left its
+     * ramp blocks hanging below it (user review 11 Oktober 2026, shots user_113 / user_114).
+     */
+    private static void pregenerate(World w, MilitaryBasePlan p)
+    {
+        net.minecraft.world.gen.ChunkProviderServer cps = (net.minecraft.world.gen.ChunkProviderServer) w.getChunkProvider();
+        for (int cx = (p.minX() >> 4) - 3; cx <= (p.maxX() >> 4) + 3; cx++)
+        {
+            for (int cz = (p.minZ() >> 4) - 3; cz <= (p.maxZ() >> 4) + 3; cz++)
+            {
+                cps.loadChunk(cx, cz);                 // a chunk is populated once its neighbours exist
+            }
+        }
+    }
+
     public void server()
     {
         int t = ++ticks;
@@ -133,7 +152,9 @@ public class MilBaseTest extends DevTestMode
             for (int k = 0; k < sizes.length; k++)
             {
                 int size = Integer.parseInt(sizes[k].trim());
-                int bx = X0 + k * STEP, bz = Z0;
+                int bx = X0 + size * STEP, bz = Z0;     // each size its own spot (by size, not by list index)
+                MilitaryBasePlan probe = new MilitaryBasePlan("probe", size, 0, bx, bz, turns);
+                pregenerate(w, probe);
                 MilitaryBasePlan plan = new MilitaryBasePlan("T" + size + "_" + seed + "_" + turns, size, seed + size,
                                                              bx, bz, turns);
                 long t0 = System.nanoTime();

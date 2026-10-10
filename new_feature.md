@@ -568,6 +568,11 @@ Not started unless marked DONE; each one also has a line in docs/roadmap.md.
 - **Human Kills** and the **main menu Play button**: DONE in v0.42.2 (bug.md, Fixed).
 - Bug for later: military jeep / tank wrecks break with one punch (bug.md).
 
+### v0.42.3: third review (11 Oktober 2026)
+Tower ladders reachable (middle of the inner side), hangar roof closed with loot inside, motor
+pool shelter with a full wooden roof; the "render issue" was worldgen below the sky test cutting
+it (fixed in the test, docs/military_base.md section 6).
+
 ### v0.42.2: second review (11 Oktober 2026)
 User list: AS Val sight position, TOC door side loot, barracks chests, DFAC radio, a busier
 garage, the main menu (no session warning, green Play, local stats). Done: sights shifted onto the

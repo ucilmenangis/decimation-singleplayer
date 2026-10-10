@@ -135,3 +135,18 @@ props placement".
 - Test traps found: rebuilding a base in place drops its multiblocks every second run; the first
   build into brand new sky chunks can leave a tower knocked down (rebuild was clean) [inferred:
   generation of the chunks being written].
+
+### Case 4: third review (v0.42.2 -> v0.42.3, 11 Oktober 2026)
+- User shots docs/shots/milbase_v0.42.2_review/user_109..114.
+- Tower: the ladder in the inner corner sat under the corner post: the hatch was blocked. Now the
+  ladder runs up the middle of the inner side (shaft cut into the HESCO, ladder on its back face),
+  crate and radio on the deck row away from the hatch, the cell in front of the hatch free.
+- Hangar: each vault column only had its top block, and the 3 -> 5 step left a gap along both
+  sides: the roof floated. Now each column's skin runs from the outer column's top to its own.
+  Lesson: a stepped vault or roof must be closed between steps (check from the inside).
+- Motor pool shelter: full spruce roof instead of the checkerboard. Hangar: crates, cases,
+  police / medical crates, a cabinet along both walls.
+- Sky test: real worldgen in chunks generated after the test base read the base top as the
+  ground (a city edge ramp cut a band out of it). MilBaseTest now generates and populates every
+  chunk under and 3 around a base before writing it, and puts each size at its own spot
+  (X0 + size * STEP; a sizes=2 run used to land on the outpost's spot).

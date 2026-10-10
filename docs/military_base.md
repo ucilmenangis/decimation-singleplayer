@@ -123,6 +123,12 @@ the DFAC; care packages at the ASP / helipad.
 
 ## 5. Status
 
+v0.42.3 (11 Oktober 2026), third review (docs/shots/milbase_v0.42.2_review/): tower ladder in the
+middle of the inner side (the corner post blocked the corner hatch), deck crate and radio on the
+row away from the hatch, radio facing the deck; hangar vault closed between its steps (the roof
+floated) and loot crates along both walls; motor pool shelter with a full spruce roof. Test site
+cleared again and rebuilt with pregenerated chunks. 0 clashes, checker 0 findings.
+
 v0.42.2 (11 Oktober 2026), second review (docs/shots/milbase_v0.42.1_review/): TOC door wall with
 two weapon cabinets facing the room, police and military crates and the large ammo case; half of
 the barracks footlockers are vanilla chests (Decimation's chest loot; its storage crate is
@@ -165,6 +171,11 @@ Traps met (the skill decimation-military-base has them as lessons):
 - Every run writes dev/run/client/devtest/milbase_<size>.tsv (all blocks); `python3
   tools/props/propclash.py dev/run/client/devtest/milbase_1.tsv` must report findings 0.
 - `turns=1` / `turns=3` too: rotated bases use the per prop quarter turn table.
+- Test trap (11 Oktober 2026): chunks under a sky base that get generated AFTER it (while
+  writing, or when someone flies around) sample the ground height and read the base's top as
+  the ground: a city edge ramp cut a 24 row band out of the large base. MilBaseTest now
+  generates and populates the footprint + 3 chunks before writing, and each size has its own
+  spot (X0 + size * STEP).
 - Test trap: rebuilding a base IN PLACE over its previous copy makes the multiblock props
   (T-walls, street barriers, shelves) vanish on every second run (writing over the old parts
   breaks the new masters); real worldgen writes fresh chunks. Prop counts in the dumps then

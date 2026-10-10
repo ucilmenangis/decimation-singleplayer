@@ -332,10 +332,13 @@ public final class MilitaryBase
             {
                 int d = Math.min(x - x0, x1 - x);
                 int top = d == 0 ? 3 : d == 1 ? 5 : d == 2 ? 6 : 7;
+                // the skin of a column runs from the top of the column outside it up to its own top,
+                // so the vault is closed (user review 11 Oktober 2026: the roof floated over a gap)
+                int outer = d == 0 ? 0 : d == 1 ? 3 : d == 2 ? 5 : 6;
                 c.set(x, 0, z, Blocks.stone);
                 for (int y = 1; y <= top; y++)
                 {
-                    boolean skin = y == top || d == 0 || back;
+                    boolean skin = y > outer || d == 0 || back;
                     c.set(x, y, z, skin ? Blocks.sandstone : null, skin ? 2 : 0);
                 }
             }
@@ -351,10 +354,24 @@ public final class MilitaryBase
             }
         }
         c.prop(mx, 1, z0 + 7, b.apc, S);
+        // along the walls (the APC is drawn 4.5 wide: x mx - 2 .. mx + 2.4), loot (user review
+        // 11 Oktober 2026: "add more crate loots in there"): crates and cases on both sides
         c.prop(x0 + 1, 1, z0 + 2, b.metalTable, E);
-        c.prop(x0 + 1, 1, z0 + 5, b.storageCrate, E);
+        c.prop(x0 + 1, 2, z0 + 2, b.ammoCrate, E);
+        c.prop(x0 + 1, 1, z0 + 4, b.militaryCrate, E);
+        c.prop(x0 + 1, 2, z0 + 4, b.militaryCrate, E);
+        c.prop(x0 + 1, 1, z0 + 5, b.militaryCrate, E);
+        c.prop(x0 + 1, 1, z0 + 6, b.storageCrate, E);
+        c.prop(x0 + 1, 1, z0 + 8, b.policeCrate, E);
+        c.prop(x0 + 1, 1, z0 + 9, b.militaryCrate, E);
+        c.prop(x0 + 1, 2, z0 + 9, b.medicalCrate, E);
+        c.prop(x0 + 1, 1, z0 + 11, b.weaponCabinet, E);
         c.prop(x1 - 2, 1, z0 + 2, b.tireStack, W);        // drawn 1.3 wide: off the curved skin
         c.prop(x1 - 1, 1, z0 + 4, b.tire, W);
+        c.prop(x1 - 1, 1, z0 + 5, b.militaryCrate, W);
+        c.prop(x1 - 1, 1, z0 + 6, b.militaryCrate, W);
+        c.prop(x1 - 1, 2, z0 + 6, b.ammoCrate, W);
+        c.prop(x1 - 1, 1, z0 + 8, b.policeCrate, W);
         c.prop(x1 - 1, 1, z0 + 11, b.generator, W);
         c.prop(x0 + 1, 1, z1 - 1, b.barrel, E);
         c.prop(x1 + 1, 1, z1 + 1, b.lightTower, S);
@@ -689,10 +706,12 @@ public final class MilitaryBase
     {
         towerSpots.add(new int[] {x0, z0});
         c.fill(x0, 1, z0, x0 + 3, 3, z0 + 3, b.hesco);
-        // the ladder in the inner corner cell (attached to the cell beside it, toward the wall)
-        int lx = ix > 0 ? x0 + 3 : x0, lz = iz > 0 ? z0 + 3 : z0;
+        // the ladder in the middle of the side facing into the base (user review 11 Oktober 2026:
+        // in the inner corner the corner post stood over the hatch), a shaft cut into the HESCO,
+        // the ladder on the shaft's back face (toward the tower centre)
+        int lx = x0 + (ix > 0 ? 1 : 2), lz = iz > 0 ? z0 + 3 : z0;
         c.clearBox(lx, 1, lz, lx, 4, lz);
-        int ladderMeta = ix > 0 ? 5 : 4;               // vanilla ladder: 5 faces east (block west of it)
+        int ladderMeta = iz > 0 ? 3 : 2;               // vanilla ladder: 3 faces south (block north of it), 2 north
         for (int y = 1; y <= 4; y++)
         {
             c.set(lx, y, lz, Blocks.ladder, ladderMeta);
@@ -751,20 +770,14 @@ public final class MilitaryBase
         }
         poi("tower_deck", x0 + 1.5 + (ix > 0 ? 0.5 : 0), 6.6, z0 + 1.5 + (iz > 0 ? 0.5 : 0), ix > 0 ? 315 : 45, 18);
         // searchlight on the roof looking out (its lens faces the placer side: front N for the
-        // north towers, S for the gate side); on the deck an ammo crate and a radio
+        // north towers, S for the gate side); on the deck, away from the hatch, a crate and a
+        // radio; the deck cell in front of the hatch stays free to step onto
         int cx = x0 + (ix > 0 ? 1 : 2), cz = z0 + (iz > 0 ? 1 : 2);
         c.prop(cx, 9, cz, b.spotlight, iz > 0 ? N : S);
         poi("tower_roof", x0 + 1.5 + ix * 5, 12.6, z0 + 1.5 + iz * 5, (float) Math.toDegrees(Math.atan2(ix, -iz)), 30);
-        int ax = x0 + (ix > 0 ? 2 : 1), az = z0 + (iz > 0 ? 2 : 1);
-        if (!(ax == lx && az == lz))
-        {
-            c.prop(ax, 5, az, b.militaryCrate, ix > 0 ? E : W);
-        }
-        int rx = x0 + (ix > 0 ? 1 : 2), rz = z0 + (iz > 0 ? 2 : 1);
-        if (!(rx == lx && rz == lz))
-        {
-            c.prop(rx, 5, rz, b.radioSmall, iz > 0 ? N : S);
-        }
+        int far = iz > 0 ? z0 + 1 : z0 + 2;            // the deck row away from the hatch
+        c.prop(x0 + (ix > 0 ? 2 : 1), 5, far, b.militaryCrate, ix > 0 ? E : W);
+        c.prop(lx, 5, far, b.radioSmall, iz > 0 ? S : N);     // its panel toward the deck, not the parapet
     }
 
     // ================================================================ roads
@@ -1506,7 +1519,7 @@ public final class MilitaryBase
             {
                 for (int z = sz; z <= sz + 4; z++)
                 {
-                    c.set(x, 4, z, (x + z) % 2 == 0 ? b.metalGreen : Blocks.wooden_slab, (x + z) % 2 == 0 ? 0 : 1);
+                    c.set(x, 4, z, Blocks.planks, 1);          // a full spruce roof (user review 11 Oktober 2026)
                 }
             }
             for (int[] p : new int[][] {{sx, sz}, {sx + 5, sz}, {sx, sz + 4}, {sx + 5, sz + 4}})

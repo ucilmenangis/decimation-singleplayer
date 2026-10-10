@@ -717,6 +717,10 @@ of the last session:
   valid (green Play), base loot / props (TOC door wall, chests, DFAC radio,
   motor pool parts yard); milbase test site moved to -20000,230,-20000 and the
   old sites cleared from the dev world (tools/perfcheck.py clearblocks).
+  v0.42.3: third review: tower ladder mid inner side, hangar vault closed +
+  loot, shelter roof; MilBaseTest pregenerates and populates the chunks under
+  a base before building (worldgen below a sky base read its top as the
+  ground and cut it) and places each size at X0 + size * STEP.
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim
