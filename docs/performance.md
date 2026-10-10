@@ -111,5 +111,13 @@ alternating three times so the drift cancels; -Pview=x,y,z,yaw,pitch).
   empty sky at 700 fps, so its numbers mean nothing; our MAC-10 also drew slowly under it
   (held 60 fps vs the Uzi's 703). Not usable here `[inferred: the GL 2.1 context]`; Prism keeps
   OptiFine. "Entity is already tracked" server errors appeared in that session only.
+- Java 25 + lwjgl3ify (`tools/devtest.py --live --java25`, task runClient25; every runClient*
+  task now gets the dev hooks): the log still says "OpenGL: Apple M4 GL version 2.1 Metal"
+  with LWJGL 3.4.2. macOS gives programs that use the old fixed function GL (all of 1.7.10)
+  only a 2.1 context, whatever the LWJGL; a modern core context drops what Minecraft and
+  Decimation draw with. The run also crashed on the same fastutil clash (GTNHLib comes with
+  lwjgl3ify): fixable, but pointless while the context stays 2.1. Prism runs the same Java 8 /
+  LWJGL 2 on the same Mac, so Angelica there is expected to show the same empty terrain
+  `[inferred]` (and it would replace OptiFine, which works).
 - Other options left: render distance 8 to 10 in cities, OptiFine in the dev client, fewer
   hidden faces in our buildings.

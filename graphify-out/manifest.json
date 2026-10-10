@@ -20,9 +20,9 @@
     "semantic_hash": "f6d0ec3d1c5bb5c1802a7544eafa4896"
   },
   "dev/dependencies.gradle": {
-    "mtime": 1791583596.1260238,
-    "ast_hash": "a441b15dada55da39461421264a0eaf4",
-    "semantic_hash": "a441b15dada55da39461421264a0eaf4"
+    "mtime": 1791615247.7976353,
+    "ast_hash": "42c9045017cf24ecb760ecafd434198a",
+    "semantic_hash": "42c9045017cf24ecb760ecafd434198a"
   },
   "dev/repositories.gradle": {
     "mtime": 1791314872.0,
@@ -650,9 +650,9 @@
     "semantic_hash": "fe52ba76871cd7e9a2bdd0e75f8f5a9d"
   },
   "tools/devtest.py": {
-    "mtime": 1791582952.0337825,
-    "ast_hash": "d7a11c41d1081d106cb072b41054a283",
-    "semantic_hash": "d7a11c41d1081d106cb072b41054a283"
+    "mtime": 1791615247.7980642,
+    "ast_hash": "fcaf65f43d983d02c0fb54297bfc77a4",
+    "semantic_hash": "fcaf65f43d983d02c0fb54297bfc77a4"
   },
   "docs/roadmap.md": {
     "mtime": 1791584243.4061973,
@@ -840,9 +840,9 @@
     "semantic_hash": "83db1dd61a8d31981e798b7c2a8028fb"
   },
   "docs/performance.md": {
-    "mtime": 1791584243.4048464,
-    "ast_hash": "00f25a92f6342ba32935449b6c39e013",
-    "semantic_hash": "00f25a92f6342ba32935449b6c39e013"
+    "mtime": 1791615897.2484381,
+    "ast_hash": "f100eacdb4a8b196174369936e32a9eb",
+    "semantic_hash": "f100eacdb4a8b196174369936e32a9eb"
   },
   "dev/src/main/java/net/decimation/worldgen/devtest/CityViewTest.java": {
     "mtime": 1791581459.197368,

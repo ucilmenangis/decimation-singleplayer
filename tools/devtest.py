@@ -16,6 +16,7 @@ LIVE (no game launch per run, docs/roadmap.md "Live dev test mode"):
     python3 tools/devtest.py --live --swap MODE ...   # first push changed code (tools/hotswap.py)
     python3 tools/devtest.py --stop                   # close the live game
     python3 tools/devtest.py --live --angelica MODE   # start the live game with Angelica (dev only)
+    python3 tools/devtest.py --live --java25 MODE     # start it on Java 25 with lwjgl3ify (runClient25)
 
 --live sends the modes to a game started with `gradlew runClient -Plive`
 (devtest/DevTestLive, 127.0.0.1:25599); if none answers it starts one in the
@@ -108,11 +109,11 @@ def live_ready(wait):
         time.sleep(2)
 
 
-def run_live(modes, extra, swap, angelica=False):
+def run_live(modes, extra, swap, angelica=False, task="runClient"):
     if live_send("ping", 5) is None:
         print("no live game: starting one (log %s)..." % os.path.relpath(LIVE_LOG, ROOT))
         os.makedirs(os.path.dirname(LIVE_LOG), exist_ok=True)
-        start = ["./gradlew", "runClient", "-q", "-Plive"]
+        start = ["./gradlew", task, "-q", "-Plive"]
         if angelica:  # Angelica rendering overhaul in the dev client (docs/performance.md)
             start += ["-Pangelica", "-PforceEnableMixins=true"]
         subprocess.Popen(start, cwd=DEV, stdout=open(LIVE_LOG, "w"),
@@ -151,7 +152,8 @@ def main():
         print(__doc__)
         return 2
     if "--live" in args:
-        if not run_live(modes, extra, "--swap" in args, "--angelica" in args):
+        task = "runClient25" if "--java25" in args else "runClient"  # Java 25 + lwjgl3ify (docs/performance.md)
+        if not run_live(modes, extra, "--swap" in args, "--angelica" in args, task):
             return 1
     else:
         if os.path.isfile(RESULTS):

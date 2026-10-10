@@ -56,13 +56,13 @@ def installVoiceChat = tasks.register("installVoiceChat", Copy) {
     into(layout.projectDirectory.dir("run/client/mods"))
     rename { "DecimationVoiceChat.jar" }
 }
-tasks.matching { it.name == "runClient" }.configureEach {
+tasks.matching { it.name.startsWith("runClient") }.configureEach {
     dependsOn(installVoiceChat)
 }
 
 // `gradlew runClient -Photswap`: debug agent on port 5005 so changed classes
 // can be pushed into the running game (tools/hotswap.py), no restart
-tasks.matching { it.name == "runClient" }.configureEach {
+tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("hotswap")) {
         jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005")
     }
@@ -71,7 +71,7 @@ tasks.matching { it.name == "runClient" }.configureEach {
 // `gradlew runClient -Plive`: the game stays open and takes test runs over
 // 127.0.0.1:25599 (devtest/DevTestLive; tools/devtest.py --live), with the
 // hotswap debug port too, so code changes in method bodies need no restart
-tasks.matching { it.name == "runClient" }.configureEach {
+tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("live")) {
         jvmArgs("-Ddeciworldgen.autotest=true", "-Ddeciworldgen.autotest.live=true")
         if (!project.hasProperty("hotswap")) {
@@ -83,7 +83,7 @@ tasks.matching { it.name == "runClient" }.configureEach {
 // `gradlew runClient -Pdevtest=checks,scope,tracer` runs those dev test modes
 // in one game session (package worldgen.devtest; tools/devtest.py wraps it):
 // checks, views, scope, tracer, props, cityfps. Results: run/client/devtest/results.txt
-tasks.matching { it.name == "runClient" }.configureEach {
+tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("devtest")) {
         jvmArgs("-Ddeciworldgen.autotest=true", "-Ddeciworldgen.autotest.test=" + project.property("devtest"))
     }
@@ -91,7 +91,7 @@ tasks.matching { it.name == "runClient" }.configureEach {
 
 // `gradlew runClient -Pautotest` runs the unattended singleplayer smoke test
 // (net.decimation.worldgen.DevAutoTest) and quits the game when done.
-tasks.matching { it.name == "runClient" }.configureEach {
+tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("autotest")) {
         jvmArgs("-Ddeciworldgen.autotest=true")
     }
