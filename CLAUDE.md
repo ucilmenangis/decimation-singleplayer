@@ -672,6 +672,7 @@ of the last session:
   v0.39.2: NPC burst rate capped (maxBurstRpm 600, bug.md "Some NPC
   machine guns fire at double rate"); dev test `firerate` times every
   NPC shot per tier and gun (-Pcases=tier:gun,...).
+  v0.39.3: MAC-10 parts seated (skill case 15).
   Gun study (10 Oktober 2026): docs/gun_style_guide.md, tools/guns/study.py
   (renders / measures Decimation's guns from the jar, `attach` adds
   attachments as the game places them), dev test mode `gunview` (hip, aim

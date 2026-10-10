@@ -98,7 +98,8 @@ into the repo: measure and learn from them, build our own.
 - `python3 tools/guns/study.py contact ours:<gun> ['gunModel1\d{3}']`:
   parts that do not sit on anything (a thin detail needs one whole face
   on or in another part; a thicker part only has to overlap one). Must
-  list nothing but known collars (a ring around a barrel). Decimation's
+  list nothing but known collars and flanges (a ring around a barrel, a
+  magazine base plate, a magazine well lip wider than its host). Decimation's
   own guns pass it almost clean (M4A4 2, Uzi 5).
 - `python3 tools/guns/study.py gaps ours:<gun>`: every metric vs the
   Decimation guns of its category (median, q10 .. q90, "<- outside"):
@@ -530,6 +531,27 @@ revision (same commit), never remove old ones.
   hk416 25 / 29, baseline 29 (noise).
 - Also found: our MAC-10 has 17 parts flagged by contact (accepted gun,
   not changed yet; roadmap).
+
+### Case 15: MAC-10 parts not seated, found by the contact check (v0.39.3, 10 Oktober 2026)
+- Request (user): "2" (clean up the 17 MAC-10 parts `study.py contact`
+  flagged after case 14).
+- Causes (tools/guns/mac10.py): raised side details (seam, housingPlate,
+  gripPanel, housingRib, housingRib2) started at the host's NOMINAL side
+  (z 0.45 / 0.4 / 0.3 / 0.32) while the host leans in (insets 0.06 to
+  0.12): gaps of 0.05 to 0.14; the seam also ran 0.1 past the lower
+  receiver's front end; the rear sight ears overhung their base by 0.04
+  (base inset under them); triggerTip started 0.09 behind the trigger's
+  lower end (a step); the stock hinge hovered above the rod end.
+- Fix (v0.39.3): inner faces pushed into the host (outer faces kept, so
+  the 0.08 proud look of case 9 stays), seam to x 8.8, rsBase widened
+  0.05 under the ears, triggerTip from the trigger's lower end (x 5.84
+  .. 5.99, raked back 0.14), hinge a knuckle around the rod end. Kept on
+  purpose: gripLip and magBase, flanges wider than their host (like a
+  collar). 17 flagged -> 2 (the flanges). Only those 14 parts moved
+  (corner diff against the old spec), geometry elsewhere identical.
+- Check: contact; before / after renders three and low
+  (docs/shots/mac10_v0.39.3/); gunview aim next to the Uzi: aperture
+  holes on the centre line as before (aim_cmp_uzi.png).
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

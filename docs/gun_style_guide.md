@@ -109,7 +109,10 @@ block.
    pieces). A detail on a leaning face (an inset side) starts 0.05 to 0.15
    INSIDE the host, not at the host's nominal z; a detail along an angled
    edge is placed from the edge's formula at its own x, never one fixed y.
-   `study.py contact` must list nothing but collars. Check the `low` render.
+   `study.py contact` must list nothing but collars and flanges (a magazine
+   base plate or well lip wider than its host). Check the `low` render.
+   Push the inner face in and keep the outer face where it was, so a
+   raised detail stays about 0.08 proud (MAC-10 v0.39.3: 17 parts -> 2).
 10. **Sights look like the real one from behind and stay as low as the base
    gun's** (user, HK416 v0.39.0: front sight "like 2 pillar"). HK front
    sight: a U of thick flared ears on one bridge, not two thin posts; ear

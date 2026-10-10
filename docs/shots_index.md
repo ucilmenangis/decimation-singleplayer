@@ -655,6 +655,12 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## mac10_v0.39.3/ (MAC-10 parts seated, 10 Oktober 2026)
+- cmp_three_before_after.png / cmp_low_before_after.png: v0.39.2 left, v0.39.3 right: no visible
+  change at this size (the fixes are 0.04 to 0.14), hinge now around the rod end, trigger tip
+  continues the trigger.
+- aim_cmp_uzi.png: Uzi / MAC-10 aim crops with centre lines: both aperture holes on the line.
+
 ## hk416_v0.39.1/ (HK416 review fixes, 10 Oktober 2026)
 - user_stock_v0390.png / user_sight_v0390.png: the user's v0.39.0 screenshots enlarged: diagonal
   fins hanging below the stock's angled panel; in aim a wide block left, a thin tall pillar right

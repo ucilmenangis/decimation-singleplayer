@@ -61,9 +61,8 @@ Details and starting points: new_feature.md "Zones, factions and world".
 0b. HK416 and HK416 Tan: v0.39.1 fixes the user's review of v0.39.0 (floating stock
    pieces, "2 pillar" front sight: really the rear sight reading our texture; skill
    casebook case 14); waiting for the user's verdict.
-0c. MAC-10: `study.py contact` flags 17 of its parts as not seated (found 10 Oktober
-   2026 with the new check, accepted gun, not changed): look at them with the low /
-   rear renders and seat the ones that really float.
+0c. MAC-10 parts seated (v0.39.3, skill casebook case 15): 17 flagged -> 2 flanges
+   kept on purpose; aim unchanged. Waiting for the user's look in game.
 0. UMP9 (v0.38.0): accepted by the user ("work really well and no
    problem"); more variants of Decimation guns can be made the same way
    (skill lesson 13).
