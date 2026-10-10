@@ -20,6 +20,18 @@ import net.minecraft.nbt.NBTTagCompound;
 public final class IronSights
 {
     private static Object hideIn;
+    /**
+     * More parts to hide under a sight, per gun: the M4A4's rail teeth under its rear sight carry
+     * a colourful placeholder texture nobody saw while the sight covered them (Decimation's art,
+     * left as it is; our variants repaint them in tools/guns/mk18.py and hk416.py).
+     */
+    private static final java.util.Map<String, java.util.Set<String>> EXTRA = new java.util.HashMap<String, java.util.Set<String>>();
+    static
+    {
+        EXTRA.put("m4a4", new java.util.HashSet<String>(java.util.Arrays.asList(
+            "gunModel205", "gunModel206", "gunModel207", "gunModel208")));
+    }
+    private static java.util.Set<String> extra;
 
     private IronSights()
     {
@@ -29,8 +41,10 @@ public final class IronSights
     public static void begin(Object gunModel, ItemStack stack)
     {
         hideIn = hasSight(stack) ? gunModel : null;
+        extra = null;
         if (hideIn != null)
         {
+            extra = EXTRA.get(cpw.mods.fml.common.registry.GameRegistry.findUniqueIdentifierFor(stack.getItem()).name);
             SightPlacement.aimShift(stack); // aiming: the gun up by its lowered sight's dy
         }
     }
@@ -48,7 +62,7 @@ public final class IronSights
             return false;
         }
         String name = ((ModelRenderer) part).boxName;
-        return name != null && name.startsWith("defaultScope");
+        return name != null && (name.startsWith("defaultScope") || extra != null && extra.contains(name));
     }
 
     /** Decimation keeps the attached sight's registry name in the gun's NBT ("sightAttach"). */

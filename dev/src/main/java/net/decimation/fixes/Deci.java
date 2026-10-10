@@ -660,6 +660,51 @@ public final class Deci
         }
     }
 
+    /**
+     * A new sight attachment (AttachmentItem deci.ay.h, slot sight, all categories) registered as
+     * deci:<name>. Decimation looks attachments up by GameRegistry.findItem("deci", name) (the gun's
+     * NBT sightAttach), so ours must live in its namespace: FML names an item after the active
+     * mod container, which is switched to Decimation's for the constructor (LoadController's
+     * private activeContainer) and back. Model deci:models/attachments/sight/<name>.bmodel, texture
+     * deci:textures/model/attachments/sight/<name>.png, icon deci:attach/<name>.
+     */
+    public static Item newSightAttachment(String name, float zoomFov, float sway)
+    {
+        cpw.mods.fml.common.ModContainer deciMod = cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deci");
+        java.lang.reflect.Field controller = null, active = null;
+        Object lc = null, before = null;
+        try
+        {
+            controller = cpw.mods.fml.common.Loader.class.getDeclaredField("modController");
+            controller.setAccessible(true);
+            lc = controller.get(cpw.mods.fml.common.Loader.instance());
+            active = lc.getClass().getDeclaredField("activeContainer");
+            active.setAccessible(true);
+            before = active.get(lc);
+            active.set(lc, deciMod);
+            return new deci.ay.h(deci.ay.b.sight, deci.ay.c.all, zoomFov, sway, name);
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.warning("[deciworldgen] sight %s not registered: %s", name, e);
+            return null;
+        }
+        finally
+        {
+            if (active != null && lc != null)
+            {
+                try
+                {
+                    active.set(lc, before);
+                }
+                catch (IllegalAccessException e)
+                {
+                    // set accessible above
+                }
+            }
+        }
+    }
+
     /** True when the gun (GunItem deci.ay.i) loads this magazine (its ammoTypes aep). */
     public static boolean gunTakes(Item gun, Item mag)
     {

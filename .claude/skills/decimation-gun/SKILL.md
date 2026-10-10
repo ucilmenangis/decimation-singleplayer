@@ -295,6 +295,19 @@ source of truth about the real gun and about how it must look in game.
    or a sight; ours are listed in its OURS). Check hip AND aim (gunview attach=reddot and 2x):
    hip on the rail, aim centred. A gap hidden by iron sights shows once they fold away.
 
+20. A new sight attachment (user, v0.41.0: EOTech 558, ACOG TA11, "so detailed ... same like in
+   real life"): build it in tools/guns/sights.py in GUN space (rail top -4.45, centre z -0.15;
+   the file gets minus (0.8, 1.12, -0.128), renderAttachments' sight translate), real sizes x 0.52
+   (Decimation's 4x: 4.7 long, 1.35 wide, glass 0.8). The see through glass is a part named
+   scopeGlass* (one part: PatchScope measures its box), its reticle a PNG in
+   textures/model/guns/scopes/<name>.png drawn by ScopeZoom (GLASS_RETICLES: size, blend; alpha
+   for coloured reticles, additive washes red to white on a bright sky). Register it with
+   Deci.newSightAttachment (deci:<name>: Decimation looks attachments up in its own namespace),
+   magnification in ScopeZoom.magnification, add it to sightfit.py SIGHTS and study.py
+   ATTACH_SLOT. Avoid names Decimation's jar already has assets for (it ships an unused
+   attachments/sight/acog.png). Check hip AND aim on a flat top and on an Uzi, twice (ScopeZoom
+   learns the glass position during the first aim).
+
 ## Revision casebook (never delete a case; look here first)
 
 Every user revision and every problem found on the way, with how it was
@@ -612,6 +625,33 @@ revision (same commit), never remove old ones.
   per gun), study.py applies the table in `attach` renders, gunview `npcdist=` brings the NPC
   side view closer. Lowering alone moved the aim dot below the centre: the gun must be raised
   by the same dy while aiming (SightPlacement.aimShift).
+
+### Case 18: Mk18 TS stock, EOTech 558, ACOG TA11 (v0.41.0, 10 Oktober 2026)
+- Request (user): "for the stock use sopmod or crane", then a photo of the IMI Defense TS stock;
+  "make new sight model, holographic sight ... 558 ... and acog 3.5x", 16 photos, "please be so
+  detailed on the model ... small detail will be i analyze".
+- TS stock (tools/guns/mk18.py): measured on the photo (1520 px over x -5.15 .. 0.35, px(x, y)
+  helper, lower_edge(x) for the diagonal strut): upper body with 2 x 5 slots and QD socket,
+  ribbed butt pad, rear strut and its slot, diagonal strut and its slot, front block with the
+  triangle cut, slot and pin, open window with the lever across it. The M4A4's own buffer tube
+  (gunModel68..70, x -3.95 .. 1.45, wider than our stock) showed through the stock: dropped, ours
+  matches its size (y -2.85 .. -1.95). Cuts in HOLE (12, 12, 13): DARK (24) on the stock (30) did
+  not read.
+- EOTech 558 (92 parts): first pass was a long box with a small window ("a truck"); the 558 is a
+  compact hood about as long as tall with the window filling the rear face (photos 62, 64, 67).
+  QD mount with lever, hood with rims, window glass + tinted front lens, rear panel with logo
+  plate and 4 screws, left side label / NV / arrow buttons / screws, right side two adjuster
+  dials, transverse battery tube in front with a knurled "+" cap and its tether.
+- ACOG TA11 (117 parts): eyepiece rubber / tube / ring, round eyepiece opening (corner wedges in
+  front of the square glass), lamp housing, forged body whose top climbs to the front, side
+  bosses and top shoulders, bell with lip and a round amber objective, fibre optic channel with
+  green fibre and clear cap, elevation and windage turrets with knurled caps, TA51 mount with
+  jaws, cross bolts and thumb nuts. Reticle from photo 59 (thick posts with //, green centre,
+  4 to 10 BDC); first lines 2 px thick vanished at 3.5x, now 4 / 15 px.
+- Found on the way: the M4A4's placeholder rail teeth (bug.md "Colourful rail teeth").
+- Check: renders (docs/shots/sights_v0.41/), gunview hip / aim on Mk18, M4A4, HK416, MP5, Uzi;
+  EOTech ring centred in the window on the second aim (first aim: still learning), ACOG reticle
+  centred; gunperf with each sight (numbers noisy that day, see roadmap 0e).
 
 ### Case 8: test traps met on the way (dev test gunview)
 - No gun in the shots: F1 (hideGUI) hides the held item too; first

@@ -248,6 +248,13 @@ def build():
     mine = paint(P)
     black = Image.new("RGBA", (tex.width, total * k), (0, 0, 0, 0))
     black.paste(tex, (0, 0))
+
+    # the M4A4's rail teeth gunModel205..208 (x 2.1 .. 3.5, under its rear sight) carry a colourful
+    # placeholder texture nobody saw while the sight covered them; it folds away under a sight now
+    # (IronSights): give them the island of the clean tooth gunModel204 (u 425, v 25, 4 x 2 units)
+    island = black.crop((425 * k, 25 * k, 429 * k, 27 * k))
+    for u in (433, 441, 449, 457):
+        black.paste(island, (u * k, 25 * k))
     if spill:
         black.paste(tex.crop((0, 0, tex.width, spill * k)), (0, th * k))
     for y, row in enumerate(mine):

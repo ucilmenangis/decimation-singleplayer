@@ -46,7 +46,8 @@ NAME = "mk18"
 G = "gunModel"
 SIGHT = "defaultScopeModel"   # hidden while a sight is attached (fixes/IronSights)
 RAIL = (31, 31, 33)     # anodised aluminium rail, as dark as the M4A4 receiver
-DARK = (24, 24, 26)     # holes, slots, sights
+DARK = (24, 24, 26)     # slots, sights
+HOLE = (12, 12, 13)     # through cuts in the stock
 METAL = (46, 46, 48)    # barrel
 FLASH = (36, 36, 38)
 BOLT = (52, 52, 54)
@@ -126,6 +127,100 @@ for i, dy in enumerate((-0.3, 0.3)):
 add(part("flashSlotSide", G, DARK, (15.55, BORE - 0.12, ZC + 0.27), (16.05, BORE + 0.12, ZC + 0.31)), pair=True)
 
 
+# ---------------------------------------------------------------- IMI Defense TS stock (x -5.15 .. 0.35)
+# user photo 69 (2000 px square, stock 1520 px long): photo (px, py) -> model x = -5.15 + (px - 210) * K,
+# y = -3.2 + (py - 450) * K, K = 5.5 / 1520. Butt left (photo) = rear (model -x). An open frame:
+# long upper body (2 rows of 5 slots, QD socket at the rear), rubber butt pad ribbed at the bottom,
+# rear strut with a vertical slot, diagonal lower strut with a long slot, front block with a
+# triangle cut, a slot and a pin; the big window in the middle stays open, the adjustment lever
+# lies across it. Bodies 0.8 wide (upper) / 0.6 (frame), centred on z -0.15.
+POLY = (30, 30, 32)     # black polymer
+RUBBER = (22, 22, 24)
+K = 5.5 / 1520
+
+
+def px(x, y):
+    return (-5.15 + (x - 210) * K, -3.2 + (y - 450) * K)
+
+
+def lower_edge(x):
+    """y of the stock's bottom edge (the lower strut) at model x: photo (480, 1470) to (1690, 900)."""
+    (x0, y0), (x1, y1) = px(480, 1470), px(1690, 900)
+    return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+
+
+SX0, SX1 = -4.9, 0.35                  # stock body behind the pad .. front
+WIN_L, WIN_R = px(560, 0)[0], px(1240, 0)[0]   # window x -3.88 .. -1.42
+WIN_TOP = px(0, 780)[1]                # -2.0
+STRUT = 0.45                           # lower strut height
+add(*octagon("tube", G, METAL, SX1 - 0.05, 1.45, -2.4, ZC, 0.42))   # the M4A4's tube: y -2.85 .. -1.95
+add(part("stockBody", G, POLY, (SX0, -3.2, -0.55), (SX1, WIN_TOP, 0.25)).inset("y", 0, z=(0.1, 0.1))
+    .inset("x", 1, y=(0.06, 0.1), z=(0.06, 0.06)))
+add(part("stockBodyRound", G, POLY, (SX0 - 0.02, -3.2, -0.5), (SX0 + 0.4, -2.85, 0.2)).inset("x", 0, y=(0.18, 0), z=(0.05, 0.05)))
+pad = part("buttPad", G, RUBBER, (-5.15, -3.12, -0.6), (SX0, lower_edge(-4.9) + 0.02, 0.3))
+add(pad.inset("x", 0, y=(0.1, 0.06), z=(0.06, 0.06)))
+for i in range(9):                      # ribbed lower half of the pad (photo x 270 .. 290, y 980 .. 1440)
+    y = -1.25 + i * 0.19
+    add(part("padRib", G, RUBBER, (-5.22, y, -0.52), (-5.12, y + 0.1, 0.22)).inset("x", 0, y=(0.02, 0.02)))
+# rear strut: from the body down to the bottom corner
+rear = part("rearStrut", G, POLY, (SX0, WIN_TOP - 0.05, -0.45), (WIN_L, lower_edge(SX0), 0.15))
+rear.c[(1, 1, 0)][1] = rear.c[(1, 1, 1)][1] = lower_edge(WIN_L)          # its bottom follows the strut
+add(rear.inset("y", 1, z=(0.04, 0.04)))
+# diagonal lower strut, window corner to the front
+ls = part("lowerStrut", G, POLY, (WIN_L - 0.05, 0, -0.45), (SX1 - 0.1, 0, 0.15))
+for zi in (0, 1):
+    ls.c[(0, 1, zi)][1] = lower_edge(WIN_L - 0.05)
+    ls.c[(0, 0, zi)][1] = lower_edge(WIN_L - 0.05) - STRUT
+    ls.c[(1, 1, zi)][1] = lower_edge(SX1 - 0.1)
+    ls.c[(1, 0, zi)][1] = lower_edge(SX1 - 0.1) - STRUT
+add(ls.inset("y", 1, z=(0.04, 0.04)))
+# front block between the window and the front, down to the strut
+fb = part("frontBlock", G, POLY, (WIN_R, WIN_TOP - 0.05, -0.45), (SX1 - 0.05, 0, 0.15))
+fb.c[(0, 1, 0)][1] = fb.c[(0, 1, 1)][1] = lower_edge(WIN_R) - STRUT + 0.05
+fb.c[(1, 1, 0)][1] = fb.c[(1, 1, 1)][1] = lower_edge(SX1 - 0.05) - 0.02
+add(fb.inset("x", 1, y=(0.04, 0.0), z=(0.05, 0.05)))
+# two rows of 5 slots on the upper body (photo rows y 645 .. 665 and 705 .. 725, x 525 + 230 k, 195 long)
+for row, (ya, yb) in enumerate(((645, 665), (705, 725))):
+    for k in range(5):
+        (xa, y0), (xb, y1) = px(525 + 230 * k, ya), px(720 + 230 * k, yb)
+        add(part("bodySlot", G, HOLE, (xa, y0 - 0.03, 0.15), (xb, y1 + 0.03, 0.28)).inset("z", 1, x=(0.03, 0.03)), pair=True)
+# QD sling socket at the rear of the body (photo centre 430, 720, r 55)
+qx, qy = px(430, 720)
+add(part("qdRing", G, POLY, (qx - 0.2, qy - 0.2, 0.15), (qx + 0.2, qy + 0.2, 0.31)).inset("z", 1, x=(0.06, 0.06), y=(0.06, 0.06)), pair=True)
+add(part("qdHole", G, HOLE, (qx - 0.1, qy - 0.1, 0.25), (qx + 0.1, qy + 0.1, 0.32)), pair=True)
+# vertical slot in the rear strut (photo x 440 .. 475, y 800 .. 990)
+(xa, ya), (xb, yb) = px(440, 800), px(475, 990)
+add(part("rearSlot", G, HOLE, (xa, ya, 0.1), (xb, yb, 0.18)).inset("z", 1, x=(0.02, 0.02), y=(0.03, 0.03)), pair=True)
+# long slot along the lower strut (photo (720, 1270) to (1060, 1145))
+sl = part("strutSlot", G, HOLE, (px(720, 0)[0], 0, 0.1), (px(1060, 0)[0], 0, 0.18))
+for zi in (0, 1):
+    for xi, x in ((0, px(720, 0)[0]), (1, px(1060, 0)[0])):
+        mid = lower_edge(x) - STRUT / 2
+        sl.c[(xi, 0, zi)][1], sl.c[(xi, 1, zi)][1] = mid - 0.06, mid + 0.06
+add(sl.inset("z", 1, x=(0.03, 0.03)), pair=True)
+# front block: triangle cut (photo 1360 .. 1510, 840 .. 890), a pin and a short vertical slot
+(xa, ya), (xb, yb) = px(1360, 845), px(1510, 890)
+tri = part("frontTri", G, HOLE, (xa, ya, 0.1), (xb, yb, 0.18))
+tri.c[(0, 0, 0)][1] = tri.c[(0, 0, 1)][1] = yb - 0.03       # the rear corner low: a wedge
+add(tri.inset("z", 1, x=(0.02, 0.02)), pair=True)
+(xa, ya), (xb, yb) = px(1265, 830), px(1290, 910)
+add(part("frontSlot", G, HOLE, (xa, ya, 0.1), (xb, yb, 0.18)), pair=True)
+fx, fy = px(1290, 785)
+add(part("frontPin", G, BOLT, (fx - 0.05, fy - 0.05, 0.12), (fx + 0.05, fy + 0.05, 0.2)), pair=True)
+# adjustment lever across the window (photo (1330, 740) to (690, 950), pivot 1095, 795, hook down at 690)
+(lx0, ly0), (lx1, ly1) = px(690, 935), px(1330, 750)
+lev = part("lever", G, DARK, (lx0, 0, -0.3), (lx1, 0, 0.0))
+for zi in (0, 1):
+    lev.c[(0, 0, zi)][1], lev.c[(0, 1, zi)][1] = ly0 - 0.08, ly0 + 0.08
+    lev.c[(1, 0, zi)][1], lev.c[(1, 1, zi)][1] = ly1 - 0.08, ly1 + 0.08
+add(lev)
+hx, hy = px(690, 960)
+add(part("leverHook", G, DARK, (lx0 - 0.02, ly0, -0.3), (lx0 + 0.14, hy + 0.12, 0.0)).inset("y", 1, x=(0.05, 0.0)))
+vx, vy = px(1095, 795)
+add(part("leverPivot", G, BOLT, (vx - 0.08, vy - 0.08, -0.4), (vx + 0.08, vy + 0.08, 0.1)))
+add(part("leverPost", G, POLY, (lx1 - 0.15, WIN_TOP - 0.05, -0.3), (lx1 + 0.05, ly1 + 0.05, 0.0)))   # where it meets the body
+
+
 def dropped(p):
     """The M4A4 parts our Mk18 replaces (by position, measured on the M4A4: docs/shots/hk416_v0.39)."""
     if p.group.startswith(("ammo", "slide", "default")):
@@ -133,6 +228,10 @@ def dropped(p):
     v = p.verts()
     x0, x1 = min(q[0] for q in v), max(q[0] for q in v)
     y0, y1 = min(q[1] for q in v), max(q[1] for q in v)
+    if x1 <= 0.05:                       # the M4A4's collapsible stock (ours: IMI TS)
+        return True
+    if p.name in ("gunModel68", "gunModel69", "gunModel70"):   # its buffer tube (x -3.95 .. 1.45): ours
+        return True
     if x0 >= 7.4 and y0 >= -4.25 and y1 <= -1.25 and x1 <= 16.7:   # quad rail, gas block, A-frame
         return True
     if x0 >= 14.6 or x1 > 16.7:          # front sight, barrel (12.15 .. 18.15), birdcage
@@ -178,6 +277,13 @@ def build():
     mine = paint(P)
     img = Image.new("RGBA", (tex.width, total * k), (0, 0, 0, 0))
     img.paste(tex, (0, 0))
+
+    # the M4A4's rail teeth gunModel205..208 (x 2.1 .. 3.5, under its rear sight) carry a colourful
+    # placeholder texture nobody saw while the sight covered them; it folds away under a sight now
+    # (IronSights): give them the island of the clean tooth gunModel204 (u 425, v 25, 4 x 2 units)
+    island = img.crop((425 * k, 25 * k, 429 * k, 27 * k))
+    for u in (433, 441, 449, 457):
+        img.paste(island, (u * k, 25 * k))
     if spill:
         img.paste(tex.crop((0, 0, tex.width, spill * k)), (0, th * k))
     for y, row in enumerate(mine):

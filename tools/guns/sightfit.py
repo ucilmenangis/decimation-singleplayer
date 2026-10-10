@@ -26,7 +26,7 @@ import study  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 OUT = os.path.join(ROOT, "dev", "src", "main", "resources", "assets", "deciworldgen", "sight_offsets.txt")
-SIGHTS = ["reddot", "2x", "4x", "8x", "dragunovScope"]
+SIGHTS = ["reddot", "2x", "4x", "8x", "dragunovScope", "eotech558", "ta11acog"]
 OURS = ["mac10", "ump9", "hk416", "hk416tan", "mk18"]
 TOL = 0.06       # gaps this small are left alone (Decimation's own fits are within it)
 

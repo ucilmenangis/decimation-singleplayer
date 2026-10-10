@@ -655,6 +655,24 @@ camera spots from tools/mapbuildings.py (2 per building, mid storeys).
   gun dropped 2.5 blocks in front of the camera on the arena and held;
   fps numbers in docs/performance.md section 2.
 
+## sights_v0.41/ (EOTech 558, ACOG TA11, Mk18 TS stock, 10 Oktober 2026)
+- photos_eotech.png / photos_acog.png: the user's photos 60 to 67 and 52 to 59 as contact sheets.
+- ts_stock_v1_vs_photo.png: first TS stock render next to the user's photo (the M4A4's grey buffer
+  tube still across it); ts_stock_final.png: side and three quarter, cuts dark, lever across the
+  window.
+- eotech_v1_long.png: first EOTech, too long, small window; eotech_final_views.png: three, left,
+  right, rear: compact hood, window filling the rear, label / NV / buttons, dials, battery cap.
+- acog_views.png: ACOG three, left, right, rear (eyepiece, turrets, fibre, bell, TA51 mount);
+  acog_reticle.png: the BDC reticle texture on a light background.
+- icon_eotech558.png / icon_ta11acog.png: the inventory icons enlarged.
+- ingame_first_pass.png: hip / aim / NPC for EOTech and ACOG on Mk18 and Uzi (first pass: Mk18
+  EOTech window above the centre on the first aim, ACOG lines too thin, square glass).
+- aim_eotech_runs_acog.png: Mk18 EOTech aim, run 1 and 2 (ring centred), ACOG with the round
+  eyepiece and thick reticle; eotech_final_aim_hip.png: EOTech aim (red ring with ticks) and hip
+  on the Mk18 and the MP5.
+- final_eotech_three_guns.png: Mk18, M4A4, HK416 with the EOTech, hip and NPC: on the rail, no
+  colourful rail teeth.
+
 ## sights_v0.40.1/ (sights onto the rail, 10 Oktober 2026)
 - user_mk18_reddot_floating.png: the user's Mk18 hip screenshot enlarged, red dot frame in the air.
 - m4a4_v036_vs_v040_reddot_hip.png: M4A4 red dot hip, v0.36 (frame resting on the rear sight) and

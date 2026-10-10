@@ -187,6 +187,7 @@ def load(name):
 
 
 ATTACH_SLOT = {"reddot": "sight", "2x": "sight", "4x": "sight", "8x": "sight", "dragunovScope": "sight",
+               "eotech558": "sight", "ta11acog": "sight",
                "foregrip": "grip", "flashlight": "grip", "laser": "grip", "bayonet": "barrel",
                "pistolSuppressor": "barrel", "smgSuppressor": "barrel", "arSuppressor": "barrel",
                "shotgunSuppressor": "barrel", "mgSuppressor": "barrel"}
@@ -240,9 +241,15 @@ def with_attachments(gun, names):
     z = zipfile.ZipFile(JAR)
     for n in names:
         slot = ATTACH_SLOT[n]
-        text = z.read("assets/deci/models/attachments/%s/%s.bmodel" % (slot, n)).decode("latin1")
+        mp = "assets/deci/models/attachments/%s/%s.bmodel" % (slot, n)
         tp = "assets/deci/textures/model/attachments/%s/%s.png" % (slot, n)
-        img = Image.open(BytesIO(z.read(tp))).convert("RGBA") if tp in z.namelist() else None
+        ours = os.path.join(ROOT, "dev", "src", "main", "resources")
+        if mp in z.namelist():
+            text = z.read(mp).decode("latin1")
+            img = Image.open(BytesIO(z.read(tp))).convert("RGBA") if tp in z.namelist() else None
+        else:                            # our own sights (tools/guns/sights.py)
+            text = open(os.path.join(ours, mp)).read()
+            img = Image.open(os.path.join(ours, tp)).convert("RGBA")
         a = Gun(n, slot, text, img, False)
         ox, oy, oz = attach_offset(gun, n)
         fix = ATTACH_FIX.get(gun.name, {}).get(n, (0, 0, 0)) if gun.ours else (0, 0, 0)

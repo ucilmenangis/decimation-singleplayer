@@ -420,6 +420,9 @@ Code: AttachmentItem, FilteredSlot (attachment screen), GunItemRenderer
   dot) over y -5.9 to -3.1: a new gun needs its receiver top there (section
   13). The foregrip renders behind and below even Decimation's M4A4
   (study render and the NPC shot) [inferred: misplaced in the game too].
+- Our sights (v0.41.0, tools/guns/sights.py): eotech558 (1.25x, red ring reticle) and ta11acog
+  (3.5x, BDC reticle), registered as deci:<name>; built in gun space at the real size x 0.52,
+  glass part scopeGlass*, reticle PNG drawn in the glass by ScopeZoom (skill lesson 20).
 - Sight height per gun (v0.40.1): sights are placed for a receiver top of -4.45; lower rails get
   sight_offsets.txt entries from tools/guns/sightfit.py (fixes/SightPlacement lowers the sight,
   and raises the gun by the same amount while aiming). Rerun sightfit after a new gun or sight.

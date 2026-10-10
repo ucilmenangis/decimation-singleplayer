@@ -61,8 +61,10 @@ Details and starting points: new_feature.md "Zones, factions and world".
 0b. HK416 and HK416 Tan: v0.39.1 fixes the user's review of v0.39.0 (floating stock
    pieces, "2 pillar" front sight: really the rear sight reading our texture; skill
    casebook case 14); waiting for the user's verdict.
-0e. Sights onto the rail (v0.40.1, bug.md); next (user 10 Oktober 2026): Mk18 stock IMI
-   Defense TS (user photo), new sights EOTech 558 holographic and ACOG TA11 3.5x, "very detailed".
+0e. Sights onto the rail (v0.40.1, bug.md); Mk18 IMI Defense TS stock, EOTech 558 and ACOG TA11
+   (v0.41.0): waiting for the user's detailed look ("small detail will be i analyze"). Open: the
+   Mk18 held fps was 14 vs the M4A4's 22 in one gunperf run and equal in the next (318 parts, 82
+   of them rail holes) `[not verified]`.
 0d. Mk18 Mod 1 (v0.40.0) and iron sights hidden under a sight (all guns with defaultScope
    parts): waiting for the user's verdict. Possible polish: study.py gaps lists 7 metrics
    outside the rifle range (mostly the M4A4 base and the many rail teeth).
@@ -71,14 +73,9 @@ Details and starting points: new_feature.md "Zones, factions and world".
 0. UMP9 (v0.38.0): accepted by the user ("work really well and no
    problem"); more variants of Decimation guns can be made the same way
    (skill lesson 13).
-1. **More scope models** (user, 10 Oktober 2026, "later"): new sight /
-   scope attachments of our own. Starting points: attachments are
-   AttachmentItem (slot sight, zoom fov, sway), models in
-   models/attachments/sight/<name>.bmodel placed at the fixed sight offset
-   (docs/gun_style_guide.md section 14), scope glass and overlay handled
-   by our ScopeZoom (v0.28.x). Which scopes `[not decided]`: ask the user
-   (for example ACOG 4x, holographic, PSO-1 for the AK family, 6x / 10x
-   sniper scopes) and for photos.
+1. **More scope models**: EOTech 558 and ACOG TA11 3.5x DONE (v0.41.0, tools/guns/sights.py,
+   skill casebook case 18), waiting for the user's look. More later the same way (PSO-1 for the
+   AK family, 6x / 10x sniper scopes) `[not decided]`: ask the user and for photos.
 
 1. Custom weapon creation: how-to written, a new model needs Techne.
    create_weapons.md, docs/gun_model_spec.md.

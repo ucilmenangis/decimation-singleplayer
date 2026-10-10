@@ -38,7 +38,7 @@ import net.minecraft.block.Block;
  */
 @Mod(modid = DecimationWorldGen.MODID,
      name = "Decimation World Generation",
-     version = "0.40.1",
+     version = "0.41.0",
      dependencies = "required-after:deci")
 public class DecimationWorldGen
 {
@@ -108,6 +108,7 @@ public class DecimationWorldGen
         net.decimation.fixes.Magazines.register();
         // guns of our own (tools/guns, assets/deci/...): the MAC-10 pilot
         net.decimation.fixes.NewGuns.register();
+        net.decimation.fixes.NewSights.register(); // before SightPlacement: it moves these too
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)

@@ -10,6 +10,16 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Fixed
 
+### Colourful rail teeth on the M4A4 under a sight (v0.41.0, 10 Oktober 2026)
+- Seen in our own shots: a rainbow strip on the receiver top of the M4A4 (and the HK416 / Mk18
+  built from it) once a sight is fitted. The M4A4's rail teeth gunModel205..208 (x 2.1 .. 3.5)
+  use a placeholder texture island with saturated colours; its tall rear sight always covered
+  them, and since v0.40.0 that sight folds away under a sight (IronSights).
+- Fix: our variants repaint the four islands with the clean tooth gunModel204's (tools/guns/mk18.py,
+  hk416.py); on Decimation's own M4A4 (its art, unchanged) IronSights hides those four teeth while a
+  sight is attached (the sight covers that spot). Check: gunview Mk18 / M4A4 / HK416 with the
+  EOTech (docs/shots/sights_v0.41/final_eotech_three_guns.png).
+
 ### Sights float above flat top rifles (v0.40.1, 10 Oktober 2026)
 - User (Honey Badger and Mk18 screenshots, red dot): the sight hangs in the air above the gun.
 - Cause: GunItemRenderer.renderAttachments draws every sight at one spot, made for receivers

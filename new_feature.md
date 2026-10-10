@@ -546,6 +546,13 @@ tiers (juggernaut) get an egg on their own. Creative tab Misc, names
 vanilla egg look, base colour per faction (Decimation's own egg colours),
 spots per tier. Test mode npc: all 8 eggs spawn their tier.
 
+### EOTech 558, ACOG TA11 3.5x, Mk18 TS stock (DONE v0.41.0, 10 Oktober 2026, waiting for the user's verdict)
+User: holographic 558 and ACOG 3.5x "so detailed ... same like in real life", the Mk18 with an IMI
+Defense TS stock. tools/guns/sights.py (our art, committed): EOTech 558 (92 parts) and ACOG TA11
+(117 parts) as deci:eotech558 / deci:ta11acog (NewSights, loot like the red dot / 4x), reticles
+drawn in the glass while aiming (ScopeZoom: 1.25x red ring and dot, 3.5x BDC with green centre),
+on every gun's rail (sightfit). Mk18: TS stock from the user's photo. Details: skill case 18.
+
 ### Mk18 Mod 1 and iron sights that fold away (DONE v0.40.0, 10 Oktober 2026, waiting for the user's verdict)
 User: "mk18 mod 1, black only", 9 photos; irons ready for attachments and hidden when one is
 fitted. Mk18 from Decimation's M4A4 (tools/guns/mk18.py, generated locally, git ignored): DD RIS

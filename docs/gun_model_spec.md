@@ -199,6 +199,18 @@ Fastest path: start from an existing gun of the same action type (copy its
 `.bmodel` and `.anib` files) and change the shape, so the animation part
 names already match.
 
+## 5b. Our own sight attachments (v0.41.0)
+
+tools/guns/sights.py writes, per sight: models/attachments/sight/<name>.bmodel (the red dot's
+header lines, parts in file space = gun space minus (0.8, 1.12, -0.128)),
+textures/model/attachments/sight/<name>.png, textures/items/attach/<name>.png (icon, the item's
+registerIcons uses deci:attach/<name>), textures/model/guns/scopes/<name>.png (reticle). All under
+assets/deci in our jar (our own art, committed). fixes/NewSights registers them through
+Deci.newSightAttachment, which switches FML's active mod container to Decimation's for the
+AttachmentItem constructor (GunItem.getSightAttachment looks up GameRegistry.findItem("deci", ..)).
+BModel.renderParts skips parts named scopeGlass / scopeOverlay; for scope attachments
+renderGun(-26.42) draws only scopeGlass parts (through PatchScope's projective glass).
+
 ## 6. Our own guns: the tools/guns pipeline (v0.36.0, MAC-10 pilot)
 
 Look and construction rules: docs/gun_style_guide.md (study of all 98
