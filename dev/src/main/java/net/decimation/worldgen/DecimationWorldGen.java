@@ -176,6 +176,8 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(news);
             // "Continue" under Play: the last played world in one click
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.MenuContinue());
+            // Decimation's HUD needs the menu's player preview (bug.md): made if a world was reached without the menu
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.HudGuard());
         }
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.WorldClock());
         // an entity joins a world once: Decimation's mob swaps during a chunk load added the new mob twice (bug.md)
