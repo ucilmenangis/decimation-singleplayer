@@ -527,6 +527,27 @@ public final class Deci
         return new deci.ad.i(world, x, y, z);
     }
 
+    /** EntityCorpse (deci.ae.a) as DeathHandler makes it on a player's death: owner, death time, items (addItem g). */
+    public static net.minecraft.entity.Entity newCorpse(net.minecraft.world.World world, double x, double y, double z,
+                                                         String ownerUuid, net.minecraft.item.ItemStack... items)
+    {
+        deci.ae.a c = new deci.ae.a(world);
+        c.setPositionAndRotation(x, y, z, 0, 0);
+        c.r(world.getTotalWorldTime());
+        c.E(ownerUuid);
+        for (net.minecraft.item.ItemStack s : items)
+        {
+            c.g(s);
+        }
+        return c;
+    }
+
+    /** True for Decimation's player corpse (EntityCorpse, deci.ae.a). */
+    public static boolean isCorpse(net.minecraft.entity.Entity e)
+    {
+        return e instanceof deci.ae.a;
+    }
+
     /** VehicleEntity.driverSeat (YO): the seat whose rider drives; null until the vehicle's first server tick. */
     public static net.minecraft.entity.Entity vehicleDriverSeat(net.minecraft.entity.Entity vehicle)
     {
