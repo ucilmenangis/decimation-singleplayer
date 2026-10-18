@@ -40,6 +40,9 @@ dependencies {
     // the jar references it) because GTNHLib needs a newer fastutil (docs/performance.md).
     devOnlyNonPublishable(rfg.deobf(project.files(project.hasProperty("angelica")
         ? "libs/Decimation-base-nofastutil.jar" : "libs/Decimation-base.jar")))
+    // plain Java units of fixes/hosting (docs/superpowers/plans/2026-10-18-player-hosting-part1.md)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
 }
 
 // Decimation's main menu swaps "Play" for "Update" unless mods/DecimationVoiceChat.jar

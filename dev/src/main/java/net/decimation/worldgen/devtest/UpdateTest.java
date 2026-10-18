@@ -182,6 +182,11 @@ public class UpdateTest extends DevTestMode
                                          Deci.isUpdateProgress(mc.currentScreen) && labels.toString().contains("Quit game")
                                          && labels.toString().contains("Later") && Deci.updateProgress().contains("| false |"),
                                          "Decimation's screen, safe to close, Quit game and Later");
+                    // bug.md "Update screen bar stops short of full": the length Decimation draws for the field we set
+                    int gw = new net.minecraft.client.gui.ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaledWidth();
+                    int bar = gw / 4 * 2, field = Integer.parseInt(Deci.updateProgress().split(" ")[0]);
+                    DevTestResults.check(name(), "ready bar full", (bar / 100 * field) + " of " + bar + " px (GUI width " + gw + ")",
+                                         Math.abs(bar / 100 * field - bar) <= Math.max(1, bar / 100), "the whole bar");
                     String[] lines = Deci.updateLines();
                     String total = mb(Updater.size()) + "mb";
                     DevTestResults.check(name(), "ready lines", String.join(" | ", lines),

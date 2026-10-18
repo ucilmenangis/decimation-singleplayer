@@ -126,7 +126,9 @@ public class UpdateProgress
         // field", so they go in swapped)
         String status = s == Updater.State.READY ? net.minecraft.client.resources.I18n.format("menu.updating.complete") : percent + "%";
         String file = "DeciRemnant" + (Updater.latest() == null ? "" : " " + Updater.latest());
-        Deci.setUpdateProgress(status, file, percent, s == Updater.State.DOWNLOADING, mb(size), mb(done));
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
+        int width = new net.minecraft.client.gui.ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaledWidth();
+        Deci.setUpdateProgress(status, file, UpdateBar.field(percent, width), s == Updater.State.DOWNLOADING, mb(size), mb(done));
     }
 
     private static double mb(long bytes)
