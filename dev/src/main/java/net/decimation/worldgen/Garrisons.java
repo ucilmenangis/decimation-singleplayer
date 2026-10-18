@@ -80,6 +80,12 @@ public class Garrisons
                     (g.length - 1 - 3 * g[0]) / 3, g[0]);
     }
 
+    /** Forgets one spawner cell (dev test nospawn). */
+    public static synchronized void forgetSpawner(int x, int y, int z)
+    {
+        spawners.remove(key(x, y, z));
+    }
+
     private static synchronized void addSpawners(int[] v)
     {
         for (int i = 0; i < v[1]; i++)
@@ -152,6 +158,10 @@ public class Garrisons
             return;
         }
         load(w);
+        if (!net.decimation.fixes.NaturalSpawns.on(w))
+        {
+            return;                                     // natural spawns off: posts wait (manned once it is on again)
+        }
         StructureData data = StructureData.get(w);
         for (String id : data.lists(PREFIX))
         {
@@ -320,6 +330,11 @@ public class Garrisons
                     {
                         if (spawners.contains(key(x + dx, y + dy, z + dz)))
                         {
+                            if (!net.decimation.fixes.NaturalSpawns.on(e.worldObj))
+                            {
+                                event.setCanceled(true); // the cage's spawn, natural spawns off
+                                return;
+                            }
                             Deci.setInfectedVariant(e, "MILITARY");
                             return;
                         }

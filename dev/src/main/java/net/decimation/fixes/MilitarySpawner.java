@@ -53,6 +53,12 @@ public class MilitarySpawner
         return enabled;
     }
 
+    /** May groups spawn in this world now: not peaceful, and doMobSpawning on (NaturalSpawns). */
+    public boolean allowed(WorldServer world)
+    {
+        return world != null && world.difficultySetting != EnumDifficulty.PEACEFUL && NaturalSpawns.on(world);
+    }
+
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent event)
     {
@@ -61,7 +67,7 @@ public class MilitarySpawner
             return;
         }
         WorldServer world = MinecraftServer.getServer().worldServerForDimension(0);
-        if (world == null || world.difficultySetting == EnumDifficulty.PEACEFUL)
+        if (!allowed(world))
         {
             return;
         }
