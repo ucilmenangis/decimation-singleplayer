@@ -29,7 +29,7 @@ import net.minecraft.world.WorldServer;
 public class PlaceNames
 {
     private static final int INTERVAL = 40, RADIUS_DISTRICTS = 3, RADIUS_PLACES = 600;
-    private final Map<UUID, String> sent = new HashMap<UUID, String>();
+    private static final Map<UUID, String> sent = new HashMap<UUID, String>(); // one handler per game (DecimationWorldGen)
     private int tick;
 
     /** Stores a named plan's box (Slices, first slice); y covers the whole column. */
@@ -75,6 +75,23 @@ public class PlaceNames
                 Deci.sendTurfList(p, list);
             }
         }
+    }
+
+    /**
+     * Decimation clears the client's turf list when it disconnects: forget what this player was sent, so the list goes
+     * out again after a rejoin (found in the player hosting spike, bug.md "Place names gone after a rejoin").
+     */
+    @SubscribeEvent
+    public void onLogout(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event)
+    {
+        sent.remove(event.player.getUniqueID());
+    }
+
+    /** Entries last sent to this player (dev test lanhost compares the joiner's client list with it); -1 never sent. */
+    public static int sentCount(java.util.UUID player)
+    {
+        String key = sent.get(player);
+        return key == null ? -1 : key.isEmpty() ? 0 : key.split("\\|").length;
     }
 
     static ArrayList<String> list(WorldServer world, int px, int pz, List<int[]> safe)
