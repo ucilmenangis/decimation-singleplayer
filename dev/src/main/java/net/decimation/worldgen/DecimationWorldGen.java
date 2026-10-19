@@ -181,6 +181,8 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunUseKey()); // open corpses with a gun in hand
             // prop loops (radios, vending machines, electric boxes) stop out of hearing, 6 at most (bug.md "FPS falls")
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.PropSounds());
+            // the hand holding a gun shows the player's own skin, not Steve (bug.md "Steve hand")
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunArmSkin());
         }
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.WorldClock());
         // throwables left a stack of 0 in the hand that threw forever (bug.md "The last grenade never runs out")

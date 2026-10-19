@@ -1800,4 +1800,20 @@ public final class Deci
         }
         return n;
     }
+
+    /**
+     * The texture GunItemRenderer (deci.K.b) binds for the first person arms: TJ, set once at start to "skins/<session
+     * name>", which only vanilla's dead skins.minecraft.net download ever filled (Steve for everyone).
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static net.minecraft.util.ResourceLocation gunArmSkin()
+    {
+        return deci.K.b.TJ;
+    }
+
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void setGunArmSkin(net.minecraft.util.ResourceLocation skin)
+    {
+        deci.K.b.TJ = skin;
+    }
 }
