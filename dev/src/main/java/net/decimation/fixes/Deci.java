@@ -1725,4 +1725,29 @@ public final class Deci
     {
         deci.a.b.a().B = null;
     }
+
+    /**
+     * Decimation's ModelItemRenderer (deci.K.c) and BModelItemRenderer (deci.K.d): called in first person they push a
+     * matrix and return without its pop (bug.md "GL stack overflow"). Melee weapons, grenades, the molotov, riot shield,
+     * chainsaw, guitar and a few tools use them.
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean leavesFirstPersonPush(net.minecraftforge.client.IItemRenderer r)
+    {
+        return r != null && (r.getClass() == deci.K.c.class || r.getClass() == deci.K.d.class);
+    }
+
+    /** ClientState.enableFancyNameplate (deci.b.i.bx, decimation_client.properties; on by default). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean fancyNameplates()
+    {
+        return deci.b.i.bx;
+    }
+
+    /** Tests only: the fancy nameplate setting for this session. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void setFancyNameplates(boolean on)
+    {
+        deci.b.i.bx = on;
+    }
 }

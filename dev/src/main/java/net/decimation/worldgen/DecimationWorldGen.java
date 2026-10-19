@@ -286,6 +286,7 @@ public class DecimationWorldGen
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.Updater.check();     // the menu shows "Update" once a newer release is known
+            net.decimation.fixes.GlStackGuard.install(); // Decimation's renderers left GL matrices pushed (bug.md)
         }
         net.decimation.worldgen.terrain.DecimationBiomes.copySpawns();
         if (vanillaMobs != null && vanillaMobs.enabled())
