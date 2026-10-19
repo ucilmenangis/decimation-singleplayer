@@ -17,7 +17,7 @@ import javassist.expr.MethodCall;
  * speed check: n x n work. Measured: removing the ~90 infected around the test arena took the
  * fps from about 21 to about 51.
  *
- * Fix: the wander search runs on the server only, once a second per infected (staggered by
+ * Fix (v1): the wander search runs on the server only, once a second per infected (staggered by
  * entity id so they do not all search on one tick); the horde scan runs at most every 10 ticks
  * and its result is kept in between (a new field). Behaviour stays: infected still wander and
  * speed up in hordes, the server AI still paths to its targets.
@@ -40,8 +40,11 @@ public class PatchInfectedAI {
         update.instrument(new ExprEditor() {
             public void edit(MethodCall m) throws javassist.CannotCompileException {
                 if (m.getMethodName().equals("func_70779_j")) { // updateWanderPath
-                    m.replace("{ if (!this.field_70170_p.field_72995_K"
-                            + " && (this.field_70173_aa + this.func_145782_y()) % 20 == 0) { $proceed(); } }");
+                    // v2 (19 Oktober 2026, dev test bench "zombies": 37% of the server in this search with 80 infected):
+                    // the search fills EntityCreature.pathToEntity, which only the old AI branch follows, and infected run
+                    // the new AI (isAIEnabled true: EntityAIWander makes them wander, getNavigator() leads the hordes),
+                    // so nothing ever walked that path. The call goes.
+                    m.replace("{ }");
                     done[0]++;
                 } else if (m.getMethodName().equals("func_72872_a")) { // World.getEntitiesWithinAABB
                     m.replace("{ if (this.deciwgHorde == null || (this.field_70173_aa + this.func_145782_y()) % 10 == 0) {"
@@ -55,6 +58,6 @@ public class PatchInfectedAI {
             throw new IllegalStateException("expected one call each, got wander " + done[0] + ", aabb " + done[1]);
         }
         inf.writeFile(a[1]);
-        System.out.println("deci/ag/d patched: wander search server side every 20 ticks, horde scan every 10");
+        System.out.println("deci/ag/d patched: no unused wander search, horde scan every 10 ticks");
     }
 }
