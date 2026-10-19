@@ -287,10 +287,56 @@ public class ScopeZoom
         }
     }
 
+    /**
+     * True while this class draws the hand itself. OptiFine posts RenderHandEvent inside renderHand (Forge posts it
+     * before): our own call came back here, cancelled and called again until Java's stack ran out, pushing a matrix
+     * each time: the gun vanished while aiming and every frame logged "Stack overflow" (the brother's laptop, NVIDIA and
+     * OptiFine HD U E7, 19 Oktober 2026; dev test scopeperf in the production client with OptiFine).
+     */
+    private boolean drawingHand;
+    /** The glass at the hip: a plain dark lens (0xRRGGBB), not the last aimed view. */
+    public static final int LENS = 0x14181C;
+    private long lastHandWarning;
+
+    private boolean copied;
+    private java.nio.ByteBuffer lensRows;
+
+    /** The whole scope texture the plain {@link #LENS} colour, in strips of 32 rows (once, when the copying stops). */
+    private void clearGlass()
+    {
+        if (texW <= 0 || texH <= 0)
+        {
+            return;
+        }
+        int rows = 32;
+        if (lensRows == null || lensRows.capacity() < texW * rows * 3)
+        {
+            lensRows = org.lwjgl.BufferUtils.createByteBuffer(texW * rows * 3);
+            for (int i = 0; i < texW * rows; i++)
+            {
+                lensRows.put((byte) (LENS >> 16)).put((byte) (LENS >> 8)).put((byte) LENS);
+            }
+        }
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, Deci.scopeTexture());
+        int align = GL11.glGetInteger(GL11.GL_UNPACK_ALIGNMENT);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);            // rows of width x 3 bytes
+        for (int y = 0; y < texH; y += rows)
+        {
+            ((java.nio.Buffer) lensRows).position(0);
+            GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, y, texW, Math.min(rows, texH - y), GL11.GL_RGB,
+                                 GL11.GL_UNSIGNED_BYTE, lensRows);
+        }
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, align);
+    }
+
     /** Vanilla skips the hand while zoomed: draw it here, with the same zoom. */
     @SubscribeEvent
     public void onRenderHand(RenderHandEvent e)
     {
+        if (drawingHand)
+        {
+            return;                     // our own renderHand call below, posted again by OptiFine: let it draw
+        }
         Minecraft mc = Minecraft.getMinecraft();
         if (overlay != null)
         {
@@ -311,6 +357,7 @@ public class ScopeZoom
             CAMERA_YAW.setDouble(mc.entityRenderer, shiftX);
             CAMERA_PITCH.setDouble(mc.entityRenderer, -shiftY);
             long before = Deci.scopeGlassTime();
+            drawingHand = true;
             RENDER_HAND.invoke(mc.entityRenderer, e.partialTicks, e.renderPass);
             Deci.setScopeGlassEvery(-1);
             if (Deci.scopeGlassTime() != before)
@@ -320,10 +367,16 @@ public class ScopeZoom
         }
         catch (Exception ex)
         {
-            FMLLog.warning("[deciworldgen] scope: renderHand failed: %s", ex);
+            long now = System.currentTimeMillis();
+            if (now - lastHandWarning > 60_000)  // once a minute, not every frame
+            {
+                lastHandWarning = now;
+                FMLLog.warning("[deciworldgen] scope: renderHand failed: %s", ex.getCause() != null ? ex.getCause() : ex);
+            }
         }
         finally
         {
+            drawingHand = false;
             Deci.setScopeGlassEvery(-1);
             try
             {
@@ -432,10 +485,16 @@ public class ScopeZoom
         boolean aiming = Deci.aimMode(mc.thePlayer) == 1;
         if (!aiming && zoom <= 1.001)
         {
+            if (copied)
+            {
+                clearGlass(); // else the glass keeps the last aimed view at the hip (a frozen "camera": brother's laptop)
+                copied = false;
+            }
             return;
         }
         int w = mc.displayWidth, h = mc.displayHeight;
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, Deci.scopeTexture());
+        copied = true;
         if (w != texW || h != texH)
         {
             GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, 0, 0, w, h, 0);
