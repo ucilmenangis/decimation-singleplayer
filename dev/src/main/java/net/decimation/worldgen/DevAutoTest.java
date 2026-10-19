@@ -155,6 +155,7 @@ public class DevAutoTest
         if (name.equals("soak")) return new net.decimation.worldgen.devtest.SoakTest();
         if (name.equals("radios")) return new net.decimation.worldgen.devtest.RadiosTest();
         if (name.equals("threads")) return new net.decimation.worldgen.devtest.ThreadsTest();
+        if (name.equals("targetpace")) return new net.decimation.worldgen.devtest.TargetPaceTest();
         if (name.equals("corpsegun")) return new net.decimation.worldgen.devtest.CorpseGunTest();
         if (name.equals("nospawn")) return new net.decimation.worldgen.devtest.NoSpawnTest();
         if (name.equals("garrison")) return new net.decimation.worldgen.devtest.GarrisonTest();

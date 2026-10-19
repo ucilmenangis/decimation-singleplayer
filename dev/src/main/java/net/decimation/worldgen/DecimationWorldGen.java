@@ -187,6 +187,8 @@ public class DecimationWorldGen
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.EmptyStacks());
         // an entity joins a world once: Decimation's mob swaps during a chunk load added the new mob twice (bug.md)
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.JoinOnce());
+        // Decimation's mobs searched for targets every tick: paced like vanilla's (bench "crowd", bug.md "Safezones lag")
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.TargetPacing());
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new Areas());
         // loot of our own on Decimation's loot screen (docs/loot_levels.md): opener and the body entity
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.Loot());
