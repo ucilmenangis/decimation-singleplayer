@@ -125,7 +125,7 @@ public final class Highways
                 LINKS.clear();
                 linkSeed = layout;
             }
-            Long key = ((long) rx << 32) ^ (rz & 0xFFFFFFFFL);
+            Long key = net.decimation.worldgen.Keys.pair(rx, rz);
             int[] l = LINKS.get(key);
             if (l == null)
             {
@@ -293,12 +293,25 @@ public final class Highways
      */
     private void sides(World world, long seed, int[] w)
     {
+        // the highway flags of the window's chunks and the ring around them, asked once a chunk: asked for every column
+        // they cost 5 % of chunk generation (docs/performance.md 9)
+        int ox = (w[0] >> 4) - 1, oz = (w[1] >> 4) - 1, nz = (w[3] >> 4) + 2 - oz;
+        int nx = (w[2] >> 4) + 2 - ox;
+        boolean[] xh = new boolean[nx * nz], zh = new boolean[nx * nz];
+        for (int i = 0; i < nx; i++)
+        {
+            for (int j = 0; j < nz; j++)
+            {
+                xh[i * nz + j] = xHighway(seed, ox + i, oz + j);
+                zh[i * nz + j] = zHighway(seed, ox + i, oz + j);
+            }
+        }
         for (int x = w[0]; x <= w[2]; x++)
         {
             for (int z = w[1]; z <= w[3]; z++)
             {
-                int cx = x >> 4, cz = z >> 4;
-                if (at(seed, cx, cz))
+                int cx = x >> 4, cz = z >> 4, at = (cx - ox) * nz + cz - oz;
+                if (xh[at] || zh[at])
                 {
                     continue;
                 }
@@ -307,7 +320,7 @@ public final class Highways
                 int[][] nb = {{-1, 0, (x & 15) + 1}, {1, 0, 16 - (x & 15)}, {0, -1, (z & 15) + 1}, {0, 1, 16 - (z & 15)}};
                 for (int[] n : nb)
                 {
-                    boolean road = n[0] != 0 ? zHighway(seed, cx + n[0], cz) : xHighway(seed, cx, cz + n[1]);
+                    boolean road = n[0] != 0 ? zh[at + n[0] * nz] : xh[at + n[1]];
                     if (road && n[2] < best)
                     {
                         best = n[2];

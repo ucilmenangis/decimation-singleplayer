@@ -89,6 +89,28 @@ public class DeciBiome extends BiomeGenBase
         return rand.nextInt(10) == 0 ? worldGeneratorBigTree : worldGeneratorTrees;
     }
 
+    /**
+     * Vanilla decoration with block updates run at once, as vanilla places its springs: every gravel and sand block
+     * of the ore veins and shore discs queued a tick otherwise (about 800 a chunk), and each chunk save walks the whole
+     * queue (188 000 entries after 225 chunks: 3.4 s of saving; docs/performance.md 9). A resting block's tick does
+     * nothing; one over a cave falls straight away (population drops falling blocks instantly). Liquids and fire
+     * still queue theirs.
+     */
+    @Override
+    public void decorate(World world, Random rand, int x, int z)
+    {
+        boolean was = world.scheduledUpdatesAreImmediate;
+        world.scheduledUpdatesAreImmediate = true;
+        try
+        {
+            super.decorate(world, rand, x, z);
+        }
+        finally
+        {
+            world.scheduledUpdatesAreImmediate = was;
+        }
+    }
+
     @Override
     public void genTerrainBlocks(World world, Random rand, Block[] blocks, byte[] metas, int x, int z, double noise)
     {

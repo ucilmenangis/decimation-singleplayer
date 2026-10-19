@@ -230,10 +230,29 @@ public final class Slices
         write(world, p, baseY, x0, z0, x1, z1, true);
     }
 
+    /** Time in write (wall and the thread's CPU) and blocks it set so far (DevPregen reports them). */
+    public static long writeNanos, writeCpu, setBlocks, fallingSet;
+    private static final java.lang.management.ThreadMXBean CPU = java.lang.management.ManagementFactory.getThreadMXBean();
+
     private static void write(World world, Plan p, int baseY, int x0, int z0, int x1, int z1, boolean grade)
+    {
+        long t0 = System.nanoTime(), c0 = CPU.getCurrentThreadCpuTime();
+        try
+        {
+            writeImpl(world, p, baseY, x0, z0, x1, z1, grade);
+        }
+        finally
+        {
+            writeNanos += System.nanoTime() - t0;
+            writeCpu += CPU.getCurrentThreadCpuTime() - c0;
+        }
+    }
+
+    private static void writeImpl(World world, Plan p, int baseY, int x0, int z0, int x1, int z1, boolean grade)
     {
         int[] meta = new int[1];
         java.util.List<int[]> props = new java.util.ArrayList<int[]>();
+        BlockBatch batch = new BlockBatch(world);      // lit once at the end, not block by block (BlockBatch)
         int top = baseY + p.height();
         for (int x = x0; x <= x1; x++)
         {
@@ -261,7 +280,12 @@ public final class Slices
                         {
                             break;
                         }
-                        world.setBlock(x, y, z, p.foundation(), 0, 2);
+                        batch.set(x, y, z, p.foundation(), 0);
+                        setBlocks++;
+                        if (p.foundation() instanceof net.minecraft.block.BlockFalling)
+                        {
+                            fallingSet++;
+                        }
                     }
                 }
                 for (int y = baseY; y <= top + p.clearAbove(); y++)
@@ -276,7 +300,8 @@ public final class Slices
                         }
                         if (!world.isAirBlock(x, y, z))
                         {
-                            world.setBlock(x, y, z, Blocks.air, 0, 2);
+                            batch.set(x, y, z, Blocks.air, 0);
+                            setBlocks++;
                         }
                     }
                     else if (block == net.decimation.worldgen.military.CityGate.MINE)
@@ -284,14 +309,19 @@ public final class Slices
                         // a landmine (wasteland gates): Decimation's mine entity over this cell's floor
                         if (!world.isAirBlock(x, y, z))
                         {
-                            world.setBlock(x, y, z, Blocks.air, 0, 2);
+                            batch.set(x, y, z, Blocks.air, 0);
                         }
                         world.spawnEntityInWorld(net.decimation.fixes.Deci.newLandmine(world, x + 0.5, y, z + 0.5));
                     }
                     else
                     {
                         block = Doors.swap(block, p);             // never a vanilla door (Doors)
-                        world.setBlock(x, y, z, block, meta[0], 2);
+                        batch.set(x, y, z, block, meta[0]);
+                        setBlocks++;
+                        if (block instanceof net.minecraft.block.BlockFalling)
+                        {
+                            fallingSet++;
+                        }
                         if (block.hasTileEntity(meta[0]))
                         {
                             props.add(new int[] {x, y, z});
@@ -300,6 +330,7 @@ public final class Slices
                 }
             }
         }
+        batch.light();
         // multiblock props: master + their upper parts, once the whole slice
         // (including the air above them) is written
         for (int[] q : props)

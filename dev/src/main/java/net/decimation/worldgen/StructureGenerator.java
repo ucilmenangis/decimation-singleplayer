@@ -148,6 +148,7 @@ public class StructureGenerator implements IWorldGenerator
         {
             return;
         }
+        long t0 = System.nanoTime();
         try
         {
             generateImpl(chunkX, chunkZ, world);
@@ -167,7 +168,11 @@ public class StructureGenerator implements IWorldGenerator
                             DecimationWorldGen.MODID, errors);
             }
         }
+        populateNanos += System.nanoTime() - t0;
     }
+
+    /** Time spent in our population so far (DevPregen reports it; two clock reads a chunk). */
+    public static long populateNanos;
 
     /** Which sector a chunk belongs to - deterministic per world seed. */
     private int sector(World world, int chunkX, int chunkZ)

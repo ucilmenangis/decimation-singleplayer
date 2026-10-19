@@ -8,7 +8,8 @@ Compares block ids and metadata of every chunk present in both worlds
 keeps behaviour must give 0 differences). Only chunks final in both
 worlds count (it and its 3 lower neighbours populated); fluids and
 sand / gravel are ignored (they flow / fall while the server ticks).
---within R: only chunks within R chunks of the spawn (default 10). The
+--within R: only chunks within R chunks of the spawn (default 10); --at X,Z
+(block coordinates): around that point instead (a pregen area). The
 server generates the spawn area (12 chunks around spawn) in a fixed
 order; chunks loaded later (supply drop scheduler, timers) vary from run
 to run, and population order changes edge content (ore veins spilling
@@ -54,6 +55,8 @@ def main():
     within = int(sys.argv[sys.argv.index("--within") + 1]) if "--within" in sys.argv else 10
     lvl = ms.wc.read_nbt(gzip.decompress(open(os.path.join(sys.argv[1], "level.dat"), "rb").read()))["Data"]
     scx, scz = lvl["SpawnX"] >> 4, lvl["SpawnZ"] >> 4
+    if "--at" in sys.argv:
+        scx, scz = (int(v) >> 4 for v in sys.argv[sys.argv.index("--at") + 1].split(","))
     common = sorted(k for k in set(a) & set(b) if done(a, k) and done(b, k)
                     and max(abs(k[0] - scx), abs(k[1] - scz)) <= within)
     diff_chunks, diff_blocks, shown = 0, 0, 0

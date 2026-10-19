@@ -167,6 +167,7 @@ public class DevAutoTest
         if (name.equals("npclook")) return new net.decimation.worldgen.devtest.NpcLookTest();
         if (name.equals("npcdraw")) return new net.decimation.worldgen.devtest.NpcDrawTest();
         if (name.equals("lightleak")) return new net.decimation.worldgen.devtest.LightLeakTest();
+        if (name.equals("genwalk")) return new net.decimation.worldgen.devtest.GenWalkTest();
         if (name.equals("gunbatch")) return new net.decimation.worldgen.devtest.NpcLookTest(true);
         if (name.equals("garrison")) return new net.decimation.worldgen.devtest.GarrisonTest();
         if (name.equals("rail")) return new net.decimation.worldgen.devtest.RailTest();

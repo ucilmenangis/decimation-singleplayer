@@ -177,11 +177,27 @@ tasks.matching { it.name == "runServer" }.configureEach {
     if (project.hasProperty("pregen")) {
         jvmArgs("-Ddeciworldgen.pregen=" + project.property("pregen"))
     }
+    if (project.hasProperty("walk")) {
+        jvmArgs("-Ddeciworldgen.pregenwalk=" + project.property("walk"))   // x,z,steps,view (DevPregen.walk)
+    }
     if (project.hasProperty("gatescan")) {
         jvmArgs("-Ddeciworldgen.gatescan=" + project.property("gatescan"))
     }
     if (project.hasProperty("debugsets")) {
         jvmArgs("-Ddeciworldgen.debugsets=true")
+    }
+    // -Pjfr: Java Flight Recorder CPU samples of the whole server run (run/server/profile.jfr)
+    if (project.hasProperty("jfr")) {
+        jvmArgs("-XX:+UnlockCommercialFeatures", "-XX:+FlightRecorder",
+                "-XX:StartFlightRecording=filename=profile.jfr,settings=profile,dumponexit=true")
+    }
+}
+
+// -Pbulklight=false (runServer / runClient): structure writes lit block by block again (worldgen/BlockBatch off, to
+// compare; servertest bulklight=false, devtest genwalk -Pbulklight=false)
+tasks.matching { it.name == "runServer" || it.name.startsWith("runClient") }.configureEach {
+    if (project.hasProperty("bulklight")) {
+        jvmArgs("-Ddeciworldgen.bulklight=" + project.property("bulklight"))
     }
 }
 
