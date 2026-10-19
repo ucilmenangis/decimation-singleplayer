@@ -139,11 +139,18 @@ public final class GunNoise
             {
                 continue;                             // a friend's shot (or a player it does not fight)
             }
+            long search = infected ? zombieSearch : npcSearch;
+            NBTTagCompound old = m.getEntityData().hasKey(TAG) ? m.getEntityData().getCompoundTag(TAG) : null;
+            if (old != null && old.getLong("until") - now > search / 2 && sq(old.getDouble("x") - shooter.posX)
+                + sq(old.getDouble("z") - shooter.posZ) < 64)
+            {
+                continue; // still walking to a shot within 8 blocks of this one (a fight: dozens of shots a second; bench)
+            }
             NBTTagCompound n = new NBTTagCompound();
             n.setDouble("x", shooter.posX);
             n.setDouble("y", shooter.posY);
             n.setDouble("z", shooter.posZ);
-            n.setLong("until", now + (infected ? zombieSearch : npcSearch));
+            n.setLong("until", now + search);
             m.getEntityData().setTag(TAG, n);
         }
     }
@@ -261,5 +268,10 @@ public final class GunNoise
         {
             m.getNavigator().clearPathEntity();
         }
+    }
+
+    private static double sq(double d)
+    {
+        return d * d;
     }
 }
