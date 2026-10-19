@@ -157,6 +157,8 @@ public class DevAutoTest
         if (name.equals("threads")) return new net.decimation.worldgen.devtest.ThreadsTest();
         if (name.equals("targetpace")) return new net.decimation.worldgen.devtest.TargetPaceTest();
         if (name.equals("armskin")) return new net.decimation.worldgen.devtest.ArmSkinTest();
+        if (name.equals("scopeperf")) return new net.decimation.worldgen.devtest.ScopePerfTest();
+        if (name.equals("scopediag")) return new net.decimation.worldgen.devtest.ScopeDiagTest();
         if (name.equals("corpsegun")) return new net.decimation.worldgen.devtest.CorpseGunTest();
         if (name.equals("nospawn")) return new net.decimation.worldgen.devtest.NoSpawnTest();
         if (name.equals("garrison")) return new net.decimation.worldgen.devtest.GarrisonTest();

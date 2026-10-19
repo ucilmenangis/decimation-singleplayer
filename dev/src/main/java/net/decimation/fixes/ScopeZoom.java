@@ -299,7 +299,9 @@ public class ScopeZoom
         }
         if (zoom == 1.0 || mc.entityRenderer == null)
         {
-            Deci.setScopeGlassEvery(7); // vanilla draws the hand next: measure for the glass copy
+            // vanilla draws the hand next: measure for the glass copy, which runs only while aiming (a 1x sight like the
+            // EOTech aims at zoom 1); at the hip every 8th frame was measured for nothing (19 Oktober 2026, scopeperf)
+            Deci.setScopeGlassEvery(mc.thePlayer != null && Deci.aimMode(mc.thePlayer) == 1 ? 7 : -1);
             return;
         }
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
