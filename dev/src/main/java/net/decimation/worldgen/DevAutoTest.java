@@ -152,6 +152,8 @@ public class DevAutoTest
         if (name.equals("hudguard")) return new net.decimation.worldgen.devtest.HudGuardTest();
         if (name.equals("glstack")) return new net.decimation.worldgen.devtest.GlStackTest();
         if (name.equals("throwables")) return new net.decimation.worldgen.devtest.ThrowablesTest();
+        if (name.equals("soak")) return new net.decimation.worldgen.devtest.SoakTest();
+        if (name.equals("radios")) return new net.decimation.worldgen.devtest.RadiosTest();
         if (name.equals("corpsegun")) return new net.decimation.worldgen.devtest.CorpseGunTest();
         if (name.equals("nospawn")) return new net.decimation.worldgen.devtest.NoSpawnTest();
         if (name.equals("garrison")) return new net.decimation.worldgen.devtest.GarrisonTest();

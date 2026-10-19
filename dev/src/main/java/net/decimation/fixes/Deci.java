@@ -1771,4 +1771,33 @@ public final class Deci
     {
         deci.b.i.bx = on;
     }
+
+    /** Radio / ambient prop loops Decimation started (BlockProp.mapSoundPositions, one per prop position). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static java.util.Map<net.minecraft.util.ChunkCoordinates, net.minecraft.client.audio.ISound> propSounds()
+    {
+        return net.decimation.mod.common.block.props.BlockProp.mapSoundPositions;
+    }
+
+    /** Tests: entries in propSounds(). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static int propSoundEntries()
+    {
+        return propSounds().size();
+    }
+
+    /** Tests: prop loops that are playing right now. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static int playingPropSounds()
+    {
+        int n = 0;
+        for (net.minecraft.client.audio.ISound s : propSounds().values())
+        {
+            if (s != null && net.minecraft.client.Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(s))
+            {
+                n++;
+            }
+        }
+        return n;
+    }
 }
