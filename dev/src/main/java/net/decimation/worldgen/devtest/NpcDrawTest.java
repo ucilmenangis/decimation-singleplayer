@@ -32,7 +32,8 @@ public class NpcDrawTest extends DevTestMode
 {
     public String name() { return "npcdraw"; }
 
-    private static final String[] SCENES = {"camp", "horde"};
+    /** -Pscenes=camp picks some. */
+    private static final String[] SCENES = System.getProperty("deciworldgen.autotest.scenes", "camp,horde").split(",");
     private static final int TURN = 30, FRAMES = Integer.getInteger("deciworldgen.autotest.frames", 1200);
     private static Timer timer;
 

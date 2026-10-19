@@ -1861,4 +1861,16 @@ public final class Deci
         h.i(gear[1]);
         h.h(gear[2]);
     }
+
+    /**
+     * Sets a held gun's muzzle flash ticks (GunItem deci.ay.i setFlashTime i). A stack without its tag yet is left alone:
+     * Decimation's client tick (tickMuzzleFlash) gives every held gun its tag.
+     */
+    public static void setGunFlash(net.minecraft.item.ItemStack stack, int ticks)
+    {
+        if (stack != null && stack.hasTagCompound() && stack.getItem() instanceof deci.ay.i)
+        {
+            ((deci.ay.i) stack.getItem()).i(stack, ticks);
+        }
+    }
 }

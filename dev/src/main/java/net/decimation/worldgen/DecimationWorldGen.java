@@ -183,6 +183,8 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.PropSounds());
             // the hand holding a gun shows the player's own skin, not Steve (bug.md "Steve hand")
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunArmSkin());
+            // the muzzle flash lit every mob drawn after a shooter: lighting put back around each living entity (bug.md)
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.EntityLighting());
         }
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.WorldClock());
         // throwables left a stack of 0 in the hand that threw forever (bug.md "The last grenade never runs out")
