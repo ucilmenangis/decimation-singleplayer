@@ -22,10 +22,12 @@ import net.minecraftforge.common.MinecraftForge;
 
 /**
  * What drawing NPCs costs the client per frame (fixes/HumanLayers, PatchHumanLayers; the bench's frame times could not
- * tell: Mac load and the 60 fps cap hide it). Two scenes in front of the player, standing still in view: a camp (50
- * civilians, 30 guards with gear) and a horde (80 infected). Per frame the time from RenderLivingEvent.Pre to Post of
+ * tell: Mac load and the 60 fps cap hide it). Scenes in front of the player, in view: a camp (50 civilians, 30 guards
+ * with gear standing still), a horde (80 infected) and a fight (`-Pscenes=fight`: 20 soldiers and 20 bandits shooting
+ * at each other across the view). Per frame the time from RenderLivingEvent.Pre to Post of
  * every human NPC is summed (the whole NPC: model, gear, held gun, name), drawn the new way and the old way (Decimation's
- * seven layers and three line of sight checks: HumanLayers off, sightChecks on) in turns of 30 frames, so a change in
+ * seven layers, three line of sight checks and model parts in two lists of tiny draws: HumanLayers off, sightChecks on,
+ * ModelBatch off) in turns of 30 frames, so a change in
  * the Mac's load hits both alike. Frame cap and vsync off.
  */
 public class NpcDrawTest extends DevTestMode
@@ -52,11 +54,15 @@ public class NpcDrawTest extends DevTestMode
         int drawnNow;
         final List<long[]> newWay = new ArrayList<long[]>(), oldWay = new ArrayList<long[]>(); // {ns, NPCs drawn, frame ns}
         long frameStart;
+        boolean flashing;
+        /** Draws of an NPC whose gun flashed / did not: {ns, count}. */
+        final long[] flash = new long[2], calm = new long[2];
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public void pre(RenderLivingEvent.Pre e)
         {
             start = on && Deci.humanLook(e.entity, LOOK) != null ? System.nanoTime() : 0; // a cancelled one never posts
+            flashing = start != 0 && Deci.gunFlashTicks(e.entity.getHeldItem()) > 0;
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -64,7 +70,11 @@ public class NpcDrawTest extends DevTestMode
         {
             if (on && start != 0)
             {
-                sum += System.nanoTime() - start;
+                long ns = System.nanoTime() - start;
+                long[] c = flashing ? flash : calm;
+                c[0] += ns;
+                c[1]++;
+                sum += ns;
                 drawnNow++;
                 start = 0;
             }
@@ -89,6 +99,7 @@ public class NpcDrawTest extends DevTestMode
             boolean old = frame / TURN % 2 == 1;           // this frame's way, in turns of 30 frames
             HumanLayers.enabled = !old;
             HumanLayers.sightChecks = old;
+            net.decimation.fixes.ModelBatch.enabled = !old;
         }
     }
 
@@ -118,6 +129,7 @@ public class NpcDrawTest extends DevTestMode
         {
             HumanLayers.enabled = true;
             HumanLayers.sightChecks = false;
+            net.decimation.fixes.ModelBatch.enabled = true;
             return false;
         }
         if (!ready)
@@ -129,6 +141,7 @@ public class NpcDrawTest extends DevTestMode
         {
             timer.newWay.clear();
             timer.oldWay.clear();
+            timer.flash[0] = timer.flash[1] = timer.calm[0] = timer.calm[1] = 0;
             timer.frame = 0;
             timer.on = true;
             DevTestUtil.screenshot(mc, name(), "npcdraw_" + SCENES[scene] + ".png");
@@ -138,12 +151,19 @@ public class NpcDrawTest extends DevTestMode
             timer.on = false;
             HumanLayers.enabled = true;
             HumanLayers.sightChecks = false;
+            net.decimation.fixes.ModelBatch.enabled = true;
             double[] n = stats(timer.newWay), o = stats(timer.oldWay);
             String s = SCENES[scene];
             DevTestResults.value(name(), s + " new way", String.format("NPCs %.0f a frame: %.2f ms drawing them (%.1f us each),"
                 + " frame median %.1f ms (%d frames)", n[1], n[0], n[2], n[3], timer.newWay.size()));
             DevTestResults.value(name(), s + " old way", String.format("NPCs %.0f a frame: %.2f ms drawing them (%.1f us each),"
                 + " frame median %.1f ms (%d frames)", o[1], o[0], o[2], o[3], timer.oldWay.size()));
+            if (timer.flash[1] > 0)
+            {
+                DevTestResults.value(name(), s + " muzzle flash", String.format("an NPC drawn while its gun flashes %.1f us (%d draws),"
+                    + " not flashing %.1f us (%d draws)", timer.flash[0] / 1e3 / timer.flash[1], timer.flash[1],
+                    timer.calm[1] == 0 ? 0 : timer.calm[0] / 1e3 / timer.calm[1], timer.calm[1]));
+            }
             DevTestResults.check(name(), s + ": NPCs cheaper to draw", String.format("%.0f %% of the old time", 100 * n[0] / o[0]),
                                  n[1] > 20 && o[1] > 20 && n[0] < o[0], "the new way takes less time a frame, 20+ NPCs drawn");
             ticks = 0;
@@ -177,8 +197,22 @@ public class NpcDrawTest extends DevTestMode
     {
         WorldServer w = MinecraftServer.getServer().worldServerForDimension(0);
         EntityPlayerMP p = w.playerEntities.isEmpty() ? null : (EntityPlayerMP) w.playerEntities.get(0);
-        if (p == null || scene < 0 || ready)
+        if (p == null || scene < 0)
         {
+            return;
+        }
+        if (ready)
+        {
+            if (scene < SCENES.length && SCENES[scene].equals("fight"))
+            {
+                for (Entity e : spawned)
+                {
+                    if (e instanceof EntityLiving && e.isEntityAlive())
+                    {
+                        ((EntityLiving) e).setHealth(((EntityLiving) e).getMaxHealth()); // they fight on, nobody dies
+                    }
+                }
+            }
             return;
         }
         if (scene >= SCENES.length)
@@ -212,10 +246,17 @@ public class NpcDrawTest extends DevTestMode
         w.getWorldInfo().setThundering(false);
         p.setGameType(WorldSettings.GameType.CREATIVE); // Decimation's NPCs leave a creative player alone
         p.playerNetServerHandler.setPlayerLocation(DevTestArena.X + 0.5, DevTestArena.Y, DevTestArena.Z + 0.5, 90, 12); // west
-        for (int i = 0; i < 80; i++)
+        boolean fight = SCENES[scene].equals("fight");
+        for (int i = 0; i < (fight ? 40 : 80); i++)
         {
-            String kind = SCENES[scene].equals("horde") ? "Infected" : i < 50 ? "Human" : "TraderGuard";
+            String kind = SCENES[scene].equals("horde") ? "Infected" : fight ? (i < 20 ? "Soldier" : "Bandit")
+                : i < 50 ? "Human" : "TraderGuard";
             double x = DevTestArena.X - 8 - (i / 10) * 2.0, z = DevTestArena.Z + 0.5 + (i % 10 - 4.5) * 1.6;
+            if (fight) // soldiers on the left, bandits on the right of the view, 18 blocks apart: they shoot across it
+            {
+                x = DevTestArena.X - 12 - (i % 20) / 5 * 2.0;
+                z = DevTestArena.Z + 0.5 + (i < 20 ? -9 : 9) + (i % 5 - 2) * 1.5;
+            }
             for (int tries = 0; tries < 5; tries++) // Decimation turns some spawns into other mobs: retried
             {
                 Entity e = EntityList.createEntityByName(kind, w);

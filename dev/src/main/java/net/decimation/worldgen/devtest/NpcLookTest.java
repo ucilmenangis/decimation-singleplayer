@@ -12,6 +12,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import net.decimation.fixes.Deci;
 import net.decimation.fixes.HumanLayers;
+import net.decimation.fixes.ModelBatch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -43,13 +44,31 @@ import org.lwjgl.opengl.GL11;
  */
 public class NpcLookTest extends DevTestMode
 {
-    public String name() { return "npclook"; }
+    public String name() { return batch ? "gunbatch" : "npclook"; }
+
+    /**
+     * gunbatch: the same comparison for ModelBatch (guns, attachments, armour, masks, vests, backpacks drawn from one list
+     * per part) instead of the looks: armed kinds, bare (the gun) and dressed both checked, no crowd.
+     */
+    private final boolean batch;
+
+    public NpcLookTest()
+    {
+        this(false);
+    }
+
+    public NpcLookTest(boolean batch)
+    {
+        this.batch = batch;
+        KINDS = batch ? kinds("Soldier", "Bandit", "Soviet", "Hazmat", "TraderGuard", "TraderGuns")
+                      : kinds("Human", "TraderGuard", "TraderFood", "Soldier", "Bandit", "Soviet", "Hazmat", "Infected", "Frail",
+                              "Hulk", "Bloater");
+    }
 
     /** -Pkinds=TraderFood,Human picks some. */
-    static final String[] KINDS = kinds("Human", "TraderGuard", "TraderFood", "Soldier", "Bandit", "Soviet", "Hazmat", "Infected",
-                                        "Frail", "Hulk", "Bloater");
+    final String[] KINDS;
     /** Kinds that must use their picture (ModelHuman mobs). */
-    static final List<String> MUST = Arrays.asList("Human", "TraderGuard", "Soldier", "Bandit", "Infected", "Frail");
+    static final List<String> MUST = Arrays.asList("Human", "TraderGuard", "Soldier", "Bandit", "Infected", "Frail", "Hazmat");
     static final double MAX_DIFF = 0.02;
     private static final int BACKGROUND = 0xFF203040;
     private static Draw draw;
@@ -78,7 +97,7 @@ public class NpcLookTest extends DevTestMode
         public void onRender(TickEvent.RenderTickEvent e)
         {
             NpcLookTest t = test;
-            if (e.phase == TickEvent.Phase.END && t != null && t.step == 1 && t.ready && t.kind < KINDS.length
+            if (e.phase == TickEvent.Phase.END && t != null && t.step == 1 && t.ready && t.kind < t.KINDS.length
                 && t.shown == t.kind && t.ticks >= 10)
             {
                 t.compareNext(Minecraft.getMinecraft());
@@ -112,7 +131,7 @@ public class NpcLookTest extends DevTestMode
         if (step == 1 && kind >= KINDS.length)
         {
             ready = false;
-            step = 2;
+            step = batch ? 4 : 2;                           // gunbatch: no crowd
         }
         else if (step == 1 && shown != kind)
         {
@@ -192,7 +211,16 @@ public class NpcLookTest extends DevTestMode
         }
         if (dressed)
         {
-            DevTestResults.value(name(), k + " dressed", compare(mc, m, k, "_dressed").substring(1));
+            String d = compare(mc, m, k, "_dressed");
+            if (batch && MUST.contains(k))
+            {
+                DevTestResults.check(name(), k + " dressed", d.substring(1), d.charAt(0) == '+',
+                                     "parts drawn from their one list, the same (at most 2 % of the pixels differ)");
+            }
+            else
+            {
+                DevTestResults.value(name(), k + " dressed", d.substring(1));
+            }
         }
         int[] look = new int[8];
         String folder = Deci.humanLook(m, look);
@@ -204,7 +232,8 @@ public class NpcLookTest extends DevTestMode
         boolean pass = bare.charAt(0) == '+';
         if (MUST.contains(k))
         {
-            DevTestResults.check(name(), k, bare.substring(1), pass, "picture used, the layers drawn the same (at most 2 % of the pixels differ)");
+            DevTestResults.check(name(), k, bare.substring(1), pass, batch ? "parts drawn from their one list, the same (at most 2 %"
+                + " of the pixels differ)" : "picture used, the layers drawn the same (at most 2 % of the pixels differ)");
         }
         else
         {
@@ -219,12 +248,12 @@ public class NpcLookTest extends DevTestMode
         int f = sr.getScaleFactor(), w = 100, h = 130;
         int gx = sr.getScaledWidth() / 2 - w / 2, gy = sr.getScaledHeight() / 2 - h / 2;
         drawOnce(mc, m, gx, gy, w, h, true);
-        long d0 = HumanLayers.drawn;
+        long d0 = used();
         int[] a = drawOnce(mc, m, gx, gy, w, h, true);
-        boolean usedA = HumanLayers.drawn > d0;
-        long d1 = HumanLayers.drawn;
+        boolean usedA = used() > d0;
+        long d1 = used();
         int[] b = drawOnce(mc, m, gx, gy, w, h, false);
-        boolean usedB = HumanLayers.drawn > d1;
+        boolean usedB = used() > d1;
         int[] a2 = drawOnce(mc, m, gx, gy, w, h, true), b2 = drawOnce(mc, m, gx, gy, w, h, false);
         int pw = w * f, ph = h * f, npc = 0, diff = 0, noise = 0;
         BufferedImage img = new BufferedImage(pw * 3, ph, BufferedImage.TYPE_INT_RGB);
@@ -247,7 +276,7 @@ public class NpcLookTest extends DevTestMode
                 img.setRGB(2 * pw + x, y, differs ? 0xFF2020 : unstable ? 0xE0D020 : inA ? 0x404040 : 0);
             }
         }
-        String file = "npclook_" + k.toLowerCase() + suffix + ".png";
+        String file = name() + "_" + k.toLowerCase() + suffix + ".png";
         try
         {
             File dir = new File(mc.mcDataDir, "screenshots");
@@ -265,7 +294,7 @@ public class NpcLookTest extends DevTestMode
         {
             try
             {
-                ImageIO.write(img, "png", new File(new File(mc.mcDataDir, "screenshots"), "npclook_" + k.toLowerCase() + suffix
+                ImageIO.write(img, "png", new File(new File(mc.mcDataDir, "screenshots"), name() + "_" + k.toLowerCase() + suffix
                                                                                         + "_over_" + runs + ".png"));
             }
             catch (Exception ex)
@@ -275,6 +304,12 @@ public class NpcLookTest extends DevTestMode
         }
         return (pass ? "+" : "-") + String.format("%d of %d pixels differ (%.2f %%; %d random), picture used %s, old way %s",
                                                   diff, npc, share * 100, noise, usedA ? "yes" : "no", usedB ? "no" : "yes");
+    }
+
+    /** Draws that used the new way so far: looks from a picture, or parts from their one list. */
+    private long used()
+    {
+        return batch ? ModelBatch.drawn : HumanLayers.drawn;
     }
 
     /** Pixel x, y of p has no colour match within one pixel in q, or the other way round. */
@@ -300,7 +335,7 @@ public class NpcLookTest extends DevTestMode
     }
 
     /** The NPC drawn on a plain background at the place the inventory draws the player; the pixels (top row first). */
-    private static int[] drawOnce(Minecraft mc, EntityLivingBase m, int gx, int gy, int w, int h, boolean layers)
+    private int[] drawOnce(Minecraft mc, EntityLivingBase m, int gx, int gy, int w, int h, boolean layers)
     {
         ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
         int f = sr.getScaleFactor();
@@ -310,15 +345,29 @@ public class NpcLookTest extends DevTestMode
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
         GL11.glColor4f(1, 1, 1, 1);
-        boolean was = HumanLayers.enabled;
-        HumanLayers.enabled = layers;
+        boolean was = batch ? ModelBatch.enabled : HumanLayers.enabled;
+        if (batch)
+        {
+            ModelBatch.enabled = layers;                    // here: parts from their one list or Decimation's two
+        }
+        else
+        {
+            HumanLayers.enabled = layers;
+        }
         try
         {
             GuiInventory.func_147046_a(gx + w / 2, gy + h - 12, 55, 0, 0, m);
         }
         finally
         {
-            HumanLayers.enabled = was;
+            if (batch)
+            {
+                ModelBatch.enabled = was;
+            }
+            else
+            {
+                HumanLayers.enabled = was;
+            }
         }
         int pw = w * f, ph = h * f;
         ByteBuffer buf = BufferUtils.createByteBuffer(pw * ph * 4);

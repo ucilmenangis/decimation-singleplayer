@@ -1873,4 +1873,10 @@ public final class Deci
             ((deci.ay.i) stack.getItem()).i(stack, ticks);
         }
     }
+
+    /** A held gun's muzzle flash ticks left (GunItem deci.ay.i getFlashTime M), 0 for anything else. */
+    public static int gunFlashTicks(net.minecraft.item.ItemStack stack)
+    {
+        return stack != null && stack.getItem() instanceof deci.ay.i ? ((deci.ay.i) stack.getItem()).M(stack) : 0;
+    }
 }
