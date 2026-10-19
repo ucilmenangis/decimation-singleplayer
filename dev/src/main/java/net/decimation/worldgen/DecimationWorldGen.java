@@ -181,6 +181,8 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunUseKey()); // open corpses with a gun in hand
         }
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.WorldClock());
+        // throwables left a stack of 0 in the hand that threw forever (bug.md "The last grenade never runs out")
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.EmptyStacks());
         // an entity joins a world once: Decimation's mob swaps during a chunk load added the new mob twice (bug.md)
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.JoinOnce());
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new Areas());

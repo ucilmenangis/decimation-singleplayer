@@ -439,6 +439,27 @@ public final class Deci
         return e instanceof deci.ak.b || e instanceof deci.ak.f || e instanceof deci.ak.c || e instanceof deci.ak.e;
     }
 
+    /** A frag grenade in flight (GrenadeEntity deci.ak.c). */
+    public static boolean isGrenade(net.minecraft.entity.Entity e)
+    {
+        return e instanceof deci.ak.c;
+    }
+
+    /**
+     * Throws the held throwable as Decimation's throw packet does on the server (PacketThrowItem's handler,
+     * deci.aE.a$y$a: GrenadeItem.throwGrenade, deci.aA.a.a, on the held stack); false when nothing throwable is held.
+     */
+    public static boolean throwHeld(EntityPlayer player, double strength)
+    {
+        ItemStack held = player.getHeldItem();
+        if (held == null || !(held.getItem() instanceof deci.aA.a))
+        {
+            return false;
+        }
+        ((deci.aA.a) held.getItem()).a(held, player.worldObj, player, Math.min(Math.max(strength, 0.0), 10.0));
+        return true;
+    }
+
     /** A mech (MechEntity deci.ag.k). */
     public static boolean isMech(net.minecraft.entity.Entity e)
     {
