@@ -1816,4 +1816,49 @@ public final class Deci
     {
         deci.K.b.TJ = skin;
     }
+
+    /**
+     * A human NPC's look as ModelHuman (deci.q.h) draws it, from HumanEntity (deci.af.d): fills look with {skin tone (el),
+     * hair (em), beard (ep), eyes (en), shirt (eq), pants (er), shoes (es), flags: 1 blinking (eu), 2 infected
+     * (InfectedEntity deci.ag.d: no hair or beard), 4 frail (FrailEntity deci.ag.h: no clothes)} and returns the skin
+     * folder (ew), or null for anything else.
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static String humanLook(Object entity, int[] look)
+    {
+        if (!(entity instanceof deci.af.d))
+        {
+            return null;
+        }
+        deci.af.d h = (deci.af.d) entity;
+        look[0] = h.el();
+        look[1] = h.em();
+        look[2] = h.ep();
+        look[3] = h.en();
+        look[4] = h.eq();
+        look[5] = h.er();
+        look[6] = h.es();
+        look[7] = (h.eu() ? 1 : 0) | (entity instanceof deci.ag.d ? 2 : 0) | (entity instanceof deci.ag.h ? 4 : 0);
+        return h.ew();
+    }
+
+    /** A human NPC's mask, vest and backpack (HumanEntity deci.af.d: cx, cw, cv), or null for anything else. */
+    public static net.minecraft.item.ItemStack[] humanGear(Object entity)
+    {
+        if (!(entity instanceof deci.af.d))
+        {
+            return null;
+        }
+        deci.af.d h = (deci.af.d) entity;
+        return new net.minecraft.item.ItemStack[] {h.cx(), h.cw(), h.cv()};
+    }
+
+    /** Puts a human NPC's mask, vest and backpack (setMask j, setVest i, setBackpack h), as humanGear gave them. */
+    public static void setHumanGear(Object entity, net.minecraft.item.ItemStack[] gear)
+    {
+        deci.af.d h = (deci.af.d) entity;
+        h.j(gear[0]);
+        h.i(gear[1]);
+        h.h(gear[2]);
+    }
 }

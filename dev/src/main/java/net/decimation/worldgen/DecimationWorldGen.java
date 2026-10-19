@@ -295,6 +295,7 @@ public class DecimationWorldGen
         {
             net.decimation.fixes.Updater.check();     // the menu shows "Update" once a newer release is known
             net.decimation.fixes.GlStackGuard.install(); // Decimation's renderers left GL matrices pushed (bug.md)
+            net.decimation.fixes.HumanLayers.install(); // NPC looks drawn from one picture, not seven layers
         }
         net.decimation.worldgen.terrain.DecimationBiomes.copySpawns();
         if (vanillaMobs != null && vanillaMobs.enabled())

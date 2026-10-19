@@ -164,6 +164,8 @@ public class DevAutoTest
         if (name.equals("zoneperf")) return new net.decimation.worldgen.devtest.ZonePerfTest();
         if (name.equals("corpsegun")) return new net.decimation.worldgen.devtest.CorpseGunTest();
         if (name.equals("nospawn")) return new net.decimation.worldgen.devtest.NoSpawnTest();
+        if (name.equals("npclook")) return new net.decimation.worldgen.devtest.NpcLookTest();
+        if (name.equals("npcdraw")) return new net.decimation.worldgen.devtest.NpcDrawTest();
         if (name.equals("garrison")) return new net.decimation.worldgen.devtest.GarrisonTest();
         if (name.equals("rail")) return new net.decimation.worldgen.devtest.RailTest();
         if (name.equals("bridge")) return new net.decimation.worldgen.devtest.BridgeTest();

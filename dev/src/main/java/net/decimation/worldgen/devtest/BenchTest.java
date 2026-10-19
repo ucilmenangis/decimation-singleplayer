@@ -69,6 +69,10 @@ public class BenchTest extends DevTestMode
 
     public BenchTest()
     {
+        // layers=off: NPCs drawn as Decimation drew them (seven layers, three sight checks; fixes/HumanLayers), to compare
+        boolean old = "off".equals(System.getProperty("deciworldgen.autotest.layers"));
+        net.decimation.fixes.HumanLayers.enabled = !old;
+        net.decimation.fixes.HumanLayers.sightChecks = old;
         String only = System.getProperty("deciworldgen.autotest.only", "");
         int repeat = Integer.getInteger("deciworldgen.autotest.repeat", 2);
         for (int r = 0; r < repeat; r++)
