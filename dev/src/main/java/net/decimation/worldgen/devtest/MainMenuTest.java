@@ -68,13 +68,17 @@ public class MainMenuTest extends DevTestMode
                 }
                 DevTestResults.check(name(), "news panels", titles, order, "GitHub, Updates, Website, Coming soon, each with a line and an https address");
                 // user, 17 Oktober 2026: links to our site, our version and name, Continue last world
-                String website = "", github = "", cont = "";
+                String website = "", github = "", cont = "", contTip = "";
                 for (net.minecraft.client.gui.GuiButton b : DevTestUtil.buttons(mc.currentScreen))
                 {
                     String l = DevTestUtil.label(b);
                     website = b.id == 12 ? l : website;
                     github = b.id == 15 ? l : github;
-                    cont = l.startsWith("Continue") ? l : cont;
+                    if (l.startsWith("Continue"))
+                    {
+                        cont = l;
+                        contTip = String.valueOf(Deci.menuTooltip(b));
+                    }
                 }
                 String[] links = Deci.menuLinks();
                 DevTestResults.check(name(), "top right links", website + " " + links[0] + ", " + github + " " + links[1],
@@ -85,6 +89,9 @@ public class MainMenuTest extends DevTestMode
                 DevTestResults.check(name(), "window title", title, title.startsWith("DeciRemnant v") && title.endsWith("(Minecraft 1.7.10)"),
                                      "DeciRemnant v<our version> (Minecraft 1.7.10)");
                 DevTestResults.check(name(), "continue button", cont, !cont.isEmpty(), "a Continue button (saves exist in the dev run folder)");
+                // "Open world" read like an instruction (a world named "world"); tasks.md, 0.65.0
+                DevTestResults.check(name(), "continue tooltip", contTip, contTip.startsWith("Last played: ")
+                                     && contTip.length() > "Last played: ".length(), "Last played: <world name>");
                 step = 2;
                 ticks = 0;
                 return true;

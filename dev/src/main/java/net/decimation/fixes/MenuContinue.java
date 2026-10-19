@@ -13,8 +13,9 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 
 /**
  * "Continue" on Decimation's main menu (user, 17 Oktober 2026: picked "Continue last world"): one of Decimation's own
- * menu buttons, right under Play, opening the world played last in one click; its tooltip names the world. The buttons
- * under it move down one row. Only on the main menu and only when a world exists. Client only (Forge bus).
+ * menu buttons, right under Play, opening the world played last in one click; its tooltip names the world ("Last played:
+ * <name>" since 0.65.0). The buttons under it move down one row. Only on the main menu and only when a world exists.
+ * Client only (Forge bus).
  */
 @SideOnly(Side.CLIENT)
 public class MenuContinue
@@ -51,7 +52,7 @@ public class MenuContinue
         }
         // GuiMenuBase.addMenuButtons: the column starts at width / 2 - 173 + 1, Play's row at 86, rows 21 apart
         e.buttonList.add(Deci.menuButton(ID, e.gui.width / 2 - 173 + 1, 86 + 21, 100, 20, "Continue",
-                                         "Open " + last.getDisplayName()));
+                                         "Last played: " + last.getDisplayName())); // "Open world" read like an order
     }
 
     @SubscribeEvent
