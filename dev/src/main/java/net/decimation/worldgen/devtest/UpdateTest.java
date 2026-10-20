@@ -11,13 +11,16 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 /**
- * Auto update end to end (fixes/Updater, UpdateProgress, UpdateSwap, PatchNoUpdate v2) against
+ * Auto update end to end (fixes/Updater, UpdatePrompt, UpdateProgress, UpdateSwap, PatchNoUpdate v2) against
  * tools/fake_release_server.py (start it first; port from -Pport / port=, default 8765): the check finds
- * the fake release, Decimation's update check answers true, the home menu shows its Update button
- * (update_menu), the button opens Decimation's own progress screen (deci.i.m), the download runs with its
- * bar showing our numbers (update_progress), is checked and ready with Quit game / Later on that screen
- * (update_ready), and the swap helper replaces a stand in jar
- * (run/client/devtest/update_target/Decimation.jar) with the download.
+ * the fake release, Decimation's update check answers false (never forced: user, 20 Oktober 2026), the home
+ * menu keeps Play and Decimation's question box asks (update_prompt): Update opens Decimation's own progress
+ * screen (deci.i.m); choice=later answers Later first (the menu keeps Play, nothing asks again) and updates
+ * from Settings, View Updates; noswap=true plays a game the updater cannot swap: the box offers Download and
+ * opens the release page. The download runs with its bar showing our numbers (update_progress), is checked
+ * and ready with Quit game / Later on that screen (update_ready), and the swap helper replaces a stand in jar
+ * (run/client/devtest/update_target/Decimation.jar) with the download. The question is asked on the title menu only, so
+ * the test leaves the world first (like mainmenu): run it after the modes that need a player.
  * The running version pretends to be the release `from` (default 0.58.0): only release builds look for updates.
  * real=true: against our real GitHub releases instead, expecting `expect` (default 0.59.0): the real jar downloads,
  * is checked against GitHub's sha256 and swapped into the stand in.
@@ -36,16 +39,20 @@ public class UpdateTest extends DevTestMode
     private File target;
     private long started;
     private String versionBefore;
+    private net.minecraft.server.integrated.IntegratedServer stopping;
     private final boolean real = "true".equals(System.getProperty("deciworldgen.autotest.real"));
     /** jar=true: replace the running jar itself (a shipped game only), not the stand in. */
     private final boolean useJar = "true".equals(System.getProperty("deciworldgen.autotest.jar"));
     private final String expect = prop("expect", real ? "0.59.0" : "9.9.9");   // `expect=` on a live run clears it
     private final boolean feedOnly = "true".equals(System.getProperty("deciworldgen.autotest.feedonly"));
     private final String source = prop("source", feedOnly ? "feed" : "api");
+    /** update (default): Update in the question box; later: Later, then Settings, View Updates. */
+    private final String choice = prop("choice", "update");
+    private final boolean noSwap = "true".equals(System.getProperty("deciworldgen.autotest.noswap"));
 
     public boolean client(Minecraft mc)
     {
-        if (mc.thePlayer == null)
+        if (mc.thePlayer == null && step == 0)
         {
             return true;
         }
@@ -77,6 +84,12 @@ public class UpdateTest extends DevTestMode
                 }
                 Updater.reset();
                 Updater.forgetCache();
+                net.decimation.fixes.UpdatePrompt.reset();
+                System.setProperty("deciworldgen.update.nobrowser", "true");      // the Download page is recorded, not opened
+                if (noSwap)
+                {
+                    System.setProperty("deciworldgen.update.noswap", "true");
+                }
                 String dead = "http://127.0.0.1:9/none";
                 // only release builds look for updates (Updater.offersUpdates): the running version pretends to be one
                 cpw.mods.fml.common.ModMetadata m = cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deciworldgen").getMetadata();
@@ -101,7 +114,8 @@ public class UpdateTest extends DevTestMode
                     DevTestResults.check(name(), "check finds the release", s + " " + Updater.latest() + " (" + Updater.message() + ")",
                                          s == Updater.State.AVAILABLE && expect.equals(Updater.latest()), "AVAILABLE " + expect);
                     DevTestResults.check(name(), "answer from", Updater.source(), source.equals(Updater.source()), source);
-                    DevTestResults.check(name(), "Decimation's update check", Deci.updateRequired(), Deci.updateRequired(), "true");
+                    DevTestResults.check(name(), "Decimation's update check", Deci.updateRequired(), !Deci.updateRequired(),
+                                         "false: never forced, the player decides");
                     if (!real && "api".equals(Updater.source()))
                     {
                         Updater.reset();                   // ask again: the ETag must give a 304
@@ -123,25 +137,70 @@ public class UpdateTest extends DevTestMode
                 }
                 break;
             case 2:
-                if (frames - at == 40)
+                // the question waits for the welcome box and the loading fade of a fresh game (GuiMenuHome ignores clicks)
+                if (stopping != null && !stopping.isServerStopped() && frames - at < 1200)
                 {
-                    DevTestUtil.screenshot(mc, name(), "update_menu");
-                    GuiButton b = button(mc.currentScreen, 8);
-                    DevTestResults.check(name(), "menu has the Update button", b == null ? "none" : b.displayString, b != null, "button 8");
-                    if (b != null)
+                    break;                                       // the test world is saved first
+                }
+                if (Deci.isConfirm(mc.currentScreen) || frames - at > 1200)
+                {
+                    DevTestResults.check(name(), "the menu asks", mc.currentScreen == null ? "none" : mc.currentScreen.getClass().getName(),
+                                         Deci.isConfirm(mc.currentScreen), "Decimation's question box (ConfirmScreen deci.d.s)");
+                    next(Deci.isConfirm(mc.currentScreen) ? 5 : 9);
+                }
+                break;
+            case 5:
+                if (frames - at == 20)
+                {
+                    DevTestUtil.screenshot(mc, name(), "update_prompt");
+                    StringBuilder labels = new StringBuilder();
+                    for (GuiButton b : DevTestUtil.buttons(mc.currentScreen))
                     {
-                        try
-                        {
-                            DevTestUtil.press(mc.currentScreen, b);       // MCP or SRG name: dev and shipped game
-                        }
-                        catch (Exception e)
-                        {
-                            DevTestResults.value(name(), "click", e.toString());
-                        }
+                        labels.append(DevTestUtil.label(b)).append(";");
                     }
-                    DevTestResults.check(name(), "Update opens Decimation's progress screen", mc.currentScreen == null ? "none"
+                    String lines = String.join(" | ", Deci.confirmLines(mc.currentScreen));
+                    String right = noSwap ? "Download" : "Update";
+                    DevTestResults.check(name(), "question", lines + " / " + labels,
+                                         lines.contains("DeciRemnant " + expect + " is out") && labels.toString().equals("Later;" + right + ";"),
+                                         "DeciRemnant " + expect + " is out ..., buttons Later and " + right);
+                    if (noSwap)
+                    {
+                        DevTestUtil.click(mc.currentScreen, button(mc.currentScreen, 11));
+                        String page = net.decimation.fixes.UpdatePrompt.opened.isEmpty() ? "none" : net.decimation.fixes.UpdatePrompt.opened.get(0);
+                        DevTestResults.check(name(), "Download opens the release page", page, page.endsWith("/releases/tag/" + expect),
+                                             "<releases>/tag/" + expect);
+                        next(9);
+                    }
+                    else if ("later".equals(choice))
+                    {
+                        DevTestUtil.click(mc.currentScreen, button(mc.currentScreen, 10));
+                        next(6);
+                    }
+                    else
+                    {
+                        DevTestUtil.click(mc.currentScreen, button(mc.currentScreen, 11));
+                        DevTestResults.check(name(), "Update opens Decimation's progress screen", mc.currentScreen == null ? "none"
+                                             : mc.currentScreen.getClass().getName(), Deci.isUpdateProgress(mc.currentScreen),
+                                             "GuiUpdateProgress (deci.i.m), user 17 Oktober 2026");
+                        next(3);
+                    }
+                }
+                break;
+            case 6:
+                if (frames - at == 100)
+                {
+                    // Later: back on the menu, Play still there, the question not asked again
+                    GuiButton play = button(mc.currentScreen, 9);
+                    DevTestResults.check(name(), "Later keeps Play", (Deci.isHomeMenu(mc.currentScreen) ? "home menu, " : "")
+                                         + (play == null ? "no Play" : DevTestUtil.label(play)),
+                                         Deci.isHomeMenu(mc.currentScreen) && play != null, "the home menu with Play, no question");
+                    // the update one click away later: Settings, View Updates (Decimation's own button 1000)
+                    GuiScreen options = Deci.optionsMenu(mc.currentScreen);
+                    mc.displayGuiScreen(options);
+                    DevTestUtil.click(options, button(options, 1000));
+                    DevTestResults.check(name(), "Settings, View Updates opens the progress screen", mc.currentScreen == null ? "none"
                                          : mc.currentScreen.getClass().getName(), Deci.isUpdateProgress(mc.currentScreen),
-                                         "GuiUpdateProgress (deci.i.m), user 17 Oktober 2026");
+                                         "GuiUpdateProgress (deci.i.m)");
                     next(3);
                 }
                 break;
@@ -208,6 +267,9 @@ public class UpdateTest extends DevTestMode
                     mc.displayGuiScreen(null);
                     net.decimation.worldgen.DevAutoTest.keepScreen = false;
                     System.clearProperty("deciworldgen.update.target");
+                    System.clearProperty("deciworldgen.update.nobrowser");
+                    System.clearProperty("deciworldgen.update.noswap");
+                    net.decimation.fixes.UpdatePrompt.reset();
                     if (versionBefore != null)
                     {
                         cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deciworldgen").getMetadata().version = versionBefore;
@@ -239,7 +301,18 @@ public class UpdateTest extends DevTestMode
     private void menu(Minecraft mc, Updater.State s)
     {
         net.decimation.worldgen.DevAutoTest.keepScreen = true;
+        // the question comes on the title menu, never over a game (UpdatePrompt): leave the world as Disconnect does
+        if (mc.theWorld != null)
+        {
+            stopping = mc.getIntegratedServer();
+            mc.theWorld.sendQuittingDisconnectingPacket();
+            mc.loadWorld((net.minecraft.client.multiplayer.WorldClient) null);
+        }
         mc.displayGuiScreen(Deci.homeMenu());
+        GuiButton play = button(mc.currentScreen, 9), update = button(mc.currentScreen, 8);
+        DevTestResults.check(name(), "menu keeps Play", (play == null ? "no Play" : DevTestUtil.label(play))
+                             + (update == null ? "" : ", " + DevTestUtil.label(update)), play != null && update == null,
+                             "Play (button 9), no Update in its place");
         next(s == Updater.State.AVAILABLE ? 2 : 9);
     }
 

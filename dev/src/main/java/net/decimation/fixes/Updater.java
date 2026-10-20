@@ -26,8 +26,8 @@ import net.minecraftforge.common.config.Configuration;
  *   release with a "Decimation.jar" asset whose version is above ours (mcmod.info); only release builds ask
  *   (offersUpdates: dev clients and test jars built from main or prerelease stay OFF, user 20 Oktober 2026);
  * - required(): what Decimation's UpdateChecker.isUpdateRequired answers (tools/patches/PatchNoUpdate,
- *   v2): true once a newer release is known, so its menu shows "Update"; its update page is replaced by
- *   Decimation's own progress screen (UpdateProgress; UpdateScreen for a failure);
+ *   v2): false, the update is never forced (UpdatePrompt asks); Decimation's update page is replaced by its
+ *   own progress screen (UpdateProgress; UpdateScreen for a failure, with the download page);
  * - download(): the asset into "<jar>.download" beside the running jar with progress, checked against
  *   GitHub's sha256 (or the size), then staged; the swap (UpdateSwap, its own process) runs when the
  *   game closes ("Quit game" or later), because a loaded jar cannot be replaced on Windows.
@@ -71,11 +71,24 @@ public final class Updater
         cache = new File(configDir, "deciworldgen_update_cache.json");
     }
 
-    /** True when a newer release is known (or downloaded and waiting for a restart). */
+    /**
+     * What Decimation's UpdateChecker.isUpdateRequired answers (tools/patches/PatchNoUpdate): false since 20 Oktober 2026
+     * (user: "dont force user to update their version"). While it was true, Decimation's menu put Update in Play's and in
+     * Resume Game's place and Play opened the update. The player decides now: UpdatePrompt asks once a launch, and
+     * Settings / View Updates and the Updates news panel keep the update one click away.
+     */
     public static boolean required()
     {
-        State s = state;
-        return s == State.AVAILABLE || s == State.DOWNLOADING || s == State.READY || s == State.FAILED && latest != null;
+        return false;
+    }
+
+    /**
+     * Whether this game can put a new jar in place itself (its jar was found). Where it cannot, the player gets the
+     * release page to download the jar by hand (UpdatePrompt, UpdateScreen). Dev tests: -Ddeciworldgen.update.noswap.
+     */
+    public static boolean canSwap()
+    {
+        return target() != null && !Boolean.getBoolean("deciworldgen.update.noswap");
     }
 
     public static State state() { return state; }

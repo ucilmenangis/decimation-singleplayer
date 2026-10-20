@@ -696,6 +696,48 @@ public final class Deci
         return net.decimation.mod.common.utils.h.gI();
     }
 
+    /**
+     * Decimation's question box (ConfirmScreen deci.d.s) over `parent`: the lines centred in a dark box, the left button
+     * (red, id 10) and the right one (id 11). A click or a click outside the box returns to `parent`; catch the buttons
+     * with Forge's ActionPerformedEvent.Pre. `kind` goes back only to a parent that is an IPanelCallback (deci.d.t).
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static net.minecraft.client.gui.GuiScreen confirm(int kind, net.minecraft.client.gui.GuiScreen parent, String[] lines,
+                                                             String left, String right)
+    {
+        deci.d.s box = new deci.d.s(deci.a.b.a(), kind, parent).b(lines);
+        box.c(left, right);
+        return box;
+    }
+
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean isConfirm(net.minecraft.client.gui.GuiScreen s)
+    {
+        return s instanceof deci.d.s;
+    }
+
+    /** The lines of a question box (tests). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static java.util.List<String> confirmLines(net.minecraft.client.gui.GuiScreen s)
+    {
+        return s instanceof deci.d.s && ((deci.d.s) s).go != null ? java.util.Arrays.asList(((deci.d.s) s).go)
+                                                                  : java.util.Collections.<String>emptyList();
+    }
+
+    /** Decimation's update page (GuiMenuUpdates deci.i.l); UpdateProgress opens the progress screen in its place. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static net.minecraft.client.gui.GuiScreen updatesPage()
+    {
+        return new deci.i.l(deci.a.b.a());
+    }
+
+    /** Decimation's Settings page (GuiMenuOptions deci.i.f; its View Updates button is 1000). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static net.minecraft.client.gui.GuiScreen optionsMenu(net.minecraft.client.gui.GuiScreen parent)
+    {
+        return new deci.i.f(deci.a.b.a(), parent, net.minecraft.client.Minecraft.getMinecraft().gameSettings);
+    }
+
     public static void setSessionValid(boolean valid)
     {
         deci.b.i.bv = valid;

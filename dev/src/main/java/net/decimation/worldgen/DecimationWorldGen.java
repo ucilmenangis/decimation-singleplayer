@@ -162,7 +162,7 @@ public class DecimationWorldGen
             new net.decimation.fixes.NpcEgg(npcLoadouts), "npc_egg");
         // shared core (docs/systems_plan.md section 2): the world's day and its events, our areas
         configDir = event.getModConfigurationDirectory();
-        // auto update from our GitHub releases (fixes/Updater): Decimation's "Update" button opens ours
+        // auto update from our GitHub releases (fixes/Updater): Decimation's update page opens ours
         net.decimation.fixes.Updater.configure(configDir);
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
@@ -176,6 +176,10 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(news);
             // "Continue" under Play: the last played world in one click
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.MenuContinue());
+            // a newer release: the menu asks Update or Later (never forced; the release page where it cannot swap)
+            net.decimation.fixes.UpdatePrompt prompt = new net.decimation.fixes.UpdatePrompt();
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(prompt);
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(prompt);
             // Decimation's HUD needs the menu's player preview (bug.md): made if a world was reached without the menu
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.HudGuard());
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunUseKey()); // open corpses with a gun in hand
@@ -295,7 +299,7 @@ public class DecimationWorldGen
         net.decimation.fixes.Protection.load(configDir);
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
-            net.decimation.fixes.Updater.check();     // the menu shows "Update" once a newer release is known
+            net.decimation.fixes.Updater.check();     // the menu asks once a newer release is known (UpdatePrompt)
             net.decimation.fixes.GlStackGuard.install(); // Decimation's renderers left GL matrices pushed (bug.md)
             net.decimation.fixes.HumanLayers.install(); // NPC looks drawn from one picture, not seven layers
             net.decimation.fixes.ModelWarmup.install(); // NPC textures and gear models loaded before their first draw

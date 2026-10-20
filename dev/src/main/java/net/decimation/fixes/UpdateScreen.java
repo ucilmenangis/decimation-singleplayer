@@ -5,12 +5,13 @@ import net.minecraft.client.gui.GuiScreen;
 
 /**
  * Our own update screen, since v0.64.7 only for what Decimation's progress screen cannot say (UpdateProgress opens it):
- * a check that found nothing yet, or a failed download with its reason, "Try again" / "Back". It still shows a bar and
+ * a check that found nothing yet, or a failed download with its reason, "Try again" / "Download page" / "Back" (user,
+ * 20 Oktober 2026: where the updater cannot do it, a link to download the new jar). It still shows a bar and
  * "Quit game" / "Later" if a download runs or is ready while it is open. Client only.
  */
 public class UpdateScreen extends GuiScreen
 {
-    private static final int QUIT = 1, LATER = 2, RETRY = 3, BACK = 4;
+    private static final int QUIT = 1, LATER = 2, RETRY = 3, BACK = 4, PAGE = 5;
     private Updater.State shown;
 
     public void initGui()
@@ -27,22 +28,20 @@ public class UpdateScreen extends GuiScreen
     {
         buttonList.clear();
         Updater.State s = Updater.state();
-        int y = height / 2 + 40;
-        if (s == Updater.State.READY)
+        String[] labels = UpdatePrompt.screenLabels(s);
+        int y = height / 2 + 40, x = width / 2 - labels.length * 52 + 2;
+        for (String label : labels)
         {
-            buttonList.add(new GuiButton(QUIT, width / 2 - 102, y, 100, 20, "Quit game"));
-            buttonList.add(new GuiButton(LATER, width / 2 + 2, y, 100, 20, "Later"));
-        }
-        else if (s == Updater.State.FAILED)
-        {
-            buttonList.add(new GuiButton(RETRY, width / 2 - 102, y, 100, 20, "Try again"));
-            buttonList.add(new GuiButton(BACK, width / 2 + 2, y, 100, 20, "Back"));
-        }
-        else if (s != Updater.State.DOWNLOADING)
-        {
-            buttonList.add(new GuiButton(BACK, width / 2 - 50, y, 100, 20, "Back"));
+            buttonList.add(new GuiButton(id(label), x, y, 100, 20, label));
+            x += 104;
         }
         shown = s;
+    }
+
+    private static int id(String label)
+    {
+        return "Quit game".equals(label) ? QUIT : "Later".equals(label) ? LATER : "Try again".equals(label) ? RETRY
+             : "Download page".equals(label) ? PAGE : BACK;
     }
 
     public void updateScreen()
@@ -64,6 +63,9 @@ public class UpdateScreen extends GuiScreen
                 Updater.download();
                 buttons();
                 break;
+            case PAGE:
+                UpdatePrompt.open(MenuNews.updateUrl());    // the release's page: download the jar by hand
+                break;
             default:
                 mc.displayGuiScreen(Deci.homeMenu());
         }
@@ -81,7 +83,7 @@ public class UpdateScreen extends GuiScreen
     {
         drawDefaultBackground();
         Updater.State s = Updater.state();
-        String title = Updater.latest() == null ? "Decimation update" : "Decimation update " + Updater.latest();
+        String title = Updater.latest() == null ? "DeciRemnant update" : "DeciRemnant update " + Updater.latest();
         drawCenteredString(fontRendererObj, title, width / 2, height / 2 - 50, 0xFFFFFF);
         String line;
         switch (s)
