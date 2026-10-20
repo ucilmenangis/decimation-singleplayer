@@ -165,7 +165,19 @@ public class MainMenuTest extends DevTestMode
                 // each detail popup (docs/main_menu.md 2h): what a click on its panel does, its slides, arrows and Close
                 if (ticks == 1)
                 {
-                    Deci.openNewsPanel(home, POPUPS[popup]);
+                    // a real click on the panel (where MenuNews puts it), through Decimation's loop over its panels
+                    int i = POPUPS[popup];
+                    int px = home.width / 2 - 173 + 104 + i % 2 * 123, py = i < 2 ? 47 : 120;
+                    try
+                    {
+                        home.drawScreen(px + 40, py + 30, 0);   // the mouse over it: ArticlePanel takes a click only when hovered
+                        DevTestUtil.clickAt(home, px + 40, py + 30);
+                    }
+                    catch (RuntimeException ex)
+                    {
+                        DevTestResults.check(name(), POPUP_WANT[popup][0] + " panel click", ex.getCause() == null ? ex.toString()
+                                             : ex.getCause().toString(), false, "the popup opens, no exception");
+                    }
                     return true;
                 }
                 if (ticks < 30)

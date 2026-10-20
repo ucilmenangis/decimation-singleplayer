@@ -154,6 +154,41 @@ public final class DevTestUtil
         throw new IllegalStateException("no mouseClicked on " + screen.getClass());
     }
 
+    /**
+     * A real left click at a point of the screen (GuiScreen.mouseClicked, func_73864_a in the shipped game), the way a
+     * mouse reaches Decimation's panels: inside DeciScreen.mouseClicked's loop over them (bug.md "Clicking a news popup
+     * crashed the game": a shortcut past that loop hid the crash).
+     */
+    public static void clickAt(net.minecraft.client.gui.GuiScreen screen, int x, int y)
+    {
+        for (Class<?> c = screen.getClass(); c != null; c = c.getSuperclass())
+        {
+            for (String name : new String[] {"mouseClicked", "func_73864_a"})
+            {
+                try
+                {
+                    java.lang.reflect.Method m = c.getDeclaredMethod(name, int.class, int.class, int.class);
+                    m.setAccessible(true);
+                    m.invoke(screen, x, y, 0);
+                    return;
+                }
+                catch (NoSuchMethodException e)
+                {
+                    // the other name, then the parent class
+                }
+                catch (java.lang.reflect.InvocationTargetException e)
+                {
+                    throw new IllegalStateException("click at " + x + "," + y, e.getCause());
+                }
+                catch (ReflectiveOperationException e)
+                {
+                    throw new IllegalStateException("click at " + x + "," + y, e);
+                }
+            }
+        }
+        throw new IllegalStateException("no mouseClicked on " + screen.getClass());
+    }
+
     /** True when the class file of `cls` (e.g. "deci/d/p") as the game loads it contains `text` (UTF-8). */
     public static boolean classHas(String cls, String text)
     {

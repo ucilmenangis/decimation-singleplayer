@@ -37,16 +37,30 @@ public class MenuDetail extends GuiScreen
         this.detail = detail;
     }
 
-    /** Opens popup `id` over the open screen; false for an id MenuDetails does not know. */
+    /**
+     * Opens popup `id` over the open screen on the next tick; false for an id MenuDetails does not know. A news panel's
+     * click arrives inside DeciScreen.mouseClicked's loop over the menu's panels: changing screens there let the menu
+     * re-init and refill that list mid-loop (bug.md "Clicking a news popup crashed the game").
+     */
     public static boolean open(String id)
     {
-        MenuDetails.Detail d = MenuDetails.get(id);
+        final MenuDetails.Detail d = MenuDetails.get(id);
         if (d == null)
         {
             return false;
         }
-        Minecraft mc = Minecraft.getMinecraft();
-        mc.displayGuiScreen(new MenuDetail(mc.currentScreen, d));
+        final Minecraft mc = Minecraft.getMinecraft();
+        final GuiScreen under = mc.currentScreen;
+        mc.func_152344_a(new Runnable()
+        {
+            public void run()
+            {
+                if (mc.currentScreen == under)
+                {
+                    mc.displayGuiScreen(new MenuDetail(under, d));
+                }
+            }
+        });
         return true;
     }
 
@@ -62,9 +76,9 @@ public class MenuDetail extends GuiScreen
 
     public void initGui()
     {
-        if (parent != null)
+        if (parent != null && (parent.width != width || parent.height != height))
         {
-            parent.setWorldAndResolution(mc, width, height); // the menu behind follows a new window size
+            parent.setWorldAndResolution(mc, width, height); // a new window size: the menu behind follows it (never on open)
         }
         buttonList.clear();
         boolean pictures = detail.slides.length > 0;
