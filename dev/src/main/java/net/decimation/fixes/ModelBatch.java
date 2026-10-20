@@ -26,8 +26,9 @@ public final class ModelBatch
     public static boolean enabled = !"false".equals(System.getProperty("deciworldgen.modelbatch"));
     /** True while a part's drawing is captured (read by the patched BModelQuad and BModelPart). */
     public static boolean capturing;
-    /** For tests: lists made, quads in them, parts that drew one. */
-    public static long built, quads, drawn;
+    /** For tests: lists made, quads in them, parts that drew one, time in captures (begin to end). */
+    public static long built, quads, drawn, buildNanos;
+    private static long started;
 
     private static FloatBuffer gl;                       // made on first use (unit tests have no LWJGL)
     private static final float[] base = new float[16], inv = new float[16], cur = new float[16], loc = new float[16];
@@ -42,9 +43,24 @@ public final class ModelBatch
     {
     }
 
+    /** Dev tests: when set, who asked for the next captures (call stacks of the first few, shortened). */
+    public static java.util.List<String> callers;
+
     /** Start capturing (PatchModelBatch: before Decimation's compile runs a second time). */
     public static void begin()
     {
+        if (callers != null && callers.size() < 6)
+        {
+            StringBuilder s = new StringBuilder();
+            StackTraceElement[] st = new Throwable().getStackTrace();
+            for (int i = 2; i < Math.min(st.length, 14); i++)
+            {
+                s.append(i == 2 ? "" : " < ").append(st[i].getClassName().replaceAll(".*\\.", "")).append('.')
+                 .append(st[i].getMethodName());
+            }
+            callers.add(s.toString());
+        }
+        started = System.nanoTime();
         capturing = true;
         broken = false;
         n = 0;
@@ -140,6 +156,13 @@ public final class ModelBatch
      * keeps Decimation's lists). Matrices a hidden part pushed without popping (BModelPart.render) are popped.
      */
     public static int end()
+    {
+        int list = endList();
+        buildNanos += System.nanoTime() - started;
+        return list;
+    }
+
+    private static int endList()
     {
         capturing = false;
         while (GL11.glGetInteger(GL11.GL_MODELVIEW_STACK_DEPTH) > depth)

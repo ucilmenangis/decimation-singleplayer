@@ -84,6 +84,13 @@ public class SafezoneSites
     private final Map<String, Long> missingSince = new HashMap<String, Long>();
     private int tick;
 
+    /** Dev tests: true holds the keeper (nobody spawned or put back) while the land around a site is made. */
+    public static volatile boolean hold;
+    /** The last first visit fill (dev test refugevisit): residents spawned, time, world tick, and per kind {count, ns}. */
+    public static volatile int lastFillSpawned;
+    public static volatile long lastFillNanos, lastFillTick = -1;
+    public static final Map<String, long[]> lastFillKinds = new java.util.LinkedHashMap<String, long[]>();
+
     /** Called by Slices when a resident plan's first slice is written. */
     public static synchronized void add(String id, int x0, int y0, int z0, int x1, int y1, int z1, List<Post> posts)
     {
@@ -203,7 +210,7 @@ public class SafezoneSites
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event)
     {
-        if (event.phase != TickEvent.Phase.END || ++tick % EVERY != 0)
+        if (event.phase != TickEvent.Phase.END || ++tick % EVERY != 0 || hold)
         {
             return;
         }
@@ -226,6 +233,8 @@ public class SafezoneSites
     /** Spawns the missing residents of a site that may be filled now. */
     void keep(World w, Site s)
     {
+        long t0 = System.nanoTime();
+        Map<String, long[]> kinds = new java.util.LinkedHashMap<String, long[]>();
         Set<Integer> present = new HashSet<Integer>();
         for (Object o : w.loadedEntityList)
         {
@@ -263,7 +272,20 @@ public class SafezoneSites
             boolean wiped = cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isServer()
                 && (p.kind.startsWith("trader:") || p.kind.equals("guard"));
             boolean due = !s.filled || wiped || now - since >= RESPAWN && nearest(w, p.x, p.z) > UNSEEN;
-            if (due && spawn(w, s, i) != null)
+            if (!due)
+            {
+                continue;
+            }
+            long k0 = System.nanoTime();
+            EntityLiving e = spawn(w, s, i);
+            long[] k = kinds.get(p.kind);
+            if (k == null)
+            {
+                kinds.put(p.kind, k = new long[2]);
+            }
+            k[0]++;
+            k[1] += System.nanoTime() - k0;
+            if (e != null)
             {
                 missingSince.remove(key);
                 spawned++;
@@ -276,7 +298,17 @@ public class SafezoneSites
                 s.filled = true;
                 dirty = true;
             }
-            FMLLog.info("[%s] safezone site %s filled: %d residents spawned", DecimationWorldGen.MODID, s.id, spawned);
+            long ns = System.nanoTime() - t0;
+            synchronized (lastFillKinds)
+            {
+                lastFillKinds.clear();
+                lastFillKinds.putAll(kinds);
+            }
+            lastFillSpawned = spawned;
+            lastFillNanos = ns;
+            lastFillTick = now;
+            FMLLog.info("[%s] safezone site %s filled: %d residents spawned in %.1f ms", DecimationWorldGen.MODID, s.id, spawned,
+                        ns / 1e6);
         }
     }
 
@@ -378,6 +410,11 @@ public class SafezoneSites
      * written during population (Slices), so a resident spawned earlier could stand in a tower or on
      * a deck that is not there yet, and a static guard would hang in the air.
      */
+    public static boolean ready(World w, Site s)
+    {
+        return loaded(w, s);
+    }
+
     private static boolean loaded(World w, Site s)
     {
         for (int cx = (s.x0 >> 4) - 1; cx <= (s.x1 >> 4) + 1; cx++)

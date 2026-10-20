@@ -66,8 +66,8 @@ public final class HumanLayers implements IResourceManagerReloadListener
      * test bench turns it on with layers=off, to measure the old drawing).
      */
     public static boolean sightChecks;
-    /** For tests: pictures made, NPC draws with a picture, NPC draws the old way. */
-    public static long built, drawn, oldWay;
+    /** For tests: pictures made, NPC draws with a picture, NPC draws the old way, layer files read, time making pictures. */
+    public static long built, drawn, oldWay, filesRead, makeNanos;
 
     private static final int[] look = new int[8];
     private static final Map<String, Integer> folders = new HashMap<String, Integer>();
@@ -227,6 +227,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
             return null;                              // more looks on screen than slots
         }
         made++;
+        long t0 = System.nanoTime();
         Picture p;
         try
         {
@@ -236,6 +237,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
         {
             p = null;
         }
+        makeNanos += System.nanoTime() - t0;
         if (p == null)
         {
             byLook.put(key, BROKEN);
@@ -245,7 +247,9 @@ public final class HumanLayers implements IResourceManagerReloadListener
         {
             byLook.remove(pick.key);
         }
+        long t1 = System.nanoTime();
         pick.show(p);
+        makeNanos += System.nanoTime() - t1;
         pick.key = key;
         byLook.put(key, pick);
         built++;
@@ -292,6 +296,12 @@ public final class HumanLayers implements IResourceManagerReloadListener
         return new Picture(body.w, body.h, composite(body.argb, layers, body.w, body.h));
     }
 
+    /** Decodes a layer file ahead of its first look (fixes/ModelWarmup; name as "deci:textures/model/..."). */
+    public static void warm(String name)
+    {
+        file(name);
+    }
+
     /** A layer file decoded once (91 in the jar, 8 KB each), null if missing (the old way shows the missing texture). */
     private static Picture file(String name)
     {
@@ -299,6 +309,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
         if (p == null)
         {
             p = MISSING;
+            filesRead++;
             InputStream in = null;
             try
             {

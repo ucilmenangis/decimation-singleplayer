@@ -201,6 +201,21 @@ tasks.matching { it.name == "runServer" || it.name.startsWith("runClient") }.con
     }
 }
 
+// -Pmodelbatch=false / -Phumanlayers=false / -Pwarmup=false (runClient): NPC models and looks drawn Decimation's way
+// (fixes/ModelBatch, fixes/HumanLayers off from the start), no warm up of textures and gear models (fixes/ModelWarmup), to
+// compare first draws (devtest refugevisit -Pwarmup=false)
+tasks.matching { it.name.startsWith("runClient") }.configureEach {
+    if (project.hasProperty("modelbatch")) {
+        jvmArgs("-Ddeciworldgen.modelbatch=" + project.property("modelbatch"))
+    }
+    if (project.hasProperty("humanlayers")) {
+        jvmArgs("-Ddeciworldgen.humanlayers=" + project.property("humanlayers"))
+    }
+    if (project.hasProperty("warmup")) {
+        jvmArgs("-Ddeciworldgen.warmup=" + project.property("warmup"))
+    }
+}
+
 // `-Pdress` (runServer / runClient): city dressing on (city/Dress.ON, docs/city_dressing.md)
 tasks.matching { it.name == "runServer" || it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("dress")) {

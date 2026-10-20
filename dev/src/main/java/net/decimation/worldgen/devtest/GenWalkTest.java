@@ -254,7 +254,7 @@ public class GenWalkTest extends DevTestMode
     }
 
     /** The chunk is in memory or saved (never opens a region file that does not exist: opening one creates it). */
-    private static boolean generated(WorldServer w, AnvilChunkLoader loader, int x, int z)
+    static boolean generated(WorldServer w, AnvilChunkLoader loader, int x, int z)
     {
         if (w.theChunkProviderServer.chunkExists(x, z))
         {

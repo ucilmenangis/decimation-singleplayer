@@ -1879,4 +1879,99 @@ public final class Deci
     {
         return stack != null && stack.getItem() instanceof deci.ay.i ? ((deci.ay.i) stack.getItem()).M(stack) : 0;
     }
+
+    /**
+     * Loads a gear model Decimation loads only at its first draw (ModelHuman.renderHuman, ModelDeciPlayer), set as those
+     * draws set it: a mask's, vest's or backpack's model (item.model: models/armor/mask|vest/<name>.bmodel,
+     * models/backpacks/<name>.bmodel), an armour piece's (item.armor: a DeciPlayerModel of the human model holding
+     * models/armor/full/<name>.bmodel; every draw sets its self and type again). True when it loaded one. Client thread.
+     */
+    public static boolean loadGearModel(Object item, net.minecraft.client.model.ModelBiped human)
+    {
+        if (item instanceof net.decimation.mod.common.item.armor.ItemMaskDeci)
+        {
+            net.decimation.mod.common.item.armor.ItemMaskDeci m = (net.decimation.mod.common.item.armor.ItemMaskDeci) item;
+            return m.model == null && (m.model = gearModel("models/armor/mask/" + m.modelName)) != null;
+        }
+        if (item instanceof net.decimation.mod.common.item.armor.ItemVestDeci)
+        {
+            net.decimation.mod.common.item.armor.ItemVestDeci v = (net.decimation.mod.common.item.armor.ItemVestDeci) item;
+            return v.model == null && (v.model = gearModel("models/armor/vest/" + v.modelName)) != null;
+        }
+        if (item instanceof deci.av.a)
+        {
+            deci.av.a b = (deci.av.a) item;
+            return b.model == null && (b.model = gearModel("models/backpacks/" + b.modelName)) != null;
+        }
+        if (item instanceof net.decimation.mod.common.item.armor.ItemArmorDeci && human != null)
+        {
+            net.decimation.mod.common.item.armor.ItemArmorDeci a = (net.decimation.mod.common.item.armor.ItemArmorDeci) item;
+            if (a.modelName != null && (a.armor == null || a.armor.kw == null || !a.armor.kw.path.contains(a.modelName)))
+            {
+                deci.n.f model = gearModel("models/armor/full/" + a.modelName);
+                if (model != null)
+                {
+                    a.armor = new deci.n.e(human);
+                    a.armor.kw = model;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** deci:<path>.bmodel loaded by BModelLoader when the jar has it (the loader prints a stack trace for a missing one). */
+    private static deci.n.f gearModel(String path)
+    {
+        net.minecraft.util.ResourceLocation r = new net.minecraft.util.ResourceLocation("deci", path + ".bmodel");
+        try
+        {
+            net.minecraft.client.Minecraft.getMinecraft().getResourceManager().getResource(r).getInputStream().close();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        return deci.n.g.a(r);
+    }
+
+    /** The model human NPCs are drawn with (ModelHuman deci.q.h, the "Human" renderer's main model), or null. */
+    public static net.minecraft.client.model.ModelBiped humanModel()
+    {
+        try
+        {
+            @SuppressWarnings("unchecked")
+            Class<? extends net.minecraft.entity.Entity> c = (Class<? extends net.minecraft.entity.Entity>)
+                net.minecraft.entity.EntityList.stringToClassMapping.get("Human");
+            Object r = net.minecraft.client.renderer.entity.RenderManager.instance.getEntityClassRenderObject(c);
+            Object m = cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(
+                net.minecraft.client.renderer.entity.RendererLivingEntity.class,
+                (net.minecraft.client.renderer.entity.RendererLivingEntity) r, "mainModel", "field_77045_g");
+            return m instanceof deci.q.h ? (net.minecraft.client.model.ModelBiped) m : null;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    /** The jar Decimation's classes and assets are read from (the release's one jar, the dev deobf jar), or null. */
+    public static java.io.File decimationJar()
+    {
+        try
+        {
+            java.net.URL u = deci.n.f.class.getProtectionDomain().getCodeSource().getLocation();
+            String s = u.toString();
+            if (s.startsWith("jar:"))
+            {
+                s = s.substring(4, s.indexOf("!/") > 0 ? s.indexOf("!/") : s.length());
+            }
+            java.io.File f = new java.io.File(new java.net.URI(s));
+            return f.isFile() ? f : null;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 }
