@@ -176,6 +176,10 @@ public class DecimationWorldGen
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(news);
             // "Continue" under Play: the last played world in one click
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.MenuContinue());
+            // Server Status rows from real sources: Global Server, Community Server, Download (fixes/MenuStatus)
+            net.decimation.fixes.MenuStatus status = new net.decimation.fixes.MenuStatus();
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(status);
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(status);
             // a newer release: the menu asks Update or Later (never forced; the release page where it cannot swap)
             net.decimation.fixes.UpdatePrompt prompt = new net.decimation.fixes.UpdatePrompt();
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(prompt);

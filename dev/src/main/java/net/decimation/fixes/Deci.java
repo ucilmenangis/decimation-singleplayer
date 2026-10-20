@@ -1002,6 +1002,28 @@ public final class Deci
         return out;
     }
 
+    /** True for Decimation's Server Status page (GuiMenuServerStatus deci.i.h). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean isStatusPage(net.minecraft.client.gui.GuiScreen screen)
+    {
+        return screen instanceof deci.i.h;
+    }
+
+    /**
+     * Sets row `row` (0 to 3) of the Server Status page to state `state` in the order of ServerPinger's PingStatus
+     * (deci.l.a$a: 0 Pinging..., 1 Offline, 2 Online, 3 its Unknown, which PatchMenuTexts draws "Coming soon").
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void setStatus(net.minecraft.client.gui.GuiScreen screen, int row, int state)
+    {
+        if (screen instanceof deci.i.h)
+        {
+            deci.i.h page = (deci.i.h) screen;
+            deci.l.a[] rows = {page.iS, page.iT, page.iU, page.iV};
+            rows[row].jv = deci.l.a.a.values()[state];
+        }
+    }
+
     /** Every toast notification on screen or waiting (ToastNotification deci.b.b: current S, queue R, lines W), oldest first. */
     @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
     public static java.util.List<String> toasts()

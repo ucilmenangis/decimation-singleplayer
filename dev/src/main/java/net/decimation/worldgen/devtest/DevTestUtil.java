@@ -123,6 +123,37 @@ public final class DevTestUtil
         throw new IllegalStateException("no actionPerformed on " + screen.getClass());
     }
 
+    /**
+     * A real left click on the button's middle (GuiScreen.mouseClicked, func_73864_a in the shipped game): unlike press it
+     * goes through Forge's ActionPerformedEvent, so handlers of other mods see it.
+     */
+    public static void click(net.minecraft.client.gui.GuiScreen screen, net.minecraft.client.gui.GuiButton b)
+    {
+        int x = b.xPosition + b.width / 2, y = b.yPosition + b.height / 2;
+        for (Class<?> c = screen.getClass(); c != null; c = c.getSuperclass())
+        {
+            for (String name : new String[] {"mouseClicked", "func_73864_a"})
+            {
+                try
+                {
+                    java.lang.reflect.Method m = c.getDeclaredMethod(name, int.class, int.class, int.class);
+                    m.setAccessible(true);
+                    m.invoke(screen, x, y, 0);
+                    return;
+                }
+                catch (NoSuchMethodException e)
+                {
+                    // the other name, then the parent class
+                }
+                catch (ReflectiveOperationException e)
+                {
+                    throw new IllegalStateException("click " + b.displayString, e);
+                }
+            }
+        }
+        throw new IllegalStateException("no mouseClicked on " + screen.getClass());
+    }
+
     /** True when the class file of `cls` (e.g. "deci/d/p") as the game loads it contains `text` (UTF-8). */
     public static boolean classHas(String cls, String text)
     {

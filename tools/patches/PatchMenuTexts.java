@@ -29,6 +29,8 @@ import org.objectweb.asm.Opcodes;
  * - WindowSetup deci.m.b: the window title "Minecraft - Decimation v1.21.10f" becomes MenuTexts.windowTitle();
  * - GuiMenuServerStatus deci.i.h: the EU, US and Network rows become Global Server, Community Server and Download on
  *   never resolving .invalid hosts, so they show Offline at once (their pinger has no timeout: a dead host took 75 s);
+ * - ServerPinger deci.l.a: its Unknown state reads "Coming soon" (fixes/MenuStatus sets the first three rows from real
+ *   sources: Global Server from the official list, Community Server from the relay, Download from GitHub);
  * - ListElement deci.d.p: a row that cannot be reached says "Coming soon" (gold), without the "?/?" drawn over it and
  *   without the " - 0ms" of a ping that never happened; GuiMenuOfficialServers deci.i.i: "Official DeciRemnant Server",
  *   the Community tab's tooltip "Coming soon"; GuiMenuBase deci.i.a: its toast "Community server coming soon";
@@ -47,7 +49,7 @@ import org.objectweb.asm.Opcodes;
  *   java -cp $ASM:build/patch_menutexts PatchMenuTexts dist/Decimation.jar build/patch_menutexts/out
  *   (cd build/patch_menutexts/out && zip <jar> deci/i/a.class deci/i/e.class deci/i/g.class deci/i/i.class \
  *        deci/i/j.class deci/i/k.class deci/i/l.class deci/d/k.class deci/b/c.class deci/m/b.class \
- *        deci/i/h.class deci/d/p.class)
+ *        deci/i/h.class deci/d/p.class deci/b/b.class deci/l/a.class)
  */
 public class PatchMenuTexts
 {
@@ -104,6 +106,11 @@ public class PatchMenuTexts
         row.put("?/?", "");      // drawn over the state text when a row has no player count
         row.put(" - 0ms", "");   // a ping that never happened
         plan.put("deci/d/p", row);
+        // user, 20 Oktober 2026: Server Status rows from real sources (fixes/MenuStatus); a row of a thing that does not
+        // run yet is set to ServerPinger's UNKNOWN state, drawn as "Coming soon"
+        Map<String, Object> pinger = new HashMap<String, Object>();
+        pinger.put("Unknown", "§6Coming soon");
+        plan.put("deci/l/a", pinger);
         plan.get("deci/i/i").put("Official Decimation Server ", "Official DeciRemnant Server ");
         plan.get("deci/i/i").put("Offline", "§6Coming soon");
         Map<String, Object> popup = plan.get("deci/d/k");

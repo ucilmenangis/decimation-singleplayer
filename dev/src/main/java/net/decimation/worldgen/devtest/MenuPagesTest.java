@@ -17,8 +17,8 @@ import net.minecraft.util.ResourceLocation;
  * the My Community popup (My Supporter, Website, Forums, GitHub; My Supporter tells a player without it that it is for
  * supporters: user, 20 Oktober 2026, "rewind it to supporter", it is for people who donate), the official
  * server list (Bukovka and Chernarus, both coming soon, players online coming soon, eight pictures per map), the
- * Community tab (a toast: community server coming soon) and the server status page (Global Server, Community Server and
- * Download offline). Texts no check can click (the profile card, the lounge title) are checked in the loaded classes.
+ * Community tab (a toast: community server coming soon) and the server status page (rows from real sources: Global
+ * Server coming soon, Community Server the relay, Download the GitHub release link). Texts no check can click (the profile card, the lounge title) are checked in the loaded classes.
  * Leaves the world like mainmenu: run it last. Shots menupages_community, menupages_official, menupages_status.
  */
 public class MenuPagesTest extends DevTestMode
@@ -31,10 +31,12 @@ public class MenuPagesTest extends DevTestMode
             "Forums | Our Official BoehMod Forums!",
             "GitHub | Source code, issues, all releases");
     private static final List<String> ROWS = Arrays.asList("Bukovka | offline | bukovka", "Chernarus | offline | chernarus");
+    /** Rows from real sources (fixes/MenuStatus): the official list holds only coming soon rows; Community Server is
+     *  the relay where this line has one (main), else coming soon; Download is the GitHub release link. */
     private static final String[] STATUS = {
-            "Global Server | Official DeciRemnant server | Offline",
-            "Community Server | Servers run by players | Offline",
-            "Download | DeciRemnant download server | Offline"};
+            "Global Server | Official DeciRemnant server | Coming soon",
+            "Community Server | Servers run by players | ",
+            "Download | DeciRemnant download server | Online"};
     private static final int MY_COMMUNITY = 27, PLAY = 9, COMMUNITY_TAB = 13, SERVER_STATUS = 11;
 
     private int step, ticks;
@@ -157,12 +159,14 @@ public class MenuPagesTest extends DevTestMode
                 {
                     return true; // each row pings its host on its own thread (a host that answers nothing: about 75 s)
                 }
+                String[] want = STATUS.clone();
+                want[1] += net.decimation.fixes.MenuStatus.community != null ? "Online" : "Coming soon";
                 boolean rowsOk = status.size() == 4;
                 for (int i = 0; rowsOk && i < 3; i++)
                 {
-                    rowsOk = status.get(i).equals(STATUS[i]);
+                    rowsOk = status.get(i).equals(want[i]);
                 }
-                DevTestResults.check(name(), "status rows", status, rowsOk, "Global Server, Community Server, Download: Offline");
+                DevTestResults.check(name(), "status rows", status, rowsOk, want[0] + ", " + want[1] + ", " + want[2]);
                 String site = status.size() == 4 ? status.get(3) : "";
                 DevTestResults.check(name(), "website row", site, site.equals("Website | Official DeciRemnant Website | Online"),
                                      "our website, Online");

@@ -19,6 +19,7 @@ public final class MenuServers
 {
     /** Name on the row and the key of its map's pictures, in list order. */
     static final String[][] ROWS = {{"Bukovka", "bukovka"}, {"Chernarus", "chernarus"}};
+    private static final int PORT = 25565;
 
     private MenuServers()
     {
@@ -30,9 +31,24 @@ public final class MenuServers
         List<Object> rows = new ArrayList<Object>();
         for (String[] row : ROWS)
         {
-            rows.add(Deci.officialServer(row[1].toUpperCase(), row[0], row[1] + ".deciremnant.invalid", 25565,
-                                         "§aOfficial", row[1]));
+            rows.add(Deci.officialServer(row[1].toUpperCase(), row[0], host(row), PORT, "§aOfficial", row[1]));
         }
         return rows;
+    }
+
+    /** Each row's "host:port" (MenuStatus: the Server Status page's Global Server row follows this list). */
+    public static List<String> hosts()
+    {
+        List<String> out = new ArrayList<String>();
+        for (String[] row : ROWS)
+        {
+            out.add(host(row) + ":" + PORT);
+        }
+        return out;
+    }
+
+    private static String host(String[] row)
+    {
+        return row[1] + ".deciremnant.invalid";
     }
 }
