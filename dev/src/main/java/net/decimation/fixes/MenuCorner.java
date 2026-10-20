@@ -34,9 +34,9 @@ public class MenuCorner
     {
         if (Deci.isMenuPage(e.gui))
         {
-            // the art's words (JOIN THE REMNANT, the address): from 380 / 800 and 550 / 800 of the 150 x 150 square;
-            // not the soldier, which small windows draw near the news panels
-            e.buttonList.add(new Hidden(e.gui.width - 79, e.gui.height - 47, 79, 47));
+            // the art's stack of words (title, JOIN THE REMNANT, the address): x 463 .. 793 and y 452 .. 630 of the
+            // 800 square drawn 150 x 150 in the corner (menu_assets.py corner(), FURY's banner layout)
+            e.buttonList.add(new Hidden(e.gui.width - 64, e.gui.height - 66, 63, 35));
         }
     }
 

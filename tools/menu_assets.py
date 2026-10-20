@@ -62,6 +62,8 @@ DIM, COLOUR = 0.62, 0.8  # brightness and saturation of the backgrounds: the men
 NEWS = {"news_github": "github", "news_update": "update", "news_website": "website", "news_coming": "coming"}
 NEWS_SRC = os.path.join(ROOT, "docs", "shots", "main_menu_v0.62.9", "news_src")
 NEWS_SIZE = (464, 200)
+# a news picture from elsewhere than news_src (relative to docs/shots): the Multiplayer panel shows the game, not its screens
+NEWS_PATHS = {"news_multiplayer": "main_menu_v0.65.0/mp_src/together.png"}
 # official server list map -> its eight picture slots, each a picture number in MAP_SRC/<map>_<n>.jpg
 MAPS = {"chernarus": [1, 2, 3, 4, 5, 1, 2, 3]}
 MAP_SRC = os.path.join(ROOT, "docs", "shots", "main_menu_v0.64.0", "chernarus_src")
@@ -69,10 +71,12 @@ MAP_SIZE = (960, 540)
 # detail popup slide -> its source (relative to docs/shots) and the box to cut from it first (None: the whole picture;
 # "fit": a picture wider than 16:9 kept whole on a dark band, as the Community row is)
 DETAILS = {
-    "detail_multiplayer0": ("hosting_v0.64.9/host_page.png", (80, 90, 774, 480)),      # the Host Online page
-    "detail_multiplayer1": ("main_menu_v0.62.9/news_src/multiplayer.png", "fit"),      # a hosted world listed
-    "detail_multiplayer2": ("site_v0.62.9/site_refuge.png", None),                     # a world of ours
-    "detail_coming0": ("main_menu_v0.62.9/news_src/multiplayer.png", "fit"),
+    # Multiplayer: scenes of the game with two or three people in them, not the new screens (user, 21 Oktober 2026:
+    # "show 2-3 mob in-game as preview so you dont expose the new feat at all"; tools/site/mpshots.tsv)
+    "detail_multiplayer0": ("main_menu_v0.65.0/mp_src/fight.png", None),               # side by side against infected
+    "detail_multiplayer1": ("main_menu_v0.65.0/mp_src/together.png", None),            # friends together in a city
+    "detail_multiplayer2": ("main_menu_v0.65.0/mp_src/explore.png", None),             # heading out together
+    "detail_coming0": ("main_menu_v0.65.0/mp_src/together.png", None),
     "detail_coming1": ("site_v0.62.9/site_city.png", None),
 }
 DETAIL_SIZE = (640, 360)
@@ -89,56 +93,123 @@ LANG = "assets/deci/lang/en_US.lang"
 
 
 def corner():
-    """Our corner art in place of BoehMod's FURY store advert (drawn 150 x 150 at the bottom right; donor_rank_1 pulses
-    over donor_rank_0). FURY studied (docs/main_menu.md 2h): a soldier with glowing goggles and a rifle on a red ink
-    splash fading toward the top left, a big title, a call to action and an address, the words in the pulsing layer.
-    Ours (user, 21 Oktober 2026: "yeah", Discord now): an elite soldier of our game (dev test cornerart, corner_src),
-    our logo, "JOIN THE REMNANT" and our Discord; a click opens it (fixes/MenuCorner)."""
+    """Our corner art in place of BoehMod's FURY store advert (drawn 150 x 150 GUI units at the bottom right; donor_rank_1
+    pulses over donor_rank_0). Learned from FURY detail by detail (docs/main_menu.md 2h; user, 21 Oktober 2026: "learn
+    again from old design detail by detail deeply"): a landscape banner over the bottom half of the square only (FURY's
+    rows 397 .. 800, solid from x 232), dark and opaque, fading out at its top and left; a red smoke band and black
+    splatter behind; a close up soldier (waist up, cut by the bottom edge) on the left with a red rim glow and his
+    rifle toward the words; one tight centred stack of words in FURY's band (x 441 .. 724, y 486 .. 706): the title (our
+    logo, as FURY's brush title), "JOIN THE REMNANT" in white, a small line, the address in red and white; the pulse
+    layer lights only the words. Our soldier: dev test cornerart (corner_src)."""
     import random
-    from PIL import ImageFilter
-    size = 800
-    base = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    ink = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    d = ImageDraw.Draw(ink)
+    from PIL import ImageChops, ImageFilter
+    size, top, left = 800, 400, 60
     rnd = random.Random(21)
-    for i in range(260):                                   # the splash: blots heavier toward the bottom right
-        x, y = rnd.randint(140, size), rnd.randint(260, size)
-        k = min(1.0, max(0.0, (x + y - 520) / 900.0))
-        r = rnd.randint(10, 70) * (0.5 + k)
-        d.ellipse([x - r, y - r, x + r, y + r], fill=(150 + rnd.randint(0, 40), 8, 8, int(235 * k)))
-    for i in range(18):                                    # drips
-        x = rnd.randint(300, size)
-        y0 = rnd.randint(330, 600)
-        d.rectangle([x, y0, x + rnd.randint(3, 8), y0 + rnd.randint(40, 160)], fill=(140, 6, 6, 200))
-    ink = ink.filter(ImageFilter.GaussianBlur(2))
-    base.alpha_composite(ink)
+
+    def fade_mask():
+        m = Image.new("L", (size, size), 0)
+        px = m.load()
+        for y in range(top, size):
+            ty = min(1.0, (y - top) / 80.0)                       # the soft top edge
+            for x in range(left, size):
+                tx = min(1.0, (x - left) / 220.0)                 # the soft left edge
+                px[x, y] = int(255 * ty * tx)
+        return m
+
+    banner = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(banner)
+    for y in range(top, size):                                  # dark, a touch lighter at the top left like FURY's
+        k = (y - top) / float(size - top)
+        c = (int(36 - 28 * k), int(34 - 28 * k), int(38 - 30 * k))
+        d.line([(left, y), (size, y)], fill=c + (255,))
+    smoke = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(smoke)
+    for i in range(26):                                         # the red smoke band behind the soldier and the words
+        x, y = rnd.randint(330, 800), rnd.randint(470, 760)
+        rx, ry = rnd.randint(50, 130), rnd.randint(25, 70)
+        sd.ellipse([x - rx, y - ry, x + rx, y + ry], fill=(200 + rnd.randint(0, 50), 18, 18, rnd.randint(130, 210)))
+    smoke = smoke.filter(ImageFilter.GaussianBlur(18))
+    banner.alpha_composite(smoke)
+    ink = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    idr = ImageDraw.Draw(ink)
+    for i in range(60):                                         # black splatter and drips along the right edge
+        x, y = rnd.randint(640, 800), rnd.randint(430, 800)
+        r = rnd.randint(2, 14) if rnd.random() < 0.8 else rnd.randint(16, 30)
+        idr.ellipse([x - r, y - r, x + r, y + r], fill=(4, 2, 2, 235))
+    for i in range(8):
+        x = rnd.randint(660, 800)
+        y0 = rnd.randint(440, 640)
+        idr.rectangle([x, y0, x + rnd.randint(2, 4), y0 + rnd.randint(30, 110)], fill=(4, 2, 2, 220))
+    for i in range(3):                                          # FURY's thin diagonal streaks
+        x0 = rnd.randint(520, 640)
+        idr.line([(x0, 410), (x0 - 90, 640)], fill=(0, 0, 0, 120), width=2)
+    banner.alpha_composite(ink.filter(ImageFilter.GaussianBlur(0.8)))
+    shade = Image.new("RGBA", (size, size), (0, 0, 0, 0))     # the bottom goes to black
+    shd = ImageDraw.Draw(shade)
+    for y in range(size - 90, size):
+        shd.line([(left, y), (size, y)], fill=(0, 0, 0, int(200 * (y - size + 90) / 90.0)))
+    banner.alpha_composite(shade)
+    # the soldier: a close up, waist up, cut by the banner's bottom edge, a red rim glow
     soldier = Image.open(os.path.join(CORNER_SRC, "soldier.png")).convert("RGBA")
-    sh = 480                                               # low: small windows draw the corner near the news panels
+    soldier = soldier.crop((0, 0, soldier.width, int(soldier.height * 0.70)))  # down to the rifle across his body
+    sh = 352
     soldier = soldier.resize((round(soldier.width * sh / soldier.height), sh), Image.LANCZOS)
-    glow = Image.new("RGBA", soldier.size, (255, 40, 40, 0))
-    glow.putalpha(soldier.split()[3].filter(ImageFilter.GaussianBlur(10)).point(lambda v: int(v * 0.8)))
-    sx, sy = 40, size - sh
-    base.alpha_composite(glow, (sx, sy))
-    base.alpha_composite(soldier, (sx, sy))
+    sx, sy = 196, size - sh + 6                                  # in the banner's solid part, as FURY's (x 232 on)
+    lit = Image.new("RGBA", soldier.size, (200, 20, 20, 0))      # lit red from the smoke, as FURY's soldier is
+    lit.putalpha(soldier.split()[3].point(lambda v: int(v * 0.12)))
+    soldier = Image.alpha_composite(soldier, lit)
+    glow = Image.new("RGBA", soldier.size, (235, 30, 30, 0))
+    glow.putalpha(soldier.split()[3].filter(ImageFilter.GaussianBlur(11)).point(lambda v: min(255, int(v * 2.4))))
+    banner.alpha_composite(glow, (sx, sy))
+    banner.alpha_composite(soldier, (sx, sy))
+    rim = Image.new("RGBA", soldier.size, (255, 60, 60, 0))  # light on his right edge, from the red behind him
+    a = soldier.split()[3]
+    edge = ImageChops.subtract(a, a.filter(ImageFilter.MinFilter(5)))
+    rim.putalpha(edge.point(lambda v: int(v * 0.55)))
+    banner.alpha_composite(rim, (sx, sy))
+    banner.putalpha(ImageChops.multiply(banner.split()[3], fade_mask()))
+    base = banner
+    pulse = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    # the words: one tight stack centred in FURY's band, each line placed by its measured height
     sys.path.insert(0, os.path.join(ROOT, "tools", "site"))
     from export_assets import clear_paper
     logo = clear_paper(Image.open(LOGO_SRC))
     logo = logo.crop(logo.getbbox())
-    lw = 380
-    logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
-    base.alpha_composite(logo, (size - lw - 10, 470))
-    pulse = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    words = [("JOIN THE", 44, (255, 255, 255), 556, True), ("REMNANT", 66, (255, 85, 85), 604, True),
-             ("News, help and players", 24, (240, 236, 228), 684, False), ("on our Discord", 24, (240, 236, 228), 714, False),
-             (DISCORD_SHOWN, 24, (229, 148, 104), 752, True)]
-    for text, fs, colour, y, pulses in words:
+    cx, y, band = 628, 452, 330
+    logo = logo.resize((band, round(logo.height * band / logo.width)), Image.LANCZOS)
+    halo = Image.new("RGBA", logo.size, (0, 0, 0, 0))
+    halo.putalpha(logo.split()[3].filter(ImageFilter.GaussianBlur(6)))
+    base.alpha_composite(halo, (cx - band // 2 + 3, y + 4))
+    base.alpha_composite(logo, (cx - band // 2, y))
+    y += logo.height + 10
+
+    def line(text, colour, width, gap, pulses=True, colours=None):
+        nonlocal y
+        fs = 60
         font = ImageFont.truetype(FONT, fs)
-        x = size - 20 - font.getbbox(text)[2]
+        while font.getbbox(text)[2] - font.getbbox(text)[0] > width:
+            fs -= 1
+            font = ImageFont.truetype(FONT, fs)
+        b = font.getbbox(text)
+        x0 = cx - (b[2] - b[0]) // 2 - b[0]
+        y0 = y - b[1]
+        sh = max(2, fs // 9)
         dd = ImageDraw.Draw(base)
-        dd.text((x + fs // 10, y + fs // 10), text, font=font, fill=(25, 8, 8, 230))
-        dd.text((x, y), text, font=font, fill=colour + (255,))
+        dd.text((x0 + sh, y0 + sh), text, font=font, fill=(20, 4, 4, 240))
+        if colours:                                             # address: "discord.gg/" red, the code white
+            dd.text((x0, y0), colours[0][0], font=font, fill=colours[0][1] + (255,))
+            w0 = font.getbbox(colours[0][0])[2]
+            dd.text((x0 + w0, y0), colours[1][0], font=font, fill=colours[1][1] + (255,))
+        else:
+            dd.text((x0, y0), text, font=font, fill=colour + (255,))
         if pulses:
-            ImageDraw.Draw(pulse).text((x, y), text, font=font, fill=(255, 220, 210, 255))
+            ImageDraw.Draw(pulse).text((x0, y0), text, font=font, fill=(255, 226, 214, 255))
+        y += (b[3] - b[1]) + gap
+
+    line("JOIN THE REMNANT", (255, 255, 255), band - 6, 16)
+    line("NEWS, HELP AND PLAYERS ON OUR DISCORD", (236, 232, 226), band - 60, 12, pulses=False)
+    code = DISCORD_SHOWN.split("/")[-1]
+    line(DISCORD_SHOWN, None, band - 130, 0, colours=[(DISCORD_SHOWN[:-len(code)], (232, 60, 60)), (code, (245, 245, 245))])
     return {"donor_rank_0": base, "donor_rank_1": pulse}
 
 
@@ -240,7 +311,8 @@ def build(shots, out):
         im.save(os.path.join(out, name + ".png"), optimize=True)
         made.append((name, "corner_src + logo", im.size))
     for name, topic in NEWS.items():
-        im = Image.open(os.path.join(NEWS_SRC, topic + ".png")).convert("RGB")
+        source = os.path.join(ROOT, "docs", "shots", NEWS_PATHS[name]) if name in NEWS_PATHS else os.path.join(NEWS_SRC, topic + ".png")
+        im = Image.open(source).convert("RGB")
         im = crop_ratio(im, (0.5, 0.5), NEWS_SIZE[0] / NEWS_SIZE[1]).resize(NEWS_SIZE, Image.LANCZOS)
         im.save(os.path.join(out, name + ".png"), optimize=True)
         made.append((name, "news_src/" + topic, im.size))

@@ -1,5 +1,7 @@
 package net.decimation.worldgen.devtest;
 
+import net.decimation.fixes.Deci;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,15 +33,21 @@ public class SiteShotsTest extends DevTestMode
 {
     public String name() { return "siteshots"; }
 
-    /** Shots need the current generation everywhere: a fresh seed 1 world. */
-    public boolean freshWorld() { return true; }
+    /** Shots need the current generation everywhere: a fresh seed 1 world (keepworld=true reuses the last one). */
+    public boolean freshWorld() { return !Boolean.getBoolean("deciworldgen.autotest.keepworld"); }
 
     private static final int MIN_WAIT = 200, QUIET = 60, MAX_WAIT = 2400, GROUND_WAIT = 100, SETTLED = 20;
 
-    /** One camera row of the TSV. */
+    /**
+     * One camera row of the TSV. An 8th column, the cast, places characters for the shot (docs/main_menu.md 2h, the
+     * Multiplayer popup: "show 2-3 mob in-game as preview"): "kind:ahead,right,turn;..." with kind a tier of
+     * NpcLoadouts (a survivor, soldier or bandit by its tier) or "infected", ahead and right in blocks from the camera
+     * on the ground, turn the degrees from facing the camera (180: looking where the camera looks). They are held in
+     * place and kept at full health until the shot is taken.
+     */
     static final class Row
     {
-        final String name, y;
+        final String name, y, cast;
         final double x, z;
         final float yaw, pitch;
         final long time;
@@ -53,6 +61,7 @@ public class SiteShotsTest extends DevTestMode
             yaw = Float.parseFloat(c[4]);
             pitch = Float.parseFloat(c[5]);
             time = Long.parseLong(c[6]);
+            cast = c.length > 7 ? c[7].trim() : "";
         }
 
         boolean relative()
@@ -116,7 +125,9 @@ public class SiteShotsTest extends DevTestMode
         if (rows == null)
         {
             String only = System.getProperty("deciworldgen.autotest.shots");
-            File tsv = new File(mc.mcDataDir, "../../../tools/site/siteshots.tsv");
+            // -Pshotsfile=mpshots: another table of tools/site (the main menu's Multiplayer pictures)
+            String table = System.getProperty("deciworldgen.autotest.shotsfile", "siteshots");
+            File tsv = new File(mc.mcDataDir, "../../../tools/site/" + table + ".tsv");
             try
             {
                 rows = read(tsv.getCanonicalFile(), only);
@@ -264,8 +275,90 @@ public class SiteShotsTest extends DevTestMode
         p.playerNetServerHandler.setPlayerLocation(r.x, y, r.z, r.yaw, r.pitch);
         if (!r.relative() || serverT > GROUND_WAIT)
         {
+            cast(p, r, i);
             placed = i;
         }
+    }
+
+    private final List<net.minecraft.entity.EntityLiving> actors = new ArrayList<net.minecraft.entity.EntityLiving>();
+    private final List<double[]> spots = new ArrayList<double[]>();
+    private int castRow = -1;
+
+    /** The row's cast: placed once on the ground, then held there at full health every tick; gone with the next row. */
+    private void cast(EntityPlayerMP p, Row r, int row)
+    {
+        if (castRow != row)
+        {
+            for (net.minecraft.entity.EntityLiving e : actors)
+            {
+                e.setDead();
+            }
+            actors.clear();
+            spots.clear();
+            castRow = row;
+            if (r.cast.isEmpty())
+            {
+                return;
+            }
+            p.worldObj.getGameRules().setOrCreateGameRule("doMobSpawning", "false");
+            double fx = -Math.sin(Math.toRadians(r.yaw)), fz = Math.cos(Math.toRadians(r.yaw)); // the camera's ahead
+            for (String part : r.cast.split(";"))
+            {
+                String[] kv = part.trim().split(":");
+                String[] n = kv[1].split(",");
+                double ahead = Double.parseDouble(n[0]), right = Double.parseDouble(n[1]);
+                float turn = n.length > 2 ? Float.parseFloat(n[2]) : 0;
+                double x = r.x + fx * ahead - fz * right, z = r.z + fz * ahead + fx * right;
+                double ground = p.worldObj.getHeightValue((int) Math.floor(x), (int) Math.floor(z));
+                float yaw = r.yaw + 180 + turn;
+                net.minecraft.entity.EntityLiving e = null;
+                for (int tries = 0; tries < 5; tries++)
+                {
+                    e = actor(p.worldObj, kv[0]);
+                    if (e == null)
+                    {
+                        break;
+                    }
+                    e.setLocationAndAngles(x, ground, z, yaw, 0);
+                    if (p.worldObj.spawnEntityInWorld(e))
+                    {
+                        break;                              // Decimation turns some spawns into other mobs: retried
+                    }
+                    e = null;
+                }
+                if (e == null)
+                {
+                    DevTestResults.value(name(), "cast " + r.name, kv[0] + " not spawned");
+                    continue;
+                }
+                actors.add(e);
+                spots.add(new double[] {x, ground, z, yaw});
+            }
+            DevTestResults.value(name(), "cast " + r.name, actors.size() + " of " + r.cast.split(";").length);
+        }
+        for (int k = 0; k < actors.size(); k++)
+        {
+            net.minecraft.entity.EntityLiving e = actors.get(k);
+            double[] at = spots.get(k);
+            e.setPositionAndRotation(at[0], at[1], at[2], (float) at[3], 0);
+            e.rotationYawHead = e.renderYawOffset = (float) at[3];
+            e.motionX = e.motionZ = 0;
+            e.setHealth(e.getMaxHealth());
+        }
+    }
+
+    private static net.minecraft.entity.EntityLiving actor(net.minecraft.world.World w, String kind)
+    {
+        if ("infected".equals(kind))
+        {
+            net.minecraft.entity.Entity e = net.minecraft.entity.EntityList.createEntityByName("Infected", w);
+            return e instanceof net.minecraft.entity.EntityLiving ? (net.minecraft.entity.EntityLiving) e : null;
+        }
+        net.minecraft.entity.EntityLiving e = kind.startsWith("bandit") ? net.decimation.fixes.Deci.newBandit(w)
+            : kind.startsWith("military") || kind.startsWith("elite") || kind.startsWith("juggernaut")
+              ? net.decimation.fixes.Deci.newSoviet(w) : net.decimation.fixes.Deci.newSoldier(w);
+        net.decimation.fixes.NpcLoadouts.instance().equipTier(e, kind);
+        return e;
     }
 
     private static void giveMac10(EntityPlayerMP p)
