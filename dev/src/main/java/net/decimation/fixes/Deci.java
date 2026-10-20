@@ -76,6 +76,134 @@ public final class Deci
         return sight != null ? isScope(sight) : hasIntegratedScope(stack.getItem());
     }
 
+    // ---- gunsmith (fixes/gunsmith): DeciConstants = deci.Q.c, DecimationMod = deci.a.b, FilteredSlot = deci.f.k,
+    //      WeaponSkinItem = deci.ay.j, TracerItem = deci.ay.k, SkinRegistry = deci.aD.q
+
+    /** DeciConstants.gUI_ATTACHMENTS (Xc): the GUI id Decimation's attach key (the ATTACH action) opens. */
+    public static int attachmentsGuiId()
+    {
+        return deci.Q.c.Xc;
+    }
+
+    /** DecimationMod.instance (f): Decimation's @Mod object, the key of its GUI handler. */
+    public static Object decimationMod()
+    {
+        return deci.a.b.f;
+    }
+
+    /** Decimation's own IGuiHandler as FML holds it (NetworkRegistry's private serverGuiHandlers map). */
+    @SuppressWarnings("unchecked")
+    public static cpw.mods.fml.common.network.IGuiHandler decimationGuiHandler()
+    {
+        java.util.Map<cpw.mods.fml.common.ModContainer, cpw.mods.fml.common.network.IGuiHandler> m =
+            cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(cpw.mods.fml.common.network.NetworkRegistry.class,
+                                                                    cpw.mods.fml.common.network.NetworkRegistry.INSTANCE,
+                                                                    "serverGuiHandlers");
+        return m.get(cpw.mods.fml.common.FMLCommonHandler.instance().findContainerFor(decimationMod()));
+    }
+
+    /**
+     * FilteredSlot.isItemValid (deci.f.k): whether part may go into slot deciIndex (WeaponModifyContainer's index) of this
+     * gun, by Decimation's own rules (weapon category, slot, integral suppressor, integrated scope, paint for this gun,
+     * forced tracer). Builds the slot pair on a throwaway inventory: call it on a list build, never per frame.
+     */
+    public static boolean fitsSlot(ItemStack gun, int deciIndex, ItemStack part)
+    {
+        if (gun == null || part == null || !isGun(gun.getItem()))
+        {
+            return false;
+        }
+        net.minecraft.inventory.InventoryBasic inv = new net.minecraft.inventory.InventoryBasic("gunsmith", false, 7);
+        inv.setInventorySlotContents(0, gun.copy());
+        deci.f.k parent = new deci.f.k(inv, 0, 0, 0, null);
+        return new deci.f.k(inv, deciIndex, 0, 0, parent).isItemValid(part);
+    }
+
+    /** GunItem.isIntegrallySuppressed (fL). */
+    public static boolean isIntegrallySuppressed(Item gun)
+    {
+        return ((deci.ay.i) gun).fL();
+    }
+
+    /** GunItem.stats.forcedTracer (aeq.adA): the gun's tracer colour is fixed. */
+    public static boolean hasForcedTracer(Item gun)
+    {
+        return ((deci.ay.i) gun).aeq.adA;
+    }
+
+    /** True for a weapon paint (WeaponSkinItem, deci.ay.j). */
+    public static boolean isSkin(Item item)
+    {
+        return item instanceof deci.ay.j;
+    }
+
+    /** WeaponSkinItem.getSkinId (fS): what the gun's "skin" NBT holds. */
+    public static String skinId(Item skin)
+    {
+        return ((deci.ay.j) skin).fS();
+    }
+
+    /** WeaponSkinItem.getSkinName (fT): the paint's English name ("skinEng"). */
+    public static String skinName(Item skin)
+    {
+        return ((deci.ay.j) skin).fT();
+    }
+
+    /** True for tracer powder (TracerItem, deci.ay.k). */
+    public static boolean isTracer(Item item)
+    {
+        return item instanceof deci.ay.k;
+    }
+
+    /** TracerItem.getColorId (fW): what the gun's "tracerColorID" NBT holds. */
+    public static int tracerColorId(Item tracer)
+    {
+        return ((deci.ay.k) tracer).fW();
+    }
+
+    /** The paint applied to this gun: the SkinRegistry.allSkins (deci.aD.q.awF) entry for its gunName and "skin", or null. */
+    public static Item skinItem(ItemStack gun)
+    {
+        if (gun == null || !isGun(gun.getItem()))
+        {
+            return null;
+        }
+        deci.ay.i g = (deci.ay.i) gun.getItem();
+        String skin = g.A(gun);
+        if (skin == null || skin.isEmpty())
+        {
+            return null;
+        }
+        for (deci.ay.j s : deci.aD.q.awF)
+        {
+            if (g.aer.equals(s.fR()) && skin.equals(s.fS()))
+            {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    private static java.util.Map<Integer, Item> tracerItems;
+
+    /** The tracer powder of this colour id (TracerItem.getColorId), or null; the registry is read once. */
+    public static Item tracerItem(int colorId)
+    {
+        if (tracerItems == null)
+        {
+            java.util.Map<Integer, Item> m = new java.util.HashMap<Integer, Item>();
+            for (Object o : Item.itemRegistry)
+            {
+                if (o instanceof deci.ay.k)
+                {
+                    m.put(((deci.ay.k) o).fW(), (Item) o);
+                }
+            }
+            tracerItems = m;
+        }
+        return tracerItems.get(colorId);
+    }
+
     // ---- player data: PlayerData = deci.Q.b
 
     /** PlayerData.get(player).getAimMode() (e, ci): 1 = aiming down the sights. */
