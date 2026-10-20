@@ -32,9 +32,9 @@ import org.objectweb.asm.Opcodes;
  * - ListElement deci.d.p: a row that cannot be reached says "Coming soon" (gold), without the "?/?" drawn over it and
  *   without the " - 0ms" of a ping that never happened; GuiMenuOfficialServers deci.i.i: "Official DeciRemnant Server",
  *   the Community tab's tooltip "Coming soon"; GuiMenuBase deci.i.a: its toast "Community server coming soon";
- * - the My Community popup deci.d.k: "My Supporter" becomes "Early access" (a click: "Early access is coming soon!"),
- *   the Website and GitHub lines describe our pages; the profile cards (deci.i.a, deci.i.e) and the lounge title
- *   (deci.i.k) say early access too.
+ * - the My Community popup deci.d.k: the Website and GitHub lines describe our pages. Its "My Supporter" line, the
+ *   profile cards (deci.i.a, deci.i.e) and the lounge title (deci.i.k) keep Decimation's supporter texts (user,
+ *   20 Oktober 2026: "rewind it to supporter", it is for people who donate; v0.64.1 to 0.65.0 said Early access).
  * Decimation's own mod version (deci.a.b) and the server list's version checks keep "1.21.10f".
  *
  * Reads the classes of the jar it is given and writes the patched ones; give it the ORIGINAL classes with only
@@ -81,7 +81,7 @@ public class PatchMenuTexts
         plan.put("deci/m/b", window);
 
         // user, 17 Oktober 2026: server status rows "Global Server, Community Server, Download" offline; the official
-        // list's rows (MenuServers) and the Community tab "coming soon"; "My Supporter" becomes "Early access"
+        // list's rows (MenuServers) and the Community tab "coming soon"
         Map<String, Object> status = new HashMap<String, Object>();
         status.put("EU Servers", "Global Server");
         status.put("EU Minecraft Servers for Decimation", "Official DeciRemnant server");
@@ -107,19 +107,9 @@ public class PatchMenuTexts
         plan.get("deci/i/i").put("Official Decimation Server ", "Official DeciRemnant Server ");
         plan.get("deci/i/i").put("Offline", "§6Coming soon");
         Map<String, Object> popup = plan.get("deci/d/k");
-        popup.put("★ My Supporter", "★ Early access");
-        popup.put("Personalize your Supporter settings!", "New features before everyone else!");
         popup.put("Join the verified Decimation Discord!", "Download, install and server guides");
         popup.put("Catch up on the latest twitter updates!", "Source code, issues, all releases");
-        popup.put("You must be a ", "");
-        popup.put("★ Supporter ", "★ Early access ");
-        popup.put("to access this!", "is coming soon!");
-        plan.get("deci/i/a").put(" Supporter", " Early access");
-        plan.get("deci/i/a").put("Not Supporter :(", "No early access");
         plan.get("deci/i/a").put("Failed to load Community list!", "Community server coming soon");
-        plan.get("deci/i/e").put("★Supporter", "★ Early access");
-        plan.get("deci/i/e").put("Is not a Supporter :(", "No early access");
-        plan.get("deci/i/k").put("\\⭐ Supporters Lounge", "★ Early access lounge");
 
         ZipFile jar = new ZipFile(a[0]);
         int total = 0;

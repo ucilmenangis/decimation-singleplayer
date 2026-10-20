@@ -14,7 +14,8 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Decimation's menu pages next to the home menu, as a player meets them (user, 17 Oktober 2026; docs/main_menu.md):
- * the My Community popup (Early access, Website, Forums, GitHub; Early access says it is coming soon), the official
+ * the My Community popup (My Supporter, Website, Forums, GitHub; My Supporter tells a player without it that it is for
+ * supporters: user, 20 Oktober 2026, "rewind it to supporter", it is for people who donate), the official
  * server list (Bukovka and Chernarus, both coming soon, players online coming soon, eight pictures per map), the
  * Community tab (a toast: community server coming soon) and the server status page (Global Server, Community Server and
  * Download offline). Texts no check can click (the profile card, the lounge title) are checked in the loaded classes.
@@ -25,7 +26,7 @@ public class MenuPagesTest extends DevTestMode
     public String name() { return "menupages"; }
 
     private static final List<String> POPUP = Arrays.asList(
-            "★ Early access | New features before everyone else!",
+            "★ My Supporter | Personalize your Supporter settings!",
             "Website | Download, install and server guides",
             "Forums | Our Official BoehMod Forums!",
             "GitHub | Source code, issues, all releases");
@@ -71,7 +72,7 @@ public class MenuPagesTest extends DevTestMode
                 }
                 List<String> lines = Deci.popupLines(mc.currentScreen);
                 DevTestResults.check(name(), "my community popup", lines, lines.equals(POPUP),
-                                     "Early access, Website, Forums, GitHub with our lines");
+                                     "My Supporter, Website, Forums, GitHub with our lines");
                 Deci.clickPopupLine(mc.currentScreen, 1);
                 next();
                 return true;
@@ -81,8 +82,8 @@ public class MenuPagesTest extends DevTestMode
                     return true; // the toast slides in
                 }
                 List<String> toasts = Deci.toasts();
-                DevTestResults.check(name(), "early access click", toasts, toasts.contains("★ Early access is coming soon!"),
-                                     "a toast: ★ Early access is coming soon!");
+                DevTestResults.check(name(), "supporter click", toasts, toasts.contains("You must be a ★ Supporter to access this!"),
+                                     "a toast: You must be a ★ Supporter to access this!");
                 List<String> titles = Deci.toastTitles();
                 DevTestResults.check(name(), "toast title", titles, !titles.isEmpty() && titles.get(titles.size() - 1).equals("DeciRemnant"),
                                      "DeciRemnant (was Decimation)");
@@ -176,10 +177,10 @@ public class MenuPagesTest extends DevTestMode
                 List<String> wrong = new ArrayList<String>();
                 has(wrong, "deci/d/p", "Coming soon", "Not Reachable");      // ListElement: a row's state
                 has(wrong, "deci/i/i", "Official DeciRemnant Server", "Official Decimation Server");
-                has(wrong, "deci/i/a", "No early access", "Not Supporter :("); // GuiMenuBase: the profile card
-                has(wrong, "deci/i/e", "No early access", "Is not a Supporter :("); // GuiMenuHome: a viewed profile
-                has(wrong, "deci/i/k", "Early access lounge", "Supporters Lounge");
-                has(wrong, "deci/d/k", "Early access", "My Supporter");   // texts only: field names like isSupporter stay
+                has(wrong, "deci/i/a", "Not Supporter :(", "No early access"); // GuiMenuBase: the profile card
+                has(wrong, "deci/i/e", "Is not a Supporter :(", "No early access"); // GuiMenuHome: a viewed profile
+                has(wrong, "deci/i/k", "Supporters Lounge", "Early access lounge");
+                has(wrong, "deci/d/k", "My Supporter", "Early access");
                 has(wrong, "deci/i/h", "Global Server", "mcdecimation");
                 DevTestResults.check(name(), "texts in the loaded classes", wrong.isEmpty() ? "all ours" : wrong, wrong.isEmpty(),
                                      "our texts in, Decimation's old ones out");
