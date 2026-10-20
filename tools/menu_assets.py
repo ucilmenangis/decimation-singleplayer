@@ -18,6 +18,8 @@ scene", "just use component from decimation gui menu its self").
   it; BoehMod's closed store) becomes ours (user: "Replace FURY advert"): Decimation's own torn black panel (buttonbg)
   with "DeciRemnant", "Download and guides" and the site's address in the Minecraft font the website uses
   (tools/menu/MinecraftStandard.otf, public domain); the title pulses as FURY's did.
+- The pictures of the news panels' detail popups (fixes/MenuDetail, MenuDetails; user, 21 Oktober 2026: "several
+  image with carousel design"): detail_<popup><n>.png, 640 x 360, from the hosting shots, news_src and the site shots.
 - The footer's BoehMod logo bottom left (textures/gui/menu/boehmod.png, drawn 90 x 17 at 15 % by GuiMenuBase) becomes
   our logo (user, 21 Oktober 2026: "replace boehmod logo and web link in the bottom with ours"; BoehMod is credited
   on the website); its copyright line is PatchMenuTexts'.
@@ -63,6 +65,16 @@ NEWS_SIZE = (464, 200)
 MAPS = {"chernarus": [1, 2, 3, 4, 5, 1, 2, 3]}
 MAP_SRC = os.path.join(ROOT, "docs", "shots", "main_menu_v0.64.0", "chernarus_src")
 MAP_SIZE = (960, 540)
+# detail popup slide -> its source (relative to docs/shots) and the box to cut from it first (None: the whole picture;
+# "fit": a picture wider than 16:9 kept whole on a dark band, as the Community row is)
+DETAILS = {
+    "detail_multiplayer0": ("hosting_v0.64.9/host_page.png", (80, 90, 774, 480)),      # the Host Online page
+    "detail_multiplayer1": ("main_menu_v0.62.9/news_src/multiplayer.png", "fit"),      # a hosted world listed
+    "detail_multiplayer2": ("site_v0.62.9/site_refuge.png", None),                     # a world of ours
+    "detail_coming0": ("main_menu_v0.62.9/news_src/multiplayer.png", "fit"),
+    "detail_coming1": ("site_v0.62.9/site_city.png", None),
+}
+DETAIL_SIZE = (640, 360)
 # our official logo (the user's picture on white paper, cleared like the website's: tools/site/export_assets.py)
 LOGO_SRC = os.path.join(ROOT, "docs", "shots", "main_menu_v0.64.0", "logo_src", "deciremnant_logo.png")
 
@@ -200,6 +212,18 @@ def build(shots, out):
         im = crop_ratio(im, (0.5, 0.5), NEWS_SIZE[0] / NEWS_SIZE[1]).resize(NEWS_SIZE, Image.LANCZOS)
         im.save(os.path.join(out, name + ".png"), optimize=True)
         made.append((name, "news_src/" + topic, im.size))
+    for name, (source, cut) in DETAILS.items():
+        im = Image.open(os.path.join(ROOT, "docs", "shots", source)).convert("RGB")
+        if cut == "fit":
+            band = Image.new("RGB", DETAIL_SIZE, (16, 16, 16))
+            wide = im.resize((DETAIL_SIZE[0], round(im.height * DETAIL_SIZE[0] / im.width)), Image.LANCZOS)
+            band.paste(wide, (0, (DETAIL_SIZE[1] - wide.height) // 2))
+            im = band
+        else:
+            im = im.crop(cut) if cut else im
+            im = crop_ratio(im, (0.5, 0.5), DETAIL_SIZE[0] / DETAIL_SIZE[1]).resize(DETAIL_SIZE, Image.LANCZOS)
+        im.save(os.path.join(out, name + ".png"), optimize=True)
+        made.append((name, source.split("/")[-1][:13], im.size))
     os.makedirs(os.path.join(out, "serverbackgrounds"), exist_ok=True)
     for name, pictures in MAPS.items():
         for slot, n in enumerate(pictures):

@@ -34,12 +34,22 @@ public class MenuNews
     /** id, title, line (null: the release check's), address. */
     private static final String[][] PANELS = {
         {"github", "GitHub", "Source code, issues, all releases", REPO},
-        {"update", "Updates", null, Updater.DEFAULT_WEB},
+        {"update", "Updates", null, MenuDetails.ADDRESS + MenuDetails.UPDATES},
         {"website", "Website", "Download, install and server guides", SITE},
-        {"coming", "Coming soon", "What we are building next", SITE + "#coming"},
+        {"coming", "Coming soon", "What we are building next", MenuDetails.ADDRESS + MenuDetails.COMING},
     };
     private static final ResourceLocation PLACEHOLDER = new ResourceLocation("deci", "textures/gui/menu/loadingarticle.png");
     private static final Map<String, ResourceLocation> PICTURES = new HashMap<String, ResourceLocation>();
+
+    /**
+     * A news panel's in-game address (Deci.addNewsPanel): a detail popup (MenuDetail; user, 21 Oktober 2026: Updates and
+     * Coming soon show their details, GitHub and Website still open their pages). False: not ours, the panel opens it in
+     * the browser.
+     */
+    public static boolean open(String address)
+    {
+        return address != null && address.startsWith(MenuDetails.ADDRESS) && MenuDetail.open(address.substring(MenuDetails.ADDRESS.length()));
+    }
 
     /** The update panel of the open main menu: its line follows the release check. */
     private Object update;
@@ -61,7 +71,7 @@ public class MenuNews
             Deci.newsPicture(key, picture(p[0])); // before the panel: a missing key would be downloaded as a URL
             boolean releases = "update".equals(p[0]);
             Object panel = Deci.addNewsPanel(e.gui, x + i % 2 * 123, i < 2 ? 47 : 120, p[1],
-                                             releases ? updateLine() : p[2], releases ? updateUrl() : p[3], key);
+                                             releases ? updateLine() : p[2], p[3], key);
             if (releases)
             {
                 update = panel;

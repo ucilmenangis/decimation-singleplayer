@@ -49,6 +49,8 @@ public final class Updater
     public static final String DEFAULT_WEB = "https://github.com/ucilmenangis/decimation-singleplayer/releases";
 
     private static volatile State state = State.IDLE;
+    /** The releases the last API answer listed, newest first: {tag, published_at, notes} (the Updates popup). */
+    private static volatile List<String[]> releases = java.util.Collections.emptyList();
     private static volatile String latest, url, digest, message = "", source = "";
     private static volatile long size, done;
     private static volatile boolean enabled = true, hooked;
@@ -92,6 +94,8 @@ public final class Updater
     }
 
     public static State state() { return state; }
+    /** The releases of the last check, newest first: {tag, published_at, notes}; empty before one or in a dev build. */
+    public static List<String[]> releases() { return releases; }
     public static String latest() { return latest; }
     public static String message() { return message; }
     /** Where the last check got its answer: "api", "api (not modified)" or "feed". */
@@ -264,6 +268,16 @@ public final class Updater
             throw new java.io.IOException("HTTP " + code + ", rate limit left " + c.getHeaderField("X-RateLimit-Remaining"));
         }
         List<Map<String, Object>> releases = new Gson().fromJson(body, List.class);
+        List<String[]> list = new java.util.ArrayList<String[]>();
+        for (Map<String, Object> r : releases)
+        {
+            if (!Boolean.TRUE.equals(r.get("draft")))
+            {
+                list.add(new String[] {String.valueOf(r.get("tag_name")), String.valueOf(r.get("published_at")),
+                                       r.get("body") == null ? "" : String.valueOf(r.get("body"))});
+            }
+        }
+        Updater.releases = list;
         for (Map<String, Object> r : releases)
         {
             if (Boolean.TRUE.equals(r.get("draft")))
