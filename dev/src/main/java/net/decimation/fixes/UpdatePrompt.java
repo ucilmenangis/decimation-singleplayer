@@ -13,9 +13,11 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 /**
  * Updates are the player's choice (user, 20 Oktober 2026: "make option when there is update so user can do update or not
  * at that time so they dont force user to update their version, if (worse case) the updater is doesnt support on some
- * client, there is link to download new jar"; docs/main_menu.md 2g). Once a newer release is known, the home menu asks
- * once a launch with Decimation's own question box (ConfirmScreen deci.d.s): Update opens Decimation's progress screen
- * (UpdateProgress), Later leaves the menu as it is, Play included. A game whose jar the updater cannot replace
+ * client, there is link to download new jar"; docs/main_menu.md 2g). Once a newer release is known, Decimation's home
+ * menu asks once a launch with its own question box (ConfirmScreen deci.d.s), on the title menu or, if the player is
+ * already in a world, on the Esc menu (user, 21 Oktober 2026: "yes"): Update opens Decimation's progress screen
+ * (UpdateProgress; its Quit game leaves a world safely, SafeQuit), Later leaves the menu as it is, Play or Resume Game
+ * included. A game whose jar the updater cannot replace
  * (Updater.canSwap) is offered the release page instead. Afterwards the update stays one click away: Settings, View
  * Updates (Decimation's own button) and the Updates news panel (MenuNews). Client only (both buses).
  */
@@ -40,7 +42,7 @@ public class UpdatePrompt
         }
         Minecraft mc = Minecraft.getMinecraft();
         String latest = Updater.latest();
-        if (Updater.state() != Updater.State.AVAILABLE || latest == null || latest.equals(asked) || mc.theWorld != null
+        if (Updater.state() != Updater.State.AVAILABLE || latest == null || latest.equals(asked)
             || !Deci.isHomeMenu(mc.currentScreen) || !Deci.menuShown())
         {
             return;

@@ -57,7 +57,7 @@ public class UpdateScreen extends GuiScreen
         switch (b.id)
         {
             case QUIT:
-                mc.shutdown();
+                SafeQuit.quit();                          // leaves a world and lets it save before closing
                 break;
             case RETRY:
                 Updater.download();

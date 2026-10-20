@@ -180,6 +180,8 @@ public class DecimationWorldGen
             net.decimation.fixes.MenuStatus status = new net.decimation.fixes.MenuStatus();
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(status);
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(status);
+            // Quit game on the update screens: leaves a world and lets it save before the game closes
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.SafeQuit());
             // a newer release: the menu asks Update or Later (never forced; the release page where it cannot swap)
             net.decimation.fixes.UpdatePrompt prompt = new net.decimation.fixes.UpdatePrompt();
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(prompt);

@@ -106,7 +106,7 @@ public class UpdateProgress
         if (e.button.id == QUIT)
         {
             e.setCanceled(true);
-            Minecraft.getMinecraft().shutdown();
+            SafeQuit.quit();                              // from a world too (Esc menu): leave it and let it save first
         }
         else if (e.button.id == LATER)
         {

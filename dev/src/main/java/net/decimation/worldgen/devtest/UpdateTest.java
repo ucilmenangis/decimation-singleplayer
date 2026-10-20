@@ -19,8 +19,10 @@ import net.minecraft.client.gui.GuiScreen;
  * from Settings, View Updates; noswap=true plays a game the updater cannot swap: the box offers Download and
  * opens the release page. The download runs with its bar showing our numbers (update_progress), is checked
  * and ready with Quit game / Later on that screen (update_ready), and the swap helper replaces a stand in jar
- * (run/client/devtest/update_target/Decimation.jar) with the download. The question is asked on the title menu only, so
- * the test leaves the world first (like mainmenu): run it after the modes that need a player.
+ * (run/client/devtest/update_target/Decimation.jar) with the download. The test leaves the world first (like mainmenu)
+ * and gets the question on the title menu; inworld=true stays in the world: the Esc menu keeps Resume Game, asks there
+ * too (user, 21 Oktober 2026) and Quit game leaves the world and lets it save before the game would close (SafeQuit;
+ * the test stops before closing). Either way the world is left: run it after the modes that need a player.
  * The running version pretends to be the release `from` (default 0.58.0): only release builds look for updates.
  * real=true: against our real GitHub releases instead, expecting `expect` (default 0.59.0): the real jar downloads,
  * is checked against GitHub's sha256 and swapped into the stand in.
@@ -49,6 +51,8 @@ public class UpdateTest extends DevTestMode
     /** update (default): Update in the question box; later: Later, then Settings, View Updates. */
     private final String choice = prop("choice", "update");
     private final boolean noSwap = "true".equals(System.getProperty("deciworldgen.autotest.noswap"));
+    /** inworld=true: the question on the Esc menu inside the world, and Quit game from there. */
+    private final boolean inWorld = "true".equals(System.getProperty("deciworldgen.autotest.inworld"));
 
     public boolean client(Minecraft mc)
     {
@@ -258,6 +262,28 @@ public class UpdateTest extends DevTestMode
                     boolean swapped = new String(head).startsWith(want) && target.length() == Updater.size();
                     DevTestResults.check(name(), "swap helper replaced the jar", "exit " + code + ", starts " + new String(head) + ", "
                         + target.length() + " bytes", swapped, want + ", " + Updater.size() + " bytes");
+                    if (inWorld)
+                    {
+                        // Quit game from inside the world: leave it, let it save, then close (stopped before closing)
+                        System.setProperty("deciworldgen.update.noquit", "true");
+                        stopping = mc.getIntegratedServer();
+                        DevTestUtil.click(mc.currentScreen, button(mc.currentScreen, 9101));
+                        next(7);
+                    }
+                    else
+                    {
+                        next(9);
+                    }
+                }
+                break;
+            case 7:
+                if (net.decimation.fixes.SafeQuit.reached() || frames - at > 1200)
+                {
+                    boolean saved = stopping == null || stopping.isServerStopped();
+                    DevTestResults.check(name(), "Quit game in a world", (mc.theWorld == null ? "world left" : "still in the world")
+                                         + (saved ? ", saved" : ", not saved") + (net.decimation.fixes.SafeQuit.reached() ? ", would close" : ""),
+                                         mc.theWorld == null && saved && net.decimation.fixes.SafeQuit.reached(),
+                                         "world left, saved, then the game closes (bug.md level.dat)");
                     next(9);
                 }
                 break;
@@ -269,6 +295,8 @@ public class UpdateTest extends DevTestMode
                     System.clearProperty("deciworldgen.update.target");
                     System.clearProperty("deciworldgen.update.nobrowser");
                     System.clearProperty("deciworldgen.update.noswap");
+                    System.clearProperty("deciworldgen.update.noquit");
+                    net.decimation.fixes.SafeQuit.reset();
                     net.decimation.fixes.UpdatePrompt.reset();
                     if (versionBefore != null)
                     {
@@ -301,18 +329,19 @@ public class UpdateTest extends DevTestMode
     private void menu(Minecraft mc, Updater.State s)
     {
         net.decimation.worldgen.DevAutoTest.keepScreen = true;
-        // the question comes on the title menu, never over a game (UpdatePrompt): leave the world as Disconnect does
-        if (mc.theWorld != null)
+        // the title menu: leave the world as Disconnect does; inworld=true asks on the Esc menu instead
+        if (mc.theWorld != null && !inWorld)
         {
             stopping = mc.getIntegratedServer();
             mc.theWorld.sendQuittingDisconnectingPacket();
             mc.loadWorld((net.minecraft.client.multiplayer.WorldClient) null);
         }
         mc.displayGuiScreen(Deci.homeMenu());
-        GuiButton play = button(mc.currentScreen, 9), update = button(mc.currentScreen, 8);
-        DevTestResults.check(name(), "menu keeps Play", (play == null ? "no Play" : DevTestUtil.label(play))
+        GuiButton play = button(mc.currentScreen, inWorld ? 23 : 9), update = button(mc.currentScreen, 8);
+        String keeps = inWorld ? "Resume Game" : "Play";
+        DevTestResults.check(name(), "menu keeps " + keeps, (play == null ? "no " + keeps : DevTestUtil.label(play))
                              + (update == null ? "" : ", " + DevTestUtil.label(update)), play != null && update == null,
-                             "Play (button 9), no Update in its place");
+                             keeps + " (button " + (inWorld ? 23 : 9) + "), no Update in its place");
         next(s == Updater.State.AVAILABLE ? 2 : 9);
     }
 
