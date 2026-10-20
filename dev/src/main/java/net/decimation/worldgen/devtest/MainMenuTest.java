@@ -92,9 +92,11 @@ public class MainMenuTest extends DevTestMode
                 }
                 String[] links = Deci.menuLinks();
                 DevTestResults.check(name(), "top right links", website + " " + links[0] + ", " + github + " " + links[1],
-                                     "Website".equals(website) && "GitHub".equals(github)
-                                     && links[0].equals(net.decimation.fixes.MenuNews.SITE) && links[1].equals(net.decimation.fixes.MenuNews.REPO),
-                                     "Website to the site, GitHub to the repo");
+                                     "Website".equals(website) && "Discord".equals(github)
+                                     && links[0].equals(net.decimation.fixes.MenuNews.SITE) && links[1].equals(net.decimation.fixes.MenuNews.DISCORD),
+                                     "Website to the site, Discord to our invite (user, 21 Oktober 2026)");
+                DevTestResults.check(name(), "popup GitHub line address", links[2], links[2].equals(net.decimation.fixes.MenuNews.REPO),
+                                     "the repository (was BoehMod's forums)");
                 String title = org.lwjgl.opengl.Display.getTitle();
                 DevTestResults.check(name(), "window title", title, title.startsWith("DeciRemnant v") && title.endsWith("(Minecraft 1.7.10)"),
                                      "DeciRemnant v<our version> (Minecraft 1.7.10)");

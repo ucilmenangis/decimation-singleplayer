@@ -23,9 +23,11 @@ import org.objectweb.asm.Opcodes;
  *   becomes a call to net.decimation.fixes.MenuTexts.version() (our version);
  * - GuiMenuBase deci.i.a: the title line "Decimation - " becomes "DeciRemnant: " (no dash: user rule);
  * - every menu page with the red text links top right (deci.i.a, i.g, i.i, i.j, i.k, i.l and SupporterOnlyScreen
- *   deci.d.k): "Discord" becomes "Website", "Twitter" becomes "GitHub";
- * - ClientResources deci.b.c: the two addresses behind them (BoehMod's Discord and Twitter) become our website and our
- *   GitHub repository;
+ *   deci.d.k): "Discord" becomes "Website", "Twitter" becomes "Discord" (GitHub until 21 Oktober 2026);
+ * - ClientResources deci.b.c: the addresses behind them (BoehMod's Discord and Twitter) become our website and our
+ *   Discord invite, BoehMod's site (the popup's Forums line, now GitHub) our GitHub repository;
+ * - GuiMenuBase deci.i.a: the footer "Copyright <year> - BoehMod (www.BoehMod.com)" becomes "Copyright <year>
+ *   DeciRemnant (deciremnant.vercel.app)", the small "www.boehmod.com" bottom right goes (its logo: menu_assets.py);
  * - WindowSetup deci.m.b: the window title "Minecraft - Decimation v1.21.10f" becomes MenuTexts.windowTitle();
  * - GuiMenuServerStatus deci.i.h: the EU, US and Network rows become Global Server, Community Server and Download on
  *   never resolving .invalid hosts, so they show Offline at once (their pinger has no timeout: a dead host took 75 s);
@@ -56,6 +58,7 @@ public class PatchMenuTexts
     static final String TEXTS = "net/decimation/fixes/MenuTexts";
     static final String SITE = "https://deciremnant.vercel.app/";
     static final String REPO = "https://github.com/ucilmenangis/decimation-singleplayer";
+    static final String DISCORD = "https://discord.com/invite/ZJ47zfXn8H";
 
     public static void main(String[] a) throws Exception
     {
@@ -66,7 +69,7 @@ public class PatchMenuTexts
         {
             Map<String, Object> m = new HashMap<String, Object>();
             m.put("Discord", "Website");
-            m.put("Twitter", "GitHub");
+            m.put("Twitter", "Discord");                  // user, 21 Oktober 2026: Discord instead of GitHub
             plan.put(page, m);
         }
         plan.get("deci/i/a").put("1.21.10f", new String[] {"version"});
@@ -76,7 +79,8 @@ public class PatchMenuTexts
         plan.put("deci/i/e", home);
         Map<String, Object> links = new HashMap<String, Object>();
         links.put("https://www.discord.gg/boehmod", SITE);
-        links.put("https://www.twitter.com/BoehMod", REPO);
+        links.put("https://www.twitter.com/BoehMod", DISCORD);
+        links.put("https://www.boehmod.com", REPO);          // the popup's Forums line, GitHub since 21 Oktober 2026
         plan.put("deci/b/c", links);
         Map<String, Object> window = new HashMap<String, Object>();
         window.put("Minecraft - Decimation v1.21.10f", new String[] {"windowTitle"});
@@ -115,8 +119,16 @@ public class PatchMenuTexts
         plan.get("deci/i/i").put("Offline", "§6Coming soon");
         Map<String, Object> popup = plan.get("deci/d/k");
         popup.put("Join the verified Decimation Discord!", "Download, install and server guides");
-        popup.put("Catch up on the latest twitter updates!", "Source code, issues, all releases");
+        popup.put("Catch up on the latest twitter updates!", "News, help and players");
+        // user, 21 Oktober 2026: "forum replace with discord": the Forums line (BoehMod's site) becomes GitHub, the
+        // Twitter line Discord; the popup reads My Supporter, Website, GitHub, Discord
+        popup.put("Forums", "GitHub");
+        popup.put("Our Official BoehMod Forums!", "Source code, issues, all releases");
         plan.get("deci/i/a").put("Failed to load Community list!", "Community server coming soon");
+        // user, 21 Oktober 2026: our name and site in the footer (BoehMod is credited on the website)
+        plan.get("deci/i/a").put(" - BoehMod (", " DeciRemnant (");
+        plan.get("deci/i/a").put("www.BoehMod.com", "deciremnant.vercel.app");
+        plan.get("deci/i/a").put("www.boehmod.com", "");
 
         ZipFile jar = new ZipFile(a[0]);
         int total = 0;

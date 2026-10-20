@@ -862,7 +862,7 @@ public final class Deci
     @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
     public static String[] menuLinks()
     {
-        return new String[] {String.valueOf(deci.b.c.aZ), String.valueOf(deci.b.c.bb)};
+        return new String[] {String.valueOf(deci.b.c.aZ), String.valueOf(deci.b.c.bb), String.valueOf(deci.b.c.bc)};
     }
 
     /** Changes the small line under a news panel's title (addNewsPanel). */

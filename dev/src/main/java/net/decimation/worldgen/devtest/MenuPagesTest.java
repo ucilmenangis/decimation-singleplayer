@@ -28,8 +28,8 @@ public class MenuPagesTest extends DevTestMode
     private static final List<String> POPUP = Arrays.asList(
             "★ My Supporter | Personalize your Supporter settings!",
             "Website | Download, install and server guides",
-            "Forums | Our Official BoehMod Forums!",
-            "GitHub | Source code, issues, all releases");
+            "GitHub | Source code, issues, all releases",
+            "Discord | News, help and players");
     private static final List<String> ROWS = Arrays.asList("Bukovka | offline | bukovka", "Chernarus | offline | chernarus");
     /** Rows from real sources (fixes/MenuStatus): the official list holds only coming soon rows; Community Server is
      *  the relay where this line has one (main), else coming soon; Download is the GitHub release link. */
@@ -74,7 +74,7 @@ public class MenuPagesTest extends DevTestMode
                 }
                 List<String> lines = Deci.popupLines(mc.currentScreen);
                 DevTestResults.check(name(), "my community popup", lines, lines.equals(POPUP),
-                                     "My Supporter, Website, Forums, GitHub with our lines");
+                                     "My Supporter, Website, GitHub, Discord with our lines");
                 Deci.clickPopupLine(mc.currentScreen, 1);
                 next();
                 return true;
@@ -185,6 +185,8 @@ public class MenuPagesTest extends DevTestMode
                 has(wrong, "deci/i/e", "Is not a Supporter :(", "No early access"); // GuiMenuHome: a viewed profile
                 has(wrong, "deci/i/k", "Supporters Lounge", "Early access lounge");
                 has(wrong, "deci/d/k", "My Supporter", "Early access");
+                has(wrong, "deci/d/k", "Source code, issues, all releases", "Our Official BoehMod Forums!");
+                has(wrong, "deci/i/a", " DeciRemnant (", " - BoehMod (");    // the footer: our name and site
                 has(wrong, "deci/i/h", "Global Server", "mcdecimation");
                 DevTestResults.check(name(), "texts in the loaded classes", wrong.isEmpty() ? "all ours" : wrong, wrong.isEmpty(),
                                      "our texts in, Decimation's old ones out");

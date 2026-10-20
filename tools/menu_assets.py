@@ -18,6 +18,9 @@ scene", "just use component from decimation gui menu its self").
   it; BoehMod's closed store) becomes ours (user: "Replace FURY advert"): Decimation's own torn black panel (buttonbg)
   with "DeciRemnant", "Download and guides" and the site's address in the Minecraft font the website uses
   (tools/menu/MinecraftStandard.otf, public domain); the title pulses as FURY's did.
+- The footer's BoehMod logo bottom left (textures/gui/menu/boehmod.png, drawn 90 x 17 at 15 % by GuiMenuBase) becomes
+  our logo (user, 21 Oktober 2026: "replace boehmod logo and web link in the bottom with ours"; BoehMod is credited
+  on the website); its copyright line is PatchMenuTexts'.
 - The welcome box line in Decimation's lang file: "Welcome to Decimation v%s!" becomes "Welcome to DeciRemnant v%s!"
   (the version is ours: PatchMenuTexts); "Players Online: Unknown" on the official server list becomes "Players Online:
   Coming soon" (user, 17 Oktober 2026).
@@ -126,6 +129,21 @@ def logos():
     return out
 
 
+def footer():
+    """Our logo in the footer's BoehMod logo slot (boehmod.png, 180 x 35, drawn 90 x 17 at 15 % from x 3): ours at twice
+    the size, as high as the slot, from its left edge."""
+    sys.path.insert(0, os.path.join(ROOT, "tools", "site"))
+    from export_assets import clear_paper
+    ours = clear_paper(Image.open(LOGO_SRC))
+    ours = ours.crop(ours.getbbox())
+    k = 2
+    slot = Image.new("RGBA", (180 * k, 35 * k), (0, 0, 0, 0))
+    scale = min(slot.width / ours.width, slot.height / ours.height)
+    mark = ours.resize((round(ours.width * scale), round(ours.height * scale)), Image.LANCZOS)
+    slot.alpha_composite(mark, (0, (slot.height - mark.height) // 2))
+    return {"boehmod": slot}
+
+
 def lang(out):
     """Decimation's lang file with our name in the welcome box (the version there is ours through PatchMenuTexts) and
     the official server list's player count coming soon."""
@@ -169,6 +187,9 @@ def build(shots, out):
         im.save(os.path.join(out, slot + ".png"), optimize=True)
         made.append((slot, shot, im.size))
     for name, im in logos().items():
+        im.save(os.path.join(out, name + ".png"), optimize=True)
+        made.append((name, "logo_src/deciremnant_logo", im.size))
+    for name, im in footer().items():
         im.save(os.path.join(out, name + ".png"), optimize=True)
         made.append((name, "logo_src/deciremnant_logo", im.size))
     for name, im in corner().items():
