@@ -1044,6 +1044,13 @@ public final class Deci
         return out;
     }
 
+    /** True for any of Decimation's menu pages (GuiMenuBase deci.i.a): home and pause menu, server pages, settings. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean isMenuPage(net.minecraft.client.gui.GuiScreen screen)
+    {
+        return screen instanceof deci.i.a;
+    }
+
     /** True for Decimation's Server Status page (GuiMenuServerStatus deci.i.h). */
     @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
     public static boolean isStatusPage(net.minecraft.client.gui.GuiScreen screen)

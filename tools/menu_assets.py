@@ -15,9 +15,10 @@ scene", "just use component from decimation gui menu its self").
   logo (user, 17 Oktober 2026: "replace old logo on decimation with our new logo"; logos()), from the user's picture in
   docs/shots/main_menu_v0.64.0/logo_src; the soldier and the infected of banner_intro stay.
 - The FURY advert in the bottom right corner (textures/gui/menu/donor_rank_0.png, and donor_rank_1.png that pulses over
-  it; BoehMod's closed store) becomes ours (user: "Replace FURY advert"): Decimation's own torn black panel (buttonbg)
-  with "DeciRemnant", "Download and guides" and the site's address in the Minecraft font the website uses
-  (tools/menu/MinecraftStandard.otf, public domain); the title pulses as FURY's did.
+  it; BoehMod's closed store) becomes ours: since 21 Oktober 2026 a FURY style call to our Discord (corner()): an elite
+  soldier of our game on a red ink splash, our logo, "JOIN THE REMNANT", our Discord, the words pulsing as FURY's did
+  (the Minecraft font the website uses: tools/menu/MinecraftStandard.otf, public domain). Until then Decimation's torn
+  black panel with "DeciRemnant", "Download and guides" and the site's address.
 - The pictures of the news panels' detail popups (fixes/MenuDetail, MenuDetails; user, 21 Oktober 2026: "several
   image with carousel design"): detail_<popup><n>.png, 640 x 360, from the hosting shots, news_src and the site shots.
 - The footer's BoehMod logo bottom left (textures/gui/menu/boehmod.png, drawn 90 x 17 at 15 % by GuiMenuBase) becomes
@@ -77,6 +78,9 @@ DETAILS = {
 DETAIL_SIZE = (640, 360)
 # our official logo (the user's picture on white paper, cleared like the website's: tools/site/export_assets.py)
 LOGO_SRC = os.path.join(ROOT, "docs", "shots", "main_menu_v0.64.0", "logo_src", "deciremnant_logo.png")
+# the corner's soldier (dev test cornerart, cut out) and the Discord address it shows
+CORNER_SRC = os.path.join(ROOT, "docs", "shots", "main_menu_v0.65.0", "corner_src")
+DISCORD_SHOWN = "discord.gg/ZJ47zfXn8H"
 
 
 ORIGINAL = os.path.join(ROOT, "Decimation.jar.original.bak")
@@ -85,29 +89,57 @@ LANG = "assets/deci/lang/en_US.lang"
 
 
 def corner():
-    """Our picture for the FURY corner (drawn 150 x 150 at the bottom right): donor_rank_0 the panel and the words,
-    donor_rank_1 a lighter title the menu pulses over it."""
-    with zipfile.ZipFile(ORIGINAL) as z:
-        panel = Image.open(io.BytesIO(z.read(MENU + "buttonbg.png"))).convert("RGBA")
-    base = Image.new("RGBA", (800, 800), (0, 0, 0, 0))
-    glow = Image.new("RGBA", (800, 800), (0, 0, 0, 0))
-    panel = panel.resize((620, 270), Image.LANCZOS)
-    base.alpha_composite(panel, (180, 520))
-    lines = [("DeciRemnant", 66, (255, 85, 85), 575), ("Download and guides", 30, (240, 236, 228), 668),
-             ("deciremnant.vercel.app", 26, (229, 148, 104), 718)]
-    for text, size, colour, y in lines:
-        font = ImageFont.truetype(FONT, size)
-        while font.getbbox(text)[2] > 540:  # inside the panel with a margin
-            size -= 2
-            font = ImageFont.truetype(FONT, size)
-        w = font.getbbox(text)[2]
-        x = 180 + (620 - w) // 2
-        d = ImageDraw.Draw(base)
-        d.text((x + size // 10, y + size // 10), text, font=font, fill=(25, 8, 8, 230))  # the game's text shadow
-        d.text((x, y), text, font=font, fill=colour + (255,))
-        if text == "DeciRemnant":
-            ImageDraw.Draw(glow).text((x, y), text, font=font, fill=(255, 210, 200, 255))
-    return {"donor_rank_0": base, "donor_rank_1": glow}
+    """Our corner art in place of BoehMod's FURY store advert (drawn 150 x 150 at the bottom right; donor_rank_1 pulses
+    over donor_rank_0). FURY studied (docs/main_menu.md 2h): a soldier with glowing goggles and a rifle on a red ink
+    splash fading toward the top left, a big title, a call to action and an address, the words in the pulsing layer.
+    Ours (user, 21 Oktober 2026: "yeah", Discord now): an elite soldier of our game (dev test cornerart, corner_src),
+    our logo, "JOIN THE REMNANT" and our Discord; a click opens it (fixes/MenuCorner)."""
+    import random
+    from PIL import ImageFilter
+    size = 800
+    base = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    ink = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(ink)
+    rnd = random.Random(21)
+    for i in range(260):                                   # the splash: blots heavier toward the bottom right
+        x, y = rnd.randint(140, size), rnd.randint(260, size)
+        k = min(1.0, max(0.0, (x + y - 520) / 900.0))
+        r = rnd.randint(10, 70) * (0.5 + k)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=(150 + rnd.randint(0, 40), 8, 8, int(235 * k)))
+    for i in range(18):                                    # drips
+        x = rnd.randint(300, size)
+        y0 = rnd.randint(330, 600)
+        d.rectangle([x, y0, x + rnd.randint(3, 8), y0 + rnd.randint(40, 160)], fill=(140, 6, 6, 200))
+    ink = ink.filter(ImageFilter.GaussianBlur(2))
+    base.alpha_composite(ink)
+    soldier = Image.open(os.path.join(CORNER_SRC, "soldier.png")).convert("RGBA")
+    sh = 480                                               # low: small windows draw the corner near the news panels
+    soldier = soldier.resize((round(soldier.width * sh / soldier.height), sh), Image.LANCZOS)
+    glow = Image.new("RGBA", soldier.size, (255, 40, 40, 0))
+    glow.putalpha(soldier.split()[3].filter(ImageFilter.GaussianBlur(10)).point(lambda v: int(v * 0.8)))
+    sx, sy = 40, size - sh
+    base.alpha_composite(glow, (sx, sy))
+    base.alpha_composite(soldier, (sx, sy))
+    sys.path.insert(0, os.path.join(ROOT, "tools", "site"))
+    from export_assets import clear_paper
+    logo = clear_paper(Image.open(LOGO_SRC))
+    logo = logo.crop(logo.getbbox())
+    lw = 380
+    logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
+    base.alpha_composite(logo, (size - lw - 10, 470))
+    pulse = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    words = [("JOIN THE", 44, (255, 255, 255), 556, True), ("REMNANT", 66, (255, 85, 85), 604, True),
+             ("News, help and players", 24, (240, 236, 228), 684, False), ("on our Discord", 24, (240, 236, 228), 714, False),
+             (DISCORD_SHOWN, 24, (229, 148, 104), 752, True)]
+    for text, fs, colour, y, pulses in words:
+        font = ImageFont.truetype(FONT, fs)
+        x = size - 20 - font.getbbox(text)[2]
+        dd = ImageDraw.Draw(base)
+        dd.text((x + fs // 10, y + fs // 10), text, font=font, fill=(25, 8, 8, 230))
+        dd.text((x, y), text, font=font, fill=colour + (255,))
+        if pulses:
+            ImageDraw.Draw(pulse).text((x, y), text, font=font, fill=(255, 220, 210, 255))
+    return {"donor_rank_0": base, "donor_rank_1": pulse}
 
 
 def logos():
@@ -206,7 +238,7 @@ def build(shots, out):
         made.append((name, "logo_src/deciremnant_logo", im.size))
     for name, im in corner().items():
         im.save(os.path.join(out, name + ".png"), optimize=True)
-        made.append((name, "buttonbg + text", im.size))
+        made.append((name, "corner_src + logo", im.size))
     for name, topic in NEWS.items():
         im = Image.open(os.path.join(NEWS_SRC, topic + ".png")).convert("RGB")
         im = crop_ratio(im, (0.5, 0.5), NEWS_SIZE[0] / NEWS_SIZE[1]).resize(NEWS_SIZE, Image.LANCZOS)

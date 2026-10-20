@@ -144,6 +144,18 @@ public class MainMenuTest extends DevTestMode
                     return true; // the fade is over
                 }
                 DevTestUtil.screenshot(mc, name(), "mainmenu_next");
+                // the corner art opens our Discord (fixes/MenuCorner): recorded, not opened in a browser
+                System.setProperty("deciworldgen.update.nobrowser", "true");
+                net.decimation.fixes.UpdatePrompt.reset();
+                net.minecraft.client.gui.GuiButton corner = DevTestUtil.byId(mc.currentScreen, 9600);
+                if (corner != null)
+                {
+                    DevTestUtil.click(mc.currentScreen, corner);
+                }
+                String page = net.decimation.fixes.UpdatePrompt.opened.isEmpty() ? "none" : net.decimation.fixes.UpdatePrompt.opened.get(0);
+                DevTestResults.check(name(), "corner opens our Discord", (corner == null ? "no corner button, " : "") + page,
+                                     corner != null && net.decimation.fixes.MenuNews.DISCORD.equals(page), net.decimation.fixes.MenuNews.DISCORD);
+                System.clearProperty("deciworldgen.update.nobrowser");
                 home = mc.currentScreen;
                 popup = 0;
                 step = 7;
