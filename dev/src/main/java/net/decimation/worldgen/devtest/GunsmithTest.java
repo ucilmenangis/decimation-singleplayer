@@ -556,6 +556,9 @@ public class GunsmithTest extends DevTestMode
                 if (ticks == 50)
                 {
                     check("screen: measured", hook(mc, "measures"), Integer.valueOf(1).equals(hook(mc, "measures")), "1");
+                    Object det = hook(mc, "viewDeterminant");
+                    check("screen: the gun not drawn inside out", det, det instanceof Float && (Float) det < 0,
+                          "negative, as the world draws (the GUI view flips y: hidden parts showed through, e.g. the Uzi's magazine in its grip)");
                     before = relMag(mc);
                     server(() -> found = find(Item.itemRegistry.getObject("deci:arSuppressor")));
                 }

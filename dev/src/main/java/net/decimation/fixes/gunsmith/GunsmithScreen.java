@@ -43,6 +43,13 @@ public class GunsmithScreen extends GuiContainer
     final GunsmithContainer container;
     /** How often the silhouette was measured and a list built (dev test gunsmith: once per open and per change). */
     public int measures, listBuilds;
+    /**
+     * Sign of the gun's whole view transform (projection times model view, 3 x 3) at the last measuring draw: negative as
+     * in the world view; positive means the faces are turned inside out (dev test gunsmith).
+     */
+    public float viewDeterminant;
+    private boolean measuring;
+    private static final FloatBuffer MATRIX = BufferUtils.createFloatBuffer(16);
     private int attachKey = -1;
     private int[] area;
     private boolean remeasure = true;
@@ -292,6 +299,10 @@ public class GunsmithScreen extends GuiContainer
         GL11.glScalef(s, s, s);
         RenderHelper.enableGUIStandardItemLighting(); // light from the front, fixed to the screen, before the gun turns
         GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, AMBIENT); // Decimation's guns are near black: more light than an item
+        // the GUI's view flips y, which turned every face inside out (hidden parts showed through, the Uzi's magazine in
+        // its grip): a mirror in depth turns them back without moving anything on screen (vanilla's player preview in the
+        // inventory mirrors x for the same reason)
+        GL11.glScalef(1, 1, -1);
         GL11.glRotatef(TURN_Z, 0, 0, 1);
         GL11.glRotatef(TURN_Y, 0, 1, 0);
         GL11.glRotatef(TURN_X, 1, 0, 0);
@@ -299,6 +310,10 @@ public class GunsmithScreen extends GuiContainer
         GL11.glDepthMask(true);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glColor4f(1, 1, 1, 1);
+        if (measuring)
+        {
+            viewDeterminant = viewDeterminant(); // read back GL state: on a measuring draw only, never per frame
+        }
         r.renderItem(IItemRenderer.ItemRenderType.ENTITY, gun, RenderBlocks.getInstance(), holder);
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -367,12 +382,42 @@ public class GunsmithScreen extends GuiContainer
         }
     }
 
+    /** det(projection 3 x 3 times model view 3 x 3): the handedness the gun is drawn with. */
+    private static float viewDeterminant()
+    {
+        float[] p = matrix(GL11.GL_PROJECTION_MATRIX), m = matrix(GL11.GL_MODELVIEW_MATRIX), c = new float[9];
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                float v = 0;
+                for (int k = 0; k < 3; k++)
+                {
+                    v += p[k * 4 + row] * m[col * 4 + k]; // column major
+                }
+                c[col * 3 + row] = v;
+            }
+        }
+        return c[0] * (c[4] * c[8] - c[7] * c[5]) - c[3] * (c[1] * c[8] - c[7] * c[2]) + c[6] * (c[1] * c[5] - c[4] * c[2]);
+    }
+
+    private static float[] matrix(int which)
+    {
+        MATRIX.clear();
+        GL11.glGetFloat(which, MATRIX);
+        float[] a = new float[16];
+        MATRIX.get(a);
+        return a;
+    }
+
     /** One draw of the gun into a cleared depth buffer, read back as a mask (rows top down). */
     private Silhouette probe(ItemStack gun, float x, float y, float s, int w, int h)
     {
         GL11.glColorMask(false, false, false, false);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+        measuring = true;
         drawGun(gun, x, y, s);
+        measuring = false;
         GL11.glColorMask(true, true, true, true);
         if (depth == null || depth.capacity() < w * h)
         {
