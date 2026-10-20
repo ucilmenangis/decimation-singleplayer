@@ -18,9 +18,9 @@ import net.minecraft.client.gui.GuiScreen;
  * bar showing our numbers (update_progress), is checked and ready with Quit game / Later on that screen
  * (update_ready), and the swap helper replaces a stand in jar
  * (run/client/devtest/update_target/Decimation.jar) with the download.
- * real=true: against our real GitHub releases instead, the running version pretended to be `from`
- * (default 0.58.0), expecting `expect` (default 0.59.0): the real jar downloads, is checked against
- * GitHub's sha256 and swapped into the stand in.
+ * The running version pretends to be the release `from` (default 0.58.0): only release builds look for updates.
+ * real=true: against our real GitHub releases instead, expecting `expect` (default 0.59.0): the real jar downloads,
+ * is checked against GitHub's sha256 and swapped into the stand in.
  * Fallback (rate limit): the fake server started with LIMITED answers the API with 403 and the check must
  * come from the release feed (`source=feed`); `feedonly=true` points the API at a dead address (works with
  * real=true against GitHub's own feed). A fake run that got its answer from the API asks again and must get
@@ -78,11 +78,12 @@ public class UpdateTest extends DevTestMode
                 Updater.reset();
                 Updater.forgetCache();
                 String dead = "http://127.0.0.1:9/none";
+                // only release builds look for updates (Updater.offersUpdates): the running version pretends to be one
+                cpw.mods.fml.common.ModMetadata m = cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deciworldgen").getMetadata();
+                versionBefore = m.version;
+                m.version = prop("from", "0.58.0");
                 if (real)
                 {
-                    cpw.mods.fml.common.ModMetadata m = cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deciworldgen").getMetadata();
-                    versionBefore = m.version;
-                    m.version = prop("from", "0.58.0");
                     Updater.setApi(feedOnly ? dead : Updater.DEFAULT_API, Updater.DEFAULT_WEB);
                 }
                 else
@@ -212,6 +213,10 @@ public class UpdateTest extends DevTestMode
                         cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deciworldgen").getMetadata().version = versionBefore;
                     }
                     Updater.reset();
+                    if (!Updater.offersUpdates())
+                    {
+                        Updater.check();                   // a dev or test build: back to OFF, as the game set it at start
+                    }
                     done = true;
                 }
         }

@@ -94,6 +94,9 @@ public class MenuNews
             case FAILED:
                 line = "Release check failed, see GitHub";
                 break;
+            case OFF:
+                line = "Updates off: " + Updater.message();  // a dev or test build: "dev build (main)"
+                break;
             default:
                 line = "Checking GitHub releases";
         }

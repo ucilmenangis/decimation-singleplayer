@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 /**
  * Decimation's home menu never asks for an update (tools/patches/PatchNoUpdate.java, bug.md): run it
  * with mods/DecimationVoiceChat.jar moved aside to see what a player without the voice chat jar gets.
- * Records whether the jar is there and what the update check answers, and photographs the home menu
- * (menu_home: "Play", not "Update").
+ * Records whether the jar is there and what the update check answers (OFF in a dev or test build: only releases look
+ * for updates), and photographs the home menu (menu_home: "Play", not "Update").
  */
 public class MenuTest extends DevTestMode
 {
@@ -29,6 +29,17 @@ public class MenuTest extends DevTestMode
             boolean voice = new File("mods/DecimationVoiceChat.jar").exists();
             DevTestResults.value(name(), "mods/DecimationVoiceChat.jar present", voice);
             DevTestResults.check(name(), "update required", Deci.updateRequired(), !Deci.updateRequired(), "false");
+            // only release builds look for updates (fixes/Updater.offersUpdates, user 20 Oktober 2026): the dev client and test
+            // jars built from main or prerelease stay OFF, so a main test jar never takes a pre-release for an update
+            if (net.decimation.fixes.Updater.state() == net.decimation.fixes.Updater.State.IDLE)
+            {
+                net.decimation.fixes.Updater.check();     // an update test before this one reset it
+            }
+            boolean looks = net.decimation.fixes.Updater.offersUpdates();
+            net.decimation.fixes.Updater.State s = net.decimation.fixes.Updater.state();
+            DevTestResults.check(name(), "update check", s + " (" + net.decimation.fixes.Updater.message() + ")",
+                                 looks == (s != net.decimation.fixes.Updater.State.OFF),
+                                 looks ? "a release build: it asks GitHub" : "OFF: a dev or test build never offers an update");
             // the jar an update replaces (fixes/Updater.target): the running jar in a shipped game, none in a dev folder
             boolean dev = Boolean.TRUE.equals(net.minecraft.launchwrapper.Launch.blackboard.get("fml.deobfuscatedEnvironment"));
             File target = net.decimation.fixes.Updater.target();

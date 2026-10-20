@@ -64,10 +64,16 @@ tasks.matching { it.name.startsWith("runClient") }.configureEach {
 }
 
 // `gradlew runClient -Photswap`: debug agent on port 5005 so changed classes
-// can be pushed into the running game (tools/hotswap.py), no restart
+// can be pushed into the running game (tools/hotswap.py), no restart.
+// -Pdebugport=N / -Pliveport=N: another line's own ports (the prerelease worktree's live game: 5007 / 25597,
+// tools/lineports.py), so both lines can run a live game at once
+def debugPort = project.hasProperty("debugport") ? project.property("debugport").toString() : "5005"
 tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("hotswap")) {
-        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005")
+        jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:" + debugPort)
+    }
+    if (project.hasProperty("liveport")) {
+        jvmArgs("-Ddeciworldgen.autotest.liveport=" + project.property("liveport"))
     }
 }
 
@@ -92,7 +98,7 @@ tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("live")) {
         jvmArgs("-Ddeciworldgen.autotest=true", "-Ddeciworldgen.autotest.live=true")
         if (!project.hasProperty("hotswap")) {
-            jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005")
+            jvmArgs("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:" + debugPort)
         }
     }
 }

@@ -11,9 +11,10 @@ Then in game: /deciworldgen reload (furniture sets) and
 Works for changes INSIDE method bodies (the JVM's HotSwap). Adding or
 removing fields, methods or classes, or changing signatures, is refused by
 the JVM: then restart the game. Uses jdb from the Java 8 JDK in ~/.jdks,
-attached to the debug port 5005 opened by -Photswap (bound to 127.0.0.1 only:
+attached to the debug port opened by -Photswap (bound to 127.0.0.1 only:
 Java 8 would otherwise listen on every interface, letting anyone on the
-network run code in the game).
+network run code in the game): 5005, the prerelease worktree's 5007
+(tools/lineports.py), or --port=N.
 """
 import glob
 import os
@@ -23,6 +24,10 @@ import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEV = os.path.join(ROOT, "dev")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import lineports  # noqa: E402
+
+PORT = next((int(a[len("--port="):]) for a in sys.argv if a.startswith("--port=")), lineports.ports()[1])
 CLASSES = os.path.join(DEV, "build", "classes", "java", "main")
 STAMP = os.path.join(ROOT, "build", ".hotswap_stamp")
 
@@ -57,14 +62,14 @@ def main():
         cmds.append("redefine %s %s" % (name, p))
     cmds.append("exit")
     print("redefining %d class(es)..." % len(changed))
-    proc = subprocess.Popen([jdb(), "-attach", "127.0.0.1:5005"], stdin=subprocess.PIPE,
+    proc = subprocess.Popen([jdb(), "-attach", "127.0.0.1:%d" % PORT], stdin=subprocess.PIPE,
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     time.sleep(2)
     out, _ = proc.communicate("\n".join(cmds) + "\n", timeout=60)
     bad = [l for l in out.splitlines() if "not" in l.lower() or "error" in l.lower() or "exception" in l.lower()
            or "unsupported" in l.lower() or "fail" in l.lower()]
     if "Unable to attach" in out or "Connection refused" in out:
-        print("no game listening on port 5005: start it with  cd dev && ./gradlew runClient -Photswap")
+        print("no game listening on port %d: start it with  cd dev && ./gradlew runClient -Photswap" % PORT)
         sys.exit(1)
     if bad:
         print("some classes were refused (structural change or not loaded yet):")

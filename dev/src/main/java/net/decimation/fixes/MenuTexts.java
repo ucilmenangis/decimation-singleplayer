@@ -12,18 +12,29 @@ public final class MenuTexts
     {
     }
 
-    /** Our version, without a dev build's suffix (0.64.0-main.3+abc1234 becomes 0.64.0); Decimation's when unknown. */
+    /**
+     * Our version; a dev or test build shows its last tag and "dev" (0.64.0-main.3+abc1234 becomes "0.64.0 dev", user
+     * 20 Oktober 2026: tell a build of main or prerelease from a release); Decimation's when unknown.
+     */
     public static String version()
     {
         try
         {
-            String v = Updater.current();
-            return v == null || v.isEmpty() || "0".equals(v) ? "1.21.10f" : v.split("[-+]")[0];
+            return shown(Updater.current());
         }
         catch (Throwable early)
         {
             return "1.21.10f"; // Forge's mod list not ready yet
         }
+    }
+
+    static String shown(String v)
+    {
+        if (v == null || v.isEmpty() || "0".equals(v))
+        {
+            return "1.21.10f";
+        }
+        return Updater.release(v) ? v : v.split("[-+]")[0] + " dev";
     }
 
     /** The game window's title (Decimation's was "Minecraft - Decimation v1.21.10f"; no dash in ours: user rule). */

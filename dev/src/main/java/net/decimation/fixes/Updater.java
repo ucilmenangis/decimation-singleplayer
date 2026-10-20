@@ -23,7 +23,8 @@ import net.minecraftforge.common.config.Configuration;
  * GitHub, the menu button says "Update" when there is one, it installs with a progress screen, else
  * "Play"). Client only:
  * - check(): on a background thread, GitHub's release list (pre-releases too: ours are), the newest
- *   release with a "Decimation.jar" asset whose version is above ours (mcmod.info);
+ *   release with a "Decimation.jar" asset whose version is above ours (mcmod.info); only release builds ask
+ *   (offersUpdates: dev clients and test jars built from main or prerelease stay OFF, user 20 Oktober 2026);
  * - required(): what Decimation's UpdateChecker.isUpdateRequired answers (tools/patches/PatchNoUpdate,
  *   v2): true once a newer release is known, so its menu shows "Update"; its update page is replaced by
  *   Decimation's own progress screen (UpdateProgress; UpdateScreen for a failure);
@@ -40,7 +41,8 @@ import net.minecraftforge.common.config.Configuration;
  */
 public final class Updater
 {
-    public enum State { IDLE, CHECKING, NONE, AVAILABLE, DOWNLOADING, READY, FAILED }
+    /** OFF: this build does not look for updates (a dev or test build, or turned off in the config; message() says which). */
+    public enum State { IDLE, OFF, CHECKING, NONE, AVAILABLE, DOWNLOADING, READY, FAILED }
 
     public static final String ASSET = "Decimation.jar";
     public static final String DEFAULT_API = "https://api.github.com/repos/ucilmenangis/decimation-singleplayer/releases?per_page=10";
@@ -91,6 +93,44 @@ public final class Updater
         return c == null || c.getMetadata() == null ? "0" : c.getMetadata().version;
     }
 
+    /**
+     * A release build: a clean tag ("0.65.0", "1.0.0-beta"). Every other build carries "+<commit>" in the version Gradle
+     * takes from git (0.64.8-main.115+baf1c806dd after a tag, 0.65.0-prerelease+14830b9e37-dirty with changes); "0" when
+     * unknown.
+     */
+    static boolean release(String version)
+    {
+        return version != null && !version.isEmpty() && !"0".equals(version) && version.indexOf('+') < 0;
+    }
+
+    /** The branch a dev build came from ("main" for 0.64.8-main.115+baf1c806dd); "" for a release. */
+    static String line(String version)
+    {
+        if (version == null || version.indexOf('+') < 0)
+        {
+            return "";
+        }
+        String head = version.substring(0, version.indexOf('+'));          // 0.64.8-main.115
+        String b = head.substring(head.lastIndexOf('-') + 1);              // main.115
+        int dot = b.lastIndexOf('.');
+        return dot > 0 && b.substring(dot + 1).matches("[0-9]+") ? b.substring(0, dot) : b;
+    }
+
+    /**
+     * Whether this game looks for updates (user, 20 Oktober 2026): a release build only, and not the dev client unless a
+     * dev test stands a jar in. A test jar built from main (multiplayer) would otherwise take the newest pre-release,
+     * which has no multiplayer, for an update and replace itself with it; the dev client cannot replace its build output.
+     */
+    public static boolean offersUpdates()
+    {
+        return release(current()) && (!devClient() || System.getProperty("deciworldgen.update.target") != null);
+    }
+
+    private static boolean devClient()
+    {
+        return Boolean.TRUE.equals(net.minecraft.launchwrapper.Launch.blackboard.get("fml.deobfuscatedEnvironment"));
+    }
+
     /** The jar this game runs from (the one to replace), or the dev test's stand in; null in a dev folder. */
     public static File target()
     {
@@ -99,7 +139,7 @@ public final class Updater
         {
             return new File(t);
         }
-        if (Boolean.TRUE.equals(net.minecraft.launchwrapper.Launch.blackboard.get("fml.deobfuscatedEnvironment")))
+        if (devClient())
         {
             return null;                                  // the dev client: its mod jar is Gradle's build output, never replaced
         }
@@ -130,8 +170,16 @@ public final class Updater
     /** Starts the release check on a background thread (once at a time). */
     public static synchronized void check()
     {
-        if (!enabled || state == State.CHECKING || state == State.DOWNLOADING || state == State.READY)
+        if (state == State.CHECKING || state == State.DOWNLOADING || state == State.READY)
         {
+            return;
+        }
+        if (!enabled || !offersUpdates())
+        {
+            String from = line(current());
+            message = !enabled ? "set in config" : "dev build" + (from.isEmpty() ? "" : " (" + from + ")");
+            state = State.OFF;
+            FMLLog.info("[deciworldgen] update check off: %s, running %s", message, current());
             return;
         }
         state = State.CHECKING;

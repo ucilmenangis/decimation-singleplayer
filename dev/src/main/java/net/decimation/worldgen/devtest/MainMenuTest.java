@@ -67,6 +67,16 @@ public class MainMenuTest extends DevTestMode
                     order = panels.get(i).startsWith(TITLES[i] + " | ");
                 }
                 DevTestResults.check(name(), "news panels", titles, order, "GitHub, Updates, Website, Coming soon, each with a line and an https address");
+                // the Updates panel says what the release check did; a dev or test build never looks (fixes/Updater.offersUpdates)
+                String updates = "";
+                for (String p : panels)
+                {
+                    updates = p.startsWith("Updates | ") ? p.split(" \\| ", -1)[1] : updates;
+                }
+                boolean devBuild = !net.decimation.fixes.Updater.offersUpdates();
+                DevTestResults.check(name(), "updates panel line", updates,
+                                     devBuild ? updates.startsWith("Updates off: dev build") : !updates.startsWith("Updates off"),
+                                     devBuild ? "Updates off: dev build (<branch>)" : "the release check's answer");
                 // user, 17 Oktober 2026: links to our site, our version and name, Continue last world
                 String website = "", github = "", cont = "", contTip = "";
                 for (net.minecraft.client.gui.GuiButton b : DevTestUtil.buttons(mc.currentScreen))
