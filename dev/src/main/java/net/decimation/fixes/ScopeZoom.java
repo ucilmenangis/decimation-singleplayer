@@ -236,6 +236,8 @@ public class ScopeZoom
     private long aimStart;
     private boolean wasAiming;
     private long lastFrame;
+    /** Frames counted by this class (onRenderTick): which of them measure the glass (centreSight). */
+    private int measureFrame;
     private EntityRenderer zoomed;
 
     /** Target zoom: the scope's magnification while aiming through it, else 1. */
@@ -316,6 +318,7 @@ public class ScopeZoom
         // in the world drew their glass too and were taken for ours (user report 11 Oktober 2026:
         // the gun crept down while aiming until it left the screen, a sniper NPC in view)
         Deci.setScopeGlassEvery(-1);
+        measureFrame++;
         // ease about 0.15 s, in log space so 1x -> 8x feels as quick as 1x -> 2x
         double lz = Math.log(zoom), lt = Math.log(target);
         lz += (lt - lz) * (1 - Math.exp(-dt * 18));
@@ -406,9 +409,9 @@ public class ScopeZoom
         }
         if (zoom == 1.0 || mc.entityRenderer == null)
         {
-            // vanilla draws the hand next: measure for the glass copy, which runs only while aiming (a 1x sight like the
-            // EOTech aims at zoom 1); at the hip every 8th frame was measured for nothing (19 Oktober 2026, scopeperf)
-            Deci.setScopeGlassEvery(mc.thePlayer != null && Deci.aimMode(mc.thePlayer) == 1 && !GunsmithClient.isOpen() ? 7 : -1);
+            // vanilla draws the hand next, and whatever else draws the glass in this frame after it: not measured here
+            // (every glass sight zooms past 1 from its first aimed frame on, where the measuring below runs)
+            Deci.setScopeGlassEvery(-1);
             return;
         }
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -463,10 +466,13 @@ public class ScopeZoom
     {
         ItemStack held = mc.thePlayer != null ? mc.thePlayer.getHeldItem() : null;
         double[] sight = held != null && Deci.isGun(held.getItem()) ? sights.get(sightKey(held)) : null;
-        // measure often while a sight is being learned, rarely once it is known (only during the
-        // hand draw below: onRenderHand switches measuring off again right after it)
-        Deci.setScopeGlassEvery(held != null && Deci.isGun(held.getItem()) && targetZoom(mc) > 1f
-                                && (sight == null || sight[2] < LEARN) ? 1 : 7);
+        // measure often while a sight is being learned (every 2nd frame), rarely once it is known (every 8th), only
+        // during the hand draw below (onRenderHand switches measuring off right after it). The frames are counted here:
+        // PatchScope counts every glass draw, and the production client with OptiFine drew the glass 6 times a frame (2
+        // before the hand, 3 after it), so its count put the hand's draw on an odd number every frame and it was never
+        // measured (bug.md "See-through glass not updated with OptiFine"); mask 0 = measure every draw while it is set
+        boolean learning = held != null && Deci.isGun(held.getItem()) && targetZoom(mc) > 1f && (sight == null || sight[2] < LEARN);
+        Deci.setScopeGlassEvery((measureFrame & (learning ? 1 : 7)) == 0 ? 0 : -1);
         if (sight == null || zoom <= 1.0)
         {
             shiftX = shiftY = 0;

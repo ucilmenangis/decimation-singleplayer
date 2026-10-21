@@ -150,6 +150,12 @@ public class AimDriftTest extends DevTestMode
         }
         if (t == 2)
         {
+            // the player is not hurt for the run: the sniper in view shot the test player dead mid run (21 Oktober 2026,
+            // "Developer was shot by a survivor"), the gun went with the death and the shift fell to 0 (old code too)
+            unhurt = p.capabilities.disableDamage;
+            p.capabilities.disableDamage = true;
+            p.sendPlayerAbilities();
+            p.setHealth(p.getMaxHealth());
             DevTestArena.build(p.worldObj, p);
             p.worldObj.setWorldTime(6000);
             ItemStack g = new ItemStack(GameRegistry.findItem("deci", gun));
@@ -199,7 +205,14 @@ public class AimDriftTest extends DevTestMode
         {
             Deci.setAimMode(p, 1);
         }
+        if (t == (changes.length == 0 ? 40 + 300 : 342 + changes.length * SEG))
+        {
+            p.capabilities.disableDamage = unhurt;   // as it was, before the client ends the mode in this tick
+            p.sendPlayerAbilities();
+        }
     }
+
+    private boolean unhurt;
 
     private static String fmt(double[] s)
     {

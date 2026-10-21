@@ -262,7 +262,12 @@ public final class Deci
         return new float[] {deci.n.f.glassMinX, deci.n.f.glassMinY, deci.n.f.glassMaxX, deci.n.f.glassMaxY};
     }
 
-    /** Measure the scope glass every (mask + 1)th frame (mask 1 = every 2nd, 7 = every 8th, -1 = never). */
+    /**
+     * PatchScope measures a scope glass draw when (++glassFrame & mask) == 0, glassFrame counting EVERY glass draw (NPC
+     * guns and HUD figures too): 0 = every draw while set, -1 = never. ScopeZoom sets 0 only around its own hand draw on
+     * the frames it measures (a mask of 1 or 7 never hit the hand's draw where the glass is drawn an even number of times
+     * a frame: the production client with OptiFine, 6).
+     */
     public static void setScopeGlassEvery(int mask)
     {
         deci.n.f.glassMask = mask;
