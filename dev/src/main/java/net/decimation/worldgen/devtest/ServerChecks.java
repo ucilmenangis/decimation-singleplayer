@@ -258,8 +258,10 @@ public class ServerChecks extends DevTestMode
         p.setHealth(p.getMaxHealth());
         FMLLog.info("[%s] AUTOTEST armor: 10 \"human\" damage, bare took %.2f, with %s (x%.3f) took %.2f",
                     DecimationWorldGen.MODID, bare, chest.getUnlocalizedName(), chest.getDamageMultiplier(), armored);
-        DevTestResults.check("checks", "armor vs NPC gunfire", String.format("%.2f of %.2f", armored, bare),
-                             armored < bare, "less damage with chest armor (ArmorGunfireHandler)");
+        // each piece blocks 20 % less against NPC fire than its multiplier says (user, 22 Oktober 2026)
+        float want = 1f - 0.8f * (1f - chest.getDamageMultiplier());
+        DevTestResults.check("checks", "armor vs NPC gunfire", String.format("%.2f of %.2f (x%.3f)", armored, bare, armored / bare),
+                             Math.abs(armored / bare - want) < 0.01f, String.format("x%.3f: the chest's protection at 0.8 (ArmorGunfireHandler)", want));
         float mult = net.decimation.fixes.NpcLoadouts.instance().npcDamageToPlayer();
         DevTestResults.check("checks", "NPC hit 2 on a bare player", String.format("%.2f", bare),
                              Math.abs(bare - Math.min(20, 2 * mult)) < 0.01, String.format("%.2f (x%.1f)", 2 * mult, mult));

@@ -41,6 +41,8 @@ public class ArmorGunfireHandler
     /** Height above the feet where the head starts, as a share of entity height (1.35 of 1.8). */
     private static final double HEAD_FROM = 0.75;
     private static final int HELMET = 3; // armor slot index: 0 boots .. 3 helmet
+    /** Share of each piece's protection left against NPC fire (player shots keep it whole). */
+    static final float NPC_PROTECTION = 0.8f;
 
     private final Random random = new Random();
 
@@ -69,11 +71,11 @@ public class ArmorGunfireHandler
         float armor = 1;
         for (int slot = 0; slot < HELMET; slot++)
         {
-            armor *= multiplier(victim, slot);
+            armor *= againstNpc(multiplier(victim, slot));
         }
         if (random.nextDouble() < HEADSHOT_CHANCE)
         {
-            armor *= multiplier(victim, HELMET);
+            armor *= againstNpc(multiplier(victim, HELMET));
         }
         // a .50 BMG NPC hit (NpcShots.armorPiercing): armor at half strength
         damage *= NpcShots.armorPiercing ? (float) Math.sqrt(armor) : armor;
@@ -81,6 +83,15 @@ public class ArmorGunfireHandler
     }
 
     /** Damage multiplier of the Decimation armor piece in a slot, 1 if none. */
+    /**
+     * A piece's multiplier against NPC fire: its protection (1 - multiplier) at NPC_PROTECTION (user, 22 Oktober 2026:
+     * "nerf all armor buff by -20% that affected to player when they shooted by npc"; a piece blocking 50 % blocks 40 %).
+     */
+    static float againstNpc(float multiplier)
+    {
+        return 1f - NPC_PROTECTION * (1f - multiplier);
+    }
+
     private static float multiplier(EntityPlayer player, int slot)
     {
         ItemStack piece = player.getCurrentArmor(slot);
