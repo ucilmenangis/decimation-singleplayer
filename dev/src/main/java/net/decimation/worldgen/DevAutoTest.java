@@ -161,6 +161,7 @@ public class DevAutoTest
         if (name.equals("scopeperf")) return new net.decimation.worldgen.devtest.ScopePerfTest();
         if (name.equals("scopediag")) return new net.decimation.worldgen.devtest.ScopeDiagTest();
         if (name.equals("aimdelay")) return new net.decimation.worldgen.devtest.AimDelayTest();
+        if (name.equals("gripsweep")) return new net.decimation.worldgen.devtest.GripSweepTest();
         if (name.equals("invshiftmp")) return new net.decimation.worldgen.devtest.InvShiftRemoteTest();
         if (name.equals("invshift")) return new net.decimation.worldgen.devtest.InvShiftTest();
         if (name.equals("bench")) return new net.decimation.worldgen.devtest.BenchTest();

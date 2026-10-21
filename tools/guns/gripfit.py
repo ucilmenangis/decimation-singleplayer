@@ -41,6 +41,19 @@ ZC = -0.15
 
 
 STRAY = {"foregrip": re.compile(r"^grip$")}                   # the foregrip's stray plate (also GripPlacement)
+# Parts that sink into the rail and never bear: Decimation's Foregrip has two clamp tabs (grip_1, grip_2: 0.2 long,
+# 0.1 tall) 0.3 above its body; seated by them, the body hung 0.3 to 0.4 under every rail with nothing seen between
+# (user, 22 Oktober 2026: "foregrip on some gun is invicble so its looks flying below"; bug.md).
+CLAMP = {"foregrip": re.compile(r"^grip_[12]$")}
+
+
+def bearing(grip, parts):
+    """The parts a seat is measured from: the grip's parts less its clamp tabs (CLAMP)."""
+    tabs = CLAMP.get(grip)
+    if not tabs:
+        return parts
+    keep = [p for p in parts if not tabs.match(p.name[len(grip) + 1:])]
+    return keep or parts
 FRONT = {"pistol": 0.0, "revolver": 0.0}                      # share of the free front run behind the grip (pistols:
                                                               # right ahead of the trigger guard, as real pistol lights)
 OVERLAP = 0.05                                                # the grip's top sits this far into the underside
@@ -185,7 +198,7 @@ def fit(gun, grip):
         return None
     m = gun_grid(gun)
     gx0, gx1 = min(q[0] for p in parts for q in p.verts()), max(q[0] for p in parts for q in p.verts())
-    sx0, sx1, sz0, sz1, top = seat(parts)
+    sx0, sx1, sz0, sz1, top = seat(bearing(grip, parts))
     gz = (sz0 + sz1) / 2
     w, hz = gx1 - gx0, (sz1 - sz0) / 2
     mid = (gx0 + gx1) / 2
@@ -396,7 +409,8 @@ def placed_problem(gun, grip):
     mags = [p for p in g.parts if p.name.startswith(moving)]
     V = [q for p in mine for q in p.verts()]
     bottom = max(q[1] for q in V)
-    sx0, sx1, sz0, sz1, top = seat(mine)              # the face that bears (the RK-1's clamp, not its rail jaws)
+    sx0, sx1, sz0, sz1, top = seat(bearing(grip, mine))  # the face that bears (the RK-1's clamp, not its rail jaws,
+                                                         # not the Foregrip's clamp tabs)
     cols = columns(sx0, sx1, sz0, sz1, NX, NZ)
     touching, deepest, gaps = set(), None, []
     for k, (x, z) in enumerate(cols):
