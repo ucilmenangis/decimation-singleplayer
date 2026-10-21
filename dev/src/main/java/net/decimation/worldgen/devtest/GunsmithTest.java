@@ -62,6 +62,11 @@ public class GunsmithTest extends DevTestMode
     private volatile String logoutCursor, logoutFull;
     private long glass0;
     private Object textBuilds0;
+    /** Turning (spec section 9): readings before a drag, the side on middle, the spin of the perf frames. */
+    private Object measuresT, textBuildsT, viewChangesT;
+    private int midX = -1, midY = -1;
+    private float spinYaw;
+    private static java.lang.reflect.Method spinView;
     private List<String> sweep;
     private final StringBuilder sweepBad = new StringBuilder();
     private int textures0;
@@ -75,6 +80,8 @@ public class GunsmithTest extends DevTestMode
     {
         private final List<Long> frames = new ArrayList<Long>();
         private volatile boolean on;
+        /** Run at each measured frame's start (the perf test turns the gun there). */
+        volatile Runnable perFrame;
         private long last;
         private int skip;
 
@@ -120,6 +127,11 @@ public class GunsmithTest extends DevTestMode
             if (e.phase != cpw.mods.fml.common.gameevent.TickEvent.Phase.START || !on)
             {
                 return;
+            }
+            Runnable r = perFrame;
+            if (r != null)
+            {
+                r.run();
             }
             long now = System.nanoTime();
             if (last != 0 && skip-- <= 0)
@@ -325,11 +337,32 @@ public class GunsmithTest extends DevTestMode
                           openMs - closedMs <= 1.0, "at most 1 ms more");
                     check("perf: no texture loaded while open", (tex - textures0) + " loaded", tex == textures0, "0");
                     check("perf: measured once while idle", hook(mc, "measures"), Integer.valueOf(1).equals(hook(mc, "measures")), "1");
+                    // turning each frame (spec section 9): a third median, the gun turned 3 degrees a frame
+                    spinView = method(mc.currentScreen, "setView", float[].class);
+                    viewChangesT = hook(mc, "viewChanges");
+                    spinYaw = 0;
+                    clock.perFrame = () -> invoke(spinView, new float[] {spinYaw += 3, 15, 1.3f});
+                    clock.start();
+                    step = 102;
+                    ticks = 0;
+                }
+                break;
+            case 102: // turning each frame, then the GL probe at a turned view
+                if (clock.frames() >= 220)
+                {
+                    double spinMs = clock.stop();
+                    clock.perFrame = null;
+                    Object vc = hook(mc, "viewChanges");
+                    int turned = vc instanceof Integer && viewChangesT instanceof Integer ? (Integer) vc - (Integer) viewChangesT : 0;
+                    check("perf: frame cost while turning", String.format("closed %.2f ms, turning %.2f ms (median of 200), %d views", closedMs,
+                          spinMs, turned), turned >= 200 && spinMs - closedMs <= 1.0, "at most 1 ms more, the gun turned every frame");
+                    hook(mc, "setView", new float[] {60, 20, 1.5f});
                     gl.draws = gl.errors = gl.depthChanged = 0;
                     gl.first = "";
                     gl.screen = mc.currentScreen;
                     server(() -> updates0 = slotUpdates());
-                    next100();
+                    step = 101;
+                    ticks = 0;
                 }
                 break;
             case 101: // GL around the screen's own draw, and the server while idle
@@ -337,6 +370,8 @@ public class GunsmithTest extends DevTestMode
                 {
                     gl.screen = null;
                     check("perf: GL clean", gl.report(), gl.errors == 0 && gl.depthChanged == 0, "no errors, stacks as deep as before");
+                    check("perf: GL clean while turned", gl.report() + ", yaw " + hook(mc, "yaw"), gl.errors == 0 && gl.depthChanged == 0
+                          && Float.valueOf(60f).equals(hook(mc, "yaw")), "no errors at yaw 60, tilt 20, zoom 1.5");
                     fullMs = gl.drawMs();
                     server(() -> { updates1 = slotUpdates(); emptyBag(); });
                 }
@@ -755,7 +790,7 @@ public class GunsmithTest extends DevTestMode
                     Object ms = hook(mc, "measureMs"), px = hook(mc, "pixelsRead"), area = hook(mc, "areaPixels");
                     check("measuring: under a frame", ms, ms instanceof Float && (Float) ms <= 8f, "at most 8 ms");
                     check("measuring: reads the gun area only", px + " pixels of " + area, px instanceof Integer && area instanceof Integer
-                          && (Integer) px <= 2 * (Integer) area, "at most twice the area");
+                          && (Integer) px <= 2.5 * (Integer) area, "at most 2.5 times the area (two side views, half the area from above)");
                     clickBox(mc, GunSlot.SIGHT);
                 }
                 if (ticks == 94) textBuilds0 = hook(mc, "textBuilds");
@@ -773,7 +808,10 @@ public class GunsmithTest extends DevTestMode
                     next();
                 }
                 break;
-            case 20: // every registered gun at 854 x 480: lines on the gun, boxes on screen and apart
+            case 20: // turning the gun (spec section 9)
+                turning(mc);
+                break;
+            case 21: // every registered gun at 854 x 480: lines on the gun, boxes on screen and apart
                 if (ticks == 1)
                 {
                     final String g = sweep.get(gun);
@@ -1008,18 +1046,40 @@ public class GunsmithTest extends DevTestMode
         }
         s.drawScreen(x, y, 0);
         DevTestUtil.clickAt(s, x, y);
+        move(s, x + 1, y, 80L);
+        release(s, x + 1, y);
+    }
+
+    /** A mouse drag: the press at (x0, y0), the moves in steps with the button held, the release at (x1, y1). */
+    static void drag(Minecraft mc, int x0, int y0, int x1, int y1, int steps)
+    {
+        GuiScreen s = mc.currentScreen;
+        if (s == null)
+        {
+            return;
+        }
+        s.drawScreen(x0, y0, 0);
+        DevTestUtil.clickAt(s, x0, y0);
+        for (int i = 1; i <= steps; i++)
+        {
+            move(s, x0 + (x1 - x0) * i / steps, y0 + (y1 - y0) * i / steps, 50L * i);
+        }
+        release(s, x1, y1);
+    }
+
+    /** GuiScreen.mouseClickMove: the mouse at (x, y) with the left button held for `held` ms. */
+    private static void move(GuiScreen s, int x, int y, long held)
+    {
         for (Class<?> c = s.getClass(); c != null; c = c.getSuperclass())
         {
-            boolean done = false;
             for (String n : new String[] {"mouseClickMove", "func_146273_a"})
             {
                 try
                 {
                     java.lang.reflect.Method m = c.getDeclaredMethod(n, int.class, int.class, int.class, long.class);
                     m.setAccessible(true);
-                    m.invoke(s, x + 1, y, 0, 80L);
-                    done = true;
-                    break;
+                    m.invoke(s, x, y, 0, held);
+                    return;
                 }
                 catch (NoSuchMethodException e)
                 {
@@ -1030,12 +1090,7 @@ public class GunsmithTest extends DevTestMode
                     throw new IllegalStateException(e);
                 }
             }
-            if (done)
-            {
-                break;
-            }
         }
-        release(s, x + 1, y);
     }
 
     private static void release(GuiScreen s, int x, int y)
@@ -1354,6 +1409,168 @@ public class GunsmithTest extends DevTestMode
     }
 
     /** The held stack swapped (as a right click does) and, in the same tick, a click on a part slot (a modified client). */
+    /**
+     * Turning the gun (spec section 9): a drag on empty space, staying turned, the line ends on the gun at several views
+     * (against a real render of each view), the middle, plain clicks, the double click, the tilt limit, the zoom, no per
+     * frame work, a fit keeping the view.
+     */
+    private void turning(Minecraft mc)
+    {
+        int w = mc.currentScreen == null ? 0 : mc.currentScreen.width, top = 20; // above every box (TOP 30): empty space
+        if (ticks == 1) mc.thePlayer.inventory.currentItem = 0;
+        if (ticks == 4) pressAttach(mc);
+        if (ticks == 40)
+        {
+            int[] b = (int[]) hook(mc, "gunBounds");
+            midX = b == null ? -1 : b[0] + b[2] / 2;
+            midY = b == null ? -1 : b[1] + b[3] / 2;
+            drag(mc, w / 2, top, w / 2 + 90, top, 9);
+        }
+        if (ticks == 42)
+        {
+            Object yaw = hook(mc, "yaw");
+            int[] e = (int[]) hook(mc, "lineEnd", GunSlot.BARREL);
+            check("turn: a drag on empty space turns the gun", yaw, Float.valueOf(90f).equals(yaw), "yaw 90 after 90 GUI pixels to the right");
+            check("turn: the muzzle's line follows it", e == null ? "none" : e[0] + " (gun middle " + midX + ")", e != null && Math.abs(e[0] - midX) <= 12,
+                  "the muzzle end near the gun's middle, seen end on");
+        }
+        if (ticks == 50)
+        {
+            check("turn: stays turned after letting go", hook(mc, "yaw"), Float.valueOf(90f).equals(hook(mc, "yaw")), "90, eight ticks later");
+            hook(mc, "checkLinesNextFrame");
+        }
+        if (ticks == 53)
+        {
+            shot(mc, "gunsmith_turned_90");
+            checkLines(mc, "turned 90");
+            Object off = hook(mc, "pivotOff");
+            check("turned 90: turns about its middle", off, off instanceof Float && (Float) off >= 0 && (Float) off <= 4,
+                  "the drawn gun's middle within 4 GUI pixels of the side view's");
+        }
+        float[][] views = {{30, 0, 1}, {150, 20, 1.5f}, {-60, -30, 2.5f}};
+        for (int i = 0; i < views.length; i++)
+        {
+            int t = 55 + i * 6;
+            if (ticks == t) hook(mc, "setView", views[i]);
+            if (ticks == t + 1) hook(mc, "checkLinesNextFrame");
+            if (ticks == t + 4)
+            {
+                checkLines(mc, String.format("turned %.0f, tilted %.0f, zoom %.1f", views[i][0], views[i][1], views[i][2]));
+                shot(mc, String.format("gunsmith_turned_%.0f_%.0f", views[i][0], views[i][1]));
+            }
+        }
+        if (ticks == 75) clickAt(mc, w / 2, top);
+        if (ticks == 76)
+        {
+            check("turn: a plain click on empty space does not turn", hook(mc, "yaw"), Float.valueOf(-60f).equals(hook(mc, "yaw")), "still -60");
+        }
+        if (ticks == 90)
+        {
+            clickAt(mc, w / 2, top);
+            clickAt(mc, w / 2, top);
+        }
+        if (ticks == 91)
+        {
+            String v = hook(mc, "yaw") + ", " + hook(mc, "pitch") + ", " + hook(mc, "zoom");
+            check("turn: a double click resets the view", v, "0.0, 0.0, 1.0".equals(v), "yaw 0, tilt 0, zoom 1");
+        }
+        if (ticks == 94) drag(mc, w / 2, top, w / 2, top + 300, 10);
+        if (ticks == 96) check("turn: the tilt stops at 85", hook(mc, "pitch"), Float.valueOf(85f).equals(hook(mc, "pitch")), "85");
+        if (ticks == 108)
+        {
+            clickAt(mc, w / 2, top);
+            clickAt(mc, w / 2, top);
+        }
+        if (ticks == 110) clickBox(mc, GunSlot.SIGHT);
+        if (ticks == 112)
+        {
+            check("turn: a click on a box opens its list and does not turn", hook(mc, "openList") + ", yaw " + hook(mc, "yaw"),
+                  GunSlot.SIGHT == hook(mc, "openList") && Float.valueOf(0f).equals(hook(mc, "yaw")), "SIGHT list, yaw 0");
+            hook(mc, "wheel", 120);
+            hook(mc, "wheel", 120);
+        }
+        if (ticks == 113) check("zoom: an open list keeps the zoom", hook(mc, "zoom"), Float.valueOf(1f).equals(hook(mc, "zoom")), "1 (the wheel scrolls the list)");
+        if (ticks == 114) clickAt(mc, w / 2, top); // outside the list: it closes
+        if (ticks == 116)
+        {
+            for (int i = 0; i < 3; i++) hook(mc, "wheel", 120);
+        }
+        if (ticks == 117)
+        {
+            Object z = hook(mc, "zoom");
+            check("zoom: the wheel zooms", z, z instanceof Float && Math.abs((Float) z - 1.331f) < 0.01f, "1.33 after three notches");
+            for (int i = 0; i < 30; i++) hook(mc, "wheel", 120);
+        }
+        if (ticks == 118)
+        {
+            check("zoom: stops at 2.5", hook(mc, "zoom"), Float.valueOf(2.5f).equals(hook(mc, "zoom")), "2.5");
+            for (int i = 0; i < 40; i++) hook(mc, "wheel", -120);
+        }
+        if (ticks == 119) check("zoom: stops at 1", hook(mc, "zoom"), Float.valueOf(1f).equals(hook(mc, "zoom")), "1");
+        if (ticks == 120)
+        {
+            measuresT = hook(mc, "measures");
+            textBuildsT = hook(mc, "textBuilds");
+            viewChangesT = hook(mc, "viewChanges");
+        }
+        if (ticks > 120 && ticks <= 140) hook(mc, "setView", new float[] {(ticks - 120) * 9, 10, 1.2f});
+        if (ticks == 142)
+        {
+            Object m = hook(mc, "measures"), tb = hook(mc, "textBuilds"), vc = hook(mc, "viewChanges");
+            int turned = vc instanceof Integer && viewChangesT instanceof Integer ? (Integer) vc - (Integer) viewChangesT : 0;
+            check("turning: no depth read, no text built", "measured " + measuresT + " then " + m + ", texts " + textBuildsT + " then " + tb + ", "
+                  + turned + " views", turned == 20 && m != null && m.equals(measuresT) && tb != null && tb.equals(textBuildsT),
+                  "20 views, measures and texts unchanged");
+            hook(mc, "setView", new float[] {45, 10, 1.2f});
+            server(() -> { put(3, "deci:reddot"); found = 3; });
+        }
+        if (ticks == 146) act(mc, GunsmithAction.fit(GunSlot.SIGHT, found));
+        if (ticks == 170)
+        {
+            String v = hook(mc, "yaw") + ", " + hook(mc, "pitch") + ", " + hook(mc, "zoom");
+            Object m = hook(mc, "measures");
+            check("turning: a fit keeps the view", v + ", measured " + measuresT + " then " + m, "45.0, 10.0, 1.2".equals(v) && m instanceof Integer
+                  && measuresT instanceof Integer && (Integer) m == (Integer) measuresT + 1, "45, 10, 1.2; measured once more");
+            mc.thePlayer.closeScreen();
+            next();
+        }
+    }
+
+    private void checkLines(Minecraft mc, String view)
+    {
+        Object on = hook(mc, "linesOnGun"), drawn = hook(mc, "linesDrawn");
+        check(view + ": every line ends on the gun", on + " of " + drawn, on instanceof Integer && drawn instanceof Integer && (Integer) drawn > 0
+              && on.equals(drawn), "all of them (a real render of that view)");
+    }
+
+    private static java.lang.reflect.Method method(Object o, String name, Class<?>... types)
+    {
+        try
+        {
+            return o == null ? null : o.getClass().getMethod(name, types);
+        }
+        catch (NoSuchMethodException e)
+        {
+            return null; // an older screen: the check then fails
+        }
+    }
+
+    private static void invoke(java.lang.reflect.Method m, Object arg)
+    {
+        GuiScreen s = Minecraft.getMinecraft().currentScreen;
+        if (m != null && s != null && m.getDeclaringClass().isInstance(s))
+        {
+            try
+            {
+                m.invoke(s, arg);
+            }
+            catch (ReflectiveOperationException e)
+            {
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+
     /**
      * A part picked onto the cursor, then the player's logout as FML posts it before the save (Minecraft saves the bag,
      * never the cursor): the part must be back in the bag.

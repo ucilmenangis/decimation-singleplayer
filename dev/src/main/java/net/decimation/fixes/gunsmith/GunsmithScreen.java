@@ -27,7 +27,9 @@ import org.lwjgl.opengl.GL12;
  * gun's own 3D model drawn large by Decimation's renderer, each of the six slots in a box near its part with a line to
  * it, a click on a box opens the list of matching parts the player carries. The gun's silhouette (the depth buffer of one
  * draw) is measured on opening and on each change only (updateScreen), never per frame; the lists are built on opening
- * and when the inventory changes. Fits, swaps and take offs go to the server as button ids (GunsmithAction).
+ * and when the inventory changes. Fits, swaps and take offs go to the server as button ids (GunsmithAction). A left drag
+ * on empty space turns the gun, the wheel zooms (spec section 9): the line ends ride on the parts, turned in Java on a
+ * view change only.
  */
 public class GunsmithScreen extends GuiContainer
 {
@@ -53,6 +55,22 @@ public class GunsmithScreen extends GuiContainer
     public int pixelsRead, areaPixels;
     /** Display strings built (dev test gunsmith: none per frame while a list is open). */
     public int textBuilds;
+    /** The player's view (spec section 9): turn and tilt in degrees, zoom; side on at 1 on opening. */
+    public float yaw, pitch, zoom = 1;
+    /** View changes (dev test gunsmith: the perf frames turn the gun every frame). */
+    public int viewChanges;
+    /** The dev test's check of the drawn view: line ends on the gun, lines drawn, the drawn gun's middle off the pivot. */
+    public int linesOnGun = -1, linesDrawn = -1;
+    public float pivotOff = -1;
+    private boolean checkLines;
+    /** Each slot's point on the gun's middle plane (x, y, z in the side view's model units) and the middle itself. */
+    private final float[][] anchors = new float[GunSlot.values().length][];
+    private float cx, cy, cz, pivotX, pivotY;
+    /** The line ends as drawn: the anchors at the current view, worked out on a view change only. */
+    private final int[][] ends = new int[GunSlot.values().length][2];
+    private boolean endsValid, turning, moved, topView;
+    private int pressX, pressY, lastX, lastY;
+    private long lastEmptyClick;
     private boolean measuring;
     private static final FloatBuffer MATRIX = BufferUtils.createFloatBuffer(16);
     private int attachKey = -1;
@@ -138,6 +156,49 @@ public class GunsmithScreen extends GuiContainer
             return null;
         }
         return new int[] {panel[0], panel[1] + 14 + i * GunsmithLayout.ROW};
+    }
+
+    /** Where slot s's line ends now (turned with the gun), or null for a built in part or before measuring. */
+    public int[] lineEnd(GunSlot s)
+    {
+        updateEnds();
+        return anchors[s.ordinal()] == null || builtIn[s.ordinal()] ? null : ends[s.ordinal()].clone();
+    }
+
+    /** The view as {turn, tilt, zoom} (the dev test sets views; the mouse goes through the same limits). */
+    public void setView(float[] v)
+    {
+        view(v[0], v[1], v[2]);
+    }
+
+    /** The next frame checks the drawn view against a render of it (dev test gunsmith: linesOnGun, pivotOff). */
+    public void checkLinesNextFrame()
+    {
+        checkLines = true;
+    }
+
+    /** One wheel step: an open list scrolls, else the gun zooms (10 % a notch, 1 to 2.5). */
+    public void wheel(int d)
+    {
+        if (d == 0)
+        {
+            return;
+        }
+        if (open != null)
+        {
+            scroll = Math.max(0, Math.min(rows() - GunsmithLayout.MAX_ROWS, scroll + (d > 0 ? -1 : 1)));
+            return;
+        }
+        view(yaw, pitch, zoom * (d > 0 ? 1.1f : 1 / 1.1f));
+    }
+
+    private void view(float turn, float tilt, float z)
+    {
+        yaw = turn;
+        pitch = Math.max(-85, Math.min(85, tilt));
+        zoom = Math.max(1, Math.min(2.5f, z));
+        viewChanges++;
+        endsValid = false;
     }
 
     /** The refusal shown in the screen, or null once it has gone (3 s). */
@@ -278,8 +339,13 @@ public class GunsmithScreen extends GuiContainer
             drawGradientRect(0, mid, width, mid + reach, 0x34FFFFFF, 0x00FFFFFF);
             GL11.glEnable(GL11.GL_ALPHA_TEST);
             GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-            drawGun(gun, gx, gy, scale);
+            if (checkLines)
+            {
+                checkView(gun);
+            }
+            drawGun(gun, pivotX - scale * zoom * cx, pivotY - scale * zoom * cy, scale * zoom);
         }
+        updateEnds();
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         drawLines();
@@ -339,6 +405,18 @@ public class GunsmithScreen extends GuiContainer
         // its grip): a mirror in depth turns them back without moving anything on screen (vanilla's player preview in the
         // inventory mirrors x for the same reason)
         GL11.glScalef(1, 1, -1);
+        if (topView)
+        {
+            GL11.glRotatef(90, 1, 0, 0); // measuring from above: screen y is minus depth
+        }
+        else if (!measuring && (yaw != 0 || pitch != 0))
+        {
+            // the player's view, about the gun's middle: turn first, then the tilt about the screen's own x axis
+            GL11.glTranslatef(cx, cy, cz);
+            GL11.glRotatef(pitch, 1, 0, 0);
+            GL11.glRotatef(-yaw, 0, 1, 0);
+            GL11.glTranslatef(-cx, -cy, -cz);
+        }
         GL11.glRotatef(TURN_Z, 0, 0, 1);
         GL11.glRotatef(TURN_Y, 0, 1, 0);
         GL11.glRotatef(TURN_X, 1, 0, 0);
@@ -415,6 +493,23 @@ public class GunsmithScreen extends GuiContainer
             points[s.ordinal()] = new int[] {Math.round(gx + (area[0] + p[0] / (float) f - px) * k),
                                              Math.round(gy + (area[1] + p[1] / (float) f - py) * k)};
         }
+        // the 3D middle and each part's point on the middle plane, in the probe's model units (display = gx + scale * q)
+        cx = ((minX + maxX) / 2 - px) / s0;
+        cy = ((minY + maxY) / 2 - py) / s0;
+        float sTop = s0 / 2;
+        int tw = Math.max(1, aw / 2), tx = ax + (aw - tw) / 2;
+        topView = true;
+        Silhouette top = probe(gun, ox - cx * sTop, oy, sTop, tx, ay, tw, ah); // from above, half scale, the middle half
+        topView = false;
+        cz = top == null ? 0 : -(area[1] + (top.minY + top.maxY + 1) / 2f / f - oy) / sTop;
+        for (GunSlot s : GunSlot.values())
+        {
+            int[] p = sil.points[s.ordinal()];
+            anchors[s.ordinal()] = new float[] {(area[0] + (p[0] + 0.5f) / f - px) / s0, (area[1] + (p[1] + 0.5f) / f - py) / s0, cz};
+        }
+        pivotX = gx + scale * cx;
+        pivotY = gy + scale * cy;
+        endsValid = false;
         int[][] b = GunsmithLayout.boxes(width, height, points);
         for (GunSlot s : GunSlot.values())
         {
@@ -496,6 +591,93 @@ public class GunsmithScreen extends GuiContainer
         return Silhouette.measure(mask, w, h);
     }
 
+    /** The line ends at the current view: each anchor turned about the middle, zoomed, projected (on a change only). */
+    private void updateEnds()
+    {
+        if (endsValid)
+        {
+            return;
+        }
+        endsValid = true;
+        double t = Math.toRadians(-yaw), u = Math.toRadians(pitch);
+        float ct = (float) Math.cos(t), st = (float) Math.sin(t), cu = (float) Math.cos(u), su = (float) Math.sin(u), sz = scale * zoom;
+        for (GunSlot s : GunSlot.values())
+        {
+            float[] a = anchors[s.ordinal()];
+            if (a == null)
+            {
+                continue;
+            }
+            float x = a[0] - cx, y = a[1] - cy, z = a[2] - cz;
+            float x1 = x * ct + z * st, z1 = -x * st + z * ct; // turn about y, as glRotatef(-yaw, 0, 1, 0)
+            float y1 = y * cu - z1 * su;                       // tilt about x, as glRotatef(pitch, 1, 0, 0)
+            ends[s.ordinal()][0] = Math.round(pivotX + sz * x1);
+            ends[s.ordinal()][1] = Math.round(pivotY + sz * y1);
+        }
+    }
+
+    /**
+     * The dev test's check of the drawn view (checkLinesNextFrame): the gun as it is drawn now, alone in the depth buffer,
+     * read over the whole window; counts the line ends on the gun (a set pixel within 2 GUI pixels) and how far the drawn
+     * gun's middle is from the pivot. Test only: it reads the whole window once.
+     */
+    private void checkView(ItemStack gun)
+    {
+        checkLines = false;
+        updateEnds();
+        int f = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor(), w = mc.displayWidth, h = mc.displayHeight;
+        GL11.glColorMask(false, false, false, false);
+        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+        drawGun(gun, pivotX - scale * zoom * cx, pivotY - scale * zoom * cy, scale * zoom);
+        GL11.glColorMask(true, true, true, true);
+        FloatBuffer all = BufferUtils.createFloatBuffer(w * h);
+        GL11.glReadPixels(0, 0, w, h, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, all);
+        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+        int minX = w, minY = h, maxX = -1, maxY = -1;
+        for (int row = 0; row < h; row++)
+        {
+            for (int col = 0; col < w; col++)
+            {
+                if (all.get(row * w + col) < 0.9999f)
+                {
+                    minX = Math.min(minX, col);
+                    maxX = Math.max(maxX, col);
+                    minY = Math.min(minY, h - 1 - row);
+                    maxY = Math.max(maxY, h - 1 - row);
+                }
+            }
+        }
+        pivotOff = maxX < 0 ? -1 : (float) Math.hypot((minX + maxX + 1) / 2f / f - pivotX, (minY + maxY + 1) / 2f / f - pivotY);
+        int on = 0, drawn = 0, r = 2 * f;
+        for (GunSlot s : GunSlot.values())
+        {
+            if (anchors[s.ordinal()] == null || builtIn[s.ordinal()])
+            {
+                continue;
+            }
+            int ex = ends[s.ordinal()][0] * f, ey = ends[s.ordinal()][1] * f;
+            if (ex < 0 || ey < 0 || ex >= w || ey >= h)
+            {
+                continue; // zoomed past the window's edge
+            }
+            drawn++;
+            search:
+            for (int y = Math.max(0, ey - r); y <= Math.min(h - 1, ey + r); y++)
+            {
+                for (int x = Math.max(0, ex - r); x <= Math.min(w - 1, ex + r); x++)
+                {
+                    if (all.get((h - 1 - y) * w + x) < 0.9999f)
+                    {
+                        on++;
+                        break search;
+                    }
+                }
+            }
+        }
+        linesOnGun = on;
+        linesDrawn = drawn;
+    }
+
     private void drawLines()
     {
         if (bounds == null)
@@ -510,7 +692,7 @@ public class GunsmithScreen extends GuiContainer
         t.setColorRGBA(255, 255, 255, 140);
         for (GunSlot s : GunSlot.values())
         {
-            int[] p = points[s.ordinal()], b = boxes[s.ordinal()];
+            int[] p = anchors[s.ordinal()] == null ? null : ends[s.ordinal()], b = boxes[s.ordinal()];
             if (p == null || b == null || builtIn[s.ordinal()])
             {
                 continue;
@@ -524,7 +706,7 @@ public class GunsmithScreen extends GuiContainer
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         for (GunSlot s : GunSlot.values())
         {
-            int[] p = points[s.ordinal()];
+            int[] p = anchors[s.ordinal()] == null ? null : ends[s.ordinal()];
             if (p != null && !builtIn[s.ordinal()])
             {
                 drawRect(p[0] - 1, p[1] - 1, p[0] + 2, p[1] + 2, RED);
@@ -730,18 +912,86 @@ public class GunsmithScreen extends GuiContainer
                 }
             }
         }
+        if (button == 0 && emptySpace(x, y))
+        {
+            turning = true; // a move of 2 GUI pixels turns the gun, a release before that is a plain click
+            moved = false;
+            pressX = lastX = x;
+            pressY = lastY = y;
+            return;
+        }
         super.mouseClicked(x, y, button);
+    }
+
+    /** No box and no visible slot under (x, y): a press there may turn the gun. */
+    private boolean emptySpace(int x, int y)
+    {
+        for (int[] b : boxes)
+        {
+            if (b != null && x >= b[0] - 1 && x <= b[0] + GunsmithLayout.BOX && y >= b[1] - 1 && y <= b[1] + GunsmithLayout.BOX)
+            {
+                return false;
+            }
+        }
+        for (Object o : container.inventorySlots)
+        {
+            Slot s = (Slot) o;
+            if (s.xDisplayPosition >= 0 && x >= s.xDisplayPosition - 1 && x <= s.xDisplayPosition + 16 && y >= s.yDisplayPosition - 1
+                && y <= s.yDisplayPosition + 16)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected void mouseClickMove(int x, int y, int button, long held)
+    {
+        if (!turning)
+        {
+            super.mouseClickMove(x, y, button, held);
+            return;
+        }
+        if (!moved && Math.abs(x - pressX) + Math.abs(y - pressY) < 2)
+        {
+            return;
+        }
+        moved = true;
+        view(yaw + x - lastX, pitch + y - lastY, zoom); // grab and spin: the near side follows the cursor
+        lastX = x;
+        lastY = y;
+    }
+
+    @Override
+    protected void mouseMovedOrUp(int x, int y, int which)
+    {
+        if (!turning || which != 0)
+        {
+            super.mouseMovedOrUp(x, y, which);
+            return;
+        }
+        turning = false;
+        if (!moved)
+        {
+            long now = net.minecraft.client.Minecraft.getSystemTime();
+            if (now - lastEmptyClick < 300)
+            {
+                view(0, 0, 1); // a double click on empty space: side on again
+                lastEmptyClick = 0;
+            }
+            else
+            {
+                lastEmptyClick = now;
+            }
+        }
     }
 
     @Override
     public void handleMouseInput()
     {
         super.handleMouseInput();
-        int wheel = Mouse.getEventDWheel();
-        if (wheel != 0 && open != null)
-        {
-            scroll = Math.max(0, Math.min(rows() - GunsmithLayout.MAX_ROWS, scroll + (wheel > 0 ? -1 : 1)));
-        }
+        wheel(Mouse.getEventDWheel());
     }
 
     @Override
