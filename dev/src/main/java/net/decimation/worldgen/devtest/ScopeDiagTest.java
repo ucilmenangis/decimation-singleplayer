@@ -14,7 +14,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Why no scope glass is measured (19 Oktober 2026: aimdrift's shift stayed 0.0000, v0.43.1 measured 0.0049 / -0.2189):
- * aims the AKM with -Psight (default reddot) for 3 s and counts, per frame, the glass draws (PatchScope's glassFrame),
+ * aims the AKM with -Psight (default ta11acog; Decimation's red dot drew no measured glass, 0 draws a frame, 21 Oktober
+ * 2026) for 3 s and counts, per frame, the glass draws (PatchScope's glassFrame),
  * the measurements (glassTime), the hand events that reach ScopeZoom's priority and the ones cancelled before it, and
  * where in the frame the glass is drawn. The production client with OptiFine drew it 6 times a frame (2 before the hand,
  * 1 in it, 3 after: bug.md "See-through glass not updated with OptiFine"); -Pextra=N draws the held gun N more times
@@ -35,6 +36,17 @@ public class ScopeDiagTest extends DevTestMode
     private static volatile boolean on;
     private static boolean listening;
     private int ticks;
+    private volatile Runnable onServer;
+
+    public void server()
+    {
+        Runnable r = onServer;
+        if (r != null)
+        {
+            onServer = null;
+            r.run();
+        }
+    }
 
     /** Glass draws per frame before the first hand event, between it and the last, and after it (sums over the run). */
     private static final long[] where = new long[3];
@@ -174,9 +186,19 @@ public class ScopeDiagTest extends DevTestMode
             ItemStack s = new ItemStack((Item) Item.itemRegistry.getObject("deci:akm"));
             s.stackTagCompound = new NBTTagCompound();
             s.stackTagCompound.setInteger("ammo", 30);
-            s.stackTagCompound.setString("sightAttach", System.getProperty("deciworldgen.autotest.sight", "reddot"));
+            s.stackTagCompound.setString("sightAttach", System.getProperty("deciworldgen.autotest.sight", "ta11acog"));
             mc.gameSettings.thirdPersonView = 0;
             mc.thePlayer.inventory.setInventorySlotContents(mc.thePlayer.inventory.currentItem, s);
+            // the server's copy too: else its next slot sync puts back what it holds (an empty slot after attachments)
+            final int slot = mc.thePlayer.inventory.currentItem;
+            final ItemStack copy = s.copy();
+            onServer = () -> {
+                net.minecraft.entity.player.EntityPlayerMP p = DevTestUtil.player();
+                if (p != null)
+                {
+                    p.inventory.setInventorySlotContents(slot, copy);
+                }
+            };
             DevTestResults.value(name(), "scoped gun (Deci.isScopedGun)", Deci.isScopedGun(s));
             DevTestResults.value(name(), "pip property (zoom mode off when true)", Boolean.getBoolean("decimation.scope.pip"));
             return true;
@@ -189,6 +211,8 @@ public class ScopeDiagTest extends DevTestMode
         }
         on = false;
         Deci.setAimMode(mc.thePlayer, 0);
+        ItemStack held = mc.thePlayer.getHeldItem();
+        DevTestResults.value(name(), "held at the end", held == null ? "nothing" : Item.itemRegistry.getNameForObject(held.getItem()));
         DevTestResults.value(name(), "frames", frames);
         DevTestResults.value(name(), "hand events (cancelled before ScopeZoom's turn)", handEvents + " (" + handCancelled + ")");
         DevTestResults.value(name(), "glass draws", glassDraws);

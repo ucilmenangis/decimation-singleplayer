@@ -159,6 +159,7 @@ public class DevAutoTest
         if (name.equals("armskin")) return new net.decimation.worldgen.devtest.ArmSkinTest();
         if (name.equals("scopeperf")) return new net.decimation.worldgen.devtest.ScopePerfTest();
         if (name.equals("scopediag")) return new net.decimation.worldgen.devtest.ScopeDiagTest();
+        if (name.equals("aimdelay")) return new net.decimation.worldgen.devtest.AimDelayTest();
         if (name.equals("bench")) return new net.decimation.worldgen.devtest.BenchTest();
         if (name.equals("traderperf")) return new net.decimation.worldgen.devtest.TraderPerfTest();
         if (name.equals("zoneperf")) return new net.decimation.worldgen.devtest.ZonePerfTest();

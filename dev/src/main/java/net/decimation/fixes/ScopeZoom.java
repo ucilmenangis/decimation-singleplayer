@@ -100,6 +100,7 @@ public class ScopeZoom
     public ScopeZoom(File configDir)
     {
         INSTANCE = this;
+        sightsFile = new File(configDir, "deciworldgen_sights.txt");
         cfg = new Configuration(new File(configDir, "deciworldgen_scope.cfg"));
         pictureInPicture = cfg.getBoolean("pictureInPicture", "scope", false,
             "true = Decimation's original scope (the world rendered a second time into the scope glass; about "
@@ -201,6 +202,35 @@ public class ScopeZoom
         return INSTANCE == null ? 1 : INSTANCE.zoom;
     }
 
+    /** Dev test aimdelay: forget the learned sight positions, so the next aim is a first aim as after a launch. */
+    public static void forgetSights()
+    {
+        if (INSTANCE != null)
+        {
+            INSTANCE.sights.clear();
+        }
+    }
+
+    /** Dev test aimdelay: as after a new launch: the session's sight positions dropped, the kept ones read back. */
+    public static void relaunchSights()
+    {
+        if (INSTANCE != null)
+        {
+            INSTANCE.sights.clear();
+            INSTANCE.sightsRead = false;
+            INSTANCE.readSights();
+        }
+    }
+
+    private void readSights()
+    {
+        if (!sightsRead && sightsFile != null)
+        {
+            sightsRead = true;
+            sights.putAll(SightMemory.load(sightsFile, Updater.current(), LEARN));
+        }
+    }
+
     /** Dev test: the sniper overlay is being drawn. */
     public static boolean overlayShown()
     {
@@ -229,6 +259,14 @@ public class ScopeZoom
      * aims are centred at once.
      */
     private final java.util.Map<String, double[]> sights = new java.util.HashMap<String, double[]>();
+    /**
+     * Learned positions kept between launches (fixes/SightMemory, config/deciworldgen_sights.txt): without them every
+     * launch held the zoom at 1.5x on each gun and sight's first aim until learned again (user: "sometime it has delay";
+     * dev test aimdelay: ACOG 415 ms to 95 % zoom against 188 ms once learned). Read on the first frame (our version is
+     * known by then), written when a sight becomes learned.
+     */
+    private File sightsFile;
+    private boolean sightsRead;
     private long lastGlass;
     /** Last unshifted sample and how many samples in a row agreed with it. */
     private double prevX = Double.NaN, prevY = Double.NaN;
@@ -294,6 +332,7 @@ public class ScopeZoom
     public void onRenderTick(TickEvent.RenderTickEvent e)
     {
         Minecraft mc = Minecraft.getMinecraft();
+        readSights();
         if (e.phase == TickEvent.Phase.END)
         {
             if (!Float.isNaN(savedSensitivity))
@@ -531,6 +570,10 @@ public class ScopeZoom
         sight[0] += (sx - sight[0]) * a;
         sight[1] += (sy - sight[1]) * a;
         sight[2]++;
+        if (sight[2] == LEARN && sightsFile != null)
+        {
+            SightMemory.save(sightsFile, sights, Updater.current(), LEARN);   // once per sight: the next launch has it
+        }
     }
 
 
