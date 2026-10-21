@@ -19,8 +19,8 @@ import javassist.expr.MethodCall;
  *   while the method runs (an expression edit cannot see the method's own arguments).
  * - GunItemRenderer (deci.K.b) renderItem: the Object.equals right after its read of ItemRegistry.foregrip (the view's
  *   kick calmed for the Foregrip) becomes GripRecoil.calmsView(grip) || the old test.
- * deci.K.b is already patched by PatchScope / PatchIronSights: read dist/Decimation.jar (Javassist reads a path as a jar
- * only when it ends in .jar). GripRecoil is our class: a stand in with its signatures is made here for the compile.
+ * deci.K.b is already patched by PatchIronSights (PatchScope patches deci.c.b and deci.n.f): read dist/Decimation.jar
+ * (Javassist reads a path as a jar only when it ends in .jar). GripRecoil is our class: a stand in with its signatures is made here for the compile.
  *
  *   javac -cp tools/lib/javassist.jar --release 8 -d build/patch_grip tools/patches/PatchGripRecoil.java
  *   java -cp tools/lib/javassist.jar:build/patch_grip PatchGripRecoil dist/Decimation.jar build/patch_grip/out
