@@ -580,10 +580,13 @@ public final class Updater
         }
     }
 
-    private static HttpURLConnection open(String u) throws Exception
+    static HttpURLConnection open(String u) throws Exception
     {
         HttpURLConnection c = (HttpURLConnection) new URL(u).openConnection();
         c.setRequestProperty("User-Agent", "deciworldgen-updater");
+        // named, not Java's default ("text/html, image/gif, image/jpeg, *; q=.2, ..."): GitHub answers that with 406 on
+        // release downloads since October 2026 (bug.md "Update downloads fail with 406"); API calls set their own
+        c.setRequestProperty("Accept", "application/octet-stream, */*");
         c.setConnectTimeout(10000);
         c.setReadTimeout(30000);
         c.setInstanceFollowRedirects(true);
