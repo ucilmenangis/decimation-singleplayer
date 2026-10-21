@@ -48,6 +48,11 @@ public class GunsmithScreen extends GuiContainer
      * in the world view; positive means the faces are turned inside out (dev test gunsmith).
      */
     public float viewDeterminant;
+    /** The last measuring: its time in ms, the depth pixels it read, the gun area in pixels (dev test gunsmith). */
+    public float measureMs;
+    public int pixelsRead, areaPixels;
+    /** Display strings built (dev test gunsmith: none per frame while a list is open). */
+    public int textBuilds;
     private boolean measuring;
     private static final FloatBuffer MATRIX = BufferUtils.createFloatBuffer(16);
     private int attachKey = -1;
@@ -56,16 +61,25 @@ public class GunsmithScreen extends GuiContainer
     private float scale, gx, gy;
     private int[] bounds;
     private final int[][] points = new int[GunSlot.values().length][], boxes = new int[GunSlot.values().length][];
-    private final String[] labels = new String[GunSlot.values().length];
+    private final String[] labels = new String[GunSlot.values().length], upper = new String[GunSlot.values().length];
+    private final int[] labelW = new int[GunSlot.values().length], upperW = new int[GunSlot.values().length];
     private final boolean[] builtIn = new boolean[GunSlot.values().length];
     private String partsSig = "", title = "";
     private int invSig;
     private GunSlot open;
     private final List<Integer> entries = new ArrayList<Integer>();
-    private boolean takeOffRow;
-    private int scroll;
-    private FloatBuffer depth;
-    private boolean[] mask;
+    private boolean takeOffRow, full;
+    private int scroll, closeW;
+    /** The open list as drawn, built in fill() only: row texts (shortened), row items, the panel {x, y, w, h}. */
+    private String[] rowTexts = new String[0];
+    private ItemStack[] rowStacks = new ItemStack[0];
+    private int[] panel;
+    /** A refusal from the server ("Inventory full"): shown in the screen, the HUD and its chat being hidden. */
+    private String notice;
+    private long noticeUntil;
+    /** Depth read back of the gun area only, kept between openings (review I4: a whole window, five times, each open). */
+    private static FloatBuffer depth;
+    private static boolean[] mask;
     private EntityItem holder;
     private static final FloatBuffer AMBIENT = (FloatBuffer) BufferUtils.createFloatBuffer(4).put(new float[] {0.7f, 0.7f, 0.7f, 1})
                                                                     .flip();
@@ -112,22 +126,30 @@ public class GunsmithScreen extends GuiContainer
         }
         List<String> l = new ArrayList<String>();
         l.add(open.listTitle());
-        for (int i = 0; i < rows(); i++)
-        {
-            l.add(rowText(i));
-        }
+        Collections.addAll(l, rowTexts);
         return l;
     }
 
     /** Top left of row i of the open list (0 = the first row under the title), or null. */
     public int[] listRow(int i)
     {
-        if (open == null || boxes[open.ordinal()] == null || i < 0 || i >= Math.min(rows(), GunsmithLayout.MAX_ROWS))
+        if (open == null || panel == null || i < 0 || i >= Math.min(rows(), GunsmithLayout.MAX_ROWS))
         {
             return null;
         }
-        int[] l = GunsmithLayout.list(width, height, boxes[open.ordinal()], rows());
-        return new int[] {l[0], l[1] + 14 + i * GunsmithLayout.ROW};
+        return new int[] {panel[0], panel[1] + 14 + i * GunsmithLayout.ROW};
+    }
+
+    /** The refusal shown in the screen, or null once it has gone (3 s). */
+    public String notice()
+    {
+        return notice != null && System.currentTimeMillis() < noticeUntil ? notice : null;
+    }
+
+    void showNotice(String text)
+    {
+        notice = text;
+        noticeUntil = System.currentTimeMillis() + 3000;
     }
 
     // ---- life cycle
@@ -140,6 +162,7 @@ public class GunsmithScreen extends GuiContainer
         super.initGui();
         area = GunsmithLayout.gunArea(width, height);
         remeasure = true;
+        closeW = fontRendererObj.getStringWidth("Esc  Close") / 2;
         int left = width / 2 - 9 * 20 / 2;
         for (int i = 0; i < 36; i++)
         {
@@ -183,6 +206,14 @@ public class GunsmithScreen extends GuiContainer
             builtIn[s.ordinal()] = GunParts.builtIn(s, gun);
             ItemStack part = ((Slot) container.inventorySlots.get(s.ordinal())).getStack();
             labels[s.ordinal()] = builtIn[s.ordinal()] ? "Built in" : part != null ? fit(part.getDisplayName(), 52) : s.label;
+            upper[s.ordinal()] = builtIn[s.ordinal()] ? "" : s.label.toUpperCase();
+            labelW[s.ordinal()] = fontRendererObj.getStringWidth(labels[s.ordinal()]);
+            upperW[s.ordinal()] = fontRendererObj.getStringWidth(upper[s.ordinal()]);
+            textBuilds += 2;
+        }
+        if (open != null)
+        {
+            fill(open); // a part came on or off: the Take off row and the list follow
         }
     }
 
@@ -269,7 +300,12 @@ public class GunsmithScreen extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         drawCenteredString(fontRendererObj, title, width / 2, 10, TEXT);
-        small("Esc  Close", width - 6 - fontRendererObj.getStringWidth("Esc  Close") / 2, 10, MUTED);
+        small("Esc  Close", width - 6 - closeW, 10, MUTED);
+        String n = notice();
+        if (n != null)
+        {
+            drawCenteredString(fontRendererObj, n, width / 2, height - 40, RED);
+        }
     }
 
     @Override
@@ -322,55 +358,62 @@ public class GunsmithScreen extends GuiContainer
 
     /**
      * The gun's silhouette: drawn alone into the depth buffer (colour writes off), read back once, measured by
-     * Silhouette; the probe scale halves while the gun is cut by the window and doubles while it is small. Then the gun
-     * is fitted into the area, the line ends and the boxes follow. On opening and on a change only.
+     * Silhouette, the gun area only. The first probe is drawn at the area's middle (halved while the area's edge cuts
+     * it); a small one is probed once more at about the size it will be drawn, centred, for finer points: two probes as
+     * a rule. Then the gun is fitted into the area, the line ends and the boxes follow. On opening and on a change only.
      */
     private void measure(ItemStack gun)
     {
+        long started = System.nanoTime();
+        pixelsRead = 0;
         remeasure = false;
         measures++;
-        int f = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor(), w = mc.displayWidth,
-            h = mc.displayHeight;
-        float ox = area[0] + area[2] / 2f, oy = area[1] + area[3] / 2f, s0 = area[3] / 2f;
-        Silhouette sil = null;
-        for (int tries = 0; tries < 5; tries++)
+        int f = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaleFactor();
+        int ax = area[0] * f, ay = Math.max(0, mc.displayHeight - (area[1] + area[3]) * f);
+        int aw = Math.min(area[2] * f, mc.displayWidth - ax), ah = Math.min(area[3] * f, mc.displayHeight - ay);
+        float ox = area[0] + area[2] / 2f, oy = area[1] + area[3] / 2f, px = ox, py = oy, s0 = area[3] / 2.5f;
+        Silhouette sil = probe(gun, px, py, s0, ax, ay, aw, ah);
+        for (int tries = 1; sil != null && cut(sil, aw, ah) && tries < 3; tries++)
         {
-            sil = probe(gun, ox, oy, s0, w, h);
-            if (sil == null)
+            s0 /= 2;
+            sil = probe(gun, px, py, s0, ax, ay, aw, ah);
+        }
+        if (sil != null && !cut(sil, aw, ah))
+        {
+            float kk = Math.min(0.8f * aw / (sil.maxX + 1 - sil.minX), 0.8f * ah / (sil.maxY + 1 - sil.minY));
+            if (kk > 1.5f)
             {
-                break;
-            }
-            boolean cut = sil.minX <= 0 || sil.minY <= 0 || sil.maxX >= w - 1 || sil.maxY >= h - 1;
-            if (cut)
-            {
-                s0 /= 2;
-            }
-            else if (sil.maxX - sil.minX < 200 && tries < 4)
-            {
-                s0 *= 2;
-            }
-            else
-            {
-                break;
+                // the silhouette scales about the draw point: move that so the bigger one sits in the area's middle
+                float cx = area[0] + (sil.minX + sil.maxX + 1) / 2f / f - px, cy = area[1] + (sil.minY + sil.maxY + 1) / 2f / f - py;
+                Silhouette big = probe(gun, ox - cx * kk, oy - cy * kk, s0 * kk, ax, ay, aw, ah);
+                if (big != null && !cut(big, aw, ah))
+                {
+                    sil = big;
+                    px = ox - cx * kk;
+                    py = oy - cy * kk;
+                    s0 *= kk;
+                }
             }
         }
         bounds = null;
-        if (sil == null)
+        if (sil == null) // nothing drawn; a gun still cut after the halvings is laid out from what the area held
         {
+            measureMs = (System.nanoTime() - started) / 1e6f;
             return;
         }
-        float minX = sil.minX / (float) f, maxX = (sil.maxX + 1) / (float) f, minY = sil.minY / (float) f,
-              maxY = (sil.maxY + 1) / (float) f;
+        float minX = area[0] + sil.minX / (float) f, maxX = area[0] + (sil.maxX + 1) / (float) f,
+              minY = area[1] + sil.minY / (float) f, maxY = area[1] + (sil.maxY + 1) / (float) f;
         float k = Math.min(area[2] * 0.9f / (maxX - minX), area[3] * 0.8f / (maxY - minY));
         scale = s0 * k;
-        gx = area[0] + area[2] / 2f - ((minX + maxX) / 2 - ox) * k;
-        gy = area[1] + area[3] / 2f - ((minY + maxY) / 2 - oy) * k;
-        bounds = new int[] {Math.round(gx + (minX - ox) * k), Math.round(gy + (minY - oy) * k), Math.round((maxX - minX) * k),
+        gx = ox - ((minX + maxX) / 2 - px) * k;
+        gy = oy - ((minY + maxY) / 2 - py) * k;
+        bounds = new int[] {Math.round(gx + (minX - px) * k), Math.round(gy + (minY - py) * k), Math.round((maxX - minX) * k),
                             Math.round((maxY - minY) * k)};
         for (GunSlot s : GunSlot.values())
         {
             int[] p = sil.points[s.ordinal()];
-            points[s.ordinal()] = new int[] {Math.round(gx + (p[0] / (float) f - ox) * k), Math.round(gy + (p[1] / (float) f - oy) * k)};
+            points[s.ordinal()] = new int[] {Math.round(gx + (area[0] + p[0] / (float) f - px) * k),
+                                             Math.round(gy + (area[1] + p[1] / (float) f - py) * k)};
         }
         int[][] b = GunsmithLayout.boxes(width, height, points);
         for (GunSlot s : GunSlot.values())
@@ -380,6 +423,18 @@ public class GunsmithScreen extends GuiContainer
             slot.xDisplayPosition = b[s.ordinal()][0] + 4;
             slot.yDisplayPosition = b[s.ordinal()][1] + 4;
         }
+        areaPixels = area[2] * f * area[3] * f;
+        if (open != null)
+        {
+            fill(open); // the boxes moved: the open list's panel follows
+        }
+        measureMs = (System.nanoTime() - started) / 1e6f;
+    }
+
+    /** The silhouette touches the read area's edge: part of the gun is outside it. */
+    private static boolean cut(Silhouette sil, int w, int h)
+    {
+        return sil.minX <= 0 || sil.minY <= 0 || sil.maxX >= w - 1 || sil.maxY >= h - 1;
     }
 
     /** det(projection 3 x 3 times model view 3 x 3): the handedness the gun is drawn with. */
@@ -410,13 +465,16 @@ public class GunsmithScreen extends GuiContainer
         return a;
     }
 
-    /** One draw of the gun into a cleared depth buffer, read back as a mask (rows top down). */
-    private Silhouette probe(ItemStack gun, float x, float y, float s, int w, int h)
+    /**
+     * One draw of the gun into a cleared depth buffer, the area's w x h pixels from (x, y) (window pixels, bottom left)
+     * read back as a mask, rows top down.
+     */
+    private Silhouette probe(ItemStack gun, float gunX, float gunY, float s, int x, int y, int w, int h)
     {
         GL11.glColorMask(false, false, false, false);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
         measuring = true;
-        drawGun(gun, x, y, s);
+        drawGun(gun, gunX, gunY, s);
         measuring = false;
         GL11.glColorMask(true, true, true, true);
         if (depth == null || depth.capacity() < w * h)
@@ -425,7 +483,8 @@ public class GunsmithScreen extends GuiContainer
             mask = new boolean[w * h];
         }
         depth.clear();
-        GL11.glReadPixels(0, 0, w, h, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, depth);
+        GL11.glReadPixels(x, y, w, h, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, depth);
+        pixelsRead += w * h;
         for (int row = 0; row < h; row++)
         {
             for (int col = 0; col < w; col++)
@@ -487,23 +546,20 @@ public class GunsmithScreen extends GuiContainer
         drawRect(b[0], b[1], b[0] + GunsmithLayout.BOX, b[1] + GunsmithLayout.BOX, in ? 0x80101010 : BOX_BG);
         if (!fitted)
         {
-            String t = in ? "" : s.label.toUpperCase();
-            small(t, b[0] + GunsmithLayout.BOX / 2 - fontRendererObj.getStringWidth(t) / 4, b[1] + GunsmithLayout.BOX / 2 - 2, DIM);
+            small(upper[s.ordinal()], b[0] + GunsmithLayout.BOX / 2 - upperW[s.ordinal()] / 4, b[1] + GunsmithLayout.BOX / 2 - 2, DIM);
         }
-        String l = labels[s.ordinal()];
-        small(l, b[0] + GunsmithLayout.BOX / 2 - fontRendererObj.getStringWidth(l) / 4, b[1] + GunsmithLayout.BOX + 3,
+        small(labels[s.ordinal()], b[0] + GunsmithLayout.BOX / 2 - labelW[s.ordinal()] / 4, b[1] + GunsmithLayout.BOX + 3,
               in ? DIM : fitted ? TEXT : MUTED);
     }
 
     private void drawList(int mouseX, int mouseY)
     {
-        int[] b = boxes[open.ordinal()];
-        if (b == null)
+        int[] l = panel;
+        if (l == null)
         {
             return;
         }
-        int n = rows(), shown = Math.min(n, GunsmithLayout.MAX_ROWS);
-        int[] l = GunsmithLayout.list(width, height, b, n);
+        int shown = Math.min(rows(), GunsmithLayout.MAX_ROWS);
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, 300);
         drawRect(l[0] - 1, l[1] - 1, l[0] + l[2] + 1, l[1] + l[3] + 1, RED);
@@ -517,7 +573,7 @@ public class GunsmithScreen extends GuiContainer
             {
                 drawRect(l[0] + 1, y, l[0] + l[2] - 1, y + GunsmithLayout.ROW, 0x40FFFFFF);
             }
-            ItemStack stack = rowStack(row);
+            ItemStack stack = row < rowStacks.length ? rowStacks[row] : null;
             if (stack != null)
             {
                 RenderHelper.enableGUIStandardItemLighting();
@@ -527,8 +583,9 @@ public class GunsmithScreen extends GuiContainer
                 RenderHelper.disableStandardItemLighting();
                 GL11.glDisable(GL11.GL_LIGHTING);
             }
-            String t = fitWidth(rowText(row), l[2] - 26);
-            fontRendererObj.drawStringWithShadow(t, l[0] + (stack != null ? 23 : 6), y + 5, stack == null && row == 0 && takeOffRow ? RED : TEXT);
+            String t = row < rowTexts.length ? rowTexts[row] : "";
+            int colour = stack != null ? TEXT : row == 0 && takeOffRow ? full ? DIM : RED : TEXT;
+            fontRendererObj.drawStringWithShadow(t, l[0] + textLeft(stack), y + 5, colour);
         }
         GL11.glPopMatrix();
     }
@@ -544,7 +601,7 @@ public class GunsmithScreen extends GuiContainer
     {
         if (takeOffRow && row == 0)
         {
-            return "Take off";
+            return full ? GunsmithContainer.FULL : "Take off";
         }
         int i = row - (takeOffRow ? 1 : 0);
         if (i < 0 || i >= entries.size())
@@ -576,7 +633,34 @@ public class GunsmithScreen extends GuiContainer
             }
         }
         takeOffRow = !s.usedUp() && ((Slot) container.inventorySlots.get(s.ordinal())).getHasStack();
+        full = mc.thePlayer.inventory.getFirstEmptyStack() < 0;
         scroll = Math.max(0, Math.min(scroll, rows() - GunsmithLayout.MAX_ROWS));
+        int n = rows(), pw = fontRendererObj.getStringWidth(s.listTitle()) + 10;
+        rowTexts = new String[n];
+        rowStacks = new ItemStack[n];
+        for (int row = 0; row < n; row++)
+        {
+            rowStacks[row] = rowStack(row);
+            rowTexts[row] = rowText(row);
+            pw = Math.max(pw, fontRendererObj.getStringWidth(rowTexts[row]) + textLeft(rowStacks[row]) + 4);
+            textBuilds++;
+        }
+        // as wide as its longest row (the spec's "None in your inventory" was cut at LIST_W), at most 200
+        pw = Math.max(GunsmithLayout.LIST_W, Math.min(pw, 200));
+        panel = boxes[s.ordinal()] == null ? null : GunsmithLayout.list(width, height, boxes[s.ordinal()], n, pw);
+        if (panel != null)
+        {
+            for (int row = 0; row < n; row++)
+            {
+                rowTexts[row] = fitWidth(rowTexts[row], panel[2] - textLeft(rowStacks[row]) - 4);
+            }
+        }
+    }
+
+    /** Where a row's text starts in the panel: after the part's icon, or near the edge. */
+    private static int textLeft(ItemStack stack)
+    {
+        return stack != null ? 23 : 6;
     }
 
     private void choose(int row)
@@ -584,6 +668,11 @@ public class GunsmithScreen extends GuiContainer
         GunSlot s = open;
         if (takeOffRow && row == 0)
         {
+            if (full)
+            {
+                showNotice(GunsmithContainer.FULL);
+                return;
+            }
             mc.playerController.sendEnchantPacket(container.windowId, GunsmithAction.takeOff(s));
         }
         else
@@ -606,9 +695,9 @@ public class GunsmithScreen extends GuiContainer
     @Override
     protected void mouseClicked(int x, int y, int button)
     {
-        if (open != null)
+        if (open != null && panel != null)
         {
-            int[] l = GunsmithLayout.list(width, height, boxes[open.ordinal()], rows());
+            int[] l = panel;
             if (x >= l[0] && x < l[0] + l[2] && y >= l[1] && y < l[1] + l[3])
             {
                 int row = (y - l[1] - 14) / GunsmithLayout.ROW;
@@ -618,6 +707,10 @@ public class GunsmithScreen extends GuiContainer
                 }
                 return;
             }
+            open = null;
+        }
+        else if (open != null)
+        {
             open = null;
         }
         if (mc.thePlayer.inventory.getItemStack() == null)

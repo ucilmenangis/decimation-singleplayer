@@ -11,6 +11,7 @@ class GunsmithLayoutTest
 {
     static final int[][] SIZES = {{427, 240}, {480, 270}, {640, 360}, {960, 540}, {320, 240}};
     static final int B = GunsmithLayout.BOX;
+    private static final int GAP = 4; // GunsmithLayout's gap between a box and its list
 
     /** The rifle of SilhouetteTest drawn at 90 % of the gun area's width, centred, its points in screen units. */
     static int[][] rifleAt(int[] area)
@@ -107,6 +108,39 @@ class GunsmithLayoutTest
                 assertFalse(rectsOverlap(l, new int[] {box[0], box[1], B, B}), Arrays.toString(s) + " " + Arrays.toString(box));
             }
         }
+    }
+
+    @Test
+    void wideListOnScreenAndBesideItsBoxWhenThereIsRoom()
+    {
+        for (int pw : new int[] {130, 180, 200})
+        {
+            for (int[] s : SIZES)
+            {
+                for (int[] box : corners(s))
+                {
+                    int[] l = GunsmithLayout.list(s[0], s[1], box, 7, pw);
+                    assertEquals(pw, l[2]);
+                    assertTrue(l[0] >= 0 && l[1] >= 0 && l[0] + l[2] <= s[0] && l[1] + l[3] <= s[1],
+                               pw + " " + Arrays.toString(s) + " " + Arrays.toString(l));
+                    boolean room = box[0] + B + GAP + pw <= s[0] || box[0] - GAP - pw >= 0;
+                    if (room)
+                    {
+                        assertFalse(rectsOverlap(l, new int[] {box[0], box[1], B, B}),
+                                    pw + " " + Arrays.toString(s) + " " + Arrays.toString(box));
+                    }
+                }
+            }
+        }
+        // the width the empty list's text needs fits beside a box in the middle of the smallest GUI
+        int[] mid = {320 / 2 - B / 2, 240 / 2 - B / 2};
+        assertFalse(rectsOverlap(GunsmithLayout.list(320, 240, mid, 1, 130), new int[] {mid[0], mid[1], B, B}));
+    }
+
+    @Test
+    void listNeverWiderThanTheScreen()
+    {
+        assertEquals(427, GunsmithLayout.list(427, 240, new int[] {100, 100}, 3, 1000)[2]);
     }
 
     @Test

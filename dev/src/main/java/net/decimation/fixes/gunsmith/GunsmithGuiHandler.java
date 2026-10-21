@@ -30,6 +30,7 @@ public final class GunsmithGuiHandler implements IGuiHandler
         if (old != null && !(old instanceof GunsmithGuiHandler))
         {
             NetworkRegistry.INSTANCE.registerGuiHandler(Deci.decimationMod(), new GunsmithGuiHandler(old));
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new GunsmithContainer.Logout());
         }
     }
 

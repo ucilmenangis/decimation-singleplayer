@@ -7,6 +7,7 @@ import java.util.List;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.decimation.fixes.gunsmith.GunSlot;
 import net.decimation.fixes.gunsmith.GunsmithAction;
+import net.decimation.fixes.gunsmith.GunsmithContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
@@ -55,6 +56,14 @@ public class GunsmithTest extends DevTestMode
     private final boolean PERF = Boolean.getBoolean("deciworldgen.autotest.perf"); // read per run: live settings stay set
     private double closedMs, fullMs, emptyMs;
     private int pressedAt;
+    private volatile String swapClick = "";
+    private volatile boolean swapClean;
+    private volatile int countSupp;
+    private volatile String logoutCursor, logoutFull;
+    private long glass0;
+    private Object textBuilds0;
+    private List<String> sweep;
+    private final StringBuilder sweepBad = new StringBuilder();
     private int textures0;
     private volatile int updates0, updates1;
     private static final Clock clock = new Clock();
@@ -433,7 +442,20 @@ public class GunsmithTest extends DevTestMode
                 if (ticks == 3) act(mc, GunsmithAction.fit(GunSlot.SIGHT, found));
                 if (ticks == 15) server(() -> { twoFourX(); fillWithDirt(); });
                 if (ticks == 17) act(mc, GunsmithAction.fit(GunSlot.SIGHT, 2)); // the stack of two 4x: the reddot could not come back
+                if (ticks == 27)
+                {
+                    check("full: the screen says so", hook(mc, "notice"), "Inventory full".equals(hook(mc, "notice")),
+                          "Inventory full shown in the screen (the HUD and its chat are hidden)");
+                }
                 if (ticks == 29) act(mc, GunsmithAction.takeOff(GunSlot.SIGHT));
+                if (ticks == 33) clickBox(mc, GunSlot.SIGHT);
+                if (ticks == 37)
+                {
+                    List<String> l = lines(mc);
+                    check("full: no Take off offered", String.join(" | ", l), l.size() > 1 && "Inventory full".equals(l.get(1)),
+                          "Inventory full in Take off's place");
+                    clickAt(mc, 2, 2);
+                }
                 if (ticks == 41) server(this::read);
                 if (ticks == 43)
                 {
@@ -525,12 +547,13 @@ public class GunsmithTest extends DevTestMode
                 break;
             case 12: // the held stack replaced while open: the screen closes, the copy keeps the parts
                 if (ticks == 1) pressAttach(mc);
-                if (ticks == 35) server(this::replaceHeld);
+                if (ticks == 35) server(this::replaceAndClick);
                 if (ticks == 45) server(this::read);
                 if (ticks == 47)
                 {
                     check("replaced: the screen closed", screenName(mc), mc.currentScreen == null, "no screen");
                     check("replaced: the copy keeps its parts", barrel, "arSuppressor".equals(barrel), "barrelAttach arSuppressor");
+                    check("replaced: a part slot click in that tick takes nothing", swapClick, swapClean, "nothing taken, cursor empty");
                     mc.thePlayer.closeScreen();
                     next();
                 }
@@ -644,12 +667,36 @@ public class GunsmithTest extends DevTestMode
                 if (ticks == 17)
                 {
                     int[] b = (int[]) hook(mc, "box", GunSlot.BARREL);
-                    if (b != null) clickAt(mc, b[0] + 12, b[1] + 12);
+                    if (b != null) clickWithMove(mc, b[0] + 12, b[1] + 12); // a hand moves while it clicks
                 }
                 if (ticks == 30) server(this::read);
                 if (ticks == 32)
                 {
                     check("drag: hotbar row to the Barrel box", barrel, "arSuppressor".equals(barrel), "barrelAttach arSuppressor");
+                    act(mc, GunsmithAction.takeOff(GunSlot.BARREL));
+                }
+                if (ticks == 44) server(() -> found = find(Item.itemRegistry.getObject("deci:arSuppressor")));
+                if (ticks == 46)
+                {
+                    int[] slot = hotbarSlot(mc, found);
+                    if (slot != null) clickAt(mc, slot[0] + 8, slot[1] + 8); // the part on the cursor
+                }
+                if (ticks == 49) typeAttach(mc);
+                if (ticks == 62) server(this::read);
+                if (ticks == 64)
+                {
+                    check("closing with a part on the cursor puts it back", "on the ground " + loose + ", in the bag " + countSupp,
+                          loose == 0 && countSupp == 1, "0 on the ground, 1 in the bag");
+                    mc.thePlayer.closeScreen();
+                }
+                if (ticks == 66) pressAttach(mc);
+                if (ticks == 100) server(this::logoutWithPartOnCursor);
+                if (ticks == 102)
+                {
+                    check("a disconnect with a part on the cursor keeps it", logoutCursor,
+                          "picked up, then cursor empty, 1 in the bag".equals(logoutCursor), "picked up, then cursor empty, 1 in the bag (saved)");
+                    check("a disconnect with a full bag drops the cursor's part", logoutFull,
+                          "picked up, then cursor empty, 1 on the ground".equals(logoutFull), "picked up, then cursor empty, 1 on the ground");
                     mc.thePlayer.closeScreen();
                     gun = 0;
                     size = 0;
@@ -690,6 +737,60 @@ public class GunsmithTest extends DevTestMode
                     if (size == SIZES.length)
                     {
                         resize(mc, new int[] {startW, startH});
+                        next();
+                    }
+                }
+                break;
+            case 19: // opened while aiming (no scope glass work), measuring cost, nothing built per frame with a list open
+                if (ticks == 1) server(() -> { put(0, "deci:m4a4"); put(2, "deci:4x"); });
+                if (ticks == 4) mc.thePlayer.inventory.currentItem = 0;
+                if (ticks == 8) pressAttach(mc);
+                if (ticks == 40) act(mc, GunsmithAction.fit(GunSlot.SIGHT, 2));
+                if (ticks == 52) mc.thePlayer.closeScreen();
+                if (ticks == 54) net.decimation.fixes.Deci.setAimMode(mc.thePlayer, 1);
+                if (ticks == 58) pressAttach(mc);
+                if (ticks == 90)
+                {
+                    glass0 = net.decimation.fixes.Deci.scopeGlassTime();
+                    Object ms = hook(mc, "measureMs"), px = hook(mc, "pixelsRead"), area = hook(mc, "areaPixels");
+                    check("measuring: under a frame", ms, ms instanceof Float && (Float) ms <= 8f, "at most 8 ms");
+                    check("measuring: reads the gun area only", px + " pixels of " + area, px instanceof Integer && area instanceof Integer
+                          && (Integer) px <= 2 * (Integer) area, "at most twice the area");
+                    clickBox(mc, GunSlot.SIGHT);
+                }
+                if (ticks == 94) textBuilds0 = hook(mc, "textBuilds");
+                if (ticks == 150)
+                {
+                    check("opened while aiming: no scope glass work", net.decimation.fixes.Deci.scopeGlassTime() == glass0 ? "none" : "measured",
+                          net.decimation.fixes.Deci.scopeGlassTime() == glass0, "none (spec 5)");
+                    Object tb = hook(mc, "textBuilds");
+                    check("a list open: no text built per frame", textBuilds0 + " then " + tb, tb != null && tb.equals(textBuilds0),
+                          "unchanged over 56 ticks");
+                    net.decimation.fixes.Deci.setAimMode(mc.thePlayer, 0);
+                    mc.thePlayer.closeScreen();
+                    sweep = allGuns();
+                    gun = 0;
+                    next();
+                }
+                break;
+            case 20: // every registered gun at 854 x 480: lines on the gun, boxes on screen and apart
+                if (ticks == 1)
+                {
+                    final String g = sweep.get(gun);
+                    server(() -> put(0, g));
+                }
+                if (ticks == 4) mc.thePlayer.inventory.currentItem = 0;
+                if (ticks == 6) pressAttach(mc);
+                if (ticks >= 20 && mc.currentScreen != null && hook(mc, "gunBounds") != null || ticks > 120)
+                {
+                    String bad = layoutProblems(mc);
+                    if (!bad.isEmpty()) sweepBad.append(sweep.get(gun)).append(": ").append(bad).append("; ");
+                    mc.thePlayer.closeScreen();
+                    ticks = 0;
+                    if (++gun == sweep.size())
+                    {
+                        check("every gun lays out", sweep.size() + " guns" + (sweepBad.length() == 0 ? "" : ", " + sweepBad), sweepBad.length() == 0,
+                              "every gun's lines on it, boxes on screen and apart");
                         net.decimation.worldgen.DevAutoTest.keepScreen = false;
                         listener.test = null;
                         joins.test = null;
@@ -895,6 +996,46 @@ public class GunsmithTest extends DevTestMode
             DevTestUtil.clickAt(s, x, y);
             release(s, x, y);
         }
+    }
+
+    /** A press, a one unit move with the button held, then the release: how a hand really clicks. */
+    static void clickWithMove(Minecraft mc, int x, int y)
+    {
+        GuiScreen s = mc.currentScreen;
+        if (s == null)
+        {
+            return;
+        }
+        s.drawScreen(x, y, 0);
+        DevTestUtil.clickAt(s, x, y);
+        for (Class<?> c = s.getClass(); c != null; c = c.getSuperclass())
+        {
+            boolean done = false;
+            for (String n : new String[] {"mouseClickMove", "func_146273_a"})
+            {
+                try
+                {
+                    java.lang.reflect.Method m = c.getDeclaredMethod(n, int.class, int.class, int.class, long.class);
+                    m.setAccessible(true);
+                    m.invoke(s, x + 1, y, 0, 80L);
+                    done = true;
+                    break;
+                }
+                catch (NoSuchMethodException e)
+                {
+                    // the other name, then the parent class
+                }
+                catch (ReflectiveOperationException e)
+                {
+                    throw new IllegalStateException(e);
+                }
+            }
+            if (done)
+            {
+                break;
+            }
+        }
+        release(s, x + 1, y);
     }
 
     private static void release(GuiScreen s, int x, int y)
@@ -1133,6 +1274,7 @@ public class GunsmithTest extends DevTestMode
         countM4Paint = countOf(p, byName("item.spraycan.m4a4."));
         countAkPaint = countOf(p, byName("item.spraycan.ak74."));
         countTracer = countOf(p, byName("item.ItemPyroPowder"));
+        countSupp = countOf(p, (Item) Item.itemRegistry.getObject("deci:arSuppressor"));
         loose = p.worldObj.getEntitiesWithinAABB(EntityItem.class, p.boundingBox.expand(4, 4, 4)).size();
     }
 
@@ -1209,6 +1351,127 @@ public class GunsmithTest extends DevTestMode
         EntityPlayerMP p = player();
         p.inventory.mainInventory[index] = stack(name, 1);
         p.openContainer.detectAndSendChanges();
+    }
+
+    /** The held stack swapped (as a right click does) and, in the same tick, a click on a part slot (a modified client). */
+    /**
+     * A part picked onto the cursor, then the player's logout as FML posts it before the save (Minecraft saves the bag,
+     * never the cursor): the part must be back in the bag.
+     */
+    private void logoutWithPartOnCursor()
+    {
+        EntityPlayerMP p = player();
+        int i = find(Item.itemRegistry.getObject("deci:arSuppressor"));
+        if (i >= 0 && p.openContainer instanceof GunsmithContainer)
+        {
+            p.openContainer.slotClick(i < 9 ? GunsmithContainer.HOTBAR + i : GunsmithContainer.MAIN + i - 9, 0, 0, p);
+        }
+        boolean picked = p.inventory.getItemStack() != null;
+        new GunsmithContainer.Logout().loggedOut(new cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent(p));
+        ItemStack cursor = p.inventory.getItemStack();
+        read();
+        logoutCursor = (picked ? "picked up" : "not picked up") + ", then cursor " + (cursor == null ? "empty" : "held") + ", " + countSupp
+                       + " in the bag";
+        if (cursor != null)
+        {
+            p.inventory.setItemStack(null); // a test leftover: it must not drop when the screen closes
+            p.inventory.addItemStackToInventory(cursor);
+        }
+        // a full bag: what cannot go back drops beside the player, as closing the screen drops it
+        i = find(Item.itemRegistry.getObject("deci:arSuppressor"));
+        if (i >= 0)
+        {
+            p.openContainer.slotClick(i < 9 ? GunsmithContainer.HOTBAR + i : GunsmithContainer.MAIN + i - 9, 0, 0, p);
+        }
+        picked = p.inventory.getItemStack() != null;
+        fillWithDirt();
+        new GunsmithContainer.Logout().loggedOut(new cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent(p));
+        cursor = p.inventory.getItemStack();
+        read();
+        logoutFull = (picked ? "picked up" : "not picked up") + ", then cursor " + (cursor == null ? "empty" : "held") + ", " + loose
+                     + " on the ground";
+        clearDirt();
+        if (cursor != null)
+        {
+            p.inventory.setItemStack(null);
+            p.inventory.addItemStackToInventory(cursor);
+        }
+        for (Object o : p.worldObj.getEntitiesWithinAABB(EntityItem.class, p.boundingBox.expand(4, 4, 4)))
+        {
+            p.inventory.addItemStackToInventory(((EntityItem) o).getEntityItem()); // the dropped part back in the bag
+            ((EntityItem) o).setDead();
+        }
+        p.openContainer.detectAndSendChanges();
+    }
+
+    private void replaceAndClick()
+    {
+        EntityPlayerMP p = player();
+        ItemStack h = p.inventory.getCurrentItem();
+        p.inventory.setInventorySlotContents(p.inventory.currentItem, h == null ? null : h.copy());
+        ItemStack got = p.openContainer.slotClick(GunSlot.BARREL.ordinal(), 0, 0, p);
+        ItemStack cursor = p.inventory.getItemStack();
+        swapClick = (got == null ? "nothing" : got.getDisplayName()) + ", cursor " + (cursor == null ? "empty" : cursor.getDisplayName());
+        swapClean = got == null && cursor == null;
+        if (cursor != null)
+        {
+            p.inventory.setItemStack(null); // a test leftover: it must not drop when the screen closes
+        }
+    }
+
+    /** Every registered gun, by registry name. */
+    private static List<String> allGuns()
+    {
+        List<String> g = new ArrayList<String>();
+        for (Object o : Item.itemRegistry)
+        {
+            if (net.decimation.fixes.Deci.isGun((Item) o))
+            {
+                g.add(String.valueOf(Item.itemRegistry.getNameForObject(o)));
+            }
+        }
+        return g;
+    }
+
+    /** What layoutChecks would fail on, as text ("" when all is right). */
+    private static String layoutProblems(Minecraft mc)
+    {
+        GuiScreen s = mc.currentScreen;
+        int[] b = (int[]) hook(mc, "gunBounds");
+        if (s == null || b == null)
+        {
+            return "no screen or no gun drawn";
+        }
+        StringBuilder bad = new StringBuilder();
+        int B = net.decimation.fixes.gunsmith.GunsmithLayout.BOX;
+        int[][] boxes = new int[GunSlot.values().length][];
+        for (GunSlot k : GunSlot.values())
+        {
+            int[] p = (int[]) hook(mc, "point", k);
+            if (p == null || p[0] < b[0] - 1 || p[0] > b[0] + b[2] + 1 || p[1] < b[1] - 1 || p[1] > b[1] + b[3] + 1)
+            {
+                bad.append(k).append(" line off the gun ");
+            }
+            int[] x = (int[]) hook(mc, "box", k);
+            boxes[k.ordinal()] = x;
+            if (x == null || x[0] < 4 || x[0] + B > s.width - 4 || x[1] < net.decimation.fixes.gunsmith.GunsmithLayout.TOP
+                || x[1] + B + 10 > s.height - net.decimation.fixes.gunsmith.GunsmithLayout.BOTTOM)
+            {
+                bad.append(k).append(" box off screen ");
+            }
+        }
+        for (int i = 0; i < boxes.length; i++)
+        {
+            for (int j = i + 1; j < boxes.length; j++)
+            {
+                if (boxes[i] != null && boxes[j] != null && Math.abs(boxes[i][0] - boxes[j][0]) < B + 4
+                    && Math.abs(boxes[i][1] - boxes[j][1]) < B + 14)
+                {
+                    bad.append(GunSlot.values()[i]).append('/').append(GunSlot.values()[j]).append(" overlap ");
+                }
+            }
+        }
+        return bad.toString().trim();
     }
 
     private void replaceHeld()

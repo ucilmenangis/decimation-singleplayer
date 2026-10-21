@@ -19,6 +19,8 @@ import net.minecraft.util.EnumChatFormatting;
  */
 public class GunsmithContainer extends Container
 {
+    /** Said when a part cannot come back to a full inventory (GunsmithClient shows it in the screen). */
+    static final String FULL = "Inventory full";
     public static final int PARTS = 6, HOTBAR = PARTS, MAIN = HOTBAR + 9;
     /** The hotbar slot of the gun, fixed while the screen is open. */
     public final int heldSlot;
@@ -41,7 +43,7 @@ public class GunsmithContainer extends Container
         public void markDirty()
         {
             super.markDirty();
-            if (ready && !player.worldObj.isRemote)
+            if (ready && !player.worldObj.isRemote && player.inventory.getStackInSlot(heldSlot) == gun)
             {
                 for (GunSlot s : GunSlot.values())
                 {
@@ -143,6 +145,10 @@ public class GunsmithContainer extends Container
     @Override
     public ItemStack slotClick(int slotId, int button, int mode, EntityPlayer p)
     {
+        if (!canInteractWith(p))
+        {
+            return null; // the held stack changed this tick (a right click copies it): the parts view is stale (review C1)
+        }
         if (slotId == HOTBAR + heldSlot || mode == 2 && (button == heldSlot || slotId < PARTS) || mode == 6
             || slotId >= 0 && slotId < PARTS && mode != 0)
         {
@@ -155,6 +161,61 @@ public class GunsmithContainer extends Container
     public ItemStack transferStackInSlot(EntityPlayer p, int slot)
     {
         return null;
+    }
+
+    /**
+     * No drag painting onto a part slot or the gun's slot: GuiContainer then sends a plain click, which those take. A
+     * hand that moved while clicking started a drag the part slots refused (review I1).
+     */
+    @Override
+    public boolean canDragIntoSlot(Slot slot)
+    {
+        return slot.slotNumber >= PARTS && slot.slotNumber != HOTBAR + heldSlot;
+    }
+
+    /** A part on the cursor goes back into the bag when the screen closes; only what does not fit drops (review I3). */
+    @Override
+    public void onContainerClosed(EntityPlayer p)
+    {
+        returnCursor(p);
+        super.onContainerClosed(p);
+    }
+
+    /** The cursor's stack into the inventory, as far as it fits (closing, and a disconnect: Logout). */
+    void returnCursor(EntityPlayer p)
+    {
+        ItemStack cursor = p.inventory.getItemStack();
+        if (cursor != null)
+        {
+            p.inventory.addItemStackToInventory(cursor);
+            if (cursor.stackSize <= 0)
+            {
+                p.inventory.setItemStack(null);
+            }
+        }
+    }
+
+    /**
+     * A disconnect with the screen open: Minecraft saves the player without closing the screen, and the cursor is not
+     * saved, so a part held there was lost (review I3). FML posts this before the save: the part goes back in the bag,
+     * and what a full bag cannot take drops beside the player, as closing the screen drops it.
+     */
+    public static final class Logout
+    {
+        @cpw.mods.fml.common.eventhandler.SubscribeEvent
+        public void loggedOut(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent e)
+        {
+            if (e.player.openContainer instanceof GunsmithContainer)
+            {
+                ((GunsmithContainer) e.player.openContainer).returnCursor(e.player);
+                ItemStack rest = e.player.inventory.getItemStack();
+                if (rest != null)
+                {
+                    e.player.dropPlayerItemWithRandomChoice(rest, false);
+                    e.player.inventory.setItemStack(null);
+                }
+            }
+        }
     }
 
     @Override
@@ -179,7 +240,7 @@ public class GunsmithContainer extends Container
         boolean back = old != null && !s.usedUp();
         if (back && src.stackSize > 1 && p.inventory.getFirstEmptyStack() < 0)
         {
-            tell(p, "Inventory full");
+            tell(p, FULL);
             return false;
         }
         ItemStack one = src.splitStack(1);
@@ -205,7 +266,7 @@ public class GunsmithContainer extends Container
         }
         if (p.inventory.getFirstEmptyStack() < 0)
         {
-            tell(p, "Inventory full");
+            tell(p, FULL);
             return false;
         }
         parts.setInventorySlotContents(s.ordinal(), null);

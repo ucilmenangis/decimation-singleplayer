@@ -57,14 +57,21 @@ public final class GunsmithLayout
     /** The list panel {x, y, w, h} for `rows` rows beside the box at {x, y}: right of it when it fits, else left. */
     public static int[] list(int w, int h, int[] box, int rows)
     {
+        return list(w, h, box, rows, LIST_W);
+    }
+
+    /** The same, pw wide (the screen sizes it to its longest row), never wider than the screen. */
+    public static int[] list(int w, int h, int[] box, int rows, int pw)
+    {
+        pw = Math.min(pw, w);
         int ph = 14 + ROW * Math.min(rows, MAX_ROWS);
         int x = box[0] + BOX + GAP;
-        if (x + LIST_W > w)
+        if (x + pw > w)
         {
-            x = Math.max(0, box[0] - GAP - LIST_W);
+            x = Math.max(0, box[0] - GAP - pw);
         }
         int y = Math.max(0, Math.min(box[1], h - ph));
-        return new int[] {x, y, LIST_W, ph};
+        return new int[] {x, y, pw, ph};
     }
 
     private static int[] clamp(int w, int h, int x, int y)

@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.decimation.fixes.gunsmith.GunsmithClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
@@ -243,7 +244,7 @@ public class ScopeZoom
         long now = System.nanoTime();
         double dt = lastFrame == 0 ? 0 : Math.min(0.1, (now - lastFrame) / 1e9);
         lastFrame = now;
-        boolean aiming = mc.thePlayer != null && Deci.aimMode(mc.thePlayer) == 1;
+        boolean aiming = mc.thePlayer != null && Deci.aimMode(mc.thePlayer) == 1 && !GunsmithClient.isOpen();
         if (aiming && !wasAiming)
         {
             aimStart = now;
@@ -347,7 +348,7 @@ public class ScopeZoom
         {
             // vanilla draws the hand next: measure for the glass copy, which runs only while aiming (a 1x sight like the
             // EOTech aims at zoom 1); at the hip every 8th frame was measured for nothing (19 Oktober 2026, scopeperf)
-            Deci.setScopeGlassEvery(mc.thePlayer != null && Deci.aimMode(mc.thePlayer) == 1 ? 7 : -1);
+            Deci.setScopeGlassEvery(mc.thePlayer != null && Deci.aimMode(mc.thePlayer) == 1 && !GunsmithClient.isOpen() ? 7 : -1);
             return;
         }
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -482,7 +483,7 @@ public class ScopeZoom
         // the glass shows the world only while aiming (or zooming in / out): holding a scoped gun at the
         // hip copied the whole screen every frame (the glass box is unknown there), and so did every
         // frame of the zoom animation: a large frame drop on a weak laptop (bug report 13 Oktober 2026)
-        boolean aiming = Deci.aimMode(mc.thePlayer) == 1;
+        boolean aiming = Deci.aimMode(mc.thePlayer) == 1 && !GunsmithClient.isOpen(); // the Gunsmith hides the hand: no glass
         if (!aiming && zoom <= 1.001)
         {
             if (copied)

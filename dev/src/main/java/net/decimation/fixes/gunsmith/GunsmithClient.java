@@ -2,7 +2,9 @@ package net.decimation.fixes.gunsmith;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,7 +33,8 @@ public final class GunsmithClient
         return new GunsmithScreen(new GunsmithContainer(player));
     }
 
-    private static boolean open()
+    /** The Gunsmith screen is up (ScopeZoom: no scope glass work while it hides the hand). */
+    public static boolean isOpen()
     {
         return Minecraft.getMinecraft().currentScreen instanceof GunsmithScreen;
     }
@@ -39,7 +42,7 @@ public final class GunsmithClient
     @SubscribeEvent
     public void overlay(RenderGameOverlayEvent.Pre e)
     {
-        if (e.type == RenderGameOverlayEvent.ElementType.ALL && open())
+        if (e.type == RenderGameOverlayEvent.ElementType.ALL && isOpen())
         {
             // the HUD's draw is also where a world's GUI view gets set up (GuiIngameForge, before its other elements):
             // set it up here, then skip the HUD
@@ -51,9 +54,20 @@ public final class GunsmithClient
     @SubscribeEvent
     public void hand(RenderHandEvent e)
     {
-        if (open())
+        if (isOpen())
         {
             e.setCanceled(true);
+        }
+    }
+
+    /** The server's refusals reach the player in the screen: its chat is hidden with the HUD. */
+    @SubscribeEvent
+    public void chat(ClientChatReceivedEvent e)
+    {
+        GuiScreen s = Minecraft.getMinecraft().currentScreen;
+        if (s instanceof GunsmithScreen && e.message != null && GunsmithContainer.FULL.equals(e.message.getUnformattedText()))
+        {
+            ((GunsmithScreen) s).showNotice(GunsmithContainer.FULL);
         }
     }
 }
