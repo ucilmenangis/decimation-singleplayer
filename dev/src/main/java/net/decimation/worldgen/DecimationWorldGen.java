@@ -330,6 +330,7 @@ public class DecimationWorldGen
     public void init(FMLInitializationEvent event)
     {
         net.decimation.fixes.WreckHardness.apply();   // military wrecks broke with one punch (bug.md)
+        net.decimation.fixes.PropHardness.apply();    // every other prop with hardness 0 (bug.md)
         Map<Integer, Sub> subs = buildSubstitutions();
         StructureGenerator generator = new StructureGenerator(schematics, subs, roadBlocks(),
                                    Block.getBlockFromName("deci:BlockRoad"),
