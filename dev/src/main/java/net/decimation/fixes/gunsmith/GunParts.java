@@ -3,6 +3,7 @@ package net.decimation.fixes.gunsmith;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.decimation.fixes.Deci;
 import net.decimation.fixes.GripRails;
+import net.decimation.fixes.SightMounts;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +22,7 @@ public final class GunParts
     /**
      * Whether part may go into slot s of this gun: the right kind of item for the slot first (Decimation's FilteredSlot
      * maps indexes 5 and 6 to the grip rule, so it would take a grip as paint), then Decimation's own rules, and a
-     * Foregrip or RK-1 only on a gun with a rail (fixes/GripRails).
+     * Foregrip or RK-1 only on a gun with a rail (fixes/GripRails), a sight only on its mount (fixes/SightMounts).
      */
     public static boolean fits(GunSlot s, ItemStack gun, ItemStack part)
     {
@@ -31,10 +32,13 @@ public final class GunParts
         }
         Item i = part.getItem();
         boolean kind = s == GunSlot.PAINT ? Deci.isSkin(i) : s == GunSlot.TRACER ? Deci.isTracer(i) : Deci.isAttachment(i);
-        if (s == GunSlot.GRIP && kind && !GripRails.fits(GameRegistry.findUniqueIdentifierFor(gun.getItem()).name,
-                                                         GameRegistry.findUniqueIdentifierFor(i).name))
+        if (kind && (s == GunSlot.GRIP || s == GunSlot.SIGHT))
         {
-            return false;
+            String g = GameRegistry.findUniqueIdentifierFor(gun.getItem()).name, a = GameRegistry.findUniqueIdentifierFor(i).name;
+            if (s == GunSlot.GRIP ? !GripRails.fits(g, a) : !SightMounts.fits(g, a))
+            {
+                return false;
+            }
         }
         return kind && Deci.fitsSlot(gun, s.deciIndex, part);
     }

@@ -19,14 +19,14 @@ import net.minecraft.nbt.NBTTagCompound;
  * sometime it has delay on it. due to loading the scope render"). Per gun and sight, a first aim (ScopeZoom's learned
  * sight positions forgotten first, as after a launch) and a second aim: the time from the aim until the zoom is 95 % in,
  * the worst frame in the first second and the frames over 50 ms. Pairs: -Ppairs=gun:sight,... (default the M4A4 with our
- * ACOG, EOTech and SpecterDR and Decimation's 2x, the AKM with its red dot). Values first; the checks follow the measure.
+ * ACOG, EOTech and SpecterDR and Decimation's 2x, the Glock 17 with the red dot). Values first; the checks follow the measure.
  */
 public class AimDelayTest extends DevTestMode
 {
     public String name() { return "aimdelay"; }
 
     private static final String[][] DEFAULT = {{"m4a4", "ta11acog"}, {"m4a4", "eotech558"}, {"m4a4", "specterdr"}, {"m4a4", "2x"},
-                                               {"akm", "reddot"}};
+                                               {"glock17", "reddot"}};   // the red dot: pistols with a mount only
     private final String[][] pairs = pairs(System.getProperty("deciworldgen.autotest.pairs", ""));
     private int pair, phase, ticks;
     /** Time to 95 % zoom of the second aim (learned), per pair, to compare with the aim after a relaunch. */

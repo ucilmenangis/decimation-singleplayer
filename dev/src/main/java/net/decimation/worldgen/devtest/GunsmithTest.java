@@ -30,7 +30,7 @@ import net.minecraftforge.common.MinecraftForge;
  * key (the way its client tick reads it) opens our container for the held gun; list actions (container button ids) fit,
  * swap and take off parts by Decimation's own rules; a full inventory refuses; the gun never leaves its hotbar slot and
  * closing drops nothing; a replaced held stack closes the screen and keeps the parts; death drops exactly what was held.
- * Survival on the test arena, mob spawning off. Inventory: 0 M4A4, 1 free, 2 two 4x, 3 reddot, 4 AR suppressor,
+ * Survival on the test arena, mob spawning off. Inventory: 0 M4A4, 1 free, 2 two 4x, 3 EOTech, 4 AR suppressor,
  * 5 foregrip, 6 M4A4 paint, 7 AK74 paint, 8 tracer powder, 9 AS Val (built in suppressor), 10 AUG (built in scope).
  */
 public class GunsmithTest extends DevTestMode
@@ -46,7 +46,7 @@ public class GunsmithTest extends DevTestMode
     /** Server readings, written on the server thread by read(). */
     private volatile String held = "", sight = "", barrel = "", skin = "", wantSkin = "";
     private volatile boolean tracerSet;
-    private volatile int count4x, countReddot, countM4Paint, countAkPaint, countTracer, heldId, heldIndex, loose, dropped,
+    private volatile int count4x, countEotech, countM4Paint, countAkPaint, countTracer, heldId, heldIndex, loose, dropped,
                          carried, found = -1;
     private int openHeldId, windowId;
     private static final String[] GUNS = {"m4a4", "glock17", "svd", "r870", "uzi", "minigun", "deagle", "rpg7"};
@@ -450,15 +450,15 @@ public class GunsmithTest extends DevTestMode
                     next();
                 }
                 break;
-            case 4: // swap to the reddot: the 4x comes back
-                if (ticks == 1) server(() -> found = find(Item.itemRegistry.getObject("deci:reddot")));
+            case 4: // swap to the EOTech: the 4x comes back
+                if (ticks == 1) server(() -> found = find(Item.itemRegistry.getObject("deci:eotech558")));
                 if (ticks == 3) act(mc, GunsmithAction.fit(GunSlot.SIGHT, found));
                 if (ticks == 15) server(this::read);
                 if (ticks == 17)
                 {
-                    check("swap: the gun has the reddot", sight, "reddot".equals(sight), "sightAttach reddot");
+                    check("swap: the gun has the EOTech", sight, "eotech558".equals(sight), "sightAttach eotech558");
                     check("swap: the 4x came back", count4x, count4x == 2, "2");
-                    check("swap: the reddot left the inventory", countReddot, countReddot == 0, "0");
+                    check("swap: the EOTech left the inventory", countEotech, countEotech == 0, "0");
                     next();
                 }
                 break;
@@ -468,15 +468,15 @@ public class GunsmithTest extends DevTestMode
                 if (ticks == 15)
                 {
                     check("take off: no sight", sight, "".equals(sight), "sightAttach empty");
-                    check("take off: the reddot is back", countReddot, countReddot == 1, "1");
+                    check("take off: the EOTech is back", countEotech, countEotech == 1, "1");
                     next();
                 }
                 break;
             case 6: // a full inventory refuses what could not come back
-                if (ticks == 1) server(() -> found = find(Item.itemRegistry.getObject("deci:reddot")));
+                if (ticks == 1) server(() -> found = find(Item.itemRegistry.getObject("deci:eotech558")));
                 if (ticks == 3) act(mc, GunsmithAction.fit(GunSlot.SIGHT, found));
                 if (ticks == 15) server(() -> { twoFourX(); fillWithDirt(); });
-                if (ticks == 17) act(mc, GunsmithAction.fit(GunSlot.SIGHT, 2)); // the stack of two 4x: the reddot could not come back
+                if (ticks == 17) act(mc, GunsmithAction.fit(GunSlot.SIGHT, 2)); // the stack of two 4x: the EOTech could not come back
                 if (ticks == 27)
                 {
                     check("full: the screen says so", hook(mc, "notice"), "Inventory full".equals(hook(mc, "notice")),
@@ -494,7 +494,7 @@ public class GunsmithTest extends DevTestMode
                 if (ticks == 41) server(this::read);
                 if (ticks == 43)
                 {
-                    check("full: nothing changed", sight, "reddot".equals(sight), "sightAttach still reddot");
+                    check("full: nothing changed", sight, "eotech558".equals(sight), "sightAttach still eotech558");
                     check("full: told twice", said("Inventory full"), said("Inventory full") >= 2, "Inventory full x2");
                     check("full: the 4x stack kept", count4x, count4x == 2, "2");
                     server(this::clearDirt);
@@ -636,7 +636,7 @@ public class GunsmithTest extends DevTestMode
                 if (ticks == 5)
                 {
                     List<String> lines = lines(mc);
-                    String fourX = name("deci:4x"), red = name("deci:reddot");
+                    String fourX = name("deci:4x"), red = name("deci:eotech558");
                     check("list: opens on its slot", hook(mc, "openList"), GunSlot.SIGHT.equals(hook(mc, "openList")), "SIGHT");
                     check("list: title", lines.isEmpty() ? "none" : lines.get(0), !lines.isEmpty() && "Sights you carry".equals(lines.get(0)), "Sights you carry");
                     check("list: what fits", String.join(" | ", lines), lines.contains(fourX) && lines.contains(red), fourX + " and " + red);
@@ -1271,7 +1271,7 @@ public class GunsmithTest extends DevTestMode
         wantSkin = m4Paint == null ? "" : m4Paint.getUnlocalizedName().substring("item.spraycan.m4a4.".length());
         p.inventory.mainInventory[0] = stack("deci:m4a4", 1);
         p.inventory.mainInventory[2] = stack("deci:4x", 2);
-        p.inventory.mainInventory[3] = stack("deci:reddot", 1);
+        p.inventory.mainInventory[3] = stack("deci:eotech558", 1);
         p.inventory.mainInventory[4] = stack("deci:arSuppressor", 1);
         p.inventory.mainInventory[5] = grip ? stack("deci:foregrip", 1) : null;
         p.inventory.mainInventory[6] = m4Paint == null ? null : new ItemStack(m4Paint);
@@ -1325,7 +1325,7 @@ public class GunsmithTest extends DevTestMode
         skin = nbt(h, GunSlot.PAINT.nbtKey);
         tracerSet = h != null && h.hasTagCompound() && h.getTagCompound().hasKey(GunSlot.TRACER.nbtKey);
         count4x = countOf(p, (Item) Item.itemRegistry.getObject("deci:4x"));
-        countReddot = countOf(p, (Item) Item.itemRegistry.getObject("deci:reddot"));
+        countEotech = countOf(p, (Item) Item.itemRegistry.getObject("deci:eotech558"));
         countM4Paint = countOf(p, byName("item.spraycan.m4a4."));
         countAkPaint = countOf(p, byName("item.spraycan.ak74."));
         countTracer = countOf(p, byName("item.ItemPyroPowder"));
@@ -1522,7 +1522,7 @@ public class GunsmithTest extends DevTestMode
                   + turned + " views", turned == 20 && m != null && m.equals(measuresT) && tb != null && tb.equals(textBuildsT),
                   "20 views, measures and texts unchanged");
             hook(mc, "setView", new float[] {45, 10, 1.2f});
-            server(() -> { put(3, "deci:reddot"); found = 3; });
+            server(() -> { put(3, "deci:eotech558"); found = 3; });
         }
         if (ticks == 146) act(mc, GunsmithAction.fit(GunSlot.SIGHT, found));
         if (ticks == 170)

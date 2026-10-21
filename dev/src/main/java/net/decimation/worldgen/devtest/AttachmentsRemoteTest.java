@@ -163,7 +163,7 @@ public class AttachmentsRemoteTest extends DevTestMode
                     next();
                 }
                 break;
-            case 6: // a Foregrip on a rail-less RPK comes off on the server (fixes/GripStrip) and reaches the client
+            case 6: // a Foregrip on a rail-less RPK comes off on the server (fixes/MountStrip) and reaches the client
                 String who = mc.thePlayer.getCommandSenderName();
                 if (ticks == 1) mc.thePlayer.sendChatMessage("/gamemode 1");
                 if (ticks == 10) mc.thePlayer.sendChatMessage("/clear");

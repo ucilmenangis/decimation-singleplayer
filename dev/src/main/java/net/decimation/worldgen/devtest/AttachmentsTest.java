@@ -77,7 +77,14 @@ public class AttachmentsTest extends DevTestMode
                 }
                 return true;
             case 4:
-                return rails(mc);
+                if (!rails(mc))
+                {
+                    step++;
+                    ticks = 0;
+                }
+                return true;
+            case 5:
+                return mounts(mc);
             case 10:
                 return perf(mc);
             default:
@@ -230,7 +237,7 @@ public class AttachmentsTest extends DevTestMode
     /**
      * Foregrips need a rail (user, 21 Oktober 2026; docs/references/grip_rails.md): the Gunsmith refuses a Foregrip or
      * RK-1 on a rail-less rifle (lights still fit), NPC rifles without a rail never carry one, and a vertical grip on a
-     * rail-less gun pops off into the inventory (fixes/GripStrip), never while the Gunsmith is open on it (its slots are
+     * rail-less gun pops off into the inventory (fixes/MountStrip), never while the Gunsmith is open on it (its slots are
      * a view of the gun: taking it then would copy it), and onto the ground when the inventory is full.
      */
     private boolean rails(Minecraft mc)
@@ -268,7 +275,7 @@ public class AttachmentsTest extends DevTestMode
                 p.inventory.setInventorySlotContents(1, gunWith("deci:rpk", "laser"));
                 p.inventory.setInventorySlotContents(2, gunWith("deci:fnscar", "rk1"));
                 p.inventory.currentItem = 0;
-                // the Gunsmith opened in the same server step: GripStrip's next pass (once a second) must find it open
+                // the Gunsmith opened in the same server step: MountStrip's next pass (once a second) must find it open
                 p.openGui(Deci.decimationMod(), Deci.attachmentsGuiId(), p.worldObj, (int) p.posX, (int) p.posY, (int) p.posZ);
             };
             mc.thePlayer.inventory.currentItem = 0;
@@ -324,6 +331,82 @@ public class AttachmentsTest extends DevTestMode
             };
         }
         return ticks < 185;
+    }
+
+    /**
+     * Sights need a mount (user, 22 Oktober 2026; docs/references/grip_rails.md section 6): the red dot only on a pistol
+     * with an optic cut or rail, other sights only on a top rail or a side mount; the Gunsmith, NPC kits and the strip
+     * (fixes/MountStrip) follow it.
+     */
+    private boolean mounts(Minecraft mc)
+    {
+        if (ticks == 1)
+        {
+            String[][] cases = {{"glock17", "reddot", "true"}, {"makarov", "reddot", "false"}, {"m4a4", "reddot", "false"},
+                                {"akm", "reddot", "false"}, {"akm", "ta11acog", "true"}, {"m4a4", "eotech558", "true"},
+                                {"mp5a3", "2x", "true"}, {"kar98k", "4x", "false"}, {"glock17", "4x", "false"}, {"uzi", "eotech558", "false"}};
+            StringBuilder got = new StringBuilder();
+            boolean ok = true;
+            for (String[] c : cases)
+            {
+                boolean f = GunParts.fits(GunSlot.SIGHT, stack("deci:" + c[0]), stack("deci:" + c[1]));
+                got.append(got.length() == 0 ? "" : ", ").append(c[0]).append(' ').append(c[1]).append(' ').append(f);
+                ok &= f == Boolean.parseBoolean(c[2]);
+            }
+            DevTestResults.check(name(), "mounts: Gunsmith fits a sight only on its mount", got.toString(), ok,
+                                 "red dot on glock17 only; ACOG on the AKM's side mount; EOTech, 2x on rails; none on kar98k, uzi, a pistol's 4x");
+            String[] mg3 = net.decimation.fixes.NpcLoadouts.fitKit("mg3", new String[] {"sight=4x", "barrel=mgSuppressor", "grip=laser"});
+            String[] pkm = net.decimation.fixes.NpcLoadouts.fitKit("pkm", new String[] {"sight=4x", "barrel=mgSuppressor", "grip=laser"});
+            int akmRed = 0, akmSights = 0;
+            for (int i = 0; i < 400; i++)
+            {
+                for (String k : net.decimation.fixes.NpcLoadouts.instance().rifleAttachments("akm"))
+                {
+                    akmRed += k.equals("sight=reddot") ? 1 : 0;
+                    akmSights += k.startsWith("sight=") ? 1 : 0;
+                }
+            }
+            DevTestResults.check(name(), "mounts: NPC kits keep only sights their gun can mount", "mg3 " + String.join(" ", mg3) + "; pkm "
+                                 + String.join(" ", pkm) + "; akm red dots " + akmRed + ", sights " + akmSights + " of 400",
+                                 !String.join(" ", mg3).contains("sight=") && String.join(" ", pkm).contains("sight=4x") && akmRed == 0 && akmSights > 0,
+                                 "mg3 no sight, pkm its 4x, akm sights but no red dot");
+            onServer = () -> {
+                EntityPlayerMP p = player();
+                p.inventory.clearInventory(null, -1);
+                p.inventory.setInventorySlotContents(0, sightOn("deci:kar98k", "4x"));
+                p.inventory.setInventorySlotContents(1, sightOn("deci:m4a4", "reddot"));
+                p.inventory.setInventorySlotContents(2, sightOn("deci:akm", "ta11acog"));
+                p.inventory.setInventorySlotContents(3, sightOn("deci:glock17", "reddot"));
+            };
+        }
+        if (ticks == 60)
+        {
+            onServer = () -> {
+                EntityPlayerMP p = player();
+                DevTestResults.check(name(), "mounts: a sight off its mount pops off", "kar98k '" + sight(p, 0) + "', m4a4 '" + sight(p, 1)
+                                     + "', akm '" + sight(p, 2) + "', glock17 '" + sight(p, 3) + "', loose 4x " + count(p, "4x") + ", red dots "
+                                     + count(p, "reddot"), "".equals(sight(p, 0)) && "".equals(sight(p, 1)) && "ta11acog".equals(sight(p, 2))
+                                     && "reddot".equals(sight(p, 3)) && count(p, "4x") == 1 && count(p, "reddot") == 1,
+                                     "kar98k and m4a4 none, akm ACOG and glock17 red dot kept, 1 loose 4x, 1 loose red dot");
+                p.inventory.clearInventory(null, -1);
+            };
+        }
+        return ticks < 64;
+    }
+
+    private static ItemStack sightOn(String gun, String sight)
+    {
+        ItemStack s = new ItemStack((Item) Item.itemRegistry.getObject(gun));
+        s.stackTagCompound = new NBTTagCompound();
+        s.stackTagCompound.setInteger("ammo", 5);
+        s.stackTagCompound.setString("sightAttach", sight);
+        return s;
+    }
+
+    private static String sight(EntityPlayerMP p, int slot)
+    {
+        ItemStack s = p.inventory.getStackInSlot(slot);
+        return s == null || s.stackTagCompound == null ? "no gun" : s.stackTagCompound.getString("sightAttach");
     }
 
     private static ItemStack gunWith(String gun, String grip)
@@ -941,8 +1024,8 @@ public class AttachmentsTest extends DevTestMode
                              "m4a4 true, glock17 false (category rifle, as the Foregrip)");
         boolean sm4 = specter != null && GunParts.fits(GunSlot.SIGHT, m4, specter);
         boolean sglock = specter != null && GunParts.fits(GunSlot.SIGHT, glock, specter);
-        DevTestResults.check(name(), "items: SpecterDR fits a rifle and a pistol", "m4a4 " + sm4 + ", glock17 " + sglock, sm4 && sglock,
-                             "both true (category all, as the ACOG)");
+        DevTestResults.check(name(), "items: SpecterDR fits a railed rifle, not a pistol", "m4a4 " + sm4 + ", glock17 " + sglock,
+                             sm4 && !sglock, "m4a4 true, glock17 false (a pistol's mount takes the red dot only)");
         loot("loot: the SpecterDR wherever the 4x is", "deci:4x", "deci:specterdr");
         loot("loot: the RK-1 wherever the Foregrip is", "deci:foregrip", "deci:rk1");
     }

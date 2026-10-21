@@ -720,7 +720,8 @@ public class NpcLoadouts
             gun = "ak74";
         }
         // the gun spec "name;sight=4x;barrel=...;mask=nvgoggles" (gunStack / applySpec read it)
-        String[] kit = rifle ? rifleAttachments(gun) : contains(MG, gun) ? tier.mgKit : contains(SNIPER, gun) ? tier.sniperKit : tier.rifleKit;
+        String[] kit = fitKit(gun, rifle ? rifleAttachments(gun) : contains(MG, gun) ? tier.mgKit
+                                   : contains(SNIPER, gun) ? tier.sniperKit : tier.rifleKit);
         StringBuilder spec = new StringBuilder(gun);
         for (String k : kit)
         {
@@ -759,13 +760,15 @@ public class NpcLoadouts
             return new String[0];
         }
         boolean marksman = contains(MARKSMAN, gun);
-        String[] sights = gun.equals("svd") ? new String[] {"dragunovScope", "4x", "ta11acog"}
-            : marksman ? new String[] {"4x", "8x", "ta11acog"} : new String[] {"reddot", "2x", "eotech558", "ta11acog", "4x"};
+        String[] sights = fitKit(gun, gun.equals("svd") ? new String[] {"sight=dragunovScope", "sight=4x", "sight=ta11acog"}
+            : marksman ? new String[] {"sight=4x", "sight=8x", "sight=ta11acog"}
+            : new String[] {"sight=reddot", "sight=2x", "sight=eotech558", "sight=ta11acog", "sight=4x"});   // only its mount's
         String[] grips = GripRails.fits(gun, "foregrip") ? new String[] {"foregrip", "laser", "flashlight"}
                          : new String[] {"laser", "flashlight"};      // no rail, no foregrip (docs/references/grip_rails.md)
         List<String> kit = new ArrayList<String>();
-        String sight = sights[random.nextInt(sights.length)], grip = grips[random.nextInt(grips.length)];
-        if (item(sight) != null && !Deci.hasIntegratedScope(item(gun)))
+        String sight = sights.length == 0 ? "none" : sights[random.nextInt(sights.length)].substring(6);
+        String grip = grips[random.nextInt(grips.length)];
+        if (sights.length > 0 && item(sight) != null && !Deci.hasIntegratedScope(item(gun)))
         {
             kit.add("sight=" + sight);
         }
@@ -783,6 +786,25 @@ public class NpcLoadouts
             kit = new ArrayList<String>(kit.subList(0, Math.min(kit.size(), 1 + random.nextInt(2))));
         }
         return kit.toArray(new String[0]);
+    }
+
+    /**
+     * The kit's parts this gun can mount ("sight=4x", "grip=foregrip"...): a sight on its mount (fixes/SightMounts), a
+     * foregrip on a rail (fixes/GripRails); the rest as given.
+     */
+    public static String[] fitKit(String gun, String[] kit)
+    {
+        List<String> out = new ArrayList<String>();
+        for (String k : kit)
+        {
+            boolean fits = k.startsWith("sight=") ? SightMounts.fits(gun, k.substring(6))
+                           : !k.startsWith("grip=") || GripRails.fits(gun, k.substring(5));
+            if (fits)
+            {
+                out.add(k);
+            }
+        }
+        return out.toArray(new String[0]);
     }
 
     /** Gun in hand (server field + watcher for the client) and a fire rate that fits it. */

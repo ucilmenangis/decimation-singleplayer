@@ -1,0 +1,58 @@
+# gun mount: where a sight can go on this gun (docs/references/grip_rails.md section 6; fixes/SightMounts)
+#   rail  a top Picatinny rail, a railed cover or HK claw mount points: every sight but the red dot
+#   side  an AK / SVD style side mount (dovetail): every sight but the red dot
+#   slide a pistol with an optic cut or rail on its slide: the red dot only
+# guns not listed take no sight (Decimation's integrated scopes are its own rule)
+acr rail
+ak12 rail
+ar15 rail
+ar15beowulf rail
+aug3 rail
+aug3para rail
+barrett rail
+famasi rail
+fnscar rail
+fnscarhamr rail
+fnscarl rail
+fnscarsc rail
+fnscarssr rail
+g36c rail
+g3a3 rail
+g3a4 rail
+honeybadger rail
+jng90 rail
+l115a3 rail
+l85a1 rail
+m110 rail
+m4a4 rail
+mpt76 rail
+sv98 rail
+hk416 rail
+hk416tan rail
+mk18 rail
+ak74 side
+akm side
+akms side
+aks74 side
+aks74u side
+kms72 side
+rpk side
+rpk74 side
+asval side
+svd side
+m14 side
+mp5a3 rail
+ump45 rail
+ump9 rail
+vector rail
+mp7 rail
+p90 rail
+m240 rail
+mk48 rail
+pkm side
+pkp side
+aa12 rail
+benellim4 rail
+glock17 slide
+deagle slide
+barettam9 slide

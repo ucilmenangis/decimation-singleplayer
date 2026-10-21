@@ -135,7 +135,8 @@ public class DecimationWorldGen
         net.decimation.fixes.NewSights.register(); // before SightPlacement: it moves these too
         net.decimation.fixes.NewGrips.register(); // the RK-1 Foregrip (before GripPlacement)
         net.decimation.fixes.GripRails.load(); // a Foregrip or RK-1 only on a gun with a rail (grip_offsets.txt)
-        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GripStrip());
+        net.decimation.fixes.SightMounts.load(); // a sight only on its mount (sight_mounts.txt)
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.MountStrip());
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)

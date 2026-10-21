@@ -15,7 +15,7 @@ import java.util.TreeSet;
  * Foregrip, our RK-1) now goes only on a gun with a rail or slots under its handguard. The list is the shipped
  * grip_offsets.txt: tools/guns/gripfit.py writes foregrip rows only for its RAILED rifles, so a gun takes a foregrip
  * exactly where the table places one. Lights (laser, flashlight) keep every gun, as Decimation has them. Both sides:
- * the Gunsmith's fit check, NPC loadouts and the grip taken off a rail-less gun (fixes/GripStrip) ask here. Plain Java
+ * the Gunsmith's fit check, NPC loadouts and the grip taken off a rail-less gun (fixes/MountStrip) ask here. Plain Java
  * apart from the class path read: unit tests load it without Minecraft.
  */
 public final class GripRails

@@ -84,7 +84,7 @@ public class GunsmithRemoteTest extends DevTestMode
                 if (ticks == 110) mc.thePlayer.sendChatMessage("/clear");
                 if (ticks == 120) mc.thePlayer.sendChatMessage("/give " + me + " deci:m4a4 1");
                 if (ticks == 130) mc.thePlayer.sendChatMessage("/give " + me + " deci:4x 1");
-                if (ticks == 140) mc.thePlayer.sendChatMessage("/give " + me + " deci:reddot 1");
+                if (ticks == 140) mc.thePlayer.sendChatMessage("/give " + me + " deci:eotech558 1");
                 if (ticks == 170) mc.thePlayer.sendChatMessage("/gamemode 0");
                 if (ticks == 180)
                 {
