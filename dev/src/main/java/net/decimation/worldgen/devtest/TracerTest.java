@@ -126,6 +126,11 @@ public class TracerTest extends DevTestMode
                         + "(bandit facing away; before the fix about 180)", DecimationWorldGen.MODID, tracerCount,
                         tracerCount > 0 ? tracerSum / tracerCount : 0, tracerMax);
             DevTestResults.value("tracer", "tracer colours (test bandit)", colours + ", all tracers seen " + allSeen);
+            // every NPC shot a tracer in the NPC's own colour (user, 22 Oktober 2026): Decimation drew GENERIC on 40 %
+            // of the shots and INVIS on the rest; a gun with a tracer colour draws it on every shot
+            boolean one = colours.size() == 1 && !colours.containsKey("GENERIC") && !colours.containsKey("INVIS");
+            DevTestResults.check("tracer", "every shot a tracer in the NPC's colour", colours.toString(), one && tracerCount > 10,
+                                 "one named colour on all the bandit's tracers, no INVIS or GENERIC");
             DevTestResults.value("tracer", "mean angle to target (spread)", String.format("%.1f deg (%d)",
                                  tracerCount > 0 ? tracerSum / tracerCount : 0, tracerCount));
             DevTestResults.check("tracer", "tracer vs server shot line", String.format("%.1f deg (%d tracers, %d shots)",

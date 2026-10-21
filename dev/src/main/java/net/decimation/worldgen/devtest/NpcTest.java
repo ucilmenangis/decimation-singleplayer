@@ -80,7 +80,12 @@ public class NpcTest extends DevTestMode
                             for (String part : e.getValue().split(";"))
                             {
                                 int eq = part.indexOf('=');
-                                if (eq > 0 && !part.startsWith("mask="))
+                                if (part.startsWith("tracer="))   // the NPC's tracer colour: an int (22 Oktober 2026)
+                                {
+                                    kit &= g.stackTagCompound != null
+                                        && Integer.parseInt(part.substring(7)) == g.stackTagCompound.getInteger("tracerColorID");
+                                }
+                                else if (eq > 0 && !part.startsWith("mask="))
                                 {
                                     kit &= g.stackTagCompound != null
                                         && part.substring(eq + 1).equals(g.stackTagCompound.getString(part.substring(0, eq) + "Attach"));

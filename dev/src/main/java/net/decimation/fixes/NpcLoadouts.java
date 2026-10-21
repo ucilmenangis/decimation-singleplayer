@@ -478,6 +478,12 @@ public class NpcLoadouts
         Item g = item(gunName(gun));
         if (g != null)
         {
+            String coloured = withTracer(gun, random);     // NPCs saved before 22 Oktober 2026 get theirs on load
+            if (coloured != gun)
+            {
+                data.setString(GUN_TAG, coloured);
+                gun = coloured;
+            }
             arm(npc, tier, gun, g);
         }
     }
@@ -548,10 +554,49 @@ public class NpcLoadouts
                 {
                     stack.stackTagCompound = new NBTTagCompound();
                 }
-                stack.stackTagCompound.setString(part.substring(0, eq) + "Attach", part.substring(eq + 1));
+                if (part.startsWith("tracer="))
+                {
+                    stack.stackTagCompound.setInteger("tracerColorID", tracerOf(";" + part));
+                }
+                else
+                {
+                    stack.stackTagCompound.setString(part.substring(0, eq) + "Attach", part.substring(eq + 1));
+                }
             }
         }
         return stack;
+    }
+
+    /**
+     * The spec with a tracer colour (user, 22 Oktober 2026: "npc who shot gun can randomly use other tracer instead white
+     * only"): one of Decimation's named colours, WHITE 1 to YELLOW 7, kept for the NPC's life (saved in GUN_TAG). A gun
+     * with a tracer colour draws it on every shot (GunItem.getTracerColor reads NBT tracerColorID); before, every NPC
+     * shot was GENERIC white. A spec that has one keeps it.
+     */
+    static String withTracer(String spec, Random r)
+    {
+        return tracerOf(spec) > 0 ? spec : spec + ";tracer=" + (1 + r.nextInt(7));
+    }
+
+    /** The spec's tracer colour id, 0 when it has none (no allocation: the client asks every tick). */
+    static int tracerOf(String spec)
+    {
+        int i = spec.indexOf(";tracer=");
+        if (i < 0)
+        {
+            return 0;
+        }
+        int v = 0;
+        for (int k = i + 8; k < spec.length() && Character.isDigit(spec.charAt(k)); k++)
+        {
+            v = v * 10 + spec.charAt(k) - '0';
+        }
+        return v;
+    }
+
+    private static int tracerOfStack(ItemStack gun)
+    {
+        return gun.stackTagCompound == null ? 0 : gun.stackTagCompound.getInteger("tracerColorID");
     }
 
     /** Gun (with attachments) and mask of a spec onto an NPC, either side. */
@@ -606,7 +651,7 @@ public class NpcLoadouts
         }
         ItemStack held = Deci.npcGun(e);
         Item g = item(gunName(name));
-        if (g != null && (held == null || held.getItem() != g))
+        if (g != null && (held == null || held.getItem() != g || tracerOf(name) != tracerOfStack(held)))
         {
             applySpec(e, name);
         }
