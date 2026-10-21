@@ -14,6 +14,24 @@ public final class DevTestUtil
     }
 
     /** The singleplayer server's player, or null. */
+    /**
+     * A right click as the mouse makes it: Minecraft.rightClickMouse (func_147121_ag), so Forge's PlayerInteractEvent,
+     * the item's use and the packets to the server all run as for a player.
+     */
+    public static void rightClick(Minecraft mc)
+    {
+        try
+        {
+            java.lang.reflect.Method m = cpw.mods.fml.relauncher.ReflectionHelper.findMethod(Minecraft.class, mc,
+                new String[] {"func_147121_ag", "rightClickMouse"});
+            m.invoke(mc);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static EntityPlayerMP player()
     {
         MinecraftServer s = MinecraftServer.getServer();
