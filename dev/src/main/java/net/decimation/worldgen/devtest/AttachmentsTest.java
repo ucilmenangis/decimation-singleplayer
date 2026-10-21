@@ -270,6 +270,12 @@ public class AttachmentsTest extends DevTestMode
         {
             onServer = () -> {
                 EntityPlayerMP p = player();
+                // on the arena floor in survival: in creative vanilla's addItemStackToInventory takes anything into a
+                // full inventory and deletes it (creative items are free), so nothing would drop, and genwalk leaves the
+                // player creative over a city
+                DevTestArena.build(p.worldObj, p);
+                p.fallDistance = 0;                        // the flight's fall would kill a survival player on landing
+                p.setGameType(net.minecraft.world.WorldSettings.GameType.SURVIVAL);
                 p.inventory.clearInventory(null, -1);
                 p.inventory.setInventorySlotContents(0, gunWith("deci:rpk", "foregrip"));
                 p.inventory.setInventorySlotContents(1, gunWith("deci:rpk", "laser"));
@@ -316,7 +322,7 @@ public class AttachmentsTest extends DevTestMode
             onServer = () -> {
                 EntityPlayerMP p = player();
                 int dropped = 0;
-                for (Object o : p.worldObj.getEntitiesWithinAABB(net.minecraft.entity.item.EntityItem.class, p.boundingBox.expand(4, 4, 4)))
+                for (Object o : p.worldObj.getEntitiesWithinAABB(net.minecraft.entity.item.EntityItem.class, p.boundingBox.expand(6, 6, 6)))
                 {
                     net.minecraft.entity.item.EntityItem it = (net.minecraft.entity.item.EntityItem) o;
                     if (it.getEntityItem().getItem() == Item.itemRegistry.getObject("deci:rk1"))
