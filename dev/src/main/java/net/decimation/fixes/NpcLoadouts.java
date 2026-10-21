@@ -752,7 +752,7 @@ public class NpcLoadouts
      * (the SVD its own Dragunov scope), automatic rifles close ones; no sight on a gun with a built in
      * scope; only attachments registered here.
      */
-    String[] rifleAttachments(String gun)
+    public String[] rifleAttachments(String gun)
     {
         if (random.nextBoolean())
         {
@@ -761,7 +761,8 @@ public class NpcLoadouts
         boolean marksman = contains(MARKSMAN, gun);
         String[] sights = gun.equals("svd") ? new String[] {"dragunovScope", "4x", "ta11acog"}
             : marksman ? new String[] {"4x", "8x", "ta11acog"} : new String[] {"reddot", "2x", "eotech558", "ta11acog", "4x"};
-        String[] grips = {"foregrip", "laser", "flashlight"};
+        String[] grips = GripRails.fits(gun, "foregrip") ? new String[] {"foregrip", "laser", "flashlight"}
+                         : new String[] {"laser", "flashlight"};      // no rail, no foregrip (docs/references/grip_rails.md)
         List<String> kit = new ArrayList<String>();
         String sight = sights[random.nextInt(sights.length)], grip = grips[random.nextInt(grips.length)];
         if (item(sight) != null && !Deci.hasIntegratedScope(item(gun)))

@@ -10,336 +10,306 @@
 
   // clamp
   gripModel0 = new BeardieModelRenderer(this, 1, 1);
-  gripModel0.addShape(0F,0F,0F, new float[][]{{-0.18F, -0.68F, -0.06F}, {0.08F, -0.68F, -0.06F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}, {-0.18F, -0.68F, 0.06F}, {0.08F, -0.68F, 0.06F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}}, 2, 1, 1);
-  gripModel0.setRotationPoint(12.95F, -2.15F, -0.65F);
+  gripModel0.addShape(0F,0F,0F, new float[][]{{0.14F, -0.78F, -0.25F}, {0.06F, -0.78F, -0.25F}, {0.2F, 0F, -0.2F}, {0F, 0F, -0.2F}, {0.14F, -0.78F, 0.05F}, {0.06F, -0.78F, 0.05F}, {0.2F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel0.setRotationPoint(13.3F, -2.15F, -0.55F);
   gripModel0.setRotation(0F, 0F, 0F);
 
   // jaw
   gripModel1 = new BeardieModelRenderer(this, 9, 1);
-  gripModel1.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.78F, -0.9F}, {0F, -0.78F, -0.9F}, {-0.1F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.1F, -0.78F, 0F}, {0F, -0.78F, 0F}, {-0.1F, 0F, 0F}, {0F, 0F, 0F}}, 2, 1, 1);
-  gripModel1.setRotationPoint(12.95F, -2.31F, 0.27F);
+  gripModel1.addShape(0F,0F,0F, new float[][]{{0.2F, -0.84F, -0.92F}, {0F, -0.84F, -0.92F}, {0.2F, 0F, -0.96F}, {0F, 0F, -0.96F}, {0.2F, -0.84F, 0F}, {0F, -0.84F, 0F}, {0.2F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel1.setRotationPoint(13.3F, -2.27F, 0.18F);
   gripModel1.setRotation(0F, 0F, 0F);
 
   // jawR
   gripModel2 = new BeardieModelRenderer(this, 17, 1);
-  gripModel2.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.78F, -0.9F}, {0F, -0.78F, -0.9F}, {-0.1F, 0F, -0.9F}, {0F, 0F, -0.9F}, {-0.1F, -0.78F, 0F}, {0F, -0.78F, 0F}, {-0.1F, 0F, 0.05F}, {0F, 0F, 0.05F}}, 2, 1, 1);
-  gripModel2.setRotationPoint(12.95F, -2.31F, -0.67F);
+  gripModel2.addShape(0F,0F,0F, new float[][]{{0.2F, -0.84F, -0.92F}, {0F, -0.84F, -0.92F}, {0.2F, 0F, -0.92F}, {0F, 0F, -0.92F}, {0.2F, -0.84F, 0F}, {0F, -0.84F, 0F}, {0.2F, 0F, 0.04F}, {0F, 0F, 0.04F}}, 1, 1, 1);
+  gripModel2.setRotationPoint(13.3F, -2.27F, -0.56F);
   gripModel2.setRotation(0F, 0F, 0F);
 
   // boltMid
   gripModel3 = new BeardieModelRenderer(this, 25, 1);
-  gripModel3.addShape(0F,0F,0F, new float[][]{{-0.82F, -0.9244F, -0.89F}, {0F, -0.9244F, -0.89F}, {-0.82F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.82F, -0.9244F, 0F}, {0F, -0.9244F, 0F}, {-0.82F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel3.setRotationPoint(13.26F, -2.0178F, 0.32F);
+  gripModel3.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9412F, -0.91F}, {0F, -0.9412F, -0.91F}, {-0.86F, 0F, -0.91F}, {0F, 0F, -0.91F}, {-0.86F, -0.9412F, 0F}, {0F, -0.9412F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel3.setRotationPoint(13.83F, -2.0694F, 0.23F);
   gripModel3.setRotation(0F, 0F, 0F);
 
   // boltTop
   gripModel4 = new BeardieModelRenderer(this, 33, 1);
-  gripModel4.addShape(0F,0F,0F, new float[][]{{-0.82F, -0.9478F, -0.89F}, {0F, -0.9478F, -0.89F}, {-0.8722F, 0F, -0.89F}, {0.0522F, 0F, -0.89F}, {-0.82F, -0.9478F, 0F}, {0F, -0.9478F, 0F}, {-0.8722F, 0F, 0F}, {0.0522F, 0F, 0F}}, 1, 1, 1);
-  gripModel4.setRotationPoint(13.26F, -2.07F, 0.32F);
+  gripModel4.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9594F, -0.91F}, {0F, -0.9594F, -0.91F}, {-0.9006F, 0F, -0.91F}, {0.0406F, 0F, -0.91F}, {-0.86F, -0.9594F, 0F}, {0F, -0.9594F, 0F}, {-0.9006F, 0F, 0F}, {0.0406F, 0F, 0F}}, 1, 1, 1);
+  gripModel4.setRotationPoint(13.83F, -2.11F, 0.23F);
   gripModel4.setRotation(0F, 0F, 0F);
 
   // boltBot
   gripModel5 = new BeardieModelRenderer(this, 41, 1);
-  gripModel5.addShape(0F,0F,0F, new float[][]{{-0.8722F, -0.9478F, -0.89F}, {0.0522F, -0.9478F, -0.89F}, {-0.82F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.8722F, -0.9478F, 0F}, {0.0522F, -0.9478F, 0F}, {-0.82F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel5.setRotationPoint(13.26F, -1.9422F, 0.32F);
+  gripModel5.addShape(0F,0F,0F, new float[][]{{-0.9006F, -0.9594F, -0.91F}, {0.0406F, -0.9594F, -0.91F}, {-0.86F, 0F, -0.91F}, {0F, 0F, -0.91F}, {-0.9006F, -0.9594F, 0F}, {0.0406F, -0.9594F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel5.setRotationPoint(13.83F, -2.0106F, 0.23F);
   gripModel5.setRotation(0F, 0F, 0F);
 
   // nutMid
   gripModel6 = new BeardieModelRenderer(this, 49, 1);
-  gripModel6.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.916F, -0.89F}, {0F, -0.916F, -0.89F}, {-0.8F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.8F, -0.916F, 0F}, {0F, -0.916F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel6.setRotationPoint(13.25F, -2.022F, -0.73F);
+  gripModel6.addShape(0F,0F,0F, new float[][]{{-0.84F, -0.9328F, -0.91F}, {0F, -0.9328F, -0.91F}, {-0.84F, 0F, -0.91F}, {0F, 0F, -0.91F}, {-0.84F, -0.9328F, 0F}, {0F, -0.9328F, 0F}, {-0.84F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel6.setRotationPoint(13.82F, -2.0736F, -0.62F);
   gripModel6.setRotation(0F, 0F, 0F);
 
   // nutTop
   gripModel7 = new BeardieModelRenderer(this, 57, 1);
-  gripModel7.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.942F, -0.89F}, {0F, -0.942F, -0.89F}, {-0.858F, 0F, -0.89F}, {0.058F, 0F, -0.89F}, {-0.8F, -0.942F, 0F}, {0F, -0.942F, 0F}, {-0.858F, 0F, 0F}, {0.058F, 0F, 0F}}, 1, 1, 1);
-  gripModel7.setRotationPoint(13.25F, -2.08F, -0.73F);
+  gripModel7.addShape(0F,0F,0F, new float[][]{{-0.84F, -0.9536F, -0.91F}, {0F, -0.9536F, -0.91F}, {-0.8864F, 0F, -0.91F}, {0.0464F, 0F, -0.91F}, {-0.84F, -0.9536F, 0F}, {0F, -0.9536F, 0F}, {-0.8864F, 0F, 0F}, {0.0464F, 0F, 0F}}, 1, 1, 1);
+  gripModel7.setRotationPoint(13.82F, -2.12F, -0.62F);
   gripModel7.setRotation(0F, 0F, 0F);
 
   // nutBot
   gripModel8 = new BeardieModelRenderer(this, 65, 1);
-  gripModel8.addShape(0F,0F,0F, new float[][]{{-0.858F, -0.942F, -0.89F}, {0.058F, -0.942F, -0.89F}, {-0.8F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.858F, -0.942F, 0F}, {0.058F, -0.942F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel8.setRotationPoint(13.25F, -1.938F, -0.73F);
+  gripModel8.addShape(0F,0F,0F, new float[][]{{-0.8864F, -0.9536F, -0.91F}, {0.0464F, -0.9536F, -0.91F}, {-0.84F, 0F, -0.91F}, {0F, 0F, -0.91F}, {-0.8864F, -0.9536F, 0F}, {0.0464F, -0.9536F, 0F}, {-0.84F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel8.setRotationPoint(13.82F, -2.0064F, -0.62F);
   gripModel8.setRotation(0F, 0F, 0F);
 
-  // boltMid
+  // mount
   gripModel9 = new BeardieModelRenderer(this, 73, 1);
-  gripModel9.addShape(0F,0F,0F, new float[][]{{-0.82F, -0.9244F, -0.89F}, {0F, -0.9244F, -0.89F}, {-0.82F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.82F, -0.9244F, 0F}, {0F, -0.9244F, 0F}, {-0.82F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel9.setRotationPoint(14.36F, -2.0178F, 0.32F);
+  gripModel9.addShape(0F,0F,0F, new float[][]{{0F, -0.86F, -0.24F}, {0F, -0.86F, -0.24F}, {0F, 0F, -0.24F}, {0F, 0F, -0.24F}, {0F, -0.1F, 0F}, {0F, -0.1F, 0F}, {0F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  gripModel9.setRotationPoint(13.4F, -1.95F, -0.53F);
   gripModel9.setRotation(0F, 0F, 0F);
 
-  // boltTop
+  // neck
   gripModel10 = new BeardieModelRenderer(this, 81, 1);
-  gripModel10.addShape(0F,0F,0F, new float[][]{{-0.82F, -0.9478F, -0.89F}, {0F, -0.9478F, -0.89F}, {-0.8722F, 0F, -0.89F}, {0.0522F, 0F, -0.89F}, {-0.82F, -0.9478F, 0F}, {0F, -0.9478F, 0F}, {-0.8722F, 0F, 0F}, {0.0522F, 0F, 0F}}, 1, 1, 1);
-  gripModel10.setRotationPoint(14.36F, -2.07F, 0.32F);
+  gripModel10.addShape(0F,0F,0F, new float[][]{{-0.16F, -0.8586F, -0.2646F}, {0F, -0.8586F, -0.2646F}, {-0.26F, 0F, -0.5475F}, {0.1F, 0F, -0.5475F}, {-0.16F, -0.2646F, 0.1414F}, {0F, -0.2646F, 0.1414F}, {-0.26F, 0.4525F, 0F}, {0.1F, 0.4525F, 0F}}, 1, 1, 1);
+  gripModel10.setRotationPoint(13.48F, -1.6563F, -0.3763F);
   gripModel10.setRotation(0F, 0F, 0F);
 
-  // boltBot
+  // bodyMid
   gripModel11 = new BeardieModelRenderer(this, 89, 1);
-  gripModel11.addShape(0F,0F,0F, new float[][]{{-0.8722F, -0.9478F, -0.89F}, {0.0522F, -0.9478F, -0.89F}, {-0.82F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.8722F, -0.9478F, 0F}, {0.0522F, -0.9478F, 0F}, {-0.82F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel11.setRotationPoint(14.36F, -1.9422F, 0.32F);
+  gripModel11.addShape(0F,0F,0F, new float[][]{{-0.16F, 0.0253F, 0.2748F}, {0F, 0.0253F, 0.2748F}, {-0.16F, 0F, -0.7505F}, {0F, 0F, -0.7505F}, {-0.16F, 0.2748F, 1.0253F}, {0F, 0.2748F, 1.0253F}, {-0.16F, 0.2495F, 0F}, {0F, 0.2495F, 0F}}, 1, 1, 1);
+  gripModel11.setRotationPoint(13.48F, -1.3426F, -0.0626F);
   gripModel11.setRotation(0F, 0F, 0F);
 
-  // nutMid
+  // bodyA
   gripModel12 = new BeardieModelRenderer(this, 97, 1);
-  gripModel12.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.916F, -0.89F}, {0F, -0.916F, -0.89F}, {-0.8F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.8F, -0.916F, 0F}, {0F, -0.916F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel12.setRotationPoint(14.35F, -2.022F, -0.73F);
+  gripModel12.addShape(0F,0F,0F, new float[][]{{-0.4036F, 0.0253F, 0.1976F}, {0.2436F, 0.0253F, 0.1976F}, {-0.4036F, 0F, -0.8277F}, {0.2436F, 0F, -0.8277F}, {-0.16F, 0.1976F, 1.0253F}, {0F, 0.1976F, 1.0253F}, {-0.16F, 0.1723F, 0F}, {0F, 0.1723F, 0F}}, 1, 1, 1);
+  gripModel12.setRotationPoint(13.48F, -1.5149F, 0.1869F);
   gripModel12.setRotation(0F, 0F, 0F);
 
-  // nutTop
+  // bodyB
   gripModel13 = new BeardieModelRenderer(this, 105, 1);
-  gripModel13.addShape(0F,0F,0F, new float[][]{{-0.8F, -0.942F, -0.89F}, {0F, -0.942F, -0.89F}, {-0.858F, 0F, -0.89F}, {0.058F, 0F, -0.89F}, {-0.8F, -0.942F, 0F}, {0F, -0.942F, 0F}, {-0.858F, 0F, 0F}, {0.058F, 0F, 0F}}, 1, 1, 1);
-  gripModel13.setRotationPoint(14.35F, -2.08F, -0.73F);
+  gripModel13.addShape(0F,0F,0F, new float[][]{{-0.16F, 0.0253F, 0.1976F}, {0F, 0.0253F, 0.1976F}, {-0.16F, 0F, -0.8277F}, {0F, 0F, -0.8277F}, {-0.4036F, 0.1976F, 1.0253F}, {0.2436F, 0.1976F, 1.0253F}, {-0.4036F, 0.1723F, 0F}, {0.2436F, 0.1723F, 0F}}, 1, 1, 1);
+  gripModel13.setRotationPoint(13.48F, -1.0931F, -0.2349F);
   gripModel13.setRotation(0F, 0F, 0F);
 
-  // nutBot
+  // checkF
   gripModel14 = new BeardieModelRenderer(this, 113, 1);
-  gripModel14.addShape(0F,0F,0F, new float[][]{{-0.858F, -0.942F, -0.89F}, {0.058F, -0.942F, -0.89F}, {-0.8F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.858F, -0.942F, 0F}, {0.058F, -0.942F, 0F}, {-0.8F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel14.setRotationPoint(14.35F, -1.938F, -0.73F);
+  gripModel14.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.3282F, -0.1161F}, {0F, -0.3282F, -0.0737F}, {-0.94F, 0.0424F, -0.7454F}, {0F, 0F, -0.7454F}, {-0.94F, -0.1161F, 0.6718F}, {0F, -0.0737F, 0.6718F}, {-0.94F, 0.2546F, 0.0424F}, {0F, 0.2546F, 0F}}, 1, 1, 1);
+  gripModel14.setRotationPoint(14.29F, -1.1684F, 0.1116F);
   gripModel14.setRotation(0F, 0F, 0F);
 
-  // neck
+  // checkB
   gripModel15 = new BeardieModelRenderer(this, 121, 1);
-  gripModel15.addShape(0F,0F,0F, new float[][]{{0.44F, -0.55F, 0.44F}, {0F, -0.55F, 0.44F}, {0.28F, 0F, 0.28F}, {0.16F, 0F, 0.28F}, {0.44F, -0.55F, 0F}, {0F, -0.55F, 0F}, {0.28F, 0F, 0.16F}, {0.16F, 0F, 0.16F}}, 1, 1, 1);
-  gripModel15.setRotationPoint(13.18F, -1.86F, -0.87F);
+  gripModel15.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.3282F, -0.0737F}, {0F, -0.3282F, -0.1161F}, {-0.94F, 0F, -0.7454F}, {0F, 0.0424F, -0.7454F}, {-0.94F, -0.0737F, 0.6718F}, {0F, -0.1161F, 0.6718F}, {-0.94F, 0.2546F, 0F}, {0F, 0.2546F, 0.0424F}}, 1, 1, 1);
+  gripModel15.setRotationPoint(13.45F, -1.1684F, 0.1116F);
   gripModel15.setRotation(0F, 0F, 0F);
 
-  // bodyMid
+  // checkS
   gripModel16 = new BeardieModelRenderer(this, 129, 1);
-  gripModel16.addShape(0F,0F,0F, new float[][]{{0.44F, 0.3F, -0.3952F}, {0F, 0.3F, -0.3952F}, {0.44F, 0F, -0.3952F}, {0F, 0F, -0.3952F}, {0.44F, 0.3F, 0F}, {0F, 0.3F, 0F}, {0.44F, 0F, 0F}, {0F, 0F, 0F}}, 1, 2, 1);
-  gripModel16.setRotationPoint(13.18F, -1.41F, -0.4524F);
+  gripModel16.addShape(0F,0F,0F, new float[][]{{-0.67F, -0.3707F, -0.307F}, {0.03F, -0.3707F, -0.307F}, {-0.67F, 0F, -0.9364F}, {0.03F, 0F, -0.9364F}, {-0.64F, -0.307F, 0.6718F}, {0F, -0.307F, 0.6718F}, {-0.64F, 0.0212F, 0F}, {0F, 0.0212F, 0F}}, 1, 1, 1);
+  gripModel16.setRotationPoint(13.72F, -1.3381F, 0.5147F);
   gripModel16.setRotation(0F, 0F, 0F);
 
-  // bodyA
+  // checkSR
   gripModel17 = new BeardieModelRenderer(this, 137, 1);
-  gripModel17.addShape(0F,0F,0F, new float[][]{{0.0224F, 0.3F, -0.5824F}, {0.4176F, 0.3F, -0.5824F}, {0.0224F, 0F, -0.5824F}, {0.4176F, 0F, -0.5824F}, {0.44F, 0.3F, 0F}, {0F, 0.3F, 0F}, {0.44F, 0F, 0F}, {0F, 0F, 0F}}, 1, 2, 1);
-  gripModel17.setRotationPoint(13.18F, -1.41F, 0.1524F);
+  gripModel17.addShape(0F,0F,0F, new float[][]{{-0.64F, -0.3282F, -0.307F}, {0F, -0.3282F, -0.307F}, {-0.64F, 0F, -0.9788F}, {0F, 0F, -0.9788F}, {-0.67F, -0.307F, 0.6293F}, {0.03F, -0.307F, 0.6293F}, {-0.67F, 0.0636F, 0F}, {0.03F, 0.0636F, 0F}}, 1, 1, 1);
+  gripModel17.setRotationPoint(13.72F, -0.7653F, -0.0581F);
   gripModel17.setRotation(0F, 0F, 0F);
 
-  // bodyB
+  // bandF
   gripModel18 = new BeardieModelRenderer(this, 145, 1);
-  gripModel18.addShape(0F,0F,0F, new float[][]{{0.44F, 0.3F, -0.5824F}, {0F, 0.3F, -0.5824F}, {0.44F, 0F, -0.5824F}, {0F, 0F, -0.5824F}, {0.0224F, 0.3F, 0F}, {0.4176F, 0.3F, 0F}, {0.0224F, 0F, 0F}, {0.4176F, 0F, 0F}}, 1, 2, 1);
-  gripModel18.setRotationPoint(13.18F, -1.41F, -0.87F);
+  gripModel18.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.9646F, -0.6818F}, {0F, -0.9646F, -0.6818F}, {-0.95F, 0F, -0.7172F}, {0F, 0F, -0.7172F}, {-0.95F, -0.6818F, 0.0354F}, {0F, -0.6818F, 0.0354F}, {-0.95F, 0.2828F, 0F}, {0F, 0.2828F, 0F}}, 1, 1, 1);
+  gripModel18.setRotationPoint(14.29F, -1.2462F, 0.0338F);
   gripModel18.setRotation(0F, 0F, 0F);
 
-  // checkF
+  // bandB
   gripModel19 = new BeardieModelRenderer(this, 153, 1);
-  gripModel19.addShape(0F,0F,0F, new float[][]{{-0.93F, 0.44F, -0.44F}, {0F, 0.48F, -0.4F}, {-0.93F, 0.04F, -0.44F}, {0F, 0F, -0.4F}, {-0.93F, 0.44F, 0.04F}, {0F, 0.48F, 0F}, {-0.93F, 0.04F, 0.04F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel19.setRotationPoint(14.59F, -0.99F, -0.45F);
+  gripModel19.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.9646F, -0.6818F}, {0F, -0.9646F, -0.6818F}, {-0.95F, 0F, -0.7172F}, {0F, 0F, -0.7172F}, {-0.95F, -0.6818F, 0.0354F}, {0F, -0.6818F, 0.0354F}, {-0.95F, 0.2828F, 0F}, {0F, 0.2828F, 0F}}, 1, 1, 1);
+  gripModel19.setRotationPoint(13.46F, -1.2462F, 0.0338F);
   gripModel19.setRotation(0F, 0F, 0F);
 
-  // checkB
+  // bandS
   gripModel20 = new BeardieModelRenderer(this, 161, 1);
-  gripModel20.addShape(0F,0F,0F, new float[][]{{-0.93F, 0.48F, -0.4F}, {0F, 0.44F, -0.44F}, {-0.93F, 0F, -0.4F}, {0F, 0.04F, -0.44F}, {-0.93F, 0.48F, 0F}, {0F, 0.44F, 0.04F}, {-0.93F, 0F, 0F}, {0F, 0.04F, 0.04F}}, 1, 1, 1);
-  gripModel20.setRotationPoint(13.14F, -0.99F, -0.45F);
+  gripModel20.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.9646F, -0.9293F}, {0F, -0.9646F, -0.9293F}, {-0.6F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.6F, -0.9293F, 0.0354F}, {0F, -0.9293F, 0.0354F}, {-0.6F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel20.setRotationPoint(13.7F, -1.4159F, 0.451F);
   gripModel20.setRotation(0F, 0F, 0F);
 
-  // checkS
+  // bandSR
   gripModel21 = new BeardieModelRenderer(this, 169, 1);
-  gripModel21.addShape(0F,0F,0F, new float[][]{{-0.44F, 0.44F, -0.93F}, {0.04F, 0.44F, -0.93F}, {-0.44F, 0.04F, -0.93F}, {0.04F, 0.04F, -0.93F}, {-0.4F, 0.48F, 0F}, {0F, 0.48F, 0F}, {-0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel21.setRotationPoint(13.6F, -0.99F, 0.54F);
+  gripModel21.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.9646F, -0.9293F}, {0F, -0.9646F, -0.9293F}, {-0.6F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.6F, -0.9293F, 0.0354F}, {0F, -0.9293F, 0.0354F}, {-0.6F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel21.setRotationPoint(13.7F, -0.829F, -0.1359F);
   gripModel21.setRotation(0F, 0F, 0F);
 
-  // checkSR
+  // bandF
   gripModel22 = new BeardieModelRenderer(this, 177, 1);
-  gripModel22.addShape(0F,0F,0F, new float[][]{{-0.4F, 0.48F, -0.93F}, {0F, 0.48F, -0.93F}, {-0.4F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.44F, 0.44F, 0F}, {0.04F, 0.44F, 0F}, {-0.44F, 0.04F, 0F}, {0.04F, 0.04F, 0F}}, 1, 1, 1);
-  gripModel22.setRotationPoint(13.6F, -0.99F, -0.91F);
+  gripModel22.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.9646F, -0.6818F}, {0F, -0.9646F, -0.6818F}, {-0.95F, 0F, -0.7172F}, {0F, 0F, -0.7172F}, {-0.95F, -0.6818F, 0.0354F}, {0F, -0.6818F, 0.0354F}, {-0.95F, 0.2828F, 0F}, {0F, 0.2828F, 0F}}, 1, 1, 1);
+  gripModel22.setRotationPoint(14.29F, -0.4825F, 0.7975F);
   gripModel22.setRotation(0F, 0F, 0F);
 
-  // bandF
+  // bandB
   gripModel23 = new BeardieModelRenderer(this, 185, 1);
-  gripModel23.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.93F, -0.36F}, {0F, -0.93F, -0.36F}, {-0.95F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.95F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel23.setRotationPoint(14.59F, -1.11F, -0.47F);
+  gripModel23.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.9646F, -0.6818F}, {0F, -0.9646F, -0.6818F}, {-0.95F, 0F, -0.7172F}, {0F, 0F, -0.7172F}, {-0.95F, -0.6818F, 0.0354F}, {0F, -0.6818F, 0.0354F}, {-0.95F, 0.2828F, 0F}, {0F, 0.2828F, 0F}}, 1, 1, 1);
+  gripModel23.setRotationPoint(13.46F, -0.4825F, 0.7975F);
   gripModel23.setRotation(0F, 0F, 0F);
 
-  // bandB
+  // bandS
   gripModel24 = new BeardieModelRenderer(this, 193, 1);
-  gripModel24.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.93F, -0.36F}, {0F, -0.93F, -0.36F}, {-0.95F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.95F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel24.setRotationPoint(13.16F, -1.11F, -0.47F);
+  gripModel24.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.9646F, -0.9293F}, {0F, -0.9646F, -0.9293F}, {-0.6F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.6F, -0.9293F, 0.0354F}, {0F, -0.9293F, 0.0354F}, {-0.6F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel24.setRotationPoint(13.7F, -0.6522F, 1.2147F);
   gripModel24.setRotation(0F, 0F, 0F);
 
-  // bandS
+  // bandSR
   gripModel25 = new BeardieModelRenderer(this, 201, 1);
-  gripModel25.addShape(0F,0F,0F, new float[][]{{-0.36F, -0.93F, -0.95F}, {0F, -0.93F, -0.95F}, {-0.36F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.36F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.36F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel25.setRotationPoint(13.58F, -1.11F, 0.54F);
+  gripModel25.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.9646F, -0.9293F}, {0F, -0.9646F, -0.9293F}, {-0.6F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.6F, -0.9293F, 0.0354F}, {0F, -0.9293F, 0.0354F}, {-0.6F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel25.setRotationPoint(13.7F, -0.0653F, 0.6278F);
   gripModel25.setRotation(0F, 0F, 0F);
 
-  // bandSR
+  // ringMid
   gripModel26 = new BeardieModelRenderer(this, 209, 1);
-  gripModel26.addShape(0F,0F,0F, new float[][]{{-0.36F, -0.93F, -0.95F}, {0F, -0.93F, -0.95F}, {-0.36F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.36F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.36F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel26.setRotationPoint(13.58F, -1.11F, -0.89F);
+  gripModel26.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.8303F, -0.563F}, {0F, -0.8303F, -0.563F}, {-0.1F, 0F, -0.7327F}, {0F, 0F, -0.7327F}, {-0.1F, -0.563F, 0.1697F}, {0F, -0.563F, 0.1697F}, {-0.1F, 0.2673F, 0F}, {0F, 0.2673F, 0F}}, 1, 1, 1);
+  gripModel26.setRotationPoint(13.45F, -0.3262F, 0.9538F);
   gripModel26.setRotation(0F, 0F, 0F);
 
-  // bandF
+  // ringA
   gripModel27 = new BeardieModelRenderer(this, 217, 1);
-  gripModel27.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.93F, -0.36F}, {0F, -0.93F, -0.36F}, {-0.95F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.95F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel27.setRotationPoint(14.59F, 0.59F, -0.47F);
+  gripModel27.addShape(0F,0F,0F, new float[][]{{-0.361F, -0.8303F, -0.6457F}, {0.261F, -0.8303F, -0.6457F}, {-0.361F, 0F, -0.8154F}, {0.261F, 0F, -0.8154F}, {-0.1F, -0.6457F, 0.1697F}, {0F, -0.6457F, 0.1697F}, {-0.1F, 0.1846F, 0F}, {0F, 0.1846F, 0F}}, 1, 1, 1);
+  gripModel27.setRotationPoint(13.45F, -0.5108F, 1.2211F);
   gripModel27.setRotation(0F, 0F, 0F);
 
-  // bandB
+  // ringB
   gripModel28 = new BeardieModelRenderer(this, 225, 1);
-  gripModel28.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.93F, -0.36F}, {0F, -0.93F, -0.36F}, {-0.95F, 0F, -0.36F}, {0F, 0F, -0.36F}, {-0.95F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel28.setRotationPoint(13.16F, 0.59F, -0.47F);
+  gripModel28.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.8303F, -0.6457F}, {0F, -0.8303F, -0.6457F}, {-0.1F, 0F, -0.8154F}, {0F, 0F, -0.8154F}, {-0.361F, -0.6457F, 0.1697F}, {0.261F, -0.6457F, 0.1697F}, {-0.361F, 0.1846F, 0F}, {0.261F, 0.1846F, 0F}}, 1, 1, 1);
+  gripModel28.setRotationPoint(13.45F, -0.0589F, 0.7692F);
   gripModel28.setRotation(0F, 0F, 0F);
 
-  // bandS
+  // ringRib
   gripModel29 = new BeardieModelRenderer(this, 233, 1);
-  gripModel29.addShape(0F,0F,0F, new float[][]{{-0.36F, -0.93F, -0.95F}, {0F, -0.93F, -0.95F}, {-0.36F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.36F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.36F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel29.setRotationPoint(13.58F, 0.59F, 0.54F);
+  gripModel29.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel29.setRotationPoint(14.325F, -0.1961F, 1.0839F);
   gripModel29.setRotation(0F, 0F, 0F);
 
-  // bandSR
+  // ringRib
   gripModel30 = new BeardieModelRenderer(this, 241, 1);
-  gripModel30.addShape(0F,0F,0F, new float[][]{{-0.36F, -0.93F, -0.95F}, {0F, -0.93F, -0.95F}, {-0.36F, 0F, -0.95F}, {0F, 0F, -0.95F}, {-0.36F, -0.93F, 0F}, {0F, -0.93F, 0F}, {-0.36F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel30.setRotationPoint(13.58F, 0.59F, -0.89F);
+  gripModel30.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel30.setRotationPoint(14.2907F, -0.3179F, 1.2057F);
   gripModel30.setRotation(0F, 0F, 0F);
 
-  // ringMid
+  // ringRib
   gripModel31 = new BeardieModelRenderer(this, 249, 1);
-  gripModel31.addShape(0F,0F,0F, new float[][]{{-0.48F, -0.62F, -0.3616F}, {0F, -0.62F, -0.3616F}, {-0.48F, 0F, -0.3616F}, {0F, 0F, -0.3616F}, {-0.48F, -0.62F, 0F}, {0F, -0.62F, 0F}, {-0.48F, 0F, 0F}, {0F, 0F, 0F}}, 2, 1, 1);
-  gripModel31.setRotationPoint(13.14F, 0.89F, -0.4692F);
+  gripModel31.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel31.setRotationPoint(14.1932F, -0.4211F, 1.3089F);
   gripModel31.setRotation(0F, 0F, 0F);
 
-  // ringA
+  // ringRib
   gripModel32 = new BeardieModelRenderer(this, 257, 1);
-  gripModel32.addShape(0F,0F,0F, new float[][]{{-0.9208F, -0.62F, -0.5592F}, {0.4408F, -0.62F, -0.5592F}, {-0.9208F, 0F, -0.5592F}, {0.4408F, 0F, -0.5592F}, {-0.48F, -0.62F, 0F}, {0F, -0.62F, 0F}, {-0.48F, 0F, 0F}, {0F, 0F, 0F}}, 2, 1, 1);
-  gripModel32.setRotationPoint(13.14F, 0.89F, 0.1692F);
+  gripModel32.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel32.setRotationPoint(14.0472F, -0.4901F, 1.3779F);
   gripModel32.setRotation(0F, 0F, 0F);
 
-  // ringB
+  // ringRib
   gripModel33 = new BeardieModelRenderer(this, 265, 1);
-  gripModel33.addShape(0F,0F,0F, new float[][]{{-0.48F, -0.62F, -0.5592F}, {0F, -0.62F, -0.5592F}, {-0.48F, 0F, -0.5592F}, {0F, 0F, -0.5592F}, {-0.9208F, -0.62F, 0F}, {0.4408F, -0.62F, 0F}, {-0.9208F, 0F, 0F}, {0.4408F, 0F, 0F}}, 2, 1, 1);
-  gripModel33.setRotationPoint(13.14F, 0.89F, -0.91F);
+  gripModel33.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel33.setRotationPoint(13.875F, -0.5143F, 1.4021F);
   gripModel33.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel34 = new BeardieModelRenderer(this, 273, 1);
-  gripModel34.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel34.setRotationPoint(14.625F, 0.92F, -0.185F);
+  gripModel34.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel34.setRotationPoint(13.7028F, -0.4901F, 1.3779F);
   gripModel34.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel35 = new BeardieModelRenderer(this, 281, 1);
-  gripModel35.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel35.setRotationPoint(14.5671F, 0.92F, 0.1058F);
+  gripModel35.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel35.setRotationPoint(13.5568F, -0.4211F, 1.3089F);
   gripModel35.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel36 = new BeardieModelRenderer(this, 289, 1);
-  gripModel36.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel36.setRotationPoint(14.4024F, 0.92F, 0.3524F);
+  gripModel36.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel36.setRotationPoint(13.4593F, -0.3179F, 1.2057F);
   gripModel36.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel37 = new BeardieModelRenderer(this, 297, 1);
-  gripModel37.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel37.setRotationPoint(14.1558F, 0.92F, 0.5171F);
+  gripModel37.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel37.setRotationPoint(13.425F, -0.1961F, 1.0839F);
   gripModel37.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel38 = new BeardieModelRenderer(this, 305, 1);
-  gripModel38.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel38.setRotationPoint(13.865F, 0.92F, 0.575F);
+  gripModel38.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel38.setRotationPoint(13.4593F, -0.0743F, 0.9621F);
   gripModel38.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel39 = new BeardieModelRenderer(this, 313, 1);
-  gripModel39.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel39.setRotationPoint(13.5742F, 0.92F, 0.5171F);
+  gripModel39.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel39.setRotationPoint(13.5568F, 0.0289F, 0.8589F);
   gripModel39.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel40 = new BeardieModelRenderer(this, 321, 1);
-  gripModel40.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel40.setRotationPoint(13.3276F, 0.92F, 0.3524F);
+  gripModel40.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel40.setRotationPoint(13.7028F, 0.0979F, 0.7899F);
   gripModel40.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel41 = new BeardieModelRenderer(this, 329, 1);
-  gripModel41.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel41.setRotationPoint(13.1629F, 0.92F, 0.1058F);
+  gripModel41.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel41.setRotationPoint(13.875F, 0.1221F, 0.7657F);
   gripModel41.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel42 = new BeardieModelRenderer(this, 337, 1);
-  gripModel42.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel42.setRotationPoint(13.105F, 0.92F, -0.185F);
+  gripModel42.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel42.setRotationPoint(14.0472F, 0.0979F, 0.7899F);
   gripModel42.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel43 = new BeardieModelRenderer(this, 345, 1);
-  gripModel43.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel43.setRotationPoint(13.1629F, 0.92F, -0.4758F);
+  gripModel43.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel43.setRotationPoint(14.1932F, 0.0289F, 0.8589F);
   gripModel43.setRotation(0F, 0F, 0F);
 
   // ringRib
   gripModel44 = new BeardieModelRenderer(this, 353, 1);
-  gripModel44.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel44.setRotationPoint(13.3276F, 0.92F, -0.7224F);
+  gripModel44.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.8586F, -0.8232F}, {0F, -0.8586F, -0.8232F}, {-0.95F, 0F, -0.9646F}, {0F, 0F, -0.9646F}, {-0.95F, -0.8232F, 0.1414F}, {0F, -0.8232F, 0.1414F}, {-0.95F, 0.0354F, 0F}, {0F, 0.0354F, 0F}}, 1, 1, 1);
+  gripModel44.setRotationPoint(14.2907F, -0.0743F, 0.9621F);
   gripModel44.setRotation(0F, 0F, 0F);
 
-  // ringRib
+  // capMid
   gripModel45 = new BeardieModelRenderer(this, 361, 1);
-  gripModel45.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel45.setRotationPoint(13.5742F, 0.92F, -0.8871F);
+  gripModel45.addShape(0F,0F,0F, new float[][]{{-0.2F, -0.8586F, -0.621F}, {0F, -0.8586F, -0.621F}, {-0.2F, 0F, -0.7624F}, {0F, 0F, -0.7624F}, {-0.2F, -0.621F, 0.1414F}, {0F, -0.621F, 0.1414F}, {-0.2F, 0.2376F, 0F}, {0F, 0.2376F, 0F}}, 1, 1, 1);
+  gripModel45.setRotationPoint(13.5F, -0.1417F, 1.1383F);
   gripModel45.setRotation(0F, 0F, 0F);
 
-  // ringRib
+  // capA
   gripModel46 = new BeardieModelRenderer(this, 369, 1);
-  gripModel46.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel46.setRotationPoint(13.865F, 0.92F, -0.945F);
+  gripModel46.addShape(0F,0F,0F, new float[][]{{-0.432F, -0.8586F, -0.6945F}, {0.232F, -0.8586F, -0.6945F}, {-0.432F, 0F, -0.836F}, {0.232F, 0F, -0.836F}, {-0.2F, -0.6945F, 0.1414F}, {0F, -0.6945F, 0.1414F}, {-0.2F, 0.164F, 0F}, {0F, 0.164F, 0F}}, 1, 1, 1);
+  gripModel46.setRotationPoint(13.5F, -0.3057F, 1.3759F);
   gripModel46.setRotation(0F, 0F, 0F);
 
-  // ringRib
+  // capB
   gripModel47 = new BeardieModelRenderer(this, 377, 1);
-  gripModel47.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel47.setRotationPoint(14.1558F, 0.92F, -0.8871F);
+  gripModel47.addShape(0F,0F,0F, new float[][]{{-0.2F, -0.8586F, -0.6945F}, {0F, -0.8586F, -0.6945F}, {-0.2F, 0F, -0.836F}, {0F, 0F, -0.836F}, {-0.432F, -0.6945F, 0.1414F}, {0.232F, -0.6945F, 0.1414F}, {-0.432F, 0.164F, 0F}, {0.232F, 0.164F, 0F}}, 1, 1, 1);
+  gripModel47.setRotationPoint(13.5F, 0.0959F, 0.9743F);
   gripModel47.setRotation(0F, 0F, 0F);
 
-  // ringRib
+  // capFaceMid
   gripModel48 = new BeardieModelRenderer(this, 385, 1);
-  gripModel48.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel48.setRotationPoint(14.4024F, 0.92F, -0.7224F);
+  gripModel48.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.9576F, -0.7794F}, {0F, -0.9576F, -0.7794F}, {-0.4F, 0F, -0.8218F}, {0F, 0F, -0.8218F}, {-0.4F, -0.7794F, 0.0424F}, {0F, -0.7794F, 0.0424F}, {-0.4F, 0.1782F, 0F}, {0F, 0.1782F, 0F}}, 1, 1, 1);
+  gripModel48.setRotationPoint(13.6F, 0.0083F, 1.2883F);
   gripModel48.setRotation(0F, 0F, 0F);
 
-  // ringRib
+  // capFaceA
   gripModel49 = new BeardieModelRenderer(this, 393, 1);
-  gripModel49.addShape(0F,0F,0F, new float[][]{{-0.93F, -0.68F, -0.93F}, {0F, -0.68F, -0.93F}, {-0.93F, 0F, -0.93F}, {0F, 0F, -0.93F}, {-0.93F, -0.68F, 0F}, {0F, -0.68F, 0F}, {-0.93F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel49.setRotationPoint(14.5671F, 0.92F, -0.4758F);
+  gripModel49.addShape(0F,0F,0F, new float[][]{{-0.574F, -0.9576F, -0.8345F}, {0.174F, -0.9576F, -0.8345F}, {-0.574F, 0F, -0.877F}, {0.174F, 0F, -0.877F}, {-0.4F, -0.8345F, 0.0424F}, {0F, -0.8345F, 0.0424F}, {-0.4F, 0.123F, 0F}, {0F, 0.123F, 0F}}, 1, 1, 1);
+  gripModel49.setRotationPoint(13.6F, -0.1148F, 1.4664F);
   gripModel49.setRotation(0F, 0F, 0F);
 
-  // capMid
-  gripModel50 = new BeardieModelRenderer(this, 401, 1);
-  gripModel50.addShape(0F,0F,0F, new float[][]{{0.4F, -0.66F, -0.412F}, {0F, -0.66F, -0.412F}, {0.4F, 0F, -0.412F}, {0F, 0F, -0.412F}, {0.4F, -0.66F, 0F}, {0F, -0.66F, 0F}, {0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel50.setRotationPoint(13.2F, 1.27F, -0.444F);
-  gripModel50.setRotation(0F, 0F, 0F);
-
-  // capA
-  gripModel51 = new BeardieModelRenderer(this, 409, 1);
-  gripModel51.addShape(0F,0F,0F, new float[][]{{-0.006F, -0.66F, -0.594F}, {0.406F, -0.66F, -0.594F}, {-0.006F, 0F, -0.594F}, {0.406F, 0F, -0.594F}, {0.4F, -0.66F, 0F}, {0F, -0.66F, 0F}, {0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel51.setRotationPoint(13.2F, 1.27F, 0.144F);
-  gripModel51.setRotation(0F, 0F, 0F);
-
-  // capB
-  gripModel52 = new BeardieModelRenderer(this, 417, 1);
-  gripModel52.addShape(0F,0F,0F, new float[][]{{0.4F, -0.66F, -0.594F}, {0F, -0.66F, -0.594F}, {0.4F, 0F, -0.594F}, {0F, 0F, -0.594F}, {-0.006F, -0.66F, 0F}, {0.406F, -0.66F, 0F}, {-0.006F, 0F, 0F}, {0.406F, 0F, 0F}}, 1, 1, 1);
-  gripModel52.setRotationPoint(13.2F, 1.27F, -0.85F);
-  gripModel52.setRotation(0F, 0F, 0F);
-
-  // capFaceMid
-  gripModel53 = new BeardieModelRenderer(this, 425, 1);
-  gripModel53.addShape(0F,0F,0F, new float[][]{{0.12F, -0.92F, -0.5296F}, {0F, -0.92F, -0.5296F}, {0.12F, 0F, -0.5296F}, {0F, 0F, -0.5296F}, {0.12F, -0.92F, 0F}, {0F, -0.92F, 0F}, {0.12F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel53.setRotationPoint(13.34F, 1.57F, -0.3852F);
-  gripModel53.setRotation(0F, 0F, 0F);
-
-  // capFaceA
-  gripModel54 = new BeardieModelRenderer(this, 433, 1);
-  gripModel54.addShape(0F,0F,0F, new float[][]{{-0.2048F, -0.92F, -0.6752F}, {0.3248F, -0.92F, -0.6752F}, {-0.2048F, 0F, -0.6752F}, {0.3248F, 0F, -0.6752F}, {0.12F, -0.92F, 0F}, {0F, -0.92F, 0F}, {0.12F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
-  gripModel54.setRotationPoint(13.34F, 1.57F, 0.0852F);
-  gripModel54.setRotation(0F, 0F, 0F);
-
   // capFaceB
-  gripModel55 = new BeardieModelRenderer(this, 441, 1);
-  gripModel55.addShape(0F,0F,0F, new float[][]{{0.12F, -0.92F, -0.6752F}, {0F, -0.92F, -0.6752F}, {0.12F, 0F, -0.6752F}, {0F, 0F, -0.6752F}, {-0.2048F, -0.92F, 0F}, {0.3248F, -0.92F, 0F}, {-0.2048F, 0F, 0F}, {0.3248F, 0F, 0F}}, 1, 1, 1);
-  gripModel55.setRotationPoint(13.34F, 1.57F, -0.71F);
-  gripModel55.setRotation(0F, 0F, 0F);
+  gripModel50 = new BeardieModelRenderer(this, 401, 1);
+  gripModel50.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.9576F, -0.8345F}, {0F, -0.9576F, -0.8345F}, {-0.4F, 0F, -0.877F}, {0F, 0F, -0.877F}, {-0.574F, -0.8345F, 0.0424F}, {0.174F, -0.8345F, 0.0424F}, {-0.574F, 0.123F, 0F}, {0.174F, 0.123F, 0F}}, 1, 1, 1);
+  gripModel50.setRotationPoint(13.6F, 0.1864F, 1.1652F);
+  gripModel50.setRotation(0F, 0F, 0F);

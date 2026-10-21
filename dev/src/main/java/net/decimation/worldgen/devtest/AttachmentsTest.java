@@ -70,7 +70,14 @@ public class AttachmentsTest extends DevTestMode
                 }
                 return true;
             case 3:
-                return specter(mc);
+                if (!specter(mc))
+                {
+                    step++;
+                    ticks = 0;
+                }
+                return true;
+            case 4:
+                return rails(mc);
             case 10:
                 return perf(mc);
             default:
@@ -180,15 +187,15 @@ public class AttachmentsTest extends DevTestMode
             }
             int batch = Deci.attachmentBatch(m4, "rk1");
             DevTestResults.check(name(), "placement: the RK-1's copy drawn from one list", batch < 0 ? "part by part" : batch + " parts in one list",
-                                 batch == 56, "56 parts in one list (Deci.BatchedPart)");
+                                 batch == 51, "51 parts in one list (Deci.BatchedPart)");
             Map<String, Integer> parts = Deci.attachmentPartBoxes(m4, "foregrip");
             boolean plain = parts != null && Integer.valueOf(0).equals(parts.get("grip"))
                             && parts.keySet().stream().noneMatch(n -> n.startsWith("ammoModel"));
             DevTestResults.check(name(), "placement: Foregrip without its stray plate", parts == null ? "no copy" : "own boxes " + parts,
                                  plain, "{grip=0}: the parent of its 8 parts drawn without its plate, no magazine");
         }
-        // a grip on two rifles, an SMG and a pistol (the RK-1 and the Foregrip fit rifles only, Decimation's rule)
-        String[][] shots = {{"deci:m4a4", "rk1"}, {"deci:ak74", "foregrip"}, {"deci:ump45", "flashlight"}, {"deci:glock17", "laser"}};
+        // a grip on two rifles, an SMG and a pistol (the RK-1 and the Foregrip fit railed rifles only)
+        String[][] shots = {{"deci:m4a4", "rk1"}, {"deci:fnscar", "foregrip"}, {"deci:ump45", "flashlight"}, {"deci:glock17", "laser"}};
         int k = (ticks - 5) / 40, t = (ticks - 5) % 40;
         if (ticks >= 5 && k < shots.length)
         {
@@ -218,6 +225,132 @@ public class AttachmentsTest extends DevTestMode
             return false;
         }
         return true;
+    }
+
+    /**
+     * Foregrips need a rail (user, 21 Oktober 2026; docs/references/grip_rails.md): the Gunsmith refuses a Foregrip or
+     * RK-1 on a rail-less rifle (lights still fit), NPC rifles without a rail never carry one, and a vertical grip on a
+     * rail-less gun pops off into the inventory (fixes/GripStrip), never while the Gunsmith is open on it (its slots are
+     * a view of the gun: taking it then would copy it), and onto the ground when the inventory is full.
+     */
+    private boolean rails(Minecraft mc)
+    {
+        if (ticks == 1)
+        {
+            ItemStack rpk = stack("deci:rpk"), fnscar = stack("deci:fnscar"), barrett = stack("deci:barrett");
+            boolean a = GunParts.fits(GunSlot.GRIP, rpk, stack("deci:foregrip")), b = GunParts.fits(GunSlot.GRIP, rpk, stack("deci:rk1"));
+            boolean c = GunParts.fits(GunSlot.GRIP, fnscar, stack("deci:rk1")), d = GunParts.fits(GunSlot.GRIP, rpk, stack("deci:laser"));
+            boolean e = GunParts.fits(GunSlot.GRIP, barrett, stack("deci:foregrip"));
+            DevTestResults.check(name(), "rails: Gunsmith fits a foregrip only on a rail", "rpk foregrip " + a + ", rpk rk1 " + b
+                                 + ", fnscar rk1 " + c + ", rpk laser " + d + ", barrett foregrip " + e, !a && !b && c && d && !e,
+                                 "rpk false, false; fnscar true; rpk laser true; barrett false");
+            int rpkGrips = 0, m4Grips = 0;
+            for (int i = 0; i < 400; i++)
+            {
+                for (String k : net.decimation.fixes.NpcLoadouts.instance().rifleAttachments("rpk"))
+                {
+                    rpkGrips += k.equals("grip=foregrip") ? 1 : 0;
+                }
+                for (String k : net.decimation.fixes.NpcLoadouts.instance().rifleAttachments("m4a4"))
+                {
+                    m4Grips += k.equals("grip=foregrip") ? 1 : 0;
+                }
+            }
+            DevTestResults.check(name(), "rails: NPC rifles carry a Foregrip only on a rail", "rpk " + rpkGrips + ", m4a4 " + m4Grips + " of 400",
+                                 rpkGrips == 0 && m4Grips > 0, "rpk 0, m4a4 some");
+        }
+        if (ticks == 2)
+        {
+            onServer = () -> {
+                EntityPlayerMP p = player();
+                p.inventory.clearInventory(null, -1);
+                p.inventory.setInventorySlotContents(0, gunWith("deci:rpk", "foregrip"));
+                p.inventory.setInventorySlotContents(1, gunWith("deci:rpk", "laser"));
+                p.inventory.setInventorySlotContents(2, gunWith("deci:fnscar", "rk1"));
+                p.inventory.currentItem = 0;
+            };
+            mc.thePlayer.inventory.currentItem = 0;
+            net.decimation.worldgen.DevAutoTest.keepScreen = true;
+        }
+        if (ticks == 8)
+        {
+            GunsmithTest.pressAttach(mc);
+        }
+        if (ticks == 60)
+        {
+            onServer = () -> {
+                EntityPlayerMP p = player();
+                DevTestResults.check(name(), "rails: kept while the Gunsmith is open", "gun " + grip(p, 0) + ", loose " + count(p, "foregrip")
+                                     + ", screen " + p.openContainer.getClass().getSimpleName(),
+                                     "foregrip".equals(grip(p, 0)) && count(p, "foregrip") == 0, "gun foregrip, loose 0");
+            };
+        }
+        if (ticks == 62)
+        {
+            mc.thePlayer.closeScreen();
+            net.decimation.worldgen.DevAutoTest.keepScreen = false;
+        }
+        if (ticks == 120)
+        {
+            onServer = () -> {
+                EntityPlayerMP p = player();
+                DevTestResults.check(name(), "rails: a foregrip on a rail-less gun pops off", "rpk " + grip(p, 0) + ", loose foregrips "
+                                     + count(p, "foregrip") + ", rpk laser " + grip(p, 1) + ", fnscar " + grip(p, 2),
+                                     "".equals(grip(p, 0)) && count(p, "foregrip") == 1 && "laser".equals(grip(p, 1)) && "rk1".equals(grip(p, 2)),
+                                     "rpk none, 1 loose, laser and fnscar's rk1 kept");
+                p.inventory.clearInventory(null, -1);
+                for (int i = 1; i < p.inventory.mainInventory.length; i++)
+                {
+                    p.inventory.setInventorySlotContents(i, new ItemStack(net.minecraft.init.Blocks.stone, 64));
+                }
+                p.inventory.setInventorySlotContents(0, gunWith("deci:rpk", "rk1"));
+            };
+        }
+        if (ticks == 180)
+        {
+            onServer = () -> {
+                EntityPlayerMP p = player();
+                int dropped = 0;
+                for (Object o : p.worldObj.getEntitiesWithinAABB(net.minecraft.entity.item.EntityItem.class, p.boundingBox.expand(4, 4, 4)))
+                {
+                    net.minecraft.entity.item.EntityItem it = (net.minecraft.entity.item.EntityItem) o;
+                    if (it.getEntityItem().getItem() == Item.itemRegistry.getObject("deci:rk1"))
+                    {
+                        dropped += it.getEntityItem().stackSize;
+                    }
+                    it.setDead();
+                }
+                DevTestResults.check(name(), "rails: full inventory drops it", "rpk " + grip(p, 0) + ", dropped " + dropped,
+                                     "".equals(grip(p, 0)) && dropped == 1, "rpk none, 1 RK-1 on the ground");
+                p.inventory.clearInventory(null, -1);
+            };
+        }
+        return ticks < 185;
+    }
+
+    private static ItemStack gunWith(String gun, String grip)
+    {
+        ItemStack s = new ItemStack((Item) Item.itemRegistry.getObject(gun));
+        s.stackTagCompound = new NBTTagCompound();
+        s.stackTagCompound.setInteger("ammo", 10);
+        s.stackTagCompound.setString("gripAttach", grip);
+        return s;
+    }
+
+    private static String grip(EntityPlayerMP p, int slot)
+    {
+        ItemStack s = p.inventory.getStackInSlot(slot);
+        return s == null || s.stackTagCompound == null ? "no gun" : s.stackTagCompound.getString("gripAttach");
+    }
+
+    private static int count(EntityPlayerMP p, String item)
+    {
+        int n = 0;
+        for (ItemStack s : p.inventory.mainInventory)
+        {
+            n += s != null && s.getItem() == Item.itemRegistry.getObject("deci:" + item) ? s.stackSize : 0;
+        }
+        return n;
     }
 
     /** The three guns of the SpecterDR step (slots 0 .. 2): two with the SpecterDR, one with the ACOG. */

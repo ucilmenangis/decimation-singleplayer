@@ -30,6 +30,13 @@ from sightfit import OURS  # noqa: E402
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 OUT = os.path.join(ROOT, "dev", "src", "main", "resources", "assets", "deciworldgen", "grip_offsets.txt")
 GRIPS = {"rk1": "rifle", "foregrip": "rifle", "laser": "all", "flashlight": "all"}
+# Foregrips need a rail or slots under the handguard (user, 21 Oktober 2026: "for RPK and some guns that doesnt have
+# picatiny rail, they dont support any grip on it"; bipod rails of the snipers do not count, user ruling). The rifles
+# whose model and real gun have one (docs/references/grip_rails.md section 4). Only these get foregrip and rk1 rows, and
+# fixes/GripRails lets a foregrip onto a gun only where the table has its row. Lights keep every gun.
+RAIL_GRIPS = ("foregrip", "rk1")
+RAILED = {"acr", "ak12", "ar15", "ar15beowulf", "aug3", "aug3para", "fnscar", "fnscarhamr", "fnscarl", "fnscarsc",
+          "fnscarssr", "g36c", "honeybadger", "m110", "m4a4", "mpt76", "hk416", "hk416tan", "mk18"}
 ZC = -0.15
 
 
@@ -259,11 +266,19 @@ def guns():
     return out
 
 
+def takes(name, g, grip):
+    """Whether this gun takes this grip at all: Decimation's category rule, and a rail for a foregrip."""
+    cat = GRIPS[grip]
+    if cat != "all" and g.cat != cat:
+        return False
+    return grip not in RAIL_GRIPS or name.split(":")[-1] in RAILED
+
+
 def write():
     rows = []
     for name, g in guns():
-        for grip, cat in sorted(GRIPS.items()):
-            if cat != "all" and g.cat != cat:
+        for grip in sorted(GRIPS):
+            if not takes(name, g, grip):
                 continue
             d = fit(name, grip)
             if d:
@@ -278,8 +293,8 @@ def check():
     """Every gun and grip it takes, as the game would place them; problems per pair. Returns the bad pairs."""
     bad = []
     for name, g in guns():
-        for grip, cat in sorted(GRIPS.items()):
-            if cat != "all" and g.cat != cat:
+        for grip in sorted(GRIPS):
+            if not takes(name, g, grip):
                 continue
             problem = placed_problem(name, grip)
             if problem:
@@ -401,6 +416,10 @@ def placed_problem(gun, grip):
                                                                        "%.2f .. %.2f" % (min(gaps), max(gaps)))
     if problem and not (grip in LIGHTS and on_side(mine, body)):   # a light may sit against the gun's side instead
         return problem
+    gun_parts = [p for p in g.parts if not p.name.startswith(grip + "_") and not p.name.startswith(moving)]
+    hit = next((p.name for p in gun_parts for q in V if q[1] > top + 0.4 and study.inside(p, q, eps=-(OVERLAP + 0.02))), None)
+    if hit:
+        return "clips into the gun (%s)" % hit       # a rolled grip's body beside the gun (the RK-1, 45 degrees)
     if any(study.inside(m, q) for m in mags for q in V) or any(study.inside(p, q) for p in mine for m in mags for q in m.verts()):
         return "in the magazine"
     return None

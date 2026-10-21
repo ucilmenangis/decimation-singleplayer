@@ -160,6 +160,30 @@ public class AttachmentsRemoteTest extends DevTestMode
                     DevTestResults.check(name(), "a shot with both fitted", String.format("%d -> %d rounds, %s, %s", ammo0, ammo, grip, sight),
                                          ammo0 > 0 && ammo == ammo0 - 1 && "rk1".equals(grip) && "specterdr".equals(sight),
                                          "one round less, rk1, specterdr");
+                    next();
+                }
+                break;
+            case 6: // a Foregrip on a rail-less RPK comes off on the server (fixes/GripStrip) and reaches the client
+                String who = mc.thePlayer.getCommandSenderName();
+                if (ticks == 1) mc.thePlayer.sendChatMessage("/gamemode 1");
+                if (ticks == 10) mc.thePlayer.sendChatMessage("/clear");
+                if (ticks == 20) mc.thePlayer.sendChatMessage("/give " + who + " deci:rpk 1 0 {ammo:10,gripAttach:\"foregrip\"}");
+                if (ticks == 50) mc.thePlayer.sendChatMessage("/gamemode 0");
+                if (ticks == 120)
+                {
+                    String grip = "no rpk";
+                    int loose = 0;
+                    for (ItemStack s : mc.thePlayer.inventory.mainInventory)
+                    {
+                        String n = s == null ? "" : net.minecraft.item.Item.itemRegistry.getNameForObject(s.getItem());
+                        if ("deci:rpk".equals(n))
+                        {
+                            grip = s.hasTagCompound() ? s.getTagCompound().getString("gripAttach") : "";
+                        }
+                        loose += "deci:foregrip".equals(n) ? s.stackSize : 0;
+                    }
+                    DevTestResults.check(name(), "a Foregrip on a rail-less RPK pops off", "rpk grip '" + grip + "', loose " + loose,
+                                         "".equals(grip) && loose == 1, "rpk grip '', loose 1");
                     return end(mc);
                 }
                 break;
