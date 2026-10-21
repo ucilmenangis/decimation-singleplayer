@@ -19,8 +19,8 @@ import org.lwjgl.opengl.GL13;
  * bug.md "OpenGL Stack overflow on the host": held items are drawn for a few frames each, and the GL stacks must end
  * every frame as deep as a clean frame does (modelview, attribute, projection, and the texture matrix stack of texture
  * units 0 and 1, which has only 2 levels at the GL minimum). Phase 1: every item with its own renderer, first and third
- * person. Phase 2: guns with each sight (scope glass drawing), hip and aimed, first and third person. A renderer that
- * pushes without popping shows as a depth that grows by one a frame.
+ * person. Phase 2: guns with each sight (scope glass drawing) and each grip, hip and aimed, first and third person. A
+ * renderer that pushes without popping shows as a depth that grows by one a frame.
  */
 public class GlStackTest extends DevTestMode
 {
@@ -28,7 +28,9 @@ public class GlStackTest extends DevTestMode
 
     private static final int FRAMES = 6;
     private static final String[] GUNS = {"akm", "m4a4"};
-    private static final String[] SIGHTS = {"reddot", "2x", "4x", "8x", "eotech558", "ta11acog"};
+    private static final String[] SIGHTS = {"reddot", "2x", "4x", "8x", "eotech558", "ta11acog", "specterdr"};
+    /** Grip slot attachments, each placed per gun (GripPlacement): Decimation's three and our RK-1. */
+    private static final String[] GRIPS = {"foregrip", "rk1", "laser", "flashlight"};
     private static volatile int frames;
     private static volatile int[] depth = new int[5]; // modelview, attrib, projection, texture unit 0, texture unit 1
     private static volatile int[] resetTo;
@@ -271,7 +273,7 @@ public class GlStackTest extends DevTestMode
             savedView = mc.gameSettings.thirdPersonView;
             hold(mc, null, false, 0);
             DevTestResults.value(name(), "items with their own renderer", items);
-            DevTestResults.value(name(), "gun and sight cases", guns);
+            DevTestResults.value(name(), "gun with sight or grip cases", guns);
             return true;
         }
         if (ticks < 4)
@@ -385,17 +387,19 @@ public class GlStackTest extends DevTestMode
             {
                 continue;
             }
-            for (String sight : SIGHTS)
+            for (int a = 0; a < SIGHTS.length + GRIPS.length; a++)
             {
+                boolean sight = a < SIGHTS.length;
+                String part = sight ? SIGHTS[a] : GRIPS[a - SIGHTS.length];
                 for (int k = 0; k < 4; k++)
                 {
                     ItemStack s = new ItemStack(gun);
                     s.stackTagCompound = new NBTTagCompound();
                     s.stackTagCompound.setInteger("ammo", 0);
-                    s.stackTagCompound.setString("sightAttach", sight);
+                    s.stackTagCompound.setString(sight ? "sightAttach" : "gripAttach", part);
                     boolean aim = k % 2 == 1;
                     int view = k / 2;
-                    cases.add(new Case(s, g + " + " + sight + (aim ? " aimed" : " hip") + (view == 0 ? " first" : " third") + " person", aim, view));
+                    cases.add(new Case(s, g + " + " + part + (aim ? " aimed" : " hip") + (view == 0 ? " first" : " third") + " person", aim, view));
                     guns++;
                 }
             }

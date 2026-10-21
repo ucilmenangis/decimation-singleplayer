@@ -122,7 +122,7 @@ class Gun:
         self.parse(text)
 
     def parse(self, text):
-        by = {}
+        by, orphans = {}, []
         for line in text.splitlines():
             s = line.strip()
             m = re.match(r"(\w+):\s*(" + NUM + r")\s*,\s*(" + NUM + r")\s*,\s*(" + NUM + r")\s*;", s)
@@ -143,8 +143,13 @@ class Gun:
                 self.parts.append(p)
                 continue
             m = re.match(r"(\w+)\.addChild\((\w+)\);", s)
-            if m and m.group(1) in by and m.group(2) in by:
-                by[m.group(2)].parent = by[m.group(1)]
+            if m:
+                low = {k.lower(): q for k, q in by.items()}       # BModelLoader matches names ignoring case
+                parent, child = low.get(m.group(1).lower()), low.get(m.group(2).lower())
+                if child is not None and parent is None:
+                    orphans.append(child)   # BModelLoader marks it a child all the same and drops it: never drawn
+                elif child is not None:
+                    child.parent = parent
                 continue
             m = re.match(r"(\w+)\.(addShape|setRotationPoint|setRotation)\((.*)\);", s)
             if not m or m.group(1) not in by:
@@ -159,6 +164,9 @@ class Gun:
                 p.pivot = tuple(nums[0:3])
             else:
                 p.rot = tuple(nums[0:3])
+        # children of a parent the file never declares (only Decimation's foregrip: ammoModel1..4 of a missing
+        # ammoModel0, a magazine under the stock) are not drawn by the game
+        self.parts = [p for p in self.parts if not any(p is o for o in orphans)]
 
     def bounds(self, groups=None):
         pts = [q for p in self.parts if groups is None or p.group in groups for q in p.verts()]
@@ -187,7 +195,7 @@ def load(name):
 
 
 ATTACH_SLOT = {"reddot": "sight", "2x": "sight", "4x": "sight", "8x": "sight", "dragunovScope": "sight",
-               "eotech558": "sight", "ta11acog": "sight",
+               "eotech558": "sight", "ta11acog": "sight", "specterdr": "sight", "rk1": "grip",
                "foregrip": "grip", "flashlight": "grip", "laser": "grip", "bayonet": "barrel",
                "pistolSuppressor": "barrel", "smgSuppressor": "barrel", "arSuppressor": "barrel",
                "shotgunSuppressor": "barrel", "mgSuppressor": "barrel"}
@@ -236,6 +244,24 @@ def sight_offsets():
     return _SIGHT_OFFSETS
 
 
+_GRIP_OFFSETS = None
+_GRIP_STRAY = {"foregrip": re.compile(r"^grip$")}   # the foregrip's stray plate, hidden in the game (GripPlacement)
+
+
+def grip_offsets():
+    """(gun, grip) -> (dx, dy, dz) from tools/guns/gripfit.py's table (fixes/GripPlacement applies it)."""
+    global _GRIP_OFFSETS
+    if _GRIP_OFFSETS is None:
+        _GRIP_OFFSETS = {}
+        path = os.path.join(ROOT, "dev", "src", "main", "resources", "assets", "deciworldgen", "grip_offsets.txt")
+        if os.path.exists(path):
+            for line in open(path):
+                f = line.split()
+                if len(f) == 5 and not line.startswith("#"):
+                    _GRIP_OFFSETS[(f[0], f[1])] = tuple(float(v) for v in f[2:])
+    return _GRIP_OFFSETS
+
+
 def with_attachments(gun, names):
     """The gun plus attachment models placed like the game does (plus ATTACH_FIX for ours)."""
     z = zipfile.ZipFile(JAR)
@@ -255,11 +281,18 @@ def with_attachments(gun, names):
         fix = ATTACH_FIX.get(gun.name, {}).get(n, (0, 0, 0)) if gun.ours else (0, 0, 0)
         dy, dx = sight_offsets().get((gun.name, n), (0.0, 0.0))
         ox, oy, oz = ox + fix[0] + dx, oy + fix[1] + dy, oz + fix[2]
+        drop = None
+        if slot == "grip" and os.environ.get("STUDY_NO_GRIP_OFFSETS") is None:
+            gd = grip_offsets().get((gun.name, n), (0.0, 0.0, 0.0))
+            ox, oy, oz = ox + gd[0], oy + gd[1], oz + gd[2]
+            drop = _GRIP_STRAY.get(n)
         for p in a.parts:
             p.name = n + "_" + p.name
             p.tex = (img, a.tw, a.th)
             if p.parent is None:
                 p.pivot = (p.pivot[0] + ox, p.pivot[1] + oy, p.pivot[2] + oz)
+        if drop:   # after the shift: the foregrip's parent "grip" still places its children (only its own plate goes)
+            a.parts = [p for p in a.parts if not drop.match(p.name[len(n) + 1:])]
         gun.parts += a.parts
     return gun
 

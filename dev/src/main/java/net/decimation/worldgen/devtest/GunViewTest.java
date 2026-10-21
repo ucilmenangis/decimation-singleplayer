@@ -52,7 +52,7 @@ public class GunViewTest extends DevTestMode
         {
             return "barrel";
         }
-        if (a.equals("foregrip") || a.equals("flashlight") || a.equals("laser"))
+        if (a.equals("foregrip") || a.equals("flashlight") || a.equals("laser") || a.equals("rk1"))
         {
             return "grip";
         }

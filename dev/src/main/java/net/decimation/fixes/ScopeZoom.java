@@ -61,7 +61,8 @@ import net.minecraftforge.common.config.Configuration;
  * see-through glass shows exactly the point shots go to.
  *
  * Scopes from overlayFrom (default 4x: 4x, dragunov, 8x, the integrated aug
- * scope; user choice 2026-10-08, first 8x only, then 4x too: "4x is a bit
+ * scope, never our own sights: the SpecterDR at 4x keeps the gun and its glass;
+ * user choice 2026-10-08, first 8x only, then 4x too: "4x is a bit
  * long in zoom mode") use the classic sniper overlay ("fake it" with a
  * black layout): once the zoom is most of the way in, the
  * gun is not drawn and the screen is black but for a round view with the
@@ -86,9 +87,10 @@ public class ScopeZoom
     /**
      * Our sights (NewSights): their reticle is drawn in the glass by SightReticle (it sways with the
      * gun); while aiming through one, the vanilla crosshair is hidden (the reticle is the crosshair).
+     * They never get the black sniper overlay: the gun and the glass stay (the SpecterDR at 4x too).
      */
     private static final java.util.Set<String> OUR_SIGHTS = new java.util.HashSet<String>(
-        java.util.Arrays.asList("eotech558", "ta11acog"));
+        java.util.Arrays.asList("eotech558", "ta11acog", "specterdr"));
     private boolean aimingOurSight;
 
     /** How much of the zoom the mouse follows: 1 = turning slows to 1 / zoom, 0 = unchanged. */
@@ -124,9 +126,9 @@ public class ScopeZoom
     /** Configured magnification of a scope by name, else from its old zoomFov. */
     private float magnification(String name, float zoomFov)
     {
-        float def = "reddot".equals(name) || "eotech558".equals(name) ? 1.25f : "2x".equals(name) ? 2f
-            : "4x".equals(name) ? 4f : "ta11acog".equals(name) ? 3.5f : "8x".equals(name) ? 8f
-            : "dragunovScope".equals(name) ? 4f : 0f;
+        float def = "reddot".equals(name) || "eotech558".equals(name) || "specterdr1x".equals(name) ? 1.25f
+            : "2x".equals(name) ? 2f : "4x".equals(name) || "specterdr".equals(name) ? 4f
+            : "ta11acog".equals(name) ? 3.5f : "8x".equals(name) ? 8f : "dragunovScope".equals(name) ? 4f : 0f;
         if (def > 0)
         {
             return (float) cfg.get("magnification", name, def, "zoom while aiming through this scope").getDouble(def);
@@ -141,10 +143,68 @@ public class ScopeZoom
         Item sight = Deci.sightAttachment(held);
         if (sight != null)
         {
-            return Deci.isScope(sight) ? magnification(Deci.attachmentName(sight), Deci.zoomFov(sight)) : 0f;
+            String name = Deci.attachmentName(sight);
+            if ("specterdr".equals(name) && !SpecterMode.isFour(held, slotOf(held)))
+            {
+                name = "specterdr1x";              // flipped to 1x (SpecterKey): as close as the red dots
+            }
+            return Deci.isScope(sight) ? magnification(name, Deci.zoomFov(sight)) : 0f;
         }
         return Deci.hasIntegratedScope(held.getItem())
             ? magnification(Deci.integratedScopeName(held.getItem()), 46.5f) : 0f;
+    }
+
+    /** The inventory slot of this stack in the player's inventory (the held slot first), or -1. */
+    private static int slotOf(ItemStack stack)
+    {
+        EntityPlayer p = Minecraft.getMinecraft().thePlayer;
+        if (p == null)
+        {
+            return -1;
+        }
+        if (stack == p.getHeldItem())
+        {
+            return p.inventory.currentItem;
+        }
+        for (int i = 0; i < p.inventory.mainInventory.length; i++)
+        {
+            if (p.inventory.mainInventory[i] == stack)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** True when aiming through this gun's scope shows the black sniper overlay instead of the gun (never ours). */
+    private boolean overlaid(ItemStack held, float mag)
+    {
+        Item sight = Deci.sightAttachment(held);
+        return mag >= overlayFrom && (sight == null || !OUR_SIGHTS.contains(Deci.attachmentName(sight)));
+    }
+
+    /** The magnification aiming through this gun's scope gives (0 without one; the SpecterDR by its mode). */
+    public static float magnificationFor(ItemStack held)
+    {
+        return INSTANCE == null || held == null || !Deci.isGun(held.getItem()) ? 0f : INSTANCE.magnificationOf(held);
+    }
+
+    /** True when aiming through this gun's scope shows the black sniper overlay instead of the gun. */
+    public static boolean overlays(ItemStack held)
+    {
+        return INSTANCE != null && held != null && Deci.isGun(held.getItem()) && INSTANCE.overlaid(held, INSTANCE.magnificationOf(held));
+    }
+
+    /** Dev test: the zoom applied now (eased; 1 when not aiming through a scope). */
+    public static double currentZoom()
+    {
+        return INSTANCE == null ? 1 : INSTANCE.zoom;
+    }
+
+    /** Dev test: the sniper overlay is being drawn. */
+    public static boolean overlayShown()
+    {
+        return INSTANCE != null && INSTANCE.overlay != null;
     }
 
     private static final java.lang.reflect.Field CAMERA_ZOOM = ReflectionHelper.findField(EntityRenderer.class,
@@ -196,7 +256,7 @@ public class ScopeZoom
         // first aim with this gun + scope: stay low (the glass fits the screen)
         // until its sight position is learned, at most 1.5 s (not for the
         // sniper overlay: no gun is drawn there)
-        if (mag < overlayFrom && !learned(sightKey(held)) && System.nanoTime() - aimStart < 1_500_000_000L)
+        if (!overlaid(held, mag) && !learned(sightKey(held)) && System.nanoTime() - aimStart < 1_500_000_000L)
         {
             return Math.min(mag, 1.5f);
         }
@@ -521,13 +581,13 @@ public class ScopeZoom
 
     /**
      * The reticle texture when the sniper overlay should show: a scope of at
-     * least overlayFrom, aimed, and the zoom at least 70% of the way in (the
-     * gun raises normally first).
+     * least overlayFrom that is not one of ours, aimed, and the zoom at least
+     * 70% of the way in (the gun raises normally first).
      */
     private ResourceLocation overlayFor(Minecraft mc, float target)
     {
         ItemStack held = mc.thePlayer != null ? mc.thePlayer.getHeldItem() : null;
-        if (target < overlayFrom || held == null || zoom < 1 + (target - 1) * 0.7)
+        if (held == null || !Deci.isGun(held.getItem()) || target <= 1f || !overlaid(held, target) || zoom < 1 + (target - 1) * 0.7)
         {
             return null;
         }

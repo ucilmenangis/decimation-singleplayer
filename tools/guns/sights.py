@@ -20,6 +20,7 @@ the glass by ScopeZoom from textures/model/guns/scopes/<name>.png.
 """
 import math
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -269,12 +270,114 @@ def acog():
     return P
 
 
+# ================================================================ ELCAN SpecterDR 1x/4x
+def specterdr():
+    """ELCAN SpecterDR 1x/4x on its quick detach mount, after the user's tarkovbot build (docs/shots/refcapture_v0.65.0/
+    my_preset_close: side.png, top.png; REFERENCE ONLY). Real about 7.7 x 2.3 x 2.6 inch over the rail [not verified],
+    x 0.52 -> 4.0 long, 1.15 wide; the reference's side gives the rest by ratio to that length: body 0.97 tall (axis
+    0.96 over the rail), mount 0.47. Muzzle side (+x): a squared front housing round a big objective; middle: the body
+    with the 1x / 4x throw lever on the left (+z, the side the reference shows) and the knurled illumination knob with
+    its tethered cap; rear: a round eyepiece; two small guard ears on top; the mount below with two levers on the
+    left, cross bolts on the right and the battery cap at its front left."""
+    P = []
+
+    def add(*parts, pair=False):
+        for p in parts:
+            P.append(p)
+            if pair:
+                P.append(p.mirror())
+
+    BODY = (38, 38, 40)
+    DARK = (20, 20, 22)
+    EDGE = (50, 50, 52)
+    RUB = (25, 25, 27)
+    SCREW = (62, 62, 64)
+    MARK = (150, 150, 146)          # the 4X / 1X marks: small light plates (no painted detail)
+    LENS = (40, 52, 58)             # objective coating, blue grey
+    AC = RAIL - 0.96                # optical axis
+    XR, XF = 1.2, 5.2               # eyepiece rear, objective front
+    H, W = 0.485, 0.575             # body half height / half width
+
+    # --- eyepiece: rubber, tube, ring, the see through glass and its round opening (corner wedges, as the ACOG)
+    add(*octagon("eyeRubber", S, RUB, XR, XR + 0.14, AC, ZC, 0.5))
+    add(*octagon("eyeTube", S, BODY, XR + 0.14, 2.0, AC, ZC, 0.46))
+    add(*octagon("eyeRing", S, EDGE, 1.78, 1.86, AC, ZC, 0.48))
+    add(part("glass", GLASS, (30, 36, 40), (XR - 0.02, AC - 0.34, ZC - 0.34), (XR, AC + 0.34, ZC + 0.34)))
+    RETICLE["specterdr"] = (XR - 0.025, AC, ZC, 0.68)    # the reticle fills the eyepiece
+    for sy in (-1, 1):
+        for sz in (-1, 1):
+            w = part("eyeMask", S, RUB, (XR - 0.04, AC - 0.35, ZC - 0.35), (XR - 0.025, AC - 0.17, ZC - 0.17))
+            w.c[(0, 1, 1)][1] = w.c[(1, 1, 1)][1] = AC - 0.35
+            if sy > 0:
+                for k, q in w.c.items():
+                    q[1] = 2 * AC - q[1]
+            if sz > 0:
+                for k, q in w.c.items():
+                    q[2] = 2 * ZC - q[2]
+            add(w)
+
+    # --- body: rear block, the main body, the squared front housing (a step taller and wider)
+    add(part("rearBlock", S, BODY, (2.0, AC - H, ZC - W), (2.6, AC + H, ZC + W))
+        .inset("x", 0, y=(0.1, 0.1), z=(0.1, 0.1)))
+    add(part("body", S, BODY, (2.6, AC - H, ZC - W), (3.9, AC + H, ZC + W))
+        .inset("y", 0, z=(0.08, 0.08)).inset("y", 1, z=(0.06, 0.06)))
+    add(part("front", S, BODY, (3.9, AC - H - 0.04, ZC - W - 0.04), (XF - 0.06, AC + H + 0.02, ZC + W + 0.04))
+        .inset("x", 1, y=(0.05, 0.05), z=(0.05, 0.05)))
+    add(part("frontPlate", S, EDGE, (XF - 0.08, AC - H, ZC - W), (XF, AC + H - 0.02, ZC + W)))
+    for sy in (-1, 1):                                   # the front housing's corner screws (top view)
+        for sz in (-1, 1):
+            add(part("frontScrew", S, SCREW, (XF - 0.02, AC + sy * 0.38 - 0.04, ZC + sz * 0.46 - 0.04),
+                     (XF + 0.01, AC + sy * 0.38 + 0.04, ZC + sz * 0.46 + 0.04)))
+    # the objective's round hood stands out of the squared housing (the reference's big front ring), the lens set back
+    add(*octagon("objHood", S, BODY, XF - 0.04, XF + 0.2, AC, ZC, H + 0.04))    # a little taller than the body
+    add(*octagon("objLip", S, EDGE, XF + 0.2, XF + 0.25, AC, ZC, H + 0.07))
+    add(*octagon("objRim", S, DARK, XF + 0.25, XF + 0.255, AC, ZC, 0.42))   # discs stepping forward (as the ACOG's)
+    add(*octagon("objective", S, LENS, XF + 0.255, XF + 0.265, AC, ZC, 0.36))
+    add(part("seam", S, DARK, (3.86, AC - H - 0.05, ZC - W - 0.05), (3.94, AC + H + 0.03, ZC + W + 0.05)))
+
+    # --- top: two guard ears (the reference's small fins over the front and the rear)
+    for ex in (2.15, 4.35):
+        ear = part("ear", S, BODY, (ex - 0.14, AC - H - 0.16, ZC - 0.14), (ex + 0.14, AC - H + 0.02, ZC + 0.14))
+        add(ear.inset("y", 0, x=(0.1, 0.1), z=(0.06, 0.06)))
+
+    # --- left side (+z): the throw lever between its 4X and 1X marks, the illumination knob with its tethered cap
+    add(part("leverPlate", S, DARK, (2.75, AC + 0.12, ZC + W - 0.02), (3.85, AC + 0.4, ZC + W + 0.04)))
+    lever = part("lever", S, EDGE, (3.15, AC + 0.02, ZC + W - 0.01), (3.4, AC + 0.44, ZC + W + 0.12))  # from the side
+    add(lever.inset("z", 1, x=(0.04, 0.04), y=(0.04, 0.0)))
+    add(part("mark4x", S, MARK, (2.86, AC + 0.2, ZC + W + 0.04), (2.98, AC + 0.26, ZC + W + 0.05)))
+    add(part("mark1x", S, MARK, (3.62, AC + 0.2, ZC + W + 0.04), (3.74, AC + 0.26, ZC + W + 0.05)))
+    add(*oct_z("knob", S, BODY, 2.3, AC - 0.14, ZC + W - 0.02, ZC + W + 0.16, 0.3))
+    add(*ring_ribs("knobKnurl", S, DARK, 2.3, AC - 0.14, ZC + W + 0.0, ZC + W + 0.15, 0.3, n=14, size=0.06))
+    add(*oct_z("knobCap", S, RUB, 2.3, AC - 0.14, ZC + W + 0.16, ZC + W + 0.22, 0.2))
+    # the cap's tether: a wire from the knob down the body's side (inner face in the body, so it sits on it)
+    add(part("tether", S, DARK, (2.45, AC + 0.12, ZC + W - 0.01), (2.85, AC + 0.17, ZC + W + 0.03)).shift("x", 1, y=0.12))
+
+    # --- mount: a long base plate on the rail and two clamps holding the body (the rail shows between them, as in
+    # the reference), rail jaws, two throw levers on the left, cross bolts on the right, the battery cap in front
+    add(part("mountPlate", S, BODY, (1.55, RAIL - 0.16, ZC - 0.5), (4.45, RAIL + 0.02, ZC + 0.5))
+        .inset("y", 0, x=(0.08, 0.08), z=(0.04, 0.04)))
+    for cx0, cx1 in ((1.75, 2.45), (3.55, 4.25)):
+        add(part("mountClamp", S, BODY, (cx0, AC + H - 0.06, ZC - 0.44), (cx1, RAIL - 0.14, ZC + 0.44))
+            .inset("y", 0, x=(0.06, 0.06)))
+    add(part("mountJaw", S, BODY, (1.65, RAIL - 0.12, ZC + 0.42), (4.35, RAIL + 0.1, ZC + 0.52))
+        .inset("y", 1, x=(0.04, 0.04)), pair=True)
+    for lx in (2.1, 3.9):                                # on the clamps' outer sides (left)
+        arm = part("qdLever", S, EDGE, (lx - 0.3, RAIL - 0.36, ZC + 0.42), (lx + 0.3, RAIL - 0.22, ZC + 0.52))
+        add(arm.shift("x", 0, y=0.08))
+        add(*oct_z("qdPivot", S, SCREW, lx, RAIL - 0.29, ZC + 0.42, ZC + 0.56, 0.07))
+        add(*oct_z("crossBolt", S, SCREW, lx, RAIL - 0.29, ZC - 0.52, ZC - 0.41, 0.07))
+    add(*oct_z("battery", S, BODY, 4.65, AC + 0.42, ZC + 0.3, ZC + 0.56, 0.2))
+    add(*ring_ribs("batteryKnurl", S, DARK, 4.65, AC + 0.42, ZC + 0.32, ZC + 0.55, 0.2, n=10, size=0.05))
+    add(part("batteryArm", S, BODY, (4.4, AC + 0.3, ZC + 0.2), (4.7, AC + 0.55, ZC + 0.36)))
+    return P
+
+
 # ================================================================ output
-def to_file(parts):
-    """Gun space -> attachment file space (minus renderAttachments' translate)."""
+def to_file(parts, shift=SHIFT):
+    """Gun space -> attachment file space (minus renderAttachments' translate for the slot)."""
     for p in parts:
         for k, q in p.c.items():
-            p.c[k] = [q[0] - SHIFT[0], q[1] - SHIFT[1], q[2] - SHIFT[2]]
+            p.c[k] = [q[0] - shift[0], q[1] - shift[1], q[2] - shift[2]]
     return parts
 
 
@@ -331,9 +434,30 @@ def reticle_acog(path, n=512):
     img.save(path)
 
 
-def write(name, parts, reticle):
+def reticle_specterdr(path, n=512):
+    """SpecterDR: a crosshair with heavy outer posts and thin inner lines meeting at a lit red centre dot (one
+    reticle for 1x and 4x, as the real optic). Lines as thick as the ACOG's (they stayed visible at 3.5x)."""
+    from PIL import Image, ImageDraw
+    img = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    c, k = n // 2, (8, 8, 8, 255)
+    thin, thick = max(4, n // 128), max(16, n // 30)
+    d.line((c, int(n * 0.3), c, int(n * 0.7)), fill=k, width=thin)
+    d.line((int(n * 0.3), c, int(n * 0.7), c), fill=k, width=thin)
+    for a, b in (((int(n * 0.05), c - thick // 2), (int(n * 0.3), c + thick // 2)),
+                 ((int(n * 0.7), c - thick // 2), (int(n * 0.95), c + thick // 2)),
+                 ((c - thick // 2, int(n * 0.7)), (c + thick // 2, int(n * 0.95))),
+                 ((c - thick // 2, int(n * 0.05)), (c + thick // 2, int(n * 0.3)))):
+        d.rectangle((a, b), fill=k)
+    r = max(6, n // 60)
+    d.ellipse((c - r, c - r, c + r, c + r), fill=(235, 40, 30, 255))
+    img.save(path)
+
+
+def write(name, parts, reticle, slot="sight", shift=SHIFT):
+    """The model, its texture and icon (and the reticle for a sight) under assets/deci, in the slot's folders."""
     from PIL import Image
-    parts = to_file(parts)
+    parts = to_file(parts, shift)
     uvs, h = layout(parts)
     total = 32
     while total < h:
@@ -345,7 +469,7 @@ def write(name, parts, reticle):
         counts[p.group] = k + 1
         lines += part_block("%s%d" % (p.group, k), p, uvs[i][0], uvs[i][1])
     text = "\n".join(lines) + "\n"
-    mp = os.path.join(OUT, "models", "attachments", "sight", name + ".bmodel")
+    mp = os.path.join(OUT, "models", "attachments", slot, name + ".bmodel")
     os.makedirs(os.path.dirname(mp), exist_ok=True)
     open(mp, "w").write(text)
     rows = paint(parts)
@@ -355,12 +479,13 @@ def write(name, parts, reticle):
         for x, c in enumerate(row):
             if c[3] and y < img.height:
                 img.putpixel((x, y), c)
-    tp = os.path.join(OUT, "textures", "model", "attachments", "sight", name + ".png")
+    tp = os.path.join(OUT, "textures", "model", "attachments", slot, name + ".png")
     os.makedirs(os.path.dirname(tp), exist_ok=True)
     img.save(tp)
-    rp = os.path.join(OUT, "textures", "model", "guns", "scopes", name + ".png")
-    os.makedirs(os.path.dirname(rp), exist_ok=True)
-    reticle(rp)
+    if reticle:
+        rp = os.path.join(OUT, "textures", "model", "guns", "scopes", name + ".png")
+        os.makedirs(os.path.dirname(rp), exist_ok=True)
+        reticle(rp)
     icon(name, text, img, os.path.join(OUT, "textures", "items", "attach", name + ".png"))
     return {"name": name, "parts": len(parts), "texture": [512, total]}
 
@@ -401,7 +526,31 @@ def write_reticles():
     return path
 
 
+def check(name, slot="sight", lo=30, hi=150, on="m4a4", allowed=3):
+    """The written model exists, its part count is in range (Decimation's sights 7 to 68, ours 92 and 117: lo .. hi)
+    and, placed on a gun as the game places it (study.with_attachments), at most `allowed` parts sit on nothing
+    (study.contact): our accepted EOTech and ACOG flag 3 and 2 there (thin details on leaning faces), Decimation's 2x
+    and 4x none. Prints the problems; returns 1 on any."""
+    path = os.path.join(OUT, "models", "attachments", slot, name + ".bmodel")
+    if not os.path.exists(path):
+        print("%s: no model at %s" % (name, path))
+        return 1
+    g = study.with_attachments(study.load(on), [name])
+    mine = [p for p in g.parts if p.name.startswith(name + "_")]
+    bad = [n for n, k in study.contact(g, only=re.escape(name) + "_")]
+    problems = []
+    if not lo <= len(mine) <= hi:
+        problems.append("%d parts (want %d .. %d)" % (len(mine), lo, hi))
+    if len(bad) > allowed:
+        problems.append("%d parts sit on nothing on the %s (at most %d): %s" % (len(bad), on, allowed, ", ".join(bad[:12])))
+    print("%s: %d parts, %d unseated on the %s, %s" % (name, len(mine), len(bad), on, "; ".join(problems) or "ok"))
+    return 1 if problems else 0
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--check"]:
+        sys.exit(max(check(n) for n in sys.argv[2:] or ["eotech558", "ta11acog"]))
     print(write("eotech558", eotech(), reticle_eotech))
     print(write("ta11acog", acog(), reticle_acog))
+    print(write("specterdr", specterdr(), reticle_specterdr))
     print(write_reticles())

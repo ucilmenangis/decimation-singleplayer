@@ -119,6 +119,23 @@ public final class Deci
         return new deci.f.k(inv, deciIndex, 0, 0, parent).isItemValid(part);
     }
 
+    /**
+     * One run of GunItem.clientHeldTick (d, private) for a held gun: the client's per tick gun work, where Decimation
+     * turns the view by the player's recoil (dev test attachments calls it right after setting a known recoil).
+     */
+    public static void runClientHeldTick(ItemStack gun, net.minecraft.entity.player.EntityPlayer player) throws Exception
+    {
+        java.lang.reflect.Method m = deci.ay.i.class.getDeclaredMethod("d", ItemStack.class, net.minecraft.entity.player.EntityPlayer.class);
+        m.setAccessible(true);
+        m.invoke(gun.getItem(), gun, player);
+    }
+
+    /** The gun's grip slot attachment (GunItem.getGripAttachment, J), or null. */
+    public static Item gripAttachment(ItemStack gun)
+    {
+        return gun == null || !(gun.getItem() instanceof deci.ay.i) ? null : ((deci.ay.i) gun.getItem()).J(gun);
+    }
+
     /** GunItem.isIntegrallySuppressed (fL). */
     public static boolean isIntegrallySuppressed(Item gun)
     {
@@ -294,6 +311,12 @@ public final class Deci
         public long maxBottlecaps() { return (long) data.Vo; }
         /** getHumanity (cd). */
         public int humanity() { return data.cd(); }
+        /** getRecoilPitch (cs): the gun's recoil still to turn the view up, applied a part each tick. */
+        public float recoilPitch() { return data.cs(); }
+        /** getRecoilYaw (ct): the sideways part. */
+        public float recoilYaw() { return data.ct(); }
+        /** setRecoilPitch (j) / setRecoilYaw (k). */
+        public void setRecoil(float pitch, float yaw) { data.j(pitch); data.k(yaw); }
         /** addHumanity (I). */
         public void addHumanity(int n) { data.I(n); }
         /** removeHumanity (J). */
@@ -1674,6 +1697,233 @@ public final class Deci
         }
     }
 
+    /** The offset (BModel lc, ld, le) of an attachment's model copy for one gun (AttachmentItem.ST), or null. */
+    public static float[] attachmentOffset(Item gun, String attachment)
+    {
+        deci.n.f model = attachmentModel(gun, attachment);
+        if (model == null)
+        {
+            return null;
+        }
+        float[] o = new float[3];
+        String[] names = {"lc", "ld", "le"};
+        try
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                java.lang.reflect.Field f = deci.n.f.class.getDeclaredField(names[i]);
+                f.setAccessible(true);
+                o[i] = f.getFloat(model);
+            }
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        return o;
+    }
+
+    /**
+     * The top level parts (BModel.parts, children hang from them) of an attachment's model copy for one gun: name
+     * (ModelRenderer.boxName) to the number of the part's own boxes (BModelPart.jQ), or null when there is no copy.
+     */
+    public static java.util.Map<String, Integer> attachmentPartBoxes(Item gun, String attachment)
+    {
+        deci.n.f model = attachmentModel(gun, attachment);
+        if (model == null)
+        {
+            return null;
+        }
+        java.util.Map<String, Integer> out = new java.util.LinkedHashMap<String, Integer>();
+        try
+        {
+            java.lang.reflect.Field boxes = deci.n.b.class.getDeclaredField("jQ");
+            boxes.setAccessible(true);
+            for (Object p : topParts(model))
+            {
+                Object own = boxes.get(p);
+                out.put(((net.minecraft.client.model.ModelRenderer) p).boxName, own instanceof java.util.List ? ((java.util.List<?>) own).size() : 0);
+            }
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        return out;
+    }
+
+    /**
+     * Draws a top level part of an attachment's model copy for one gun without its own boxes (its children stay): the
+     * part gets an empty box list (BModelPart.jQ), so call it before the copy is first drawn (its display lists compile
+     * then). True when the part was found.
+     */
+    public static boolean clearAttachmentPartBoxes(Item gun, String attachment, String part)
+    {
+        deci.n.f model = attachmentModel(gun, attachment);
+        if (model == null)
+        {
+            return false;
+        }
+        try
+        {
+            java.lang.reflect.Field boxes = deci.n.b.class.getDeclaredField("jQ");
+            boxes.setAccessible(true);
+            for (Object p : model.kC)
+            {
+                if (part.equals(((net.minecraft.client.model.ModelRenderer) p).boxName))
+                {
+                    boxes.set(p, new java.util.ArrayList<Object>());   // a new list: never the loaded model's own
+                    return true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] attachment part %s of %s not cleared: %s", part, attachment, e);
+        }
+        return false;
+    }
+
+    /** A model's top level parts, the ones inside a BatchedPart in its place included. */
+    private static java.util.List<Object> topParts(deci.n.f model)
+    {
+        java.util.List<Object> out = new java.util.ArrayList<Object>();
+        for (Object p : model.kC)
+        {
+            if (p instanceof BatchedPart)
+            {
+                out.addAll(((BatchedPart) p).parts);
+            }
+            else
+            {
+                out.add(p);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * The attachment's model copy for one gun draws its top level parts from one display list (BatchedPart): true when
+     * done. Before the copy is first drawn.
+     */
+    public static boolean batchAttachmentParts(Item gun, String attachment)
+    {
+        deci.n.f model = attachmentModel(gun, attachment);
+        if (model == null || model.kC.isEmpty() || model.kC.get(0) instanceof BatchedPart)
+        {
+            return false;
+        }
+        java.util.List<deci.n.b> parts = new java.util.ArrayList<deci.n.b>();
+        for (Object p : model.kC)
+        {
+            parts.add((deci.n.b) p);
+        }
+        BatchedPart batch = new BatchedPart(model, parts);
+        model.kC.clear();
+        model.kC.add(batch);
+        return true;
+    }
+
+    /** How many parts the attachment's copy for this gun draws from one list, or -1 when it draws them one by one. */
+    public static int attachmentBatch(Item gun, String attachment)
+    {
+        deci.n.f model = attachmentModel(gun, attachment);
+        return model != null && model.kC.size() == 1 && model.kC.get(0) instanceof BatchedPart
+            ? ((BatchedPart) model.kC.get(0)).parts.size() : -1;
+    }
+
+    /**
+     * Top level parts of a model copy drawn from one display list (GripPlacement's grip copies, docs/decimation_code/
+     * weapons.md section 8). BModelPart (deci.n.b) draws each part with about seven GL calls (matrix push, move, scale,
+     * its lists, pop): the RK-1's 56 parts cost 0.13 ms a draw in the production client, most of it handing calls to the
+     * driver. The first draw lets every part compile its own lists (a list must never be compiled inside another), the
+     * second compiles one list that calls them all, then a draw is one call. Parts draw one by one while {@link #enabled}
+     * is off (dev test A / B), and for good when one of them was still not compiled after the first draw. Client only:
+     * only GripPlacement makes them.
+     */
+    public static final class BatchedPart extends deci.n.b
+    {
+        public static boolean enabled = true;
+        private static java.lang.reflect.Field compiled;
+        final java.util.List<deci.n.b> parts;
+        private int list;
+        private boolean warm;
+
+        BatchedPart(deci.n.f model, java.util.List<deci.n.b> parts)
+        {
+            super(model, "batch");
+            this.parts = parts;
+        }
+
+        /** BModelPart.render(scale, useLists): BModel.renderParts calls it with lists on. */
+        @Override
+        public void a(float f, boolean lists)
+        {
+            if (!enabled || !lists || list < 0 || !warm)
+            {
+                for (deci.n.b p : parts)
+                {
+                    p.a(f, lists);
+                }
+                warm |= lists;
+                return;
+            }
+            if (list == 0)
+            {
+                if (!allCompiled())
+                {
+                    list = -1;
+                    a(f, lists);
+                    return;
+                }
+                list = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
+                org.lwjgl.opengl.GL11.glNewList(list, org.lwjgl.opengl.GL11.GL_COMPILE);
+                for (deci.n.b p : parts)
+                {
+                    p.a(f, true);
+                }
+                org.lwjgl.opengl.GL11.glEndList();
+            }
+            org.lwjgl.opengl.GL11.glCallList(list);
+        }
+
+        /** Every part has compiled its own lists (BModelPart's private flag jX). */
+        private boolean allCompiled()
+        {
+            try
+            {
+                if (compiled == null)
+                {
+                    compiled = deci.n.b.class.getDeclaredField("jX");
+                    compiled.setAccessible(true);
+                }
+                for (deci.n.b p : parts)
+                {
+                    if (!compiled.getBoolean(p))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+    }
+
+    private static deci.n.f attachmentModel(Item gun, String attachment)
+    {
+        Item a = cpw.mods.fml.common.registry.GameRegistry.findItem("deci", attachment);
+        if (!(a instanceof deci.ay.h) || !(gun instanceof deci.ay.i))
+        {
+            return null;
+        }
+        Object m = ((deci.ay.h) a).ST.get(gun);
+        return m instanceof deci.n.f ? (deci.n.f) m : null;
+    }
+
     /**
      * A new sight attachment (AttachmentItem deci.ay.h, slot sight, all categories) registered as
      * deci:<name>. Decimation looks attachments up by GameRegistry.findItem("deci", name) (the gun's
@@ -1682,7 +1932,23 @@ public final class Deci
      * private activeContainer) and back. Model deci:models/attachments/sight/<name>.bmodel, texture
      * deci:textures/model/attachments/sight/<name>.png, icon deci:attach/<name>.
      */
-    public static Item newSightAttachment(String name, float zoomFov, float sway)
+    public static Item newSightAttachment(final String name, final float zoomFov, final float sway)
+    {
+        return inDecimation("sight " + name, () -> new deci.ay.h(deci.ay.b.sight, deci.ay.c.all, zoomFov, sway, name));
+    }
+
+    /**
+     * A new grip attachment (AttachmentItem deci.ay.h, slot grip, category rifle as Decimation's Foregrip) registered as
+     * deci:<name> like newSightAttachment. Model deci:models/attachments/grip/<name>.bmodel, texture
+     * deci:textures/model/attachments/grip/<name>.png, icon deci:attach/<name>.
+     */
+    public static Item newGripAttachment(final String name)
+    {
+        return inDecimation("grip " + name, () -> new deci.ay.h(deci.ay.b.grip, deci.ay.c.rifle, name));
+    }
+
+    /** Runs an item constructor with Decimation as FML's active mod container (its namespace), then switches back. */
+    private static Item inDecimation(String what, java.util.concurrent.Callable<Item> make)
     {
         cpw.mods.fml.common.ModContainer deciMod = cpw.mods.fml.common.Loader.instance().getIndexedModList().get("deci");
         java.lang.reflect.Field controller = null, active = null;
@@ -1696,11 +1962,11 @@ public final class Deci
             active.setAccessible(true);
             before = active.get(lc);
             active.set(lc, deciMod);
-            return new deci.ay.h(deci.ay.b.sight, deci.ay.c.all, zoomFov, sway, name);
+            return make.call();
         }
         catch (Exception e)
         {
-            cpw.mods.fml.common.FMLLog.warning("[deciworldgen] sight %s not registered: %s", name, e);
+            cpw.mods.fml.common.FMLLog.warning("[deciworldgen] %s not registered: %s", what, e);
             return null;
         }
         finally

@@ -39,7 +39,7 @@ import net.minecraft.item.ItemStack;
 public class LootPools
 {
     /** Bump when the built-in lists change: an older file is replaced (kept as .old). */
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;      // 2: the RK-1 and the SpecterDR (21 Oktober 2026)
     private static final String FILE = "deciworldgen_loot.json";
 
     public static class Entry
@@ -278,10 +278,10 @@ public class LootPools
             "deci:5_45x39mm_box");
         Pool m2 = pool(d, "military_2", 1, 2, 30);
         add(m2, COMMON, 1, 1, "deci:reddot", "deci:arSuppressor", "deci:smgSuppressor", "deci:pistolSuppressor", "deci:foregrip",
-            "deci:laser", "deci:flashlight");
+            "deci:rk1", "deci:laser", "deci:flashlight");
         add(m2, UNCOMMON, 1, 1, "deci:eotech558", "deci:ta11acog", "deci:2x", "deci:mgSuppressor", "deci:shotgunSuppressor",
             "deci:bayonet");
-        add(m2, RARE, 1, 1, "deci:4x", "deci:8x");
+        add(m2, RARE, 1, 1, "deci:4x", "deci:specterdr", "deci:8x");
         Pool m3 = pool(d, "military_3", 1, 1, 60);
         add(m3, COMMON, 1, 1, milCommon);
         add(m3, UNCOMMON, 1, 1, milUncommon);

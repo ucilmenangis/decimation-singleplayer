@@ -1,0 +1,579 @@
+
+  flamePos: 13.89998, -4.200001, 0;
+  ejectPos: 6.499998, -5.199995, -0.6999996;
+  rhPos: -5.899982, 0.62, -2;
+  rhRot: 0, 0, 0;
+  lhPos: 6.499999, 6.719998, 4.22;
+  lhRot: 0, 0, 0;
+  textureWidth = 512;
+  textureHeight = 32;
+
+  // eyeRubberMid
+  sightModel0 = new BeardieModelRenderer(this, 1, 1);
+  sightModel0.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.58F, 0F}, {0F, -0.58F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}, {-0.86F, -0.58F, 0F}, {0F, -0.58F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel0.setRotationPoint(0.4F, -6.74F, -0.522F);
+  sightModel0.setRotation(0F, 0F, 0F);
+
+  // eyeRubberTop
+  sightModel1 = new BeardieModelRenderer(this, 9, 1);
+  sightModel1.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.71F, 0F}, {0F, -0.71F, 0F}, {-0.86F, 0F, -0.29F}, {0F, 0F, -0.29F}, {-0.86F, -0.71F, 0F}, {0F, -0.71F, 0F}, {-0.86F, 0F, 0.29F}, {0F, 0F, 0.29F}}, 1, 1, 1);
+  sightModel1.setRotationPoint(0.4F, -7.03F, -0.522F);
+  sightModel1.setRotation(0F, 0F, 0F);
+
+  // eyeRubberBot
+  sightModel2 = new BeardieModelRenderer(this, 17, 1);
+  sightModel2.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.71F, -0.29F}, {0F, -0.71F, -0.29F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}, {-0.86F, -0.71F, 0.29F}, {0F, -0.71F, 0.29F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel2.setRotationPoint(0.4F, -6.32F, -0.522F);
+  sightModel2.setRotation(0F, 0F, 0F);
+
+  // eyeTubeMid
+  sightModel3 = new BeardieModelRenderer(this, 25, 1);
+  sightModel3.addShape(0F,0F,0F, new float[][]{{-0.34F, -0.6136F, -0.08F}, {0F, -0.6136F, -0.08F}, {-0.34F, 0F, -0.08F}, {0F, 0F, -0.08F}, {-0.34F, -0.6136F, 0F}, {0F, -0.6136F, 0F}, {-0.34F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel3.setRotationPoint(0.54F, -6.7232F, -0.482F);
+  sightModel3.setRotation(0F, 0F, 0F);
+
+  // eyeTubeTop
+  sightModel4 = new BeardieModelRenderer(this, 33, 1);
+  sightModel4.addShape(0F,0F,0F, new float[][]{{-0.34F, -0.7332F, -0.08F}, {0F, -0.7332F, -0.08F}, {-0.34F, 0F, -0.3468F}, {0F, 0F, -0.3468F}, {-0.34F, -0.7332F, 0F}, {0F, -0.7332F, 0F}, {-0.34F, 0F, 0.2668F}, {0F, 0F, 0.2668F}}, 1, 1, 1);
+  sightModel4.setRotationPoint(0.54F, -6.99F, -0.482F);
+  sightModel4.setRotation(0F, 0F, 0F);
+
+  // eyeTubeBot
+  sightModel5 = new BeardieModelRenderer(this, 41, 1);
+  sightModel5.addShape(0F,0F,0F, new float[][]{{-0.34F, -0.7332F, -0.3468F}, {0F, -0.7332F, -0.3468F}, {-0.34F, 0F, -0.08F}, {0F, 0F, -0.08F}, {-0.34F, -0.7332F, 0.2668F}, {0F, -0.7332F, 0.2668F}, {-0.34F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel5.setRotationPoint(0.54F, -6.3368F, -0.482F);
+  sightModel5.setRotation(0F, 0F, 0F);
+
+  // eyeRingMid
+  sightModel6 = new BeardieModelRenderer(this, 49, 1);
+  sightModel6.addShape(0F,0F,0F, new float[][]{{-0.92F, -0.5968F, -0.04F}, {0F, -0.5968F, -0.04F}, {-0.92F, 0F, -0.04F}, {0F, 0F, -0.04F}, {-0.92F, -0.5968F, 0F}, {0F, -0.5968F, 0F}, {-0.92F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel6.setRotationPoint(0.98F, -6.7316F, -0.502F);
+  sightModel6.setRotation(0F, 0F, 0F);
+
+  // eyeRingTop
+  sightModel7 = new BeardieModelRenderer(this, 57, 1);
+  sightModel7.addShape(0F,0F,0F, new float[][]{{-0.92F, -0.7216F, -0.04F}, {0F, -0.7216F, -0.04F}, {-0.92F, 0F, -0.3184F}, {0F, 0F, -0.3184F}, {-0.92F, -0.7216F, 0F}, {0F, -0.7216F, 0F}, {-0.92F, 0F, 0.2784F}, {0F, 0F, 0.2784F}}, 1, 1, 1);
+  sightModel7.setRotationPoint(0.98F, -7.01F, -0.502F);
+  sightModel7.setRotation(0F, 0F, 0F);
+
+  // eyeRingBot
+  sightModel8 = new BeardieModelRenderer(this, 65, 1);
+  sightModel8.addShape(0F,0F,0F, new float[][]{{-0.92F, -0.7216F, -0.3184F}, {0F, -0.7216F, -0.3184F}, {-0.92F, 0F, -0.04F}, {0F, 0F, -0.04F}, {-0.92F, -0.7216F, 0.2784F}, {0F, -0.7216F, 0.2784F}, {-0.92F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel8.setRotationPoint(0.98F, -6.3284F, -0.502F);
+  sightModel8.setRotation(0F, 0F, 0F);
+
+  // glass
+  scopeGlass0 = new BeardieModelRenderer(this, 73, 1);
+  scopeGlass0.addShape(0F,0F,0F, new float[][]{{-0.98F, -0.32F, -0.32F}, {0F, -0.32F, -0.32F}, {-0.98F, 0F, -0.32F}, {0F, 0F, -0.32F}, {-0.98F, -0.32F, 0F}, {0F, -0.32F, 0F}, {-0.98F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  scopeGlass0.setRotationPoint(0.38F, -6.87F, -0.362F);
+  scopeGlass0.setRotation(0F, 0F, 0F);
+
+  // eyeMask
+  sightModel9 = new BeardieModelRenderer(this, 81, 1);
+  sightModel9.addShape(0F,0F,0F, new float[][]{{-0.985F, -1F, -0.82F}, {0F, -1F, -0.82F}, {-0.985F, 0F, -0.82F}, {0F, 0F, -0.82F}, {-0.985F, -0.82F, 0F}, {0F, -0.82F, 0F}, {-0.985F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel9.setRotationPoint(0.36F, -6.88F, -0.372F);
+  sightModel9.setRotation(0F, 0F, 0F);
+
+  // eyeMask
+  sightModel10 = new BeardieModelRenderer(this, 89, 1);
+  sightModel10.addShape(0F,0F,0F, new float[][]{{-0.985F, -1F, -1F}, {0F, -1F, -1F}, {-0.985F, 0F, -1F}, {0F, 0F, -1F}, {-0.985F, -0.82F, 0.18F}, {0F, -0.82F, 0.18F}, {-0.985F, 0F, 0.18F}, {0F, 0F, 0.18F}}, 1, 1, 1);
+  sightModel10.setRotationPoint(0.36F, -6.88F, 0.148F);
+  sightModel10.setRotation(0F, 0F, 0F);
+
+  // eyeMask
+  sightModel11 = new BeardieModelRenderer(this, 97, 1);
+  sightModel11.addShape(0F,0F,0F, new float[][]{{-0.985F, -0.82F, -0.82F}, {0F, -0.82F, -0.82F}, {-0.985F, 0.18F, -0.82F}, {0F, 0.18F, -0.82F}, {-0.985F, -1F, 0F}, {0F, -1F, 0F}, {-0.985F, 0.18F, 0F}, {0F, 0.18F, 0F}}, 1, 1, 1);
+  sightModel11.setRotationPoint(0.36F, -6.36F, -0.372F);
+  sightModel11.setRotation(0F, 0F, 0F);
+
+  // eyeMask
+  sightModel12 = new BeardieModelRenderer(this, 105, 1);
+  sightModel12.addShape(0F,0F,0F, new float[][]{{-0.985F, -0.82F, -1F}, {0F, -0.82F, -1F}, {-0.985F, 0.18F, -1F}, {0F, 0.18F, -1F}, {-0.985F, -1F, 0.18F}, {0F, -1F, 0.18F}, {-0.985F, 0.18F, 0.18F}, {0F, 0.18F, 0.18F}}, 1, 1, 1);
+  sightModel12.setRotationPoint(0.36F, -6.36F, 0.148F);
+  sightModel12.setRotation(0F, 0F, 0F);
+
+  // rearBlock
+  sightModel13 = new BeardieModelRenderer(this, 113, 1);
+  sightModel13.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.03F, 0.15F}, {0F, -0.13F, 0.05F}, {-0.4F, 0F, 0.15F}, {0F, 0.1F, 0.05F}, {-0.4F, -0.03F, 0F}, {0F, -0.13F, 0.1F}, {-0.4F, 0F, 0F}, {0F, 0.1F, 0.1F}}, 1, 1, 1);
+  sightModel13.setRotationPoint(1.2F, -7.015F, -0.597F);
+  sightModel13.setRotation(0F, 0F, 0F);
+
+  // body
+  sightModel14 = new BeardieModelRenderer(this, 121, 1);
+  sightModel14.addShape(0F,0F,0F, new float[][]{{0.3F, -0.03F, 0.03F}, {0F, -0.03F, 0.03F}, {0.3F, 0F, 0.01F}, {0F, 0F, 0.01F}, {0.3F, -0.03F, 0F}, {0F, -0.03F, 0F}, {0.3F, 0F, 0.02F}, {0F, 0F, 0.02F}}, 1, 1, 1);
+  sightModel14.setRotationPoint(1.8F, -7.015F, -0.537F);
+  sightModel14.setRotation(0F, 0F, 0F);
+
+  // front
+  sightModel15 = new BeardieModelRenderer(this, 129, 1);
+  sightModel15.addShape(0F,0F,0F, new float[][]{{0.24F, -0.02F, 0.18F}, {0F, 0.03F, 0.23F}, {0.24F, 0.05F, 0.18F}, {0F, 0F, 0.23F}, {0.24F, -0.02F, 0.05F}, {0F, 0.03F, 0F}, {0.24F, 0.05F, 0.05F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel15.setRotationPoint(3.1F, -7.055F, -0.637F);
+  sightModel15.setRotation(0F, 0F, 0F);
+
+  // frontPlate
+  sightModel16 = new BeardieModelRenderer(this, 137, 1);
+  sightModel16.addShape(0F,0F,0F, new float[][]{{-0.92F, -0.05F, 0.15F}, {0F, -0.05F, 0.15F}, {-0.92F, 0F, 0.15F}, {0F, 0F, 0.15F}, {-0.92F, -0.05F, 0F}, {0F, -0.05F, 0F}, {-0.92F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel16.setRotationPoint(4.32F, -7.015F, -0.597F);
+  sightModel16.setRotation(0F, 0F, 0F);
+
+  // frontScrew
+  sightModel17 = new BeardieModelRenderer(this, 145, 1);
+  sightModel17.addShape(0F,0F,0F, new float[][]{{-0.97F, -0.92F, -0.92F}, {0F, -0.92F, -0.92F}, {-0.97F, 0F, -0.92F}, {0F, 0F, -0.92F}, {-0.97F, -0.92F, 0F}, {0F, -0.92F, 0F}, {-0.97F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel17.setRotationPoint(4.38F, -6.95F, -0.522F);
+  sightModel17.setRotation(0F, 0F, 0F);
+
+  // frontScrew
+  sightModel18 = new BeardieModelRenderer(this, 153, 1);
+  sightModel18.addShape(0F,0F,0F, new float[][]{{-0.97F, -0.92F, -0.92F}, {0F, -0.92F, -0.92F}, {-0.97F, 0F, -0.92F}, {0F, 0F, -0.92F}, {-0.97F, -0.92F, 0F}, {0F, -0.92F, 0F}, {-0.97F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel18.setRotationPoint(4.38F, -6.95F, 0.398F);
+  sightModel18.setRotation(0F, 0F, 0F);
+
+  // frontScrew
+  sightModel19 = new BeardieModelRenderer(this, 161, 1);
+  sightModel19.addShape(0F,0F,0F, new float[][]{{-0.97F, -0.92F, -0.92F}, {0F, -0.92F, -0.92F}, {-0.97F, 0F, -0.92F}, {0F, 0F, -0.92F}, {-0.97F, -0.92F, 0F}, {0F, -0.92F, 0F}, {-0.97F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel19.setRotationPoint(4.38F, -6.19F, -0.522F);
+  sightModel19.setRotation(0F, 0F, 0F);
+
+  // frontScrew
+  sightModel20 = new BeardieModelRenderer(this, 169, 1);
+  sightModel20.addShape(0F,0F,0F, new float[][]{{-0.97F, -0.92F, -0.92F}, {0F, -0.92F, -0.92F}, {-0.97F, 0F, -0.92F}, {0F, 0F, -0.92F}, {-0.97F, -0.92F, 0F}, {0F, -0.92F, 0F}, {-0.97F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel20.setRotationPoint(4.38F, -6.19F, 0.398F);
+  sightModel20.setRotation(0F, 0F, 0F);
+
+  // objHoodMid
+  sightModel21 = new BeardieModelRenderer(this, 177, 1);
+  sightModel21.addShape(0F,0F,0F, new float[][]{{-0.76F, -0.559F, 0.05F}, {0F, -0.559F, 0.05F}, {-0.76F, 0F, 0.05F}, {0F, 0F, 0.05F}, {-0.76F, -0.559F, 0F}, {0F, -0.559F, 0F}, {-0.76F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel21.setRotationPoint(4.36F, -6.7505F, -0.547F);
+  sightModel21.setRotation(0F, 0F, 0F);
+
+  // objHoodTop
+  sightModel22 = new BeardieModelRenderer(this, 185, 1);
+  sightModel22.addShape(0F,0F,0F, new float[][]{{-0.76F, -0.6955F, 0.05F}, {0F, -0.6955F, 0.05F}, {-0.76F, 0F, -0.2545F}, {0F, 0F, -0.2545F}, {-0.76F, -0.6955F, 0F}, {0F, -0.6955F, 0F}, {-0.76F, 0F, 0.3045F}, {0F, 0F, 0.3045F}}, 1, 1, 1);
+  sightModel22.setRotationPoint(4.36F, -7.055F, -0.547F);
+  sightModel22.setRotation(0F, 0F, 0F);
+
+  // objHoodBot
+  sightModel23 = new BeardieModelRenderer(this, 193, 1);
+  sightModel23.addShape(0F,0F,0F, new float[][]{{-0.76F, -0.6955F, -0.2545F}, {0F, -0.6955F, -0.2545F}, {-0.76F, 0F, 0.05F}, {0F, 0F, 0.05F}, {-0.76F, -0.6955F, 0.3045F}, {0F, -0.6955F, 0.3045F}, {-0.76F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel23.setRotationPoint(4.36F, -6.3095F, -0.547F);
+  sightModel23.setRotation(0F, 0F, 0F);
+
+  // objLipMid
+  sightModel24 = new BeardieModelRenderer(this, 201, 1);
+  sightModel24.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.5338F, 0.11F}, {0F, -0.5338F, 0.11F}, {-0.95F, 0F, 0.11F}, {0F, 0F, 0.11F}, {-0.95F, -0.5338F, 0F}, {0F, -0.5338F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel24.setRotationPoint(4.6F, -6.7631F, -0.577F);
+  sightModel24.setRotation(0F, 0F, 0F);
+
+  // objLipTop
+  sightModel25 = new BeardieModelRenderer(this, 209, 1);
+  sightModel25.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.6781F, 0.11F}, {0F, -0.6781F, 0.11F}, {-0.95F, 0F, -0.2119F}, {0F, 0F, -0.2119F}, {-0.95F, -0.6781F, 0F}, {0F, -0.6781F, 0F}, {-0.95F, 0F, 0.3219F}, {0F, 0F, 0.3219F}}, 1, 1, 1);
+  sightModel25.setRotationPoint(4.6F, -7.085F, -0.577F);
+  sightModel25.setRotation(0F, 0F, 0F);
+
+  // objLipBot
+  sightModel26 = new BeardieModelRenderer(this, 217, 1);
+  sightModel26.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.6781F, -0.2119F}, {0F, -0.6781F, -0.2119F}, {-0.95F, 0F, 0.11F}, {0F, 0F, 0.11F}, {-0.95F, -0.6781F, 0.3219F}, {0F, -0.6781F, 0.3219F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel26.setRotationPoint(4.6F, -6.2969F, -0.577F);
+  sightModel26.setRotation(0F, 0F, 0F);
+
+  // objRimMid
+  sightModel27 = new BeardieModelRenderer(this, 225, 1);
+  sightModel27.addShape(0F,0F,0F, new float[][]{{-0.995F, -0.6472F, -0.16F}, {0F, -0.6472F, -0.16F}, {-0.995F, 0F, -0.16F}, {0F, 0F, -0.16F}, {-0.995F, -0.6472F, 0F}, {0F, -0.6472F, 0F}, {-0.995F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel27.setRotationPoint(4.65F, -6.7064F, -0.442F);
+  sightModel27.setRotation(0F, 0F, 0F);
+
+  // objRimTop
+  sightModel28 = new BeardieModelRenderer(this, 233, 1);
+  sightModel28.addShape(0F,0F,0F, new float[][]{{-0.995F, -0.7564F, -0.16F}, {0F, -0.7564F, -0.16F}, {-0.995F, 0F, -0.4036F}, {0F, 0F, -0.4036F}, {-0.995F, -0.7564F, 0F}, {0F, -0.7564F, 0F}, {-0.995F, 0F, 0.2436F}, {0F, 0F, 0.2436F}}, 1, 1, 1);
+  sightModel28.setRotationPoint(4.65F, -6.95F, -0.442F);
+  sightModel28.setRotation(0F, 0F, 0F);
+
+  // objRimBot
+  sightModel29 = new BeardieModelRenderer(this, 241, 1);
+  sightModel29.addShape(0F,0F,0F, new float[][]{{-0.995F, -0.7564F, -0.4036F}, {0F, -0.7564F, -0.4036F}, {-0.995F, 0F, -0.16F}, {0F, 0F, -0.16F}, {-0.995F, -0.7564F, 0.2436F}, {0F, -0.7564F, 0.2436F}, {-0.995F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel29.setRotationPoint(4.65F, -6.3536F, -0.442F);
+  sightModel29.setRotation(0F, 0F, 0F);
+
+  // objectiveMid
+  sightModel30 = new BeardieModelRenderer(this, 249, 1);
+  sightModel30.addShape(0F,0F,0F, new float[][]{{-0.99F, -0.6976F, -0.28F}, {0F, -0.6976F, -0.28F}, {-0.99F, 0F, -0.28F}, {0F, 0F, -0.28F}, {-0.99F, -0.6976F, 0F}, {0F, -0.6976F, 0F}, {-0.99F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel30.setRotationPoint(4.655F, -6.6812F, -0.382F);
+  sightModel30.setRotation(0F, 0F, 0F);
+
+  // objectiveTop
+  sightModel31 = new BeardieModelRenderer(this, 257, 1);
+  sightModel31.addShape(0F,0F,0F, new float[][]{{-0.99F, -0.7912F, -0.28F}, {0F, -0.7912F, -0.28F}, {-0.99F, 0F, -0.4888F}, {0F, 0F, -0.4888F}, {-0.99F, -0.7912F, 0F}, {0F, -0.7912F, 0F}, {-0.99F, 0F, 0.2088F}, {0F, 0F, 0.2088F}}, 1, 1, 1);
+  sightModel31.setRotationPoint(4.655F, -6.89F, -0.382F);
+  sightModel31.setRotation(0F, 0F, 0F);
+
+  // objectiveBot
+  sightModel32 = new BeardieModelRenderer(this, 265, 1);
+  sightModel32.addShape(0F,0F,0F, new float[][]{{-0.99F, -0.7912F, -0.4888F}, {0F, -0.7912F, -0.4888F}, {-0.99F, 0F, -0.28F}, {0F, 0F, -0.28F}, {-0.99F, -0.7912F, 0.2088F}, {0F, -0.7912F, 0.2088F}, {-0.99F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel32.setRotationPoint(4.655F, -6.3788F, -0.382F);
+  sightModel32.setRotation(0F, 0F, 0F);
+
+  // seam
+  sightModel33 = new BeardieModelRenderer(this, 273, 1);
+  sightModel33.addShape(0F,0F,0F, new float[][]{{-0.92F, 0.05F, 0.25F}, {0F, 0.05F, 0.25F}, {-0.92F, 0F, 0.25F}, {0F, 0F, 0.25F}, {-0.92F, 0.05F, 0F}, {0F, 0.05F, 0F}, {-0.92F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel33.setRotationPoint(3.06F, -7.065F, -0.647F);
+  sightModel33.setRotation(0F, 0F, 0F);
+
+  // ear
+  sightModel34 = new BeardieModelRenderer(this, 281, 1);
+  sightModel34.addShape(0F,0F,0F, new float[][]{{-0.72F, -0.82F, -0.72F}, {0F, -0.82F, -0.72F}, {-0.82F, 0F, -0.78F}, {0.1F, 0F, -0.78F}, {-0.72F, -0.82F, 0F}, {0F, -0.82F, 0F}, {-0.82F, 0F, 0.06F}, {0.1F, 0F, 0.06F}}, 1, 1, 1);
+  sightModel34.setRotationPoint(1.21F, -7.175F, -0.162F);
+  sightModel34.setRotation(0F, 0F, 0F);
+
+  // ear
+  sightModel35 = new BeardieModelRenderer(this, 289, 1);
+  sightModel35.addShape(0F,0F,0F, new float[][]{{-0.72F, -0.82F, -0.72F}, {0F, -0.82F, -0.72F}, {-0.82F, 0F, -0.78F}, {0.1F, 0F, -0.78F}, {-0.72F, -0.82F, 0F}, {0F, -0.82F, 0F}, {-0.82F, 0F, 0.06F}, {0.1F, 0F, 0.06F}}, 1, 1, 1);
+  sightModel35.setRotationPoint(3.41F, -7.175F, -0.162F);
+  sightModel35.setRotation(0F, 0F, 0F);
+
+  // leverPlate
+  sightModel36 = new BeardieModelRenderer(this, 297, 1);
+  sightModel36.addShape(0F,0F,0F, new float[][]{{0.1F, -0.72F, -0.94F}, {0F, -0.72F, -0.94F}, {0.1F, 0F, -0.94F}, {0F, 0F, -0.94F}, {0.1F, -0.72F, 0F}, {0F, -0.72F, 0F}, {0.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel36.setRotationPoint(1.95F, -6.41F, 0.533F);
+  sightModel36.setRotation(0F, 0F, 0F);
+
+  // lever
+  sightModel37 = new BeardieModelRenderer(this, 305, 1);
+  sightModel37.addShape(0F,0F,0F, new float[][]{{-0.79F, -0.58F, -0.87F}, {0.04F, -0.58F, -0.87F}, {-0.79F, 0.04F, -0.87F}, {0.04F, 0.04F, -0.87F}, {-0.75F, -0.58F, 0F}, {0F, -0.58F, 0F}, {-0.75F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel37.setRotationPoint(2.35F, -6.51F, 0.543F);
+  sightModel37.setRotation(0F, 0F, 0F);
+
+  // mark4x
+  sightModel38 = new BeardieModelRenderer(this, 313, 1);
+  sightModel38.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.94F, -0.99F}, {0F, -0.94F, -0.99F}, {-0.88F, 0F, -0.99F}, {0F, 0F, -0.99F}, {-0.88F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel38.setRotationPoint(2.06F, -6.33F, 0.593F);
+  sightModel38.setRotation(0F, 0F, 0F);
+
+  // mark1x
+  sightModel39 = new BeardieModelRenderer(this, 321, 1);
+  sightModel39.addShape(0F,0F,0F, new float[][]{{-0.88F, -0.94F, -0.99F}, {0F, -0.94F, -0.99F}, {-0.88F, 0F, -0.99F}, {0F, 0F, -0.99F}, {-0.88F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.88F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel39.setRotationPoint(2.82F, -6.33F, 0.593F);
+  sightModel39.setRotation(0F, 0F, 0F);
+
+  // knobMid
+  sightModel40 = new BeardieModelRenderer(this, 329, 1);
+  sightModel40.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.748F, -0.82F}, {0F, -0.748F, -0.82F}, {-0.4F, 0F, -0.82F}, {0F, 0F, -0.82F}, {-0.4F, -0.748F, 0F}, {0F, -0.748F, 0F}, {-0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel40.setRotationPoint(1.2F, -6.796F, 0.533F);
+  sightModel40.setRotation(0F, 0F, 0F);
+
+  // knobTop
+  sightModel41 = new BeardieModelRenderer(this, 337, 1);
+  sightModel41.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.826F, -0.82F}, {0F, -0.826F, -0.82F}, {-0.574F, 0F, -0.82F}, {0.174F, 0F, -0.82F}, {-0.4F, -0.826F, 0F}, {0F, -0.826F, 0F}, {-0.574F, 0F, 0F}, {0.174F, 0F, 0F}}, 1, 1, 1);
+  sightModel41.setRotationPoint(1.2F, -6.97F, 0.533F);
+  sightModel41.setRotation(0F, 0F, 0F);
+
+  // knobBot
+  sightModel42 = new BeardieModelRenderer(this, 345, 1);
+  sightModel42.addShape(0F,0F,0F, new float[][]{{-0.574F, -0.826F, -0.82F}, {0.174F, -0.826F, -0.82F}, {-0.4F, 0F, -0.82F}, {0F, 0F, -0.82F}, {-0.574F, -0.826F, 0F}, {0.174F, -0.826F, 0F}, {-0.4F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel42.setRotationPoint(1.2F, -6.544F, 0.533F);
+  sightModel42.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel43 = new BeardieModelRenderer(this, 353, 1);
+  sightModel43.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel43.setRotationPoint(1.77F, -6.7F, 0.553F);
+  sightModel43.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel44 = new BeardieModelRenderer(this, 361, 1);
+  sightModel44.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel44.setRotationPoint(1.7403F, -6.5698F, 0.553F);
+  sightModel44.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel45 = new BeardieModelRenderer(this, 369, 1);
+  sightModel45.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel45.setRotationPoint(1.657F, -6.4655F, 0.553F);
+  sightModel45.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel46 = new BeardieModelRenderer(this, 377, 1);
+  sightModel46.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel46.setRotationPoint(1.5368F, -6.4075F, 0.553F);
+  sightModel46.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel47 = new BeardieModelRenderer(this, 385, 1);
+  sightModel47.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel47.setRotationPoint(1.4032F, -6.4075F, 0.553F);
+  sightModel47.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel48 = new BeardieModelRenderer(this, 393, 1);
+  sightModel48.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel48.setRotationPoint(1.283F, -6.4655F, 0.553F);
+  sightModel48.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel49 = new BeardieModelRenderer(this, 401, 1);
+  sightModel49.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel49.setRotationPoint(1.1997F, -6.5698F, 0.553F);
+  sightModel49.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel50 = new BeardieModelRenderer(this, 409, 1);
+  sightModel50.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel50.setRotationPoint(1.17F, -6.7F, 0.553F);
+  sightModel50.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel51 = new BeardieModelRenderer(this, 417, 1);
+  sightModel51.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel51.setRotationPoint(1.1997F, -6.8302F, 0.553F);
+  sightModel51.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel52 = new BeardieModelRenderer(this, 425, 1);
+  sightModel52.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel52.setRotationPoint(1.283F, -6.9345F, 0.553F);
+  sightModel52.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel53 = new BeardieModelRenderer(this, 433, 1);
+  sightModel53.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel53.setRotationPoint(1.4032F, -6.9925F, 0.553F);
+  sightModel53.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel54 = new BeardieModelRenderer(this, 441, 1);
+  sightModel54.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel54.setRotationPoint(1.5368F, -6.9925F, 0.553F);
+  sightModel54.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel55 = new BeardieModelRenderer(this, 449, 1);
+  sightModel55.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel55.setRotationPoint(1.657F, -6.9345F, 0.553F);
+  sightModel55.setRotation(0F, 0F, 0F);
+
+  // knobKnurl
+  sightModel56 = new BeardieModelRenderer(this, 457, 1);
+  sightModel56.addShape(0F,0F,0F, new float[][]{{-0.94F, -0.94F, -0.85F}, {0F, -0.94F, -0.85F}, {-0.94F, 0F, -0.85F}, {0F, 0F, -0.85F}, {-0.94F, -0.94F, 0F}, {0F, -0.94F, 0F}, {-0.94F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel56.setRotationPoint(1.7403F, -6.8302F, 0.553F);
+  sightModel56.setRotation(0F, 0F, 0F);
+
+  // knobCapMid
+  sightModel57 = new BeardieModelRenderer(this, 465, 1);
+  sightModel57.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.832F, -0.94F}, {0F, -0.832F, -0.94F}, {-0.6F, 0F, -0.94F}, {0F, 0F, -0.94F}, {-0.6F, -0.832F, 0F}, {0F, -0.832F, 0F}, {-0.6F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel57.setRotationPoint(1.3F, -6.754F, 0.713F);
+  sightModel57.setRotation(0F, 0F, 0F);
+
+  // knobCapTop
+  sightModel58 = new BeardieModelRenderer(this, 473, 1);
+  sightModel58.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.884F, -0.94F}, {0F, -0.884F, -0.94F}, {-0.716F, 0F, -0.94F}, {0.116F, 0F, -0.94F}, {-0.6F, -0.884F, 0F}, {0F, -0.884F, 0F}, {-0.716F, 0F, 0F}, {0.116F, 0F, 0F}}, 1, 1, 1);
+  sightModel58.setRotationPoint(1.3F, -6.87F, 0.713F);
+  sightModel58.setRotation(0F, 0F, 0F);
+
+  // knobCapBot
+  sightModel59 = new BeardieModelRenderer(this, 481, 1);
+  sightModel59.addShape(0F,0F,0F, new float[][]{{-0.716F, -0.884F, -0.94F}, {0.116F, -0.884F, -0.94F}, {-0.6F, 0F, -0.94F}, {0F, 0F, -0.94F}, {-0.716F, -0.884F, 0F}, {0.116F, -0.884F, 0F}, {-0.6F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel59.setRotationPoint(1.3F, -6.586F, 0.713F);
+  sightModel59.setRotation(0F, 0F, 0F);
+
+  // tether
+  sightModel60 = new BeardieModelRenderer(this, 489, 1);
+  sightModel60.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.83F, -0.96F}, {0F, -0.95F, -0.96F}, {-0.6F, 0.12F, -0.96F}, {0F, 0F, -0.96F}, {-0.6F, -0.83F, 0F}, {0F, -0.95F, 0F}, {-0.6F, 0.12F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel60.setRotationPoint(1.65F, -6.41F, 0.543F);
+  sightModel60.setRotation(0F, 0F, 0F);
+
+  // mountPlate
+  sightModel61 = new BeardieModelRenderer(this, 497, 1);
+  sightModel61.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.82F, 0F}, {0F, -0.82F, 0F}, {-0.18F, 0F, -0.04F}, {0.08F, 0F, -0.04F}, {-0.1F, -0.82F, 0F}, {0F, -0.82F, 0F}, {-0.18F, 0F, 0.04F}, {0.08F, 0F, 0.04F}}, 3, 1, 1);
+  sightModel61.setRotationPoint(0.75F, -5.73F, -0.522F);
+  sightModel61.setRotation(0F, 0F, 0F);
+
+  // mountClamp
+  sightModel62 = new BeardieModelRenderer(this, 1, 9);
+  sightModel62.addShape(0F,0F,0F, new float[][]{{-0.3F, -0.605F, -0.12F}, {0F, -0.605F, -0.12F}, {-0.36F, 0F, -0.12F}, {0.06F, 0F, -0.12F}, {-0.3F, -0.605F, 0F}, {0F, -0.605F, 0F}, {-0.36F, 0F, 0F}, {0.06F, 0F, 0F}}, 1, 1, 1);
+  sightModel62.setRotationPoint(0.95F, -6.105F, -0.462F);
+  sightModel62.setRotation(0F, 0F, 0F);
+
+  // mountClamp
+  sightModel63 = new BeardieModelRenderer(this, 9, 9);
+  sightModel63.addShape(0F,0F,0F, new float[][]{{-0.3F, -0.605F, -0.12F}, {0F, -0.605F, -0.12F}, {-0.36F, 0F, -0.12F}, {0.06F, 0F, -0.12F}, {-0.3F, -0.605F, 0F}, {0F, -0.605F, 0F}, {-0.36F, 0F, 0F}, {0.06F, 0F, 0F}}, 1, 1, 1);
+  sightModel63.setRotationPoint(2.75F, -6.105F, -0.462F);
+  sightModel63.setRotation(0F, 0F, 0F);
+
+  // mountJaw
+  sightModel64 = new BeardieModelRenderer(this, 17, 9);
+  sightModel64.addShape(0F,0F,0F, new float[][]{{-0.34F, -0.78F, -0.9F}, {0.04F, -0.78F, -0.9F}, {-0.3F, 0F, -0.9F}, {0F, 0F, -0.9F}, {-0.34F, -0.78F, 0F}, {0.04F, -0.78F, 0F}, {-0.3F, 0F, 0F}, {0F, 0F, 0F}}, 3, 1, 1);
+  sightModel64.setRotationPoint(0.85F, -5.69F, 0.398F);
+  sightModel64.setRotation(0F, 0F, 0F);
+
+  // mountJawR
+  sightModel65 = new BeardieModelRenderer(this, 33, 9);
+  sightModel65.addShape(0F,0F,0F, new float[][]{{-0.34F, -0.78F, -0.9F}, {0.04F, -0.78F, -0.9F}, {-0.3F, 0F, -0.9F}, {0F, 0F, -0.9F}, {-0.34F, -0.78F, 0F}, {0.04F, -0.78F, 0F}, {-0.3F, 0F, 0F}, {0F, 0F, 0F}}, 3, 1, 1);
+  sightModel65.setRotationPoint(0.85F, -5.69F, -0.542F);
+  sightModel65.setRotation(0F, 0F, 0F);
+
+  // qdLever
+  sightModel66 = new BeardieModelRenderer(this, 49, 9);
+  sightModel66.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.86F, -0.9F}, {0F, -0.78F, -0.9F}, {-0.4F, 0F, -0.9F}, {0F, 0.08F, -0.9F}, {-0.4F, -0.86F, 0F}, {0F, -0.78F, 0F}, {-0.4F, 0F, 0F}, {0F, 0.08F, 0F}}, 1, 1, 1);
+  sightModel66.setRotationPoint(1F, -5.93F, 0.398F);
+  sightModel66.setRotation(0F, 0F, 0F);
+
+  // qdPivotMid
+  sightModel67 = new BeardieModelRenderer(this, 57, 9);
+  sightModel67.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9412F, -0.86F}, {0F, -0.9412F, -0.86F}, {-0.86F, 0F, -0.86F}, {0F, 0F, -0.86F}, {-0.86F, -0.9412F, 0F}, {0F, -0.9412F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel67.setRotationPoint(1.23F, -5.8894F, 0.398F);
+  sightModel67.setRotation(0F, 0F, 0F);
+
+  // qdPivotTop
+  sightModel68 = new BeardieModelRenderer(this, 65, 9);
+  sightModel68.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9594F, -0.86F}, {0F, -0.9594F, -0.86F}, {-0.9006F, 0F, -0.86F}, {0.0406F, 0F, -0.86F}, {-0.86F, -0.9594F, 0F}, {0F, -0.9594F, 0F}, {-0.9006F, 0F, 0F}, {0.0406F, 0F, 0F}}, 1, 1, 1);
+  sightModel68.setRotationPoint(1.23F, -5.93F, 0.398F);
+  sightModel68.setRotation(0F, 0F, 0F);
+
+  // qdPivotBot
+  sightModel69 = new BeardieModelRenderer(this, 73, 9);
+  sightModel69.addShape(0F,0F,0F, new float[][]{{-0.9006F, -0.9594F, -0.86F}, {0.0406F, -0.9594F, -0.86F}, {-0.86F, 0F, -0.86F}, {0F, 0F, -0.86F}, {-0.9006F, -0.9594F, 0F}, {0.0406F, -0.9594F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel69.setRotationPoint(1.23F, -5.8306F, 0.398F);
+  sightModel69.setRotation(0F, 0F, 0F);
+
+  // crossBoltMid
+  sightModel70 = new BeardieModelRenderer(this, 81, 9);
+  sightModel70.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9412F, -0.89F}, {0F, -0.9412F, -0.89F}, {-0.86F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.86F, -0.9412F, 0F}, {0F, -0.9412F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel70.setRotationPoint(1.23F, -5.8894F, -0.542F);
+  sightModel70.setRotation(0F, 0F, 0F);
+
+  // crossBoltTop
+  sightModel71 = new BeardieModelRenderer(this, 89, 9);
+  sightModel71.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9594F, -0.89F}, {0F, -0.9594F, -0.89F}, {-0.9006F, 0F, -0.89F}, {0.0406F, 0F, -0.89F}, {-0.86F, -0.9594F, 0F}, {0F, -0.9594F, 0F}, {-0.9006F, 0F, 0F}, {0.0406F, 0F, 0F}}, 1, 1, 1);
+  sightModel71.setRotationPoint(1.23F, -5.93F, -0.542F);
+  sightModel71.setRotation(0F, 0F, 0F);
+
+  // crossBoltBot
+  sightModel72 = new BeardieModelRenderer(this, 97, 9);
+  sightModel72.addShape(0F,0F,0F, new float[][]{{-0.9006F, -0.9594F, -0.89F}, {0.0406F, -0.9594F, -0.89F}, {-0.86F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.9006F, -0.9594F, 0F}, {0.0406F, -0.9594F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel72.setRotationPoint(1.23F, -5.8306F, -0.542F);
+  sightModel72.setRotation(0F, 0F, 0F);
+
+  // qdLever
+  sightModel73 = new BeardieModelRenderer(this, 105, 9);
+  sightModel73.addShape(0F,0F,0F, new float[][]{{-0.4F, -0.86F, -0.9F}, {0F, -0.78F, -0.9F}, {-0.4F, 0F, -0.9F}, {0F, 0.08F, -0.9F}, {-0.4F, -0.86F, 0F}, {0F, -0.78F, 0F}, {-0.4F, 0F, 0F}, {0F, 0.08F, 0F}}, 1, 1, 1);
+  sightModel73.setRotationPoint(2.8F, -5.93F, 0.398F);
+  sightModel73.setRotation(0F, 0F, 0F);
+
+  // qdPivotMid
+  sightModel74 = new BeardieModelRenderer(this, 113, 9);
+  sightModel74.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9412F, -0.86F}, {0F, -0.9412F, -0.86F}, {-0.86F, 0F, -0.86F}, {0F, 0F, -0.86F}, {-0.86F, -0.9412F, 0F}, {0F, -0.9412F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel74.setRotationPoint(3.03F, -5.8894F, 0.398F);
+  sightModel74.setRotation(0F, 0F, 0F);
+
+  // qdPivotTop
+  sightModel75 = new BeardieModelRenderer(this, 121, 9);
+  sightModel75.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9594F, -0.86F}, {0F, -0.9594F, -0.86F}, {-0.9006F, 0F, -0.86F}, {0.0406F, 0F, -0.86F}, {-0.86F, -0.9594F, 0F}, {0F, -0.9594F, 0F}, {-0.9006F, 0F, 0F}, {0.0406F, 0F, 0F}}, 1, 1, 1);
+  sightModel75.setRotationPoint(3.03F, -5.93F, 0.398F);
+  sightModel75.setRotation(0F, 0F, 0F);
+
+  // qdPivotBot
+  sightModel76 = new BeardieModelRenderer(this, 129, 9);
+  sightModel76.addShape(0F,0F,0F, new float[][]{{-0.9006F, -0.9594F, -0.86F}, {0.0406F, -0.9594F, -0.86F}, {-0.86F, 0F, -0.86F}, {0F, 0F, -0.86F}, {-0.9006F, -0.9594F, 0F}, {0.0406F, -0.9594F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel76.setRotationPoint(3.03F, -5.8306F, 0.398F);
+  sightModel76.setRotation(0F, 0F, 0F);
+
+  // crossBoltMid
+  sightModel77 = new BeardieModelRenderer(this, 137, 9);
+  sightModel77.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9412F, -0.89F}, {0F, -0.9412F, -0.89F}, {-0.86F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.86F, -0.9412F, 0F}, {0F, -0.9412F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel77.setRotationPoint(3.03F, -5.8894F, -0.542F);
+  sightModel77.setRotation(0F, 0F, 0F);
+
+  // crossBoltTop
+  sightModel78 = new BeardieModelRenderer(this, 145, 9);
+  sightModel78.addShape(0F,0F,0F, new float[][]{{-0.86F, -0.9594F, -0.89F}, {0F, -0.9594F, -0.89F}, {-0.9006F, 0F, -0.89F}, {0.0406F, 0F, -0.89F}, {-0.86F, -0.9594F, 0F}, {0F, -0.9594F, 0F}, {-0.9006F, 0F, 0F}, {0.0406F, 0F, 0F}}, 1, 1, 1);
+  sightModel78.setRotationPoint(3.03F, -5.93F, -0.542F);
+  sightModel78.setRotation(0F, 0F, 0F);
+
+  // crossBoltBot
+  sightModel79 = new BeardieModelRenderer(this, 153, 9);
+  sightModel79.addShape(0F,0F,0F, new float[][]{{-0.9006F, -0.9594F, -0.89F}, {0.0406F, -0.9594F, -0.89F}, {-0.86F, 0F, -0.89F}, {0F, 0F, -0.89F}, {-0.9006F, -0.9594F, 0F}, {0.0406F, -0.9594F, 0F}, {-0.86F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel79.setRotationPoint(3.03F, -5.8306F, -0.542F);
+  sightModel79.setRotation(0F, 0F, 0F);
+
+  // batteryMid
+  sightModel80 = new BeardieModelRenderer(this, 161, 9);
+  sightModel80.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.832F, -0.74F}, {0F, -0.832F, -0.74F}, {-0.6F, 0F, -0.74F}, {0F, 0F, -0.74F}, {-0.6F, -0.832F, 0F}, {0F, -0.832F, 0F}, {-0.6F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel80.setRotationPoint(3.65F, -6.194F, 0.278F);
+  sightModel80.setRotation(0F, 0F, 0F);
+
+  // batteryTop
+  sightModel81 = new BeardieModelRenderer(this, 169, 9);
+  sightModel81.addShape(0F,0F,0F, new float[][]{{-0.6F, -0.884F, -0.74F}, {0F, -0.884F, -0.74F}, {-0.716F, 0F, -0.74F}, {0.116F, 0F, -0.74F}, {-0.6F, -0.884F, 0F}, {0F, -0.884F, 0F}, {-0.716F, 0F, 0F}, {0.116F, 0F, 0F}}, 1, 1, 1);
+  sightModel81.setRotationPoint(3.65F, -6.31F, 0.278F);
+  sightModel81.setRotation(0F, 0F, 0F);
+
+  // batteryBot
+  sightModel82 = new BeardieModelRenderer(this, 177, 9);
+  sightModel82.addShape(0F,0F,0F, new float[][]{{-0.716F, -0.884F, -0.74F}, {0.116F, -0.884F, -0.74F}, {-0.6F, 0F, -0.74F}, {0F, 0F, -0.74F}, {-0.716F, -0.884F, 0F}, {0.116F, -0.884F, 0F}, {-0.6F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel82.setRotationPoint(3.65F, -6.026F, 0.278F);
+  sightModel82.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel83 = new BeardieModelRenderer(this, 185, 9);
+  sightModel83.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel83.setRotationPoint(4.025F, -6.135F, 0.298F);
+  sightModel83.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel84 = new BeardieModelRenderer(this, 193, 9);
+  sightModel84.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel84.setRotationPoint(3.9868F, -6.0174F, 0.298F);
+  sightModel84.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel85 = new BeardieModelRenderer(this, 201, 9);
+  sightModel85.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel85.setRotationPoint(3.8868F, -5.9448F, 0.298F);
+  sightModel85.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel86 = new BeardieModelRenderer(this, 209, 9);
+  sightModel86.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel86.setRotationPoint(3.7632F, -5.9448F, 0.298F);
+  sightModel86.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel87 = new BeardieModelRenderer(this, 217, 9);
+  sightModel87.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel87.setRotationPoint(3.6632F, -6.0174F, 0.298F);
+  sightModel87.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel88 = new BeardieModelRenderer(this, 225, 9);
+  sightModel88.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel88.setRotationPoint(3.625F, -6.135F, 0.298F);
+  sightModel88.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel89 = new BeardieModelRenderer(this, 233, 9);
+  sightModel89.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel89.setRotationPoint(3.6632F, -6.2526F, 0.298F);
+  sightModel89.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel90 = new BeardieModelRenderer(this, 241, 9);
+  sightModel90.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel90.setRotationPoint(3.7632F, -6.3252F, 0.298F);
+  sightModel90.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel91 = new BeardieModelRenderer(this, 249, 9);
+  sightModel91.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel91.setRotationPoint(3.8868F, -6.3252F, 0.298F);
+  sightModel91.setRotation(0F, 0F, 0F);
+
+  // batteryKnurl
+  sightModel92 = new BeardieModelRenderer(this, 257, 9);
+  sightModel92.addShape(0F,0F,0F, new float[][]{{-0.95F, -0.95F, -0.77F}, {0F, -0.95F, -0.77F}, {-0.95F, 0F, -0.77F}, {0F, 0F, -0.77F}, {-0.95F, -0.95F, 0F}, {0F, -0.95F, 0F}, {-0.95F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel92.setRotationPoint(3.9868F, -6.2526F, 0.298F);
+  sightModel92.setRotation(0F, 0F, 0F);
+
+  // batteryArm
+  sightModel93 = new BeardieModelRenderer(this, 265, 9);
+  sightModel93.addShape(0F,0F,0F, new float[][]{{-0.7F, -0.75F, -0.84F}, {0F, -0.75F, -0.84F}, {-0.7F, 0F, -0.84F}, {0F, 0F, -0.84F}, {-0.7F, -0.75F, 0F}, {0F, -0.75F, 0F}, {-0.7F, 0F, 0F}, {0F, 0F, 0F}}, 1, 1, 1);
+  sightModel93.setRotationPoint(3.6F, -6.23F, 0.178F);
+  sightModel93.setRotation(0F, 0F, 0F);

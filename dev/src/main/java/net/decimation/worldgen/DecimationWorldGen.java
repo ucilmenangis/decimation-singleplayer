@@ -105,6 +105,7 @@ public class DecimationWorldGen
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(zoom);
                 cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(zoom);
             }
+            net.decimation.fixes.SpecterKey.register(); // the SpecterDR's 1x / 4x switch (default G)
             // prop render distance by size (tools/patches/PatchPropCulling.java step 4)
             net.minecraftforge.common.config.Configuration props = new net.minecraftforge.common.config.Configuration(
                 new File(event.getModConfigurationDirectory(), "deciworldgen_props.cfg"));
@@ -132,9 +133,11 @@ public class DecimationWorldGen
         // guns of our own (tools/guns, assets/deci/...): the MAC-10 pilot
         net.decimation.fixes.NewGuns.register();
         net.decimation.fixes.NewSights.register(); // before SightPlacement: it moves these too
+        net.decimation.fixes.NewGrips.register(); // the RK-1 Foregrip (before GripPlacement)
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
+            net.decimation.fixes.GripPlacement.apply(); // grips under each gun's handguard (grip_offsets.txt)
         }
         // local kill / death counters for the menu and HUD; the menu's session check calls a
         // Mojang service that no longer answers, so the menu said "Play offline" with an invalid

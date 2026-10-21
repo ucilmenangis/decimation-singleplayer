@@ -21,7 +21,9 @@ public class ScopeDiagTest extends DevTestMode
 {
     public String name() { return "scopediag"; }
 
-    private static volatile int handEvents, handCancelled, frames, glassDraws, glassMeasures;
+    private static volatile int handEvents, handCancelled, frames, glassDraws, glassMeasures, emptyBoxes;
+    /** The box (Deci.scopeGlassBox) after the last measurement: ScopeZoom copies it each aimed frame. */
+    private static volatile float[] lastBox;
     private static volatile int lastFrame;
     private static volatile long lastTime;
     private static volatile boolean on;
@@ -61,6 +63,9 @@ public class ScopeDiagTest extends DevTestMode
             if (t != lastTime)
             {
                 glassMeasures++;
+                float[] b = Deci.scopeGlassBox();
+                lastBox = b;
+                emptyBoxes += b[2] > b[0] && b[3] > b[1] ? 0 : 1;
             }
             lastTime = t;
         }
@@ -117,6 +122,9 @@ public class ScopeDiagTest extends DevTestMode
         DevTestResults.value(name(), "glass draws", glassDraws);
         DevTestResults.value(name(), "glass measurements", glassMeasures);
         DevTestResults.value(name(), "glass mask now", field("glassMask"));
+        float[] b = lastBox;
+        DevTestResults.value(name(), "last glass box", b == null ? "none" : String.format("%.1f %.1f %.1f %.1f (window %d x %d), %d of %d empty",
+                             b[0], b[1], b[2], b[3], mc.displayWidth, mc.displayHeight, emptyBoxes, glassMeasures));
         mc.thePlayer.inventory.setInventorySlotContents(mc.thePlayer.inventory.currentItem, null);
         return false;
     }

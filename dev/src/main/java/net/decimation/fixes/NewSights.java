@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
  */
 public final class NewSights
 {
-    public static Item eotech558, ta11acog;
+    public static Item eotech558, ta11acog, specterdr;
 
     private NewSights()
     {
@@ -26,6 +26,7 @@ public final class NewSights
     {
         eotech558 = Deci.newSightAttachment("eotech558", 42.5f, 0.4f);   // the red dot's zoom and sway
         ta11acog = Deci.newSightAttachment("ta11acog", 45f, 0.3f);       // the 4x's
+        specterdr = Deci.newSightAttachment("specterdr", 45f, 0.3f);     // the 4x's (1x / 4x: ScopeZoom, SpecterMode)
         int pools = 0;
         Item reddot = GameRegistry.findItem("deci", "reddot"), x4 = GameRegistry.findItem("deci", "4x");
         if (eotech558 != null && reddot != null)
@@ -36,7 +37,11 @@ public final class NewSights
         {
             pools += Deci.addLootLike(x4, new ItemStack(ta11acog, 1));
         }
-        FMLLog.info("[deciworldgen] sights registered: EOTech 558 %s, ACOG TA11 %s, loot %d pools",
-                    eotech558 != null, ta11acog != null, pools);
+        if (specterdr != null && x4 != null)
+        {
+            pools += Deci.addLootLike(x4, new ItemStack(specterdr, 1));
+        }
+        FMLLog.info("[deciworldgen] sights registered: EOTech 558 %s, ACOG TA11 %s, SpecterDR %s, loot %d pools",
+                    eotech558 != null, ta11acog != null, specterdr != null, pools);
     }
 }
