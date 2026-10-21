@@ -268,13 +268,11 @@ public class AttachmentsTest extends DevTestMode
                 p.inventory.setInventorySlotContents(1, gunWith("deci:rpk", "laser"));
                 p.inventory.setInventorySlotContents(2, gunWith("deci:fnscar", "rk1"));
                 p.inventory.currentItem = 0;
+                // the Gunsmith opened in the same server step: GripStrip's next pass (once a second) must find it open
+                p.openGui(Deci.decimationMod(), Deci.attachmentsGuiId(), p.worldObj, (int) p.posX, (int) p.posY, (int) p.posZ);
             };
             mc.thePlayer.inventory.currentItem = 0;
             net.decimation.worldgen.DevAutoTest.keepScreen = true;
-        }
-        if (ticks == 8)
-        {
-            GunsmithTest.pressAttach(mc);
         }
         if (ticks == 60)
         {
