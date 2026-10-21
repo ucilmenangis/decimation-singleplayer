@@ -76,7 +76,7 @@ public final class MagUnload
             return;
         }
         ItemStack held = e.entityPlayer.getHeldItem();
-        if (rounds(held) > 0 && Deci.magazineRound(held.getItem()) != null)
+        if (unloadable(held))
         {
             e.setCanceled(true);
             Net.CHANNEL.sendToServer(new Message());
@@ -94,7 +94,8 @@ public final class MagUnload
         for (EntityPlayerMP p; (p = REQUESTS.poll()) != null; )
         {
             ItemStack held = p.getHeldItem();
-            if (rounds(held) > 0 && !busy(p))
+            // the client's check again: a request is only a wish, never trusted (a magazine with a round item, loaded)
+            if (unloadable(held) && !busy(p))
             {
                 running.add(new Running(p, p.inventory.currentItem, held));
                 p.worldObj.playSoundAtEntity(p, "deci:bullet.in", 1f, 0.7f);
@@ -104,7 +105,7 @@ public final class MagUnload
         {
             Running r = it.next();
             boolean same = !r.player.isDead && r.player.inventory.currentItem == r.slot
-                           && r.player.inventory.getStackInSlot(r.slot) == r.mag && rounds(r.mag) > 0;
+                           && r.player.inventory.getStackInSlot(r.slot) == r.mag && unloadable(r.mag);
             if (!same)
             {
                 it.remove();                              // switched away, dropped or died: nothing happens
@@ -112,7 +113,14 @@ public final class MagUnload
             else if (--r.left <= 0)
             {
                 it.remove();
-                unload(r.player, r.mag);
+                try
+                {
+                    unload(r.player, r.mag);
+                }
+                catch (RuntimeException ex)
+                {
+                    cpw.mods.fml.common.FMLLog.warning("[deciworldgen] magazine unload failed: %s", ex);   // never out of the tick
+                }
             }
         }
     }
@@ -129,9 +137,19 @@ public final class MagUnload
         return false;
     }
 
+    /** A loaded magazine whose loose round is known: the only thing either side unloads. */
+    static boolean unloadable(ItemStack s)
+    {
+        return rounds(s) > 0 && Deci.magazineRound(s.getItem()) != null;
+    }
+
     private static void unload(EntityPlayerMP p, ItemStack mag)
     {
         Item round = Deci.magazineRound(mag.getItem());
+        if (round == null)
+        {
+            return;
+        }
         int n = rounds(mag);
         mag.getTagCompound().setInteger("ammo", 0);
         for (int k : stacks(n, round.getItemStackLimit()))
