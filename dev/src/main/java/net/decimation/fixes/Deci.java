@@ -2142,6 +2142,18 @@ public final class Deci
         }
     }
 
+    /** AmmoItem.capacity (deci.ay.f.adF) of a magazine, belt or clip (feedType adE not bullet); 0 for anything else. */
+    public static int magazineCapacity(net.minecraft.item.Item item)
+    {
+        return item instanceof deci.ay.f && ((deci.ay.f) item).adE != deci.ay.a.bullet ? ((deci.ay.f) item).adF : 0;
+    }
+
+    /** AmmoItem.bulletItem (deci.ay.f.adI): the loose round a magazine is loaded with, or null. */
+    public static net.minecraft.item.Item magazineRound(net.minecraft.item.Item item)
+    {
+        return item instanceof deci.ay.f ? ((deci.ay.f) item).adI : null;
+    }
+
     /** PlayerData.getLootInventory (cN): what the loot screen shows on this side. */
     public static net.minecraft.inventory.InventoryBasic lootInventory(EntityPlayer player)
     {

@@ -137,6 +137,7 @@ public class DecimationWorldGen
         net.decimation.fixes.GripRails.load(); // a Foregrip or RK-1 only on a gun with a rail (grip_offsets.txt)
         net.decimation.fixes.SightMounts.load(); // a sight only on its mount (sight_mounts.txt)
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.MountStrip());
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.LootMagazines()); // loot mags half full
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
