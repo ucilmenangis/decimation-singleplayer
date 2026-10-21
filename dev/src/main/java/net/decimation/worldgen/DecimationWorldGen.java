@@ -202,6 +202,8 @@ public class DecimationWorldGen
             // the hand holding a gun shows the player's own skin, not Steve (bug.md "Steve hand")
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunArmSkin());
             // the muzzle flash lit every mob drawn after a shooter: lighting put back around each living entity (bug.md)
+            // shift click in Decimation's inventory screen: its client container swapped for ours (bug.md)
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.InventoryShift.Client());
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.EntityLighting());
         }
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.WorldClock());
@@ -312,6 +314,7 @@ public class DecimationWorldGen
         net.decimation.fixes.LootPools.load(configDir);
         net.decimation.fixes.Protection.load(configDir);
         net.decimation.fixes.gunsmith.GunsmithGuiHandler.install(); // the attach key opens the Gunsmith screen
+        net.decimation.fixes.InventoryShift.install(); // shift click in the inventory screen (bug.md), after the Gunsmith's
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.Updater.check();     // the menu asks once a newer release is known (UpdatePrompt)

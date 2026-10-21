@@ -2158,6 +2158,82 @@ public final class Deci
         player.openGui(deci.a.b.a(), deci.Q.c.Xa, player.worldObj, -1, 2, 0);
     }
 
+    // ---- inventory shift click (fixes/InventoryShift): PlayerGearContainer = deci.f.d (w, gy, type: its setupSlots
+    //      arguments), PlayerExtraInventory = deci.f.i (mask, vest, backpack slots), BackpackInventory = deci.f.g,
+    //      PlayerInventoryScreen = deci.g.g, DeciConstants.gUI_LOOT = deci.Q.c.Xa
+
+    /** DeciConstants.gUI_LOOT (Xa): the GUI id of Decimation's inventory screen (with or without the loot area). */
+    public static int inventoryGuiId()
+    {
+        return deci.Q.c.Xa;
+    }
+
+    /** PlayerExtraInventory (deci.f.i): the mask, vest and backpack slots of the inventory screen. */
+    public static boolean isGearInventory(net.minecraft.inventory.IInventory inv)
+    {
+        return inv instanceof deci.f.i;
+    }
+
+    /** BackpackInventory (deci.f.g): the slots of the worn backpack. */
+    public static boolean isBackpackInventory(net.minecraft.inventory.IInventory inv)
+    {
+        return inv instanceof deci.f.g;
+    }
+
+    /** PlayerInventoryScreen (deci.g.g), client only. */
+    public static boolean isInventoryScreen(Object screen)
+    {
+        return screen instanceof deci.g.g;
+    }
+
+    /** The server's container of the inventory screen, as Decimation's GuiHandler builds it (x, y of openGui). */
+    public static net.minecraft.inventory.Container gearContainer(EntityPlayer player, int x, int y)
+    {
+        return new GearContainer(player.inventory, player, x, y);
+    }
+
+    /**
+     * The client's container of the inventory screen rebuilt as ours, with the same layout (screen size w, gy and type
+     * of the one PlayerInventoryScreen.initGui made) and window id; null when it is ours already or not Decimation's.
+     */
+    public static net.minecraft.inventory.Container gearContainerLike(net.minecraft.inventory.Container old, EntityPlayer player)
+    {
+        if (!(old instanceof deci.f.d) || old instanceof GearContainer || ((deci.f.d) old).w == -1)
+        {
+            return null;
+        }
+        deci.f.d d = (deci.f.d) old;
+        GearContainer c = new GearContainer(player.inventory, player, d.w, d.gy, 0, d.type);
+        c.windowId = old.windowId;
+        return c;
+    }
+
+    /** True for our container of the inventory screen. */
+    public static boolean hasShiftClick(net.minecraft.inventory.Container c)
+    {
+        return c instanceof GearContainer;
+    }
+
+    /** PlayerGearContainer with shift click (InventoryShift.transfer); Decimation's answers null. */
+    public static final class GearContainer extends deci.f.d
+    {
+        GearContainer(net.minecraft.entity.player.InventoryPlayer inv, EntityPlayer player, int x, int y)
+        {
+            super(inv, player, x, y);
+        }
+
+        GearContainer(net.minecraft.entity.player.InventoryPlayer inv, EntityPlayer player, int w, int h, int id, int type)
+        {
+            super(inv, player, w, h, id, type);
+        }
+
+        @Override
+        public ItemStack transferStackInSlot(EntityPlayer player, int index)
+        {
+            return InventoryShift.transfer(this, player, index);
+        }
+    }
+
     /** GunItem.stats (aeq).secondsPerShot (ads): the gun's own rate of fire. */
     public static double gunSecondsPerShot(net.minecraft.item.ItemStack gun)
     {
@@ -2187,6 +2263,18 @@ public final class Deci
         deci.Q.b data = deci.Q.b.e(player);
         return data == null ? new net.minecraft.item.ItemStack[0]
             : new net.minecraft.item.ItemStack[] {data.cw(), data.cx(), data.cv()};
+    }
+
+    /** PlayerData.setVest / setMask / setBackpack (d, e, c): puts Decimation's extra gear on a player (null takes it off). */
+    public static void setPlayerGear(EntityPlayer player, ItemStack vest, ItemStack mask, ItemStack backpack)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        if (data != null)
+        {
+            data.d(vest);
+            data.e(mask);
+            data.c(backpack);
+        }
     }
 
     /** HumanEntity.getMask (deci.af.d.cx). */
