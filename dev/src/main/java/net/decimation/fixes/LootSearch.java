@@ -42,11 +42,23 @@ public final class LootSearch
     {
         private final int[] order, ticks;
         private int next, done;
+        private long lastTick = Long.MIN_VALUE;
 
         Search(int[] order, int[] ticks)
         {
             this.order = order;
             this.ticks = ticks;
+        }
+
+        /** One tick of searching on server tick `now`, once a server tick however many players look at it. */
+        boolean tickAt(long now)
+        {
+            if (now == lastTick)
+            {
+                return false;
+            }
+            lastTick = now;
+            return tick();
         }
 
         /** One tick of searching; true when it revealed a slot. */
@@ -198,18 +210,13 @@ public final class LootSearch
                 told.remove(p);
                 continue;
             }
-            Search s = SEARCHES.get(inv);
-            if (s == null)
-            {
-                s = start(inv);
-                SEARCHES.put(inv, s);
-            }
+            Search s = searchFor(inv);
             boolean fresh = told.get(p) != c;
             if (fresh)
             {
                 told.put(p, c);
             }
-            if (s.tick() || fresh)
+            if (s.tickAt(server.getTickCounter()) || fresh)
             {
                 Net.CHANNEL.sendTo(new State(c.windowId, s), p);
             }
@@ -247,10 +254,27 @@ public final class LootSearch
         }
         if (FMLCommonHandler.instance().getEffectiveSide().isServer())
         {
-            Search s = SEARCHES.get(slot.inventory);
-            return s != null && s.hidden(slot.getSlotIndex());
+            return hiddenOnServer(slot.inventory, slot.getSlotIndex());
         }
         return Client.hidden(slot.getSlotIndex());
+    }
+
+    /** Fails closed: a loot inventory whose search the tick handler has not started yet starts it here (a click right as
+     *  the screen opens finds every filled slot hidden). */
+    static boolean hiddenOnServer(IInventory inv, int slot)
+    {
+        return searchFor(inv).hidden(slot);
+    }
+
+    private static Search searchFor(IInventory inv)
+    {
+        Search s = SEARCHES.get(inv);
+        if (s == null)
+        {
+            s = start(inv);
+            SEARCHES.put(inv, s);
+        }
+        return s;
     }
 
     /** Container.slotClick of our container: a click on an unsearched slot does nothing (both sides, any kind of click). */

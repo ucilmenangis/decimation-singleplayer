@@ -75,4 +75,27 @@ class LootSearchTest
                      "armor 2 s");
         assertEquals(1, LootSearch.seconds(null));
     }
+
+    @Test
+    void aSharedSearchAdvancesOnceAServerTickHoweverManyWatch()
+    {
+        LootSearch.Search s = new LootSearch.Search(new int[] {0}, new int[] {20});
+        for (int t = 1; t <= 10; t++)
+        {
+            s.tickAt(t);
+            s.tickAt(t);                                    // a second player looking at the same body
+        }
+        assertEquals(10, s.done(), "10 server ticks, not 20");
+    }
+
+    @Test
+    void theServerFailsClosedBeforeTheFirstTick()
+    {
+        net.minecraft.inventory.InventoryBasic inv = new net.minecraft.inventory.InventoryBasic("t", false, 4);
+        inv.setInventorySlotContents(2, new ItemStack(new net.minecraft.item.ItemFood(4, false)));
+        assertEquals(null, LootSearch.progress(inv), "no search yet");
+        assertTrue(LootSearch.hiddenOnServer(inv, 2), "a filled slot is hidden before the tick handler saw the screen");
+        assertFalse(LootSearch.hiddenOnServer(inv, 1), "an empty slot is not");
+        assertEquals(1, LootSearch.progress(inv)[3], "the search started there");
+    }
 }
