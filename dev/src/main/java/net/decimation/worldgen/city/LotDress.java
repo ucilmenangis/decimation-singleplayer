@@ -55,6 +55,10 @@ final class LotDress
         {
             l.bare();
         }
+        if (l.district == StreetDress.WASTELAND)
+        {
+            d.lootKinds(net.decimation.fixes.LootBlocks.MILITARY);   // shelves of the military area hold military loot
+        }
         Dress.logTotals();
         return d;
     }

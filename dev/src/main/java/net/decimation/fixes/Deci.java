@@ -2446,6 +2446,115 @@ public final class Deci
         }
     }
 
+    // ---- copies of Decimation's props (fixes/LootBlocks, feature 12 B)
+
+    /**
+     * A copy of one of Decimation's props (BlockProp, net.decimation.mod.common.block.props): every field of BlockProp
+     * (prop name, model or .bmodel, display name, size, light, flares, seat, sound, safezone flag) and the Block's look
+     * and strength (copyBlockLook). A tile entity made by the copy is a TileEntityProp of the same prop name, so
+     * PropRenderer draws it as the original. The caller registers it.
+     */
+    public static net.minecraft.block.Block copyProp(net.minecraft.block.Block original)
+    {
+        net.decimation.mod.common.block.props.BlockProp o = (net.decimation.mod.common.block.props.BlockProp) original;
+        net.decimation.mod.common.block.props.BlockProp c =
+            new net.decimation.mod.common.block.props.BlockProp("copy", "tile.copy", o.getMaterial(), "copy");
+        try
+        {
+            for (java.lang.reflect.Field f : net.decimation.mod.common.block.props.BlockProp.class.getDeclaredFields())
+            {
+                if (!java.lang.reflect.Modifier.isStatic(f.getModifiers()))
+                {
+                    f.setAccessible(true);
+                    f.set(c, f.get(o));
+                }
+            }
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new IllegalStateException("BlockProp fields", e);
+        }
+        copyBlockLook(o, c);
+        return c;
+    }
+
+    /** A new MetalShelf (net.decimation.mod.common.block.props.BlockMetalShelf, a 1 x 2 multiblock) as Decimation sets up its own. */
+    public static net.minecraft.block.Block newMetalShelf(net.minecraft.block.Block original)
+    {
+        net.minecraft.block.Block c = new net.decimation.mod.common.block.props.BlockMetalShelf();
+        copyBlockLook(original, c);
+        return c;
+    }
+
+    /** A new WeaponCabinet (net.decimation.mod.common.block.props.BlockWeaponCabinet, EntityWeaponCabinet drawn) like the original. */
+    public static net.minecraft.block.Block newWeaponCabinet(net.minecraft.block.Block original)
+    {
+        net.minecraft.block.Block c = new net.decimation.mod.common.block.props.BlockWeaponCabinet();
+        copyBlockLook(original, c);
+        return c;
+    }
+
+    /** The Block level settings PropBlockRegistry gives a prop: bounds, hardness, resistance, light, icon, tab, sound. */
+    private static void copyBlockLook(net.minecraft.block.Block o, net.minecraft.block.Block c)
+    {
+        c.setBlockBounds((float) o.getBlockBoundsMinX(), (float) o.getBlockBoundsMinY(), (float) o.getBlockBoundsMinZ(),
+                         (float) o.getBlockBoundsMaxX(), (float) o.getBlockBoundsMaxY(), (float) o.getBlockBoundsMaxZ());
+        c.setHardness(o.getBlockHardness(null, 0, 0, 0));
+        c.setResistance(o.getExplosionResistance(null) * 5f / 3f);   // setResistance stores 3x, the getter reads / 5
+        c.setLightLevel(o.getLightValue() / 15f);
+        c.setLightOpacity(o.getLightOpacity());
+        c.setStepSound(o.stepSound);
+        c.setTickRandomly(o.getTickRandomly());
+        if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
+        {
+            c.setCreativeTab(o.getCreativeTabToDisplayOn());   // client only (a server strips the getter; tabs are a client thing)
+        }
+        String icon = cpw.mods.fml.relauncher.ReflectionHelper.getPrivateValue(net.minecraft.block.Block.class, o,
+                                                                               "textureName", "field_149768_d");
+        c.setBlockTextureName(icon);
+    }
+
+    /**
+     * A loot table entry of LootTableRegistry (deci.aD.l, entries awA of deci.aD.l$a: block, rolls afu, items awC, sound
+     * afb) for a block of ours, made from the entry of `like`: its rolls, its sound and a copy of its items (the entry's
+     * constructor copies the list, so later additions by addLootLike reach both entries once each); the pools are built
+     * again (init). False when `like` has no entry (a dedicated server with disableLootSystem has none).
+     */
+    public static boolean addLootBlock(net.minecraft.block.Block block, net.minecraft.block.Block like)
+    {
+        deci.aD.l table = deci.a.b.a().f();
+        try
+        {
+            for (Object entry : new java.util.ArrayList<Object>(table.awA))
+            {
+                Class<?> c = entry.getClass();
+                java.lang.reflect.Field fb = c.getDeclaredField("block"), fn = c.getDeclaredField("afu"),
+                    fl = c.getDeclaredField("awC"), fs = c.getDeclaredField("afb");
+                fb.setAccessible(true);
+                if (fb.get(entry) != like)
+                {
+                    continue;
+                }
+                fn.setAccessible(true);
+                fl.setAccessible(true);
+                fs.setAccessible(true);
+                java.lang.reflect.Constructor<?> k =
+                    c.getDeclaredConstructor(net.minecraft.block.Block.class, int.class, java.util.ArrayList.class);
+                k.setAccessible(true);
+                Object made = k.newInstance(block, fn.get(entry), fl.get(entry));
+                fs.set(made, fs.get(entry));
+                ((java.util.List<Object>) (java.util.List<?>) table.awA).add(made);
+                table.init();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.warning("[deciworldgen] loot entry for %s failed: %s", block, e);
+        }
+        return false;
+    }
+
     // ---- loot screen: the path of LootInteractHandler (deci.aK.k), docs/loot_levels.md
 
     /** Runtime class of the loot screen (PlayerInventoryScreen deci.g.g, client only): compare names. */

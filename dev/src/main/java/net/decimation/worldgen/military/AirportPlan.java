@@ -126,4 +126,11 @@ public final class AirportPlan extends CanvasPlan implements FixedBase, Garrison
         }
         return b;
     }
+
+    /** Shelves of a base hold military loot (fixes/LootBlocks; its weapon cabinets already do). */
+    @Override
+    int lootPlace()
+    {
+        return net.decimation.fixes.LootBlocks.MILITARY;
+    }
 }

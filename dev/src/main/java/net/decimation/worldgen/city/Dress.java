@@ -246,6 +246,32 @@ final class Dress
     }
 
     /**
+     * Shelves and cabinets in the plan, its own (converted buildings) and the dressing's, as this kind of place's loot
+     * (fixes/LootBlocks, feature 12 B: police, military, else civilian); returns how many changed.
+     */
+    int lootKinds(int place)
+    {
+        int n = 0;
+        for (int y = 0; y < h; y++)
+        {
+            for (int z = 0; z < l; z++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    Block b = block(x, y, z);
+                    Block to = net.decimation.fixes.LootBlocks.forPlace(b, place);
+                    if (to != b)
+                    {
+                        put(to, meta(x, y, z), x, y, z);
+                        n++;
+                    }
+                }
+            }
+        }
+        return n;
+    }
+
+    /**
      * Places a prop if it fits (see the class comment). mount: 0 standing (needs support below),
      * 1 hung on a wall or a ceiling (no support needed; the caller picked the wall / ceiling and its
      * metadata), 2 lying in the road (support below, may touch nothing). Returns true when placed.

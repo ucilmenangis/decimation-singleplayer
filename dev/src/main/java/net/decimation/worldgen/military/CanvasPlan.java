@@ -146,7 +146,13 @@ public abstract class CanvasPlan implements Graded
                 break;
         }
         meta[0] = m;
-        return b;
+        return net.decimation.fixes.LootBlocks.forPlace(b, lootPlace());
+    }
+
+    /** The loot kind of this plan's shelves and cabinets (fixes/LootBlocks), -1 for none: they stay as placed. */
+    int lootPlace()
+    {
+        return -1;
     }
 
     /** Ramp from the pad (floor height at the footprint) to the natural ground at the lot edge. */

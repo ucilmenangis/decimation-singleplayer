@@ -98,4 +98,11 @@ public final class MilitaryBasePlan extends CanvasPlan implements net.decimation
         return "military base (" + MilitaryBase.SIZE_NAME[size] + ") " + (maxX() - minX + 1) + "x" + (maxZ() - minZ + 1)
             + " rot " + turns * 90;
     }
+
+    /** Shelves of a base hold military loot (fixes/LootBlocks; its weapon cabinets already do). */
+    @Override
+    int lootPlace()
+    {
+        return net.decimation.fixes.LootBlocks.MILITARY;
+    }
 }

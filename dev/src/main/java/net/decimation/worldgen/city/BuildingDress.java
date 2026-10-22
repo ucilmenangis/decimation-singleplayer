@@ -131,14 +131,21 @@ final class BuildingDress
         };
         Dress d = new Dress(base, s.width, s.height, s.length);
         BuildingLayout lay = LcContent.layout(b.file, s);
+        boolean waste = Wasteland.district(p.style);
+        // shelves and cabinets hold the building's kind of loot (police, military; the wasteland is the military area)
+        int lootPlace = waste || kind(b.name) == MILITARY ? net.decimation.fixes.LootBlocks.MILITARY
+            : kind(b.name) == POLICE ? net.decimation.fixes.LootBlocks.POLICE : net.decimation.fixes.LootBlocks.CIVILIAN;
         if (lay == null)
         {
+            d.lootKinds(lootPlace);
             return d;
         }
         long seed = hl(0x4255494CL ^ p.minX() * 31L, p.minX(), p.minZ());
-        boolean waste = Wasteland.district(p.style);
         BuildingDress bd = new BuildingDress(d, lay, seed, kind(b.name), b.name, waste);
         bd.run();
+        long kindStart = System.nanoTime();
+        int kinds = d.lootKinds(lootPlace);
+        long kindMicros = (System.nanoTime() - kindStart) / 1000;
         if (LOG && bd.lootLog != null)
         {
             cpw.mods.fml.common.FMLLog.info("[deciworldgen] wasteland loot %s at %d,%d: %s", b.name, p.minX(), p.minZ(), bd.lootLog);
@@ -157,8 +164,9 @@ final class BuildingDress
                     sb.append(' ').append(e.getKey().replace("deci:", "")).append('=').append(e.getValue()[0]);
                 }
             }
-            cpw.mods.fml.common.FMLLog.info("[deciworldgen] dressed building %s kind %d at %d,%d spots %d%s:%s", b.name,
-                                            kind(b.name), p.minX(), p.minZ(), lay.spots.size(), waste ? " wasteland" : "", sb);
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] dressed building %s kind %d at %d,%d spots %d%s loot kind %d (%d in %d us):%s",
+                                            b.name, kind(b.name), p.minX(), p.minZ(), lay.spots.size(), waste ? " wasteland" : "",
+                                            lootPlace, kinds, kindMicros, sb);
         }
         Dress.logTotals();
         return d;
