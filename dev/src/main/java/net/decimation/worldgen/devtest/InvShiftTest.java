@@ -44,6 +44,7 @@ public class InvShiftTest extends DevTestMode
         {
             net.decimation.worldgen.DevAutoTest.keepScreen = false;
             InventoryShift.enabled = true;
+            net.decimation.fixes.LootSearch.enabled = true;
             return false;
         }
         if (phase == 1) // the screen is open on both sides: click
@@ -116,6 +117,7 @@ public class InvShiftTest extends DevTestMode
                 InventoryBasic loot = new InventoryBasic("invshift", false, 8);
                 loot.setInventorySlotContents(0, stack("minecraft:cobblestone", 40));
                 Deci.setLootInventory(p, loot);
+                net.decimation.fixes.LootSearch.enabled = false;   // this step moves loot at once (the search: dev test lootsearch)
                 Deci.openLootGui(p);
             }
             else

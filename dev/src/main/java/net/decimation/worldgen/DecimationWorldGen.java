@@ -160,6 +160,8 @@ public class DecimationWorldGen
         net.decimation.fixes.GasMaskFilter.addLoot(); // Gas Mask Filters in military and police loot
         net.decimation.fixes.RadiationPills.register(); // radiation pills: 40 points off the dose, medical loot
         net.decimation.fixes.LootBlocks.register(); // lootable copies of props, police and military shelves, cabinets (feature 12 B)
+        net.decimation.fixes.LootSearch.init(); // items set apart by search time (feature 12 C)
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.LootSearch()); // loot searched slot by slot
         // the wasteland city one radiation zone: worlds made before it get theirs at load (city/WastelandRadiation)
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.worldgen.city.WastelandRadiation());
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
@@ -167,6 +169,9 @@ public class DecimationWorldGen
             // right click fits a filter, "Filter: N%" in a gas mask's tooltip, Decimation's HUD unprotected when it is empty
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.GasMaskFilter.Client());
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.LootBlocks.Tooltip()); // "Lootable: ..."
+            net.decimation.fixes.LootSearch.Client search = new net.decimation.fixes.LootSearch.Client(); // "?", spinner, no tooltip
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(search);
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(search);
         }
         // feature 8, specific mobs at specific places: a table per place kind (config/deciworldgen_places.json, loaded in
         // postInit) turns Decimation's natural infected spawns into the place's mobs (fixes/PlaceSpawns, worldgen/Places)

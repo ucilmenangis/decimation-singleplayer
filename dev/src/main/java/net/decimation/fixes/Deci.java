@@ -2682,6 +2682,34 @@ public final class Deci
         {
             return InventoryShift.transfer(this, player, index);
         }
+
+        /** No click of any kind on a loot slot not searched yet (fixes/LootSearch). */
+        @Override
+        public ItemStack slotClick(int slotId, int button, int mode, EntityPlayer player)
+        {
+            return LootSearch.refuses(this, slotId) ? null : super.slotClick(slotId, button, mode, player);
+        }
+
+        /** A double click gathering stacks skips unsearched loot slots (fixes/LootSearch). */
+        @Override
+        public boolean func_94530_a(ItemStack stack, net.minecraft.inventory.Slot slot)
+        {
+            return !LootSearch.hidden(slot) && super.func_94530_a(stack, slot);
+        }
+    }
+
+    /** ItemKeycard (deci.av.k): a keycard of any clearance. */
+    public static boolean isKeycard(Item item)
+    {
+        return item instanceof deci.av.k;
+    }
+
+    /** Gear worn in Decimation's own slots: vests (ItemVestDeci), masks (ItemMaskDeci, ItemGasMaskDeci), backpacks (deci.av.a). */
+    public static boolean isWornGear(Item item)
+    {
+        return item instanceof net.decimation.mod.common.item.armor.ItemVestDeci
+            || item instanceof net.decimation.mod.common.item.armor.ItemMaskDeci
+            || item instanceof net.decimation.mod.common.item.armor.ItemGasMaskDeci || item instanceof deci.av.a;
     }
 
     /** GunItem.stats (aeq).secondsPerShot (ads): the gun's own rate of fire. */

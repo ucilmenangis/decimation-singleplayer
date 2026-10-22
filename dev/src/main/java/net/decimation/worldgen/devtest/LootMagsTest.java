@@ -208,7 +208,7 @@ public class LootMagsTest extends DevTestMode
                              g >= 10 && Math.abs(2 * loaded - g) <= 3 * Math.sqrt(g), "half within 3 standard deviations, 10 or more guns");
         DevTestResults.check(name(), "gun rounds within its magazine, Decimation's tag", outside + " outside, " + untagged + " without the tag",
                              outside == 0 && untagged == 0, "0 and 0");
-        DevTestResults.check(name(), "a looted loaded gun fires", loadedGun == null ? "no loaded automatic gun" : before + " then " + after,
+        DevTestResults.check(name(), "a looted loaded gun fires", loadedGun == null ? "no loaded automatic gun" : loadedGun.getDisplayName() + ": " + before + " then " + after,
                              loadedGun != null && before > 1 && after == before - 1, "one round less on the server");
     }
 }
