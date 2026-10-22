@@ -109,4 +109,19 @@ class TraderMarketTest
         assertEquals(calm[0], sold[0], "ten sales leave the buy price");
         assertEquals(63, sold[1], "and lower the sell price 30 %");
     }
+
+    @Test
+    void aTradeAtAnythingButTodaysPriceIsDroppedBeforeDecimationSeesIt()
+    {
+        java.util.Map<String, int[][]> rows = new java.util.HashMap<String, int[][]>();
+        java.util.Map<String, String[]> keys = new java.util.HashMap<String, String[]>();
+        rows.put("A", new int[][] {{12, 3, 0}});
+        keys.put("A", new String[] {"0/water"});
+        java.util.Map<String, Set<String>> valid = TraderMarket.validPrices(rows, keys);
+        assertTrue(TraderMarket.allowed(valid, "water", 0, 12, 0), "today's buy price");
+        assertTrue(TraderMarket.allowed(valid, "water", 1, 3, 0), "today's sell price");
+        assertTrue(!TraderMarket.allowed(valid, "water", 0, 10, 0), "the base price of a list reset a moment ago");
+        assertTrue(!TraderMarket.allowed(valid, "water", 0, 12, 1), "gold for a caps offer");
+        assertTrue(TraderMarket.allowed(valid, "bread", 0, 5, 0), "an item not in today's table: Decimation's own check");
+    }
 }

@@ -137,6 +137,40 @@ public final class TraderMarket
         }
     }
 
+    /** Per item key the trades today's table allows: "action:price:currency" (0 buy, 1 sell; a sell price of 0 is none). */
+    static Map<String, Set<String>> validPrices(Map<String, int[][]> rows, Map<String, String[]> keys)
+    {
+        Map<String, Set<String>> v = new HashMap<String, Set<String>>();
+        for (Map.Entry<String, int[][]> e : rows.entrySet())
+        {
+            String[] k = keys.get(e.getKey());
+            for (int i = 0; k != null && i < e.getValue().length; i++)
+            {
+                int slash = k[i].indexOf('/');
+                String currency = k[i].substring(0, slash), item = k[i].substring(slash + 1);
+                Set<String> s = v.get(item);
+                if (s == null)
+                {
+                    s = new HashSet<String>();
+                    v.put(item, s);
+                }
+                s.add("0:" + e.getValue()[i][0] + ":" + currency);
+                if (e.getValue()[i][1] > 0)
+                {
+                    s.add("1:" + e.getValue()[i][1] + ":" + currency);
+                }
+            }
+        }
+        return v;
+    }
+
+    /** A trade message may reach Decimation: its price is one of today's for that item, or the item is not in today's table. */
+    static boolean allowed(Map<String, Set<String>> valid, String key, int action, int price, int currency)
+    {
+        Set<String> s = valid.get(key);
+        return s == null || s.contains(action + ":" + price + ":" + currency);
+    }
+
     static String key(ItemStack s)
     {
         Object name = s == null || s.getItem() == null ? null : Item.itemRegistry.getNameForObject(s.getItem());
@@ -204,6 +238,8 @@ public final class TraderMarket
     /** Base offers per trader class (captured from a fresh list), and the offer objects we wrote (to tell them apart). */
     private static final Map<Class<?>, List<Object>> BASE = new HashMap<Class<?>, List<Object>>();
     private static final Set<Object> OURS = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
+    /** Today's allowed trades per item key, read by the watcher on the network thread (swapped whole, never changed). */
+    private static volatile Map<String, Set<String>> valid = new HashMap<String, Set<String>>();
     /** The day's prices per trader class name: {buy, sell, tag (0, 1 on sale, 2 in demand)} per base offer, in order. */
     private static volatile Map<String, int[][]> table = new HashMap<String, int[][]>();
 
@@ -256,6 +292,7 @@ public final class TraderMarket
             keys.put(kind, ks);
         }
         noArbitrage(t, keys);
+        valid = validPrices(t, keys);
         return t;
     }
 
@@ -365,7 +402,7 @@ public final class TraderMarket
     private int lastDay = -1;
     private static boolean listening;
     /** Counts for the dev test: trades seen, trades counted, tables sent. */
-    static volatile int seen, counted, sent;
+    static volatile int seen, counted, sent, dropped;
 
     private static World overworld()
     {
@@ -520,6 +557,12 @@ public final class TraderMarket
                 return;
             }
             EntityPlayerMP p = ((NetHandlerPlayServer) h).playerEntity;
+            int action = (Integer) t[0];
+            if ((action == 0 || action == 1) && !allowed(valid, key((ItemStack) t[1]), action, (Integer) t[2], (Integer) t[4]))
+            {
+                dropped++;
+                return;                                      // not today's price (a class list reset a moment ago, a forged price)
+            }
             long caps = Deci.player(p).bottlecaps(), gold = Deci.player(p).goldBottlecaps();
             ctx.fireChannelRead(msg);
             seen++;
