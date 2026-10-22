@@ -1025,6 +1025,13 @@ public final class Deci
                            p == null ? -1 : p.zombieKills, deci.Q.c.Xj, deci.Q.c.Xk};
     }
 
+    /** Shows one of Decimation's toasts (ToastNotification.show, deci.b.b.b): title "Decimation", one line. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void toast(String line)
+    {
+        deci.b.b.b(line);
+    }
+
     // ---- player skins (fixes/PlayerSkins)
 
     /** EntityCorpse.getOwnerUUID (ef): the dead player's server id as text, sent with the spawn; null for none. */
