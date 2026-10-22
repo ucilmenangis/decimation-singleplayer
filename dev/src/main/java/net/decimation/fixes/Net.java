@@ -24,6 +24,7 @@ public final class Net
         CHANNEL.registerMessage(MoonClock.DayHandler.class, MoonClock.Day.class, 2, Side.CLIENT);   // the day, for the moon phase
         CHANNEL.registerMessage(GunWear.RackHandler.class, GunWear.Rack.class, 3, Side.SERVER);   // rack a jammed gun
         CHANNEL.registerMessage(LootSearch.StateHandler.class, LootSearch.State.class, 4, Side.CLIENT);   // loot search progress
+        CHANNEL.registerMessage(TraderMarket.TableHandler.class, TraderMarket.Table.class, 5, Side.CLIENT);   // trader prices of the day
         // ids from 32: the feature agent's (branch bugfix; docs/roadmap.md "Feature order")
         CHANNEL.registerMessage(GasMaskFilter.FitHandler.class, GasMaskFilter.FitMessage.class, 32, Side.SERVER);   // fit a gas mask filter
     }

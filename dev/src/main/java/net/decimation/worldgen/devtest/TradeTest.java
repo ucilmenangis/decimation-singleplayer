@@ -41,6 +41,15 @@ public class TradeTest extends DevTestMode
             return true;
         }
         wait = 0;
+        // the trader market (fixes/TraderMarket) moves prices after each trade: take the offer's price as it is now
+        for (java.util.Map.Entry<ItemStack, int[]> o : Deci.traderOffers(mc.theWorld.getEntityByID(traderId)))
+        {
+            if (o.getKey().getItem() == offer.getItem() && o.getKey().getItemDamage() == offer.getItemDamage())
+            {
+                buy = o.getValue()[0];
+                sell = o.getValue()[1];
+            }
+        }
         switch (step)
         {
             case 0: Deci.sendTrade(0, offer, buy, traderId, 0); break;         // buy at the right price

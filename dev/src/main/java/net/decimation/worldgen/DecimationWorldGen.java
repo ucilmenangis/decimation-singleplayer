@@ -162,6 +162,9 @@ public class DecimationWorldGen
         net.decimation.fixes.LootBlocks.register(); // lootable copies of props, police and military shelves, cabinets (feature 12 B)
         net.decimation.fixes.LootSearch.init(); // items set apart by search time (feature 12 C)
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.LootSearch()); // loot searched slot by slot
+        net.decimation.fixes.TraderMarket market = new net.decimation.fixes.TraderMarket(); // trader prices by day (feature 11)
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(market);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(market);
         // the wasteland city one radiation zone: worlds made before it get theirs at load (city/WastelandRadiation)
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.worldgen.city.WastelandRadiation());
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
@@ -172,6 +175,7 @@ public class DecimationWorldGen
             net.decimation.fixes.LootSearch.Client search = new net.decimation.fixes.LootSearch.Client(); // "?", spinner, no tooltip
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(search);
             cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(search);
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.TraderMarket.Client()); // on sale, wanted
         }
         // feature 8, specific mobs at specific places: a table per place kind (config/deciworldgen_places.json, loaded in
         // postInit) turns Decimation's natural infected spawns into the place's mobs (fixes/PlaceSpawns, worldgen/Places)

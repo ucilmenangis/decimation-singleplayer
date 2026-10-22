@@ -669,6 +669,89 @@ public final class Deci
         deci.aF.a.a.a.gB().sendToServer(new deci.aE.a.M(action, item, price, traderEntityId, currency));
     }
 
+    // ---- trader market (fixes/TraderMarket): TraderEntity.OFFERS_BY_CLASS = deci.ai.a.abd, TraderOffer = deci.ai.y
+    //      (itemStack, buyPrice abi, sellPrice abj, currency hW), PacketTraderTransaction = deci.aE.a$M
+
+    /** Every trader class's live offer list (a new trader object of a class puts a fresh list of base prices in). */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static java.util.Map<Class<?>, java.util.List<Object>> traderOfferLists()
+    {
+        return (java.util.Map) deci.ai.a.abd;
+    }
+
+    /** A TraderOffer with these prices. */
+    public static Object newTraderOffer(ItemStack stack, int buy, int sell, int currency)
+    {
+        return new deci.ai.y(stack, buy, sell, currency);
+    }
+
+    /** An offer's {buy, sell, currency}. */
+    public static int[] offerPrices(Object offer)
+    {
+        deci.ai.y o = (deci.ai.y) offer;
+        return new int[] {o.abi, o.abj, o.hW};
+    }
+
+    public static ItemStack offerStack(Object offer)
+    {
+        return ((deci.ai.y) offer).itemStack;
+    }
+
+    /** True for a TraderOffer object. */
+    public static boolean isTraderOffer(Object o)
+    {
+        return o instanceof deci.ai.y;
+    }
+
+    /** The trader shown by the trader screen (TraderScreen.currentTrader deci.g.q.hc), client only. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static net.minecraft.entity.Entity traderOnScreen(Object gui)
+    {
+        return gui instanceof deci.g.q ? deci.g.q.hc : null;
+    }
+
+    private static java.lang.reflect.Field tradeAction, tradeStack;
+
+    /** A trade message (PacketTraderTransaction deci.aE.a$M) as {action (0 buy, 1 sell), stack}, null for any other. */
+    public static Object[] tradeMessage(Object msg)
+    {
+        if (!(msg instanceof deci.aE.a.M))
+        {
+            return null;
+        }
+        try
+        {
+            if (tradeAction == null)
+            {
+                tradeAction = deci.aE.a.M.class.getDeclaredField("id");
+                tradeStack = deci.aE.a.M.class.getDeclaredField("stack");
+                tradeAction.setAccessible(true);
+                tradeStack.setAccessible(true);
+            }
+            return new Object[] {tradeAction.getInt(msg), tradeStack.get(msg)};
+        }
+        catch (ReflectiveOperationException e)
+        {
+            return null;
+        }
+    }
+
+    /** Decimation's network channel of one side (its SimpleNetworkWrapper deci.aF.a$a$a.gB(), private channels map). */
+    @SuppressWarnings("unchecked")
+    public static io.netty.channel.Channel decimationChannel(cpw.mods.fml.relauncher.Side side)
+    {
+        try
+        {
+            java.lang.reflect.Field f = cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper.class.getDeclaredField("channels");
+            f.setAccessible(true);
+            return ((java.util.Map<cpw.mods.fml.relauncher.Side, io.netty.channel.Channel>) f.get(deci.aF.a.a.a.gB())).get(side);
+        }
+        catch (ReflectiveOperationException e)
+        {
+            return null;
+        }
+    }
+
     /** A civilian human: FactionHumanEntity (deci.ah.d) that is neither a bandit kind (deci.ag.a) nor a trader. */
     public static boolean isCivilian(net.minecraft.entity.Entity e)
     {
