@@ -117,6 +117,17 @@ public class WorldClock
         return d == null ? 0 : d.days + 1;
     }
 
+    /** Sets a server world's day number (tests, admins): the counter as if day - 1 midnights had passed. */
+    public static void setDay(World world, int day)
+    {
+        Data d = data(world);
+        if (d != null && day >= 1)
+        {
+            d.days = day - 1;
+            d.markDirty();
+        }
+    }
+
     /** Day number of the overworld, 0 without a server. */
     public static int day()
     {

@@ -21,5 +21,6 @@ public final class Net
     {
         CHANNEL.registerMessage(MagUnload.Handler.class, MagUnload.Message.class, 0, Side.SERVER);   // unload the held magazine
         CHANNEL.registerMessage(RadiationDose.SyncHandler.class, RadiationDose.Sync.class, 1, Side.CLIENT);   // the dose on the HUD
+        CHANNEL.registerMessage(MoonClock.DayHandler.class, MoonClock.Day.class, 2, Side.CLIENT);   // the day, for the moon phase
     }
 }

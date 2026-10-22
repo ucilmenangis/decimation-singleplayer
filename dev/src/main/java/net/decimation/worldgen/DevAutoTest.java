@@ -165,6 +165,7 @@ public class DevAutoTest
         if (name.equals("radiation")) return new net.decimation.worldgen.devtest.RadiationTest();
         if (name.equals("channelmp")) return new net.decimation.worldgen.devtest.ChannelRemoteTest();
         if (name.equals("skins")) return new net.decimation.worldgen.devtest.SkinsTest();
+        if (name.equals("nights")) return new net.decimation.worldgen.devtest.NightsTest();
         if (name.equals("lootmags")) return new net.decimation.worldgen.devtest.LootMagsTest();
         if (name.equals("gripsweep")) return new net.decimation.worldgen.devtest.GripSweepTest();
         if (name.equals("invshiftmp")) return new net.decimation.worldgen.devtest.InvShiftRemoteTest();

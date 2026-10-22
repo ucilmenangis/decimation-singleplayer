@@ -145,12 +145,17 @@ public class DecimationWorldGen
         net.decimation.fixes.RadiationDose radiation = new net.decimation.fixes.RadiationDose(); // dose in percent (fixes/RadiationDose)
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(radiation);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(radiation);
+        net.decimation.fixes.MoonClock.install(); // moon phases from our day counter, not Decimation's reset world time
+        net.decimation.fixes.MoonClock moon = new net.decimation.fixes.MoonClock();
+        net.decimation.fixes.WorldClock.listen(moon);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(moon);
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
             net.decimation.fixes.GripPlacement.apply(); // grips under each gun's handguard (grip_offsets.txt)
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.RadiationHud()); // the dose icon
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.PlayerSkins()); // no Steve
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.DarkNights()); // DayZ nights
         }
         // local kill / death counters for the menu and HUD; the menu's session check calls a
         // Mojang service that no longer answers, so the menu said "Play offline" with an invalid
