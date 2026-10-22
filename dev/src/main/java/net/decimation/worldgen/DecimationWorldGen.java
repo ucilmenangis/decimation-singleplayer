@@ -150,6 +150,7 @@ public class DecimationWorldGen
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
             net.decimation.fixes.GripPlacement.apply(); // grips under each gun's handguard (grip_offsets.txt)
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.RadiationHud()); // the dose icon
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.PlayerSkins()); // no Steve
         }
         // local kill / death counters for the menu and HUD; the menu's session check calls a
         // Mojang service that no longer answers, so the menu said "Play offline" with an invalid

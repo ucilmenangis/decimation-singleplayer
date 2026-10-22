@@ -977,6 +977,22 @@ public final class Deci
                            p == null ? -1 : p.zombieKills, deci.Q.c.Xj, deci.Q.c.Xk};
     }
 
+    // ---- player skins (fixes/PlayerSkins)
+
+    /** EntityCorpse.getOwnerUUID (ef): the dead player's server id as text, sent with the spawn; null for none. */
+    public static String corpseOwner(net.minecraft.entity.Entity corpse)
+    {
+        return ((deci.ae.a) corpse).ef();
+    }
+
+    /** DecimationMod.fakePlayerProfile (B) .getPlayer (an): the player drawn in the HUD stats box and the profile page. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static EntityPlayer menuPreviewPlayer()
+    {
+        deci.e.b preview = deci.a.b.a().B;
+        return preview == null ? null : preview.an();
+    }
+
     // ---- radiation (fixes/RadiationDose, fixes/RadiationHud)
 
     /** PlayerData.isIrradiated (co): Decimation's flag while the player stands in a RADIATION zone. */
