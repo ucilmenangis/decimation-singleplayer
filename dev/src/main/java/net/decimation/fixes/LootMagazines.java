@@ -38,7 +38,14 @@ public final class LootMagazines
         return Math.max(1, Math.min(capacity, (int) Math.round(share * capacity)));
     }
 
-    /** Gives every magazine of this inventory without rounds set its random rounds; returns how many. */
+    /** Rounds in a looted gun (user, 22 Oktober 2026: "some guns loot have ammo inside it"): 1 in 2 none, else a magazine's. */
+    static int gunRounds(int magazine, Random r)
+    {
+        return magazine <= 0 || r.nextBoolean() ? 0 : rounds(magazine, r);
+    }
+
+    /** Gives every magazine of this inventory without rounds set its random rounds, and about half its guns rounds inside;
+     *  returns how many stacks got rounds. */
     public static int fill(IInventory inv, Random r)
     {
         int n = 0;
@@ -53,6 +60,10 @@ public final class LootMagazines
                     s.stackTagCompound = new NBTTagCompound();
                 }
                 s.stackTagCompound.setInteger("ammo", rounds(cap, r));
+                n++;
+            }
+            else if (Deci.loadLootGun(s, r))
+            {
                 n++;
             }
         }

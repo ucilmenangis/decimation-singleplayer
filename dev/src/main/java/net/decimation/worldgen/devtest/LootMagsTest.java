@@ -16,6 +16,9 @@ import net.minecraft.world.World;
  * (its guns and magazines list) on the arena, opened by real right clicks through its own LootInteractHandler, the
  * cooldown cleared between clicks; every magazine the server rolled is read: its rounds (NBT ammo; a magazine without it
  * fills itself to capacity on its first tick in an inventory, AmmoItem.onUpdate) against its capacity.
+ * Guns too (user, same day: "some guns loot have ammo inside it, so not all of them is empty"; chosen: 1 in 2, rounds
+ * like a magazine's): the share loaded, rounds within the gun's magazine, Decimation's own tag on them; then one loaded
+ * gun goes into the hand and fires a shot the way the mouse does (Deci.fireHeldGun): the server copy loses a round.
  */
 public class LootMagsTest extends DevTestMode
 {
@@ -28,6 +31,9 @@ public class LootMagsTest extends DevTestMode
     private int crateX, crateY, crateZ;
     private final List<int[]> mags = new ArrayList<int[]>();      // {rounds or -1 for no NBT, capacity}
     private net.minecraft.world.WorldSettings.GameType modeBefore;
+    private final List<int[]> guns = new ArrayList<int[]>();      // {rounds, magazine size, has Decimation's tag (1/0)}
+    private ItemStack loadedGun;
+    private int fireTicks, before = -1, after = -1;
 
     public boolean client(Minecraft mc)
     {
@@ -61,6 +67,23 @@ public class LootMagsTest extends DevTestMode
             {
                 mc.thePlayer.closeScreen();
                 clicks++;
+            }
+            return true;
+        }
+        if (loadedGun != null && fireTicks < 60)
+        {
+            fireTicks++;
+            if (fireTicks == 1)
+            {
+                onServer = this::holdGun;
+            }
+            if (fireTicks == 25)
+            {
+                Deci.fireHeldGun(mc.thePlayer);
+            }
+            if (fireTicks == 50)
+            {
+                onServer = () -> after = Deci.gunAmmo(DevTestUtil.player().getHeldItem());
             }
             return true;
         }
@@ -120,6 +143,15 @@ public class LootMagsTest extends DevTestMode
         {
             ItemStack s = inv.getStackInSlot(i);
             int cap = s == null ? 0 : Deci.magazineCapacity(s.getItem());
+            if (s != null && Deci.isGun(s.getItem()))
+            {
+                int k = Deci.gunAmmo(s);
+                guns.add(new int[] {k, Deci.gunMagazine(s), s.hasTagCompound() && s.getTagCompound().hasKey("bolted") ? 1 : 0});
+                if (k > 1 && loadedGun == null && Deci.gunIsAutomatic(s))
+                {
+                    loadedGun = s.copy();
+                }
+            }
             if (cap > 1)
             {
                 mags.add(new int[] {s.hasTagCompound() && s.getTagCompound().hasKey("ammo") ? s.getTagCompound().getInteger("ammo") : -1, cap});
@@ -127,9 +159,18 @@ public class LootMagsTest extends DevTestMode
         }
     }
 
+    private void holdGun()
+    {
+        EntityPlayerMP p = DevTestUtil.player();
+        p.inventory.setInventorySlotContents(0, loadedGun.copy());
+        p.inventory.currentItem = 0;
+        before = Deci.gunAmmo(p.getHeldItem());
+    }
+
     private void cleanup()
     {
         EntityPlayerMP p = DevTestUtil.player();
+        p.inventory.setInventorySlotContents(0, null);
         p.worldObj.setBlockToAir(crateX, crateY, crateZ);
         if (modeBefore != null)
         {
@@ -153,5 +194,19 @@ public class LootMagsTest extends DevTestMode
         DevTestResults.check(name(), "every magazine 1 round to full", bad + " outside of " + n, n >= 5 && bad == 0, "0 outside, 5 or more magazines");
         DevTestResults.check(name(), "magazines mostly partial", String.format("%d full of %d, mean %.0f %% full", full, n, n == 0 ? 0 : 100 * share / n),
                              n >= 5 && full * 5 <= n && share / n > 0.3 && share / n < 0.7, "at most 1 in 5 full, mean 30 to 70 %");
+        int g = guns.size(), loaded = 0, outside = 0, untagged = 0;
+        for (int[] x : guns)
+        {
+            loaded += x[0] > 0 ? 1 : 0;
+            outside += x[0] < 0 || x[0] > x[1] ? 1 : 0;
+            untagged += x[0] > 0 && x[2] == 0 ? 1 : 0;
+        }
+        DevTestResults.value(name(), "guns rolled", g + " in " + CLICKS + " opens");
+        DevTestResults.check(name(), "about half the guns loaded", loaded + " of " + g, g >= 10 && loaded * 10 >= g * 3 && loaded * 10 <= g * 7,
+                             "30 to 70 %, 10 or more guns");
+        DevTestResults.check(name(), "gun rounds within its magazine, Decimation's tag", outside + " outside, " + untagged + " without the tag",
+                             outside == 0 && untagged == 0, "0 and 0");
+        DevTestResults.check(name(), "a looted loaded gun fires", loadedGun == null ? "no loaded automatic gun" : before + " then " + after,
+                             loadedGun != null && before > 1 && after == before - 1, "one round less on the server");
     }
 }

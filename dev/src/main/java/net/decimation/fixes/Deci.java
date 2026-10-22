@@ -24,6 +24,50 @@ public final class Deci
         return item instanceof deci.ay.i;
     }
 
+    private static java.lang.reflect.Method gunInitTag;
+
+    /**
+     * A looted gun's rounds (fixes/LootMagazines): GunItem.initTag (deci.ay.i.n, private: the tag Decimation gives a gun the
+     * first time it is held), then "ammo". ammoType stays 0, the gun's first magazine (ammoTypes aep[0]), which a reload
+     * then ejects with the rounds less the chambered one. False for launchers and crossbows (a loaded rocket for free)
+     * and when the stack already has a tag.
+     */
+    public static boolean loadLootGun(net.minecraft.item.ItemStack stack, java.util.Random r)
+    {
+        if (stack == null || !(stack.getItem() instanceof deci.ay.i) || stack.hasTagCompound())
+        {
+            return false;
+        }
+        deci.ay.i g = (deci.ay.i) stack.getItem();
+        if (g.aes == deci.ay.c.rocket || g.aes == deci.ay.c.crossbow || g.aep == null || g.aep.length == 0 || g.aep[0] == null)
+        {
+            return false;
+        }
+        deci.ay.f mag = g.aep[0];
+        int max = mag.adE != deci.ay.a.bullet && mag.adE != deci.ay.a.sclip ? mag.adF : g.w(new net.minecraft.item.ItemStack(g));
+        int rounds = LootMagazines.gunRounds(max, r);
+        if (rounds <= 0)
+        {
+            return false;
+        }
+        try
+        {
+            if (gunInitTag == null)
+            {
+                java.lang.reflect.Method m = deci.ay.i.class.getDeclaredMethod("n", net.minecraft.item.ItemStack.class);
+                m.setAccessible(true);
+                gunInitTag = m;
+            }
+            gunInitTag.invoke(g, stack);
+        }
+        catch (ReflectiveOperationException ex)
+        {
+            return false;
+        }
+        stack.stackTagCompound.setInteger("ammo", rounds);
+        return true;
+    }
+
     public static boolean isAttachment(Item item)
     {
         return item instanceof deci.ay.h;
