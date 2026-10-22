@@ -70,4 +70,31 @@ class TraderMarketTest
         assertNotEquals(sale, TraderMarket.picks(42L, 6, "TraderFood", 29, 0), "another day, other items");
         assertEquals(2, TraderMarket.picks(42L, 5, "TraderTiny", 4, 0).size(), "a small list: half on sale at most");
     }
+
+    @Test
+    void aTradeCountsOnlyWhenTheCapsMovedByExactlyItsPrice()
+    {
+        assertTrue(TraderMarket.traded(0, 100, 91, 5, 5, 9, 0), "a buy at 9 caps");
+        assertTrue(TraderMarket.traded(1, 100, 102, 5, 5, 2, 0), "a sale at 2 caps");
+        assertTrue(TraderMarket.traded(0, 100, 100, 5, 3, 2, 1), "a buy for 2 gold caps");
+        assertTrue(!TraderMarket.traded(0, 100, 100, 5, 5, 9, 0), "a refused buy changed nothing");
+        assertTrue(!TraderMarket.traded(0, 100, 95, 5, 5, 9, 0), "caps moved by something else");
+        assertTrue(!TraderMarket.traded(1, 100, 91, 5, 5, 9, 0), "a sale never takes caps");
+        assertTrue(!TraderMarket.traded(2, 100, 91, 5, 5, 9, 0), "other actions are not trades");
+    }
+
+    @Test
+    void noTraderBuysAnItemForMoreThanAnotherSellsItThatDay()
+    {
+        java.util.Map<String, int[][]> rows = new java.util.HashMap<String, int[][]>();
+        java.util.Map<String, String[]> keys = new java.util.HashMap<String, String[]>();
+        rows.put("A", new int[][] {{7, 2, 1}});          // water on sale at A: buy 7
+        keys.put("A", new String[] {"water"});
+        rows.put("B", new int[][] {{12, 13, 2}, {5, 1, 0}});   // water wanted at B: would pay 13
+        keys.put("B", new String[] {"water", "bread"});
+        TraderMarket.noArbitrage(rows, keys);
+        assertEquals(6, rows.get("B")[0][1], "B pays under A's lowest price");
+        assertEquals(2, rows.get("A")[0][1], "A's own sale price was already under");
+        assertEquals(1, rows.get("B")[1][1], "another item untouched");
+    }
 }

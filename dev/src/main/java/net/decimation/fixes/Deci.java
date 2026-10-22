@@ -710,9 +710,10 @@ public final class Deci
         return gui instanceof deci.g.q ? deci.g.q.hc : null;
     }
 
-    private static java.lang.reflect.Field tradeAction, tradeStack;
+    private static java.lang.reflect.Field tradeAction, tradeStack, tradePrice, tradeTrader, tradeCurrency;
 
-    /** A trade message (PacketTraderTransaction deci.aE.a$M) as {action (0 buy, 1 sell), stack}, null for any other. */
+    /** A trade message (PacketTraderTransaction deci.aE.a$M: id, stack, caps, ayt, hW) as {action (0 buy, 1 sell), stack,
+     *  price, trader entity id, currency (0 caps, 1 gold)}, null for any other message. */
     public static Object[] tradeMessage(Object msg)
     {
         if (!(msg instanceof deci.aE.a.M))
@@ -723,12 +724,20 @@ public final class Deci
         {
             if (tradeAction == null)
             {
-                tradeAction = deci.aE.a.M.class.getDeclaredField("id");
                 tradeStack = deci.aE.a.M.class.getDeclaredField("stack");
-                tradeAction.setAccessible(true);
+                tradePrice = deci.aE.a.M.class.getDeclaredField("caps");
+                tradeTrader = deci.aE.a.M.class.getDeclaredField("ayt");
+                tradeCurrency = deci.aE.a.M.class.getDeclaredField("hW");
                 tradeStack.setAccessible(true);
+                tradePrice.setAccessible(true);
+                tradeTrader.setAccessible(true);
+                tradeCurrency.setAccessible(true);
+                java.lang.reflect.Field a = deci.aE.a.M.class.getDeclaredField("id");
+                a.setAccessible(true);
+                tradeAction = a;
             }
-            return new Object[] {tradeAction.getInt(msg), tradeStack.get(msg)};
+            return new Object[] {tradeAction.getInt(msg), tradeStack.get(msg), tradePrice.getInt(msg), tradeTrader.getInt(msg),
+                                 tradeCurrency.getInt(msg)};
         }
         catch (ReflectiveOperationException e)
         {

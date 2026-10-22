@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -99,6 +98,41 @@ public final class TraderMarket
         return new HashSet<Integer>(order.subList(which * n, which * n + n));
     }
 
+    /** A trade went through: the caps of its currency moved by exactly its price, the right way (buy down, sell up). */
+    static boolean traded(int action, long capsBefore, long capsAfter, long goldBefore, long goldAfter, int price, int currency)
+    {
+        long before = currency == 1 ? goldBefore : capsBefore, after = currency == 1 ? goldAfter : capsAfter;
+        long other = currency == 1 ? capsAfter - capsBefore : goldAfter - goldBefore;
+        return price > 0 && other == 0 && (action == 0 && before - after == price || action == 1 && after - before == price);
+    }
+
+    /** No trader buys an item for as much as any trader sells it that day (no buying here and selling there for profit). */
+    static void noArbitrage(Map<String, int[][]> rows, Map<String, String[]> keys)
+    {
+        Map<String, Integer> lowest = new HashMap<String, Integer>();
+        for (Map.Entry<String, int[][]> e : rows.entrySet())
+        {
+            String[] k = keys.get(e.getKey());
+            for (int i = 0; k != null && i < e.getValue().length; i++)
+            {
+                Integer l = lowest.get(k[i]);
+                lowest.put(k[i], l == null ? e.getValue()[i][0] : Math.min(l, e.getValue()[i][0]));
+            }
+        }
+        for (Map.Entry<String, int[][]> e : rows.entrySet())
+        {
+            String[] k = keys.get(e.getKey());
+            for (int i = 0; k != null && i < e.getValue().length; i++)
+            {
+                int cap = Math.max(0, lowest.get(k[i]) - 1);
+                if (e.getValue()[i][1] > cap)
+                {
+                    e.getValue()[i][1] = cap;
+                }
+            }
+        }
+    }
+
     static String key(ItemStack s)
     {
         Object name = s == null || s.getItem() == null ? null : Item.itemRegistry.getNameForObject(s.getItem());
@@ -121,25 +155,32 @@ public final class TraderMarket
         @Override
         public void readFromNBT(NBTTagCompound tag)
         {
-            pressure.clear();
-            day = tag.getInteger("day");
-            NBTTagCompound p = tag.getCompoundTag("pressure");
-            for (Object o : p.func_150296_c())
+            synchronized (LOCK)
             {
-                pressure.put((String) o, p.getDouble((String) o));
+                pressure.clear();
+                day = tag.getInteger("day");
+                NBTTagCompound p = tag.getCompoundTag("pressure");
+                for (Object o : p.func_150296_c())
+                {
+                    pressure.put((String) o, p.getDouble((String) o));
+                }
             }
         }
 
+        /** Under the same lock as a trade's update (trades are counted on the network thread). */
         @Override
         public void writeToNBT(NBTTagCompound tag)
         {
-            tag.setInteger("day", day);
-            NBTTagCompound p = new NBTTagCompound();
-            for (Map.Entry<String, Double> e : pressure.entrySet())
+            synchronized (LOCK)
             {
-                p.setDouble(e.getKey(), e.getValue());
+                tag.setInteger("day", day);
+                NBTTagCompound p = new NBTTagCompound();
+                for (Map.Entry<String, Double> e : pressure.entrySet())
+                {
+                    p.setDouble(e.getKey(), e.getValue());
+                }
+                tag.setTag("pressure", p);
             }
-            tag.setTag("pressure", p);
         }
     }
 
@@ -180,6 +221,7 @@ public final class TraderMarket
     private static Map<String, int[][]> compute(long seed, int day, Data d)
     {
         Map<String, int[][]> t = new HashMap<String, int[][]>();
+        Map<String, String[]> keys = new HashMap<String, String[]>();
         for (Map.Entry<Class<?>, List<Object>> e : Deci.traderOfferLists().entrySet())
         {
             List<Object> b = base(e.getKey(), e.getValue());
@@ -190,16 +232,24 @@ public final class TraderMarket
             String kind = e.getKey().getName();
             Set<Integer> sale = picks(seed, day, kind, b.size(), 0), demand = picks(seed, day, kind, b.size(), 1);
             int[][] rows = new int[b.size()][];
+            String[] ks = new String[b.size()];
             for (int i = 0; i < b.size(); i++)
             {
                 int[] p = Deci.offerPrices(b.get(i));
                 String k = key(Deci.offerStack(b.get(i)));
-                Double pr = d.pressure.get(k);
+                ks[i] = p[2] + "/" + k;                    // per currency: caps and gold prices never compare
+                Double pr;
+                synchronized (LOCK)
+                {
+                    pr = d.pressure.get(k);
+                }
                 int[] np = prices(p[0], p[1], drift(seed, day, k), factor(pr == null ? 0 : pr), sale.contains(i), demand.contains(i));
                 rows[i] = new int[] {np[0], np[1], sale.contains(i) ? 1 : demand.contains(i) ? 2 : 0};
             }
             t.put(kind, rows);
+            keys.put(kind, ks);
         }
+        noArbitrage(t, keys);
         return t;
     }
 
@@ -271,7 +321,11 @@ public final class TraderMarket
     public static double pressureOf(ItemStack s)
     {
         World w = overworld();
-        Double p = w == null ? null : data(w).pressure.get(key(s));
+        Double p;
+        synchronized (LOCK)
+        {
+            p = w == null ? null : data(w).pressure.get(key(s));
+        }
         return p == null ? 0 : p;
     }
 
@@ -301,7 +355,6 @@ public final class TraderMarket
 
     private int lastDay = -1;
     private static boolean listening;
-    private static final ConcurrentLinkedQueue<Object[]> PENDING = new ConcurrentLinkedQueue<Object[]>();
     /** Counts for the dev test: trades seen, trades counted, tables sent. */
     static volatile int seen, counted, sent;
 
@@ -345,11 +398,14 @@ public final class TraderMarket
         if (day != lastDay)
         {
             Data d = data(w);
-            for (int k = d.day; k > 0 && k < day; k++)                // each day passed eases the pressures
+            synchronized (LOCK)
             {
-                for (Map.Entry<String, Double> p : d.pressure.entrySet())
+                for (int k = d.day; k > 0 && k < day; k++)            // each day passed eases the pressures
                 {
-                    p.setValue(ease(p.getValue()));
+                    for (Map.Entry<String, Double> p : d.pressure.entrySet())
+                    {
+                        p.setValue(ease(p.getValue()));
+                    }
                 }
             }
             d.day = day;
@@ -357,25 +413,14 @@ public final class TraderMarket
             lastDay = day;
             refresh(true);
         }
-        boolean changed = false;
-        for (Object[] t; (t = PENDING.poll()) != null; )
+        if (tradesChanged)
         {
-            EntityPlayerMP p = (EntityPlayerMP) t[0];
-            long caps = Deci.player(p).bottlecaps(), gold = Deci.player(p).goldBottlecaps();
-            if (caps != (Long) t[1] || gold != (Long) t[2])               // the trade went through
-            {
-                Data d = data(w);
-                String k = (String) t[4];
-                Double old = d.pressure.get(k);
-                d.pressure.put(k, (old == null ? 0 : old) + ((Integer) t[3] == 0 ? 1 : -1));
-                d.markDirty();
-                counted++;
-                changed = true;
-            }
-        }
-        if (changed)
-        {
+            tradesChanged = false;
             refresh(true);
+        }
+        for (Class<?> c : new ArrayList<Class<?>>(Deci.traderOfferLists().keySet()))
+        {
+            ensure(c);                                       // a list reset without a join we saw (a cancelled one) goes back
         }
     }
 
@@ -383,9 +428,9 @@ public final class TraderMarket
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onJoin(EntityJoinWorldEvent e)
     {
-        if (!Deci.isTrader(e.entity) || e.isCanceled())
+        if (!Deci.isTrader(e.entity))
         {
-            return;
+            return;                                          // a cancelled join too: its constructor reset the list
         }
         if (!e.world.isRemote && !table.containsKey(e.entity.getClass().getName()) && lastDay >= 0)
         {
@@ -427,6 +472,28 @@ public final class TraderMarket
         FMLLog.info("[deciworldgen] market: watching trades on Decimation's channel");
     }
 
+    /** Keys a trader class offers (its base list): only these can be pushed by trades. */
+    private static synchronized boolean offers(Class<?> c, String k)
+    {
+        List<Object> b = BASE.get(c);
+        for (int i = 0; b != null && i < b.size(); i++)
+        {
+            if (k.equals(key(Deci.offerStack(b.get(i)))))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static final Object LOCK = new Object();
+    private static volatile boolean tradesChanged;
+
+    /**
+     * In Decimation's server channel right after its codec. Decimation handles a trade message at once on this thread, so
+     * the player's caps are read just before and just after: a trade counts only when its own message moved the caps by
+     * exactly its price, for an item the trader's class offers (a refused or forged message moves nothing).
+     */
     @ChannelHandler.Sharable
     static final class Watcher extends ChannelInboundHandlerAdapter
     {
@@ -434,17 +501,49 @@ public final class TraderMarket
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
         {
             Object[] t = Deci.tradeMessage(msg);
-            if (t != null && ((Integer) t[0] == 0 || (Integer) t[0] == 1) && t[1] instanceof ItemStack)
+            Object h = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+            if (t == null || !(t[1] instanceof ItemStack) || !(h instanceof NetHandlerPlayServer))
             {
-                Object h = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-                if (h instanceof NetHandlerPlayServer)
+                ctx.fireChannelRead(msg);
+                return;
+            }
+            EntityPlayerMP p = ((NetHandlerPlayServer) h).playerEntity;
+            net.minecraft.entity.Entity trader = p.worldObj.getEntityByID((Integer) t[3]);
+            if (trader != null && Deci.isTrader(trader))
+            {
+                ensure(trader.getClass());                  // the day's prices are what the handler checks against
+            }
+            long caps = Deci.player(p).bottlecaps(), gold = Deci.player(p).goldBottlecaps();
+            ctx.fireChannelRead(msg);
+            seen++;
+            String k = key((ItemStack) t[1]);
+            if (trader != null && traded((Integer) t[0], caps, Deci.player(p).bottlecaps(), gold, Deci.player(p).goldBottlecaps(),
+                                         (Integer) t[2], (Integer) t[4]) && offers(trader.getClass(), k))
+            {
+                World w = overworld();
+                if (w != null)
                 {
-                    EntityPlayerMP p = ((NetHandlerPlayServer) h).playerEntity;
-                    PENDING.add(new Object[] {p, Deci.player(p).bottlecaps(), Deci.player(p).goldBottlecaps(), t[0], key((ItemStack) t[1])});
-                    seen++;
+                    synchronized (LOCK)
+                    {
+                        Data d = data(w);
+                        Double old = d.pressure.get(k);
+                        d.pressure.put(k, (old == null ? 0 : old) + ((Integer) t[0] == 0 ? 1 : -1));
+                        d.markDirty();
+                    }
+                    counted++;
+                    tradesChanged = true;
                 }
             }
-            ctx.fireChannelRead(msg);
+        }
+    }
+
+    /** A class's live list holds offers we did not write (it was reset): the day's prices go back in. */
+    private static void ensure(Class<?> c)
+    {
+        List<Object> live = Deci.traderOfferLists().get(c);
+        if (live != null && !live.isEmpty() && !OURS.contains(live.get(0)) && table.containsKey(c.getName()))
+        {
+            apply(c, table);
         }
     }
 
