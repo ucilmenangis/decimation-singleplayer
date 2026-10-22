@@ -15,7 +15,9 @@ import net.minecraft.world.WorldSettings;
 /**
  * Radiation dose (user, 22 Oktober 2026: "radiation status below player status"; chosen: a dose in percent, always on
  * the HUD, Decimation's zone damage kept and the dose fast, a high dose hurts after leaving the zone until it falls back).
- * A radiation zone on the arena (ZoneStore, as the zones test); survival, natural regeneration off for the damage counts.
+ * A radiation zone on the arena (ZoneStore, as the zones test); survival, natural regeneration off for the damage counts,
+ * mob spawning off and every other mob near the arena removed each second (in the production client's world a survivor
+ * shot the test player, a "Bandit" by humanity, in the middle of the mask check, 22 Oktober 2026).
  * Checks: 10 s in the zone without a mask is about half a dose; a gas mask (dose set to 30 % first, under the damage)
  * and creative stop the rise (the dose falls 1 a tick); out of the zone 90 % hurts every 4 s, 60 % every 8 s, 40 % not at all; the HUD's percent equals the server's;
  * the cost of our server tick and of the HUD draw. Shots: the HUD at about half a dose inside the zone, and with two
@@ -33,6 +35,7 @@ public class RadiationTest extends DevTestMode
     private volatile boolean shotTaken;
     private ObjectZone rad;
     private boolean regenBefore = true;
+    private String spawningBefore = "true";
     private int mark, waited;
     private float healthMark;
 
@@ -86,6 +89,8 @@ public class RadiationTest extends DevTestMode
             p.capabilities.disableDamage = false;
             regenBefore = w.getGameRules().getGameRuleBooleanValue("naturalRegeneration");
             w.getGameRules().setOrCreateGameRule("naturalRegeneration", "false");
+            spawningBefore = w.getGameRules().getGameRuleStringValue("doMobSpawning");
+            w.getGameRules().setOrCreateGameRule("doMobSpawning", "false");   // no NPC may hurt the player meanwhile
             Deci.setPlayerMask(p, null);
             d.setSafezoneGrace(0);
             d.setWater(20);
@@ -99,6 +104,10 @@ public class RadiationTest extends DevTestMode
         if (t == 30)
         {
             p.setPositionAndUpdate(RX + 0.5, Y, Z + 0.5);
+        }
+        if (t % 20 == 0)
+        {
+            sweep(w);
         }
         if (t == 230)
         {
@@ -175,10 +184,25 @@ public class RadiationTest extends DevTestMode
             p.setHealth(p.getMaxHealth());
             ZoneStore.remove(rad);
             w.getGameRules().setOrCreateGameRule("naturalRegeneration", String.valueOf(regenBefore));
+            w.getGameRules().setOrCreateGameRule("doMobSpawning", spawningBefore);
         }
         if (t == 1010)
         {
             done = true;
+        }
+    }
+
+    /** Removes every mob within 120 blocks of the arena (the player is no EntityLiving subclass of that kind). */
+    private static void sweep(World w)
+    {
+        for (Object o : w.loadedEntityList)
+        {
+            net.minecraft.entity.Entity e = (net.minecraft.entity.Entity) o;
+            if (!e.isDead && e instanceof net.minecraft.entity.EntityLiving
+                && Math.abs(e.posX - X) < 120 && Math.abs(e.posZ - Z) < 120)
+            {
+                e.setDead();
+            }
         }
     }
 

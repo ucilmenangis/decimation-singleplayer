@@ -96,19 +96,30 @@ public class ChannelRemoteTest extends DevTestMode
                     next();
                 }
                 break;
-            case 3: // a radiation zone around the player with Decimation's commands
+            case 3: // a radiation zone around the player with Decimation's commands; flying while the corners are set
+                    // (falling between the teleports put the player under the box in the first run, 22 Oktober 2026),
+                    // the box 4 below to 6 above the ground the player stands on
                 if (ticks == 1) mc.thePlayer.sendChatMessage("/gamemode 1");
-                if (ticks == 10) mc.thePlayer.sendChatMessage("/tp ~-3 ~-1 ~-3");
+                if (ticks == 8)
+                {
+                    mc.thePlayer.capabilities.isFlying = true;
+                    mc.thePlayer.sendPlayerAbilities();
+                }
+                if (ticks == 10) mc.thePlayer.sendChatMessage("/tp ~-3 ~-4 ~-3");
                 if (ticks == 20) mc.thePlayer.sendChatMessage("/deci pos1");
-                if (ticks == 30) mc.thePlayer.sendChatMessage("/tp ~6 ~5 ~6");
+                if (ticks == 30) mc.thePlayer.sendChatMessage("/tp ~6 ~10 ~6");
                 if (ticks == 40) mc.thePlayer.sendChatMessage("/deci pos2");
-                if (ticks == 50) mc.thePlayer.sendChatMessage("/tp ~-3 ~-4 ~-3");
+                if (ticks == 50) mc.thePlayer.sendChatMessage("/tp ~-3 ~-6 ~-3");
                 if (ticks == 60) mc.thePlayer.sendChatMessage("/zone create radiation");
                 if (ticks == 70) mc.thePlayer.sendChatMessage("/deci heal");   // full health: the zone hurts about 1 a second
                 if (ticks == 80)
                 {
+                    mc.thePlayer.capabilities.isFlying = false;
+                    mc.thePlayer.sendPlayerAbilities();
                     mc.thePlayer.sendChatMessage("/gamemode 0");
                     framesBefore = RadiationHud.framesDrawn();
+                    DevTestResults.value(name(), "standing at", (int) mc.thePlayer.posX + "/" + (int) mc.thePlayer.posY + "/"
+                        + (int) mc.thePlayer.posZ);
                 }
                 if (ticks == 290)
                 {
