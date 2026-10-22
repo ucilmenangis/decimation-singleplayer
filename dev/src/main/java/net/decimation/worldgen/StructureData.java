@@ -67,6 +67,17 @@ public class StructureData extends WorldSavedData
         return places.values();
     }
 
+    /** Takes a named place out (dev tests); true when it was there. */
+    public boolean removePlace(String id)
+    {
+        boolean had = places.remove(id) != null;
+        if (had)
+        {
+            markDirty();
+        }
+        return had;
+    }
+
     public int[] list(String id)
     {
         return lists.get(id);

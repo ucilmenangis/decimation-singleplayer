@@ -85,6 +85,11 @@ public class InfectedVariants
             {"nypdCoat"}, {"nypdPants"}, {"nypdBoots"}}));
         variants.add(new Variant("screamer", 5, 16, 1.0f, 1.0f, true, new String[][] {{"hazmatHelm"}, {"hazmatVest"},
             {"hazmatPants"}, {"hazmatBoots"}}));
+        // looks of places only (fixes/PlaceSpawns, idea 35): never rolled for a plain infected (weight 0)
+        variants.add(new Variant("irradiated", 0, 24, 1.0f, 1.0f, false, new String[][] {null, {"hazmatVest"}, {"hazmatPants"},
+            {"hazmatBoots"}}));                           // the wasteland's: a hazmat suit, bare headed (the screamer wears the hood)
+        variants.add(new Variant("medic", 0, 20, 1.0f, 1.0f, false, new String[][] {null, {"marineVestMedical"},
+            {"casual2Pants"}, {"casual2Boots"}}));        // hospitals': Decimation's medic vest, white shoes
         Configuration cfg = new Configuration(new File(configDir, "deciworldgen_zombies.cfg"));
         for (Variant v : variants)
         {

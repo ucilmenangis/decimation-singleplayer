@@ -165,6 +165,10 @@ public class DecimationWorldGen
             // right click fits a filter, "Filter: N%" in a gas mask's tooltip, Decimation's HUD unprotected when it is empty
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.GasMaskFilter.Client());
         }
+        // feature 8, specific mobs at specific places: a table per place kind (config/deciworldgen_places.json, loaded in
+        // postInit) turns Decimation's natural infected spawns into the place's mobs (fixes/PlaceSpawns, worldgen/Places)
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.PlaceSpawns());
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new Places()); // its chunk memo cleared at world load
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
@@ -347,6 +351,7 @@ public class DecimationWorldGen
         // loot lists and the protection table name items of every mod: all registered by now
         net.decimation.fixes.LootPools.load(configDir);
         net.decimation.fixes.Protection.load(configDir);
+        net.decimation.fixes.PlaceSpawns.load(configDir); // the place spawn table (feature 8): after InfectedVariants' looks
         net.decimation.fixes.gunsmith.GunsmithGuiHandler.install(); // the attach key opens the Gunsmith screen
         net.decimation.fixes.InventoryShift.install(); // shift click in the inventory screen (bug.md), after the Gunsmith's
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())

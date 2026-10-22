@@ -161,6 +161,7 @@ public class DevAutoTest
         if (name.equals("scopeperf")) return new net.decimation.worldgen.devtest.ScopePerfTest();
         if (name.equals("scopediag")) return new net.decimation.worldgen.devtest.ScopeDiagTest();
         if (name.equals("aimdelay")) return new net.decimation.worldgen.devtest.AimDelayTest();
+        if (name.equals("placespawns")) return new net.decimation.worldgen.devtest.PlaceSpawnTest(); // feature 8: mobs by place
         if (name.equals("magunload")) return new net.decimation.worldgen.devtest.MagUnloadTest();
         if (name.equals("radiation")) return new net.decimation.worldgen.devtest.RadiationTest();
         if (name.equals("channelmp")) return new net.decimation.worldgen.devtest.ChannelRemoteTest();

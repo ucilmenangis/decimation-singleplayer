@@ -127,6 +127,35 @@ public final class LcCity
     public LcCity(Block road)
     {
         this.road = road != null ? road : Blocks.stone;
+        instance = this;
+    }
+
+    /** The generator's city (DecimationWorldGen.init), for questions asked outside generation (Places). */
+    private static volatile LcCity instance;
+
+    /**
+     * The kind of the city building planned at (x, z) (BuildingDress.KIND_NAMES: "police", "medical", "military", ...), or
+     * null outside one (streets, lots, parks, land outside cities, the procedural city). From the seed's plan of the cell
+     * (the cached one generation uses); for Places, which memoises it per chunk.
+     */
+    public static String buildingKind(long seed, int x, int z)
+    {
+        LcCity c = instance;
+        int cx = Math.floorDiv(x >> 4, CELL), cz = Math.floorDiv(z >> 4, CELL);
+        if (c == null || !enabled() || !isCity(seed, cx, cz))
+        {
+            return null;
+        }
+        List<Plan> plans = c.plan(seed, cx, cz);
+        for (int i = 0; i < plans.size(); i++)
+        {
+            Plan p = plans.get(i);
+            if (p instanceof BuildingPlan && x >= p.minX() && x <= p.maxX() && z >= p.minZ() && z <= p.maxZ())
+            {
+                return BuildingDress.KIND_NAMES[((BuildingPlan) p).dressKind()];
+            }
+        }
+        return null;
     }
 
     /** Writes every city piece of the cells this chunk's population window touches. */
