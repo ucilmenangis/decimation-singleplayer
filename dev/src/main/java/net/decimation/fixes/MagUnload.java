@@ -1,7 +1,6 @@
 package net.decimation.fixes;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -14,60 +13,54 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 /**
- * Unloading a magazine (user, 22 Oktober 2026: "mags now can be unload by click shift + right click"; chosen: about a
- * second like a reload, the rounds as Decimation's loose rounds of that calibre into the inventory, dropped if full, the
- * empty magazine stays). Decimation's own right click on a magazine loads one round (AmmoItem.onItemRightClick, sneaking
- * or not), so the client cancels a sneaking right click with a loaded magazine in hand (no item use is sent) and asks the
- * server through our channel (fixes/Net); the server waits UNLOAD_TICKS with the same magazine in hand, then empties it.
- * Switching away stops it. Server work only on a request and while one runs (a list, empty almost always).
+ * Unloading a magazine (user, 22 Oktober 2026: "mags now can be unload by click shift + right click"; then "make it same
+ * like load ammo process code ... its reverse"): Decimation's loading (AmmoItem.onItemRightClick) backwards. Loading is
+ * one round a right click (held, the click repeats every 4 ticks), the "deci:bullet.in" sound and one loose round taken
+ * from the inventory, nothing of it in creative but the round; unloading is one round a sneaking right click, the same
+ * sound and one loose round given back (on the ground when the inventory is full), only the round in creative. A stack
+ * of magazines is refused with the same kind of message, an empty one says so (Decimation: "This Magazine is full!").
+ * The client cancels a sneaking right click with a magazine in hand (Decimation would load a round) and asks the server
+ * through our channel (fixes/Net); the server checks again and does one step, at most one a player a tick.
  */
 public final class MagUnload
 {
-    /** About a second, like a reload. */
-    static final int UNLOAD_TICKS = 20;
     private static final ConcurrentLinkedQueue<EntityPlayerMP> REQUESTS = new ConcurrentLinkedQueue<EntityPlayerMP>();
-    private final List<Running> running = new ArrayList<Running>();
+    private final List<EntityPlayerMP> done = new ArrayList<EntityPlayerMP>();
 
-    private static final class Running
+    /** What one sneaking right click does, in the order Decimation's loading checks its cases. */
+    enum Step { UNLOAD, MANY, EMPTY }
+
+    static Step step(int rounds, int stackSize)
     {
-        final EntityPlayerMP player;
-        final int slot;
-        final ItemStack mag;
-        int left = UNLOAD_TICKS;
-
-        Running(EntityPlayerMP player, int slot, ItemStack mag)
+        if (rounds > 0 && stackSize == 1)
         {
-            this.player = player;
-            this.slot = slot;
-            this.mag = mag;
+            return Step.UNLOAD;
+        }
+        return stackSize > 1 ? Step.MANY : Step.EMPTY;
+    }
+
+    /** The chat line of a step, worded like Decimation's loading lines; null when the round comes out. */
+    static String message(Step s, int stackSize)
+    {
+        switch (s)
+        {
+            case MANY: return "You can only unload 1 magazine at a time! Not " + stackSize + "!";
+            case EMPTY: return "This Magazine is empty!";
+            default: return null;
         }
     }
 
-    /** Loose round stacks for this many rounds, full stacks first. */
-    static int[] stacks(int rounds, int perStack)
+    /** A magazine Decimation loads by hand: its loose round is known and it carries its rounds tag. */
+    static boolean magazine(ItemStack s)
     {
-        if (rounds <= 0 || perStack <= 0)
-        {
-            return new int[0];
-        }
-        int[] out = new int[(rounds + perStack - 1) / perStack];
-        for (int i = 0; i < out.length; i++)
-        {
-            out[i] = Math.min(perStack, rounds - i * perStack);
-        }
-        return out;
+        return s != null && Deci.magazineCapacity(s.getItem()) > 0 && Deci.magazineRound(s.getItem()) != null && s.hasTagCompound();
     }
 
-    /** The rounds in a magazine stack, 0 for anything else. */
-    static int rounds(ItemStack s)
-    {
-        return s != null && Deci.magazineCapacity(s.getItem()) > 1 && s.hasTagCompound() ? s.getTagCompound().getInteger("ammo") : 0;
-    }
-
-    /** Client: a sneaking right click with a loaded magazine in hand asks the server to unload it. */
+    /** Client: a sneaking right click with a magazine in hand unloads instead of loading. */
     @SubscribeEvent
     public void onInteract(PlayerInteractEvent e)
     {
@@ -75,96 +68,68 @@ public final class MagUnload
         {
             return;
         }
-        ItemStack held = e.entityPlayer.getHeldItem();
-        if (unloadable(held))
+        if (magazine(e.entityPlayer.getHeldItem()))
         {
             e.setCanceled(true);
             Net.CHANNEL.sendToServer(new Message());
         }
     }
 
-    /** Server: start requested unloads, finish the ones whose second is up. */
+    /** Server: one step for each player who asked this tick. */
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent e)
     {
-        if (e.phase != TickEvent.Phase.END)
+        if (e.phase != TickEvent.Phase.END || REQUESTS.isEmpty())
         {
             return;
         }
         for (EntityPlayerMP p; (p = REQUESTS.poll()) != null; )
         {
-            ItemStack held = p.getHeldItem();
-            // the client's check again: a request is only a wish, never trusted (a magazine with a round item, loaded)
-            if (unloadable(held) && !busy(p))
+            if (p.isDead || done.contains(p))
             {
-                running.add(new Running(p, p.inventory.currentItem, held));
-                p.worldObj.playSoundAtEntity(p, "deci:bullet.in", 1f, 0.7f);
+                continue;                                   // a request is only a wish: one step a tick, like a held click
+            }
+            done.add(p);
+            try
+            {
+                unloadOne(p);
+            }
+            catch (RuntimeException ex)
+            {
+                cpw.mods.fml.common.FMLLog.warning("[deciworldgen] magazine unload failed: %s", ex);   // never out of the tick
             }
         }
-        for (Iterator<Running> it = running.iterator(); it.hasNext(); )
+        done.clear();
+    }
+
+    private static void unloadOne(EntityPlayerMP p)
+    {
+        ItemStack mag = p.getHeldItem();
+        if (!magazine(mag))
         {
-            Running r = it.next();
-            boolean same = !r.player.isDead && r.player.inventory.currentItem == r.slot
-                           && r.player.inventory.getStackInSlot(r.slot) == r.mag && unloadable(r.mag);
-            if (!same)
-            {
-                it.remove();                              // switched away, dropped or died: nothing happens
-            }
-            else if (--r.left <= 0)
-            {
-                it.remove();
-                try
-                {
-                    unload(r.player, r.mag);
-                }
-                catch (RuntimeException ex)
-                {
-                    cpw.mods.fml.common.FMLLog.warning("[deciworldgen] magazine unload failed: %s", ex);   // never out of the tick
-                }
-            }
+            return;                                         // the client's check again: never trusted
         }
-    }
-
-    private boolean busy(EntityPlayerMP p)
-    {
-        for (Running r : running)
+        Step s = step(mag.getTagCompound().getInteger("ammo"), mag.stackSize);
+        if (s != Step.UNLOAD)
         {
-            if (r.player == p)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /** A loaded magazine whose loose round is known: the only thing either side unloads. */
-    static boolean unloadable(ItemStack s)
-    {
-        return rounds(s) > 0 && Deci.magazineRound(s.getItem()) != null;
-    }
-
-    private static void unload(EntityPlayerMP p, ItemStack mag)
-    {
-        Item round = Deci.magazineRound(mag.getItem());
-        if (round == null)
-        {
+            p.addChatMessage(new ChatComponentText(message(s, mag.stackSize)));
             return;
         }
-        int n = rounds(mag);
-        mag.getTagCompound().setInteger("ammo", 0);
-        for (int k : stacks(n, round.getItemStackLimit()))
+        Item round = Deci.magazineRound(mag.getItem());
+        mag.getTagCompound().setInteger("ammo", mag.getTagCompound().getInteger("ammo") - 1);
+        if (!p.capabilities.isCreativeMode)
         {
-            ItemStack s = new ItemStack(round, k);
-            if (!p.inventory.addItemStackToInventory(s) || s.stackSize > 0)
+            p.worldObj.playSoundAtEntity(p, "deci:bullet.in", 1f, 1f);
+            ItemStack r = new ItemStack(round, 1);
+            if (!p.inventory.addItemStackToInventory(r) || r.stackSize > 0)
             {
-                p.dropPlayerItemWithRandomChoice(s, false);   // what did not fit (addItemStackToInventory takes part of it)
+                p.dropPlayerItemWithRandomChoice(r, false);
             }
         }
-        p.worldObj.playSoundAtEntity(p, "deci:bullet.in", 1f, 1.2f);
         p.inventoryContainer.detectAndSendChanges();
     }
 
-    /** "Unload the magazine in my hand" (no fields: the server reads the held item). */
+    /** "Take one round out of the magazine in my hand" (no fields: the server reads the held item). */
     public static final class Message implements IMessage
     {
         public void fromBytes(ByteBuf buf)

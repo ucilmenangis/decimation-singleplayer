@@ -11,17 +11,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Unloading a magazine (user, 22 Oktober 2026: "mags now can be unload by click shift + right click"; chosen: about a
- * second like a reload, the rounds as Decimation's loose rounds of that calibre into the inventory, dropped if full, the
- * empty magazine stays). The player holds a magazine with 20 rounds and has 5 loose rounds of its calibre (so Decimation's
- * own right click, which loads one round, would show as 21); sneak held, a right click as the mouse makes it
- * (DevTestUtil.rightClick). Cases: unload (20 rounds out, magazine empty), switching away within the second (nothing
- * happens), a full inventory (the rounds on the ground).
+ * Unloading a magazine (user, 22 Oktober 2026: "mags now can be unload by click shift + right click"; then "make it same
+ * like load ammo process code ... its reverse"): one round out a sneaking right click, like Decimation's loading puts one
+ * in a plain right click. The player holds a magazine and has 5 loose rounds of its calibre; sneak held, right clicks as
+ * the mouse makes them (DevTestUtil.rightClick), 4 ticks apart like a held button. Cases: one click (one round out), five
+ * clicks (five out), an empty magazine (nothing, and no round loaded), a full inventory (the round on the ground), a
+ * plain click (Decimation still loads one).
  */
 public class MagUnloadTest extends DevTestMode
 {
     public String name() { return "magunload"; }
 
+    /** Per case: rounds in the magazine at the start, clicks, sneaking, inventory full. */
+    private static final int[][] CASES = {{20, 1, 1, 0}, {20, 5, 1, 0}, {0, 1, 1, 0}, {20, 1, 1, 1}, {20, 1, 0, 0}};
     private int phase, ticks;
     private volatile Runnable onServer;
     private Item mag, round;
@@ -30,49 +32,37 @@ public class MagUnloadTest extends DevTestMode
     {
         ticks++;
         KeyBinding sneak = mc.gameSettings.keyBindSneak;
-        switch (phase)
+        if (phase >= CASES.length)
         {
-            case 0: // unload
-            case 1: // switch away within the second
-            case 2: // full inventory
-                if (ticks == 1)
-                {
-                    final int ph = phase;
-                    onServer = () -> setup(ph);
-                    mc.thePlayer.inventory.currentItem = 0;
-                }
-                if (ticks == 10)
-                {
-                    KeyBinding.setKeyBindState(sneak.getKeyCode(), true);
-                }
-                if (ticks == 16)
-                {
-                    DevTestUtil.rightClick(mc);
-                }
-                if (ticks == 20)
-                {
-                    onServer = this::early;
-                }
-                if (ticks == 22 && phase == 1)
-                {
-                    mc.thePlayer.inventory.currentItem = 1;           // away from the magazine within the second
-                }
-                if (ticks == 60)
-                {
-                    KeyBinding.setKeyBindState(sneak.getKeyCode(), false);
-                    final int ph = phase;
-                    onServer = () -> result(ph);
-                }
-                if (ticks == 70)
-                {
-                    phase++;
-                    ticks = 0;
-                }
-                return true;
-            default:
-                onServer = () -> DevTestUtil.player().inventory.clearInventory(null, -1);
-                return false;
+            onServer = () -> DevTestUtil.player().inventory.clearInventory(null, -1);
+            return false;
         }
+        final int[] c = CASES[phase];
+        final int ph = phase;
+        if (ticks == 1)
+        {
+            onServer = () -> setup(ph, c);
+            mc.thePlayer.inventory.currentItem = 0;
+        }
+        if (ticks == 10 && c[2] == 1)
+        {
+            KeyBinding.setKeyBindState(sneak.getKeyCode(), true);
+        }
+        if (ticks >= 16 && ticks < 16 + 4 * c[1] && (ticks - 16) % 4 == 0)
+        {
+            DevTestUtil.rightClick(mc);
+        }
+        if (ticks == 60)
+        {
+            KeyBinding.setKeyBindState(sneak.getKeyCode(), false);
+            onServer = () -> result(ph, c);
+        }
+        if (ticks == 70)
+        {
+            phase++;
+            ticks = 0;
+        }
+        return true;
     }
 
     public void server()
@@ -85,7 +75,7 @@ public class MagUnloadTest extends DevTestMode
         }
     }
 
-    private void setup(int ph)
+    private void setup(int ph, int[] c)
     {
         EntityPlayerMP p = DevTestUtil.player();
         if (ph == 0)
@@ -112,28 +102,20 @@ public class MagUnloadTest extends DevTestMode
         p.inventory.clearInventory(null, -1);
         ItemStack m = new ItemStack(mag);
         m.stackTagCompound = new NBTTagCompound();
-        m.stackTagCompound.setInteger("ammo", 20);
+        m.stackTagCompound.setInteger("ammo", c[0]);
         p.inventory.setInventorySlotContents(0, m);
         p.inventory.setInventorySlotContents(2, new ItemStack(round, 5));
-        if (ph == 2)
+        if (c[3] == 1)
         {
-            for (int i = 3; i < p.inventory.mainInventory.length; i++)
+            for (int i = 1; i < p.inventory.mainInventory.length; i++)
             {
                 p.inventory.setInventorySlotContents(i, new ItemStack(Blocks.stone, 64));
             }
-            p.inventory.setInventorySlotContents(1, new ItemStack(Blocks.stone, 64));
-            p.inventory.setInventorySlotContents(2, new ItemStack(Blocks.stone, 64));
         }
         p.inventory.currentItem = 0;
     }
 
-    private void early()
-    {
-        DevTestResults.check(name(), "phase " + phase + ": the click did not load a round", ammo() + " in the magazine",
-                             ammo() <= 20, "20 or less (Decimation's right click would make it 21)");
-    }
-
-    private void result(int ph)
+    private void result(int ph, int[] c)
     {
         EntityPlayerMP p = DevTestUtil.player();
         int loose = 0, dropped = 0;
@@ -147,21 +129,14 @@ public class MagUnloadTest extends DevTestMode
             dropped += s.getItem() == round ? s.stackSize : 0;
         }
         String got = ammo() + " in the magazine, " + loose + " loose, " + dropped + " on the ground";
-        if (ph == 0)
-        {
-            DevTestResults.check(name(), "unload: rounds out, magazine empty", got, ammo() == 0 && loose == 25 && dropped == 0,
-                                 "0 in the magazine, 25 loose (20 + 5), 0 on the ground");
-        }
-        else if (ph == 1)
-        {
-            DevTestResults.check(name(), "switching away stops it", got, ammo() == 20 && loose == 5 && dropped == 0,
-                                 "20 in the magazine, 5 loose");
-        }
-        else
-        {
-            DevTestResults.check(name(), "full inventory: rounds on the ground", got, ammo() == 0 && dropped == 20,
-                                 "0 in the magazine, 20 on the ground");
-        }
+        int start = c[3] == 1 ? 0 : 5;
+        int moved = c[2] == 0 ? -1 : Math.min(c[1], c[0]);        // a plain click loads one, a sneaking one unloads
+        int ammo = c[0] - moved, inv = c[3] == 1 ? start : start + moved, ground = c[3] == 1 ? moved : 0;
+        String[] what = {"one sneaking click: one round out", "five clicks: five rounds out",
+                         "empty magazine: nothing, no round loaded", "full inventory: the round on the ground",
+                         "plain click: Decimation still loads one"};
+        DevTestResults.check(name(), what[ph], got, ammo() == ammo && loose == inv && dropped == ground,
+                             ammo + " in the magazine, " + inv + " loose, " + ground + " on the ground");
     }
 
     private int ammo()
