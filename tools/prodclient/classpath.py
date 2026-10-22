@@ -13,7 +13,14 @@ mc = ['org.lwjgl.lwjgl/lwjgl/2.9.4-nightly-20150209', 'org.lwjgl.lwjgl/lwjgl_uti
       'commons-codec/commons-codec/1.9', 'net.java.jinput/jinput/2.0.5', 'net.java.jutils/jutils/1.0.0',
       'com.google.code.gson/gson/2.2.4', 'org.apache.logging.log4j/log4j-api/2.0-beta9-fixed',
       'org.apache.logging.log4j/log4j-core/2.0-beta9-fixed', 'tv.twitch/twitch/5.16']
-jars = [glob.glob(os.path.join(SRV, 'forge-*-universal.jar'))[0]]
+# Forge universal FIRST, the copy downloaded on its own (DIR/dl/forge-universal.jar): the server install's copy sits next
+# to minecraft_server.1.7.10.jar, which its manifest Class-Path then puts before the client ("binary discrepency" on every
+# Forge patch, docs/production_test.md trap 1; it happened again on 22 Oktober 2026 when this tool took the server's copy)
+UNIVERSAL = os.path.join(P, 'dl', 'forge-universal.jar')
+if not os.path.isfile(UNIVERSAL):
+    sys.exit('need %s: the Forge 1.7.10-10.13.4.1614 universal jar downloaded on its own, not the server install\'s copy'
+             % UNIVERSAL)
+jars = [UNIVERSAL]
 for root, d, fs in os.walk(os.path.join(SRV, 'libraries')):          # Forge's own libraries (installer)
     for f in fs:
         if f.endswith('.jar') and 'minecraft_server' not in f and 'forge' not in f:
