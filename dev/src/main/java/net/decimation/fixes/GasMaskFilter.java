@@ -49,8 +49,10 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
  * - Client: "Filter: N%" in a gas mask's tooltip, a hint in the filter's; Decimation's HUD line "Protected" (IngameHud)
  *   and its missing screen tint (ClientEventHandler) follow the mask item only, so while the worn filter is empty the
  *   mask is hidden from them for that draw: "Irradiated" and the tint, as without a mask.
- * Loot: one Gas Mask Filter entry in the military list (where Decimation's military gas mask is) and one in the police
- * list; its own weight 0.5 makes it as rare as a gas mask there, rarer than every item of weight 0.9.
+ * - Protects against nothing when empty (user, follow up of 22 Oktober 2026): Decimation's tear gas (TearGasGrenadeEntity,
+ *   checked on the client against the mask item) poisons a player whose filter is empty through us, with its own poison.
+ * Loot (follow up): Gas Mask Filters in about 3 % of military crate opens and 7 % of police crate opens, as many copies in
+ * the pools holding Decimation's military gas mask and the police vest as the pools' weights ask for (copiesFor).
  */
 public final class GasMaskFilter
 {
@@ -141,6 +143,53 @@ public final class GasMaskFilter
             return Warn.EMPTY;
         }
         return before > LOW && now <= LOW && now > 0 ? Warn.LOW : null;
+    }
+
+    /** The share of opens holding at least one of an item rolled with this chance, an open rolling 1 .. n times alike. */
+    static double perOpen(double perRoll, int maxRolls)
+    {
+        double none = 0, miss = 1;
+        for (int r = 1; r <= maxRolls; r++)
+        {
+            miss *= 1 - perRoll;
+            none += miss;
+        }
+        return 1 - none / maxRolls;
+    }
+
+    /** Copies of an item of this weight a pool of this total weight needs for about this share of its opens (at least 1). */
+    static int copiesFor(double poolWeight, double itemWeight, int maxRolls, double share)
+    {
+        int best = 1;
+        double off = Double.MAX_VALUE;
+        for (int k = 1; k <= 100; k++)
+        {
+            double d = Math.abs(perOpen(k * itemWeight / (poolWeight + k * itemWeight), maxRolls) - share);
+            if (d < off)
+            {
+                off = d;
+                best = k;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Decimation's tear gas reach (TearGasGrenadeEntity.onUpdate): a player whose box meets the box 6 wide, 3 below and 5
+     * above the gas and who stands under 5 blocks from it; d is the player's feet less the gas.
+     */
+    static boolean inGas(double dx, double dy, double dz)
+    {
+        return dx * dx + dy * dy + dz * dz < 25 && dy < 5 && dy + 1.8 > -3;
+    }
+
+    /**
+     * Our share of tear gas: Decimation's client check spares any gas mask item and poisons the rest itself, so only a gas
+     * mask with an empty filter is ours; never in creative or while already poisoned (its own conditions).
+     */
+    static boolean poisonDue(boolean creative, boolean poisoned, boolean gasMask, int life)
+    {
+        return !creative && !poisoned && gasMask && life == 0;
     }
 
     static String message(Fit f)
@@ -312,12 +361,37 @@ public final class GasMaskFilter
                 }
             }
         }
+        if (f.life == 0 && (p.ticksExisted & 3) == 0
+            && poisonDue(p.capabilities.isCreativeMode, p.isPotionActive(net.minecraft.potion.Potion.poison), true, 0))
+        {
+            tearGas(p);                                     // an empty filter lets Decimation's tear gas through too
+        }
         if (f.pending && p.openContainer == p.inventoryContainer && (!exposed || step(f.life)))
         {
             flush(f);
             if (f.life == 0)
             {
                 Deci.markPlayerDataDirty(p);                // the client's copy of the mask: its HUD says Irradiated now
+            }
+        }
+    }
+
+    /**
+     * Decimation's tear gas on a player whose gas mask filter is empty (its own check, on the client, spares the mask item):
+     * the poison its PacketApplyPoison gives (Poison V, 40 ticks), from any settled tear gas in reach. Only for such
+     * players, every 4 ticks: a search of the box round them.
+     */
+    private static void tearGas(EntityPlayerMP p)
+    {
+        List<?> near = p.worldObj.getEntitiesWithinAABB(Deci.tearGasClass(), p.boundingBox.expand(6.5, 5, 6.5));
+        for (int i = 0; i < near.size(); i++)
+        {
+            Entity g = (Entity) near.get(i);
+            if (!g.isDead && Deci.tearGasActive(g) && inGas(p.posX - g.posX, p.posY - g.posY, p.posZ - g.posZ))
+            {
+                p.addPotionEffect(new net.minecraft.potion.PotionEffect(net.minecraft.potion.Potion.poison.getId(), 40, 4, true));
+                gassed++;
+                return;
             }
         }
     }
@@ -463,17 +537,40 @@ public final class GasMaskFilter
      */
     public static void addLoot()
     {
+        add("gasmaskmilitary", "deci:BlockMilitaryCrate", MILITARY_SHARE);
+        add("policevest", "deci:BlockPoliceCrate", POLICE_SHARE);
+    }
+
+    /** Shares of crate opens with a filter in them (user, 22 Oktober 2026: military about 3 %, police about 7 %). */
+    static final double MILITARY_SHARE = 0.03, POLICE_SHARE = 0.07;
+
+    /** Filter copies in every pool holding `like`, as many as give the crate this share of its opens. */
+    private static void add(String like, String crate, double share)
+    {
+        Item item = GameRegistry.findItem("deci", like);
+        java.util.Map.Entry<Integer, List<ItemStack>> pool = Deci.lootTable().get(crate);
+        if (item == null || pool == null)
+        {
+            FMLLog.warning("[deciworldgen] gas mask filters: no %s loot", crate);
+            return;
+        }
+        double weight = 0;
+        for (ItemStack s : pool.getValue())
+        {
+            weight += Deci.lootWeight(s);
+        }
         ItemStack filter = new ItemStack(Deci.gasMaskFilter());
-        Item military = GameRegistry.findItem("deci", "gasmaskmilitary"), police = GameRegistry.findItem("deci", "policevest");
-        int m = military == null ? 0 : Deci.addLootLike(military, filter);
-        int p = police == null ? 0 : Deci.addLootLike(police, filter);
-        FMLLog.info("[deciworldgen] gas mask filters: %d military and %d police loot pools", m, p);
+        int copies = copiesFor(weight, Deci.lootWeight(filter), pool.getKey(), share);
+        int pools = Deci.addLootCopies(item, filter, copies);
+        FMLLog.info("[deciworldgen] gas mask filters: %d in each of %d loot pools like %s (%.1f %% of %s opens)", copies, pools,
+                    like, 100 * perOpen(copies * Deci.lootWeight(filter) / (weight + copies * Deci.lootWeight(filter)), pool.getKey()),
+                    crate);
     }
 
     // ------------------------------------------------------------ for the dev test
 
     static long tickRuns, tickNanos, wornTicks, flushes;
-    static int fitted, refused, dropped, lowWarnings, emptyWarnings;
+    static int fitted, refused, dropped, lowWarnings, emptyWarnings, gassed;
     /** Allocation measuring (dev test only): the server thread's allocated bytes around our tick. */
     static volatile boolean measureAllocation;
     static long allocatedBytes, allocationTicks, allocationOverhead;
@@ -511,10 +608,10 @@ public final class GasMaskFilter
         return tickRuns == 0 ? 0 : tickNanos / 1000.0 / tickRuns;
     }
 
-    /** For the dev test: counters "fitted, refused, dropped, low warnings, empty warnings, tag writes". */
+    /** For the dev test: counters "fitted, refused, dropped, low warnings, empty warnings, tag writes, tear gas poisonings". */
     public static int[] counters()
     {
-        return new int[] {fitted, refused, dropped, lowWarnings, emptyWarnings, (int) flushes};
+        return new int[] {fitted, refused, dropped, lowWarnings, emptyWarnings, (int) flushes, gassed};
     }
 
     /** For tests: the filter left in the gas mask this player wears (ticks), -1 without one. */

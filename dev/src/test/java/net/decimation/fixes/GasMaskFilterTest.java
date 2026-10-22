@@ -97,6 +97,48 @@ class GasMaskFilterTest
     }
 
     @Test
+    void theShareOfOpensWithOneOrMoreOfAnItem()
+    {
+        // an open rolls 1 .. n times, each as likely (Decimation's IntRange with PatchLootRolls)
+        assertEquals(0.0, GasMaskFilter.perOpen(0.0, 2), 1e-12);
+        assertEquals(1.0, GasMaskFilter.perOpen(1.0, 2), 1e-12);
+        assertEquals(0.1, GasMaskFilter.perOpen(0.1, 1), 1e-12);
+        assertEquals(1 - (0.9 + 0.81) / 2, GasMaskFilter.perOpen(0.1, 2), 1e-12);
+    }
+
+    @Test
+    void filterCopiesForAboutThreePercentOfMilitaryAndSevenOfPoliceCrates()
+    {
+        // user, 22 Oktober 2026: filters in about 3 % of military crate opens, police as built (about 7 %)
+        assertEquals(8, GasMaskFilter.copiesFor(184.7, 0.5, 2, 0.03));   // 7 copies: 2.8 %, 8: 3.2 %
+        assertEquals(1, GasMaskFilter.copiesFor(10.1, 0.5, 2, 0.07));    // 7.0 %
+        assertEquals(1, GasMaskFilter.copiesFor(1000, 0.5, 2, 0.00001)); // never none
+    }
+
+    @Test
+    void decimationsTearGasReach()
+    {
+        // TearGasGrenadeEntity: players whose box meets x, z within 6 and y -3 .. +5 of the gas and under 5 blocks away
+        assertTrue(GasMaskFilter.inGas(0, 0, 0));
+        assertTrue(GasMaskFilter.inGas(4.9, 0, 0));
+        assertFalse(GasMaskFilter.inGas(5.0, 0, 0));
+        assertTrue(GasMaskFilter.inGas(0, 4.9, 0));
+        assertFalse(GasMaskFilter.inGas(0, -4.9, 0));                    // the feet 4.9 below: the box ends at 3 below
+        assertTrue(GasMaskFilter.inGas(0, -4.7, 0));
+    }
+
+    @Test
+    void anEmptyFilterLetsTearGasThrough()
+    {
+        // Decimation's own check spares any gas mask item (and poisons a player without one): ours only for empty filters
+        assertTrue(GasMaskFilter.poisonDue(false, false, true, 0));
+        assertFalse(GasMaskFilter.poisonDue(false, false, true, 1));
+        assertFalse(GasMaskFilter.poisonDue(false, false, false, 0));     // no mask: Decimation's own path
+        assertFalse(GasMaskFilter.poisonDue(true, false, true, 0));       // creative
+        assertFalse(GasMaskFilter.poisonDue(false, true, true, 0));       // already poisoned, as Decimation's check
+    }
+
+    @Test
     void warnedOnceAtTenPercentAndOnceWhenEmpty()
     {
         assertEquals(GasMaskFilter.Warn.LOW, GasMaskFilter.warning(GasMaskFilter.LOW + 1, GasMaskFilter.LOW));

@@ -38,8 +38,9 @@ import net.minecraft.world.WorldSettings;
  *   filter and takes one filter; a full filter is refused; two forged requests in one tick use one filter; creative fills
  *   without using one; a stack of masks is refused; without a gas mask nothing is sent; a click on a loot crate opens the
  *   crate and fits nothing.
- * - Loot: one filter entry in the military and police lists, rarer than a weight 0.9 item, and the pills in the medical
- *   list; 10000 rolls of each crate match the weights.
+ * - Tear gas (follow up): Decimation's own poisoning without a mask, ours with an empty filter, none with filter left.
+ * - Loot: filters in about 3 % of military and 7 % of police crate opens, the pills in the medical list; 10000 opens of
+ *   each crate match the weights.
  * - Wasteland: a district's zone call makes its MILITARY and RADIATION zones (the sector box in worlds with whole sector
  *   wasteland cities), Decimation's own check answers both kinds there, and the world load upgrade puts a removed
  *   radiation box back (worlds from before).
@@ -70,6 +71,7 @@ public class RadSetTest extends DevTestMode
     private int[] counterMark;
     private long sentMark;
     private ItemStack mask;
+    private net.minecraft.entity.Entity gas;
     private final UseStart uses = new UseStart();
     private final double[] runMicros = new double[2];
     private long[] warm = new long[2];
@@ -440,9 +442,46 @@ public class RadSetTest extends DevTestMode
                         && GasMaskFilter.Client.sent() == sentMark, "looted, 1 filter, filter 6000, 0 sent");
                 w.setBlockToAir(X, Y, Z + 2);
                 break;
-            case 980: loot(); break;
-            case 985: wasteland(p, w); break;
-            case 995: finish(p, w); break;
+            case 978:   // Decimation's tear gas 2 blocks away; no gas mask first: its own (client side) poisoning
+                Deci.setPlayerMask(p, null);
+                p.removePotionEffect(net.minecraft.potion.Potion.poison.getId());
+                p.setHealth(p.getMaxHealth());
+                gas = Deci.newTearGas(w);
+                gas.setPosition(X + 2.5, Y + 0.1, Z + 0.5);
+                w.spawnEntityInWorld(gas);
+                break;
+            case 1000:
+                DevTestResults.check(name(), "tear gas without a gas mask (Decimation's own)", "gas active " + Deci.tearGasActive(gas)
+                    + ", poisoned " + p.isPotionActive(net.minecraft.potion.Potion.poison), Deci.tearGasActive(gas)
+                    && p.isPotionActive(net.minecraft.potion.Potion.poison), "active, poisoned");
+                Deci.setPlayerMask(p, new ItemStack(Deci.gasMask()));
+                GasMaskFilter.setFilter(p, 0);
+                break;
+            case 1010:
+                p.removePotionEffect(net.minecraft.potion.Potion.poison.getId());
+                counterMark = GasMaskFilter.counters();
+                break;
+            case 1040:
+                DevTestResults.check(name(), "tear gas with an empty filter", "poisoned " + p.isPotionActive(net.minecraft.potion.Potion.poison)
+                    + ", by us " + (GasMaskFilter.counters()[6] - counterMark[6]), p.isPotionActive(net.minecraft.potion.Potion.poison)
+                    && GasMaskFilter.counters()[6] > counterMark[6], "poisoned, by the empty filter");
+                GasMaskFilter.setFilter(p, GasMaskFilter.full());
+                break;
+            case 1050:
+                p.removePotionEffect(net.minecraft.potion.Potion.poison.getId());
+                counterMark = GasMaskFilter.counters();
+                break;
+            case 1080:
+                DevTestResults.check(name(), "tear gas with a filter left", "poisoned " + p.isPotionActive(net.minecraft.potion.Potion.poison)
+                    + ", by us " + (GasMaskFilter.counters()[6] - counterMark[6]), !p.isPotionActive(net.minecraft.potion.Potion.poison)
+                    && GasMaskFilter.counters()[6] == counterMark[6], "not poisoned");
+                gas.setDead();
+                p.removePotionEffect(net.minecraft.potion.Potion.poison.getId());
+                p.setHealth(p.getMaxHealth());
+                break;
+            case 1085: loot(); break;
+            case 1090: wasteland(p, w); break;
+            case 1100: finish(p, w); break;
             default: break;
         }
     }
@@ -611,12 +650,16 @@ public class RadSetTest extends DevTestMode
     private void loot()
     {
         Map<String, Map.Entry<Integer, List<ItemStack>>> table = Deci.lootTable();
-        lootList(table, "BlockMilitaryCrate", Deci.gasMaskFilter(), true);
-        lootList(table, "BlockPoliceCrate", Deci.gasMaskFilter(), true);
-        lootList(table, "BlockMedicalCrate", RadiationPills.instance, false);
+        lootList(table, "BlockMilitaryCrate", Deci.gasMaskFilter(), 0.03);   // user, follow up: about 3 % of opens
+        lootList(table, "BlockPoliceCrate", Deci.gasMaskFilter(), 0.07);     // as built, about 7 %
+        lootList(table, "BlockMedicalCrate", RadiationPills.instance, 0);
     }
 
-    private void lootList(Map<String, Map.Entry<Integer, List<ItemStack>>> table, String block, Item item, boolean rare)
+    /**
+     * One crate's list: the item's entries, its share a roll from the weights, and 10000 opens rolled: the share of opens
+     * with at least one (1 .. n rolls an open, PatchLootRolls) against the weights' and, for filters, the user's target.
+     */
+    private void lootList(Map<String, Map.Entry<Integer, List<ItemStack>>> table, String block, Item item, double target)
     {
         String what = block + " " + (item == RadiationPills.instance ? "pills" : "filters");
         Map.Entry<Integer, List<ItemStack>> e = table.get("deci:" + block);
@@ -638,23 +681,46 @@ public class RadSetTest extends DevTestMode
                 mine += weight;
             }
         }
-        double share = mine / total, common = 0.9 / total;
+        int n = e.getKey();
+        double perRoll = mine / total, perOpen = perOpen(perRoll, n);
+        // with whole entries: the nearest share to the target (one entry more or less is further from it)
+        double w = entries == 0 ? 0 : mine / entries, others = total - mine;
+        double less = entries > 1 ? perOpen((entries - 1) * w / (others + (entries - 1) * w), n) : -1;
+        double more = perOpen((entries + 1) * w / (others + (entries + 1) * w), n);
         InventoryBasic inv = new InventoryBasic("radset", false, 18);
-        int opens = 10000, found = 0;
+        int opens = 10000, with = 0;
         for (int i = 0; i < opens; i++)
         {
             Deci.rollDecimationLoot(b, inv);
+            boolean has = false;
             for (int k = 0; k < inv.getSizeInventory(); k++)
             {
                 ItemStack s = inv.getStackInSlot(k);
-                found += s != null && s.getItem() == item ? 1 : 0;
+                has |= s != null && s.getItem() == item;
             }
+            with += has ? 1 : 0;
         }
-        double expected = opens * (e.getKey() + 1) / 2.0 * share;      // 1 .. n rolls an open (PatchLootRolls)
-        DevTestResults.check(name(), what, String.format("%d entry, %.2f %% a roll (a weight 0.9 item %.2f %%), %d in %d opens",
-            entries, 100 * share, 100 * common, found, opens),
-            entries == 1 && Math.abs(found - expected) <= 4 * Math.sqrt(expected) + 3 && (!rare || share < common),
-            String.format("1 entry, %.0f found (4 sigma)%s", expected, rare ? ", rarer than a weight 0.9 item" : ""));
+        double expected = opens * perOpen, sigma = Math.sqrt(opens * perOpen * (1 - perOpen));
+        boolean onTarget = target <= 0 || Math.abs(perOpen - target) <= Math.abs(more - target)
+            && (less < 0 || Math.abs(perOpen - target) <= Math.abs(less - target));
+        DevTestResults.check(name(), what, String.format("%d entries of %d, %.2f %% a roll, %.2f %% of opens by the weights (one"
+            + " entry %s, one more %.2f %%), %d of %d opens rolled", entries, e.getValue().size(), 100 * perRoll, 100 * perOpen,
+            less < 0 ? "is the least" : String.format("less %.2f %%", 100 * less), 100 * more, with, opens),
+            entries >= 1 && Math.abs(with - expected) <= 4 * sigma + 3 && onTarget,
+            String.format("%.0f opens (4 sigma)%s", expected, target > 0
+                ? String.format(", the whole number of entries nearest %.0f %% of opens", 100 * target) : ""));
+    }
+
+    /** The share of opens with at least one, rolled with this chance, 1 .. n rolls an open alike (PatchLootRolls). */
+    private static double perOpen(double perRoll, int n)
+    {
+        double none = 0, miss = 1;
+        for (int r = 1; r <= n; r++)
+        {
+            miss *= 1 - perRoll;
+            none += miss;
+        }
+        return 1 - none / n;
     }
 
     // ------------------------------------------------------------ wasteland

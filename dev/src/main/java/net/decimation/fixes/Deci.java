@@ -2913,6 +2913,35 @@ public final class Deci
         }
     }
 
+    /** TearGasGrenadeEntity (deci.ak.p): Decimation's tear gas grenade. */
+    public static Class<? extends net.minecraft.entity.Entity> tearGasClass()
+    {
+        return deci.ak.p.class;
+    }
+
+    /** TearGasGrenadeEntity.active (acz): settled and giving off its gas (both sides; 600 ticks, then gone). */
+    public static boolean tearGasActive(net.minecraft.entity.Entity e)
+    {
+        return e instanceof deci.ak.p && ((deci.ak.p) e).acz;
+    }
+
+    /** A new TearGasGrenadeEntity (deci.ak.p) with no thrower, never exploding (dev tests). */
+    public static net.minecraft.entity.Entity newTearGas(net.minecraft.world.World world)
+    {
+        return new deci.ak.p(world);
+    }
+
+    /** As addLootLike, this many copies in every pool holding `like`. Returns the pools changed. */
+    public static int addLootCopies(Item like, net.minecraft.item.ItemStack add, int copies)
+    {
+        int n = 0;
+        for (int i = 0; i < copies; i++)
+        {
+            n = addLootLike(like, add);
+        }
+        return n;
+    }
+
     /** LootTableRegistry.hasPool (deci.aD.l.d): a right click on this block rolls Decimation's loot (crates, wrecks, bins). */
     public static boolean hasLootPool(net.minecraft.block.Block block)
     {
