@@ -202,8 +202,10 @@ public class LootMagsTest extends DevTestMode
             untagged += x[0] > 0 && x[2] == 0 ? 1 : 0;
         }
         DevTestResults.value(name(), "guns rolled", g + " in " + CLICKS + " opens");
-        DevTestResults.check(name(), "about half the guns loaded", loaded + " of " + g, g >= 10 && loaded * 10 >= g * 3 && loaded * 10 <= g * 7,
-                             "30 to 70 %, 10 or more guns");
+        // a coin per gun: within 3 standard deviations of half (a 30 to 70 % bound failed 15 of 21 by chance; the unit
+        // test checks the split itself on 4000 rolls)
+        DevTestResults.check(name(), "about half the guns loaded", loaded + " of " + g,
+                             g >= 10 && Math.abs(2 * loaded - g) <= 3 * Math.sqrt(g), "half within 3 standard deviations, 10 or more guns");
         DevTestResults.check(name(), "gun rounds within its magazine, Decimation's tag", outside + " outside, " + untagged + " without the tag",
                              outside == 0 && untagged == 0, "0 and 0");
         DevTestResults.check(name(), "a looted loaded gun fires", loadedGun == null ? "no loaded automatic gun" : before + " then " + after,

@@ -20,5 +20,6 @@ public final class Net
     public static void register()
     {
         CHANNEL.registerMessage(MagUnload.Handler.class, MagUnload.Message.class, 0, Side.SERVER);   // unload the held magazine
+        CHANNEL.registerMessage(RadiationDose.SyncHandler.class, RadiationDose.Sync.class, 1, Side.CLIENT);   // the dose on the HUD
     }
 }

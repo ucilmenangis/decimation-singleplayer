@@ -977,6 +977,104 @@ public final class Deci
                            p == null ? -1 : p.zombieKills, deci.Q.c.Xj, deci.Q.c.Xk};
     }
 
+    // ---- radiation (fixes/RadiationDose, fixes/RadiationHud)
+
+    /** PlayerData.isIrradiated (co): Decimation's flag while the player stands in a RADIATION zone. */
+    public static boolean irradiated(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        return data != null && data.co();
+    }
+
+    /** PlayerData.getMask (cx) is a gas mask (ItemRegistry gasmask apo, gasmaskmilitary app): Decimation's protection. */
+    public static boolean wearsGasMask(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        ItemStack mask = data == null ? null : data.cx();
+        return mask != null && (mask.getItem() == deci.aD.k.apo || mask.getItem() == deci.aD.k.app);
+    }
+
+    /** ItemRegistry.gasmask (apo): Decimation's gas mask. */
+    public static Item gasMask()
+    {
+        return deci.aD.k.apo;
+    }
+
+    /** PlayerData.setMask (e): the player's mask slot (gas mask, goggles), null for none. */
+    public static void setPlayerMask(EntityPlayer player, ItemStack mask)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        if (data != null)
+        {
+            data.e(mask);
+        }
+    }
+
+    /** DamageSources.irradiated (akW): "irradiatedDeci", bypasses armor. */
+    public static net.minecraft.util.DamageSource irradiatedDamage()
+    {
+        return deci.aD.h.akW;
+    }
+
+    /** ClientState.cl: the HUD's status icons (food, water, blood, health) hidden. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean hudIconsHidden()
+    {
+        return deci.b.i.cl;
+    }
+
+    /**
+     * How far IngameHud.render (deci.g.j.b) moves its status icons down: 0 with the stats list hidden (ClientState.cf),
+     * else 10 a line plus 10. The lines are counted as it adds them: kills, zombie kills, deaths, days, humanity always;
+     * clan (not ClanManagerV1.UNKNOWN_CLAN), bottlecaps, gold bottlecaps when above 0; high score, score and timer while
+     * the target timer runs (bA); range and a blank line with a range finder (deci.av.t) in hand; irradiated (co),
+     * bleeding (cn), infected (cm), broken leg (cl).
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static int hudIconsDown(EntityPlayer player)
+    {
+        if (deci.b.i.cf)
+        {
+            return 0;
+        }
+        deci.Q.b d = deci.Q.b.e(player);
+        if (d == null)
+        {
+            return 0;
+        }
+        int lines = 5;
+        String clan = d.cY();
+        lines += clan == null || clan.equals(net.decimation.mod.server.clans.a.UNKNOWN_CLAN) ? 0 : 1;
+        lines += d.cb() > 0L ? 1 : 0;
+        lines += d.ca() > 0L ? 1 : 0;
+        lines += d.bA() > 0 ? 3 : 0;
+        ItemStack held = player.getHeldItem();
+        lines += held != null && held.getItem() instanceof deci.av.t ? 2 : 0;
+        lines += (d.co() ? 1 : 0) + (d.cn() ? 1 : 0) + (d.cm() ? 1 : 0) + (d.cl() ? 1 : 0);
+        return 10 + lines * 10;
+    }
+
+    /** The screen is Decimation's inventory and loot screen (PlayerInventoryScreen deci.g.g): its HUD is not drawn. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean isInventoryScreen(net.minecraft.client.gui.GuiScreen screen)
+    {
+        return screen instanceof deci.g.g;
+    }
+
+    /** RenderUtil.drawTextureOpaque (deci.j.a.c): a HUD picture the way Decimation draws its status icons. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void drawHudTexture(double x, double y, net.minecraft.util.ResourceLocation texture, double w, double h)
+    {
+        deci.j.a.c(x, y, texture, w, h);
+    }
+
+    /** RenderUtil.drawOutlined (deci.j.a.e): text with a black outline, as the status percentages. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void drawOutlined(String text, int x, int y, int colour)
+    {
+        deci.j.a.e(text, x, y, colour);
+    }
+
     /** The in game HUD's stats list on (ClientState.cf false; Decimation's HUD toggle). */
     public static void showHudStats()
     {

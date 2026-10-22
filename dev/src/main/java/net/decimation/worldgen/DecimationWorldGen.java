@@ -142,10 +142,14 @@ public class DecimationWorldGen
         net.decimation.fixes.MagUnload unload = new net.decimation.fixes.MagUnload(); // shift + right click empties a magazine
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(unload);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(unload);
+        net.decimation.fixes.RadiationDose radiation = new net.decimation.fixes.RadiationDose(); // dose in percent (fixes/RadiationDose)
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(radiation);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(radiation);
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
             net.decimation.fixes.GripPlacement.apply(); // grips under each gun's handguard (grip_offsets.txt)
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.RadiationHud()); // the dose icon
         }
         // local kill / death counters for the menu and HUD; the menu's session check calls a
         // Mojang service that no longer answers, so the menu said "Play offline" with an invalid
