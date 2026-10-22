@@ -427,7 +427,7 @@ public class RadSetTest extends DevTestMode
             case 935:   // a loot crate in front: its click stays the crate's
                 Deci.setPlayerMask(p, new ItemStack(Deci.gasMask()));
                 GasMaskFilter.setFilter(p, GasMaskFilter.full() / 2);
-                Deci.clearLootCooldowns();
+                net.decimation.fixes.LootRefill.clearAll();
                 w.setBlock(X, Y, Z + 2, GameRegistry.findBlock("deci", "BlockMilitaryCrate"), 0, 3);
                 break;
             case 945:

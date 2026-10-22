@@ -2374,10 +2374,76 @@ public final class Deci
         return deci.aB.e.d(world).k(x, y, z);
     }
 
-    /** LootCooldownRegistry.clear: every crate of every world gives loot again (server start does this). */
+    /** LootCooldownRegistry.clear: every crate of every world gives loot again in Decimation's own map (its clear at server
+     *  start never runs: an @Mod.EventHandler method put on the event buses; the map lives for the whole game). */
     public static void clearLootCooldowns()
     {
         deci.aB.e.clear();
+    }
+
+    /** ServerConfig.lootRespawnTime (deci.aJ.b.aAy): seconds until Decimation refills a looted spot (900; a dedicated
+     *  server's decimation_server.properties may change it, read in preInit). */
+    public static int lootRespawnSeconds()
+    {
+        return deci.aJ.b.aAy;
+    }
+
+    /**
+     * The spot LootInteractHandler (deci.aK.k) keys a click on: the clicked block, or for a multiblock (IMultiblockB
+     * deci.W.b) its origin (IMultiblockD deci.W.d); null where the handler stops (no tile entity there, another block at
+     * the origin).
+     */
+    public static int[] lootSpot(net.minecraft.world.World world, int x, int y, int z)
+    {
+        net.minecraft.block.Block block = world.getBlock(x, y, z);
+        if (!(block instanceof deci.W.b))
+        {
+            return new int[] {x, y, z};
+        }
+        net.minecraft.tileentity.TileEntity te = world.getTileEntity(x, y, z);
+        if (!(te instanceof deci.W.d))
+        {
+            return null;
+        }
+        deci.W.d d = (deci.W.d) te;
+        int ox = d.getOriginX(), oy = d.getOriginY(), oz = d.getOriginZ();
+        return world.getBlock(ox, oy, oz) == block ? new int[] {ox, oy, oz} : null;
+    }
+
+    private static java.lang.reflect.Field lootTimes;
+
+    /**
+     * Sets LootCooldownRegistry's own state of a spot (deci.aB.e.d(world)): looted now (markLooted l: the handler then
+     * answers "This <block> is empty...") or ready (the spot taken out of its private TLongLongMap afm, keyed as
+     * packPos j: LootRefill.key).
+     */
+    public static void setLootCooldown(net.minecraft.world.World world, int x, int y, int z, boolean looted)
+    {
+        deci.aB.e reg = deci.aB.e.d(world);
+        if (looted)
+        {
+            reg.l(x, y, z);
+            return;
+        }
+        try
+        {
+            if (lootTimes == null)
+            {
+                for (java.lang.reflect.Field f : deci.aB.e.class.getDeclaredFields())
+                {
+                    if (f.getType() == gnu.trove.map.TLongLongMap.class && !java.lang.reflect.Modifier.isStatic(f.getModifiers()))
+                    {
+                        f.setAccessible(true);
+                        lootTimes = f;
+                    }
+                }
+            }
+            ((gnu.trove.map.TLongLongMap) lootTimes.get(reg)).remove(LootRefill.key(x, y, z));
+        }
+        catch (Exception e)
+        {
+            throw new IllegalStateException("LootCooldownRegistry's map not found", e);
+        }
     }
 
     // ---- loot screen: the path of LootInteractHandler (deci.aK.k), docs/loot_levels.md

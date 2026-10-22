@@ -52,7 +52,7 @@ public class LootMagsTest extends DevTestMode
         {
             if (t == 0)
             {
-                onServer = Deci::clearLootCooldowns;
+                onServer = net.decimation.fixes.LootRefill::clearAll;
             }
             if (t == 3)
             {
@@ -132,7 +132,7 @@ public class LootMagsTest extends DevTestMode
         crateY = DevTestArena.Y;
         crateZ = DevTestArena.Z - 2;
         w.setBlock(crateX, crateY, crateZ, b, 0, 3);
-        Deci.clearLootCooldowns();
+        net.decimation.fixes.LootRefill.clearAll();
         placed = true;
     }
 

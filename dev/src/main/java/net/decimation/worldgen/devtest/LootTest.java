@@ -438,7 +438,7 @@ public class LootTest extends DevTestMode
             crateY = DevTestArena.Y;
             crateZ = DevTestArena.Z - 2;
             w.setBlock(crateX, crateY, crateZ, b, 0, 3);
-            Deci.clearLootCooldowns();
+            net.decimation.fixes.LootRefill.clearAll();
             deciName = pick;
             deciPlaced = true;
         }

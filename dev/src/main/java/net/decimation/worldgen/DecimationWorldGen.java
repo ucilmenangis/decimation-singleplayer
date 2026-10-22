@@ -144,6 +144,7 @@ public class DecimationWorldGen
         net.decimation.fixes.MagUnload unload = new net.decimation.fixes.MagUnload(); // shift + right click empties a magazine
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(unload);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(unload);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.LootRefill()); // looted stays looted
         net.decimation.fixes.RadiationDose radiation = new net.decimation.fixes.RadiationDose(); // dose in percent (fixes/RadiationDose)
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(radiation);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(radiation);
