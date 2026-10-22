@@ -2,8 +2,13 @@ package net.decimation.fixes;
 
 import java.util.Random;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.decimation.mod.common.item.armor.ItemArmorDeci;
+import net.decimation.mod.common.item.armor.ItemMaskDeci;
+import net.decimation.mod.common.item.armor.ItemVestDeci;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,6 +38,14 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  * - "human" / "turret" (NPC guns): body pieces always; the helmet on a random
  *   HEADSHOT_CHANCE of hits, because NPC shots carry no hit position and NPCs
  *   always aim at eye level.
+ *
+ * Durability (feature 10, user 22 Oktober 2026; docs/superpowers/specs/2026-10-22-durability-design.md): every piece
+ * that counted against a shot loses 1 (body pieces on every shot, the helmet on a headshot, the vest or the chest piece:
+ * whichever counted); a used up piece (Durability.broken: damage at the maximum) is kept but protects nothing, so its
+ * factor is taken back out of Decimation's player hit; vests (ItemVestDeci, PlayerData's vest slot), which no code
+ * applied before, protect body shots: the stronger of vest and chest piece counts (Durability.bodyFactor). Melee hits
+ * wear armor the vanilla way (Forge's ArmorProperties.ApplyArmor, at least 1 a piece, absorbing at most what is left);
+ * meleeLast keeps that wear from destroying a piece: it stops on the maximum.
  */
 public class ArmorGunfireHandler
 {
@@ -46,6 +59,10 @@ public class ArmorGunfireHandler
 
     private final Random random = new Random();
 
+    private static final int CHEST = 2;
+    /** For the dev test: shots handled and their time in nanoseconds. */
+    static long shots, shotNanos;
+
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event)
     {
@@ -53,14 +70,53 @@ public class ArmorGunfireHandler
         {
             return;
         }
+        long start = System.nanoTime();
+        handle(event);
+        shots++;
+        shotNanos += System.nanoTime() - start;
+    }
+
+    /** For the dev test: {hurt events handled, their nanoseconds}. */
+    public static long[] totals()
+    {
+        return new long[] {shots, shotNanos};
+    }
+
+    /** For the dev test: average time of a hurt event of a player, microseconds. */
+    public static double averageMicros()
+    {
+        return shots == 0 ? 0 : shotNanos / 1000.0 / shots;
+    }
+
+    private void handle(LivingHurtEvent event)
+    {
         EntityPlayer victim = (EntityPlayer) event.entityLiving;
         String type = event.source.getDamageType();
+        ItemStack vest = Deci.playerVest(victim);
+        float vestFactor = working(vest) && vest.getItem() instanceof ItemVestDeci ? ((ItemVestDeci) vest.getItem()).getDamageMultiplier() : 1f;
         if ("gunDeci".equals(type))
         {
-            if (isHeadshot(event.source.getEntity(), victim))
+            // Decimation's hit handler multiplied boots, legs and chest, used up or not: those factors out again, the vest in
+            float amount = event.ammount;
+            for (int slot = 0; slot < HELMET; slot++)
             {
-                event.ammount *= multiplier(victim, HELMET);
+                if (broken(victim.getCurrentArmor(slot)))
+                {
+                    amount /= rawMultiplier(victim, slot);
+                }
             }
+            float chest = multiplier(victim, CHEST);
+            if (vestFactor < chest)
+            {
+                amount *= vestFactor / chest;
+            }
+            boolean head = isHeadshot(event.source.getEntity(), victim);
+            if (head)
+            {
+                amount *= multiplier(victim, HELMET);
+            }
+            event.ammount = amount;
+            wear(victim, vest, chest, vestFactor, head);
             return;
         }
         if (!"human".equals(type) && !"turret".equals(type))
@@ -69,17 +125,108 @@ public class ArmorGunfireHandler
         }
         float damage = event.ammount;
         float armor = 1;
-        for (int slot = 0; slot < HELMET; slot++)
+        for (int slot = 0; slot < CHEST; slot++)
         {
             armor *= againstNpc(multiplier(victim, slot));
         }
-        if (random.nextDouble() < HEADSHOT_CHANCE)
+        float chest = multiplier(victim, CHEST);
+        armor *= againstNpc(Durability.bodyFactor(chest, vestFactor));
+        boolean head = random.nextDouble() < HEADSHOT_CHANCE;
+        if (head)
         {
             armor *= againstNpc(multiplier(victim, HELMET));
         }
         // a .50 BMG NPC hit (NpcShots.armorPiercing): armor at half strength
         damage *= NpcShots.armorPiercing ? (float) Math.sqrt(armor) : armor;
         event.ammount = damage;
+        wear(victim, vest, chest, vestFactor, head);
+    }
+
+    /** One durability off each piece that counted against a shot (feature 10). */
+    private static void wear(EntityPlayer victim, ItemStack vest, float chest, float vestFactor, boolean head)
+    {
+        for (int slot = 0; slot < CHEST; slot++)
+        {
+            wear(victim.getCurrentArmor(slot));
+        }
+        if (vestFactor < chest)
+        {
+            wear(vest);
+        }
+        else
+        {
+            wear(victim.getCurrentArmor(CHEST));
+        }
+        if (head)
+        {
+            wear(victim.getCurrentArmor(HELMET));
+        }
+    }
+
+    /** One durability off a working Decimation armor piece or vest (masks and anything else untouched). */
+    static void wear(ItemStack piece)
+    {
+        if (working(piece))
+        {
+            piece.setItemDamage(piece.getItemDamage() + 1);
+        }
+    }
+
+    /** A Decimation armor piece or vest with durability left. */
+    static boolean working(ItemStack piece)
+    {
+        return worn(piece) && !Durability.broken(piece.getItemDamage(), piece.getMaxDamage());
+    }
+
+    /** A used up Decimation armor piece or vest. */
+    static boolean broken(ItemStack piece)
+    {
+        return worn(piece) && Durability.broken(piece.getItemDamage(), piece.getMaxDamage());
+    }
+
+    /** A Decimation armor piece or vest that wears (masks do not). */
+    private static boolean worn(ItemStack piece)
+    {
+        return piece != null && piece.getItem() instanceof ItemArmorDeci && !(piece.getItem() instanceof ItemMaskDeci)
+               && piece.getMaxDamage() > 0;
+    }
+
+    /**
+     * Melee and other blockable hits, last: Forge's ApplyArmor will take max(1, health x points / 25) off each armor
+     * piece and destroy one that passes its maximum; a piece is first set back just enough that the wear ends on the
+     * maximum (the at most one point of damage this leaves it to absorb counts for nothing).
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void meleeLast(LivingHurtEvent event)
+    {
+        if (event.entityLiving.worldObj.isRemote || !(event.entityLiving instanceof EntityPlayer) || event.source.isUnblockable()
+            || event.ammount <= 0)
+        {
+            return;
+        }
+        EntityPlayer victim = (EntityPlayer) event.entityLiving;
+        for (int slot = 0; slot <= HELMET; slot++)
+        {
+            ItemStack piece = victim.getCurrentArmor(slot);
+            if (worn(piece))
+            {
+                int points = ((ItemArmor) piece.getItem()).damageReduceAmount;
+                int vanilla = Math.max(1, (int) (event.ammount * points / 25f) + 1);
+                piece.setItemDamage(Durability.beforeVanillaWear(piece.getItemDamage(), piece.getMaxDamage(), vanilla));
+            }
+        }
+    }
+
+    /** Every Decimation armor piece 256, every vest 512 (masks keep theirs): at preInit, after Decimation's items exist. */
+    public static void setMaxima()
+    {
+        for (Object o : Item.itemRegistry)
+        {
+            if (o instanceof ItemArmorDeci && !(o instanceof ItemMaskDeci))
+            {
+                ((Item) o).setMaxDamage(o instanceof ItemVestDeci ? Durability.VEST : Durability.ARMOR);
+            }
+        }
     }
 
     /** Damage multiplier of the Decimation armor piece in a slot, 1 if none. */
@@ -92,7 +239,15 @@ public class ArmorGunfireHandler
         return 1f - NPC_PROTECTION * (1f - multiplier);
     }
 
+    /** A slot's factor as it protects now: 1 for none or a used up piece. */
     private static float multiplier(EntityPlayer player, int slot)
+    {
+        ItemStack piece = player.getCurrentArmor(slot);
+        return broken(piece) ? 1.0f : rawMultiplier(player, slot);
+    }
+
+    /** A slot's factor as Decimation's hit handler applies it (used up or not). */
+    private static float rawMultiplier(EntityPlayer player, int slot)
     {
         ItemStack piece = player.getCurrentArmor(slot);
         if (piece != null && piece.getItem() instanceof ItemArmorDeci)

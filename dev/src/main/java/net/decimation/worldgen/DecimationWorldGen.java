@@ -130,6 +130,8 @@ public class DecimationWorldGen
         infectedVariants = new net.decimation.fixes.InfectedVariants(event.getModConfigurationDirectory());
         // 60 round STANAG / AK magazines: guns and loot of Decimation exist after its preInit
         net.decimation.fixes.Magazines.register();
+        net.decimation.fixes.ArmorGunfireHandler.setMaxima(); // armor 256, vests 512 (feature 10: durability)
+        net.decimation.fixes.RepairPart.register(); // armor kits, plates, gun parts; military and police loot
         // guns of our own (tools/guns, assets/deci/...): the MAC-10 pilot
         net.decimation.fixes.NewGuns.register();
         net.decimation.fixes.NewSights.register(); // before SightPlacement: it moves these too
@@ -149,6 +151,7 @@ public class DecimationWorldGen
         net.decimation.fixes.MoonClock moon = new net.decimation.fixes.MoonClock();
         net.decimation.fixes.WorldClock.listen(moon);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(moon);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunWear()); // gun wear: racks
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
@@ -156,6 +159,9 @@ public class DecimationWorldGen
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.RadiationHud()); // the dose icon
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.PlayerSkins()); // no Steve
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.DarkNights()); // DayZ nights
+            net.decimation.fixes.GunWearClient wearClient = new net.decimation.fixes.GunWearClient(); // jams, R to rack, tooltips
+            cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(wearClient);
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(wearClient);
         }
         // local kill / death counters for the menu and HUD; the menu's session check calls a
         // Mojang service that no longer answers, so the menu said "Play offline" with an invalid

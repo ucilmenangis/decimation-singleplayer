@@ -1,5 +1,6 @@
 package net.decimation.fixes;
 
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -66,6 +67,53 @@ public final class Deci
         }
         stack.stackTagCompound.setInteger("ammo", rounds);
         return true;
+    }
+
+    /** GunItem.category (aes): Decimation's WeaponCategory name (rifle, smg, mg, shotgun, pistol, revolver, rocket, crossbow ...). */
+    public static String gunCategory(Item gun)
+    {
+        return gun instanceof deci.ay.i && ((deci.ay.i) gun).aes != null ? ((deci.ay.i) gun).aes.name() : null;
+    }
+
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    private static KeyBinding reloadKey;
+
+    /** KeyBindingHandler.keyReload (deci.c.a field "do", a Java keyword, so read by reflection): Decimation's R. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static KeyBinding reloadKey()
+    {
+        if (reloadKey == null)
+        {
+            try
+            {
+                reloadKey = (KeyBinding) deci.c.a.class.getField("do").get(null);
+            }
+            catch (ReflectiveOperationException e)
+            {
+                return null;
+            }
+        }
+        return reloadKey;
+    }
+
+    /**
+     * Decimation's Rack animation of this gun on the gun renderer (GunAnimation.get b, "animations/<gunName aer>/<gunName>
+     * Rack.anib", into GunItemRenderer.iNSTANCE TI .currentAnimation TM, active): what PlayerData does after a reload.
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void playRack(ItemStack gun)
+    {
+        if (gun == null || !(gun.getItem() instanceof deci.ay.i) || deci.K.b.TI == null)
+        {
+            return;
+        }
+        String name = ((deci.ay.i) gun.getItem()).aer;
+        deci.F.a rack = deci.F.a.b(new net.minecraft.util.ResourceLocation("deci", "animations/" + name + "/" + name + "Rack.anib"));
+        if (rack != null)
+        {
+            deci.K.b.TI.TM = rack;
+            rack.active = true;
+        }
     }
 
     public static boolean isAttachment(Item item)
@@ -1008,6 +1056,13 @@ public final class Deci
         deci.Q.b data = deci.Q.b.e(player);
         ItemStack mask = data == null ? null : data.cx();
         return mask != null && (mask.getItem() == deci.aD.k.apo || mask.getItem() == deci.aD.k.app);
+    }
+
+    /** PlayerData.getVest (cw): the vest slot's stack, or null (fixes/ArmorGunfireHandler, feature 10). */
+    public static ItemStack playerVest(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        return data == null ? null : data.cw();
     }
 
     /** ItemRegistry.gasmask (apo): Decimation's gas mask. */
@@ -2173,6 +2228,46 @@ public final class Deci
         deci.ay.f[] more = java.util.Arrays.copyOf(now, now.length + 1);
         more[now.length] = (deci.ay.f) mag;
         g.aep = more;
+    }
+
+    /**
+     * As addLootLike, with as many copies in each pool as give the stack about this share of the pool's entries (pools
+     * differ: a military crate's holds about 191 entries, a police crate's about 14), at least one. Returns pools changed.
+     */
+    @SuppressWarnings("unchecked")
+    public static int addLootShare(Item like, net.minecraft.item.ItemStack add, double share)
+    {
+        deci.aD.l table = deci.a.b.a().f();
+        int n = 0;
+        try
+        {
+            for (Object entry : table.awA)
+            {
+                java.lang.reflect.Field f = entry.getClass().getDeclaredField("awC");
+                f.setAccessible(true);
+                java.util.List<net.minecraft.item.ItemStack> items = (java.util.List<net.minecraft.item.ItemStack>) f.get(entry);
+                boolean has = false;
+                for (net.minecraft.item.ItemStack s : items)
+                {
+                    has |= s != null && s.getItem() == like;
+                }
+                if (has)
+                {
+                    int copies = Math.max(1, (int) Math.round(share * items.size() / (1 - share)));
+                    for (int i = 0; i < copies; i++)
+                    {
+                        items.add(add.copy());
+                    }
+                    n++;
+                }
+            }
+            table.init();
+        }
+        catch (Exception e)
+        {
+            cpw.mods.fml.common.FMLLog.info("[deciworldgen] loot table change failed: %s", e);
+        }
+        return n;
     }
 
     /**

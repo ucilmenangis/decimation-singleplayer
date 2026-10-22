@@ -70,6 +70,9 @@ public class ZombieTest extends DevTestMode
         {
             w.difficultySetting = EnumDifficulty.NORMAL;
             w.setWorldTime(6000);
+            // creative and flying: a test before may have left the player in survival, and a hulk then killed it mid test
+            // (22 Oktober 2026: the watched infected left the world with the death, so no frenzy could be read)
+            p.setGameType(net.minecraft.world.WorldSettings.GameType.CREATIVE);
             p.capabilities.isFlying = true;
             DevTestArena.build(w, p);
             x0 = DevTestArena.X;
@@ -117,6 +120,9 @@ public class ZombieTest extends DevTestMode
             w.getWorldInfo().setThundering(false);
             w.getWorldInfo().setRainTime(24000);
             w.getWorldInfo().setThunderTime(24000);
+            // and no rain left fading: the strength falls 0.01 a tick, and isDaytime() counts it (22 Oktober 2026: x1.20 by day)
+            w.setRainStrength(0F);
+            w.setThunderStrength(0F);
             w.setWorldTime(18000);
             nightSpeed0 = ratio(night); // Decimation resets the base every tick: compare value / base
             nightHit0 = night.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();

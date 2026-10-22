@@ -35,6 +35,7 @@ public class RadiationTest extends DevTestMode
     private volatile boolean shotTaken;
     private ObjectZone rad;
     private boolean regenBefore = true;
+    private WorldSettings.GameType modeBefore;
     private String spawningBefore = "true";
     private int mark, waited;
     private float healthMark;
@@ -85,6 +86,7 @@ public class RadiationTest extends DevTestMode
         {
             DevTestArena.build(w, p);
             w.setWorldTime(6000);
+            modeBefore = p.theItemInWorldManager.getGameType();
             p.setGameType(WorldSettings.GameType.SURVIVAL);
             p.capabilities.disableDamage = false;
             regenBefore = w.getGameRules().getGameRuleBooleanValue("naturalRegeneration");
@@ -184,6 +186,10 @@ public class RadiationTest extends DevTestMode
             p.setHealth(p.getMaxHealth());
             ZoneStore.remove(rad);
             w.getGameRules().setOrCreateGameRule("naturalRegeneration", String.valueOf(regenBefore));
+            if (modeBefore != null)
+            {
+                p.setGameType(modeBefore);                    // as the world had it (a survival player was later killed)
+            }
             w.getGameRules().setOrCreateGameRule("doMobSpawning", spawningBefore);
         }
         if (t == 1010)
