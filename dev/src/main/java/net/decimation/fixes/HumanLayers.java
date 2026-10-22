@@ -78,6 +78,8 @@ public final class HumanLayers implements IResourceManagerReloadListener
     private static final Picture MISSING = new Picture(0, 0, null);
     private static final Slot[] slots = new Slot[SLOTS];
     private static Slot current;
+    /** This NPC's own picture with its blood splats (Wounds), bound instead of the look's; null for none. */
+    private static ResourceLocation wounded;
     private static long frame;
     private static int made;
 
@@ -93,6 +95,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
     {
         active = false;
         current = null;
+        wounded = null;
         if (!enabled)
         {
             return;
@@ -122,6 +125,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
         }
         s.used = frame;
         current = s;
+        wounded = Wounds.picture(entity, (look[7] & INFECTED) != 0, key, s.argb, s.w, s.h);
         active = true;
         drawn++;
     }
@@ -131,7 +135,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
     {
         if (current != null)
         {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(current.location);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(wounded != null ? wounded : current.location);
         }
     }
 
@@ -341,6 +345,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
         {
             frame++;
             made = 0;
+            Wounds.frame();
         }
     }
 
@@ -357,6 +362,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
                 s.key = -1;
             }
         }
+        Wounds.reload();
     }
 
     private static final class Picture
@@ -379,6 +385,8 @@ public final class HumanLayers implements IResourceManagerReloadListener
         DynamicTexture texture;
         int w, h;
         long key = -1, used = Long.MIN_VALUE;
+        /** The picture shown (Wounds paints its splats on a copy). */
+        int[] argb;
 
         Slot(int i)
         {
@@ -400,6 +408,7 @@ public final class HumanLayers implements IResourceManagerReloadListener
             }
             System.arraycopy(p.argb, 0, texture.getTextureData(), 0, p.argb.length);
             texture.updateDynamicTexture();
+            argb = p.argb;
         }
     }
 }

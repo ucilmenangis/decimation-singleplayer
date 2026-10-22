@@ -447,6 +447,28 @@ public final class Deci
         public boolean creativeFlag() { return data.cP(); }
         public void setCreativeFlag(boolean b) { data.m(b); }
         public void healFully() { data.bH(); }
+        /** getBlood (bO): 0 .. 20. */
+        public int blood() { return data.bO(); }
+        /** getDaysSurvived (dj). */
+        public long daysSurvived() { return data.dj(); }
+        /** getClanName (cY): ClanManagerV1.UNKNOWN_CLAN ("unknown") when in none. */
+        public String clanName() { return data.cY(); }
+        /** In a clan: the name is not ClanManagerV1.UNKNOWN_CLAN (net.decimation.mod.server.clans.a). */
+        public boolean inClan() { return !net.decimation.mod.server.clans.a.UNKNOWN_CLAN.equals(data.cY()); }
+        /** getHumanityRankText (O): "Survivor", "Hero II", ... with its colour code in front. */
+        public String humanityRankText() { return data.O(data.cd()); }
+        /** getMask (cx): the mask slot (gas mask, goggles), or null. */
+        public net.minecraft.item.ItemStack mask() { return data.cx(); }
+        /** getTargetTimer (bA) in ticks, getTargetScore (bB), getTargetBestScore (bz): the target range run. */
+        public int targetTimer() { return data.bA(); }
+        public int targetScore() { return data.bB(); }
+        public int targetBestScore() { return data.bz(); }
+        /**
+         * getFlagN (cF) / setFlagN (l): ModelDeciPlayer draws the player whole (head, body in place) instead of as the
+         * first person body; Decimation's inventory screen sets it around its own player picture.
+         */
+        public boolean guiPose() { return data.cF(); }
+        public void setGuiPose(boolean b) { data.l(b); }
     }
 
     // ---- server config: ServerConfig = deci.aJ.b (static fields)
@@ -1252,6 +1274,42 @@ public final class Deci
     public static void showHudStats()
     {
         deci.b.i.cf = false;
+    }
+
+    /**
+     * Decimation's HUD switches (ClientState): cf hides the stats list and the player figure behind it (its "cancel gui"
+     * key, O), cl is its unused old GUI (config enableOldGui): vanilla hearts, armor, food and experience stay, and the
+     * big food / water / blood / health icons go. {cf, cl}.
+     */
+    public static boolean[] hudSwitches()
+    {
+        return new boolean[] {deci.b.i.cf, deci.b.i.cl};
+    }
+
+    public static void setHudSwitches(boolean hideStats, boolean oldGui)
+    {
+        deci.b.i.cf = hideStats;
+        deci.b.i.cl = oldGui;
+    }
+
+    /** Decimation's 9 x 9 water and blood icons (ClientResources ab, ac: 32 x 32 sheets; empty at u 0, full 9, half 18). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static net.minecraft.util.ResourceLocation[] waterBloodIcons()
+    {
+        return new net.minecraft.util.ResourceLocation[] {deci.b.c.ab, deci.b.c.ac};
+    }
+
+    /** Decimation's range finder (ItemRangeFinder deci.av.t): its HUD shows the distance to the block looked at. */
+    public static boolean isRangeFinder(net.minecraft.item.Item item)
+    {
+        return item instanceof deci.av.t;
+    }
+
+    /** Decimation's Settings page (GuiMenuOptions deci.i.f). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean isOptionsMenu(net.minecraft.client.gui.GuiScreen screen)
+    {
+        return screen instanceof deci.i.f;
     }
 
     /**
