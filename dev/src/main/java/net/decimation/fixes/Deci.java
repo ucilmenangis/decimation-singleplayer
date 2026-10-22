@@ -1057,12 +1057,15 @@ public final class Deci
         return data != null && data.co();
     }
 
-    /** PlayerData.getMask (cx) is a gas mask (ItemRegistry gasmask apo, gasmaskmilitary app): Decimation's protection. */
+    /**
+     * PlayerData.getMask (cx) is a gas mask (ItemRegistry gasmask apo, gasmaskmilitary app): Decimation's protection; since
+     * 22 Oktober 2026 only while its filter has life left (fixes/GasMaskFilter).
+     */
     public static boolean wearsGasMask(EntityPlayer player)
     {
         deci.Q.b data = deci.Q.b.e(player);
         ItemStack mask = data == null ? null : data.cx();
-        return mask != null && (mask.getItem() == deci.aD.k.apo || mask.getItem() == deci.aD.k.app);
+        return isGasMask(mask) && GasMaskFilter.left(player, mask) > 0;
     }
 
     /** PlayerData.getVest (cw): the vest slot's stack, or null (fixes/ArmorGunfireHandler, feature 10). */
@@ -2845,5 +2848,96 @@ public final class Deci
         {
             return null;
         }
+    }
+
+    // ---- feature agent (branch bugfix)
+
+    /**
+     * A Decimation gas mask (ItemRegistry gasmask apo, gasmaskmilitary app): the masks PlayerData.tick spares from the zone
+     * damage and IngameHud calls "Protected".
+     */
+    public static boolean isGasMask(ItemStack stack)
+    {
+        return stack != null && (stack.getItem() == deci.aD.k.apo || stack.getItem() == deci.aD.k.app);
+    }
+
+    /** PlayerData.getMask (cx): the stack in Decimation's mask slot (the same object the gear screen's slot holds), or null. */
+    public static ItemStack playerMask(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        return data == null ? null : data.cx();
+    }
+
+    /**
+     * PlayerData.markDirty (df): on the server, the player's data (conditions, backpack, vest and mask with their tags) goes
+     * to the client with PacketSyncPlayerData at its next tick; nothing on the client.
+     */
+    public static void markPlayerDataDirty(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        if (data != null)
+        {
+            data.df();
+        }
+    }
+
+    /** ItemRegistry.itemScrapMilitaryGasMaskFilter (amW): Decimation's "Gas Mask Filter" (deci:ItemScrapMilitaryGasMaskFilter). */
+    public static Item gasMaskFilter()
+    {
+        return deci.aD.k.amW;
+    }
+
+    /** CreativeTabRegistry.axl ("tabDeciTools"): the creative tab Decimation's medical items (pills, syringes) are in. */
+    public static net.minecraft.creativetab.CreativeTabs medicalTab()
+    {
+        return deci.aD.r.axl;
+    }
+
+    /**
+     * PlayerData.isLongTimerElapsed (cj): 8 s since its last markActionTime; Decimation's medical items play their "open"
+     * sound only then.
+     */
+    public static boolean actionTimerElapsed(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        return data != null && data.cj();
+    }
+
+    /** PlayerData.markActionTime (cq): starts that timer again. */
+    public static void markActionTime(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        if (data != null)
+        {
+            data.cq();
+        }
+    }
+
+    /** LootTableRegistry.hasPool (deci.aD.l.d): a right click on this block rolls Decimation's loot (crates, wrecks, bins). */
+    public static boolean hasLootPool(net.minecraft.block.Block block)
+    {
+        return block != null && deci.a.b.a().f().d(block);
+    }
+
+    /**
+     * The weight LootPool.fillInventory (deci.aB.c) gives a loot entry: its item's getLootChance as a LootChanceItem
+     * (deci.ao.d, Decimation's described items: 0.5), OwnedItem (deci.ao.c, guns) or ItemArmorDeci, else 0.9.
+     */
+    public static double lootWeight(ItemStack stack)
+    {
+        Item i = stack == null ? null : stack.getItem();
+        if (i instanceof deci.ao.d)
+        {
+            return ((deci.ao.d) i).getLootChance();
+        }
+        if (i instanceof deci.ao.c)
+        {
+            return ((deci.ao.c) i).getLootChance();
+        }
+        if (i instanceof net.decimation.mod.common.item.armor.ItemArmorDeci)
+        {
+            return ((net.decimation.mod.common.item.armor.ItemArmorDeci) i).getLootChance();
+        }
+        return 0.9;
     }
 }

@@ -86,6 +86,17 @@ class RadiationDoseTest
     }
 
     @Test
+    void aPillTakesFortyPointsNeverBelowNothing()
+    {
+        // radiation pills (user, 22 Oktober 2026, idea 41): 40 percentage points off at once
+        assertEquals(RadiationDose.MAX * 50 / 100, RadiationDose.lowered(RadiationDose.MAX * 90 / 100, 40));
+        assertEquals(50, RadiationDose.percent(RadiationDose.lowered(RadiationDose.MAX * 90 / 100, 40)));
+        assertEquals(RadiationDose.MAX * 60 / 100, RadiationDose.lowered(RadiationDose.MAX, 40));
+        assertEquals(0, RadiationDose.lowered(RadiationDose.MAX * 20 / 100, 40));
+        assertEquals(0, RadiationDose.lowered(0, 40));
+    }
+
+    @Test
     void aBrokenSaveIsClamped()
     {
         NBTTagCompound tag = new NBTTagCompound();

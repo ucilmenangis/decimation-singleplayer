@@ -133,6 +133,20 @@ public class ZoneStore
         return zones.size();
     }
 
+    /** Every zone of ours of this kind as {x1, y1, z1, x2, y2, z2} (city/WastelandRadiation at world load, dev tests). */
+    public static synchronized List<int[]> boxes(ZoneKind kind)
+    {
+        List<int[]> out = new ArrayList<int[]>();
+        for (ObjectZone zone : zones)
+        {
+            if (net.decimation.fixes.Deci.isZone(zone, kind))
+            {
+                out.add(new int[] {zone.zoneX1, zone.zoneY1, zone.zoneZ1, zone.zoneX2, zone.zoneY2, zone.zoneZ2});
+            }
+        }
+        return out;
+    }
+
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event)
     {

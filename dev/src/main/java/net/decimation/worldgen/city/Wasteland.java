@@ -290,9 +290,10 @@ public final class Wasteland
      * One MILITARY zone over the district of this cell: its 2 x 2 cells (128 x 128 blocks), y 0 to
      * 255, added once per world when the first chunk near it is populated (StructureData marker).
      * Decimation then gives 25 % of the infected spawning there the military look and draws the
-     * district on the GPS map; the buildings no longer carry boxes of their own.
+     * district on the GPS map; the buildings no longer carry boxes of their own. Since 22 Oktober 2026
+     * also the RADIATION zone over the wasteland city (WastelandRadiation). Public for dev tests.
      */
-    static void zone(World world, int cellX, int cellZ)
+    public static void zone(World world, int cellX, int cellZ)
     {
         long seed = world.getSeed();
         if (!district(style(seed, cellX, cellZ)))
@@ -302,17 +303,17 @@ public final class Wasteland
         int gx = Math.floorDiv(cellX, 2) * 2, gz = Math.floorDiv(cellZ, 2) * 2;
         String id = "!wz_" + gx + "_" + gz;
         StructureData data = StructureData.get(world);
-        if (data.baseY(id) != null)
+        if (data.baseY(id) == null)
         {
-            return;
+            int x0 = gx * CELL * 16, z0 = gz * CELL * 16, size = 2 * CELL * 16;
+            if (ZoneStore.add(ZoneKind.MILITARY, x0, 0, z0, x0 + size - 1, 255, z0 + size - 1) != null)
+            {
+                data.setBaseY(id, 1);
+                FMLLog.info("[%s] wasteland military zone %d,%d to %d,%d", DecimationWorldGen.MODID, x0, z0,
+                            x0 + size - 1, z0 + size - 1);
+            }
         }
-        int x0 = gx * CELL * 16, z0 = gz * CELL * 16, size = 2 * CELL * 16;
-        if (ZoneStore.add(ZoneKind.MILITARY, x0, 0, z0, x0 + size - 1, 255, z0 + size - 1) != null)
-        {
-            data.setBaseY(id, 1);
-            FMLLog.info("[%s] wasteland military zone %d,%d to %d,%d", DecimationWorldGen.MODID, x0, z0,
-                        x0 + size - 1, z0 + size - 1);
-        }
+        WastelandRadiation.add(data, gx, gz);   // the whole wasteland city one radiation zone (feature 7)
     }
 
     /**

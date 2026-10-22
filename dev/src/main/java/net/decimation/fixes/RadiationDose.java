@@ -63,6 +63,25 @@ public final class RadiationDose
         return shown;
     }
 
+    /** The dose after a pill that takes this many percentage points off, never below nothing. */
+    static int lowered(int dose, int points)
+    {
+        return Math.max(0, dose - MAX / 100 * points);
+    }
+
+    /**
+     * Radiation pills (fixes/RadiationPills; user, 22 Oktober 2026): the dose falls by these percentage points at once
+     * (server). The HUD follows by itself: the next tick sends the new percent.
+     */
+    public static void lower(EntityPlayer p, int points)
+    {
+        Dose d = (Dose) p.getExtendedProperties(KEY);
+        if (d != null)
+        {
+            d.dose = lowered(d.dose, points);
+        }
+    }
+
     /** A player's dose (server): what the save keeps. */
     static final class Dose implements IExtendedEntityProperties
     {

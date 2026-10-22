@@ -23,5 +23,7 @@ public final class Net
         CHANNEL.registerMessage(RadiationDose.SyncHandler.class, RadiationDose.Sync.class, 1, Side.CLIENT);   // the dose on the HUD
         CHANNEL.registerMessage(MoonClock.DayHandler.class, MoonClock.Day.class, 2, Side.CLIENT);   // the day, for the moon phase
         CHANNEL.registerMessage(GunWear.RackHandler.class, GunWear.Rack.class, 3, Side.SERVER);   // rack a jammed gun
+        // ids from 32: the feature agent's (branch bugfix; docs/roadmap.md "Feature order")
+        CHANNEL.registerMessage(GasMaskFilter.FitHandler.class, GasMaskFilter.FitMessage.class, 32, Side.SERVER);   // fit a gas mask filter
     }
 }

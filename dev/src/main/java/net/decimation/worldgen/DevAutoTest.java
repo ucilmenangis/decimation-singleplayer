@@ -167,6 +167,7 @@ public class DevAutoTest
         if (name.equals("skins")) return new net.decimation.worldgen.devtest.SkinsTest();
         if (name.equals("nights")) return new net.decimation.worldgen.devtest.NightsTest();
         if (name.equals("durability")) return new net.decimation.worldgen.devtest.DurabilityLiveTest();
+        if (name.equals("radset")) return new net.decimation.worldgen.devtest.RadSetTest(); // feature 7: pills, filters, wasteland
         if (name.equals("lootmags")) return new net.decimation.worldgen.devtest.LootMagsTest();
         if (name.equals("gripsweep")) return new net.decimation.worldgen.devtest.GripSweepTest();
         if (name.equals("invshiftmp")) return new net.decimation.worldgen.devtest.InvShiftRemoteTest();

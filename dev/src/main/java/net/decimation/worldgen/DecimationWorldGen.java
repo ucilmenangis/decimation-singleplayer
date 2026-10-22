@@ -152,6 +152,19 @@ public class DecimationWorldGen
         net.decimation.fixes.WorldClock.listen(moon);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(moon);
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.GunWear()); // gun wear: racks
+        // feature 7, radiation set: gas mask filters wear only in radiation and are refitted with Decimation's Gas Mask Filter
+        net.decimation.fixes.GasMaskFilter filters = new net.decimation.fixes.GasMaskFilter();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(filters);
+        cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(filters);
+        net.decimation.fixes.GasMaskFilter.addLoot(); // Gas Mask Filters in military and police loot
+        net.decimation.fixes.RadiationPills.register(); // radiation pills: 40 points off the dose, medical loot
+        // the wasteland city one radiation zone: worlds made before it get theirs at load (city/WastelandRadiation)
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.worldgen.city.WastelandRadiation());
+        if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
+        {
+            // right click fits a filter, "Filter: N%" in a gas mask's tooltip, Decimation's HUD unprotected when it is empty
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new net.decimation.fixes.GasMaskFilter.Client());
+        }
         if (cpw.mods.fml.common.FMLCommonHandler.instance().getSide().isClient())
         {
             net.decimation.fixes.SightPlacement.apply(); // sights onto each gun's rail (sight_offsets.txt)
