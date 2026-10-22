@@ -42,18 +42,18 @@ class TraderMarketTest
     @Test
     void pricesAreWholeCapsNeverBelowOneAndSellNeverAboveBuy()
     {
-        int[] p = TraderMarket.prices(10, 2, 1.0, 1.0, false, false);
+        int[] p = TraderMarket.prices(10, 2, 1.0, 1.0, 1.0, false, false);
         assertEquals(10, p[0]);
         assertEquals(2, p[1]);
-        p = TraderMarket.prices(1, 1, 0.85, 0.6, false, false);
+        p = TraderMarket.prices(1, 1, 0.85, 0.6, 0.6, false, false);
         assertEquals(1, p[0], "never below 1");
-        p = TraderMarket.prices(10, 0, 1.0, 1.0, false, false);
+        p = TraderMarket.prices(10, 0, 1.0, 1.0, 1.0, false, false);
         assertEquals(0, p[1], "an offer the trader does not buy stays so");
-        p = TraderMarket.prices(100, 25, 1.0, 1.0, true, false);
+        p = TraderMarket.prices(100, 25, 1.0, 1.0, 1.0, true, false);
         assertEquals(70, p[0], "on sale: buy at 70 %");
-        p = TraderMarket.prices(100, 25, 1.0, 1.0, false, true);
+        p = TraderMarket.prices(100, 25, 1.0, 1.0, 1.0, false, true);
         assertEquals(38, p[1], "in demand: sells to it for 150 %");
-        p = TraderMarket.prices(10, 9, 1.0, 1.0, false, true);
+        p = TraderMarket.prices(10, 9, 1.0, 1.0, 1.0, false, true);
         assertTrue(p[1] < p[0], "a sale price stays under the buy price: " + p[1] + " / " + p[0]);
     }
 
@@ -96,5 +96,17 @@ class TraderMarketTest
         assertEquals(6, rows.get("B")[0][1], "B pays under A's lowest price");
         assertEquals(2, rows.get("A")[0][1], "A's own sale price was already under");
         assertEquals(1, rows.get("B")[1][1], "another item untouched");
+    }
+
+    @Test
+    void buyingRaisesOnlyTheBuyPriceAndSellingLowersOnlyTheSellPrice()
+    {
+        int[] calm = TraderMarket.prices(100, 90, 1.0, 1.0, 1.0, false, false);
+        int[] bought = TraderMarket.prices(100, 90, 1.0, TraderMarket.factor(20), 1.0, false, false);
+        assertEquals(160, bought[0], "twenty buys: the buy price up 60 %");
+        assertEquals(calm[1], bought[1], "the sell price does not follow: buying then selling back never pays");
+        int[] sold = TraderMarket.prices(100, 90, 1.0, 1.0, TraderMarket.factor(-10), false, false);
+        assertEquals(calm[0], sold[0], "ten sales leave the buy price");
+        assertEquals(63, sold[1], "and lower the sell price 30 %");
     }
 }

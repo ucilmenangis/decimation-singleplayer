@@ -73,11 +73,15 @@ public final class TraderMarket
         return pressure * 0.7;
     }
 
-    /** The day's {buy, sell} of an offer: whole caps, buy at least 1, sell 0 stays 0 and stays under the buy price. */
-    static int[] prices(int buy, int sell, double drift, double factor, boolean sale, boolean demand)
+    /**
+     * The day's {buy, sell} of an offer: whole caps, buy at least 1, sell 0 stays 0 and stays under the buy price. Buying
+     * pushes only the buy price (buyFactor) and selling only the sell price (sellFactor): buying a stack up never raises
+     * what selling it back pays (security review, 23 Oktober 2026).
+     */
+    static int[] prices(int buy, int sell, double drift, double buyFactor, double sellFactor, boolean sale, boolean demand)
     {
-        int b = Math.max(1, (int) Math.round(buy * drift * factor * (sale ? 0.7 : 1)));
-        int s = sell <= 0 ? 0 : Math.max(1, (int) Math.round(sell * drift * factor * (demand ? 1.5 : 1)));
+        int b = Math.max(1, (int) Math.round(buy * drift * buyFactor * (sale ? 0.7 : 1)));
+        int s = sell <= 0 ? 0 : Math.max(1, (int) Math.round(sell * drift * sellFactor * (demand ? 1.5 : 1)));
         if (s >= b)
         {
             s = Math.max(0, b - 1);
@@ -238,12 +242,14 @@ public final class TraderMarket
                 int[] p = Deci.offerPrices(b.get(i));
                 String k = key(Deci.offerStack(b.get(i)));
                 ks[i] = p[2] + "/" + k;                    // per currency: caps and gold prices never compare
-                Double pr;
+                Double pb, ps;
                 synchronized (LOCK)
                 {
-                    pr = d.pressure.get(k);
+                    pb = d.pressure.get(BUY + k);
+                    ps = d.pressure.get(SELL + k);
                 }
-                int[] np = prices(p[0], p[1], drift(seed, day, k), factor(pr == null ? 0 : pr), sale.contains(i), demand.contains(i));
+                int[] np = prices(p[0], p[1], drift(seed, day, k), factor(pb == null ? 0 : pb), factor(ps == null ? 0 : ps),
+                                  sale.contains(i), demand.contains(i));
                 rows[i] = new int[] {np[0], np[1], sale.contains(i) ? 1 : demand.contains(i) ? 2 : 0};
             }
             t.put(kind, rows);
@@ -297,7 +303,8 @@ public final class TraderMarket
         return 0;
     }
 
-    /** For the dev test: the day's {buy, sell, tag} rows of a trader class, its base {buy, sell} rows, a stack's pressure. */
+    /** For the dev test: the day's {buy, sell, tag} rows of a trader class, its base {buy, sell} rows, a stack's pressure
+     *  (its buy pressure plus its sell pressure). */
     public static int[][] rowsOf(Class<?> c)
     {
         return table.get(c.getName());
@@ -322,11 +329,13 @@ public final class TraderMarket
     {
         World w = overworld();
         Double p;
+        Double q;
         synchronized (LOCK)
         {
-            p = w == null ? null : data(w).pressure.get(key(s));
+            p = w == null ? null : data(w).pressure.get(BUY + key(s));
+            q = w == null ? null : data(w).pressure.get(SELL + key(s));
         }
-        return p == null ? 0 : p;
+        return (p == null ? 0 : p) + (q == null ? 0 : q);
     }
 
     /** For the dev test: {nanoseconds of one refresh without sending (median of n), the table's bytes}. */
@@ -413,9 +422,8 @@ public final class TraderMarket
             lastDay = day;
             refresh(true);
         }
-        if (tradesChanged)
+        if (handleTrades(w))
         {
-            tradesChanged = false;
             refresh(true);
         }
         for (Class<?> c : new ArrayList<Class<?>>(Deci.traderOfferLists().keySet()))
@@ -487,12 +495,16 @@ public final class TraderMarket
     }
 
     private static final Object LOCK = new Object();
-    private static volatile boolean tradesChanged;
+    /** Pressure keys: buys push "b:" (buy prices up), sales push "s:" (sell prices down). */
+    static final String BUY = "b:", SELL = "s:";
+    /** Trades checked on the network thread, handled on the server thread: {player, action, key, trader entity id}. */
+    private static final java.util.concurrent.ConcurrentLinkedQueue<Object[]> DONE = new java.util.concurrent.ConcurrentLinkedQueue<Object[]>();
 
     /**
      * In Decimation's server channel right after its codec. Decimation handles a trade message at once on this thread, so
      * the player's caps are read just before and just after: a trade counts only when its own message moved the caps by
-     * exactly its price, for an item the trader's class offers (a refused or forged message moves nothing).
+     * exactly its price. Nothing else happens on this thread (security review, 23 Oktober 2026): the item and the trader
+     * are checked and the pressure moved on the server thread (DONE, onServerTick).
      */
     @ChannelHandler.Sharable
     static final class Watcher extends ChannelInboundHandlerAdapter
@@ -508,33 +520,41 @@ public final class TraderMarket
                 return;
             }
             EntityPlayerMP p = ((NetHandlerPlayServer) h).playerEntity;
-            net.minecraft.entity.Entity trader = p.worldObj.getEntityByID((Integer) t[3]);
-            if (trader != null && Deci.isTrader(trader))
-            {
-                ensure(trader.getClass());                  // the day's prices are what the handler checks against
-            }
             long caps = Deci.player(p).bottlecaps(), gold = Deci.player(p).goldBottlecaps();
             ctx.fireChannelRead(msg);
             seen++;
-            String k = key((ItemStack) t[1]);
-            if (trader != null && traded((Integer) t[0], caps, Deci.player(p).bottlecaps(), gold, Deci.player(p).goldBottlecaps(),
-                                         (Integer) t[2], (Integer) t[4]) && offers(trader.getClass(), k))
+            if (traded((Integer) t[0], caps, Deci.player(p).bottlecaps(), gold, Deci.player(p).goldBottlecaps(), (Integer) t[2], (Integer) t[4]))
             {
-                World w = overworld();
-                if (w != null)
-                {
-                    synchronized (LOCK)
-                    {
-                        Data d = data(w);
-                        Double old = d.pressure.get(k);
-                        d.pressure.put(k, (old == null ? 0 : old) + ((Integer) t[0] == 0 ? 1 : -1));
-                        d.markDirty();
-                    }
-                    counted++;
-                    tradesChanged = true;
-                }
+                DONE.add(new Object[] {p, t[0], key((ItemStack) t[1]), t[3]});
             }
         }
+    }
+
+    /** Server thread: the trades the watcher saw go through, for an item their trader's class offers, push its pressure. */
+    private static boolean handleTrades(World w)
+    {
+        boolean changed = false;
+        for (Object[] t; (t = DONE.poll()) != null; )
+        {
+            EntityPlayerMP p = (EntityPlayerMP) t[0];
+            net.minecraft.entity.Entity trader = p.worldObj.getEntityByID((Integer) t[3]);
+            String k = (String) t[2];
+            if (trader == null || !Deci.isTrader(trader) || !offers(trader.getClass(), k))
+            {
+                continue;
+            }
+            synchronized (LOCK)
+            {
+                Data d = data(w);
+                String pk = ((Integer) t[1] == 0 ? BUY : SELL) + k;
+                Double old = d.pressure.get(pk);
+                d.pressure.put(pk, (old == null ? 0 : old) + ((Integer) t[1] == 0 ? 1 : -1));
+                d.markDirty();
+            }
+            counted++;
+            changed = true;
+        }
+        return changed;
     }
 
     /** A class's live list holds offers we did not write (it was reset): the day's prices go back in. */
