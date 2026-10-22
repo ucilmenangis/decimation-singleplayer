@@ -39,13 +39,15 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  *   HEADSHOT_CHANCE of hits, because NPC shots carry no hit position and NPCs
  *   always aim at eye level.
  *
- * Durability (feature 10, user 22 Oktober 2026; docs/superpowers/specs/2026-10-22-durability-design.md): every piece
- * that counted against a shot loses 1 (body pieces on every shot, the helmet on a headshot, the vest or the chest piece:
- * whichever counted); a used up piece (Durability.broken: damage at the maximum) is kept but protects nothing, so its
- * factor is taken back out of Decimation's player hit; vests (ItemVestDeci, PlayerData's vest slot), which no code
- * applied before, protect body shots: the stronger of vest and chest piece counts (Durability.bodyFactor). Melee hits
- * wear armor the vanilla way (Forge's ArmorProperties.ApplyArmor, at least 1 a piece, absorbing at most what is left);
- * meleeLast keeps that wear from destroying a piece: it stops on the maximum.
+ * Durability (feature 10, user 22 Oktober 2026; docs/superpowers/specs/2026-10-22-durability-design.md): a shot wears
+ * boots, legs, chest piece and vest by 1 each and the helmet on a headshot (user, 23 Oktober 2026: "vest armor still
+ * doesnt affected when hit by zombie or shot"; before, only the one of vest and chest piece that counted wore); a used up
+ * piece (Durability.broken: damage at the maximum) is kept but protects nothing, so its factor is taken back out of
+ * Decimation's player hit; vests (ItemVestDeci, PlayerData's vest slot), which no code applied before, protect body
+ * shots: the stronger of vest and chest piece counts (Durability.bodyFactor). Melee hits wear armor the vanilla way
+ * (Forge's ArmorProperties.ApplyArmor, at least 1 a piece, absorbing at most what is left), and the vest, which Forge
+ * never sees, the same way (Durability.meleeWear); meleeLast keeps that wear from destroying a piece: it stops on the
+ * maximum.
  */
 public class ArmorGunfireHandler
 {
@@ -116,7 +118,7 @@ public class ArmorGunfireHandler
                 amount *= multiplier(victim, HELMET);
             }
             event.ammount = amount;
-            wear(victim, vest, chest, vestFactor, head);
+            wear(victim, vest, head);
             return;
         }
         if (!"human".equals(type) && !"turret".equals(type))
@@ -139,24 +141,17 @@ public class ArmorGunfireHandler
         // a .50 BMG NPC hit (NpcShots.armorPiercing): armor at half strength
         damage *= NpcShots.armorPiercing ? (float) Math.sqrt(armor) : armor;
         event.ammount = damage;
-        wear(victim, vest, chest, vestFactor, head);
+        wear(victim, vest, head);
     }
 
-    /** One durability off each piece that counted against a shot (feature 10). */
-    private static void wear(EntityPlayer victim, ItemStack vest, float chest, float vestFactor, boolean head)
+    /** One durability off boots, legs, chest piece and vest on a shot, and off the helmet on a headshot (feature 10). */
+    private static void wear(EntityPlayer victim, ItemStack vest, boolean head)
     {
-        for (int slot = 0; slot < CHEST; slot++)
+        for (int slot = 0; slot <= CHEST; slot++)
         {
             wear(victim.getCurrentArmor(slot));
         }
-        if (vestFactor < chest)
-        {
-            wear(vest);
-        }
-        else
-        {
-            wear(victim.getCurrentArmor(CHEST));
-        }
+        wear(vest);
         if (head)
         {
             wear(victim.getCurrentArmor(HELMET));
@@ -194,7 +189,8 @@ public class ArmorGunfireHandler
     /**
      * Melee and other blockable hits, last: Forge's ApplyArmor wears each armor piece (Durability.forgeWear) and destroys
      * one that passes its maximum; a piece this hit would push past it is first set to the maximum less 1, where Forge's
-     * wear is exactly 1 (Durability.beforeVanillaWear): it ends on the maximum, kept, and never gains durability.
+     * wear is exactly 1 (Durability.beforeVanillaWear): it ends on the maximum, kept, and never gains durability. The vest
+     * (not an armor slot, so Forge never wears it) takes the same wear here, stopping on its maximum.
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void meleeLast(LivingHurtEvent event)
@@ -213,6 +209,12 @@ public class ArmorGunfireHandler
                 int points = ((ItemArmor) piece.getItem()).damageReduceAmount;
                 piece.setItemDamage(Durability.beforeVanillaWear(piece.getItemDamage(), piece.getMaxDamage(), event.ammount, points));
             }
+        }
+        ItemStack vest = Deci.playerVest(victim);              // synced to the client with Decimation's player data
+        if (worn(vest))
+        {
+            int points = ((ItemArmor) vest.getItem()).damageReduceAmount;
+            vest.setItemDamage(Durability.meleeWear(vest.getItemDamage(), vest.getMaxDamage(), event.ammount, points));
         }
     }
 

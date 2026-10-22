@@ -82,4 +82,26 @@ public final class Durability
     {
         return damage + forgeWear(health, points, max, damage) > max ? Math.max(0, max - 1) : damage;
     }
+
+    /**
+     * A vest's damage after a melee hit (user, 23 Oktober 2026: "vest armor still doesnt affected when hit by zombie"):
+     * Forge wears only the four armor slots, so the vest gets the wear Forge gives a piece of its points, stopping on the
+     * maximum (kept, never destroyed).
+     */
+    public static int meleeWear(int damage, int max, float health, int points)
+    {
+        return Math.min(max, damage + forgeWear(health, points, max, damage));
+    }
+
+    /** A durability bar on the item's icon, as vanilla draws one for a damaged tool: only once something is used up. */
+    public static boolean barShown(int damage, int max)
+    {
+        return max > 0 && damage > 0;
+    }
+
+    /** The share used up, 0 .. 1, as Forge's Item.getDurabilityForDisplay answers it (1 draws an empty bar). */
+    public static double barFraction(int damage, int max)
+    {
+        return max <= 0 ? 0 : Math.max(0, Math.min(1, damage / (double) max));
+    }
 }

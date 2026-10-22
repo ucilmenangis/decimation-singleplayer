@@ -126,11 +126,12 @@ public class TracerTest extends DevTestMode
                         + "(bandit facing away; before the fix about 180)", DecimationWorldGen.MODID, tracerCount,
                         tracerCount > 0 ? tracerSum / tracerCount : 0, tracerMax);
             DevTestResults.value("tracer", "tracer colours (test bandit)", colours + ", all tracers seen " + allSeen);
-            // every NPC shot a tracer in the NPC's own colour (user, 22 Oktober 2026): Decimation drew GENERIC on 40 %
-            // of the shots and INVIS on the rest; a gun with a tracer colour draws it on every shot
-            boolean one = colours.size() == 1 && !colours.containsKey("GENERIC") && !colours.containsKey("INVIS");
-            DevTestResults.check("tracer", "every shot a tracer in the NPC's colour", colours.toString(), one && tracerCount > 10,
-                                 "one named colour on all the bandit's tracers, no INVIS or GENERIC");
+            // every NPC shot a tracer (user, 22 Oktober 2026): Decimation drew GENERIC on 40 % of the shots and INVIS on the
+            // rest; a gun with a tracer colour draws it on every shot. White again (user, 23 Oktober 2026: "make the npc shot
+            // white tracer again, just changing the color only, the tracer each shot still intact")
+            boolean white = colours.size() == 1 && colours.containsKey("GENERIC");
+            DevTestResults.check("tracer", "every shot a white tracer", colours.toString(), white && tracerCount > 10,
+                                 "GENERIC (Decimation's near white) on all the bandit's tracers, no other colour or INVIS");
             DevTestResults.value("tracer", "mean angle to target (spread)", String.format("%.1f deg (%d)",
                                  tracerCount > 0 ? tracerSum / tracerCount : 0, tracerCount));
             DevTestResults.check("tracer", "tracer vs server shot line", String.format("%.1f deg (%d tracers, %d shots)",

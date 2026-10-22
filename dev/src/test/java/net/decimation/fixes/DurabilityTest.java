@@ -82,4 +82,27 @@ class DurabilityTest
         int d = Durability.beforeVanillaWear(256, 256, 40f, 5);
         assertEquals(256, d + Durability.forgeWear(40f, 5, 256, d));        // a big hit on a used up piece: no free repair
     }
+
+    @Test
+    void aVestWearsOnAMeleeHitAsForgeWearsAPiece()
+    {
+        // user, 23 Oktober 2026: "vest armor still doesnt affected when hit by zombie": Forge wears only the four armor slots
+        assertEquals(104, Durability.meleeWear(100, 512, 20f, 5));          // Forge's wear of a piece: 4
+        assertEquals(1, Durability.meleeWear(0, 512, 1f, 0));               // at least 1
+        assertEquals(512, Durability.meleeWear(511, 512, 20f, 5));          // the last point
+        assertEquals(512, Durability.meleeWear(512, 512, 40f, 5));          // used up: kept on the maximum, never past it
+    }
+
+    @Test
+    void theBarShowsOnlyOnceWornAndEmptiesAtTheMaximum()
+    {
+        // user, 23 Oktober 2026: "the icon gun item has progress bar in there showing durability like native progress bar"
+        assertFalse(Durability.barShown(0, 1500));                          // new: no bar, as a new vanilla tool
+        assertTrue(Durability.barShown(1, 1500));
+        assertFalse(Durability.barShown(5, 0));                             // nothing that wears
+        assertEquals(0.5, Durability.barFraction(750, 1500), 1e-9);         // the share used up, as Forge's getDurabilityForDisplay
+        assertEquals(1.0, Durability.barFraction(1600, 1500), 1e-9);
+        assertEquals(0.0, Durability.barFraction(-3, 1500), 1e-9);
+        assertEquals(0.0, Durability.barFraction(5, 0), 1e-9);
+    }
 }

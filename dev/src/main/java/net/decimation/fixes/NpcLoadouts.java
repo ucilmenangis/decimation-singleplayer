@@ -478,7 +478,7 @@ public class NpcLoadouts
         Item g = item(gunName(gun));
         if (g != null)
         {
-            String coloured = withTracer(gun, random);     // NPCs saved before 22 Oktober 2026 get theirs on load
+            String coloured = withTracer(gun);             // NPCs saved before 23 Oktober 2026 get theirs on load
             if (coloured != gun)
             {
                 data.setString(GUN_TAG, coloured);
@@ -567,15 +567,32 @@ public class NpcLoadouts
         return stack;
     }
 
+    /** Decimation's GENERIC tracer colour (8, #FFF6E8): the near white its NPC shots were drawn in. */
+    static final int GENERIC_TRACER = 8;
+
     /**
-     * The spec with a tracer colour (user, 22 Oktober 2026: "npc who shot gun can randomly use other tracer instead white
-     * only"): one of Decimation's named colours, WHITE 1 to YELLOW 7, kept for the NPC's life (saved in GUN_TAG). A gun
-     * with a tracer colour draws it on every shot (GunItem.getTracerColor reads NBT tracerColorID); before, every NPC
-     * shot was GENERIC white. A spec that has one keeps it.
+     * The spec with the NPC tracer colour. A gun with a tracer colour draws it on every shot (GunItem.getTracerColor reads
+     * NBT tracerColorID); without one Decimation draws an NPC shot GENERIC 4 times in 10 and nothing otherwise. User, 22
+     * Oktober 2026: a random colour per NPC, a tracer on every shot; 23 Oktober 2026: "make the npc shot white tracer again,
+     * just changing the color only, the tracer each shot still intact": GENERIC on every NPC, colours saved since replaced.
      */
-    static String withTracer(String spec, Random r)
+    static String withTracer(String spec)
     {
-        return tracerOf(spec) > 0 ? spec : spec + ";tracer=" + (1 + r.nextInt(7));
+        if (tracerOf(spec) == GENERIC_TRACER)
+        {
+            return spec;
+        }
+        int i = spec.indexOf(";tracer=");
+        if (i >= 0)
+        {
+            int end = i + 8;
+            while (end < spec.length() && Character.isDigit(spec.charAt(end)))
+            {
+                end++;
+            }
+            spec = spec.substring(0, i) + spec.substring(end);
+        }
+        return spec + ";tracer=" + GENERIC_TRACER;
     }
 
     /** The spec's tracer colour id, 0 when it has none (no allocation: the client asks every tick). */

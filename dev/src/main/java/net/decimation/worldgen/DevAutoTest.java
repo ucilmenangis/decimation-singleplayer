@@ -251,6 +251,7 @@ public class DevAutoTest
                 return;
             }
             DevTestResults.value(modes.get(current).name(), "done", "");
+            screenCheck = modes.get(current).name();
             current++;
         }
         if (quitting)
@@ -330,9 +331,33 @@ public class DevAutoTest
         FMLLog.info("[%s] AUTOTEST live: running %s", DecimationWorldGen.MODID, c.modes);
     }
 
+    /**
+     * The mode that just ended, for a look at its player's server side screen (null when none is due). The harness closes
+     * client screens with displayGuiScreen(null), which never tells the server: a container a mode left open stayed open
+     * there, and every later mode that needs no screen open failed (radset, 23 Oktober 2026: filter wear and fitting).
+     */
+    private volatile String screenCheck;
+
+    /** A container still open on the server after a mode: named in the results, then closed as Esc would. */
+    private void closeLeftoverScreen(String mode)
+    {
+        net.minecraft.entity.player.EntityPlayerMP p = net.decimation.worldgen.devtest.DevTestUtil.player();
+        if (p != null && p.openContainer != null && p.openContainer != p.inventoryContainer)
+        {
+            DevTestResults.value(mode, "server screen left open", p.openContainer.getClass().getName() + " (closed)");
+            p.closeScreen();
+        }
+    }
+
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event)
     {
+        String ended = screenCheck;
+        if (event.phase == TickEvent.Phase.END && ended != null)
+        {
+            screenCheck = null;
+            closeLeftoverScreen(ended);
+        }
         int i = current;
         if (event.phase == TickEvent.Phase.END && active && i < modes.size())
         {

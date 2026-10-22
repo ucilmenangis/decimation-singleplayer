@@ -3,6 +3,7 @@ package net.decimation.worldgen.devtest;
 import net.decimation.fixes.ArmorGunfireHandler;
 import net.decimation.fixes.Deci;
 import net.decimation.fixes.Durability;
+import net.decimation.fixes.GasMaskFilter;
 import net.decimation.fixes.GunWear;
 import net.decimation.fixes.GunWearClient;
 import net.decimation.fixes.RepairPart;
@@ -20,13 +21,15 @@ import net.minecraft.world.World;
 /**
  * Durability (feature 10, user 22 Oktober 2026; docs/superpowers/specs/2026-10-22-durability-design.md). On the arena,
  * survival, natural regeneration and mob spawning off, mobs swept: a full Marine set and a Military Vest. An NPC shot
- * ("human") takes the stronger of vest and chest piece and wears each counted piece by 1; a used up piece protects
- * nothing and stays on its maximum; a player's shot as Decimation's hit handler hands it over (boots, legs, chest already
- * multiplied) gets the used up boots taken back out and the vest in; a melee hit on a piece with 1 left ends on the
- * maximum, never destroying it. Then an M4A4: three real shots (Deci.fireHeldGun, the mouse path) wear 3; a jammed gun
- * does not fire and R racks it (the press taken before Decimation's reload); a worn out gun does not fire; each part
- * repairs a quarter and is used up; nothing to repair uses nothing; parts in military and police loot, none in civilian.
- * The hooks' costs.
+ * ("human") takes the stronger of vest and chest piece and wears boots, legs, chest piece and vest by 1 (user, 23 Oktober
+ * 2026: "vest armor still doesnt affected when hit by zombie or shot"); a used up piece protects nothing and stays on its
+ * maximum; a player's shot as Decimation's hit handler hands it over (boots, legs, chest already multiplied) gets the used
+ * up boots taken back out and the vest in; a melee hit on a piece with 1 left ends on the maximum, never destroying it, and
+ * wears the vest too, which the client then sees. Then an M4A4: three real shots (Deci.fireHeldGun, the mouse path) wear
+ * 3; its tooltip keeps our durability line under Decimation's (which clears a gun's tooltip); a jammed gun does not fire
+ * and R racks it (the press taken before Decimation's reload); a worn out gun does not fire; each part repairs a quarter
+ * and is used up; nothing to repair uses nothing; parts in military and police loot, none in civilian. Native durability
+ * bars (Item.showDurabilityBar) on a worn gun, gas masks by filter and the vest, with a hotbar picture. The hooks' costs.
  */
 public class DurabilityLiveTest extends DevTestMode
 {
@@ -42,6 +45,8 @@ public class DurabilityLiveTest extends DevTestMode
     private String spawningBefore = "true";
     private boolean regenBefore = true;
     private net.minecraft.world.WorldSettings.GameType modeBefore;
+    /** The vest's damage on the server after the melee hits, for the client's copy (-1 before). */
+    private volatile int vestServer = -1;
 
     public boolean client(Minecraft mc)
     {
@@ -52,11 +57,25 @@ public class DurabilityLiveTest extends DevTestMode
         if (ticks == 20) onServer = this::playerShot;
         if (ticks == 25) onServer = this::melee;
         if (ticks == 30) onServer = this::gunSetup;
+        if (ticks == 32)
+        {
+            mc.thePlayer.inventory.currentItem = 0;              // the gun's slot, as pressing 1: the saved world may hold another
+        }
+        if (ticks == 38)
+        {
+            ItemStack v = Deci.playerVest(mc.thePlayer);           // Decimation's player data sync, every few ticks
+            DevTestResults.check(name(), "the client sees the vest's wear", "client " + (v == null ? "no vest" : v.getItemDamage())
+                + ", server " + vestServer, v != null && vestServer > 0 && v.getItemDamage() == vestServer, "equal");
+        }
         if (ticks == 40 || ticks == 46 || ticks == 52)
         {
             Deci.fireHeldGun(mc.thePlayer);
         }
         if (ticks == 70) onServer = this::threeShots;
+        if (ticks == 76)
+        {
+            tooltip(mc);
+        }
         if (ticks == 80)
         {
             Deci.fireHeldGun(mc.thePlayer);                 // jammed: must not fire
@@ -90,9 +109,14 @@ public class DurabilityLiveTest extends DevTestMode
         {
             DevTestResults.check(name(), "shot hook cost", String.format("%.2f us over %d shots", GunWear.averageMicros(), GunWear.shotCount()),
                 GunWear.shotCount() >= 3 && GunWear.averageMicros() < 50, "under 50 us a shot");
-            onServer = this::restore;
+            onServer = this::barStacks;
         }
-        return ticks < 160;
+        if (ticks == 156)
+        {
+            bars(mc);
+        }
+        if (ticks == 160) onServer = this::restore;
+        return ticks < 166;
     }
 
     public void server()
@@ -189,8 +213,8 @@ public class DurabilityLiveTest extends DevTestMode
             expect, head ? " (headshot)" : ""), Math.abs(lost - expect) < 0.02, "equal");
         String wear = "boots " + a[BOOTS].getItemDamage() + ", legs " + a[LEGS].getItemDamage() + ", chest " + a[CHEST].getItemDamage()
                       + ", vest " + vest.getItemDamage() + ", helmet " + a[HELMET].getItemDamage();
-        DevTestResults.check(name(), "NPC shot wears each counted piece by 1", wear, a[BOOTS].getItemDamage() == 1
-            && a[LEGS].getItemDamage() == 1 && a[CHEST].getItemDamage() == 0 && vest.getItemDamage() == 1, "boots, legs, vest 1; chest 0");
+        DevTestResults.check(name(), "NPC shot wears boots, legs, chest piece and vest by 1", wear, a[BOOTS].getItemDamage() == 1
+            && a[LEGS].getItemDamage() == 1 && a[CHEST].getItemDamage() == 1 && vest.getItemDamage() == 1, "boots, legs, chest, vest 1");
     }
 
     private void brokenBoots()
@@ -230,7 +254,11 @@ public class DurabilityLiveTest extends DevTestMode
         a[LEGS].setItemDamage(a[LEGS].getMaxDamage() - 1);
         Entity zombie = Deci.newInfected(p.worldObj);
         zombie.setLocationAndAngles(X + 1.5, Y, Z + 0.5, 90f, 0f);
+        ItemStack vest = Deci.playerVest(p);
+        int vestBefore = vest.getItemDamage();
         hit(p, DamageSource.causeMobDamage((net.minecraft.entity.EntityLivingBase) zombie), 6f);
+        DevTestResults.check(name(), "a zombie hit wears the vest", "vest " + vestBefore + " to " + vest.getItemDamage() + " of "
+            + vest.getMaxDamage(), vest.getItemDamage() > vestBefore && vest.getItemDamage() < vest.getMaxDamage(), "worn, not used up");
         ItemStack legs = p.inventory.armorInventory[LEGS];
         DevTestResults.check(name(), "a melee hit ends on the maximum, never destroys", legs == null ? "destroyed"
             : legs.getItemDamage() + " of " + legs.getMaxDamage(), legs != null && legs.getItemDamage() == legs.getMaxDamage(), "kept, on the maximum");
@@ -241,6 +269,75 @@ public class DurabilityLiveTest extends DevTestMode
         ItemStack chest = p.inventory.armorInventory[CHEST];
         DevTestResults.check(name(), "a big melee hit on a used up piece: no free repair", chest == null ? "destroyed"
             : chest.getItemDamage() + " of " + chest.getMaxDamage(), chest != null && chest.getItemDamage() == chest.getMaxDamage(), "kept, on the maximum");
+        vest.setItemDamage(vest.getMaxDamage() - 1);
+        hit(p, DamageSource.causeMobDamage((net.minecraft.entity.EntityLivingBase) zombie), 18f);
+        hit(p, DamageSource.causeMobDamage((net.minecraft.entity.EntityLivingBase) zombie), 18f);
+        ItemStack vestAfter = Deci.playerVest(p);
+        DevTestResults.check(name(), "melee hits end the vest on its maximum, never past it", vestAfter == null ? "gone"
+            : vestAfter.getItemDamage() + " of " + vestAfter.getMaxDamage(), vestAfter != null && vestAfter.getItemDamage() == vestAfter.getMaxDamage(),
+            "kept, on the maximum");
+        vestServer = vestAfter == null ? -1 : vestAfter.getItemDamage();
+    }
+
+    /** The held gun's tooltip as a hover builds it (every listener, Decimation's too): our durability line in it. */
+    private void tooltip(Minecraft mc)
+    {
+        ItemStack gun = mc.thePlayer.inventory.getStackInSlot(0);
+        java.util.List<?> tip = gun.getTooltip(mc.thePlayer, false);
+        int left = GunWear.max(gun) - (gun.stackTagCompound == null ? 0 : gun.stackTagCompound.getInteger(GunWear.WEAR));
+        boolean has = false;
+        for (Object o : tip)
+        {
+            String line = net.minecraft.util.EnumChatFormatting.getTextWithoutFormattingCodes(String.valueOf(o));
+            has |= line.contains("Durability") || line.equals(left + "/" + GunWear.max(gun));
+        }
+        DevTestResults.check(name(), "a gun's tooltip shows its durability", tip.size() + " lines, last "
+            + (tip.isEmpty() ? "none" : net.minecraft.util.EnumChatFormatting.getTextWithoutFormattingCodes(String.valueOf(tip.get(tip.size() - 1)))),
+            has, "a Durability line");
+    }
+
+    /** Hotbar slots 4 to 8: a gun half worn, gas masks with half, no and a full filter, a vest half worn. */
+    private void barStacks()
+    {
+        EntityPlayerMP p = DevTestUtil.player();
+        ItemStack gun = new ItemStack(item("deci:m4a4"));
+        gun.stackTagCompound = new NBTTagCompound();
+        gun.stackTagCompound.setInteger("ammo", 30);
+        gun.stackTagCompound.setInteger(GunWear.WEAR, 750);
+        p.inventory.setInventorySlotContents(4, gun);
+        ItemStack half = new ItemStack(item("deci:gasmask"));
+        GasMaskFilter.setLifeOf(half, GasMaskFilter.full() / 2);
+        p.inventory.setInventorySlotContents(5, half);
+        ItemStack empty = new ItemStack(item("deci:gasmask"));
+        GasMaskFilter.setLifeOf(empty, 0);
+        p.inventory.setInventorySlotContents(6, empty);
+        p.inventory.setInventorySlotContents(7, new ItemStack(item("deci:gasmask")));
+        ItemStack vest = new ItemStack(item("deci:militaryvest"));
+        vest.setItemDamage(vest.getMaxDamage() / 2);
+        p.inventory.setInventorySlotContents(8, vest);
+        p.inventoryContainer.detectAndSendChanges();
+    }
+
+    /** Forge's bar hooks on the client's copies (RenderItem.renderItemOverlayIntoGUI draws what they answer), then a picture. */
+    private void bars(Minecraft mc)
+    {
+        ItemStack[] inv = mc.thePlayer.inventory.mainInventory;
+        bar("worn gun", inv[4], true, 0.5);
+        bar("gas mask, half a filter", inv[5], true, 0.5);
+        bar("gas mask, empty filter", inv[6], true, 1.0);
+        bar("gas mask, full filter", inv[7], false, 0);
+        bar("vest half worn", inv[8], true, 0.5);
+        ItemStack fresh = new ItemStack(item("deci:m4a4"));
+        bar("new gun", fresh, false, 0);
+        DevTestUtil.screenshot(mc, name(), "bars");
+    }
+
+    private void bar(String what, ItemStack s, boolean shown, double fraction)
+    {
+        boolean is = s != null && s.getItem().showDurabilityBar(s);
+        double f = is ? s.getItem().getDurabilityForDisplay(s) : 0;
+        DevTestResults.check(name(), "durability bar: " + what, s == null ? "no stack" : (is ? String.format("shown, %.3f used", f) : "none"),
+            s != null && is == shown && (!shown || Math.abs(f - fraction) < 0.01), shown ? String.format("shown, %.3f used", fraction) : "none");
     }
 
     private void gunSetup()

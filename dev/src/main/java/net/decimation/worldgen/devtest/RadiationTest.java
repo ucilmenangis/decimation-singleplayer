@@ -49,6 +49,9 @@ public class RadiationTest extends DevTestMode
             DevTestUtil.screenshot(mc, name(), s);
             DevTestResults.check(name(), "icon whole on screen (" + s + ")", RadiationHud.lastPlace(), RadiationHud.lastOnScreen(),
                 "inside the screen");
+            double off = RadiationHud.lastTextOffset();      // user, 23 Oktober 2026: "the text is not centered on radiaton hud"
+            DevTestResults.check(name(), "percent centred on the icon (" + s + ")", String.format("%+.1f half pixels", off),
+                Math.abs(off) <= 1, "within 1 half pixel");
         }
         int sp = serverPct;
         if (sp >= 0 && ++waited >= 10)                  // the server's packet takes a tick or two

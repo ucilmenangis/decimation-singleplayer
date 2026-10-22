@@ -637,6 +637,12 @@ public final class GasMaskFilter
         }
     }
 
+    /** For tests: a mask stack's filter in ticks (0 .. LIFE). */
+    public static void setLifeOf(ItemStack mask, int life)
+    {
+        setLife(mask, life);
+    }
+
     /** A full filter in ticks (LIFE), for tests. */
     public static int full()
     {

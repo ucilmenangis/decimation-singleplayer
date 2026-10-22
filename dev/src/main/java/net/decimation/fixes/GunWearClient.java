@@ -1,5 +1,6 @@
 package net.decimation.fixes;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.decimation.mod.common.item.armor.ItemArmorDeci;
@@ -75,15 +76,23 @@ public final class GunWearClient
         }
     }
 
-    @SubscribeEvent
+    /**
+     * After Decimation's own tooltip handler (ClientEventHandler.onItemTooltip, NORMAL), which clears a gun's tooltip and
+     * writes its own: at the same priority it ran after ours (it registers at init, we at preInit) and wiped our line
+     * (user, 23 Oktober 2026: "for gun show durability on hover"). A gun's durability is laid out as Decimation lays out
+     * its entries: a blank line, the label, the value in red.
+     */
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onTooltip(ItemTooltipEvent e)
     {
         ItemStack s = e.itemStack;
         int gunMax = GunWear.max(s);
         if (gunMax > 0)
         {
-            int left = gunMax - GunWear.wear(s.stackTagCompound);
-            e.toolTip.add(EnumChatFormatting.GRAY + "Durability " + left + " / " + gunMax);
+            int left = Math.max(0, gunMax - GunWear.wear(s.stackTagCompound));
+            e.toolTip.add("");
+            e.toolTip.add("Durability");
+            e.toolTip.add(EnumChatFormatting.RED + "" + left + EnumChatFormatting.GRAY + "/" + EnumChatFormatting.RED + gunMax);
             if (GunWear.jammed(s.stackTagCompound))
             {
                 e.toolTip.add(EnumChatFormatting.RED + "Jammed: press R to rack");
