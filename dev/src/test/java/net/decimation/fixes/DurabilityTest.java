@@ -64,11 +64,22 @@ class DurabilityTest
     }
 
     @Test
-    void vanillaWearStopsAtTheMaximum()
+    void forgesOwnWearOfAPiece()
     {
-        assertEquals(100, Durability.beforeVanillaWear(100, 256, 1));       // room left: untouched
-        assertEquals(255, Durability.beforeVanillaWear(256, 256, 1));       // broken: lands on the maximum again
-        assertEquals(253, Durability.beforeVanillaWear(255, 256, 3));
-        assertEquals(0, Durability.beforeVanillaWear(5, 4, 9));            // never below 0
+        // ArmorProperties.ApplyArmor: absorbs damage x points / 25, at most durability left + 1, wears that / 25, at least 1
+        assertEquals(4, Durability.forgeWear(20f, 5, 256, 100));           // 20 hp on a chest piece: 4
+        assertEquals(1, Durability.forgeWear(6f, 4, 256, 100));            // a small hit: 1
+        assertEquals(1, Durability.forgeWear(20f, 5, 256, 253));           // 3 left: absorbs at most 4 / 25 hp: 1
+        assertEquals(1, Durability.forgeWear(20f, 5, 256, 256));           // used up: 1, which would destroy it
+    }
+
+    @Test
+    void vanillaWearStopsAtTheMaximumWithoutRepairing()
+    {
+        assertEquals(100, Durability.beforeVanillaWear(100, 256, 20f, 5)); // room left: untouched
+        assertEquals(255, Durability.beforeVanillaWear(256, 256, 20f, 5)); // used up: one back, Forge's 1 brings it to 256
+        assertEquals(254, Durability.beforeVanillaWear(254, 256, 30f, 5)); // 2 left: Forge wears 1 there, untouched
+        int d = Durability.beforeVanillaWear(256, 256, 40f, 5);
+        assertEquals(256, d + Durability.forgeWear(40f, 5, 256, d));        // a big hit on a used up piece: no free repair
     }
 }

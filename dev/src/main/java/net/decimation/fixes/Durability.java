@@ -62,9 +62,24 @@ public final class Durability
         return Math.min(chest, vest);
     }
 
-    /** The damage to give a piece before vanilla adds its melee wear, so that it stops on the maximum (never destroyed). */
-    public static int beforeVanillaWear(int damage, int max, int vanillaWear)
+    /**
+     * Forge's own wear of a vanilla armor piece in a hit (ArmorProperties.ApplyArmor): it absorbs health x 25 x points / 25
+     * (scaled by 25), at most the durability left + 1, and wears (int) (absorbed / 25), at least 1.
+     */
+    public static int forgeWear(float health, int points, int max, int damage)
     {
-        return damage + vanillaWear > max ? Math.max(0, max - vanillaWear) : damage;
+        double absorb = Math.min(health * 25.0 * (points / 25.0), max + 1 - damage);
+        return (int) (absorb / 25.0 < 1 ? 1 : absorb / 25.0);
+    }
+
+    /**
+     * The damage to give a piece before Forge wears it in this hit, so that it ends on the maximum and is never destroyed
+     * (Forge destroys a piece past it): a hit that would pass the maximum gets the piece set to the maximum less 1, where
+     * Forge's wear is exactly 1 (it absorbs at most 2 / 25 health there). Otherwise untouched: never a free repair (an
+     * automated review found the first version, a guess of Forge's wear plus 1, setting used up pieces back by several).
+     */
+    public static int beforeVanillaWear(int damage, int max, float health, int points)
+    {
+        return damage + forgeWear(health, points, max, damage) > max ? Math.max(0, max - 1) : damage;
     }
 }

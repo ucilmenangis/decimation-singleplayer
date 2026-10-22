@@ -234,6 +234,13 @@ public class DurabilityLiveTest extends DevTestMode
         ItemStack legs = p.inventory.armorInventory[LEGS];
         DevTestResults.check(name(), "a melee hit ends on the maximum, never destroys", legs == null ? "destroyed"
             : legs.getItemDamage() + " of " + legs.getMaxDamage(), legs != null && legs.getItemDamage() == legs.getMaxDamage(), "kept, on the maximum");
+        // a big hit on a used up piece: kept on its maximum, never set back (an automated review found the first clamp
+        // repairing used up pieces by several points a hit)
+        a[CHEST].setItemDamage(a[CHEST].getMaxDamage());
+        hit(p, DamageSource.causeMobDamage((net.minecraft.entity.EntityLivingBase) zombie), 18f);
+        ItemStack chest = p.inventory.armorInventory[CHEST];
+        DevTestResults.check(name(), "a big melee hit on a used up piece: no free repair", chest == null ? "destroyed"
+            : chest.getItemDamage() + " of " + chest.getMaxDamage(), chest != null && chest.getItemDamage() == chest.getMaxDamage(), "kept, on the maximum");
     }
 
     private void gunSetup()

@@ -192,9 +192,9 @@ public class ArmorGunfireHandler
     }
 
     /**
-     * Melee and other blockable hits, last: Forge's ApplyArmor will take max(1, health x points / 25) off each armor
-     * piece and destroy one that passes its maximum; a piece is first set back just enough that the wear ends on the
-     * maximum (the at most one point of damage this leaves it to absorb counts for nothing).
+     * Melee and other blockable hits, last: Forge's ApplyArmor wears each armor piece (Durability.forgeWear) and destroys
+     * one that passes its maximum; a piece this hit would push past it is first set to the maximum less 1, where Forge's
+     * wear is exactly 1 (Durability.beforeVanillaWear): it ends on the maximum, kept, and never gains durability.
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void meleeLast(LivingHurtEvent event)
@@ -211,8 +211,7 @@ public class ArmorGunfireHandler
             if (worn(piece))
             {
                 int points = ((ItemArmor) piece.getItem()).damageReduceAmount;
-                int vanilla = Math.max(1, (int) (event.ammount * points / 25f) + 1);
-                piece.setItemDamage(Durability.beforeVanillaWear(piece.getItemDamage(), piece.getMaxDamage(), vanilla));
+                piece.setItemDamage(Durability.beforeVanillaWear(piece.getItemDamage(), piece.getMaxDamage(), event.ammount, points));
             }
         }
     }
