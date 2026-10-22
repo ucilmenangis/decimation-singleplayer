@@ -1,0 +1,206 @@
+  textureWidth = 512;
+  textureHeight = 16;
+
+  // ring0
+  meleeModel0 = new BeardieModelRenderer(this, 1, 1);
+  meleeModel0.addShape(0F,0F,0F, new float[][]{{-0.3533F, 0.1863F, -0.36F}, {0.6467F, -1F, -0.36F}, {-1F, 0.9184F, -0.36F}, {0F, 0.2679F, -0.36F}, {-0.3533F, 0.1863F, 0F}, {0.6467F, -1F, 0F}, {-1F, 0.9184F, 0F}, {0F, 0.2679F, 0F}}, 1, 1, 1);
+  meleeModel0.setRotationPoint(0.7853F, 1.5068F, -0.32F);
+  meleeModel0.setRotation(0F, 0F, 0F);
+
+  // ring1
+  meleeModel1 = new BeardieModelRenderer(this, 9, 1);
+  meleeModel1.addShape(0F,0F,0F, new float[][]{{-0.7321F, 0.1067F, -0.36F}, {1.1067F, -0.7321F, -0.36F}, {-1F, 0.46F, -0.36F}, {0.46F, 0F, -0.36F}, {-0.7321F, 0.1067F, 0F}, {1.1067F, -0.7321F, 0F}, {-1F, 0.46F, 0F}, {0.46F, 0F, 0F}}, 1, 1, 1);
+  meleeModel1.setRotationPoint(0.3253F, 2.4253F, -0.32F);
+  meleeModel1.setRotation(0F, 0F, 0F);
+
+  // ring2
+  meleeModel2 = new BeardieModelRenderer(this, 17, 1);
+  meleeModel2.addShape(0F,0F,0F, new float[][]{{-1F, -0.3533F, -0.36F}, {1.1863F, -0.3533F, -0.36F}, {-0.7321F, 0F, -0.36F}, {0.9184F, 0F, -0.36F}, {-1F, -0.3533F, 0F}, {1.1863F, -0.3533F, 0F}, {-0.7321F, 0F, 0F}, {0.9184F, 0F, 0F}}, 1, 1, 1);
+  meleeModel2.setRotationPoint(-0.5932F, 2.8853F, -0.32F);
+  meleeModel2.setRotation(0F, 0F, 0F);
+
+  // ring3
+  meleeModel3 = new BeardieModelRenderer(this, 25, 1);
+  meleeModel3.addShape(0F,0F,0F, new float[][]{{-1F, -0.7321F, -0.36F}, {0.8389F, 0.1067F, -0.36F}, {-0.3533F, 0F, -0.36F}, {1.1067F, 0.46F, -0.36F}, {-1F, -0.7321F, 0F}, {0.8389F, 0.1067F, 0F}, {-0.3533F, 0F, 0F}, {1.1067F, 0.46F, 0F}}, 1, 1, 1);
+  meleeModel3.setRotationPoint(-1.432F, 2.4253F, -0.32F);
+  meleeModel3.setRotation(0F, 0F, 0F);
+
+  // ring4
+  meleeModel4 = new BeardieModelRenderer(this, 33, 1);
+  meleeModel4.addShape(0F,0F,0F, new float[][]{{-1F, -1F, -0.36F}, {0F, 0.1863F, -0.36F}, {-0.3533F, 0.2679F, -0.36F}, {0.6467F, 0.9184F, -0.36F}, {-1F, -1F, 0F}, {0F, 0.1863F, 0F}, {-0.3533F, 0.2679F, 0F}, {0.6467F, 0.9184F, 0F}}, 1, 1, 1);
+  meleeModel4.setRotationPoint(-1.432F, 1.5068F, -0.32F);
+  meleeModel4.setRotation(0F, 0F, 0F);
+
+  // ring5
+  meleeModel5 = new BeardieModelRenderer(this, 41, 1);
+  meleeModel5.addShape(0F,0F,0F, new float[][]{{-0.1611F, -1F, -0.36F}, {0F, -0.1611F, -0.36F}, {0.1067F, 0.6467F, -0.36F}, {0.6467F, 1.1067F, -0.36F}, {-0.1611F, -1F, 0F}, {0F, -0.1611F, 0F}, {0.1067F, 0.6467F, 0F}, {0.6467F, 1.1067F, 0F}}, 1, 1, 1);
+  meleeModel5.setRotationPoint(-1.432F, 0.668F, -0.32F);
+  meleeModel5.setRotation(0F, 0F, 0F);
+
+  // ring6
+  meleeModel6 = new BeardieModelRenderer(this, 49, 1);
+  meleeModel6.addShape(0F,0F,0F, new float[][]{{0.1863F, -1F, -0.36F}, {0F, -1F, -0.36F}, {-0.0816F, 0.6467F, -0.36F}, {0.2679F, 0.6467F, -0.36F}, {0.1863F, -1F, 0F}, {0F, -1F, 0F}, {-0.0816F, 0.6467F, 0F}, {0.2679F, 0.6467F, 0F}}, 1, 1, 1);
+  meleeModel6.setRotationPoint(-0.5932F, 0.668F, -0.32F);
+  meleeModel6.setRotation(0F, 0F, 0F);
+
+  // ring7
+  meleeModel7 = new BeardieModelRenderer(this, 57, 1);
+  meleeModel7.addShape(0F,0F,0F, new float[][]{{0.1067F, -0.1611F, -0.36F}, {0.2679F, -1F, -0.36F}, {-0.54F, 1.1067F, -0.36F}, {0F, 0.6467F, -0.36F}, {0.1067F, -0.1611F, 0F}, {0.2679F, -1F, 0F}, {-0.54F, 1.1067F, 0F}, {0F, 0.6467F, 0F}}, 1, 1, 1);
+  meleeModel7.setRotationPoint(0.3253F, 0.668F, -0.32F);
+  meleeModel7.setRotation(0F, 0F, 0F);
+
+  // tang
+  meleeModel8 = new BeardieModelRenderer(this, 65, 1);
+  meleeModel8.addShape(0F,0F,0F, new float[][]{{0.1F, 0F, -0.64F}, {0F, 0F, -0.64F}, {0.1F, 0F, -0.64F}, {0F, 0F, -0.64F}, {0.1F, 0F, 0F}, {0F, 0F, 0F}, {0.1F, 0F, 0F}, {0F, 0F, 0F}}, 1, 6, 1);
+  meleeModel8.setRotationPoint(-0.55F, -5.2F, -0.18F);
+  meleeModel8.setRotation(0F, 0F, 0F);
+
+  // cord0
+  meleeModel9 = new BeardieModelRenderer(this, 73, 1);
+  meleeModel9.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel9.setRotationPoint(-0.95F, -0.25F, -0.5F);
+  meleeModel9.setRotation(0F, 0F, 0F);
+
+  // cord1
+  meleeModel10 = new BeardieModelRenderer(this, 81, 1);
+  meleeModel10.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel10.setRotationPoint(-0.89F, -1.07F, -0.5F);
+  meleeModel10.setRotation(0F, 0F, 0F);
+
+  // cord2
+  meleeModel11 = new BeardieModelRenderer(this, 89, 1);
+  meleeModel11.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel11.setRotationPoint(-0.83F, -1.89F, -0.5F);
+  meleeModel11.setRotation(0F, 0F, 0F);
+
+  // cord3
+  meleeModel12 = new BeardieModelRenderer(this, 97, 1);
+  meleeModel12.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel12.setRotationPoint(-0.77F, -2.71F, -0.5F);
+  meleeModel12.setRotation(0F, 0F, 0F);
+
+  // cord4
+  meleeModel13 = new BeardieModelRenderer(this, 105, 1);
+  meleeModel13.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel13.setRotationPoint(-0.71F, -3.53F, -0.5F);
+  meleeModel13.setRotation(0F, 0F, 0F);
+
+  // cord5
+  meleeModel14 = new BeardieModelRenderer(this, 113, 1);
+  meleeModel14.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel14.setRotationPoint(-0.65F, -4.35F, -0.5F);
+  meleeModel14.setRotation(0F, 0F, 0F);
+
+  // cord6
+  meleeModel15 = new BeardieModelRenderer(this, 121, 1);
+  meleeModel15.addShape(0F,0F,0F, new float[][]{{-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, -0.06F}, {0F, 0F, -0.06F}, {-0.1F, -0.2F, 0F}, {0F, -0.2F, 0F}, {-0.1F, 0F, 0.06F}, {0F, 0F, 0.06F}}, 2, 1, 1);
+  meleeModel15.setRotationPoint(-0.59F, -5.17F, -0.5F);
+  meleeModel15.setRotation(0F, 0F, 0F);
+
+  // guard
+  meleeModel16 = new BeardieModelRenderer(this, 129, 1);
+  meleeModel16.addShape(0F,0F,0F, new float[][]{{0.4F, -0.4F, -0.16F}, {0F, -1F, -0.16F}, {0.2F, 1F, -0.16F}, {0F, 0.8F, -0.16F}, {0.4F, -0.4F, 0F}, {0F, -1F, 0F}, {0.2F, 1F, 0F}, {0F, 0.8F, 0F}}, 1, 1, 1);
+  meleeModel16.setRotationPoint(0.5F, -5.9F, -0.42F);
+  meleeModel16.setRotation(0F, 0F, 0F);
+
+  // blade0
+  meleeModel17 = new BeardieModelRenderer(this, 137, 1);
+  meleeModel17.addShape(0F,0F,0F, new float[][]{{-1.6857F, -1F, -0.3486F}, {0F, 0.3324F, -0.32F}, {-0.3515F, 0.3468F, -0.3486F}, {1.6F, 1.3324F, -0.32F}, {-1.6857F, -1F, 0.0286F}, {0F, 0.3324F, 0F}, {-0.3515F, 0.3468F, 0.0286F}, {1.6F, 1.3324F, 0F}}, 2, 1, 1);
+  meleeModel17.setRotationPoint(-1.04F, -6.9324F, -0.34F);
+  meleeModel17.setRotation(0F, 0F, 0F);
+
+  // edge0
+  meleeModel18 = new BeardieModelRenderer(this, 145, 1);
+  meleeModel18.addShape(0F,0F,0F, new float[][]{{-0.9515F, -1F, -0.6091F}, {0F, -0.0144F, -0.592F}, {-0.6376F, 0.0816F, -0.736F}, {0.37F, 0.9856F, -0.716F}, {-0.9515F, -1F, 0.0171F}, {0F, -0.0144F, 0F}, {-0.6376F, 0.0816F, 0.144F}, {0.37F, 0.9856F, 0.124F}}, 1, 1, 1);
+  meleeModel18.setRotationPoint(0.56F, -6.5856F, -0.204F);
+  meleeModel18.setRotation(0F, 0F, 0F);
+
+  // blade1
+  meleeModel19 = new BeardieModelRenderer(this, 153, 1);
+  meleeModel19.addShape(0F,0F,0F, new float[][]{{-1.3742F, -2F, -0.4057F}, {0F, -0.8234F, -0.3771F}, {-0.3635F, 0.5635F, -0.4057F}, {1.3342F, 1.5234F, -0.3771F}, {-1.3742F, -2F, 0.0286F}, {0F, -0.8234F, 0F}, {-0.3635F, 0.5635F, 0.0286F}, {1.3342F, 1.5234F, 0F}}, 2, 2, 1);
+  meleeModel19.setRotationPoint(-0.7257F, -8.109F, -0.3114F);
+  meleeModel19.setRotation(0F, 0F, 0F);
+
+  // edge1
+  meleeModel20 = new BeardieModelRenderer(this, 161, 1);
+  meleeModel20.addShape(0F,0F,0F, new float[][]{{-0.6978F, -1F, -0.6434F}, {0F, -0.0401F, -0.6263F}, {-0.4545F, 0.1357F, -0.7531F}, {0.3139F, 1.0415F, -0.7331F}, {-0.6978F, -1F, 0.0171F}, {0F, -0.0401F, 0F}, {-0.4545F, 0.1357F, 0.1269F}, {0.3139F, 1.0415F, 0.1069F}}, 1, 1, 1);
+  meleeModel20.setRotationPoint(0.6085F, -7.5455F, -0.1869F);
+  meleeModel20.setRotation(0F, 0F, 0F);
+
+  // blade2
+  meleeModel21 = new BeardieModelRenderer(this, 169, 1);
+  meleeModel21.addShape(0F,0F,0F, new float[][]{{-1.12F, -2F, -0.4629F}, {0F, -1.048F, -0.4343F}, {-0.4437F, 0.6466F, -0.4629F}, {1.0107F, 1.5155F, -0.4343F}, {-1.12F, -2F, 0.0286F}, {0F, -1.048F, 0F}, {-0.4437F, 0.6466F, 0.0286F}, {1.0107F, 1.5155F, 0F}}, 2, 2, 1);
+  meleeModel21.setRotationPoint(-0.0999F, -9.061F, -0.2829F);
+  meleeModel21.setRotation(0F, 0F, 0F);
+
+  // edge2
+  meleeModel22 = new BeardieModelRenderer(this, 177, 1);
+  meleeModel22.addShape(0F,0F,0F, new float[][]{{-0.4543F, -1F, -0.6777F}, {0F, -0.1312F, -0.6606F}, {-0.286F, 0.1609F, -0.7703F}, {0.2433F, 1.0045F, -0.7503F}, {-0.4543F, -1F, 0.0171F}, {0F, -0.1312F, 0F}, {-0.286F, 0.1609F, 0.1097F}, {0.2433F, 1.0045F, 0.0897F}}, 1, 1, 1);
+  meleeModel22.setRotationPoint(0.9107F, -8.4144F, -0.1697F);
+  meleeModel22.setRotation(0F, 0F, 0F);
+
+  // blade3
+  meleeModel23 = new BeardieModelRenderer(this, 185, 1);
+  meleeModel23.addShape(0F,0F,0F, new float[][]{{0.0628F, -1F, -0.52F}, {0F, -0.323F, -0.4914F}, {0.4383F, 0.6076F, -0.52F}, {0.6763F, 1.3236F, -0.4914F}, {0.0628F, -1F, 0.0286F}, {0F, -0.323F, 0F}, {0.4383F, 0.6076F, 0.0286F}, {0.6763F, 1.3236F, 0F}}, 1, 1, 1);
+  meleeModel23.setRotationPoint(0.7801F, -9.738F, -0.2543F);
+  meleeModel23.setRotation(0F, 0F, 0F);
+
+  // edge3
+  meleeModel24 = new BeardieModelRenderer(this, 193, 1);
+  meleeModel24.addShape(0F,0F,0F, new float[][]{{-0.238F, -1F, -0.712F}, {0F, -0.284F, -0.6949F}, {-0.1396F, 0.1592F, -0.7874F}, {0.1683F, 0.8769F, -0.7674F}, {-0.238F, -1F, 0.0171F}, {0F, -0.284F, 0F}, {-0.1396F, 0.1592F, 0.0926F}, {0.1683F, 0.8769F, 0.0726F}}, 1, 1, 1);
+  meleeModel24.setRotationPoint(1.4564F, -9.1303F, -0.1526F);
+  meleeModel24.setRotation(0F, 0F, 0F);
+
+  // blade4
+  meleeModel25 = new BeardieModelRenderer(this, 201, 1);
+  meleeModel25.addShape(0F,0F,0F, new float[][]{{0.1657F, -1F, -0.5771F}, {0F, -0.6273F, -0.5486F}, {0.311F, 0.471F, -0.5771F}, {0.3755F, 0.9803F, -0.5486F}, {0.1657F, -1F, 0.0286F}, {0F, -0.6273F, 0F}, {0.311F, 0.471F, 0.0286F}, {0.3755F, 0.9803F, 0F}}, 1, 1, 1);
+  meleeModel25.setRotationPoint(1.8429F, -10.1106F, -0.2257F);
+  meleeModel25.setRotation(0F, 0F, 0F);
+
+  // edge4
+  meleeModel26 = new BeardieModelRenderer(this, 209, 1);
+  meleeModel26.addShape(0F,0F,0F, new float[][]{{-0.0645F, -1F, -0.7463F}, {0F, -0.4906F, -0.7291F}, {-0.0228F, 0.1351F, -0.8046F}, {0.0984F, 0.6686F, -0.7846F}, {-0.0645F, -1F, 0.0171F}, {0F, -0.4906F, 0F}, {-0.0228F, 0.1351F, 0.0754F}, {0.0984F, 0.6686F, 0.0554F}}, 1, 1, 1);
+  meleeModel26.setRotationPoint(2.2184F, -9.6397F, -0.1354F);
+  meleeModel26.setRotation(0F, 0F, 0F);
+
+  // blade5
+  meleeModel27 = new BeardieModelRenderer(this, 217, 1);
+  meleeModel27.addShape(0F,0F,0F, new float[][]{{0.186F, -1F, -0.6343F}, {0F, -0.9388F, -0.6057F}, {0.1982F, 0.2712F, -0.6343F}, {0.1453F, 0.5321F, -0.6057F}, {0.186F, -1F, 0.0286F}, {0F, -0.9388F, 0F}, {0.1982F, 0.2712F, 0.0286F}, {0.1453F, 0.5321F, 0F}}, 1, 1, 1);
+  meleeModel27.setRotationPoint(3.0087F, -10.1718F, -0.1971F);
+  meleeModel27.setRotation(0F, 0F, 0F);
+
+  // edge5
+  meleeModel28 = new BeardieModelRenderer(this, 225, 1);
+  meleeModel28.addShape(0F,0F,0F, new float[][]{{0.0529F, -1F, -0.7806F}, {0F, -0.739F, -0.7634F}, {0.0572F, 0.0956F, -0.8217F}, {0.0417F, 0.3961F, -0.8017F}, {0.0529F, -1F, 0.0171F}, {0F, -0.739F, 0F}, {0.0572F, 0.0956F, 0.0583F}, {0.0417F, 0.3961F, 0.0383F}}, 1, 1, 1);
+  meleeModel28.setRotationPoint(3.1539F, -9.9007F, -0.1183F);
+  meleeModel28.setRotation(0F, 0F, 0F);
+
+  // blade6
+  meleeModel29 = new BeardieModelRenderer(this, 233, 1);
+  meleeModel29.addShape(0F,0F,0F, new float[][]{{0.1269F, -0.7638F, -0.6914F}, {0F, -1F, -0.6629F}, {0.1165F, 0.2851F, -0.6914F}, {0.0122F, 0.2712F, -0.6629F}, {0.1269F, -0.7638F, 0.0286F}, {0F, -1F, 0F}, {0.1165F, 0.2851F, 0.0286F}, {0.0122F, 0.2712F, 0F}}, 1, 1, 1);
+  meleeModel29.setRotationPoint(4.1947F, -10.1718F, -0.1686F);
+  meleeModel29.setRotation(0F, 0F, 0F);
+
+  // edge6
+  meleeModel30 = new BeardieModelRenderer(this, 241, 1);
+  meleeModel30.addShape(0F,0F,0F, new float[][]{{0.1043F, -0.9861F, -0.8149F}, {0F, -1F, -0.7977F}, {0.0939F, 0.0628F, -0.8389F}, {0.0043F, 0.0956F, -0.8189F}, {0.1043F, -0.9861F, 0.0171F}, {0F, -1F, 0F}, {0.0939F, 0.0628F, 0.0411F}, {0.0043F, 0.0956F, 0.0211F}}, 1, 1, 1);
+  meleeModel30.setRotationPoint(4.2069F, -9.9007F, -0.1011F);
+  meleeModel30.setRotation(0F, 0F, 0F);
+
+  // jimp0
+  meleeModel31 = new BeardieModelRenderer(this, 249, 1);
+  meleeModel31.addShape(0F,0F,0F, new float[][]{{-0.962F, -1F, -0.4F}, {0F, -0.7114F, -0.4F}, {-0.6854F, 0.0438F, -0.4F}, {0.2785F, 0.3179F, -0.4F}, {-0.962F, -1F, 0F}, {0F, -0.7114F, 0F}, {-0.6854F, 0.0438F, 0F}, {0.2785F, 0.3179F, 0F}}, 1, 1, 1);
+  meleeModel31.setRotationPoint(-1.1303F, -6.4699F, -0.3F);
+  meleeModel31.setRotation(0F, 0F, 0F);
+
+  // jimp1
+  meleeModel32 = new BeardieModelRenderer(this, 257, 1);
+  meleeModel32.addShape(0F,0F,0F, new float[][]{{-0.928F, -1F, -0.4F}, {0F, -0.7217F, -0.4F}, {-0.6589F, 0.0772F, -0.4F}, {0.2728F, 0.3413F, -0.4F}, {-0.928F, -1F, 0F}, {0F, -0.7217F, 0F}, {-0.6589F, 0.0772F, 0F}, {0.2728F, 0.3413F, 0F}}, 1, 1, 1);
+  meleeModel32.setRotationPoint(-0.9508F, -7.1137F, -0.3F);
+  meleeModel32.setRotation(0F, 0F, 0F);
+
+  // jimp2
+  meleeModel33 = new BeardieModelRenderer(this, 265, 1);
+  meleeModel33.addShape(0F,0F,0F, new float[][]{{-0.896F, -1F, -0.4F}, {0F, -0.7359F, -0.4F}, {-0.6382F, 0.1094F, -0.4F}, {0.2631F, 0.3599F, -0.4F}, {-0.896F, -1F, 0F}, {0F, -0.7359F, 0F}, {-0.6382F, 0.1094F, 0F}, {0.2631F, 0.3599F, 0F}}, 1, 1, 1);
+  meleeModel33.setRotationPoint(-0.6954F, -7.7187F, -0.3F);
+  meleeModel33.setRotation(0F, 0F, 0F);

@@ -151,6 +151,10 @@ tasks.matching { it.name.startsWith("runClient") }.configureEach {
     if (project.hasProperty("trackdebug")) {
         jvmArgs("-Ddeciworldgen.trackdebug=true")
     }
+    // -Pgif: the melee test samples the draw and inspect every 1/20 s without the HUD (frames for a GIF)
+    if (project.hasProperty("gif")) {
+        jvmArgs("-Ddeciworldgen.autotest.gif=true")
+    }
     // -Pprops: fps with many props in view / hidden (last autotest world)
     if (project.hasProperty("props")) {
         jvmArgs("-Ddeciworldgen.autotest.props=true")

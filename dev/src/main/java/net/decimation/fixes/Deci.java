@@ -2267,6 +2267,30 @@ public final class Deci
         return inDecimation("grip " + name, () -> new deci.ay.h(deci.ay.b.grip, deci.ay.c.rifle, name));
     }
 
+    /**
+     * A melee weapon of Decimation's own kind (MeleeWeaponItem deci.az.b, durability, damage): its damage taken off the
+     * target's health by DamageModifierHandler (not reduced by armor), wear and impact sound, its "Melee Weapon / Damage"
+     * tooltip; in Decimation's melee creative tab (CreativeTabRegistry axc). Not registered here.
+     */
+    public static Item newMeleeWeapon(int durability, int damage)
+    {
+        return new deci.az.b(durability, damage).setCreativeTab(deci.aD.r.axc);
+    }
+
+    /** A model from a .bmodel file (BModelLoader.load deci.n.g.a), as Object: draw it with renderModel. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static Object loadModel(String location)
+    {
+        return deci.n.g.a(new net.minecraft.util.ResourceLocation(location));
+    }
+
+    /** Draws every part of a model from loadModel at 1/16 block a unit (BModel.render), texture bound by the caller. */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static void renderModel(Object model)
+    {
+        ((deci.n.f) model).render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
+    }
+
     /** Runs an item constructor with Decimation as FML's active mod container (its namespace), then switches back. */
     private static Item inDecimation(String what, java.util.concurrent.Callable<Item> make)
     {
@@ -3304,5 +3328,15 @@ public final class Deci
             return ((net.decimation.mod.common.item.armor.ItemArmorDeci) i).getLootChance();
         }
         return 0.9;
+    }
+
+    /**
+     * True for the RenderPlayer that PlayerModelSwapper (deci.J.e) uses to draw your own body in first person
+     * (deci.J.e$a, on RenderWorldLastEvent); the world's normal player renderer is a different instance.
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    public static boolean isFirstPersonBodyRenderer(Object renderer)
+    {
+        return renderer instanceof deci.J.e.a;
     }
 }

@@ -136,6 +136,7 @@ public class DecimationWorldGen
         net.decimation.fixes.NewGuns.register();
         net.decimation.fixes.NewSights.register(); // before SightPlacement: it moves these too
         net.decimation.fixes.NewGrips.register(); // the RK-1 Foregrip (before GripPlacement)
+        net.decimation.fixes.NewMelee.register(); // the Karambit and the Katana (tools/guns/melee.py)
         net.decimation.fixes.GripRails.load(); // a Foregrip or RK-1 only on a gun with a rail (grip_offsets.txt)
         net.decimation.fixes.SightMounts.load(); // a sight only on its mount (sight_mounts.txt)
         cpw.mods.fml.common.FMLCommonHandler.instance().bus().register(new net.decimation.fixes.MountStrip());

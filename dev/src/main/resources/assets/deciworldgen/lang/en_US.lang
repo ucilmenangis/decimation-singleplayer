@@ -21,3 +21,6 @@ item.rk1.name=RK-1 Foregrip
 key.deciworldgen.specterdr=DeciRemnant: SpecterDR 1x/4x
 item.deciworldgen.radiationPills.name=Radiation Pills
 tile.deciworldgen.cabinet.name=Cabinet
+item.karambit.name=Karambit
+item.katana.name=Katana
+key.deciworldgen.inspect=DeciRemnant: Inspect
