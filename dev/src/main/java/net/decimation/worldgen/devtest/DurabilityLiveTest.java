@@ -330,6 +330,38 @@ public class DurabilityLiveTest extends DevTestMode
         ItemStack fresh = new ItemStack(item("deci:m4a4"));
         bar("new gun", fresh, false, 0);
         DevTestUtil.screenshot(mc, name(), "bars");
+        barCost(new ItemStack[] {inv[4], inv[5], inv[6], inv[7], fresh});
+    }
+
+    /**
+     * The bar hooks' cost (CLAUDE.md "Every feature: optimized before done"): Forge asks both for every gun and gas mask
+     * drawn, every frame (a full inventory about 45 stacks). Warmed up first, then the median of 5 batches of 200,000
+     * calls of each; the budget keeps an inventory of 45 under 50 us a frame.
+     */
+    private void barCost(ItemStack[] stacks)
+    {
+        double sink = 0;
+        long[] batch = new long[5];
+        for (int round = -2; round < batch.length; round++)       // two warm up rounds for the JIT
+        {
+            long t = System.nanoTime();
+            for (int i = 0; i < 200000; i++)
+            {
+                ItemStack s = stacks[i % stacks.length];
+                if (s.getItem().showDurabilityBar(s))
+                {
+                    sink += s.getItem().getDurabilityForDisplay(s);
+                }
+            }
+            if (round >= 0)
+            {
+                batch[round] = System.nanoTime() - t;
+            }
+        }
+        java.util.Arrays.sort(batch);
+        double ns = batch[batch.length / 2] / 200000.0;
+        DevTestResults.check(name(), "bar hooks cost", String.format("%.0f ns a stack (both calls; sum %.0f)", ns, sink), ns < 1000,
+            "under 1 us a stack");
     }
 
     private void bar(String what, ItemStack s, boolean shown, double fraction)

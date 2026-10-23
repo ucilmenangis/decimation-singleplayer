@@ -52,6 +52,16 @@ public class RadiationTest extends DevTestMode
             double off = RadiationHud.lastTextOffset();      // user, 23 Oktober 2026: "the text is not centered on radiaton hud"
             DevTestResults.check(name(), "percent centred on the icon (" + s + ")", String.format("%+.1f half pixels", off),
                 Math.abs(off) <= 1, "within 1 half pixel");
+            // Decimation's own four, against their icons' middle from the screen width (user: "centre decimation hud percents too")
+            int sw = new net.minecraft.client.gui.ScaledResolution(mc, mc.displayWidth, mc.displayHeight).getScaledWidth();
+            String[] rows = {"food", "water", "blood", "health"};
+            for (int r = 0; r < rows.length; r++)
+            {
+                double d = net.decimation.fixes.HudPercents.offset(r, sw);
+                DevTestResults.check(name(), "Decimation's " + rows[r] + " percent centred (" + s + ")", net.decimation.fixes.HudPercents.calls() == 0
+                    ? "never drawn through HudPercents" : String.format("%+.1f half pixels", d), net.decimation.fixes.HudPercents.calls() > 0
+                    && Math.abs(d) <= 1, "within 1 half pixel");
+            }
         }
         int sp = serverPct;
         if (sp >= 0 && ++waited >= 10)                  // the server's packet takes a tick or two

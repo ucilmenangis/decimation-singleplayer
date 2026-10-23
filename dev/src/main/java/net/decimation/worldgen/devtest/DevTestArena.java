@@ -36,6 +36,9 @@ public final class DevTestArena
     public static void build(World w, EntityPlayer p)
     {
         p.setPositionAndUpdate(X + 0.5, Y, Z + 0.5);
+        // a fall an earlier mode built up (genwalk flies in creative) lands here: a mode that switches to survival then
+        // died on the floor ("fell from a high place", throwables FAIL after genwalk, 23 Oktober 2026)
+        p.fallDistance = 0;
         for (int x = X - BACK; x <= X + FRONT; x++)
         {
             for (int z = Z - SIDE; z <= Z + SIDE; z++)

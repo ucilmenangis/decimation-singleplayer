@@ -338,11 +338,19 @@ public class DevAutoTest
      */
     private volatile String screenCheck;
 
-    /** A container still open on the server after a mode: named in the results, then closed as Esc would. */
+    /**
+     * A container still open on the server after a mode: named in the results, then closed as Esc would. Its fall
+     * distance cleared too: genwalk flies in creative, and the next mode to switch to survival died on landing.
+     */
     private void closeLeftoverScreen(String mode)
     {
         net.minecraft.entity.player.EntityPlayerMP p = net.decimation.worldgen.devtest.DevTestUtil.player();
-        if (p != null && p.openContainer != null && p.openContainer != p.inventoryContainer)
+        if (p == null)
+        {
+            return;
+        }
+        p.fallDistance = 0;
+        if (p.openContainer != null && p.openContainer != p.inventoryContainer)
         {
             DevTestResults.value(mode, "server screen left open", p.openContainer.getClass().getName() + " (closed)");
             p.closeScreen();
