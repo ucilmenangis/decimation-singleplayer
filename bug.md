@@ -10,6 +10,21 @@ not something we introduced or need to fix) see `documentation.md`.
 
 ## Open
 
+### Looking down with a knife: the hand floats (reported 23 Oktober 2026 by the user, FIXED on branch feature/katana-fire-reach)
+- User: "look down and you'll see its botched, the character hand is floating (left hand)", "try look-down while moving".
+- Cause: our first person arm and knife (MeleeRenderer) stay in the view at any pitch while Decimation's first person
+  body (arms hidden by us for knives, as Decimation does for guns) is drawn below: an arm without a shoulder over the
+  body. Showing the body's arms instead brought another: walking swings its left arm forward into the view.
+- Fix: MeleeMotion SLIDE / BODY: the view's arm and knife slide out from 35 to 55 degrees, past 55 the body's right arm
+  holds the knife, its left arm stays hidden. Dev test `melee` look down shots at 30 / 50 / 70 / 88 while walking.
+- Then (user: "in left hand you can see its gelang stayed"): Decimation's wrist display (ItemRegistry.wristTimer, on by
+  default: enableWristDisplay) and its armor pieces draw their own arm parts, which skip only when the body's
+  isHidden is set (Decimation resets that each draw; we hide by showModel). The floating "shoe" at 88 degrees was that
+  band on the left wrist. Deci.dropArmorArms swaps the armor model's part list (BModel.kC) for a cached one without the
+  arm parts for the first person body draw and puts it back after (a hidden BModelPart pushes a matrix it never pops,
+  so not by its visible flag). 88 degrees while walking: no floating block left. A worn Decimation chest piece gets
+  the same; not shot with one on [not verified].
+
 ### Gun durability gone from the tooltip; vests not worn by zombies, only one body piece by a shot (reported 23 Oktober 2026 by the user, FIXED on main)
 - User: "for gun show durability on hover ... vest armor still doesnt affected when hit by zombie or shot. only armor
   affected, fix that."

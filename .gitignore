@@ -40,6 +40,8 @@ __pycache__/
 
 # Gradle wrapper is meant to be committed
 !dev/gradle/wrapper/gradle-wrapper.jar
+!fabric/gradle/wrapper/gradle-wrapper.jar
+!optimized/gradle/wrapper/gradle-wrapper.jar
 
 # ---- Local screenshots (show Decimation models / textures: never public) ----
 docs/shots/
@@ -66,3 +68,4 @@ dev/src/main/resources/assets/deci/animations/mk18/
 
 # the design hook's cache (its config.json is kept: sanctioned exceptions)
 .impeccable/hook.cache.json
+tools/fabric/lib/

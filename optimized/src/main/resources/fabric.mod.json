@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "deciremnant_optimized",
+  "version": "${version}",
+  "name": "DeciRemnant Optimized",
+  "description": "Fabulously Optimized style performance modules written for Minecraft 1.7.10 (EntityCulling, Dynamic FPS, chunk geometry in vertex buffers as Sodium does, FastQuit), for Decimation on the Forge layer. Switches: config/deciremnant_optimized.properties.",
+  "license": "LGPL-2.1",
+  "environment": "client",
+  "mixins": [
+    "deciremnant_optimized.entityculling.mixins.json",
+    "deciremnant_optimized.dynamicfps.mixins.json",
+    "deciremnant_optimized.chunkvbo.mixins.json",
+    "deciremnant_optimized.fastquit.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.7.10"
+  }
+}

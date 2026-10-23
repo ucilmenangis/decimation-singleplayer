@@ -247,6 +247,17 @@ Knowledge index:
   Decimation's loot works (33 blocks, 12 lists, 1 .. n items per open since the v0.57.0 fix, rarity per item).
 - `docs/porting.md`: PARKED plan for a port to modern Minecraft (three paths: modpack, gun pack for a
   modern gun mod, full NeoForge rewrite; model conversion; first spike), for later only (user).
+- `docs/fabric_port.md`: Decimation + DeciRemnant on Legacy Fabric 1.7.10 (user 23 Oktober 2026): Forge applied
+  ahead of time (tools/fabric: mappings.py, Forgify game / forge / mod / strings, build_jars.py with shims for
+  ModClassLoader and ReflectionHelper), the layer `fabric/` (FML set up in pre launch), run_client.py (launcher style
+  run, dev tests by -Ddeciworldgen.autotest.test=MODE), prism_instance.py (Prism "Decimation Fabric"). Plays: checks,
+  gun, zombies, loot, menu pass; FPS +70 % with OptiFine 1.7.10 built into the game jar (the user's OptiFine jar in
+  build/fabric/optifine, never shipped; OptiFabric cannot: it wants vanilla classes); no 1.7.10 Fabric FPS mod helps.
+  Our Fabulously Optimized style modules in optimized/ (ChunkVBO: chunk sections from vertex buffers, EntityCulling,
+  Dynamic FPS; mixins, one config per module): +11 to +38 % over OptiFine alone at 1440 x 810 (at 854 x 480 the Mac
+  holds windowed frames to its 120 Hz display: bench larger). Dev tests fpsbench, culltest.
+  Traps: Legacy Fabric API's networking mixin cannot run on Forge's MinecraftServer; SRG names in strings; mixin
+  targets without a yarn name need the bare intermediary name; a mixin package belongs to one config.
 - `docs/city_dressing.md`: Decimation props through the whole city (streets, road scenes,
   interiors, story layer), rules in directions, verified facing table, checks, status / handoff.
 - `docs/airport.md`: military airport in a wasteland city (placement as a 2 x 4 cell block, layout, block-built

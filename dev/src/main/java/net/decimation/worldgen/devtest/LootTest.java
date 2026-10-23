@@ -295,6 +295,7 @@ public class LootTest extends DevTestMode
     {
         Container c = mc.thePlayer.openContainer;
         InventoryBasic inv = Deci.lootInventory(mc.thePlayer);
+        taken = null; // else a take that finds no slot leaves the crate's item and its "in the inventory" check passes
         for (Object o : c.inventorySlots)
         {
             Slot s = (Slot) o;

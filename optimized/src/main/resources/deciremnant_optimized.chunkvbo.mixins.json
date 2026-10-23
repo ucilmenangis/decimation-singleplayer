@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.decimation.optimized.chunkvbo.mixin",
+  "plugin": "net.decimation.optimized.MixinPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "client": ["TessellatorMixin", "BufferBuilderMixin", "ListedChunkRenderManagerMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

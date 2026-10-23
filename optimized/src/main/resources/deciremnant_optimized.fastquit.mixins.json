@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.decimation.optimized.fastquit.mixin",
+  "plugin": "net.decimation.optimized.MixinPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "client": ["MinecraftClientMixin", "ConnectScreenMixin", "LevelStorageMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

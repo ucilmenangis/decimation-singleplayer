@@ -132,3 +132,26 @@ spike answers the open questions (tapers, texture layout, animation) before any 
 Path B first, as the spike above: smallest, keeps the part of this project that is most our
 own (the guns), and tests the model pipeline every other path needs. Path A for the world side
 if the user wants modern terrain and performance. Path C only with a long time budget.
+
+## 8. Fabric on 1.7.10 instead of Forge (asked 23 Oktober 2026, analysis only)
+
+User: "make a fabric mod to support this version of minecraft, then make DeciRemnant a fabric mod".
+
+- The loader part exists: Legacy Fabric (legacyfabric.net) runs Fabric on 1.3 to 1.14, 1.7.10 included, with a
+  Legacy Fabric API. Nothing to build there.
+- The blocker is Decimation, not us: it is a closed Forge mod and our mod calls into it and patches it. Counted from
+  the bytecode (dev/libs/Decimation-base.jar, our build): 590 of Decimation's 1323 own classes use Forge / FML, 81
+  distinct Forge / FML types (SideOnly, SimpleNetworkWrapper and 207 IMessage classes, FMLCommonHandler, the event bus
+  with RenderWorldLastEvent / RenderGameOverlayEvent / LivingHurtEvent and more, IItemRenderer, GameRegistry,
+  ReflectionHelper, Configuration); no coremod. Ours: 255 of 583 classes, 79 types, nearly the same set.
+- So Decimation on Fabric needs a Forge 1.7.10 layer on Fabric (what Sinytra Connector is for modern versions; none
+  exists for 1.7.10 [not verified beyond a search]): those 81 types, the FML mod lifecycle and @Mod loading, and every
+  vanilla hook Forge adds by binpatch (the events must fire from mixins at Forge's exact places, the IItemRenderer path in
+  ItemRenderer, Forge's extra methods on vanilla classes), Forge's registry ids saved in level.dat (existing worlds),
+  and the jar remapped from SRG to Legacy Fabric's intermediary. If that layer works for Decimation, our mod runs on it
+  as it is (same types): porting ours to Fabric API on its own would be wasted, since it cannot load without Decimation.
+- Rough share of the work [inferred, not measured]: loader 0 %, the Forge layer 75 to 85 %, remapping and world / id
+  compatibility 10 to 15 %, our own code 0 to 10 %. Payoff on 1.7.10 is small: the 1.7.10 mods worth having (Angelica,
+  lwjgl3ify, the GTNH set this workspace already builds with) are Forge mods, and gvc (voice chat) too.
+- Advice given: do not; stay on Forge 1.7.10 (GTNH tooling), and if a move is wanted, it is to modern Minecraft
+  (sections 3 and 7), where a Fabric / NeoForge choice is real.

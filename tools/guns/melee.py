@@ -225,7 +225,35 @@ def sheet(path):
     return out.size
 
 
+def heat(name, parts, names, guard, length):
+    """The fire's heat mask (MeleeFire, Fire Aspect): the texture's metal pixels (the parts named) with how far along the
+    blade their part sits, guard 0 to tip 255, in red, 255 alpha; everything else clear. Only this file is written, the
+    model and texture stay as they are."""
+    from PIL import Image
+    from gunmodel import size, PX
+    uvs, th = layout(parts)
+    tex = Image.open(os.path.join(OUT, "textures", "model", "melee", name + ".png")).convert("RGBA")
+    img = Image.new("RGBA", tex.size, (0, 0, 0, 0))
+    for i, p in enumerate(parts):
+        if not any(p.name.startswith(n) for n in names):
+            continue
+        ys = [c[1] for c in p.points()]
+        s = max(0.0, min(1.0, (guard - (min(ys) + max(ys)) / 2) / length))
+        u, v = uvs[i]
+        w, h, d = size(p)
+        for y in range(int(v * PX), int((v + d + h) * PX)):
+            for x in range(int(u * PX), int((u + 2 * (d + w)) * PX)):
+                if x < img.width and y < img.height and tex.getpixel((x, y))[3]:
+                    img.putpixel((x, y), (int(s * 255), 255, 255, 255))
+    path = os.path.join(OUT, "textures", "model", "melee", name + "_heat.png")
+    img.save(path)
+    return path
+
+
 if __name__ == "__main__":
+    if "--heat" in sys.argv:
+        print(heat("katana", katana(), ("blade", "edge", "spine", "kissaki", "hi"), -1.0, 17.0))
+        sys.exit(0)
     print(write("karambit", karambit(), ("blade", "edge"), 0.05))
     print(write("katana", katana(), ("blade", "edge", "kissaki"), 0.025))
     if "--sheet" in sys.argv:

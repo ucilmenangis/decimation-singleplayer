@@ -369,10 +369,16 @@ public class ServerChecks extends DevTestMode
             refused += w.spawnEntityInWorld(e) ? 0 : 1;
             e.setDead();
         }
-        net.minecraft.entity.EntityLiving infected = net.decimation.fixes.Deci.newInfected(w);
-        infected.setPosition(p.posX + 3, p.posY, p.posZ);
-        boolean deci = w.spawnEntityInWorld(infected);
-        infected.setDead();
+        // Decimation refuses some infected spawns on purpose (it swaps 10% for a hulk / bloater): retried, as CLAUDE.md
+        // says for test spawns; a single try failed "infected spawns" in 4 of about 12 Fabric runs (23 Oktober 2026)
+        boolean deci = false;
+        for (int i = 0; i < 10 && !deci; i++)
+        {
+            net.minecraft.entity.EntityLiving infected = net.decimation.fixes.Deci.newInfected(w);
+            infected.setPosition(p.posX + 3, p.posY, p.posZ);
+            deci = w.spawnEntityInWorld(infected);
+            infected.setDead();
+        }
         int entries = 0;
         for (net.minecraft.world.biome.BiomeGenBase b : net.minecraft.world.biome.BiomeGenBase.getBiomeGenArray())
         {

@@ -73,6 +73,7 @@ GunAnimation.get 99 (a lookup each frame while the gun is held).
 | Need | Use |
 |---|---|
 | our guns and sights drawn like Decimation's | tools/guns (gunmodel.py), fixes/NewGuns, fixes/NewSights, fixes/SightPlacement, fixes/SightReticle, `Deci.offsetAttachment` (skill decimation-gun) |
+| every gun drawn into the view its own way, its rack at the end | fixes/GunDraw (wraps each gun's item renderer; dev test `gundraw`) |
 | scopes | fixes/ScopeZoom |
 | prop render distance and culling | tools/patches/PatchPropCulling.java, config deciworldgen_props.cfg |
 | NPC tracers | fixes/NpcShots, PatchTracer |

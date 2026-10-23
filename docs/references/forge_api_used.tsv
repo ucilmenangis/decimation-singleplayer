@@ -1,0 +1,614 @@
+kind	owner	name	descriptor	users	count
+class	cpw/mods/fml/client/FMLClientHandler			both	10
+class	cpw/mods/fml/client/registry/ClientRegistry			both	5
+class	cpw/mods/fml/client/registry/RenderingRegistry			decimation	2
+class	cpw/mods/fml/common/FMLCommonHandler			both	85
+class	cpw/mods/fml/common/FMLLog			ours	85
+class	cpw/mods/fml/common/FMLModContainer			decimation	1
+class	cpw/mods/fml/common/IASMHook			decimation	3
+class	cpw/mods/fml/common/IFMLSidedHandler			decimation	3
+class	cpw/mods/fml/common/ILanguageAdapter			decimation	3
+class	cpw/mods/fml/common/IWorldGenerator			ours	1
+class	cpw/mods/fml/common/Loader			ours	5
+class	cpw/mods/fml/common/MetadataCollection			decimation	1
+class	cpw/mods/fml/common/Mod			both	13
+class	cpw/mods/fml/common/ModContainer			ours	5
+class	cpw/mods/fml/common/ModMetadata			ours	3
+class	cpw/mods/fml/common/discovery/ContainerType			decimation	1
+class	cpw/mods/fml/common/discovery/ModCandidate			decimation	1
+class	cpw/mods/fml/common/event/FMLInitializationEvent			both	3
+class	cpw/mods/fml/common/event/FMLPostInitializationEvent			decimation	1
+class	cpw/mods/fml/common/event/FMLPreInitializationEvent			both	3
+class	cpw/mods/fml/common/event/FMLServerStartingEvent			both	2
+class	cpw/mods/fml/common/event/FMLServerStoppingEvent			decimation	1
+class	cpw/mods/fml/common/eventhandler/Event			ours	6
+class	cpw/mods/fml/common/eventhandler/EventBus			both	39
+class	cpw/mods/fml/common/gameevent/PlayerEvent			both	26
+class	cpw/mods/fml/common/gameevent/TickEvent			both	214
+class	cpw/mods/fml/common/network/ByteBufUtils			decimation	30
+class	cpw/mods/fml/common/network/FMLEmbeddedChannel			ours	1
+class	cpw/mods/fml/common/network/FMLNetworkEvent			both	8
+class	cpw/mods/fml/common/network/IGuiHandler			both	5
+class	cpw/mods/fml/common/network/NetworkRegistry			both	14
+class	cpw/mods/fml/common/network/internal/NetworkModHolder			ours	4
+class	cpw/mods/fml/common/network/simpleimpl/IMessage			both	84
+class	cpw/mods/fml/common/network/simpleimpl/IMessageHandler			both	84
+class	cpw/mods/fml/common/network/simpleimpl/MessageContext			both	63
+class	cpw/mods/fml/common/network/simpleimpl/SimpleIndexedCodec			ours	1
+class	cpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper			both	70
+class	cpw/mods/fml/common/registry/EntityRegistry			both	4
+class	cpw/mods/fml/common/registry/FMLControlledNamespacedRegistry			ours	2
+class	cpw/mods/fml/common/registry/GameData			ours	2
+class	cpw/mods/fml/common/registry/GameRegistry			both	66
+class	cpw/mods/fml/common/registry/IEntityAdditionalSpawnData			decimation	6
+class	cpw/mods/fml/relauncher/ReflectionHelper			both	23
+class	cpw/mods/fml/relauncher/Side			both	61
+class	net/minecraftforge/client/ForgeHooksClient			decimation	1
+class	net/minecraftforge/client/GuiIngameForge			both	2
+class	net/minecraftforge/client/IItemRenderer			both	63
+class	net/minecraftforge/client/MinecraftForgeClient			both	11
+class	net/minecraftforge/client/event/ClientChatReceivedEvent			ours	3
+class	net/minecraftforge/client/event/DrawBlockHighlightEvent			decimation	1
+class	net/minecraftforge/client/event/EntityViewRenderEvent			both	4
+class	net/minecraftforge/client/event/GuiOpenEvent			both	4
+class	net/minecraftforge/client/event/GuiScreenEvent			ours	46
+class	net/minecraftforge/client/event/MouseEvent			decimation	1
+class	net/minecraftforge/client/event/RenderBlockOverlayEvent			decimation	1
+class	net/minecraftforge/client/event/RenderGameOverlayEvent			both	37
+class	net/minecraftforge/client/event/RenderHandEvent			both	5
+class	net/minecraftforge/client/event/RenderLivingEvent			both	20
+class	net/minecraftforge/client/event/RenderPlayerEvent			both	15
+class	net/minecraftforge/client/event/RenderWorldEvent			decimation	5
+class	net/minecraftforge/client/event/RenderWorldLastEvent			both	14
+class	net/minecraftforge/client/event/sound/PlaySoundEvent17			decimation	1
+class	net/minecraftforge/common/BiomeDictionary			ours	8
+class	net/minecraftforge/common/DimensionManager			both	3
+class	net/minecraftforge/common/ForgeChunkManager			decimation	2
+class	net/minecraftforge/common/ForgeHooks			ours	1
+class	net/minecraftforge/common/IExtendedEntityProperties			both	4
+class	net/minecraftforge/common/MinecraftForge			both	24
+class	net/minecraftforge/common/UsernameCache			decimation	2
+class	net/minecraftforge/common/config/ConfigCategory			ours	1
+class	net/minecraftforge/common/config/Configuration			ours	12
+class	net/minecraftforge/common/config/Property			ours	4
+class	net/minecraftforge/common/util/EnumHelper			decimation	1
+class	net/minecraftforge/common/util/FakePlayer			ours	1
+class	net/minecraftforge/common/util/FakePlayerFactory			ours	1
+class	net/minecraftforge/common/util/ForgeDirection			decimation	2
+class	net/minecraftforge/event/AnvilUpdateEvent			ours	2
+class	net/minecraftforge/event/CommandEvent			decimation	1
+class	net/minecraftforge/event/ForgeEventFactory			ours	2
+class	net/minecraftforge/event/ServerChatEvent			decimation	2
+class	net/minecraftforge/event/entity/EntityEvent			both	8
+class	net/minecraftforge/event/entity/EntityJoinWorldEvent			both	16
+class	net/minecraftforge/event/entity/item/ItemTossEvent			decimation	3
+class	net/minecraftforge/event/entity/living/LivingAttackEvent			both	5
+class	net/minecraftforge/event/entity/living/LivingDeathEvent			both	6
+class	net/minecraftforge/event/entity/living/LivingDropsEvent			decimation	2
+class	net/minecraftforge/event/entity/living/LivingEvent			both	6
+class	net/minecraftforge/event/entity/living/LivingHurtEvent			both	8
+class	net/minecraftforge/event/entity/living/LivingSpawnEvent			ours	2
+class	net/minecraftforge/event/entity/player/AttackEntityEvent			ours	1
+class	net/minecraftforge/event/entity/player/EntityInteractEvent			both	4
+class	net/minecraftforge/event/entity/player/EntityItemPickupEvent			both	3
+class	net/minecraftforge/event/entity/player/ItemTooltipEvent			both	6
+class	net/minecraftforge/event/entity/player/PlayerEvent			decimation	4
+class	net/minecraftforge/event/entity/player/PlayerInteractEvent			both	14
+class	net/minecraftforge/event/entity/player/PlayerUseItemEvent			ours	2
+class	net/minecraftforge/event/terraingen/DecorateBiomeEvent			ours	3
+class	net/minecraftforge/event/terraingen/InitMapGenEvent			ours	2
+class	net/minecraftforge/event/terraingen/PopulateChunkEvent			ours	3
+class	net/minecraftforge/event/terraingen/WorldTypeEvent			ours	2
+class	net/minecraftforge/event/world/BlockEvent			decimation	7
+class	net/minecraftforge/event/world/ChunkEvent			ours	2
+class	net/minecraftforge/event/world/ExplosionEvent			decimation	1
+class	net/minecraftforge/event/world/WorldEvent			ours	31
+class	net/minecraftforge/oredict/OreDictionary			decimation	1
+field	cpw/mods/fml/common/ModMetadata	version	Ljava/lang/String;	ours	3
+field	cpw/mods/fml/common/discovery/ContainerType	DIR	Lcpw/mods/fml/common/discovery/ContainerType;	decimation	1
+field	cpw/mods/fml/common/eventhandler/Event$Result	DENY	Lcpw/mods/fml/common/eventhandler/Event$Result;	ours	3
+field	cpw/mods/fml/common/gameevent/PlayerEvent$ItemPickupEvent	pickedUp	Lnet/minecraft/entity/item/EntityItem;	decimation	1
+field	cpw/mods/fml/common/gameevent/PlayerEvent$ItemPickupEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	cpw/mods/fml/common/gameevent/PlayerEvent$PlayerLoggedInEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	both	6
+field	cpw/mods/fml/common/gameevent/PlayerEvent$PlayerLoggedOutEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	ours	4
+field	cpw/mods/fml/common/gameevent/PlayerEvent$PlayerRespawnEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	cpw/mods/fml/common/gameevent/TickEvent$ClientTickEvent	phase	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	both	21
+field	cpw/mods/fml/common/gameevent/TickEvent$Phase	END	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	both	47
+field	cpw/mods/fml/common/gameevent/TickEvent$Phase	START	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	both	30
+field	cpw/mods/fml/common/gameevent/TickEvent$PlayerTickEvent	phase	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	both	6
+field	cpw/mods/fml/common/gameevent/TickEvent$PlayerTickEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	both	6
+field	cpw/mods/fml/common/gameevent/TickEvent$RenderTickEvent	phase	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	both	24
+field	cpw/mods/fml/common/gameevent/TickEvent$RenderTickEvent	renderTickTime	F	decimation	1
+field	cpw/mods/fml/common/gameevent/TickEvent$ServerTickEvent	phase	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	both	21
+field	cpw/mods/fml/common/gameevent/TickEvent$WorldTickEvent	phase	Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	decimation	1
+field	cpw/mods/fml/common/gameevent/TickEvent$WorldTickEvent	world	Lnet/minecraft/world/World;	decimation	1
+field	cpw/mods/fml/common/network/NetworkRegistry	INSTANCE	Lcpw/mods/fml/common/network/NetworkRegistry;	both	7
+field	cpw/mods/fml/common/network/NetworkRegistry	NET_HANDLER	Lio/netty/util/AttributeKey;	ours	1
+field	cpw/mods/fml/common/network/simpleimpl/MessageContext	side	Lcpw/mods/fml/relauncher/Side;	decimation	2
+field	cpw/mods/fml/common/registry/GameRegistry$UniqueIdentifier	name	Ljava/lang/String;	both	12
+field	cpw/mods/fml/relauncher/Side	CLIENT	Lcpw/mods/fml/relauncher/Side;	both	6
+field	cpw/mods/fml/relauncher/Side	SERVER	Lcpw/mods/fml/relauncher/Side;	both	4
+field	net/minecraftforge/client/GuiIngameForge	left_height	I	ours	1
+field	net/minecraftforge/client/GuiIngameForge	right_height	I	both	2
+field	net/minecraftforge/client/IItemRenderer$ItemRenderType	ENTITY	Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;	both	7
+field	net/minecraftforge/client/IItemRenderer$ItemRenderType	EQUIPPED	Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;	both	18
+field	net/minecraftforge/client/IItemRenderer$ItemRenderType	EQUIPPED_FIRST_PERSON	Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;	both	14
+field	net/minecraftforge/client/IItemRenderer$ItemRenderType	INVENTORY	Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;	decimation	2
+field	net/minecraftforge/client/IItemRenderer$ItemRendererHelper	ENTITY_BOBBING	Lnet/minecraftforge/client/IItemRenderer$ItemRendererHelper;	ours	1
+field	net/minecraftforge/client/IItemRenderer$ItemRendererHelper	ENTITY_ROTATION	Lnet/minecraftforge/client/IItemRenderer$ItemRendererHelper;	ours	1
+field	net/minecraftforge/client/event/ClientChatReceivedEvent	message	Lnet/minecraft/util/IChatComponent;	ours	3
+field	net/minecraftforge/client/event/DrawBlockHighlightEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	net/minecraftforge/client/event/EntityViewRenderEvent$FogColors	renderPartialTicks	D	ours	1
+field	net/minecraftforge/client/event/EntityViewRenderEvent$FogDensity	density	F	decimation	1
+field	net/minecraftforge/client/event/GuiOpenEvent	gui	Lnet/minecraft/client/gui/GuiScreen;	both	4
+field	net/minecraftforge/client/event/GuiScreenEvent$ActionPerformedEvent$Pre	button	Lnet/minecraft/client/gui/GuiButton;	ours	7
+field	net/minecraftforge/client/event/GuiScreenEvent$ActionPerformedEvent$Pre	gui	Lnet/minecraft/client/gui/GuiScreen;	ours	7
+field	net/minecraftforge/client/event/GuiScreenEvent$DrawScreenEvent$Post	gui	Lnet/minecraft/client/gui/GuiScreen;	ours	3
+field	net/minecraftforge/client/event/GuiScreenEvent$DrawScreenEvent$Post	mouseX	I	ours	2
+field	net/minecraftforge/client/event/GuiScreenEvent$DrawScreenEvent$Post	mouseY	I	ours	2
+field	net/minecraftforge/client/event/GuiScreenEvent$DrawScreenEvent$Post	renderPartialTicks	F	ours	1
+field	net/minecraftforge/client/event/GuiScreenEvent$InitGuiEvent$Post	buttonList	Ljava/util/List;	ours	6
+field	net/minecraftforge/client/event/GuiScreenEvent$InitGuiEvent$Post	gui	Lnet/minecraft/client/gui/GuiScreen;	ours	8
+field	net/minecraftforge/client/event/MouseEvent	button	I	decimation	1
+field	net/minecraftforge/client/event/MouseEvent	buttonstate	Z	decimation	1
+field	net/minecraftforge/client/event/RenderBlockOverlayEvent	blockForOverlay	Lnet/minecraft/block/Block;	decimation	1
+field	net/minecraftforge/client/event/RenderBlockOverlayEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	net/minecraftforge/client/event/RenderGameOverlayEvent	type	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	decimation	1
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	AIR	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	ours	1
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	ALL	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	10
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	ARMOR	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	CROSSHAIRS	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	EXPERIENCE	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	FOOD	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	HEALTH	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	HELMET	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	HOTBAR	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	ours	1
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	PLAYER_LIST	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	decimation	1
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$Post	partialTicks	F	both	2
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$Post	resolution	Lnet/minecraft/client/gui/ScaledResolution;	both	3
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$Post	type	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	6
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$Pre	resolution	Lnet/minecraft/client/gui/ScaledResolution;	both	3
+field	net/minecraftforge/client/event/RenderGameOverlayEvent$Pre	type	Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;	both	7
+field	net/minecraftforge/client/event/RenderHandEvent	partialTicks	F	ours	1
+field	net/minecraftforge/client/event/RenderHandEvent	renderPass	I	ours	1
+field	net/minecraftforge/client/event/RenderLivingEvent$Post	entity	Lnet/minecraft/entity/EntityLivingBase;	ours	1
+field	net/minecraftforge/client/event/RenderLivingEvent$Pre	entity	Lnet/minecraft/entity/EntityLivingBase;	both	3
+field	net/minecraftforge/client/event/RenderLivingEvent$Specials$Pre	entity	Lnet/minecraft/entity/EntityLivingBase;	both	2
+field	net/minecraftforge/client/event/RenderLivingEvent$Specials$Pre	renderer	Lnet/minecraft/client/renderer/entity/RendererLivingEntity;	decimation	1
+field	net/minecraftforge/client/event/RenderLivingEvent$Specials$Pre	x	D	decimation	1
+field	net/minecraftforge/client/event/RenderLivingEvent$Specials$Pre	y	D	decimation	1
+field	net/minecraftforge/client/event/RenderLivingEvent$Specials$Pre	z	D	decimation	1
+field	net/minecraftforge/client/event/RenderPlayerEvent$Pre	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	both	3
+field	net/minecraftforge/client/event/RenderPlayerEvent$Pre	renderer	Lnet/minecraft/client/renderer/entity/RenderPlayer;	both	2
+field	net/minecraftforge/client/event/RenderPlayerEvent$Specials$Post	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	net/minecraftforge/client/event/RenderPlayerEvent$Specials$Post	partialRenderTick	F	decimation	1
+field	net/minecraftforge/client/event/RenderPlayerEvent$Specials$Post	renderer	Lnet/minecraft/client/renderer/entity/RenderPlayer;	decimation	1
+field	net/minecraftforge/client/event/RenderPlayerEvent$Specials$Pre	renderCape	Z	ours	1
+field	net/minecraftforge/client/event/RenderPlayerEvent$Specials$Pre	renderItem	Z	ours	1
+field	net/minecraftforge/client/event/RenderPlayerEvent$Specials$Pre	renderer	Lnet/minecraft/client/renderer/entity/RenderPlayer;	ours	2
+field	net/minecraftforge/client/event/RenderWorldLastEvent	partialTicks	F	decimation	11
+field	net/minecraftforge/client/event/sound/PlaySoundEvent17	category	Lnet/minecraft/client/audio/SoundCategory;	decimation	1
+field	net/minecraftforge/client/event/sound/PlaySoundEvent17	name	Ljava/lang/String;	decimation	1
+field	net/minecraftforge/client/event/sound/PlaySoundEvent17	result	Lnet/minecraft/client/audio/ISound;	decimation	1
+field	net/minecraftforge/client/event/sound/PlaySoundEvent17	sound	Lnet/minecraft/client/audio/ISound;	decimation	1
+field	net/minecraftforge/common/BiomeDictionary$Type	DEAD	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	DENSE	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	DRY	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	FOREST	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	3
+field	net/minecraftforge/common/BiomeDictionary$Type	HILLS	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	JUNGLE	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	LUSH	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	MESA	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	PLAINS	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	RIVER	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	SANDY	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	SAVANNA	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	SNOWY	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	SPARSE	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	SPOOKY	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	SWAMP	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	WASTELAND	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/BiomeDictionary$Type	WET	Lnet/minecraftforge/common/BiomeDictionary$Type;	ours	1
+field	net/minecraftforge/common/MinecraftForge	EVENT_BUS	Lcpw/mods/fml/common/eventhandler/EventBus;	both	24
+field	net/minecraftforge/common/MinecraftForge	TERRAIN_GEN_BUS	Lcpw/mods/fml/common/eventhandler/EventBus;	ours	1
+field	net/minecraftforge/common/util/ForgeDirection	DOWN	Lnet/minecraftforge/common/util/ForgeDirection;	decimation	1
+field	net/minecraftforge/event/AnvilUpdateEvent	cost	I	ours	1
+field	net/minecraftforge/event/AnvilUpdateEvent	left	Lnet/minecraft/item/ItemStack;	ours	1
+field	net/minecraftforge/event/AnvilUpdateEvent	output	Lnet/minecraft/item/ItemStack;	ours	2
+field	net/minecraftforge/event/AnvilUpdateEvent	right	Lnet/minecraft/item/ItemStack;	ours	1
+field	net/minecraftforge/event/CommandEvent	command	Lnet/minecraft/command/ICommand;	decimation	1
+field	net/minecraftforge/event/CommandEvent	sender	Lnet/minecraft/command/ICommandSender;	decimation	1
+field	net/minecraftforge/event/ServerChatEvent	message	Ljava/lang/String;	decimation	2
+field	net/minecraftforge/event/ServerChatEvent	player	Lnet/minecraft/entity/player/EntityPlayerMP;	decimation	2
+field	net/minecraftforge/event/ServerChatEvent	username	Ljava/lang/String;	decimation	2
+field	net/minecraftforge/event/entity/EntityEvent$EntityConstructing	entity	Lnet/minecraft/entity/Entity;	both	4
+field	net/minecraftforge/event/entity/EntityJoinWorldEvent	entity	Lnet/minecraft/entity/Entity;	both	16
+field	net/minecraftforge/event/entity/EntityJoinWorldEvent	world	Lnet/minecraft/world/World;	both	13
+field	net/minecraftforge/event/entity/item/ItemTossEvent	entityItem	Lnet/minecraft/entity/item/EntityItem;	decimation	1
+field	net/minecraftforge/event/entity/item/ItemTossEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	decimation	3
+field	net/minecraftforge/event/entity/living/LivingAttackEvent	entity	Lnet/minecraft/entity/Entity;	decimation	2
+field	net/minecraftforge/event/entity/living/LivingAttackEvent	entityLiving	Lnet/minecraft/entity/EntityLivingBase;	both	3
+field	net/minecraftforge/event/entity/living/LivingAttackEvent	source	Lnet/minecraft/util/DamageSource;	both	4
+field	net/minecraftforge/event/entity/living/LivingDeathEvent	entity	Lnet/minecraft/entity/Entity;	both	4
+field	net/minecraftforge/event/entity/living/LivingDeathEvent	entityLiving	Lnet/minecraft/entity/EntityLivingBase;	both	5
+field	net/minecraftforge/event/entity/living/LivingDeathEvent	source	Lnet/minecraft/util/DamageSource;	both	5
+field	net/minecraftforge/event/entity/living/LivingDropsEvent	entity	Lnet/minecraft/entity/Entity;	decimation	2
+field	net/minecraftforge/event/entity/living/LivingEvent$LivingUpdateEvent	entity	Lnet/minecraft/entity/Entity;	ours	1
+field	net/minecraftforge/event/entity/living/LivingEvent$LivingUpdateEvent	entityLiving	Lnet/minecraft/entity/EntityLivingBase;	both	2
+field	net/minecraftforge/event/entity/living/LivingHurtEvent	ammount	F	both	5
+field	net/minecraftforge/event/entity/living/LivingHurtEvent	entity	Lnet/minecraft/entity/Entity;	decimation	5
+field	net/minecraftforge/event/entity/living/LivingHurtEvent	entityLiving	Lnet/minecraft/entity/EntityLivingBase;	both	4
+field	net/minecraftforge/event/entity/living/LivingHurtEvent	source	Lnet/minecraft/util/DamageSource;	both	7
+field	net/minecraftforge/event/entity/living/LivingSpawnEvent$CheckSpawn	entityLiving	Lnet/minecraft/entity/EntityLivingBase;	ours	1
+field	net/minecraftforge/event/entity/living/LivingSpawnEvent$CheckSpawn	world	Lnet/minecraft/world/World;	ours	1
+field	net/minecraftforge/event/entity/living/LivingSpawnEvent$CheckSpawn	x	F	ours	1
+field	net/minecraftforge/event/entity/living/LivingSpawnEvent$CheckSpawn	y	F	ours	1
+field	net/minecraftforge/event/entity/living/LivingSpawnEvent$CheckSpawn	z	F	ours	1
+field	net/minecraftforge/event/entity/player/AttackEntityEvent	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	ours	1
+field	net/minecraftforge/event/entity/player/AttackEntityEvent	target	Lnet/minecraft/entity/Entity;	ours	1
+field	net/minecraftforge/event/entity/player/EntityInteractEvent	entity	Lnet/minecraft/entity/Entity;	decimation	2
+field	net/minecraftforge/event/entity/player/EntityInteractEvent	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	both	2
+field	net/minecraftforge/event/entity/player/EntityInteractEvent	target	Lnet/minecraft/entity/Entity;	both	4
+field	net/minecraftforge/event/entity/player/EntityItemPickupEvent	entity	Lnet/minecraft/entity/Entity;	both	3
+field	net/minecraftforge/event/entity/player/EntityItemPickupEvent	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	both	3
+field	net/minecraftforge/event/entity/player/EntityItemPickupEvent	item	Lnet/minecraft/entity/item/EntityItem;	both	3
+field	net/minecraftforge/event/entity/player/ItemTooltipEvent	itemStack	Lnet/minecraft/item/ItemStack;	both	6
+field	net/minecraftforge/event/entity/player/ItemTooltipEvent	toolTip	Ljava/util/List;	both	6
+field	net/minecraftforge/event/entity/player/PlayerEvent$Clone	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	net/minecraftforge/event/entity/player/PlayerEvent$Clone	original	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	net/minecraftforge/event/entity/player/PlayerEvent$StartTracking	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	decimation	1
+field	net/minecraftforge/event/entity/player/PlayerEvent$StartTracking	target	Lnet/minecraft/entity/Entity;	decimation	1
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent	action	Lnet/minecraftforge/event/entity/player/PlayerInteractEvent$Action;	both	6
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	both	6
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent	world	Lnet/minecraft/world/World;	both	3
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent	x	I	both	4
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent	y	I	both	4
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent	z	I	both	4
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent$Action	LEFT_CLICK_BLOCK	Lnet/minecraftforge/event/entity/player/PlayerInteractEvent$Action;	ours	2
+field	net/minecraftforge/event/entity/player/PlayerInteractEvent$Action	RIGHT_CLICK_BLOCK	Lnet/minecraftforge/event/entity/player/PlayerInteractEvent$Action;	both	6
+field	net/minecraftforge/event/entity/player/PlayerUseItemEvent$Start	duration	I	ours	1
+field	net/minecraftforge/event/entity/player/PlayerUseItemEvent$Start	entityPlayer	Lnet/minecraft/entity/player/EntityPlayer;	ours	1
+field	net/minecraftforge/event/entity/player/PlayerUseItemEvent$Start	item	Lnet/minecraft/item/ItemStack;	ours	1
+field	net/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate	chunkX	I	ours	1
+field	net/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate	chunkZ	I	ours	1
+field	net/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate	type	Lnet/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate	world	Lnet/minecraft/world/World;	ours	1
+field	net/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate$EventType	LAKE	Lnet/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/InitMapGenEvent	newGen	Lnet/minecraft/world/gen/MapGenBase;	ours	1
+field	net/minecraftforge/event/terraingen/InitMapGenEvent	originalGen	Lnet/minecraft/world/gen/MapGenBase;	ours	1
+field	net/minecraftforge/event/terraingen/InitMapGenEvent	type	Lnet/minecraftforge/event/terraingen/InitMapGenEvent$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/InitMapGenEvent$EventType	CAVE	Lnet/minecraftforge/event/terraingen/InitMapGenEvent$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/InitMapGenEvent$EventType	RAVINE	Lnet/minecraftforge/event/terraingen/InitMapGenEvent$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate	chunkX	I	ours	1
+field	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate	chunkZ	I	ours	1
+field	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate	type	Lnet/minecraftforge/event/terraingen/PopulateChunkEvent$Populate$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate	world	Lnet/minecraft/world/World;	ours	1
+field	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate$EventType	LAKE	Lnet/minecraftforge/event/terraingen/PopulateChunkEvent$Populate$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate$EventType	LAVA	Lnet/minecraftforge/event/terraingen/PopulateChunkEvent$Populate$EventType;	ours	1
+field	net/minecraftforge/event/terraingen/WorldTypeEvent$InitBiomeGens	newBiomeGens	[Lnet/minecraft/world/gen/layer/GenLayer;	ours	1
+field	net/minecraftforge/event/terraingen/WorldTypeEvent$InitBiomeGens	seed	J	ours	1
+field	net/minecraftforge/event/terraingen/WorldTypeEvent$InitBiomeGens	worldType	Lnet/minecraft/world/WorldType;	ours	1
+field	net/minecraftforge/event/world/BlockEvent$BreakEvent	block	Lnet/minecraft/block/Block;	decimation	2
+field	net/minecraftforge/event/world/BlockEvent$PlaceEvent	block	Lnet/minecraft/block/Block;	decimation	2
+field	net/minecraftforge/event/world/BlockEvent$PlaceEvent	player	Lnet/minecraft/entity/player/EntityPlayer;	decimation	2
+field	net/minecraftforge/event/world/BlockEvent$PlaceEvent	world	Lnet/minecraft/world/World;	decimation	2
+field	net/minecraftforge/event/world/BlockEvent$PlaceEvent	x	I	decimation	2
+field	net/minecraftforge/event/world/BlockEvent$PlaceEvent	y	I	decimation	2
+field	net/minecraftforge/event/world/BlockEvent$PlaceEvent	z	I	decimation	2
+field	net/minecraftforge/event/world/ExplosionEvent	explosion	Lnet/minecraft/world/Explosion;	decimation	1
+field	net/minecraftforge/event/world/ExplosionEvent	world	Lnet/minecraft/world/World;	decimation	1
+field	net/minecraftforge/event/world/WorldEvent$Load	world	Lnet/minecraft/world/World;	ours	10
+field	net/minecraftforge/event/world/WorldEvent$Save	world	Lnet/minecraft/world/World;	ours	3
+field	net/minecraftforge/event/world/WorldEvent$Unload	world	Lnet/minecraft/world/World;	ours	6
+forge-added field	net/minecraft/client/audio/ISound$AttenuationType	NONE	Lnet/minecraft/client/audio/ISound$AttenuationType;	decimation	1
+forge-added field	net/minecraft/client/audio/SoundCategory	MUSIC	Lnet/minecraft/client/audio/SoundCategory;	decimation	1
+forge-added field	net/minecraft/client/renderer/OpenGlHelper	lastBrightnessX	F	ours	1
+forge-added field	net/minecraft/client/renderer/OpenGlHelper	lastBrightnessY	F	ours	1
+forge-added field	net/minecraft/client/renderer/entity/RenderLiving	NAME_TAG_RANGE	F	decimation	1
+forge-added field	net/minecraft/client/renderer/entity/RenderLiving	NAME_TAG_RANGE_SNEAK	F	decimation	1
+forge-added field	net/minecraft/client/settings/GameSettings$Options	DIFFICULTY	Lnet/minecraft/client/settings/GameSettings$Options;	decimation	1
+forge-added field	net/minecraft/client/settings/GameSettings$Options	FOV	Lnet/minecraft/client/settings/GameSettings$Options;	decimation	1
+forge-added field	net/minecraft/entity/EnumCreatureType	creature	Lnet/minecraft/entity/EnumCreatureType;	decimation	1
+forge-added field	net/minecraft/entity/EnumCreatureType	monster	Lnet/minecraft/entity/EnumCreatureType;	both	4
+forge-added field	net/minecraft/entity/item/EntityItem	lifespan	I	ours	1
+forge-added field	net/minecraft/entity/player/EntityPlayer	eyeHeight	F	decimation	1
+forge-added field	net/minecraft/item/EnumAction	block	Lnet/minecraft/item/EnumAction;	both	18
+forge-added field	net/minecraft/item/EnumAction	bow	Lnet/minecraft/item/EnumAction;	decimation	1
+forge-added field	net/minecraft/item/EnumAction	drink	Lnet/minecraft/item/EnumAction;	decimation	2
+forge-added field	net/minecraft/item/ItemArmor$ArmorMaterial	CHAIN	Lnet/minecraft/item/ItemArmor$ArmorMaterial;	decimation	1
+forge-added field	net/minecraft/launchwrapper/Launch	blackboard	Ljava/util/Map;	both	7
+forge-added field	net/minecraft/network/play/client/C02PacketUseEntity$Action	INTERACT	Lnet/minecraft/network/play/client/C02PacketUseEntity$Action;	ours	1
+forge-added field	net/minecraft/util/EnumChatFormatting	AQUA	Lnet/minecraft/util/EnumChatFormatting;	both	5
+forge-added field	net/minecraft/util/EnumChatFormatting	BLACK	Lnet/minecraft/util/EnumChatFormatting;	decimation	4
+forge-added field	net/minecraft/util/EnumChatFormatting	BLUE	Lnet/minecraft/util/EnumChatFormatting;	decimation	3
+forge-added field	net/minecraft/util/EnumChatFormatting	BOLD	Lnet/minecraft/util/EnumChatFormatting;	both	8
+forge-added field	net/minecraft/util/EnumChatFormatting	DARK_GRAY	Lnet/minecraft/util/EnumChatFormatting;	decimation	19
+forge-added field	net/minecraft/util/EnumChatFormatting	DARK_GREEN	Lnet/minecraft/util/EnumChatFormatting;	both	5
+forge-added field	net/minecraft/util/EnumChatFormatting	DARK_RED	Lnet/minecraft/util/EnumChatFormatting;	both	16
+forge-added field	net/minecraft/util/EnumChatFormatting	GOLD	Lnet/minecraft/util/EnumChatFormatting;	both	5
+forge-added field	net/minecraft/util/EnumChatFormatting	GRAY	Lnet/minecraft/util/EnumChatFormatting;	both	96
+forge-added field	net/minecraft/util/EnumChatFormatting	GREEN	Lnet/minecraft/util/EnumChatFormatting;	both	53
+forge-added field	net/minecraft/util/EnumChatFormatting	LIGHT_PURPLE	Lnet/minecraft/util/EnumChatFormatting;	decimation	1
+forge-added field	net/minecraft/util/EnumChatFormatting	RED	Lnet/minecraft/util/EnumChatFormatting;	both	109
+forge-added field	net/minecraft/util/EnumChatFormatting	RESET	Lnet/minecraft/util/EnumChatFormatting;	decimation	8
+forge-added field	net/minecraft/util/EnumChatFormatting	WHITE	Lnet/minecraft/util/EnumChatFormatting;	decimation	41
+forge-added field	net/minecraft/util/EnumChatFormatting	YELLOW	Lnet/minecraft/util/EnumChatFormatting;	both	17
+forge-added field	net/minecraft/util/MovingObjectPosition$MovingObjectType	BLOCK	Lnet/minecraft/util/MovingObjectPosition$MovingObjectType;	both	14
+forge-added field	net/minecraft/util/MovingObjectPosition$MovingObjectType	ENTITY	Lnet/minecraft/util/MovingObjectPosition$MovingObjectType;	decimation	1
+forge-added field	net/minecraft/util/MovingObjectPosition$MovingObjectType	MISS	Lnet/minecraft/util/MovingObjectPosition$MovingObjectType;	both	4
+forge-added field	net/minecraft/util/Util$EnumOS	OSX	Lnet/minecraft/util/Util$EnumOS;	decimation	1
+forge-added field	net/minecraft/world/EnumDifficulty	HARD	Lnet/minecraft/world/EnumDifficulty;	decimation	1
+forge-added field	net/minecraft/world/EnumDifficulty	NORMAL	Lnet/minecraft/world/EnumDifficulty;	ours	14
+forge-added field	net/minecraft/world/EnumDifficulty	PEACEFUL	Lnet/minecraft/world/EnumDifficulty;	ours	3
+forge-added field	net/minecraft/world/EnumSkyBlock	Block	Lnet/minecraft/world/EnumSkyBlock;	both	2
+forge-added field	net/minecraft/world/EnumSkyBlock	Sky	Lnet/minecraft/world/EnumSkyBlock;	ours	2
+forge-added field	net/minecraft/world/WorldSettings$GameType	CREATIVE	Lnet/minecraft/world/WorldSettings$GameType;	ours	24
+forge-added field	net/minecraft/world/WorldSettings$GameType	SURVIVAL	Lnet/minecraft/world/WorldSettings$GameType;	ours	31
+forge-added field	net/minecraft/world/biome/WorldChunkManager	allowedBiomes	Ljava/util/ArrayList;	ours	1
+forge-added method	net/minecraft/block/Block	createTileEntity	(Lnet/minecraft/world/World;I)Lnet/minecraft/tileentity/TileEntity;	ours	1
+forge-added method	net/minecraft/block/Block	getLightOpacity	(Lnet/minecraft/world/IBlockAccess;III)I	ours	2
+forge-added method	net/minecraft/block/Block	getLightValue	(Lnet/minecraft/world/IBlockAccess;III)I	ours	2
+forge-added method	net/minecraft/block/Block	hasTileEntity	(I)Z	ours	9
+forge-added method	net/minecraft/block/Block	isAir	(Lnet/minecraft/world/IBlockAccess;III)Z	ours	1
+forge-added method	net/minecraft/block/Block	isReplaceable	(Lnet/minecraft/world/IBlockAccess;III)Z	ours	1
+forge-added method	net/minecraft/client/entity/EntityClientPlayerMP	getDisplayName	()Ljava/lang/String;	decimation	1
+forge-added method	net/minecraft/client/gui/GuiScreen	drawHoveringText	(Ljava/util/List;IILnet/minecraft/client/gui/FontRenderer;)V	decimation	1
+forge-added method	net/minecraft/client/renderer/RenderBlocks	getInstance	()Lnet/minecraft/client/renderer/RenderBlocks;	ours	1
+forge-added method	net/minecraft/client/renderer/entity/RenderBiped	getArmorResource	(Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;ILjava/lang/String;)Lnet/minecraft/util/ResourceLocation;	decimation	1
+forge-added method	net/minecraft/entity/Entity	canRiderInteract	()Z	decimation	1
+forge-added method	net/minecraft/entity/Entity	equals	(Ljava/lang/Object;)Z	decimation	10
+forge-added method	net/minecraft/entity/Entity	getEntityData	()Lnet/minecraft/nbt/NBTTagCompound;	ours	11
+forge-added method	net/minecraft/entity/Entity	registerExtendedProperties	(Ljava/lang/String;Lnet/minecraftforge/common/IExtendedEntityProperties;)Ljava/lang/String;	ours	2
+forge-added method	net/minecraft/entity/EntityCreature	getEntityData	()Lnet/minecraft/nbt/NBTTagCompound;	ours	2
+forge-added method	net/minecraft/entity/EntityLiving	getEntityData	()Lnet/minecraft/nbt/NBTTagCompound;	ours	17
+forge-added method	net/minecraft/entity/EntityLivingBase	equals	(Ljava/lang/Object;)Z	decimation	1
+forge-added method	net/minecraft/entity/EntityLivingBase	getEntityData	()Lnet/minecraft/nbt/NBTTagCompound;	ours	2
+forge-added method	net/minecraft/entity/EntityTracker	getTrackingPlayers	(Lnet/minecraft/entity/Entity;)Ljava/util/Set;	decimation	1
+forge-added method	net/minecraft/entity/EnumCreatureType	values	()[Lnet/minecraft/entity/EnumCreatureType;	ours	3
+forge-added method	net/minecraft/entity/passive/EntityPig	getEntityData	()Lnet/minecraft/nbt/NBTTagCompound;	ours	3
+forge-added method	net/minecraft/entity/player/EntityPlayer	equals	(Ljava/lang/Object;)Z	decimation	4
+forge-added method	net/minecraft/entity/player/EntityPlayer	getDefaultEyeHeight	()F	decimation	2
+forge-added method	net/minecraft/entity/player/EntityPlayer	getDisplayName	()Ljava/lang/String;	decimation	9
+forge-added method	net/minecraft/entity/player/EntityPlayer	getExtendedProperties	(Ljava/lang/String;)Lnet/minecraftforge/common/IExtendedEntityProperties;	both	4
+forge-added method	net/minecraft/entity/player/EntityPlayer	hashCode	()I	decimation	1
+forge-added method	net/minecraft/entity/player/EntityPlayer	openGui	(Ljava/lang/Object;ILnet/minecraft/world/World;III)V	both	6
+forge-added method	net/minecraft/entity/player/EntityPlayer	registerExtendedProperties	(Ljava/lang/String;Lnet/minecraftforge/common/IExtendedEntityProperties;)Ljava/lang/String;	decimation	1
+forge-added method	net/minecraft/entity/player/EntityPlayerMP	getDisplayName	()Ljava/lang/String;	decimation	1
+forge-added method	net/minecraft/entity/player/EntityPlayerMP	getExtendedProperties	(Ljava/lang/String;)Lnet/minecraftforge/common/IExtendedEntityProperties;	ours	1
+forge-added method	net/minecraft/entity/player/EntityPlayerMP	openGui	(Ljava/lang/Object;ILnet/minecraft/world/World;III)V	both	5
+forge-added method	net/minecraft/entity/player/EntityPlayerMP	registerExtendedProperties	(Ljava/lang/String;Lnet/minecraftforge/common/IExtendedEntityProperties;)Ljava/lang/String;	decimation	1
+forge-added method	net/minecraft/inventory/Slot	getSlotIndex	()I	ours	5
+forge-added method	net/minecraft/item/Item	getDamage	(Lnet/minecraft/item/ItemStack;)I	decimation	1
+forge-added method	net/minecraft/item/Item	getDurabilityForDisplay	(Lnet/minecraft/item/ItemStack;)D	ours	1
+forge-added method	net/minecraft/item/Item	isValidArmor	(Lnet/minecraft/item/ItemStack;ILnet/minecraft/entity/Entity;)Z	decimation	1
+forge-added method	net/minecraft/item/Item	showDurabilityBar	(Lnet/minecraft/item/ItemStack;)Z	ours	1
+forge-added method	net/minecraft/item/ItemArmor	isValidArmor	(Lnet/minecraft/item/ItemStack;ILnet/minecraft/entity/Entity;)Z	decimation	1
+forge-added method	net/minecraft/item/ItemBlock	placeBlockAt	(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;IIIIFFFI)Z	decimation	8
+forge-added method	net/minecraft/nbt/NBTTagCompound	hashCode	()I	decimation	1
+forge-added method	net/minecraft/tileentity/TileEntity	getRenderBoundingBox	()Lnet/minecraft/util/AxisAlignedBB;	both	2
+forge-added method	net/minecraft/tileentity/TileEntity	shouldRefresh	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;IILnet/minecraft/world/World;III)Z	ours	1
+forge-added method	net/minecraft/util/EnumChatFormatting	toString	()Ljava/lang/String;	ours	1
+forge-added method	net/minecraft/util/EnumChatFormatting	values	()[Lnet/minecraft/util/EnumChatFormatting;	decimation	1
+forge-added method	net/minecraft/util/MovingObjectPosition$MovingObjectType	equals	(Ljava/lang/Object;)Z	decimation	2
+forge-added method	net/minecraft/util/RegistryNamespaced	iterator	()Ljava/util/Iterator;	ours	10
+forge-added method	net/minecraft/util/ResourceLocation	equals	(Ljava/lang/Object;)Z	ours	3
+forge-added method	net/minecraft/util/ResourceLocation	toString	()Ljava/lang/String;	both	4
+forge-added method	net/minecraft/world/EnumSkyBlock	values	()[Lnet/minecraft/world/EnumSkyBlock;	ours	1
+forge-added method	net/minecraft/world/World	calculateInitialWeatherBody	()V	decimation	1
+forge-added method	net/minecraft/world/World	drawCloudsBody	(F)Lnet/minecraft/util/Vec3;	decimation	1
+forge-added method	net/minecraft/world/World	finishSetup	()V	decimation	1
+forge-added method	net/minecraft/world/World	getBlockLightOpacity	(III)I	decimation	1
+forge-added method	net/minecraft/world/World	getPersistentChunks	()Lcom/google/common/collect/ImmutableSetMultimap;	decimation	1
+forge-added method	net/minecraft/world/World	getSkyColorBody	(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/util/Vec3;	decimation	1
+forge-added method	net/minecraft/world/World	getStarBrightnessBody	(F)F	decimation	1
+forge-added method	net/minecraft/world/World	isSideSolid	(IIILnet/minecraftforge/common/util/ForgeDirection;)Z	decimation	1
+forge-added method	net/minecraft/world/World	markAndNotifyBlock	(IIILnet/minecraft/world/chunk/Chunk;Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;I)V	ours	1
+forge-added method	net/minecraft/world/WorldProvider	drawClouds	(F)Lnet/minecraft/util/Vec3;	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getCloudRenderer	()Lnet/minecraftforge/client/IRenderHandler;	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getHorizon	()D	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getMovementFactor	()D	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getSkyColor	(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/util/Vec3;	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getSkyRenderer	()Lnet/minecraftforge/client/IRenderHandler;	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getStarBrightness	(F)F	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	getWeatherRenderer	()Lnet/minecraftforge/client/IRenderHandler;	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	setCloudRenderer	(Lnet/minecraftforge/client/IRenderHandler;)V	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	setSkyRenderer	(Lnet/minecraftforge/client/IRenderHandler;)V	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	setSpawnPoint	(III)V	decimation	1
+forge-added method	net/minecraft/world/WorldProvider	setWeatherRenderer	(Lnet/minecraftforge/client/IRenderHandler;)V	decimation	1
+forge-added method	net/minecraft/world/chunk/Chunk	getTileEntityUnsafe	(III)Lnet/minecraft/tileentity/TileEntity;	ours	1
+forge-added method	net/minecraft/world/chunk/storage/AnvilChunkLoader	chunkExists	(Lnet/minecraft/world/World;II)Z	ours	6
+forge-added method	net/minecraft/world/gen/MapGenCaves	digBlock	([Lnet/minecraft/block/Block;IIIIIIZ)V	ours	1
+forge-added method	net/minecraft/world/gen/MapGenRavine	digBlock	([Lnet/minecraft/block/Block;IIIIIIZ)V	ours	1
+method	cpw/mods/fml/client/FMLClientHandler	addModAsResource	(Lcpw/mods/fml/common/ModContainer;)V	decimation	1
+method	cpw/mods/fml/client/FMLClientHandler	connectToServer	(Lnet/minecraft/client/gui/GuiScreen;Lnet/minecraft/client/multiplayer/ServerData;)V	both	8
+method	cpw/mods/fml/client/FMLClientHandler	instance	()Lcpw/mods/fml/client/FMLClientHandler;	both	10
+method	cpw/mods/fml/client/FMLClientHandler	setupServerList	()V	both	7
+method	cpw/mods/fml/client/registry/ClientRegistry	bindTileEntitySpecialRenderer	(Ljava/lang/Class;Lnet/minecraft/client/renderer/tileentity/TileEntitySpecialRenderer;)V	decimation	1
+method	cpw/mods/fml/client/registry/ClientRegistry	registerKeyBinding	(Lnet/minecraft/client/settings/KeyBinding;)V	both	4
+method	cpw/mods/fml/client/registry/RenderingRegistry	getNextAvailableRenderId	()I	decimation	1
+method	cpw/mods/fml/client/registry/RenderingRegistry	registerEntityRenderingHandler	(Ljava/lang/Class;Lnet/minecraft/client/renderer/entity/Render;)V	decimation	1
+method	cpw/mods/fml/common/FMLCommonHandler	bus	()Lcpw/mods/fml/common/eventhandler/EventBus;	both	29
+method	cpw/mods/fml/common/FMLCommonHandler	findContainerFor	(Ljava/lang/Object;)Lcpw/mods/fml/common/ModContainer;	ours	1
+method	cpw/mods/fml/common/FMLCommonHandler	getEffectiveSide	()Lcpw/mods/fml/relauncher/Side;	both	3
+method	cpw/mods/fml/common/FMLCommonHandler	getMinecraftServerInstance	()Lnet/minecraft/server/MinecraftServer;	decimation	1
+method	cpw/mods/fml/common/FMLCommonHandler	getModName	()Ljava/lang/String;	decimation	1
+method	cpw/mods/fml/common/FMLCommonHandler	getSide	()Lcpw/mods/fml/relauncher/Side;	both	53
+method	cpw/mods/fml/common/FMLCommonHandler	getSidedDelegate	()Lcpw/mods/fml/common/IFMLSidedHandler;	decimation	3
+method	cpw/mods/fml/common/FMLCommonHandler	instance	()Lcpw/mods/fml/common/FMLCommonHandler;	both	85
+method	cpw/mods/fml/common/FMLLog	info	(Ljava/lang/String;[Ljava/lang/Object;)V	ours	80
+method	cpw/mods/fml/common/FMLLog	warning	(Ljava/lang/String;[Ljava/lang/Object;)V	ours	21
+method	cpw/mods/fml/common/FMLModContainer	<init>	(Ljava/lang/String;Lcpw/mods/fml/common/discovery/ModCandidate;Ljava/util/Map;)V	decimation	1
+method	cpw/mods/fml/common/FMLModContainer	bindMetadata	(Lcpw/mods/fml/common/MetadataCollection;)V	decimation	1
+method	cpw/mods/fml/common/IFMLSidedHandler	getServer	()Lnet/minecraft/server/MinecraftServer;	decimation	3
+method	cpw/mods/fml/common/Loader	getActiveModList	()Ljava/util/List;	ours	1
+method	cpw/mods/fml/common/Loader	getConfigDir	()Ljava/io/File;	ours	1
+method	cpw/mods/fml/common/Loader	getIndexedModList	()Ljava/util/Map;	ours	4
+method	cpw/mods/fml/common/Loader	instance	()Lcpw/mods/fml/common/Loader;	ours	5
+method	cpw/mods/fml/common/MetadataCollection	from	(Ljava/io/InputStream;Ljava/lang/String;)Lcpw/mods/fml/common/MetadataCollection;	decimation	1
+method	cpw/mods/fml/common/ModContainer	getMetadata	()Lcpw/mods/fml/common/ModMetadata;	ours	3
+method	cpw/mods/fml/common/ModContainer	getModId	()Ljava/lang/String;	ours	2
+method	cpw/mods/fml/common/ModContainer	getSource	()Ljava/io/File;	ours	1
+method	cpw/mods/fml/common/ModContainer	getVersion	()Ljava/lang/String;	ours	1
+method	cpw/mods/fml/common/discovery/ModCandidate	<init>	(Ljava/io/File;Ljava/io/File;Lcpw/mods/fml/common/discovery/ContainerType;)V	decimation	1
+method	cpw/mods/fml/common/event/FMLPostInitializationEvent	getSide	()Lcpw/mods/fml/relauncher/Side;	decimation	1
+method	cpw/mods/fml/common/event/FMLPreInitializationEvent	getModConfigurationDirectory	()Ljava/io/File;	both	2
+method	cpw/mods/fml/common/event/FMLPreInitializationEvent	getSide	()Lcpw/mods/fml/relauncher/Side;	decimation	1
+method	cpw/mods/fml/common/event/FMLServerStartingEvent	getServer	()Lnet/minecraft/server/MinecraftServer;	ours	1
+method	cpw/mods/fml/common/event/FMLServerStartingEvent	getSide	()Lcpw/mods/fml/relauncher/Side;	decimation	1
+method	cpw/mods/fml/common/event/FMLServerStartingEvent	registerServerCommand	(Lnet/minecraft/command/ICommand;)V	both	2
+method	cpw/mods/fml/common/eventhandler/Event$Result	name	()Ljava/lang/String;	ours	1
+method	cpw/mods/fml/common/eventhandler/EventBus	post	(Lcpw/mods/fml/common/eventhandler/Event;)Z	both	2
+method	cpw/mods/fml/common/eventhandler/EventBus	register	(Ljava/lang/Object;)V	both	38
+method	cpw/mods/fml/common/eventhandler/EventBus	unregister	(Ljava/lang/Object;)V	ours	4
+method	cpw/mods/fml/common/gameevent/PlayerEvent$PlayerLoggedOutEvent	<init>	(Lnet/minecraft/entity/player/EntityPlayer;)V	ours	1
+method	cpw/mods/fml/common/gameevent/TickEvent$Phase	equals	(Ljava/lang/Object;)Z	decimation	1
+method	cpw/mods/fml/common/gameevent/TickEvent$Phase	ordinal	()I	decimation	2
+method	cpw/mods/fml/common/gameevent/TickEvent$Phase	values	()[Lcpw/mods/fml/common/gameevent/TickEvent$Phase;	decimation	1
+method	cpw/mods/fml/common/network/ByteBufUtils	readItemStack	(Lio/netty/buffer/ByteBuf;)Lnet/minecraft/item/ItemStack;	decimation	8
+method	cpw/mods/fml/common/network/ByteBufUtils	readUTF8String	(Lio/netty/buffer/ByteBuf;)Ljava/lang/String;	decimation	24
+method	cpw/mods/fml/common/network/ByteBufUtils	writeItemStack	(Lio/netty/buffer/ByteBuf;Lnet/minecraft/item/ItemStack;)V	decimation	8
+method	cpw/mods/fml/common/network/ByteBufUtils	writeUTF8String	(Lio/netty/buffer/ByteBuf;Ljava/lang/String;)V	decimation	24
+method	cpw/mods/fml/common/network/FMLEmbeddedChannel	findChannelHandlerNameForType	(Ljava/lang/Class;)Ljava/lang/String;	ours	1
+method	cpw/mods/fml/common/network/FMLEmbeddedChannel	pipeline	()Lio/netty/channel/ChannelPipeline;	ours	1
+method	cpw/mods/fml/common/network/IGuiHandler	getClientGuiElement	(ILnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;III)Ljava/lang/Object;	ours	2
+method	cpw/mods/fml/common/network/IGuiHandler	getServerGuiElement	(ILnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;III)Ljava/lang/Object;	ours	2
+method	cpw/mods/fml/common/network/NetworkRegistry	newSimpleChannel	(Ljava/lang/String;)Lcpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper;	both	2
+method	cpw/mods/fml/common/network/NetworkRegistry	registerGuiHandler	(Ljava/lang/Object;Lcpw/mods/fml/common/network/IGuiHandler;)V	both	3
+method	cpw/mods/fml/common/network/NetworkRegistry	registry	()Ljava/util/Map;	ours	1
+method	cpw/mods/fml/common/network/NetworkRegistry$TargetPoint	<init>	(IDDDD)V	decimation	3
+method	cpw/mods/fml/common/network/internal/NetworkModHolder$NetworkChecker	<init>	(Lcpw/mods/fml/common/network/internal/NetworkModHolder;)V	ours	1
+method	cpw/mods/fml/common/network/internal/NetworkModHolder$NetworkChecker	check	(Ljava/util/Map;Lcpw/mods/fml/relauncher/Side;)Z	ours	1
+method	cpw/mods/fml/common/network/simpleimpl/MessageContext	getServerHandler	()Lnet/minecraft/network/NetHandlerPlayServer;	both	26
+method	cpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper	registerMessage	(Ljava/lang/Class;Ljava/lang/Class;ILcpw/mods/fml/relauncher/Side;)V	both	2
+method	cpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper	sendTo	(Lcpw/mods/fml/common/network/simpleimpl/IMessage;Lnet/minecraft/entity/player/EntityPlayerMP;)V	both	15
+method	cpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper	sendToAll	(Lcpw/mods/fml/common/network/simpleimpl/IMessage;)V	both	36
+method	cpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper	sendToAllAround	(Lcpw/mods/fml/common/network/simpleimpl/IMessage;Lcpw/mods/fml/common/network/NetworkRegistry$TargetPoint;)V	decimation	2
+method	cpw/mods/fml/common/network/simpleimpl/SimpleNetworkWrapper	sendToServer	(Lcpw/mods/fml/common/network/simpleimpl/IMessage;)V	both	24
+method	cpw/mods/fml/common/registry/EntityRegistry	addSpawn	(Ljava/lang/Class;IIILnet/minecraft/entity/EnumCreatureType;[Lnet/minecraft/world/biome/BiomeGenBase;)V	decimation	1
+method	cpw/mods/fml/common/registry/EntityRegistry	findGlobalUniqueEntityId	()I	decimation	1
+method	cpw/mods/fml/common/registry/EntityRegistry	registerGlobalEntityID	(Ljava/lang/Class;Ljava/lang/String;I)V	decimation	1
+method	cpw/mods/fml/common/registry/EntityRegistry	registerGlobalEntityID	(Ljava/lang/Class;Ljava/lang/String;III)V	decimation	1
+method	cpw/mods/fml/common/registry/EntityRegistry	registerModEntity	(Ljava/lang/Class;Ljava/lang/String;ILjava/lang/Object;IIZ)V	both	2
+method	cpw/mods/fml/common/registry/EntityRegistry	removeSpawn	(Ljava/lang/Class;Lnet/minecraft/entity/EnumCreatureType;[Lnet/minecraft/world/biome/BiomeGenBase;)V	decimation	1
+method	cpw/mods/fml/common/registry/FMLControlledNamespacedRegistry	func_148742_b	()Ljava/util/Set;	ours	2
+method	cpw/mods/fml/common/registry/GameData	getBlockRegistry	()Lcpw/mods/fml/common/registry/FMLControlledNamespacedRegistry;	ours	2
+method	cpw/mods/fml/common/registry/GameRegistry	addRecipe	(Lnet/minecraft/item/ItemStack;[Ljava/lang/Object;)V	decimation	1
+method	cpw/mods/fml/common/registry/GameRegistry	findBlock	(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/block/Block;	ours	3
+method	cpw/mods/fml/common/registry/GameRegistry	findItem	(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/item/Item;	both	33
+method	cpw/mods/fml/common/registry/GameRegistry	findUniqueIdentifierFor	(Lnet/minecraft/item/Item;)Lcpw/mods/fml/common/registry/GameRegistry$UniqueIdentifier;	both	13
+method	cpw/mods/fml/common/registry/GameRegistry	registerBlock	(Lnet/minecraft/block/Block;Ljava/lang/String;)Lnet/minecraft/block/Block;	both	7
+method	cpw/mods/fml/common/registry/GameRegistry	registerItem	(Lnet/minecraft/item/Item;Ljava/lang/String;)V	both	9
+method	cpw/mods/fml/common/registry/GameRegistry	registerTileEntity	(Ljava/lang/Class;Ljava/lang/String;)V	decimation	1
+method	cpw/mods/fml/common/registry/GameRegistry	registerWorldGenerator	(Lcpw/mods/fml/common/IWorldGenerator;I)V	ours	1
+method	cpw/mods/fml/relauncher/ReflectionHelper	findField	(Ljava/lang/Class;[Ljava/lang/String;)Ljava/lang/reflect/Field;	both	11
+method	cpw/mods/fml/relauncher/ReflectionHelper	findMethod	(Ljava/lang/Class;Ljava/lang/Object;[Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;	both	6
+method	cpw/mods/fml/relauncher/ReflectionHelper	getPrivateValue	(Ljava/lang/Class;Ljava/lang/Object;[Ljava/lang/String;)Ljava/lang/Object;	both	8
+method	cpw/mods/fml/relauncher/ReflectionHelper	setPrivateValue	(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Object;[Ljava/lang/String;)V	both	4
+method	cpw/mods/fml/relauncher/Side	isClient	()Z	both	34
+method	cpw/mods/fml/relauncher/Side	isServer	()Z	both	28
+method	net/minecraftforge/client/ForgeHooksClient	getArmorModel	(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;ILnet/minecraft/client/model/ModelBiped;)Lnet/minecraft/client/model/ModelBiped;	decimation	1
+method	net/minecraftforge/client/IItemRenderer	handleRenderType	(Lnet/minecraft/item/ItemStack;Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;)Z	ours	3
+method	net/minecraftforge/client/IItemRenderer	renderItem	(Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;Lnet/minecraft/item/ItemStack;[Ljava/lang/Object;)V	ours	8
+method	net/minecraftforge/client/IItemRenderer	shouldUseRenderHelper	(Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;Lnet/minecraft/item/ItemStack;Lnet/minecraftforge/client/IItemRenderer$ItemRendererHelper;)Z	ours	3
+method	net/minecraftforge/client/IItemRenderer$ItemRenderType	equals	(Ljava/lang/Object;)Z	decimation	3
+method	net/minecraftforge/client/IItemRenderer$ItemRenderType	ordinal	()I	decimation	14
+method	net/minecraftforge/client/IItemRenderer$ItemRenderType	values	()[Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;	decimation	7
+method	net/minecraftforge/client/MinecraftForgeClient	getItemRenderer	(Lnet/minecraft/item/ItemStack;Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;)Lnet/minecraftforge/client/IItemRenderer;	ours	8
+method	net/minecraftforge/client/MinecraftForgeClient	registerItemRenderer	(Lnet/minecraft/item/Item;Lnet/minecraftforge/client/IItemRenderer;)V	both	5
+method	net/minecraftforge/client/event/DrawBlockHighlightEvent	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/EntityViewRenderEvent$FogDensity	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/GuiOpenEvent	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/GuiScreenEvent$ActionPerformedEvent$Pre	setCanceled	(Z)V	ours	7
+method	net/minecraftforge/client/event/RenderBlockOverlayEvent	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/RenderGameOverlayEvent	isCancelable	()Z	decimation	1
+method	net/minecraftforge/client/event/RenderGameOverlayEvent	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/RenderGameOverlayEvent$ElementType	equals	(Ljava/lang/Object;)Z	decimation	1
+method	net/minecraftforge/client/event/RenderGameOverlayEvent$Pre	setCanceled	(Z)V	ours	5
+method	net/minecraftforge/client/event/RenderHandEvent	isCanceled	()Z	ours	2
+method	net/minecraftforge/client/event/RenderHandEvent	setCanceled	(Z)V	both	4
+method	net/minecraftforge/client/event/RenderLivingEvent$Post	<init>	(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/entity/RendererLivingEntity;DDD)V	decimation	1
+method	net/minecraftforge/client/event/RenderLivingEvent$Pre	<init>	(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/entity/RendererLivingEntity;DDD)V	decimation	1
+method	net/minecraftforge/client/event/RenderLivingEvent$Pre	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/RenderLivingEvent$Specials$Pre	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/client/event/RenderPlayerEvent$Pre	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/common/BiomeDictionary	isBiomeOfType	(Lnet/minecraft/world/biome/BiomeGenBase;Lnet/minecraftforge/common/BiomeDictionary$Type;)Z	ours	3
+method	net/minecraftforge/common/BiomeDictionary	registerBiomeType	(Lnet/minecraft/world/biome/BiomeGenBase;[Lnet/minecraftforge/common/BiomeDictionary$Type;)Z	ours	1
+method	net/minecraftforge/common/DimensionManager	getCurrentSaveRootDirectory	()Ljava/io/File;	decimation	2
+method	net/minecraftforge/common/DimensionManager	registerProviderType	(ILjava/lang/Class;Z)Z	ours	1
+method	net/minecraftforge/common/DimensionManager	unregisterProviderType	(I)[I	ours	1
+method	net/minecraftforge/common/ForgeHooks	getTotalArmorValue	(Lnet/minecraft/entity/player/EntityPlayer;)I	ours	1
+method	net/minecraftforge/common/UsernameCache	getLastKnownUsername	(Ljava/util/UUID;)Ljava/lang/String;	decimation	1
+method	net/minecraftforge/common/UsernameCache	getMap	()Ljava/util/Map;	decimation	1
+method	net/minecraftforge/common/config/ConfigCategory	remove	(Ljava/lang/Object;)Lnet/minecraftforge/common/config/Property;	ours	1
+method	net/minecraftforge/common/config/Configuration	<init>	(Ljava/io/File;)V	ours	11
+method	net/minecraftforge/common/config/Configuration	<init>	(Ljava/io/File;Ljava/lang/String;)V	ours	1
+method	net/minecraftforge/common/config/Configuration	get	(Ljava/lang/String;Ljava/lang/String;DLjava/lang/String;)Lnet/minecraftforge/common/config/Property;	ours	1
+method	net/minecraftforge/common/config/Configuration	get	(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;II)Lnet/minecraftforge/common/config/Property;	ours	1
+method	net/minecraftforge/common/config/Configuration	get	(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lnet/minecraftforge/common/config/Property;	ours	2
+method	net/minecraftforge/common/config/Configuration	get	(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)Lnet/minecraftforge/common/config/Property;	ours	1
+method	net/minecraftforge/common/config/Configuration	getBoolean	(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)Z	ours	7
+method	net/minecraftforge/common/config/Configuration	getCategory	(Ljava/lang/String;)Lnet/minecraftforge/common/config/ConfigCategory;	ours	1
+method	net/minecraftforge/common/config/Configuration	getFloat	(Ljava/lang/String;Ljava/lang/String;FFFLjava/lang/String;)F	ours	6
+method	net/minecraftforge/common/config/Configuration	getInt	(Ljava/lang/String;Ljava/lang/String;IIILjava/lang/String;)I	ours	6
+method	net/minecraftforge/common/config/Configuration	getLoadedConfigVersion	()Ljava/lang/String;	ours	1
+method	net/minecraftforge/common/config/Configuration	getString	(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;	ours	1
+method	net/minecraftforge/common/config/Configuration	getString	(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/lang/String;	ours	1
+method	net/minecraftforge/common/config/Configuration	getStringList	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;	ours	1
+method	net/minecraftforge/common/config/Configuration	hasCategory	(Ljava/lang/String;)Z	ours	1
+method	net/minecraftforge/common/config/Configuration	hasChanged	()Z	ours	2
+method	net/minecraftforge/common/config/Configuration	load	()V	ours	1
+method	net/minecraftforge/common/config/Configuration	save	()V	ours	12
+method	net/minecraftforge/common/config/Configuration	setCategoryComment	(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraftforge/common/config/Configuration;	ours	1
+method	net/minecraftforge/common/config/Property	getBoolean	(Z)Z	ours	1
+method	net/minecraftforge/common/config/Property	getDouble	(D)D	ours	1
+method	net/minecraftforge/common/config/Property	getInt	(I)I	ours	1
+method	net/minecraftforge/common/config/Property	getString	()Ljava/lang/String;	ours	1
+method	net/minecraftforge/common/config/Property	set	(Ljava/lang/String;)V	ours	2
+method	net/minecraftforge/common/util/EnumHelper	addArmorMaterial	(Ljava/lang/String;I[II)Lnet/minecraft/item/ItemArmor$ArmorMaterial;	decimation	1
+method	net/minecraftforge/common/util/FakePlayerFactory	getMinecraft	(Lnet/minecraft/world/WorldServer;)Lnet/minecraftforge/common/util/FakePlayer;	ours	1
+method	net/minecraftforge/event/AnvilUpdateEvent	<init>	(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Ljava/lang/String;I)V	ours	1
+method	net/minecraftforge/event/ForgeEventFactory	canEntitySpawn	(Lnet/minecraft/entity/EntityLiving;Lnet/minecraft/world/World;FFF)Lcpw/mods/fml/common/eventhandler/Event$Result;	ours	1
+method	net/minecraftforge/event/ForgeEventFactory	doSpecialSpawn	(Lnet/minecraft/entity/EntityLiving;Lnet/minecraft/world/World;FFF)Z	ours	1
+method	net/minecraftforge/event/ServerChatEvent	setCanceled	(Z)V	decimation	1
+method	net/minecraftforge/event/entity/EntityJoinWorldEvent	isCanceled	()Z	ours	3
+method	net/minecraftforge/event/entity/EntityJoinWorldEvent	setCanceled	(Z)V	both	7
+method	net/minecraftforge/event/entity/item/ItemTossEvent	setCanceled	(Z)V	decimation	3
+method	net/minecraftforge/event/entity/living/LivingAttackEvent	isCanceled	()Z	ours	1
+method	net/minecraftforge/event/entity/living/LivingAttackEvent	setCanceled	(Z)V	both	4
+method	net/minecraftforge/event/entity/living/LivingDropsEvent	setCanceled	(Z)V	decimation	2
+method	net/minecraftforge/event/entity/living/LivingHurtEvent	isCancelable	()Z	decimation	1
+method	net/minecraftforge/event/entity/living/LivingHurtEvent	setCanceled	(Z)V	decimation	4
+method	net/minecraftforge/event/entity/living/LivingSpawnEvent$CheckSpawn	setResult	(Lcpw/mods/fml/common/eventhandler/Event$Result;)V	ours	1
+method	net/minecraftforge/event/entity/player/AttackEntityEvent	setCanceled	(Z)V	ours	1
+method	net/minecraftforge/event/entity/player/EntityInteractEvent	isCancelable	()Z	decimation	2
+method	net/minecraftforge/event/entity/player/EntityInteractEvent	isCanceled	()Z	ours	1
+method	net/minecraftforge/event/entity/player/EntityInteractEvent	setCanceled	(Z)V	decimation	2
+method	net/minecraftforge/event/entity/player/EntityItemPickupEvent	setCanceled	(Z)V	decimation	2
+method	net/minecraftforge/event/entity/player/PlayerInteractEvent	<init>	(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraftforge/event/entity/player/PlayerInteractEvent$Action;IIIILnet/minecraft/world/World;)V	ours	1
+method	net/minecraftforge/event/entity/player/PlayerInteractEvent	setCanceled	(Z)V	both	4
+method	net/minecraftforge/event/terraingen/DecorateBiomeEvent$Decorate	setResult	(Lcpw/mods/fml/common/eventhandler/Event$Result;)V	ours	1
+method	net/minecraftforge/event/terraingen/PopulateChunkEvent$Populate	setResult	(Lcpw/mods/fml/common/eventhandler/Event$Result;)V	ours	1
+method	net/minecraftforge/event/world/BlockEvent$BreakEvent	getPlayer	()Lnet/minecraft/entity/player/EntityPlayer;	decimation	2
+method	net/minecraftforge/event/world/BlockEvent$BreakEvent	setCanceled	(Z)V	decimation	2
+method	net/minecraftforge/event/world/BlockEvent$PlaceEvent	setCanceled	(Z)V	decimation	2
+method	net/minecraftforge/event/world/ChunkEvent$Load	getChunk	()Lnet/minecraft/world/chunk/Chunk;	ours	1
+method	net/minecraftforge/oredict/OreDictionary	getOreID	(Ljava/lang/String;)I	decimation	1
+method	net/minecraftforge/oredict/OreDictionary	getOreIDs	(Lnet/minecraft/item/ItemStack;)[I	decimation	1
+override forge-added	net/minecraft/block/Block	createTileEntity	(Lnet/minecraft/world/World;I)Lnet/minecraft/tileentity/TileEntity;	decimation	7
+override forge-added	net/minecraft/block/Block	hasTileEntity	(I)Z	decimation	4
+override forge-added	net/minecraft/block/Block/net/minecraft/block/BlockAnvil/net/minecraft/block/BlockBeacon/net/minecraft/block/BlockBed/ne	onBlockActivated	(Lnet/minecraft/world/World;IIILnet/minecraft/entity/player/EntityPlayer;IFFF)Z	decimation	1
+override forge-added	net/minecraft/client/renderer/texture/Stitcher$Holder/net/minecraft/realms/RealmsButton/net/minecraft/world/ChunkCache/n	getHeight	()I	decimation	1
+override forge-added	net/minecraft/client/renderer/texture/Stitcher$Slot/net/minecraft/client/renderer/texture/TextureAtlasSprite	getOriginX	()I	decimation	1
+override forge-added	net/minecraft/client/renderer/texture/Stitcher$Slot/net/minecraft/client/renderer/texture/TextureAtlasSprite	getOriginY	()I	decimation	1
+override forge-added	net/minecraft/enchantment/Enchantment/net/minecraft/enchantment/EnchantmentDamage/net/minecraft/enchantment/EnchantmentP	getName	()Ljava/lang/String;	decimation	1
+override forge-added	net/minecraft/entity/player/EntityPlayer	openGui	(Ljava/lang/Object;ILnet/minecraft/world/World;III)V	decimation	1
+override forge-added	net/minecraft/item/Item	getArmorModel	(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/client/model/ModelBiped;	decimation	1
+override forge-added	net/minecraft/item/Item	isValidArmor	(Lnet/minecraft/item/ItemStack;ILnet/minecraft/entity/Entity;)Z	decimation	1
+override forge-added	net/minecraft/item/ItemBlock	placeBlockAt	(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;IIIIFFFI)Z	decimation	8
+override forge-added	net/minecraft/server/management/LowerStringMap	clear	()V	both	2
+override forge-added	net/minecraft/server/management/LowerStringMap	size	()I	ours	2
+override forge-added	net/minecraft/tileentity/TileEntity	canUpdate	()Z	decimation	2
+override forge-added	net/minecraft/tileentity/TileEntity	getRenderBoundingBox	()Lnet/minecraft/util/AxisAlignedBB;	decimation	30
+override forge-added	net/minecraft/tileentity/TileEntity	onDataPacket	(Lnet/minecraft/network/NetworkManager;Lnet/minecraft/network/play/server/S35PacketUpdateTileEntity;)V	decimation	1
+override forge-added	net/minecraft/tileentity/TileEntity	shouldRefresh	(Lnet/minecraft/block/Block;Lnet/minecraft/block/Block;IILnet/minecraft/world/World;III)Z	decimation	4
+override forge-added	net/minecraft/world/gen/MapGenCaves/net/minecraft/world/gen/MapGenRavine	digBlock	([Lnet/minecraft/block/Block;IIIIIIZ)V	ours	2

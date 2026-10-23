@@ -175,3 +175,10 @@ and the linked docs; this file only names each item. Keep it current: add an ite
 - [x] Decimation's food, water, blood and health percents centred on their icons (PatchHudPercents; user 23 Oktober 2026)
 - [~] release 0.70.0 "Scavenger": fourth candidate 14399c4b checked (server, client with OptiFine, real update from 0.66.1); waiting for the user's go to publish
 - [ ] more clothing slots (docs/ideas.md 61)
+- [x] katana: 17 damage, hits twice as wide, Fire Aspect (anvil) burns the blade after the catch; knives looking down (branch feature/katana-fire-reach)
+- [ ] user: the katana's burn and the look down fix in game
+- [x] gun draws: every gun its own way in by category, its rack at the end (fixes/GunDraw; dev test gundraw; branch feature/gun-draw)
+- [ ] user: the gun draws in game
+- [x] Fabric port (Legacy Fabric 1.7.10 + Forge applied ahead, docs/fabric_port.md): menu, checks, gun, zombies, loot pass on Fabric; OptiFine 1.7.10 built in: city view 62 / 71 -> 114 / 114 fps; Prism instance "Decimation Fabric" runs with it
+- [x] FO style modules for 1.7.10 (optimized/, "DeciRemnant Optimized": ChunkVBO, EntityCulling, Dynamic FPS, FastQuit; fabric_port.md item 10): +11 to +38 % on 3 of 4 city views at 1440 x 810 over OptiFine alone; leaving a world 647 ms -> about 10 ms; dev tests pass with them; in the Prism "Decimation Fabric" instance (23 Oktober 2026)
+- [ ] user: play the Prism "Decimation Fabric" instance

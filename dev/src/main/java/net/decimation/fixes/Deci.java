@@ -322,6 +322,13 @@ public final class Deci
         return data == null ? 0 : data.ci();
     }
 
+    /** PlayerData.get(player).isHolstered() (e, cg): the gun lowered by Decimation's holster key. */
+    public static boolean holstered(EntityPlayer player)
+    {
+        deci.Q.b data = deci.Q.b.e(player);
+        return data != null && data.cg();
+    }
+
     /** PlayerData.get(player).setAimMode(mode) (e, M). */
     public static void setAimMode(EntityPlayer player, int mode)
     {
@@ -3199,6 +3206,66 @@ public final class Deci
     public static boolean isFirstPersonBodyRenderer(Object renderer)
     {
         return renderer instanceof deci.J.e.a;
+    }
+
+    /** Arm-less part lists per armor model part list (dropArmorArms), [0] without the left arm, [1] without both. */
+    private static final java.util.Map<Object, java.util.ArrayList<?>[]> ARMLESS = new java.util.IdentityHashMap<Object, java.util.ArrayList<?>[]>();
+
+    /**
+     * Takes the arm parts out of a Decimation armor piece's model for one draw (the left arm's, both when `right`):
+     * ItemArmorDeci.armor (DeciPlayerModel deci.n.e) -> heldGunModel kw (BModel deci.n.f) -> parts kC, swapped for a
+     * cached list without parts named leftArm (/ rightArm). Its own hide check reads the body's isHidden, which
+     * Decimation sets on every draw, and a hidden BModelPart pushes a matrix it never pops, so the list is the clean way.
+     * Returns what putArmorArms needs to put it back, or null (not Decimation armor, model not loaded yet).
+     */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public static Object[] dropArmorArms(Item item, boolean right)
+    {
+        if (!(item instanceof net.decimation.mod.common.item.armor.ItemArmorDeci))
+        {
+            return null;
+        }
+        deci.n.e model = ((net.decimation.mod.common.item.armor.ItemArmorDeci) item).armor;
+        if (model == null || model.kw == null)
+        {
+            return null;
+        }
+        java.util.ArrayList<deci.n.b> all = model.kw.kC;
+        java.util.ArrayList<?>[] cut = ARMLESS.get(all);
+        if (cut == null)
+        {
+            cut = new java.util.ArrayList<?>[2];
+            for (int k = 0; k < 2; k++)
+            {
+                java.util.ArrayList<deci.n.b> kept = new java.util.ArrayList<deci.n.b>();
+                for (deci.n.b p : all)
+                {
+                    if (!p.boxName.contains("leftArm") && !(k == 1 && p.boxName.contains("rightArm")))
+                    {
+                        kept.add(p);
+                    }
+                }
+                cut[k] = kept;
+            }
+            ARMLESS.put(all, cut);
+        }
+        model.kw.kC = (java.util.ArrayList<deci.n.b>) cut[right ? 1 : 0];
+        return new Object[] {model, all};
+    }
+
+    /** Puts back what dropArmorArms took out (its return value). */
+    @cpw.mods.fml.relauncher.SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public static void putArmorArms(Object[] dropped)
+    {
+        ((deci.n.e) dropped[0]).kw.kC = (java.util.ArrayList<deci.n.b>) dropped[1];
+    }
+
+    /** Decimation's wrist display (ItemRegistry.wristTimer deci.aD.k.anH), drawn on the left arm while ClientState.co. */
+    public static Item wristDisplay()
+    {
+        return deci.aD.k.anH;
     }
 
     /**

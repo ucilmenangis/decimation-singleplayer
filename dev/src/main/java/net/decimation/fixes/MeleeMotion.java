@@ -1,6 +1,8 @@
 package net.decimation.fixes;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
@@ -17,8 +19,14 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,8 +51,9 @@ public final class MeleeMotion
     public static int testAnim = -1;
     public static float testTime;
 
-    // {t, hx, hy, hz, hrx, hry, hrz, kx, ky, kz, ox, oy, oz}: hand place and turn, knife turn about the view's axes at the
-    // grip, knife place off the hand (thrown: the katana's draw); columns left out are 0
+    // {t, hx, hy, hz, hrx, hry, hrz, kx, ky, kz, ox, oy, oz, sy, sp, sr}: hand place and turn, knife turn about the view's
+    // axes at the grip, knife place off the hand (thrown: the katana's draw), the shoulder swing (MeleeRenderer.SHOULDER:
+    // yaw, + carries the hand left; pitch, + up; roll); columns left out are 0
     private static final float[][] KARAMBIT_DRAW = {
         {0.00f, 0.12f, -0.62f, 0.15f, -52, 12, -28, 0, 0, -540},
         {0.30f, 0.02f, 0.06f, 0.00f, 8, -5, 6, 0, 0, -60},
@@ -87,44 +96,48 @@ public final class MeleeMotion
         {3.45f, 0.50f, 0.15f, -0.30f, 0, 0, 0, 0, 35, 172},
         {4.15f, 0.48f, 0.17f, -0.30f, 0, 0, 0, 0, 35, 168},
         {4.85f, 0, 0, 0, 0, 0, 0, 0, 0, 360}};
-    // the slashes after the Sovereign blade's attacks (user's reference video, 23 Oktober 2026), chained by quick clicks:
-    // A a forehand (hand raised high right, the blade sweeps right to left leading, ends low left), B a backhand (blade
-    // pulled across to the left, sweeps back to the right), C the heavy one (arm up overhead, blade cocked back, a big
-    // diagonal down to the lower left); each starts and ends at rest so any can follow any
+    // the slashes after the Sovereign blade's attacks (user's reference video, 23 Oktober 2026), chained by quick clicks,
+    // redone as an arm swings (user: "looks weird still, doesnt come natural"): the arm turns a little about the shoulder,
+    // so the hand runs on an arc, while the blade rolls in the view so its tip leads the cut (side on, as the video shows
+    // it); a slow wind up, a strike over in 0.06 s, a follow through that eases out. A forehand right to left, B a
+    // backhand left to right, C the heavy one: up high, the tip cocked back, down across to the lower left. Each starts
+    // and ends at rest so any can follow any.
     private static final float[][] KATANA_SLASH_A = {
-        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0.07f, 0.75f, 0.30f, -0.15f, 0, 0, -20, 0, -20, 80},
-        {0.13f, 0.35f, 0.12f, -0.25f, 0, 0, 10, 0, 0, 160},
-        {0.19f, -0.15f, -0.05f, -0.10f, 0, 0, 15, 0, 0, 115},
-        {0.30f, 0.00f, -0.05f, 0.00f, 0, 0, 4, 0, 0, 30},
-        {0.42f, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0.11f, 0.15f, 0.15f, 0, 0, 0, -15, 0, 0, 70, 0, 0, 0, -25, 12, -8},
+        {0.17f, 0.15f, 0.12f, 0, 0, 0, 5, 0, 0, 150, 0, 0, 0, 0, 6, 0},
+        {0.23f, 0.25f, 0.06f, 0, 0, 0, 15, 0, 0, 120, 0, 0, 0, 8, -4, 6},
+        {0.36f, 0.05f, 0, 0, 0, 0, 5, 0, 0, 40, 0, 0, 0, 6, -2, 2},
+        {0.52f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     private static final float[][] KATANA_SLASH_B = {
-        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0.07f, -0.05f, 0.05f, -0.10f, 0, 0, 15, 0, 20, 150},
-        {0.13f, 0.40f, 0.15f, -0.25f, 0, 0, -5, 0, 0, 90},
-        {0.19f, 0.62f, 0.05f, -0.12f, 0, 0, -15, 0, 0, 25},
-        {0.30f, 0.20f, 0.00f, 0.00f, 0, 0, -4, 0, 0, -5},
-        {0.42f, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0.11f, 0.10f, 0.10f, 0, 0, 0, 15, 0, 0, 165, 0, 0, 0, 15, 10, 8},
+        {0.17f, 0.30f, 0.12f, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, -5, 6, 0},
+        {0.23f, 0.35f, 0.12f, 0, 0, 0, -15, 0, 0, 40, 0, 0, 0, -12, -3, -6},
+        {0.36f, 0.15f, 0, 0, 0, 0, -5, 0, 0, 0, 0, 0, 0, -8, -2, -2},
+        {0.52f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     private static final float[][] KATANA_SLASH_C = {
-        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0.15f, 0.55f, 0.40f, -0.50f, -20, 0, -10, 30, 0, 100},
-        {0.27f, 0.15f, 0.08f, -0.35f, 10, 0, 10, -20, 0, 190},
-        {0.36f, -0.20f, -0.05f, -0.15f, 5, 0, 15, -10, 0, 170},
-        {0.50f, 0.00f, -0.05f, 0.00f, 0, 0, 3, 0, 0, 20},
-        {0.62f, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-    // the karambit's: short wrist cuts (the claw stays in the fist), a forehand, a backhand and a thrust
+        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0.18f, 0.25f, 0.12f, -0.50f, 0, 0, -10, 25, 0, 100, 0, 0, 0, -15, 12, -12},
+        {0.26f, 0.15f, 0.10f, 0, 0, 0, 0, -10, 0, 150, 0, 0, 0, 0, 5, 0},
+        {0.33f, 0.30f, 0.12f, 0, 0, 0, 12, -10, 0, 140, 0, 0, 0, 4, -4, 8},
+        {0.50f, 0.03f, 0, 0, 0, 0, 4, -4, 0, 30, 0, 0, 0, 5, -5, 3},
+        {0.70f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    // the karambit's: short cuts from the elbow (a smaller swing, the wrist doing more), a forehand, a backhand and a thrust
     private static final float[][] KARAMBIT_SLASH_A = {
-        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0.06f, 0.30f, 0.15f, -0.05f, -10, 15, -30, 0, 0, 0},
-        {0.12f, -0.05f, 0.02f, -0.15f, 5, -10, 25, 0, 0, 0},
-        {0.18f, -0.25f, -0.12f, 0.00f, 8, -15, 35, 0, 0, 0},
-        {0.32f, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0.10f, 0, 0.05f, 0, -10, 15, -30, 0, 0, 0, 0, 0, 0, -15, 10, -8},
+        {0.15f, 0, 0.02f, -0.05f, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 5, 0},
+        {0.21f, 0, 0, 0, 8, -15, 35, 0, 0, 0, 0, 0, 0, 30, -6, 8},
+        {0.34f, 0, 0, 0, 2, -4, 10, 0, 0, 0, 0, 0, 0, 10, -2, 2},
+        {0.46f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     private static final float[][] KARAMBIT_SLASH_B = {
-        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0.06f, -0.20f, 0.05f, -0.05f, -5, -15, 30, 0, 0, 0},
-        {0.12f, 0.15f, 0.08f, -0.15f, 0, 10, -20, 0, 0, 0},
-        {0.18f, 0.30f, -0.08f, 0.00f, 5, 15, -30, 0, 0, 0},
-        {0.32f, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0.10f, -0.05f, 0.05f, 0, -5, -15, 30, 0, 0, 0, 0, 0, 0, 25, 8, 8},
+        {0.15f, 0, 0.03f, -0.05f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0},
+        {0.21f, -0.05f, 0, 0, 5, 15, -30, 0, 0, 0, 0, 0, 0, -18, -5, -8},
+        {0.34f, 0, 0, 0, 1, 4, -8, 0, 0, 0, 0, 0, 0, -10, -2, -2},
+        {0.46f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     private static final float[][] KARAMBIT_SLASH_C = {
         {0.00f, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0.10f, 0.06f, 0.08f, 0.05f, 15, 0, -10, 0, 0, 0},
@@ -136,18 +149,30 @@ public final class MeleeMotion
         {KATANA_DRAW, KATANA_INSPECT, KATANA_SLASH_A, KATANA_SLASH_B, KATANA_SLASH_C}};
     /** Clicks closer than this (seconds) chain the slashes A, B, C; a longer pause starts again at A. */
     private static final float COMBO = 0.9f;
+    /**
+     * Fire Aspect (MeleeFire): the katana catches at IGNITE seconds into its draw (the catch, as the hand closes on it)
+     * and the flame climbs from the guard to the tip in SPREAD seconds; held without a draw it is alight at once.
+     */
+    private static final float IGNITE = 0.78f, SPREAD = 0.8f;
+    /** When the katana in hand caught fire (nanoTime), 0 while it is not alight. */
+    private static long litAt;
 
     private static KeyBinding key;
     private static Field equipped, prevEquipped, drawn, drawnSlot, mainModel;
     /** The models whose arms are out of Decimation's first person body draw now (onBodyPre / onBodyPost). */
     private static final ModelBiped[] hidden = new ModelBiped[3];
+    /**
+     * Decimation armor drawn on the arms of that same body draw, its arm parts taken out (Deci.dropArmorArms): the wrist
+     * display, a band left on the left wrist with the arm gone (user: "its gelang stayed"), and a worn chest piece.
+     */
+    private static final Object[][] droppedArmor = new Object[2][];
     private static int anim, lastSlot = -1, combo;
     private static long start, lastSlash;
     /** Minecraft's own arm swing, held at 0 for the frame's first person draw and put back after (onRenderTick). */
     private static float swing, prevSwing;
     private static boolean swingHeld;
     private static Item lastItem;
-    private static final float[] pose = new float[12];
+    private static final float[] pose = new float[15];
 
     private MeleeMotion()
     {
@@ -248,6 +273,7 @@ public final class MeleeMotion
         {
             anim = DRAW;
             start = System.nanoTime();
+            litAt = 0;                                   // a fresh draw lights it again at the catch
         }
         lastItem = item;
         lastSlot = slot;
@@ -259,7 +285,8 @@ public final class MeleeMotion
                 start = System.nanoTime();
             }
         }
-        if (ours && mc.thePlayer.isSwingInProgress && mc.thePlayer.swingProgressInt == 0 && anim != DRAW)
+        boolean newSwing = ours && mc.thePlayer.isSwingInProgress && mc.thePlayer.swingProgressInt == 0;
+        if (newSwing && anim != DRAW)
         {
             long now = System.nanoTime();                // a new swing (Minecraft restarts it at 0): the next slash
             combo = (now - lastSlash) / 1e9f < COMBO ? (combo + 1) % 3 : 0;
@@ -267,6 +294,65 @@ public final class MeleeMotion
             anim = SLASH_A + combo;                      // also ends an inspect, as in CS and Valorant
             start = now;
         }
+        if (newSwing && kind == 1)
+        {
+            wideHit(mc);
+        }
+        if (kind == 1 && NewMelee.fireAspect(held) > 0)
+        {
+            if (litAt == 0 && (anim != DRAW || (System.nanoTime() - start) / 1e9f >= IGNITE))
+            {
+                litAt = System.nanoTime();
+            }
+        }
+        else
+        {
+            litAt = 0;
+        }
+        flames(mc);
+    }
+
+    /**
+     * The katana hits twice as wide (user 23 Oktober 2026): a swing at nothing (Minecraft found no entity and no block
+     * under the crosshair) looks again with every living thing's box twice its width and attacks the nearest one the
+     * view's line crosses within reach, through Minecraft's own attack (the server checks the reach as for any hit).
+     */
+    static Entity wideHit(Minecraft mc)
+    {
+        MovingObjectPosition over = mc.objectMouseOver;
+        if (over != null && over.typeOfHit != MovingObjectPosition.MovingObjectType.MISS)
+        {
+            return null;                                 // Minecraft hit it already (or a block is in the way)
+        }
+        EntityClientPlayerMP p = mc.thePlayer;
+        double reach = mc.playerController.isInCreativeMode() ? 5.0 : 3.0;
+        Vec3 eye = p.getPosition(1.0f), look = p.getLook(1.0f);
+        Vec3 far = eye.addVector(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach);
+        List<?> near = mc.theWorld.getEntitiesWithinAABBExcludingEntity(p,
+            p.boundingBox.addCoord(look.xCoord * reach, look.yCoord * reach, look.zCoord * reach).expand(2, 2, 2));
+        Entity best = null;
+        double bestDist = reach;
+        for (Object o : near)
+        {
+            Entity e = (Entity) o;
+            if (!(e instanceof EntityLivingBase) || !e.canBeCollidedWith())
+            {
+                continue;
+            }
+            double grow = e.width / 2 + e.getCollisionBorderSize();
+            MovingObjectPosition hit = e.boundingBox.expand(grow, e.getCollisionBorderSize(), grow).calculateIntercept(eye, far);
+            double d = hit == null ? Double.MAX_VALUE : eye.distanceTo(hit.hitVec);
+            if (d < bestDist)
+            {
+                best = e;
+                bestDist = d;
+            }
+        }
+        if (best != null)
+        {
+            mc.playerController.attackEntity(p, best);
+        }
+        return best;
     }
 
     /**
@@ -293,7 +379,7 @@ public final class MeleeMotion
         {
             return;
         }
-        if (mc.gameSettings.thirdPersonView == 0)
+        if (mc.gameSettings.thirdPersonView == 0 && !bodyHolds(mc))
         {
             swing = mc.thePlayer.swingProgress;
             prevSwing = mc.thePlayer.prevSwingProgress;
@@ -301,6 +387,16 @@ public final class MeleeMotion
             mc.thePlayer.prevSwingProgress = 0;
             swingHeld = true;
         }
+        holdEquip(mc);
+    }
+
+    /**
+     * Minecraft's equip dip held off for this frame (our knives and GunDraw's draws are their own way in): the first
+     * person view's item and slot set to what is in hand, the dip at rest. Minecraft only swaps the drawn item while its
+     * dip is down, so holding the dip alone would keep the old item on screen.
+     */
+    static void holdEquip(Minecraft mc)
+    {
         try
         {
             if (equipped == null)
@@ -316,23 +412,92 @@ public final class MeleeMotion
             equipped.setFloat(r, 1.0f);
             prevEquipped.setFloat(r, 1.0f);
         }
-        catch (Exception ex)
+        catch (ReflectiveOperationException ex)
         {
-            equipped = null;                           // left to Minecraft: its dip on top of the draw
+            throw new IllegalStateException("ItemRenderer equip fields not reachable", ex);
         }
     }
 
     /**
      * Decimation cancels the first person hand for anything but its guns (ClientEventHandler.onRenderHand: its own body
-     * stands in); for our knives the hand is drawn again, so MeleeRenderer's first person view shows.
+     * stands in); for our knives the hand is drawn again, so MeleeRenderer's first person view shows, except looking
+     * down past BODY, where the body's own arms hold the knife.
      */
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public void onRenderHand(RenderHandEvent e)
     {
-        if (e.isCanceled() && NewMelee.kind(itemInHand(Minecraft.getMinecraft())) >= 0
-            && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
+        Minecraft mc = Minecraft.getMinecraft();
+        if (e.isCanceled() && NewMelee.kind(itemInHand(mc)) >= 0 && mc.gameSettings.thirdPersonView == 0 && !bodyHolds(mc))
         {
             e.setCanceled(false);
+        }
+    }
+
+    /**
+     * Looking down (user 23 Oktober 2026: "the character hand is floating"): our first person arm and knife hung over
+     * Decimation's armless body. From SLIDE to BODY degrees of pitch they slide down out of the view; past BODY the
+     * body's own arms hold the knife (Decimation's way for any item but a gun) and Minecraft's swing moves them.
+     */
+    static final float SLIDE = 35, BODY = 55;
+
+    static boolean bodyHolds(Minecraft mc)
+    {
+        return mc.thePlayer != null && mc.thePlayer.rotationPitch >= BODY;
+    }
+
+    /** How far our first person view has slid out, 0 .. 1 (smoothstep over SLIDE .. BODY). */
+    static float slide(Minecraft mc)
+    {
+        float t = Math.max(0, Math.min(1, (mc.thePlayer.rotationPitch - SLIDE) / (BODY - SLIDE)));
+        return t * t * (3 - 2 * t);
+    }
+
+    /** How far the katana's flame has climbed, 0 .. 1 (MeleeFire), below 0 while it is not alight (no Fire Aspect). */
+    static float fireSpread(ItemStack held)
+    {
+        if (NewMelee.kind(held == null ? null : held.getItem()) != 1 || NewMelee.fireAspect(held) <= 0)
+        {
+            return -1;
+        }
+        float t = testAnim >= 0 ? (testAnim == DRAW ? testTime - IGNITE : SPREAD)
+            : litAt == 0 ? -1 : (System.nanoTime() - litAt) / 1e9f;
+        return t < 0 ? -1 : Math.min(1, t / SPREAD);
+    }
+
+    /**
+     * Flames and smoke off a burning katana in the world, for every player holding one that is seen from outside (not
+     * the local player in first person, whose blade burns in the view): a few a tick along the blade, which hangs
+     * forward and up from the right hand.
+     */
+    private static void flames(Minecraft mc)
+    {
+        if (mc.theWorld == null || mc.isGamePaused())
+        {
+            return;
+        }
+        for (Object o : mc.theWorld.playerEntities)
+        {
+            EntityPlayer pl = (EntityPlayer) o;
+            ItemStack s = pl.getHeldItem();
+            if (s == null || NewMelee.kind(s.getItem()) != 1 || NewMelee.fireAspect(s) <= 0
+                || pl == mc.thePlayer && mc.gameSettings.thirdPersonView == 0)
+            {
+                continue;
+            }
+            double yaw = Math.toRadians(pl.renderYawOffset);
+            double fx = -Math.sin(yaw), fz = Math.cos(yaw), rx = -Math.cos(yaw), rz = -Math.sin(yaw);
+            for (int i = 0; i < 2; i++)
+            {
+                double t = 0.15 + pl.getRNG().nextDouble() * 1.1;    // along the blade from the hand
+                double x = pl.posX + rx * 0.36 + fx * (0.25 + t * 0.6);
+                double y = pl.boundingBox.minY + 0.7 + t * 0.55;
+                double z = pl.posZ + rz * 0.36 + fz * (0.25 + t * 0.6);
+                mc.theWorld.spawnParticle("flame", x, y, z, 0, 0.02, 0);
+                if (pl.getRNG().nextInt(4) == 0)
+                {
+                    mc.theWorld.spawnParticle("smoke", x, y + 0.1, z, 0, 0.03, 0);
+                }
+            }
         }
     }
 
@@ -340,7 +505,8 @@ public final class MeleeMotion
     @SubscribeEvent
     public void onSpecials(RenderPlayerEvent.Specials.Pre e)
     {
-        if (Deci.isFirstPersonBodyRenderer(e.renderer) && NewMelee.kind(itemInHand(Minecraft.getMinecraft())) >= 0)
+        Minecraft mc = Minecraft.getMinecraft();
+        if (Deci.isFirstPersonBodyRenderer(e.renderer) && NewMelee.kind(itemInHand(mc)) >= 0 && !bodyHolds(mc))
         {
             e.renderItem = false;
         }
@@ -349,12 +515,15 @@ public final class MeleeMotion
     /**
      * Decimation's first person body shows its arms unless a gun is in hand (ModelDeciPlayer.render sets their isHidden
      * on every draw), so with our knife looking down showed three hands. showModel, which it never sets, takes them out
-     * of that one draw (its model, the renderer's biped and armor), put back right after.
+     * of that one draw (its model, the renderer's biped and armor), put back right after. Looking down past BODY the
+     * right arm stays (it holds the knife) and only the left one goes: Decimation moves the body back and the arms
+     * forward, so walking swung the left arm into the view as a hand without a shoulder (user: "the left hand floating").
      */
     @SubscribeEvent
     public void onBodyPre(RenderPlayerEvent.Pre e)
     {
-        if (!Deci.isFirstPersonBodyRenderer(e.renderer) || NewMelee.kind(itemInHand(Minecraft.getMinecraft())) < 0)
+        Minecraft mc = Minecraft.getMinecraft();
+        if (!Deci.isFirstPersonBodyRenderer(e.renderer) || NewMelee.kind(itemInHand(mc)) < 0)
         {
             return;
         }
@@ -374,7 +543,11 @@ public final class MeleeMotion
         hidden[0] = main instanceof ModelBiped ? (ModelBiped) main : null;
         hidden[1] = e.renderer.modelBipedMain;
         hidden[2] = e.renderer.modelArmorChestplate;
-        arms(false);
+        boolean right = !bodyHolds(mc);
+        arms(false, right);
+        ItemStack chest = e.entityPlayer.getCurrentArmor(2);
+        droppedArmor[0] = Deci.dropArmorArms(Deci.wristDisplay(), right);
+        droppedArmor[1] = chest == null ? null : Deci.dropArmorArms(chest.getItem(), right);
     }
 
     @SubscribeEvent
@@ -382,19 +555,31 @@ public final class MeleeMotion
     {
         if (hidden[1] != null)
         {
-            arms(true);
-            java.util.Arrays.fill(hidden, null);
+            arms(true, true);
+            Arrays.fill(hidden, null);
+        }
+        for (int i = 0; i < droppedArmor.length; i++)
+        {
+            if (droppedArmor[i] != null)
+            {
+                Deci.putArmorArms(droppedArmor[i]);
+                droppedArmor[i] = null;
+            }
         }
     }
 
-    private static void arms(boolean show)
+    /** The left arms of the hidden models shown or not, the right ones too when `right`. */
+    private static void arms(boolean show, boolean right)
     {
         for (ModelBiped m : hidden)
         {
             if (m != null)
             {
-                m.bipedRightArm.showModel = show;
                 m.bipedLeftArm.showModel = show;
+                if (right)
+                {
+                    m.bipedRightArm.showModel = show;
+                }
             }
         }
     }

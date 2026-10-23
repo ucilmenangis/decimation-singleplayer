@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "forgelayer",
+  "version": "${version}",
+  "name": "Decimation Forge Layer",
+  "description": "Runs Forge 1.7.10 mods (Decimation, DeciRemnant) on Legacy Fabric.",
+  "license": "LGPL-2.1",
+  "environment": "*",
+  "entrypoints": {
+    "preLaunch": [
+      "net.decimation.forgelayer.ForgeLayer"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.7.10"
+  }
+}

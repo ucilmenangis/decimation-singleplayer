@@ -7,6 +7,59 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
 
 ## Done
 
+### Gun draws: every gun comes into the view its own way (23 Oktober 2026, branch feature/gun-draw)
+- User: "reimagine when switching to weapons (guns) they all need some kind of intro ... valorant smoothness or cs2 like
+  ... arena breakout for intro animation for ALL of the guns". Decimation had none: a gun rose with Minecraft's flat
+  equip dip.
+- fixes/GunDraw wraps each gun's item renderer the first time the gun is in hand (Decimation's 103 guns, ours and gun
+  pack guns alike): for the first person view it turns back to the view's axes (as MeleeRenderer), moves the gun along
+  keys (Catmull-Rom on real time, MeleeMotion.curve) and lets Decimation draw it from there. A way per WeaponCategory:
+  pistols snap up from the lower right with a flick (CS2), the revolver twirls once, SMGs swing in from the left
+  (Valorant), rifles and shotguns rise low and canted and settle with their weight (Arena Breakout), machine guns the
+  same slower and heavier, the rocket launcher onto the shoulder; 0.5 to 1.1 s. Each gun's own Rack animation
+  (Deci.playRack: its Rack.anib and rack sounds, client only, nothing sent) works the action near the end (all but
+  rockets, crossbow and flamethrower). On a switch to a gun and on leaving Decimation's holster (Deci.holstered).
+  Minecraft's equip dip held off meanwhile (MeleeMotion.holdEquip, shared with the knives); aiming during the draw runs
+  it three times as fast.
+- Checked: dev test `gundraw` 14 PASS (Glock 17, Raging Bull, Uzi, AK-74, R870, PKM, RPG-7: switching starts the
+  draw, the rack plays at its end, none for the RPG), shots at six moments of each draw. A gun below the view for the
+  first tenth of a second read as a delay: every draw starts low but in view. Not seen by the user yet [not verified
+  in game]; firing during the draw is not blocked (Decimation fires on its own mouse read).
+
+### Katana on fire, wide hits and looking down (23 Oktober 2026, branch feature/katana-fire-reach)
+- User: "fix the character view in FPS mode, look down and you'll see its botched, the character hand is floating (left
+  hand)"; "increase the damage for katana and its attack range, 2x wide and damage 17"; "when katana is enchanted with fire
+  aspect, it should add fire animation when user holding it ... when the intro animation is done and the user is almost
+  holding it ... fire in the whole metal"; then "it should start burning when the hand catches it, fire slowly burns
+  in the sword".
+- Looking down (fixes/MeleeMotion SLIDE 35 / BODY 55 degrees, MeleeRenderer): our first person arm and knife hung over
+  Decimation's armless first person body. They slide out of the view from 35 to 55 degrees; past 55 the body's own right
+  arm holds the knife (Decimation's way for any item but a gun) and Minecraft's swing moves it; its left arm stays hidden
+  (Decimation moves the body back and the arms forward: walking swung the left arm in as a hand without a shoulder).
+  Walking while looking straight down still shows the body's left leg and brown shoe swing forward under the camera
+  (Decimation's own body, the same with any item) [not verified with the user that this is not what they meant].
+- Katana: 17 damage (NewMelee), hits twice as wide (MeleeMotion.wideHit: a swing at nothing looks again with every
+  living box twice its width, then attacks through Minecraft's own attack: the server checks reach as for any hit).
+- Slashes redone (user: "slashing animation looks weird still, doesnt come natural, not like the video"): the hand slid
+  in straight lines while the blade spun about the grip. Now the arm turns about the shoulder (MeleeRenderer.SHOULDER,
+  three more motion columns: shoulder yaw / pitch / roll), so the hand runs on an arc, and the blade rolls in the view
+  so its tip leads the cut, side on as in the video; a slow wind up (0.11 s), a strike over in 0.06 s, a follow through
+  that eases out and keeps the blade in view (forehand ends low left tip up, backhand right tip up, heavy low left).
+  Karambit: the same, smaller, its thrust kept. A first try pointing the blade forward showed it end on: dropped.
+- Fire Aspect: the katana is no sword to Minecraft, so a Fire Aspect book on an anvil goes on through NewMelee.onAnvil
+  (AnvilUpdateEvent, 5 levels). fixes/MeleeFire draws the fire: a heat mask (tools/guns/melee.py --heat:
+  katana_heat.png, the metal's pixels, red = guard 0 .. tip 255) fills a live texture at 30 fps with tongues of fire
+  (dark red, orange, yellow, white core), drawn full bright and additive over the blade, then again twice as thick and
+  faint (heat haze), plus little square flames peeling off the edge and spine. The burn after the catch
+  (MeleeMotion.IGNITE 0.78 s into the draw): over SPREAD 0.8 s (user: 2 s was too slow, "2.5x" faster) a front climbs
+  from the hand to the tip, the steel glowing red
+  just ahead of it, the flames growing behind it. Held in third person and dropped it burns whole; others holding one
+  shed flame and smoke particles.
+- Checked: dev test `melee` 9 PASS (the 6 before, Fire Aspect II book on the anvil, an infected 0.62 off the view's line
+  is off the crosshair and one swing takes 17 + 1 burn), look down shots at 30 / 50 / 70 / 88 degrees while walking, the
+  burn every 0.12 to 0.3 s from the catch to the full blade; 0 OpenGL errors. Not seen by the user yet [not verified in
+  game].
+
 ### Karambit and Katana: our own melee weapons with first person draw and inspect (23 Oktober 2026, branch feature/karambit-katana)
 - User: "add 2 more knife: Karambit (held like CS) and a long Katana (like Valorant), vanilla version of how a katana would
   look like in a zombie apocalypse"; draw animation on pulling it out and an inspect (CS / Valorant smooth).
@@ -26,8 +79,8 @@ Status values: `Done` / `Decided` (direction agreed, not built yet) /
 - Checked: dev test `melee` 6 PASS (slot change starts the draw, Y starts the inspect, a swing starts slash A, each
   knife), frames compared with the reference videos; `-Pgif` samples draw, inspect and slashes every 1/20 s without the
   HUD. User checked earlier builds in Prism; toss draw and slashes not seen by the user yet [not verified in game]. Arm is
-  one skin block (no fingers). Looking down: the user reports the katana's handling as bugged; dev shots show only the
-  body (feet, floor edge) below the view, same as an empty hand: cause not found yet.
+  one skin block (no fingers). Looking down: see the next entry (Katana on fire, wide hits and looking down).
+
 ### HUD styles: Decimation or Inline (22 Oktober 2026, main)
 - User: "an option to switch to inline mode, which is like minecraft default one ... reimagine it ... for the corner
   view of character make it like xbox version in top corner, so only character 3rd person view overall".

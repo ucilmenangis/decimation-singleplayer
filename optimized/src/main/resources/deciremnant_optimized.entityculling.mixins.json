@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.decimation.optimized.entityculling.mixin",
+  "plugin": "net.decimation.optimized.MixinPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "client": ["EntityMixin", "BlockEntityMixin", "EntityRenderDispatcherMixin", "BlockEntityRenderDispatcherMixin", "WorldRendererMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
